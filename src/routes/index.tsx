@@ -4,6 +4,7 @@ import {
   GraduationCap, HeartPulse, Users, Sprout, Wrench, Leaf,
   BookOpen, Stethoscope, Hand, Tractor, MapPin, Calendar,
   ArrowRight, Award, ShieldCheck, Heart, HandHeart, Briefcase,
+  Info, BarChart2, Newspaper, UserCheck, MessageCircle, Target,
 } from "lucide-react";
 import hero from "@/assets/hero.jpg";
 import causeEdu from "@/assets/cause-education.jpg";
@@ -86,13 +87,13 @@ function Index() {
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
           <div className="relative max-w-7xl mx-auto px-4 h-full flex items-center">
             <div className="max-w-2xl text-white">
-              <p className="text-sm md:text-base mb-3 font-medium">Empowering Youth · Enriching Communities · Transforming Lives</p>
+              <p className="text-sm md:text-base mb-3 font-medium">"Planting Seeds of Hope and Change" — Islah Welfare Foundation (Reg.)</p>
               <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">
                 Empowering Lives Through<br />
                 <span className="text-brand-orange">Education</span>, <span className="text-brand-orange">Healthcare</span><br />
-                & <span className="text-brand-orange">Livelihood</span>
+                &amp; <span className="text-brand-orange">Livelihood</span>
               </h1>
-              <p className="mt-4 text-base md:text-lg text-white/90">Your support creates real change in rural India.</p>
+              <p className="mt-4 text-base md:text-lg text-white/90">IWF is an effort to lay a positive foundation of change in the field of education for the underprivileged. We believe happiness for a lifetime can only be achieved by helping &amp; enriching the next generation. IWF's doors are always open — if you feel you can fill the gap of a missing drop, come join us.</p>
               <div className="mt-7 flex flex-wrap gap-3">
                 <button className="bg-brand-orange hover:bg-brand-orange-dark text-white font-semibold px-6 py-3 rounded shadow-lg transition">DONATE NOW</button>
                 <button className="bg-white/95 hover:bg-white text-brand-green-dark font-semibold px-6 py-3 rounded shadow-lg transition">GET INVOLVED</button>
@@ -128,9 +129,9 @@ function Index() {
           <SectionTitle>Featured Causes</SectionTitle>
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { img: causeEdu, icon: BookOpen, title: "Child Education", desc: "Support school fees, learning materials and better future.", raised: "1,65,240", pct: 75 },
-              { img: causeMed, icon: Stethoscope, title: "Medical Help", desc: "Support free care, medicines and health camps.", raised: "2,12,880", pct: 48 },
-              { img: causeWomen, icon: Users, title: "Women Empowerment", desc: "Empower women through skills, training and livelihoods.", raised: "1,48,720", pct: 60 },
+              { img: causeEdu, icon: BookOpen, title: "Child Education", desc: "Through our 'Shiksha Na Ruke' campaign, we fund school fees, learning materials, and scholarships to keep every child in school and out of child labour.", raised: "1,65,240", pct: 75 },
+              { img: causeMed, icon: Stethoscope, title: "Medical Help", desc: "Our 'Health Cannot Wait' initiative funds free health camps, medicines, emergency treatment, and health awareness drives in underserved rural communities.", raised: "2,12,880", pct: 48 },
+              { img: causeWomen, icon: Users, title: "Women Empowerment", desc: "The 'She Can Fly' & 'Swabhiman' campaigns train women in vocational skills, promote Self-Help Groups, and build financial independence for lasting change.", raised: "1,48,720", pct: 60 },
             ].map((c) => (
               <article key={c.title} className="bg-white rounded-lg shadow-md overflow-hidden border border-slate-100">
                 <div className="relative h-44">
@@ -163,18 +164,19 @@ function Index() {
           <SectionTitle>What We Do</SectionTitle>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {[
-              { icon: GraduationCap, l: "Education" },
-              { icon: HeartPulse, l: "Healthcare" },
-              { icon: Users, l: "Women Empowerment" },
-              { icon: Sprout, l: "Rural Development" },
-              { icon: Wrench, l: "Skill Development" },
-              { icon: Leaf, l: "Environment Protection" },
-            ].map(({ icon: Icon, l }) => (
+              { icon: GraduationCap, l: "Education", s: "Learning Centres & Scholarships" },
+              { icon: HeartPulse, l: "Healthcare", s: "Free camps, care & awareness" },
+              { icon: Users, l: "Women Empowerment", s: "SHGs, skills & financial literacy" },
+              { icon: Sprout, l: "Rural Development", s: "Infrastructure & livelihoods" },
+              { icon: Wrench, l: "Skill Development", s: "Vocational & entrepreneurship" },
+              { icon: Leaf, l: "Environment", s: "Plantation & sustainability" },
+            ].map(({ icon: Icon, l, s }) => (
               <div key={l} className="bg-white rounded-md p-5 text-center shadow-sm border border-slate-100 hover:shadow-md transition">
                 <div className="w-12 h-12 mx-auto rounded-full bg-brand-green/10 flex items-center justify-center mb-3">
                   <Icon className="w-6 h-6 text-brand-green" />
                 </div>
                 <div className="text-xs font-semibold text-slate-700">{l}</div>
+                <div className="text-[10px] text-slate-500 mt-1">{s}</div>
               </div>
             ))}
           </div>
@@ -189,10 +191,10 @@ function Index() {
             <SectionTitle>Our Programs</SectionTitle>
             <div className="grid sm:grid-cols-2 gap-4">
               {[
-                { icon: BookOpen, title: "Education Support", desc: "Quality education support for underprivileged children." },
-                { icon: HeartPulse, title: "Healthcare Camps", desc: "Organising free health checkups and awareness camps." },
-                { icon: Users, title: "Women Empowerment", desc: "Skill training, livelihood support and self-reliance programs." },
-                { icon: Sprout, title: "Rural Development", desc: "Working for better infrastructure and sustainable rural growth." },
+                { icon: BookOpen, title: "Education Support", desc: "We run Community Learning Centres and 'Shiksha Na Ruke' scholarships to keep underprivileged children in school, providing materials and academic support." },
+                { icon: HeartPulse, title: "Healthcare Camps", desc: "Through 'Health Cannot Wait', we organise free medical check-up camps, distribute medicines, and spread awareness on health, hygiene, and nutrition." },
+                { icon: Users, title: "Women Empowerment", desc: "We form Self-Help Groups (SHGs), provide vocational training, promote financial literacy, and support leadership development for rural women." },
+                { icon: Sprout, title: "Rural Development", desc: "We work on sanitation, safe housing, clean water access, and community infrastructure under our 'Model Village' initiative for self-reliant communities." },
               ].map((p) => (
                 <div key={p.title} className="bg-white rounded-md p-5 border border-slate-100 shadow-sm">
                   <div className="w-10 h-10 rounded-md bg-brand-orange/15 flex items-center justify-center mb-3">
@@ -234,9 +236,9 @@ function Index() {
             <SectionTitle>Events & Notices</SectionTitle>
             <div className="space-y-3">
               {[
-                { d: "25", m: "MAY", title: "Free Health Camp in Bathiya", desc: "Join us for a free health check-up camp for the local community." },
-                { d: "05", m: "JUN", title: "World Environment Day Drive", desc: "Tree plantation & awareness drive in local villages." },
-                { d: "15", m: "JUL", title: "Scholarship Distribution Program", desc: "Supporting bright students for a better tomorrow." },
+                { d: "25", m: "MAY", title: "Free Health Camp — Bathiya, Darbhanga", desc: "Free check-up camp under our 'Health Cannot Wait' initiative. Open to all community members. Medicines and consultations provided free of charge." },
+                { d: "05", m: "JUN", title: "World Environment Day Plantation Drive", desc: "Tree plantation & sustainability awareness drive in local villages — part of IWF's Environment & Rural Livelihood programme. Join us to plant saplings." },
+                { d: "15", m: "JUL", title: "Shiksha Na Ruke — Scholarship Distribution", desc: "IWF distributes scholarships to bright students under the 'Shiksha Na Ruke' campaign. Supporting eligible students for a better, educated tomorrow." },
               ].map((e) => (
                 <div key={e.title} className="bg-white rounded-md p-4 flex gap-4 items-center border border-slate-100 shadow-sm">
                   <div className="text-center bg-brand-green/10 rounded px-3 py-2 w-16">
@@ -273,13 +275,14 @@ function Index() {
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4">
           <SectionTitle>Get Involved</SectionTitle>
+          <p className="text-center text-slate-600 text-sm max-w-2xl mx-auto mb-6">IWF's doors are always open to individuals, corporates, and institutions. Whether you have time, skills, resources, or ideas — there is a place for you here. Join us in being a drop that makes the ocean.</p>
           <div className="bg-white border border-slate-100 shadow-sm rounded-md p-6 grid grid-cols-2 md:grid-cols-6 gap-4 items-center">
             {[
-              { icon: Hand, l: "Volunteer", s: "Join our team" },
-              { icon: HandHeart, l: "Partner", s: "Collaborate with us" },
-              { icon: Heart, l: "Sponsor", s: "Support a cause" },
-              { icon: Users, l: "Mentor", s: "Share your expertise" },
-              { icon: Briefcase, l: "Employee", s: "Work with us" },
+              { icon: Hand, l: "Volunteer", s: "Give your time & skills" },
+              { icon: HandHeart, l: "Partner", s: "CSR & collaborations" },
+              { icon: Heart, l: "Sponsor", s: "Fund a programme" },
+              { icon: Users, l: "Mentor", s: "Guide the next generation" },
+              { icon: Briefcase, l: "Employee", s: "Build a career with purpose" },
             ].map((i) => (
               <div key={i.l} className="text-center">
                 <div className="w-12 h-12 mx-auto rounded-full bg-brand-green/10 flex items-center justify-center mb-2">
@@ -290,6 +293,57 @@ function Index() {
               </div>
             ))}
             <button className="bg-brand-orange hover:bg-brand-orange-dark text-white font-semibold py-3 rounded">DONATE NOW</button>
+          </div>
+        </div>
+      </section>
+
+      {/* Explore IWF — Page Previews */}
+      <section className="py-16 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <SectionTitle>Explore IWF</SectionTitle>
+          <p className="text-center text-slate-600 text-sm max-w-2xl mx-auto mb-10">Discover the full breadth of our work — from governance and programs to impact and opportunities to join us.</p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                icon: Info,
+                page: "About Us",
+                summary: "IWF is a public charitable trust dedicated to the socio-economic development of India's most vulnerable communities. Guided by 'Vision 2047', we are building an equitable, self-reliant India where every individual has access to education, healthcare, and a dignified livelihood. Our governance is rooted in transparency, accountability, and measurable impact.",
+              },
+              {
+                icon: Target,
+                page: "Programs",
+                summary: "IWF runs structured programmes across Education, Healthcare, Women Empowerment, Skill Development, Rural Development, Environment & Sustainability, Entrepreneurship, and Relief & Rehabilitation. Each programme is community-driven, impact-monitored, and designed for lasting, scalable change at the grassroots level.",
+              },
+              {
+                icon: BarChart2,
+                page: "Impact",
+                summary: "IWF has touched 5,000+ lives, conducted 100+ health camps, and supported 2,000+ students across rural India. We document every outcome through success stories, annual reports, and a live impact statistics dashboard — ensuring full transparency with every rupee contributed.",
+              },
+              {
+                icon: Newspaper,
+                page: "Media & Updates",
+                summary: "Stay informed with the latest news, events, newsletters, press releases, and publications from IWF's field teams. Our gallery captures real moments of transformation from the communities we serve. Follow our updates to see your support in action.",
+              },
+              {
+                icon: UserCheck,
+                page: "Get Involved",
+                summary: "Whether as a Volunteer, Partner, Sponsor, Mentor, or Employee — IWF welcomes everyone who wants to contribute. Our doors are open to individuals, corporates, and institutions. Every role, big or small, creates a ripple of positive change in the communities we serve.",
+              },
+              {
+                icon: MessageCircle,
+                page: "Contact Us",
+                summary: "Reach IWF at our registered office in Bathiya, Darbhanga (Bihar) or connect with us in Patna, Delhi, or Meerut. Write to info@iwfindia.org or call +91 9801812625. We would love to hear your ideas, feedback, or offer of support.",
+              },
+            ].map((item) => (
+              <div key={item.page} className="bg-white rounded-md p-5 border border-slate-100 shadow-sm hover:shadow-md transition">
+                <div className="w-10 h-10 rounded-md bg-brand-orange/15 flex items-center justify-center mb-3">
+                  <item.icon className="w-5 h-5 text-brand-orange" />
+                </div>
+                <h3 className="font-bold text-sm mb-2 text-brand-green-dark">{item.page}</h3>
+                <p className="text-xs text-slate-600 leading-relaxed mb-3">{item.summary}</p>
+                <a className="text-xs font-semibold text-brand-green inline-flex items-center gap-1 hover:opacity-80 transition">Learn More <ArrowRight className="w-3 h-3" /></a>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -310,6 +364,7 @@ function Index() {
               </div>
             </div>
             <p className="text-sm text-white/80">Islah Welfare Foundation is committed to empowering underprivileged communities through education, skill development, healthcare and social welfare initiatives for a better tomorrow.</p>
+            <p className="text-xs text-white/60 mt-3 italic">"We ourselves feel that what we are doing is just a drop in the ocean. But the ocean would be less because of that missing drop." — Mother Teresa</p>
             <div className="mt-4">
               <div className="text-xs font-semibold mb-2">FOLLOW US</div>
               <div className="flex gap-2">
@@ -336,8 +391,8 @@ function Index() {
           <div>
             <h4 className="font-bold mb-3 text-sm flex items-center gap-2"><span className="w-1.5 h-4 bg-brand-orange" /> CONTACT US</h4>
             <ul className="space-y-3 text-sm text-white/85">
-              <li className="flex gap-2"><MapPin className="w-4 h-4 mt-0.5 shrink-0 text-brand-orange" /> Bathiya, Via- Pusa Mangacchi, Darbhanga, Bihar – 847425, India</li>
-              <li className="flex gap-2"><Phone className="w-4 h-4 mt-0.5 shrink-0 text-brand-orange" /> +91 9801812625</li>
+              <li className="flex gap-2"><MapPin className="w-4 h-4 mt-0.5 shrink-0 text-brand-orange" /> Bathiya, Via- Putai Manigachhi, Darbhanga, Bihar – 847423, India</li>
+              <li className="flex gap-2"><Phone className="w-4 h-4 mt-0.5 shrink-0 text-brand-orange" /> +91 9801812625 &nbsp;|&nbsp; +91 6272 288697</li>
               <li className="flex gap-2"><Mail className="w-4 h-4 mt-0.5 shrink-0 text-brand-orange" /> info@iwfindia.org</li>
             </ul>
             <button className="mt-5 w-full bg-brand-orange hover:bg-brand-orange-dark text-white font-semibold py-3 rounded flex items-center justify-center gap-2">
@@ -383,9 +438,9 @@ function Index() {
           <div className="border-t border-slate-200">
             <div className="max-w-7xl mx-auto px-4 py-6 grid md:grid-cols-3 gap-4 items-center">
               {[
-                { icon: ShieldCheck, t: "Transparency", d: "We are open and honest in all our actions." },
-                { icon: Hand, t: "Accountability", d: "We take responsibility for our commitments." },
-                { icon: Heart, t: "Compassion", d: "We care for people and communities we serve." },
+                { icon: ShieldCheck, t: "Transparency", d: "We are open and honest in all our actions and financial operations — every rupee is accounted for and reported." },
+                { icon: Hand, t: "Accountability", d: "We hold ourselves and our partners accountable for project outcomes, ensuring commitments are met with integrity." },
+                { icon: Heart, t: "Compassion", d: "We care for people and the communities we serve, remaining sensitive to their needs, dignity, and aspirations." },
               ].map((v) => (
                 <div key={v.t} className="flex items-start gap-3">
                   <div className="w-9 h-9 rounded-full bg-brand-green/10 flex items-center justify-center shrink-0"><v.icon className="w-4 h-4 text-brand-green" /></div>
