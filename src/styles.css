@@ -157,3 +157,54 @@
     color: var(--color-foreground);
   }
 }
+
+/* ── Mega Nav Animations ──────────────────────────────────────────────────── */
+
+@keyframes megaSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mega-panel {
+  animation: megaSlideDown 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ── Mobile Drawer Animation ──────────────────────────────────────────────── */
+
+@keyframes mobileDrawerSlideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0.6;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.mobile-drawer {
+  animation: mobileDrawerSlideIn 0.26s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ── Scrolling Marquee Animation ──────────────────────────────────────────── */
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 25s linear infinite;
+}
+
+
