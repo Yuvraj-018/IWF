@@ -208,7 +208,15 @@ export function Header() {
                   onMouseLeave={hasMega ? scheduleClose : undefined}
                 >
                   <a
-                    href={item === "Home" ? "/" : item === "About Us" ? "/about" : "#"}
+                    href={
+                      item === "Home"
+                        ? "/"
+                        : item === "About Us"
+                        ? "/about"
+                        : item === "Programs"
+                        ? "/programs/healthcare"
+                        : "#"
+                    }
                     className={`relative flex items-center gap-1 font-medium text-sm transition-colors py-1 group ${
                       isRouteActive ? "text-brand-green font-semibold" : "text-gray-700 hover:text-[#0d2b1a]"
                     }`}
@@ -272,7 +280,15 @@ export function Header() {
                           return (
                             <a
                               key={subItem}
-                              href={activeMenu === "About Us" && subItem === "Overview" ? "/about" : "#"}
+                              href={
+                                activeMenu === "About Us" && subItem === "Overview"
+                                  ? "/about"
+                                  : activeMenu === "What We Do" && subItem === "Health Care"
+                                  ? "/programs/healthcare"
+                                  : activeMenu === "Programs" && subItem === "View All Programs →"
+                                  ? "/programs/healthcare"
+                                  : "#"
+                              }
                               className="flex items-center gap-2 text-gray-700 hover:text-[#0d2b1a] text-sm hover:translate-x-1 transition-all duration-200"
                               style={{ transitionDelay: `${globalIndex * 30}ms` }}
                               onClick={() => setActiveMenu(null)}
@@ -349,7 +365,15 @@ export function Header() {
                   <div key={item} className="border-b border-slate-100 last:border-0">
                     <div className="flex items-center">
                       <a
-                        href={item === "Home" ? "/" : item === "About Us" ? "/about" : "#"}
+                        href={
+                          item === "Home"
+                            ? "/"
+                            : item === "About Us"
+                            ? "/about"
+                            : item === "Programs"
+                            ? "/programs/healthcare"
+                            : "#"
+                        }
                         className="flex-1 px-5 py-3.5 text-sm font-semibold text-slate-800 hover:text-brand-green transition-colors"
                         onClick={() => {
                           if (!hasMega) setMobileOpen(false);
@@ -375,7 +399,15 @@ export function Header() {
                         {MEGA_DATA[item].items.map((sub) => (
                           <a
                             key={sub}
-                            href="#"
+                            href={
+                              item === "About Us" && sub === "Overview"
+                                ? "/about"
+                                : item === "What We Do" && sub === "Health Care"
+                                ? "/programs/healthcare"
+                                : item === "Programs" && sub === "View All Programs →"
+                                ? "/programs/healthcare"
+                                : "#"
+                            }
                             className="flex items-center gap-2 px-4 py-2 text-sm text-slate-600 hover:text-brand-green hover:bg-white transition-all"
                             onClick={() => setMobileOpen(false)}
                           >

@@ -1,4 +1,5 @@
 import { GraduationCap, HeartPulse, Home, Wrench, Users } from "lucide-react";
+import ScrollReveal from "@/components/healthcare/ScrollReveal";
 import imgEdu from "@/assets/cause-education.jpg";
 import imgHealth from "@/assets/cause-medical.png";
 import imgHousing from "@/assets/gallery-4.jpg";
@@ -72,7 +73,8 @@ export default function FocusAreas() {
   return (
     <section className="bg-slate-50 py-16">
       <div className="max-w-7xl mx-auto px-4">
-        <SectionTitle>Focus Areas</SectionTitle>
+        <ScrollReveal><SectionTitle>Focus Areas</SectionTitle></ScrollReveal>
+        <ScrollReveal stagger={0.09}>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
           {AREAS.map((area) => (
             <div
@@ -108,6 +110,7 @@ export default function FocusAreas() {
             </div>
           ))}
         </div>
+        </ScrollReveal>
       </div>
     </section>
   );

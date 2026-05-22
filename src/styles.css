@@ -207,4 +207,184 @@
   animation: marquee 25s linear infinite;
 }
 
+/* ── Smooth Scroll ────────────────────────────────────────────────────────── */
 
+html {
+  scroll-behavior: smooth;
+}
+
+/* ── Scroll Progress Bar ──────────────────────────────────────────────────── */
+
+@keyframes grow-bar {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--brand-orange);
+  transform-origin: left;
+  animation: grow-bar linear;
+  animation-timeline: scroll();
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* ── CSS Native Scroll-Driven Fade-Up ─────────────────────────────────────── */
+
+@keyframes fade-up-scroll {
+  from {
+    opacity: 0;
+    translate: 0 40px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0px;
+  }
+}
+
+.scroll-fade-up {
+  animation: fade-up-scroll ease both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 35%;
+}
+
+/* ── Parallax Hero Background ─────────────────────────────────────────────── */
+
+@keyframes parallax-bg {
+  from { background-position: 50% 0%; }
+  to   { background-position: 50% 25%; }
+}
+
+.hero-parallax {
+  animation: parallax-bg linear;
+  animation-timeline: scroll(root block);
+  animation-range: 0% 50%;
+}
+
+/* ── Page Transition ──────────────────────────────────────────────────────── */
+
+@keyframes page-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes page-fade-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-6px); }
+}
+
+.page-enter {
+  animation: page-fade-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.page-exit {
+  animation: page-fade-out 0.2s ease forwards;
+}
+
+/* ── Skeleton Shimmer ─────────────────────────────────────────────────────── */
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+.skeleton {
+  --skeleton-base: oklch(0.93 0 0);
+  --skeleton-highlight: oklch(0.97 0 0);
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-base) 25%,
+    var(--skeleton-highlight) 50%,
+    var(--skeleton-base) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 0.375rem;
+}
+
+/* ── Healthcare Scroll Reveal Utility ─────────────────────────────────────── */
+
+.scroll-reveal-hidden {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.scroll-reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+/* ── Hover Micro-interactions (global card enhancement) ───────────────────── */
+
+.iwf-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.iwf-card:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 8px 24px -4px oklch(0.42 0.11 145 / 0.12);
+}
+
+.iwf-card:hover .iwf-card-icon {
+  animation: icon-bounce 0.4s ease;
+}
+
+@keyframes icon-bounce {
+  0%   { transform: translateY(0); }
+  40%  { transform: translateY(-4px); }
+  70%  { transform: translateY(-2px); }
+  100% { transform: translateY(0); }
+}
+
+/* ── Scrollbar Hide (mobile ticker) ──────────────────────────────────────────*/
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Counter Animation ────────────────────────────────────────────────────── */
+
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.stat-counter {
+  animation: count-up 0.6s ease both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 30%;
+}
+
+/* ── useScrollReveal hook CSS classes ────────────────────────────────────── */
+
+.is-scroll-hidden {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.is-scroll-visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Stagger children via nth-child delay */
+.is-scroll-hidden:nth-child(1) { transition-delay: 0ms; }
+.is-scroll-hidden:nth-child(2) { transition-delay: 80ms; }
+.is-scroll-hidden:nth-child(3) { transition-delay: 160ms; }
+.is-scroll-hidden:nth-child(4) { transition-delay: 240ms; }
+.is-scroll-hidden:nth-child(5) { transition-delay: 320ms; }
+.is-scroll-hidden:nth-child(6) { transition-delay: 400ms; }
+.is-scroll-hidden:nth-child(7) { transition-delay: 480ms; }
+.is-scroll-hidden:nth-child(8) { transition-delay: 560ms; }

@@ -1,4 +1,5 @@
 import { CheckCircle2 } from "lucide-react";
+import ScrollReveal from "@/components/healthcare/ScrollReveal";
 
 function SectionTitle({ children, align = "center" }: { children: React.ReactNode; align?: "center" | "left" }) {
   return (
@@ -31,6 +32,7 @@ export default function Achievements() {
       <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center">
 
         {/* Left — Achievement list */}
+        <ScrollReveal>
         <div>
           <SectionTitle align="left">Our Achievements</SectionTitle>
           <ul className="space-y-3">
@@ -42,13 +44,15 @@ export default function Achievements() {
             ))}
           </ul>
         </div>
+        </ScrollReveal>
 
         {/* Right — Stats grid */}
+        <ScrollReveal stagger={0.08}>
         <div className="grid grid-cols-2 gap-4">
           {STATS.map((stat) => (
             <div
               key={stat.label}
-              className="bg-brand-green/5 rounded-xl p-5 text-center border border-brand-green/10 hover:border-brand-green/30 transition"
+              className="bg-brand-green/5 rounded-xl p-5 text-center border border-brand-green/10 hover:border-brand-green/30 transition stat-counter"
             >
               <div className="text-3xl font-extrabold text-brand-green-dark">{stat.number}</div>
               <div className="text-xs text-slate-600 mt-1 leading-tight">{stat.label}</div>
@@ -61,6 +65,7 @@ export default function Achievements() {
             <div className="text-xs text-white/70 mt-1 leading-tight">Regions Across India</div>
           </div>
         </div>
+        </ScrollReveal>
       </div>
     </section>
   );

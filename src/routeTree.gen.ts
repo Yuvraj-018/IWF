@@ -11,6 +11,15 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProgramsHealthcareIndexRouteImport } from './routes/programs/healthcare/index'
+import { Route as ProgramsHealthcareWellnessCentresRouteImport } from './routes/programs/healthcare/wellness-centres'
+import { Route as ProgramsHealthcareRuralAmbulanceRouteImport } from './routes/programs/healthcare/rural-ambulance'
+import { Route as ProgramsHealthcareMenstrualHygieneRouteImport } from './routes/programs/healthcare/menstrual-hygiene'
+import { Route as ProgramsHealthcareMedicalAidRouteImport } from './routes/programs/healthcare/medical-aid'
+import { Route as ProgramsHealthcareHealthCheckupCampsRouteImport } from './routes/programs/healthcare/health-checkup-camps'
+import { Route as ProgramsHealthcareDiabetesPreventionRouteImport } from './routes/programs/healthcare/diabetes-prevention'
+import { Route as ProgramsHealthcareCriticalLifeSupportRouteImport } from './routes/programs/healthcare/critical-life-support'
+import { Route as ProgramsHealthcareCervicalCancerRouteImport } from './routes/programs/healthcare/cervical-cancer'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
@@ -22,31 +31,154 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProgramsHealthcareIndexRoute = ProgramsHealthcareIndexRouteImport.update({
+  id: '/programs/healthcare/',
+  path: '/programs/healthcare/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgramsHealthcareWellnessCentresRoute =
+  ProgramsHealthcareWellnessCentresRouteImport.update({
+    id: '/programs/healthcare/wellness-centres',
+    path: '/programs/healthcare/wellness-centres',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsHealthcareRuralAmbulanceRoute =
+  ProgramsHealthcareRuralAmbulanceRouteImport.update({
+    id: '/programs/healthcare/rural-ambulance',
+    path: '/programs/healthcare/rural-ambulance',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsHealthcareMenstrualHygieneRoute =
+  ProgramsHealthcareMenstrualHygieneRouteImport.update({
+    id: '/programs/healthcare/menstrual-hygiene',
+    path: '/programs/healthcare/menstrual-hygiene',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsHealthcareMedicalAidRoute =
+  ProgramsHealthcareMedicalAidRouteImport.update({
+    id: '/programs/healthcare/medical-aid',
+    path: '/programs/healthcare/medical-aid',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsHealthcareHealthCheckupCampsRoute =
+  ProgramsHealthcareHealthCheckupCampsRouteImport.update({
+    id: '/programs/healthcare/health-checkup-camps',
+    path: '/programs/healthcare/health-checkup-camps',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsHealthcareDiabetesPreventionRoute =
+  ProgramsHealthcareDiabetesPreventionRouteImport.update({
+    id: '/programs/healthcare/diabetes-prevention',
+    path: '/programs/healthcare/diabetes-prevention',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsHealthcareCriticalLifeSupportRoute =
+  ProgramsHealthcareCriticalLifeSupportRouteImport.update({
+    id: '/programs/healthcare/critical-life-support',
+    path: '/programs/healthcare/critical-life-support',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsHealthcareCervicalCancerRoute =
+  ProgramsHealthcareCervicalCancerRouteImport.update({
+    id: '/programs/healthcare/cervical-cancer',
+    path: '/programs/healthcare/cervical-cancer',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/programs/healthcare/cervical-cancer': typeof ProgramsHealthcareCervicalCancerRoute
+  '/programs/healthcare/critical-life-support': typeof ProgramsHealthcareCriticalLifeSupportRoute
+  '/programs/healthcare/diabetes-prevention': typeof ProgramsHealthcareDiabetesPreventionRoute
+  '/programs/healthcare/health-checkup-camps': typeof ProgramsHealthcareHealthCheckupCampsRoute
+  '/programs/healthcare/medical-aid': typeof ProgramsHealthcareMedicalAidRoute
+  '/programs/healthcare/menstrual-hygiene': typeof ProgramsHealthcareMenstrualHygieneRoute
+  '/programs/healthcare/rural-ambulance': typeof ProgramsHealthcareRuralAmbulanceRoute
+  '/programs/healthcare/wellness-centres': typeof ProgramsHealthcareWellnessCentresRoute
+  '/programs/healthcare/': typeof ProgramsHealthcareIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/programs/healthcare/cervical-cancer': typeof ProgramsHealthcareCervicalCancerRoute
+  '/programs/healthcare/critical-life-support': typeof ProgramsHealthcareCriticalLifeSupportRoute
+  '/programs/healthcare/diabetes-prevention': typeof ProgramsHealthcareDiabetesPreventionRoute
+  '/programs/healthcare/health-checkup-camps': typeof ProgramsHealthcareHealthCheckupCampsRoute
+  '/programs/healthcare/medical-aid': typeof ProgramsHealthcareMedicalAidRoute
+  '/programs/healthcare/menstrual-hygiene': typeof ProgramsHealthcareMenstrualHygieneRoute
+  '/programs/healthcare/rural-ambulance': typeof ProgramsHealthcareRuralAmbulanceRoute
+  '/programs/healthcare/wellness-centres': typeof ProgramsHealthcareWellnessCentresRoute
+  '/programs/healthcare': typeof ProgramsHealthcareIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/programs/healthcare/cervical-cancer': typeof ProgramsHealthcareCervicalCancerRoute
+  '/programs/healthcare/critical-life-support': typeof ProgramsHealthcareCriticalLifeSupportRoute
+  '/programs/healthcare/diabetes-prevention': typeof ProgramsHealthcareDiabetesPreventionRoute
+  '/programs/healthcare/health-checkup-camps': typeof ProgramsHealthcareHealthCheckupCampsRoute
+  '/programs/healthcare/medical-aid': typeof ProgramsHealthcareMedicalAidRoute
+  '/programs/healthcare/menstrual-hygiene': typeof ProgramsHealthcareMenstrualHygieneRoute
+  '/programs/healthcare/rural-ambulance': typeof ProgramsHealthcareRuralAmbulanceRoute
+  '/programs/healthcare/wellness-centres': typeof ProgramsHealthcareWellnessCentresRoute
+  '/programs/healthcare/': typeof ProgramsHealthcareIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/programs/healthcare/cervical-cancer'
+    | '/programs/healthcare/critical-life-support'
+    | '/programs/healthcare/diabetes-prevention'
+    | '/programs/healthcare/health-checkup-camps'
+    | '/programs/healthcare/medical-aid'
+    | '/programs/healthcare/menstrual-hygiene'
+    | '/programs/healthcare/rural-ambulance'
+    | '/programs/healthcare/wellness-centres'
+    | '/programs/healthcare/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about'
-  id: '__root__' | '/' | '/about'
+  to:
+    | '/'
+    | '/about'
+    | '/programs/healthcare/cervical-cancer'
+    | '/programs/healthcare/critical-life-support'
+    | '/programs/healthcare/diabetes-prevention'
+    | '/programs/healthcare/health-checkup-camps'
+    | '/programs/healthcare/medical-aid'
+    | '/programs/healthcare/menstrual-hygiene'
+    | '/programs/healthcare/rural-ambulance'
+    | '/programs/healthcare/wellness-centres'
+    | '/programs/healthcare'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/programs/healthcare/cervical-cancer'
+    | '/programs/healthcare/critical-life-support'
+    | '/programs/healthcare/diabetes-prevention'
+    | '/programs/healthcare/health-checkup-camps'
+    | '/programs/healthcare/medical-aid'
+    | '/programs/healthcare/menstrual-hygiene'
+    | '/programs/healthcare/rural-ambulance'
+    | '/programs/healthcare/wellness-centres'
+    | '/programs/healthcare/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  ProgramsHealthcareCervicalCancerRoute: typeof ProgramsHealthcareCervicalCancerRoute
+  ProgramsHealthcareCriticalLifeSupportRoute: typeof ProgramsHealthcareCriticalLifeSupportRoute
+  ProgramsHealthcareDiabetesPreventionRoute: typeof ProgramsHealthcareDiabetesPreventionRoute
+  ProgramsHealthcareHealthCheckupCampsRoute: typeof ProgramsHealthcareHealthCheckupCampsRoute
+  ProgramsHealthcareMedicalAidRoute: typeof ProgramsHealthcareMedicalAidRoute
+  ProgramsHealthcareMenstrualHygieneRoute: typeof ProgramsHealthcareMenstrualHygieneRoute
+  ProgramsHealthcareRuralAmbulanceRoute: typeof ProgramsHealthcareRuralAmbulanceRoute
+  ProgramsHealthcareWellnessCentresRoute: typeof ProgramsHealthcareWellnessCentresRoute
+  ProgramsHealthcareIndexRoute: typeof ProgramsHealthcareIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +197,89 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/programs/healthcare/': {
+      id: '/programs/healthcare/'
+      path: '/programs/healthcare'
+      fullPath: '/programs/healthcare/'
+      preLoaderRoute: typeof ProgramsHealthcareIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/healthcare/wellness-centres': {
+      id: '/programs/healthcare/wellness-centres'
+      path: '/programs/healthcare/wellness-centres'
+      fullPath: '/programs/healthcare/wellness-centres'
+      preLoaderRoute: typeof ProgramsHealthcareWellnessCentresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/healthcare/rural-ambulance': {
+      id: '/programs/healthcare/rural-ambulance'
+      path: '/programs/healthcare/rural-ambulance'
+      fullPath: '/programs/healthcare/rural-ambulance'
+      preLoaderRoute: typeof ProgramsHealthcareRuralAmbulanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/healthcare/menstrual-hygiene': {
+      id: '/programs/healthcare/menstrual-hygiene'
+      path: '/programs/healthcare/menstrual-hygiene'
+      fullPath: '/programs/healthcare/menstrual-hygiene'
+      preLoaderRoute: typeof ProgramsHealthcareMenstrualHygieneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/healthcare/medical-aid': {
+      id: '/programs/healthcare/medical-aid'
+      path: '/programs/healthcare/medical-aid'
+      fullPath: '/programs/healthcare/medical-aid'
+      preLoaderRoute: typeof ProgramsHealthcareMedicalAidRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/healthcare/health-checkup-camps': {
+      id: '/programs/healthcare/health-checkup-camps'
+      path: '/programs/healthcare/health-checkup-camps'
+      fullPath: '/programs/healthcare/health-checkup-camps'
+      preLoaderRoute: typeof ProgramsHealthcareHealthCheckupCampsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/healthcare/diabetes-prevention': {
+      id: '/programs/healthcare/diabetes-prevention'
+      path: '/programs/healthcare/diabetes-prevention'
+      fullPath: '/programs/healthcare/diabetes-prevention'
+      preLoaderRoute: typeof ProgramsHealthcareDiabetesPreventionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/healthcare/critical-life-support': {
+      id: '/programs/healthcare/critical-life-support'
+      path: '/programs/healthcare/critical-life-support'
+      fullPath: '/programs/healthcare/critical-life-support'
+      preLoaderRoute: typeof ProgramsHealthcareCriticalLifeSupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/healthcare/cervical-cancer': {
+      id: '/programs/healthcare/cervical-cancer'
+      path: '/programs/healthcare/cervical-cancer'
+      fullPath: '/programs/healthcare/cervical-cancer'
+      preLoaderRoute: typeof ProgramsHealthcareCervicalCancerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  ProgramsHealthcareCervicalCancerRoute: ProgramsHealthcareCervicalCancerRoute,
+  ProgramsHealthcareCriticalLifeSupportRoute:
+    ProgramsHealthcareCriticalLifeSupportRoute,
+  ProgramsHealthcareDiabetesPreventionRoute:
+    ProgramsHealthcareDiabetesPreventionRoute,
+  ProgramsHealthcareHealthCheckupCampsRoute:
+    ProgramsHealthcareHealthCheckupCampsRoute,
+  ProgramsHealthcareMedicalAidRoute: ProgramsHealthcareMedicalAidRoute,
+  ProgramsHealthcareMenstrualHygieneRoute:
+    ProgramsHealthcareMenstrualHygieneRoute,
+  ProgramsHealthcareRuralAmbulanceRoute: ProgramsHealthcareRuralAmbulanceRoute,
+  ProgramsHealthcareWellnessCentresRoute:
+    ProgramsHealthcareWellnessCentresRoute,
+  ProgramsHealthcareIndexRoute: ProgramsHealthcareIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

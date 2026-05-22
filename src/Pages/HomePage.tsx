@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from "react";
+import ScrollReveal from "@/components/healthcare/ScrollReveal";
 import {
   Phone, Mail, Facebook, Twitter, Instagram, Youtube, Linkedin,
   GraduationCap, HeartPulse, Users, Sprout, Wrench, Leaf,
@@ -230,7 +231,15 @@ function Header() {
                   onMouseLeave={hasMega ? scheduleClose : undefined}
                 >
                   <a
-                    href="#"
+                    href={
+                      item === "Home"
+                        ? "/"
+                        : item === "About Us"
+                        ? "/about"
+                        : item === "Programs"
+                        ? "/programs/healthcare"
+                        : "#"
+                    }
                     className="relative flex items-center gap-1 text-gray-700 hover:text-[#0d2b1a] font-medium text-sm transition-colors py-1 group"
                     onClick={() => !hasMega && setActiveMenu(null)}
                   >
@@ -298,7 +307,15 @@ function Header() {
                           return (
                             <a
                               key={subItem}
-                              href={activeMenu === "About Us" && subItem === "Overview" ? "/about" : "#"}
+                              href={
+                                activeMenu === "About Us" && subItem === "Overview"
+                                  ? "/about"
+                                  : activeMenu === "What We Do" && subItem === "Health Care"
+                                  ? "/programs/healthcare"
+                                  : activeMenu === "Programs" && subItem === "View All Programs →"
+                                  ? "/programs/healthcare"
+                                  : "#"
+                              }
                               className="flex items-center gap-2 text-gray-700 hover:text-[#0d2b1a] text-sm hover:translate-x-1 transition-all duration-200"
                               style={{
                                 transitionDelay: `${globalIndex * 30}ms`,
@@ -389,7 +406,15 @@ function Header() {
                   <div key={item} className="border-b border-slate-100 last:border-0">
                     <div className="flex items-center">
                       <a
-                        href="#"
+                        href={
+                          item === "Home"
+                            ? "/"
+                            : item === "About Us"
+                            ? "/about"
+                            : item === "Programs"
+                            ? "/programs/healthcare"
+                            : "#"
+                        }
                         className="flex-1 px-5 py-3.5 text-sm font-semibold text-slate-800 hover:text-brand-green transition-colors"
                         onClick={() => {
                           if (!hasMega) {
@@ -420,7 +445,15 @@ function Header() {
                         {MEGA_DATA[item].items.map((sub) => (
                           <a
                             key={sub}
-                            href="#"
+                            href={
+                              item === "About Us" && sub === "Overview"
+                                ? "/about"
+                                : item === "What We Do" && sub === "Health Care"
+                                ? "/programs/healthcare"
+                                : item === "Programs" && sub === "View All Programs →"
+                                ? "/programs/healthcare"
+                                : "#"
+                            }
                             className="flex items-center gap-2 px-4 py-2 text-sm text-slate-600 hover:text-brand-green hover:bg-white transition-all"
                             onClick={() => setMobileOpen(false)}
                           >
@@ -543,7 +576,8 @@ function FeaturedCauses() {
   return (
     <section className="py-16">
       <div className="max-w-7xl mx-auto px-4">
-        <SectionTitle>Featured Causes</SectionTitle>
+        <ScrollReveal><SectionTitle>Featured Causes</SectionTitle></ScrollReveal>
+        <ScrollReveal stagger={0.1}>
         <div className="grid md:grid-cols-3 gap-6">
           {[
             { img: causeEdu, icon: BookOpen, title: "Child Education", desc: "Through our 'Shiksha Na Ruke' campaign, we fund school fees, learning materials, and scholarships to keep every child in school and out of child labour.", raised: "1,65,240", pct: 75 },
@@ -589,6 +623,7 @@ function FeaturedCauses() {
             </CardContainer>
           ))}
         </div>
+        </ScrollReveal>
       </div>
     </section>
   );
@@ -598,25 +633,27 @@ function WhatWeDo() {
   return (
     <section className="py-12 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4">
-        <SectionTitle>What We Do</SectionTitle>
+        <ScrollReveal><SectionTitle>What We Do</SectionTitle></ScrollReveal>
+        <ScrollReveal stagger={0.07}>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {[
-            { icon: GraduationCap, l: "Education", s: "Learning Centres & Scholarships" },
-            { icon: HeartPulse, l: "Healthcare", s: "Free camps, care & awareness" },
-            { icon: Users, l: "Women Empowerment", s: "SHGs, skills & financial literacy" },
-            { icon: Sprout, l: "Rural Development", s: "Infrastructure & livelihoods" },
-            { icon: Wrench, l: "Skill Development", s: "Vocational & entrepreneurship" },
-            { icon: Leaf, l: "Environment", s: "Plantation & sustainability" },
-          ].map(({ icon: Icon, l, s }) => (
-            <div key={l} className="bg-white rounded-md p-5 text-center shadow-sm border border-slate-100 hover:shadow-md transition">
+            { icon: GraduationCap, l: "Education", s: "Learning Centres & Scholarships", route: "#" },
+            { icon: HeartPulse, l: "Healthcare", s: "Free camps, care & awareness", route: "/programs/healthcare" },
+            { icon: Users, l: "Women Empowerment", s: "SHGs, skills & financial literacy", route: "#" },
+            { icon: Sprout, l: "Rural Development", s: "Infrastructure & livelihoods", route: "#" },
+            { icon: Wrench, l: "Skill Development", s: "Vocational & entrepreneurship", route: "#" },
+            { icon: Leaf, l: "Environment", s: "Plantation & sustainability", route: "#" },
+          ].map(({ icon: Icon, l, s, route }) => (
+            <a key={l} href={route} className="bg-white rounded-md p-5 text-center shadow-sm border border-slate-100 hover:shadow-md transition block">
               <div className="w-12 h-12 mx-auto rounded-full bg-brand-green/10 flex items-center justify-center mb-3">
                 <Icon className="w-6 h-6 text-brand-green" />
               </div>
               <div className="text-xs font-semibold text-slate-700">{l}</div>
               <div className="text-[10px] text-slate-500 mt-1">{s}</div>
-            </div>
+            </a>
           ))}
         </div>
+        </ScrollReveal>
       </div>
     </section>
   );
@@ -630,10 +667,10 @@ function ProgramsAndThematic() {
           <SectionTitle>Our Programs</SectionTitle>
           <div className="grid sm:grid-cols-2 gap-4">
             {[
-              { icon: BookOpen, title: "Education Support", desc: "We run Community Learning Centres and 'Shiksha Na Ruke' scholarships to keep underprivileged children in school, providing materials and academic support." },
-              { icon: HeartPulse, title: "Healthcare Camps", desc: "Through 'Health Cannot Wait', we organise free medical check-up camps, distribute medicines, and spread awareness on health, hygiene, and nutrition." },
-              { icon: Users, title: "Women Empowerment", desc: "We form Self-Help Groups (SHGs), provide vocational training, promote financial literacy, and support leadership development for rural women." },
-              { icon: Sprout, title: "Rural Development", desc: "We work on sanitation, safe housing, clean water access, and community infrastructure under our 'Model Village' initiative for self-reliant communities." },
+              { icon: BookOpen, title: "Education Support", desc: "We run Community Learning Centres and 'Shiksha Na Ruke' scholarships to keep underprivileged children in school, providing materials and academic support.", route: "#" },
+              { icon: HeartPulse, title: "Healthcare Camps", desc: "Through 'Health Cannot Wait', we organise free medical check-up camps, distribute medicines, and spread awareness on health, hygiene, and nutrition.", route: "/programs/healthcare" },
+              { icon: Users, title: "Women Empowerment", desc: "We form Self-Help Groups (SHGs), provide vocational training, promote financial literacy, and support leadership development for rural women.", route: "#" },
+              { icon: Sprout, title: "Rural Development", desc: "We work on sanitation, safe housing, clean water access, and community infrastructure under our 'Model Village' initiative for self-reliant communities.", route: "#" },
             ].map((p) => (
               <div key={p.title} className="bg-white rounded-md p-5 border border-slate-100 shadow-sm">
                 <div className="w-10 h-10 rounded-md bg-brand-orange/15 flex items-center justify-center mb-3">
@@ -641,7 +678,7 @@ function ProgramsAndThematic() {
                 </div>
                 <h3 className="font-bold text-sm mb-1">{p.title}</h3>
                 <p className="text-xs text-slate-600 mb-2">{p.desc}</p>
-                <a href="#" className="text-xs font-semibold text-brand-green inline-flex items-center gap-1">Read More <ArrowRight className="w-3 h-3" /></a>
+                <a href={p.route} className="text-xs font-semibold text-brand-green inline-flex items-center gap-1">Read More <ArrowRight className="w-3 h-3" /></a>
               </div>
             ))}
           </div>
@@ -716,7 +753,7 @@ function GetInvolved({ onOpenModal }: { onOpenModal: (type: 'volunteer' | 'partn
   return (
     <section className="py-12">
       <div className="max-w-7xl mx-auto px-4">
-        <SectionTitle>Get Involved</SectionTitle>
+        <ScrollReveal><SectionTitle>Get Involved</SectionTitle></ScrollReveal>
         <p className="text-center text-slate-600 text-sm max-w-2xl mx-auto mb-6">
           Islah Welfare Foundation's doors are always open. If you feel you can fill the gap of a missing drop. Our doors are always open to all, like individuals, Corporates, and institutions. Come and join us …
         </p>
@@ -753,16 +790,17 @@ function ExploreIWF() {
   return (
     <section className="py-16 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4">
-        <SectionTitle>Explore IWF</SectionTitle>
+        <ScrollReveal><SectionTitle>Explore IWF</SectionTitle></ScrollReveal>
         <p className="text-center text-slate-600 text-sm max-w-2xl mx-auto mb-10">Discover the full breadth of our work — from governance and programs to impact and opportunities to join us.</p>
+        <ScrollReveal stagger={0.08}>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {[
-            { icon: Info, page: "About Us", summary: "IWF is a public charitable trust dedicated to the socio-economic development of India's most vulnerable communities. Guided by 'Vision 2047', we are building an equitable, self-reliant India where every individual has access to education, healthcare, and a dignified livelihood." },
-            { icon: Target, page: "Programs", summary: "IWF runs structured programmes across Education, Healthcare, Women Empowerment, Skill Development, Rural Development, Environment & Sustainability, Entrepreneurship, and Relief & Rehabilitation." },
-            { icon: BarChart2, page: "Impact", summary: "IWF has touched 5,000+ lives, conducted 100+ health camps, and supported 2,000+ students across rural India. We document every outcome through success stories, annual reports, and a live impact statistics dashboard." },
-            { icon: Newspaper, page: "Media & Updates", summary: "Stay informed with the latest news, events, newsletters, press releases, and publications from IWF's field teams. Our gallery captures real moments of transformation from the communities we serve." },
-            { icon: UserCheck, page: "Get Involved", summary: "Whether as a Volunteer, Partner, Sponsor, Mentor, or Employee — IWF welcomes everyone who wants to contribute. Our doors are open to individuals, corporates, and institutions." },
-            { icon: MessageCircle, page: "Contact Us", summary: "Reach IWF at our registered office in Bathiya, Darbhanga (Bihar) or connect with us in Patna, Delhi, or Meerut. Write to info@iwfindia.org or call +91 9801812625." },
+            { icon: Info, page: "About Us", summary: "IWF is a public charitable trust dedicated to the socio-economic development of India's most vulnerable communities. Guided by 'Vision 2047', we are building an equitable, self-reliant India where every individual has access to education, healthcare, and a dignified livelihood.", route: "/about" },
+            { icon: Target, page: "Programs", summary: "IWF runs structured programmes across Education, Healthcare, Women Empowerment, Skill Development, Rural Development, Environment & Sustainability, Entrepreneurship, and Relief & Rehabilitation.", route: "/programs/healthcare" },
+            { icon: BarChart2, page: "Impact", summary: "IWF has touched 5,000+ lives, conducted 100+ health camps, and supported 2,000+ students across rural India. We document every outcome through success stories, annual reports, and a live impact statistics dashboard.", route: "#" },
+            { icon: Newspaper, page: "Media & Updates", summary: "Stay informed with the latest news, events, newsletters, press releases, and publications from IWF's field teams. Our gallery captures real moments of transformation from the communities we serve.", route: "#" },
+            { icon: UserCheck, page: "Get Involved", summary: "Whether as a Volunteer, Partner, Sponsor, Mentor, or Employee — IWF welcomes everyone who wants to contribute. Our doors are open to individuals, corporates, and institutions.", route: "#" },
+            { icon: MessageCircle, page: "Contact Us", summary: "Reach IWF at our registered office in Bathiya, Darbhanga (Bihar) or connect with us in Patna, Delhi, or Meerut. Write to info@iwfindia.org or call +91 9801812625.", route: "#" },
           ].map((item) => (
             <div key={item.page} className="bg-white rounded-md p-5 border border-slate-100 shadow-sm hover:shadow-md transition">
               <div className="w-10 h-10 rounded-md bg-brand-orange/15 flex items-center justify-center mb-3">
@@ -770,10 +808,11 @@ function ExploreIWF() {
               </div>
               <h3 className="font-bold text-sm mb-2 text-brand-green-dark">{item.page}</h3>
               <p className="text-xs text-slate-600 leading-relaxed mb-3">{item.summary}</p>
-              <a href="#" className="text-xs font-semibold text-brand-green inline-flex items-center gap-1 hover:opacity-80 transition">Learn More <ArrowRight className="w-3 h-3" /></a>
+              <a href={item.route} className="text-xs font-semibold text-brand-green inline-flex items-center gap-1 hover:opacity-80 transition">Learn More <ArrowRight className="w-3 h-3" /></a>
             </div>
           ))}
         </div>
+        </ScrollReveal>
       </div>
     </section>
   );
