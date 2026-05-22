@@ -14,6 +14,9 @@ import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProgramsWomenEmpowermentRouteImport } from './routes/programs/women-empowerment'
+import { Route as ProgramsSkillsDevelopmentRouteImport } from './routes/programs/skills-development'
+import { Route as ProgramsEducationRouteImport } from './routes/programs/education'
 import { Route as AboutVision2047RouteImport } from './routes/about_/vision-2047'
 import { Route as AboutObjectiveAndVisionRouteImport } from './routes/about_/objective-and-vision'
 import { Route as ProgramsHealthcareIndexRouteImport } from './routes/programs/healthcare/index'
@@ -49,6 +52,23 @@ const AboutRoute = AboutRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgramsWomenEmpowermentRoute =
+  ProgramsWomenEmpowermentRouteImport.update({
+    id: '/programs/women-empowerment',
+    path: '/programs/women-empowerment',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsSkillsDevelopmentRoute =
+  ProgramsSkillsDevelopmentRouteImport.update({
+    id: '/programs/skills-development',
+    path: '/programs/skills-development',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsEducationRoute = ProgramsEducationRouteImport.update({
+  id: '/programs/education',
+  path: '/programs/education',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutVision2047Route = AboutVision2047RouteImport.update({
@@ -118,8 +138,14 @@ const ProgramsHealthcareCervicalCancerRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
+  '/refund-policy': typeof RefundPolicyRoute
+  '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/about/objective-and-vision': typeof AboutObjectiveAndVisionRoute
   '/about/vision-2047': typeof AboutVision2047Route
+  '/programs/education': typeof ProgramsEducationRoute
+  '/programs/skills-development': typeof ProgramsSkillsDevelopmentRoute
+  '/programs/women-empowerment': typeof ProgramsWomenEmpowermentRoute
   '/programs/healthcare/cervical-cancer': typeof ProgramsHealthcareCervicalCancerRoute
   '/programs/healthcare/critical-life-support': typeof ProgramsHealthcareCriticalLifeSupportRoute
   '/programs/healthcare/diabetes-prevention': typeof ProgramsHealthcareDiabetesPreventionRoute
@@ -133,8 +159,14 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
+  '/refund-policy': typeof RefundPolicyRoute
+  '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/about/objective-and-vision': typeof AboutObjectiveAndVisionRoute
   '/about/vision-2047': typeof AboutVision2047Route
+  '/programs/education': typeof ProgramsEducationRoute
+  '/programs/skills-development': typeof ProgramsSkillsDevelopmentRoute
+  '/programs/women-empowerment': typeof ProgramsWomenEmpowermentRoute
   '/programs/healthcare/cervical-cancer': typeof ProgramsHealthcareCervicalCancerRoute
   '/programs/healthcare/critical-life-support': typeof ProgramsHealthcareCriticalLifeSupportRoute
   '/programs/healthcare/diabetes-prevention': typeof ProgramsHealthcareDiabetesPreventionRoute
@@ -149,8 +181,14 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
+  '/refund-policy': typeof RefundPolicyRoute
+  '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/about_/objective-and-vision': typeof AboutObjectiveAndVisionRoute
   '/about_/vision-2047': typeof AboutVision2047Route
+  '/programs/education': typeof ProgramsEducationRoute
+  '/programs/skills-development': typeof ProgramsSkillsDevelopmentRoute
+  '/programs/women-empowerment': typeof ProgramsWomenEmpowermentRoute
   '/programs/healthcare/cervical-cancer': typeof ProgramsHealthcareCervicalCancerRoute
   '/programs/healthcare/critical-life-support': typeof ProgramsHealthcareCriticalLifeSupportRoute
   '/programs/healthcare/diabetes-prevention': typeof ProgramsHealthcareDiabetesPreventionRoute
@@ -166,8 +204,14 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/privacy-policy'
+    | '/refund-policy'
+    | '/terms-and-conditions'
     | '/about/objective-and-vision'
     | '/about/vision-2047'
+    | '/programs/education'
+    | '/programs/skills-development'
+    | '/programs/women-empowerment'
     | '/programs/healthcare/cervical-cancer'
     | '/programs/healthcare/critical-life-support'
     | '/programs/healthcare/diabetes-prevention'
@@ -181,8 +225,14 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/privacy-policy'
+    | '/refund-policy'
+    | '/terms-and-conditions'
     | '/about/objective-and-vision'
     | '/about/vision-2047'
+    | '/programs/education'
+    | '/programs/skills-development'
+    | '/programs/women-empowerment'
     | '/programs/healthcare/cervical-cancer'
     | '/programs/healthcare/critical-life-support'
     | '/programs/healthcare/diabetes-prevention'
@@ -196,8 +246,14 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/privacy-policy'
+    | '/refund-policy'
+    | '/terms-and-conditions'
     | '/about_/objective-and-vision'
     | '/about_/vision-2047'
+    | '/programs/education'
+    | '/programs/skills-development'
+    | '/programs/women-empowerment'
     | '/programs/healthcare/cervical-cancer'
     | '/programs/healthcare/critical-life-support'
     | '/programs/healthcare/diabetes-prevention'
@@ -212,8 +268,14 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  PrivacyPolicyRoute: typeof PrivacyPolicyRoute
+  RefundPolicyRoute: typeof RefundPolicyRoute
+  TermsAndConditionsRoute: typeof TermsAndConditionsRoute
   AboutObjectiveAndVisionRoute: typeof AboutObjectiveAndVisionRoute
   AboutVision2047Route: typeof AboutVision2047Route
+  ProgramsEducationRoute: typeof ProgramsEducationRoute
+  ProgramsSkillsDevelopmentRoute: typeof ProgramsSkillsDevelopmentRoute
+  ProgramsWomenEmpowermentRoute: typeof ProgramsWomenEmpowermentRoute
   ProgramsHealthcareCervicalCancerRoute: typeof ProgramsHealthcareCervicalCancerRoute
   ProgramsHealthcareCriticalLifeSupportRoute: typeof ProgramsHealthcareCriticalLifeSupportRoute
   ProgramsHealthcareDiabetesPreventionRoute: typeof ProgramsHealthcareDiabetesPreventionRoute
@@ -260,6 +322,27 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/women-empowerment': {
+      id: '/programs/women-empowerment'
+      path: '/programs/women-empowerment'
+      fullPath: '/programs/women-empowerment'
+      preLoaderRoute: typeof ProgramsWomenEmpowermentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/skills-development': {
+      id: '/programs/skills-development'
+      path: '/programs/skills-development'
+      fullPath: '/programs/skills-development'
+      preLoaderRoute: typeof ProgramsSkillsDevelopmentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/education': {
+      id: '/programs/education'
+      path: '/programs/education'
+      fullPath: '/programs/education'
+      preLoaderRoute: typeof ProgramsEducationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about_/vision-2047': {
@@ -345,8 +428,14 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  PrivacyPolicyRoute: PrivacyPolicyRoute,
+  RefundPolicyRoute: RefundPolicyRoute,
+  TermsAndConditionsRoute: TermsAndConditionsRoute,
   AboutObjectiveAndVisionRoute: AboutObjectiveAndVisionRoute,
   AboutVision2047Route: AboutVision2047Route,
+  ProgramsEducationRoute: ProgramsEducationRoute,
+  ProgramsSkillsDevelopmentRoute: ProgramsSkillsDevelopmentRoute,
+  ProgramsWomenEmpowermentRoute: ProgramsWomenEmpowermentRoute,
   ProgramsHealthcareCervicalCancerRoute: ProgramsHealthcareCervicalCancerRoute,
   ProgramsHealthcareCriticalLifeSupportRoute:
     ProgramsHealthcareCriticalLifeSupportRoute,
