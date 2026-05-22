@@ -306,6 +306,7 @@ export function Header() {
                   {Array.from({ length: MEGA_DATA[activeMenu].cols }).map((_, colIndex) => {
                     const items = MEGA_DATA[activeMenu].items;
                     const itemsPerCol = Math.ceil(items.length / MEGA_DATA[activeMenu].cols);
+                    const colItems = items.slice(colIndex * itemsPerCol, (colIndex + 1) * itemsPerCol);
                     return (
                       <div key={colIndex} className="flex flex-col gap-3">
                         {colItems.map((subItem, itemIndex) => {
@@ -320,8 +321,14 @@ export function Header() {
                                   ? "/about/objective-and-vision"
                                   : activeMenu === "About Us" && subItem === "Vision 2047"
                                   ? "/about/vision-2047"
-                                  : activeMenu === "What We Do" && subItem === "Health Care"
-                                  ? "/programs/healthcare"
+                                  : activeMenu === "What We Do" && subItem === "Education"
+                                    ? "/programs/education"
+                                    : activeMenu === "What We Do" && subItem === "Health Care"
+                                      ? "/programs/healthcare"
+                                      : activeMenu === "What We Do" && subItem === "Skills Development"
+                                        ? "/programs/skills-development"
+                                        : activeMenu === "What We Do" && subItem === "Women Empowerment"
+                                          ? "/programs/women-empowerment"
                                   : activeMenu === "Programs" && subItem === "View All Programs →"
                                   ? "/programs/healthcare"
                                   : "#"
