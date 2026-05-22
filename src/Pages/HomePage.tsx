@@ -310,6 +310,10 @@ function Header() {
                               href={
                                 activeMenu === "About Us" && subItem === "Overview"
                                   ? "/about"
+                                  : activeMenu === "About Us" && subItem === "Our Objective & Vision"
+                                  ? "/about/objective-and-vision"
+                                  : activeMenu === "About Us" && subItem === "Vision 2047"
+                                  ? "/about/vision-2047"
                                   : activeMenu === "What We Do" && subItem === "Health Care"
                                   ? "/programs/healthcare"
                                   : activeMenu === "Programs" && subItem === "View All Programs →"
@@ -448,6 +452,10 @@ function Header() {
                             href={
                               item === "About Us" && sub === "Overview"
                                 ? "/about"
+                                : item === "About Us" && sub === "Our Objective & Vision"
+                                ? "/about/objective-and-vision"
+                                : item === "About Us" && sub === "Vision 2047"
+                                ? "/about/vision-2047"
                                 : item === "What We Do" && sub === "Health Care"
                                 ? "/programs/healthcare"
                                 : item === "Programs" && sub === "View All Programs →"
