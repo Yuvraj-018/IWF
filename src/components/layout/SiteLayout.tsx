@@ -37,7 +37,6 @@ export const NAV_ITEMS = [
   "Home",
   "About Us",
   "What We Do",
-  "Programs",
   "Impact",
   "Media & Updates",
   "Get Involved",
@@ -321,6 +320,12 @@ export function Header() {
 
           {/* Right Group: Donate Button & Mobile Hamburger */}
           <div className="flex items-center gap-2 md:gap-3 shrink-0 py-1.5 ml-auto lg:ml-0">
+            <a
+              href="/membership"
+              className="bg-[#15803D] hover:bg-[#166534] text-white font-bold text-xs md:text-sm px-4 py-2 rounded-md shadow-md transition-all hover:scale-105 active:scale-95 uppercase tracking-wide"
+            >
+              Become Member
+            </a>
             <a
               href="/donate"
               className="bg-[#f97316] hover:bg-orange-600 text-white font-bold text-xs md:text-sm px-4 py-2 rounded-md shadow-md transition-all hover:scale-105 active:scale-95 uppercase tracking-wide"

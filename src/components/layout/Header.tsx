@@ -4,7 +4,6 @@ import newLogo from "@/assets/new logo.png";
 const navItems = [
   { label: "Home", to: "/" },
   { label: "About Us", to: "/about" },
-  { label: "Programs", to: "/programs" },
   { label: "Impact", to: "/impact" },
   { label: "Get Involved", to: "/get-involved" },
   { label: "Contact Us", to: "/contact" },
@@ -37,9 +36,17 @@ export function Header() {
             );
           })}
         </nav>
-        <button className="bg-brand-orange hover:bg-brand-orange-dark text-white font-semibold text-sm px-5 py-2.5 rounded shadow transition">
-          DONATE NOW
-        </button>
+        <div className="flex items-center gap-2">
+          <Link
+            to="/membership"
+            className="bg-brand-green hover:bg-brand-green-dark text-white font-semibold text-sm px-5 py-2.5 rounded shadow transition"
+          >
+            Become Member
+          </Link>
+          <button className="bg-brand-orange hover:bg-brand-orange-dark text-white font-semibold text-sm px-5 py-2.5 rounded shadow transition">
+            DONATE NOW
+          </button>
+        </div>
       </div>
     </header>
   );

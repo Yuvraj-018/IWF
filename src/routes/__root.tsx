@@ -148,7 +148,7 @@ function RootComponent() {
       </PageTransition>
 
       {/* Sticky Social Links Sidebar on Right Edge */}
-      <div className="fixed right-0 top-[62%] -translate-y-1/2 z-50 flex flex-col shadow-2xl rounded-l-xl overflow-hidden select-none">
+      <div className="fixed right-0 top-[75%] -translate-y-1/2 z-50 flex flex-col shadow-2xl rounded-l-xl overflow-hidden select-none">
         {[
           { Icon: Facebook, color: "bg-[#1877f2] hover:bg-[#166fe5]", href: "https://facebook.com", name: "Facebook" },
           { Icon: Twitter, color: "bg-[#1da1f2] hover:bg-[#0d95e8]", href: "https://twitter.com", name: "Twitter" },
