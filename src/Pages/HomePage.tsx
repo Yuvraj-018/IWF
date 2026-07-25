@@ -187,7 +187,6 @@ const NAV_ITEMS = [
   "Home",
   "About Us",
   "What We Do",
-  "Programs",
   "Impact",
   "Media & Updates",
   "Get Involved",
@@ -338,8 +337,8 @@ const TRANSLATIONS = {
 };
 
 const NAV_ITEMS_TRANSLATIONS = {
-  en: ["Home", "About Us", "What We Do", "Programs", "Impact", "Media & Updates", "Get Involved", "Contact Us"],
-  hi: ["होम", "हमारे बारे में", "हम क्या करते हैं", "कार्यक्रम", "प्रभाव", "मीडिया और अपडेट", "जुड़ें", "संपर्क करें"]
+  en: ["Home", "About Us", "What We Do", "Impact", "Media & Updates", "Get Involved", "Contact Us"],
+  hi: ["होम", "हमारे बारे में", "हम क्या करते हैं", "प्रभाव", "मीडिया और अपडेट", "जुड़ें", "संपर्क करें"]
 };
 
 interface SectionHeaderProps {
@@ -588,6 +587,9 @@ function Header({ lang }: HeaderProps) {
 
           {/* Right Group: Donate Button & Mobile Hamburger */}
           <div className="flex items-center gap-2 md:gap-3 shrink-0 py-1.5 ml-auto lg:ml-0">
+            <a href="/membership" className="bg-brand-green hover:bg-brand-green-dark text-white font-bold text-xs md:text-sm px-4 py-2 rounded-md shadow-md transition-all hover:scale-105 active:scale-95 uppercase tracking-wide">
+              Become Member
+            </a>
             <a href="/donate" className="bg-[#f97316] hover:bg-orange-600 text-white font-bold text-xs md:text-sm px-4 py-2 rounded-md shadow-md transition-all hover:scale-105 active:scale-95 uppercase tracking-wide">
               DONATE NOW
             </a>

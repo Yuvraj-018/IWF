@@ -656,16 +656,16 @@ function MembersTab({ onRenewClick }: { onRenewClick: () => void }) {
   }, [stateFilter]);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 pt-10">
+    <div className="max-w-6xl mx-auto px-4 pt-3">
 
       {/* ─ Info Banner */}
-      <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2.5 mb-5 text-xs text-amber-800 font-semibold">
+      <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2.5 mb-3 text-xs text-amber-800 font-semibold">
         <Info className="w-4 h-4 shrink-0 text-amber-500" />
         All Members are Non-Executive &amp; Non-Voting Members
       </div>
 
       {/* ─ Category Description Cards */}
-      <div className="grid md:grid-cols-3 gap-4 mb-6">
+      <div className="grid md:grid-cols-3 gap-4 mb-3">
         {(["Blue", "Yellow", "Green"] as MemberCategory[]).map(cat => {
           const cfg = CATEGORY_CONFIG[cat];
           const Icon = cfg.icon;
@@ -732,7 +732,7 @@ function MembersTab({ onRenewClick }: { onRenewClick: () => void }) {
       </div>
 
       {/* ─ Renew button */}
-      <div className="flex justify-end mb-4">
+      <div className="flex justify-end mb-3">
         <button onClick={onRenewClick}
           className="inline-flex items-center gap-2 border-2 border-amber-400 text-amber-600 font-bold px-5 py-2 rounded-full text-sm hover:bg-amber-50 transition-colors shadow-sm">
           <RefreshCw className="w-3.5 h-3.5" /> Renew Membership
@@ -740,7 +740,7 @@ function MembersTab({ onRenewClick }: { onRenewClick: () => void }) {
       </div>
 
       {/* ─ Filter Bar */}
-      <div className="bg-white border border-slate-100 rounded-2xl p-4 mb-4 flex flex-wrap gap-3 items-end shadow-sm">
+      <div className="bg-white border border-slate-100 rounded-2xl p-3 mb-3 flex flex-wrap gap-3 items-end shadow-sm">
         <div>
           <label className="block text-xs font-semibold text-slate-500 mb-1.5">Category</label>
           <select value={categoryFilter}
@@ -793,7 +793,7 @@ function MembersTab({ onRenewClick }: { onRenewClick: () => void }) {
       </div>
 
       {/* ─ Table */}
-      <div className="bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm mb-4">
+      <div className="bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm mb-3">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
@@ -985,8 +985,8 @@ function DonorTierSection({ tier, donors }: { tier: DonorTier; donors: MockDonor
   const tierRangeLabel = { Platinum: "₹50,000 & Above", Gold: "₹20,000 – ₹49,999", Silver: "₹5,000 – ₹19,999" }[tier];
 
   return (
-    <div className="mb-10">
-      <div className="flex items-center justify-between mb-4">
+    <div className="mb-4">
+      <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm"
             style={{ background: `linear-gradient(135deg, ${cfg.gradientFrom}, ${cfg.gradientTo})` }}>
@@ -1051,24 +1051,24 @@ function DonorsTab({ isTopDonors = false }: { isTopDonors?: boolean }) {
   }))).sort()];
 
   return (
-    <div className="max-w-6xl mx-auto px-4 pt-10">
+    <div className="max-w-6xl mx-auto px-4 pt-3">
 
       {/* ─ Sub-hero */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-8 p-6 md:p-8 rounded-2xl relative overflow-hidden"
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-3 p-4 rounded-2xl relative overflow-hidden"
         style={{ background: "linear-gradient(135deg, #0b1f3b 0%, #18325c 60%, #0a1b33 100%)" }}>
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 right-0 w-48 h-48 rounded-full bg-brand-orange/10 blur-2xl" />
           <div className="absolute bottom-0 left-1/4 w-32 h-32 rounded-full bg-green-400/10 blur-xl" />
         </div>
         <div className="relative z-10">
-          <p className="text-brand-orange text-[10px] font-bold uppercase tracking-widest mb-2">Our Pillars of Strength</p>
-          <h2 className="text-white text-3xl md:text-4xl font-extrabold mb-2">
+          <p className="text-brand-orange text-[10px] font-bold uppercase tracking-widest mb-1.5">Our Pillars of Strength</p>
+          <h2 className="text-white text-3xl md:text-4xl font-extrabold mb-1.5">
             {isTopDonors ? "Top Donors Leaderboard" : "Donors"}
           </h2>
           <p className="text-white/65 text-sm max-w-md leading-relaxed">
             Our donors empower us to transform lives and build stronger communities. We sincerely appreciate their generous support and trust in our mission.
           </p>
-          <p className="text-white/40 text-xs mt-2 flex items-center gap-1">
+          <p className="text-white/40 text-xs mt-1.5 flex items-center gap-1">
             <Heart className="w-3 h-3 text-red-400" /> Thank you for being a part of our journey.
           </p>
         </div>
@@ -1081,7 +1081,7 @@ function DonorsTab({ isTopDonors = false }: { isTopDonors?: boolean }) {
       </div>
 
       {/* ─ Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
         {[
           { label: "Total Donors", value: "120+", sub: "Individuals & Organizations", color: "#1D4ED8", bg: "#EFF6FF", Icon: Users },
           { label: "Total Donations", value: "₹12,50,000+", sub: "Received So Far", color: "#15803D", bg: "#F0FDF4", Icon: IndianRupee },
@@ -1102,7 +1102,7 @@ function DonorsTab({ isTopDonors = false }: { isTopDonors?: boolean }) {
       </div>
 
       {/* ─ Filters */}
-      <div className="bg-white border border-slate-100 rounded-2xl p-4 mb-8 flex flex-wrap gap-3 items-end shadow-sm">
+      <div className="bg-white border border-slate-100 rounded-2xl p-3 mb-3 flex flex-wrap gap-3 items-end shadow-sm">
         <div className="flex-1 min-w-44">
           <label className="block text-xs font-semibold text-slate-500 mb-1.5">Search</label>
           <div className="relative">
@@ -1139,8 +1139,8 @@ function DonorsTab({ isTopDonors = false }: { isTopDonors?: boolean }) {
 
       {/* ─ Featured Top 3 */}
       {!search && tierFilter === "All" && (
-        <div className="mb-10">
-          <div className="flex items-center gap-2 mb-5">
+        <div className="mb-4">
+          <div className="flex items-center gap-2 mb-3">
             <Trophy className="w-5 h-5 text-amber-500" />
             <h3 className="font-extrabold text-slate-800 text-lg">Featured Donors (Top 3)</h3>
             <span className="text-xs text-slate-500 hidden sm:block">— Our most generous and impactful supporters</span>
@@ -1189,14 +1189,14 @@ function DonorsTab({ isTopDonors = false }: { isTopDonors?: boolean }) {
 
 function BecomeMemberCTA({ onApplyNow }: { onApplyNow: (cat: MemberCategory) => void }) {
   return (
-    <section className="py-16 relative overflow-hidden">
+    <section className="py-8 relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
         {/* background blurs removed */}
       </div>
 
       <div className="max-w-5xl mx-auto px-4 relative z-10">
-        <div className="text-center mb-10">
-          <div className="flex items-center justify-center gap-3 mb-3">
+        <div className="text-center mb-5">
+          <div className="flex items-center justify-center gap-3 mb-2">
             <div className="h-px w-10 bg-brand-orange/40" />
             <span className="text-brand-orange text-xs font-bold uppercase tracking-widest">Join Us</span>
             <div className="h-px w-10 bg-brand-orange/40" />
@@ -1206,29 +1206,29 @@ function BecomeMemberCTA({ onApplyNow }: { onApplyNow: (cat: MemberCategory) => 
         </div>
 
         {/* Plan cards */}
-        <div className="grid md:grid-cols-3 gap-5 mb-10">
+        <div className="grid md:grid-cols-3 gap-4 mb-5">
           {(["Blue", "Yellow", "Green"] as MemberCategory[]).map(cat => {
             const cfg = CATEGORY_CONFIG[cat];
             const Icon = cfg.icon;
             return (
               <motion.div
                 key={cat}
-                whileHover={{ y: -6, scale: 1.02 }}
+                whileHover={{ y: -4, scale: 1.01 }}
                 transition={{ type: "spring", stiffness: 280, damping: 20 }}
-                className="bg-white rounded-2xl border-2 shadow-lg hover:shadow-xl transition-shadow p-6 text-center flex flex-col items-center"
+                className="bg-white rounded-2xl border-2 shadow-lg hover:shadow-xl transition-shadow p-4 text-center flex flex-col items-center"
                 style={{ borderColor: cfg.border }}>
-                <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 shadow-md"
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-2 shadow-md"
                   style={{ background: `linear-gradient(135deg, ${cfg.color}, ${cfg.darkColor})` }}>
-                  <Icon className="w-8 h-8 text-white" />
+                  <Icon className="w-5.5 h-5.5 text-white" />
                 </div>
-                <h3 className="font-extrabold text-slate-800 text-base mb-1">{cat} Card Member</h3>
-                <p className="text-2xl font-extrabold mb-1" style={{ color: cfg.color }}>
+                <h3 className="font-extrabold text-slate-800 text-sm mb-0.5">{cat} Card Member</h3>
+                <p className="text-xl font-extrabold mb-0.5" style={{ color: cfg.color }}>
                   ₹{cfg.amount.toLocaleString("en-IN")}
                 </p>
-                <p className="text-xs text-slate-500 mb-5">/ Year</p>
+                <p className="text-xs text-slate-500 mb-3.5">/ Year</p>
                 <button
                   onClick={() => onApplyNow(cat)}
-                  className="w-full py-3 rounded-xl font-bold text-white text-sm shadow-md hover:scale-[1.02] transition-all"
+                  className="w-full py-2 rounded-lg font-bold text-white text-sm shadow-md hover:scale-[1.01] transition-all"
                   style={{ background: `linear-gradient(135deg, ${cfg.color}, ${cfg.darkColor})` }}>
                   Apply Now
                 </button>
@@ -1238,18 +1238,18 @@ function BecomeMemberCTA({ onApplyNow }: { onApplyNow: (cat: MemberCategory) => 
         </div>
 
         {/* Quote strip */}
-        <div className="relative bg-white rounded-2xl border border-slate-100 shadow-sm p-6 md:p-8 overflow-hidden">
+        <div className="relative bg-white rounded-2xl border border-slate-100 shadow-sm py-4 px-5 overflow-hidden">
           <div className="absolute top-0 left-0 bottom-0 w-1.5 rounded-l-2xl"
             style={{ background: "linear-gradient(180deg, #1D4ED8, #D97706, #15803D)" }} />
-          <div className="pl-4 flex flex-col md:flex-row items-start md:items-center gap-4">
+          <div className="pl-3 flex flex-col md:flex-row items-start md:items-center gap-3">
             <div className="flex-1">
               <span className="text-4xl text-slate-200 font-serif leading-none">"</span>
-              <p className="text-slate-700 font-medium text-sm md:text-base -mt-2 leading-relaxed italic">
+              <p className="text-slate-700 font-medium text-xs md:text-sm -mt-2 leading-relaxed italic">
                 Your contribution is more than support—it is a step towards building stronger communities and creating lasting social impact.
               </p>
             </div>
             <div className="shrink-0 text-brand-green/70">
-              <Sparkles className="w-10 h-10" />
+              <Sparkles className="w-8 h-8" />
             </div>
           </div>
         </div>
@@ -2943,7 +2943,7 @@ function YourMembershipTab({
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-4xl mx-auto px-4 py-3">
       <AnimatePresence mode="wait">
         {loadedMember ? (
           <motion.div
@@ -2962,9 +2962,9 @@ function YourMembershipTab({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.3 }}
-            className="text-center mb-8"
+            className="text-center mb-4"
           >
-            <div className="bg-slate-50 rounded-2xl border border-slate-100 p-6 mb-8 text-center">
+            <div className="bg-slate-50 rounded-2xl border border-slate-100 p-4 mb-3 text-center">
               <Shield className="w-8 h-8 text-slate-400 mx-auto mb-2" />
               <p className="text-sm font-semibold text-slate-500">
                 No active membership profile loaded.
@@ -2980,7 +2980,7 @@ function YourMembershipTab({
               </button>
             </div>
 
-            <div className="border-t border-slate-100 pt-8">
+            <div className="border-t border-slate-100 pt-4">
               <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Preview Card Types</p>
               <MemberCardPreviewSection />
             </div>
@@ -2988,7 +2988,7 @@ function YourMembershipTab({
         )}
       </AnimatePresence>
 
-      <div className="border-t border-slate-100 pt-12 space-y-12">
+      <div className="border-t border-slate-100 pt-4 space-y-4">
         <MemberStatusCheck loadedMember={loadedMember} setLoadedMember={setLoadedMember} />
         <RenewalSection loadedMember={loadedMember} setLoadedMember={setLoadedMember} />
       </div>
