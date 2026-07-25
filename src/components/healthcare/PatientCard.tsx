@@ -50,35 +50,37 @@ export function PatientCard({
       </div>
 
       {/* Content */}
-      <div className="p-3 flex flex-col flex-1 gap-1.5">
-        <h3 className="font-bold text-[#0b1f3b] text-sm leading-tight truncate">{name}</h3>
-        <p className="text-[11px] font-medium text-slate-500">
-          Age: {age} Yrs | {gender}
-        </p>
+      <div className="p-3 flex flex-col flex-1 gap-1">
+        <div className="flex items-baseline justify-between gap-2">
+          <h3 className="font-extrabold text-[#0b1f3b] text-base leading-tight truncate">{name}</h3>
+          <span className="text-xs font-bold text-slate-500 shrink-0">
+            {age} Yrs · {gender}
+          </span>
+        </div>
 
         <div className="h-px bg-slate-100 my-0.5" />
 
-        <div>
-          <span className="text-[9px] font-black text-[#f97316] uppercase tracking-wide">
+        <div className="flex items-baseline gap-1.5 min-w-0">
+          <span className="text-[10px] font-black text-[#f97316] uppercase tracking-wide shrink-0">
             Disease:
           </span>
-          <p className="text-[11px] text-slate-700 font-medium leading-snug line-clamp-1">{disease}</p>
+          <span className="text-xs text-slate-800 font-bold truncate leading-snug">{disease}</span>
         </div>
 
-        <div>
-          <span className="text-[9px] font-black text-[#0b1f3b] uppercase tracking-wide">
+        <div className="flex items-baseline gap-1.5 min-w-0">
+          <span className="text-[10px] font-black text-[#0b1f3b] uppercase tracking-wide shrink-0">
             Hospital:
           </span>
-          <p className="text-[11px] text-slate-600 font-normal leading-snug line-clamp-1">{hospital}</p>
+          <span className="text-xs text-slate-700 font-semibold truncate leading-snug">{hospital}</span>
         </div>
 
         {/* Financial section */}
         <div className="mt-1 py-1 flex items-center justify-between border-t border-b border-slate-100">
-          <span className="text-[9px] font-extrabold text-[#0b1f3b] uppercase tracking-wide">
+          <span className="text-[10px] font-black text-[#0b1f3b] uppercase tracking-wide">
             Needed
           </span>
-          <div className="flex items-center gap-0.5 text-xs text-[#f97316] font-extrabold">
-            <IndianRupee className="w-3 h-3 text-[#f97316] shrink-0" />
+          <div className="flex items-center gap-0.5 text-sm text-[#f97316] font-black">
+            <IndianRupee className="w-3.5 h-3.5 text-[#f97316] shrink-0" />
             <span>{neededAmount.toLocaleString("en-IN")}</span>
           </div>
         </div>
@@ -87,9 +89,9 @@ export function PatientCard({
         <Link
           to="/patients/$patientSlug"
           params={{ patientSlug: slug }}
-          className="mt-1.5 w-full bg-[#0b1f3b] hover:bg-brand-green text-white font-bold text-[11px] py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-colors duration-200 active:scale-95"
+          className="mt-1 w-full bg-[#0b1f3b] hover:bg-brand-green text-white font-extrabold text-xs py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-colors duration-200 active:scale-95"
         >
-          <Eye className="w-3 h-3" />
+          <Eye className="w-3.5 h-3.5" />
           VIEW MORE
         </Link>
       </div>
