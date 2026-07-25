@@ -102,11 +102,22 @@ const donorSchema = z.object({
   email: z.string().trim().email("Enter a valid email address"),
   phone: z.string().trim().min(10, "Enter a valid phone number"),
   address: z.string().trim().min(5, "Address is required"),
+  taxExemption: z.boolean().optional(),
   pan: z.string().trim().optional(),
   financialType: z.string().min(1, "Please select a donation category"),
   amount: z.number({ invalid_type_error: "Enter a valid amount" }).min(1, "Amount must be at least Rs.1"),
   paymentMode: z.enum(["online", "bank", "offline"]),
   consent: z.boolean().optional(),
+}).superRefine((data, ctx) => {
+  if (data.citizenship === "indian" && data.taxExemption) {
+    if (!data.pan || !/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/i.test(data.pan)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "A valid PAN Number (e.g. ABCDE1234F) is required for 80G tax exemption",
+        path: ["pan"],
+      });
+    }
+  }
 });
 
 type DonorFormData = z.infer<typeof donorSchema>;
@@ -349,7 +360,7 @@ function Step1DonorInfo({
   const donorType = watch("donorType");
 
   const handleNext = async () => {
-    const valid = await trigger(["donorType", "citizenship", "fullName", "email", "phone", "address"]);
+    const valid = await trigger(["donorType", "citizenship", "fullName", "email", "phone", "address", "pan", "taxExemption"]);
     if (valid) onNext();
   };
 
@@ -441,7 +452,21 @@ function Step1DonorInfo({
         </InputField>
 
         {/* PAN */}
-        <InputField label={`PAN Number ${citizenship === "indian" ? "(Required for 80G certificate)" : "(Optional)"}`} error={errors.pan?.message}>
+        {citizenship === "indian" && (
+          <div className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200 mb-2">
+            <input
+              id="taxExemption"
+              type="checkbox"
+              {...register("taxExemption")}
+              className="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand-green"
+            />
+            <label htmlFor="taxExemption" className="text-xs text-slate-600 cursor-pointer leading-relaxed">
+              <strong>I want to claim 80G Tax Exemption</strong> (Requires a valid PAN card number)
+            </label>
+          </div>
+        )}
+
+        <InputField label={`PAN Number ${citizenship === "indian" && watch("taxExemption") ? "(Required for 80G certificate) *" : "(Optional)"}`} error={errors.pan?.message}>
           <input {...register("pan")} placeholder="ABCDE1234F" className={inputCls} style={{ textTransform: "uppercase" }} />
         </InputField>
 
