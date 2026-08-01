@@ -6,6 +6,7 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  useRouterState,
 } from "@tanstack/react-router";
 import { useState } from "react";
 import {
@@ -130,6 +131,9 @@ function RootComponent() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [formStatus, setFormStatus] = useState<"idle" | "loading" | "success">("idle");
 
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isHomepage = pathname === "/";
+
   const handleMsgSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setFormStatus("loading");
@@ -143,12 +147,14 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ScrollProgressBar />
-      <PageTransition>
-        <Outlet />
-      </PageTransition>
+      <div className={isHomepage ? "homepage-layout" : "subpage-layout"}>
+        <PageTransition>
+          <Outlet />
+        </PageTransition>
+      </div>
 
       {/* Sticky Social Links Sidebar on Right Edge */}
-      <div className="fixed right-0 top-[75%] -translate-y-1/2 z-50 flex flex-col shadow-2xl rounded-l-xl overflow-hidden select-none">
+      <div className="fixed right-0 top-[62%] -translate-y-1/2 z-50 flex flex-col shadow-2xl rounded-l-xl overflow-hidden select-none">
         {[
           { Icon: Facebook, color: "bg-[#1877f2] hover:bg-[#166fe5]", href: "https://facebook.com", name: "Facebook" },
           { Icon: Twitter, color: "bg-[#1da1f2] hover:bg-[#0d95e8]", href: "https://twitter.com", name: "Twitter" },
@@ -272,17 +278,38 @@ function RootComponent() {
           </div>
         )}
 
-        {/* Float Toggle Button */}
-        <button
-          onClick={() => setMsgOpen(!msgOpen)}
-          className={`w-12 h-12 rounded-full flex items-center justify-center text-white shadow-2xl transition-all duration-300 hover:scale-110 cursor-pointer ${
-            msgOpen ? "bg-[#0b1f3b] hover:bg-[#071629] rotate-90" : "bg-brand-orange hover:bg-brand-orange-dark hover:shadow-brand-orange/30"
-          }`}
-          aria-label="Toggle contact message popup"
-          title="Send a message"
-        >
-          {msgOpen ? <X className="w-5 h-5" /> : <MessageCircle className="w-5 h-5 fill-white text-brand-orange" />}
-        </button>
+        {/* Floating Action Buttons Row */}
+        <div className="flex items-center gap-3">
+          {/* WhatsApp Button */}
+          <a
+            href="https://wa.me/919811861633"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-12 h-12 rounded-full bg-[#25d366] hover:bg-[#20ba5a] flex items-center justify-center text-white shadow-2xl transition-all duration-300 hover:scale-110 cursor-pointer"
+            aria-label="Connect via WhatsApp"
+            title="Chat on WhatsApp"
+          >
+            <svg
+              className="w-6 h-6 fill-white"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.965C16.59 2.012 14.12 1 11.48 1H11.43c-5.438 0-9.863 4.372-9.867 9.802-.001 1.73.457 3.41 1.32 4.91L1.87 20.89l5.35-1.4c1.55.932 3.125 1.42 4.675 1.42.01 0 .02 0 .03 0zm10.457-7.233c-.29-.145-1.716-.848-1.982-.946-.265-.098-.458-.147-.65.145-.192.291-.745.946-.913 1.137-.168.19-.336.213-.626.069-.29-.145-1.225-.452-2.333-1.443-.862-.77-1.443-1.721-1.61-2.011-.169-.29-.017-.447.127-.591.13-.13.29-.339.436-.508.145-.17.193-.29.29-.485.097-.193.048-.363-.024-.508-.072-.145-.65-1.573-.89-2.152-.234-.567-.473-.488-.65-.497-.168-.008-.36-.01-.553-.01-.193 0-.507.073-.77.362-.266.29-.988.966-.988 2.356 0 1.39 1.01 2.73 1.15 2.91.144.19 1.989 3.046 4.819 4.264.673.29 1.2.463 1.61.593.676.215 1.29.185 1.776.113.54-.08 1.716-.7 1.961-1.374.246-.675.246-1.253.173-1.373-.073-.12-.265-.193-.555-.338z" />
+            </svg>
+          </a>
+
+          {/* Float Toggle Button */}
+          <button
+            onClick={() => setMsgOpen(!msgOpen)}
+            className={`w-12 h-12 rounded-full flex items-center justify-center text-white shadow-2xl transition-all duration-300 hover:scale-110 cursor-pointer ${
+              msgOpen ? "bg-[#0b1f3b] hover:bg-[#071629] rotate-90" : "bg-brand-orange hover:bg-brand-orange-dark hover:shadow-brand-orange/30"
+            }`}
+            aria-label="Toggle contact message popup"
+            title="Send a message"
+          >
+            {msgOpen ? <X className="w-5 h-5" /> : <MessageCircle className="w-5 h-5 fill-white text-brand-orange" />}
+          </button>
+        </div>
       </div>
       <FloatingTranslateButton />
     </QueryClientProvider>
