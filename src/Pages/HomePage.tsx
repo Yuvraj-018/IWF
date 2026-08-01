@@ -1706,6 +1706,7 @@ function GallerySection({ lang }: LanguageProp) {
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   // Responsive scroll bounds
   const [maxIndex, setMaxIndex] = useState(2);
@@ -1724,6 +1725,21 @@ function GallerySection({ lang }: LanguageProp) {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // Keyboard navigation for Lightbox
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setLightboxIndex(null);
+      } else if (e.key === "ArrowLeft" && lightboxIndex !== null && lightboxIndex > 0) {
+        setLightboxIndex(lightboxIndex - 1);
+      } else if (e.key === "ArrowRight" && lightboxIndex !== null && lightboxIndex < items.length - 1) {
+        setLightboxIndex(lightboxIndex + 1);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [lightboxIndex, items.length]);
 
   const handlePrev = () => {
     setCurrentIndex((prev) => Math.max(0, prev - 1));
@@ -1784,6 +1800,7 @@ function GallerySection({ lang }: LanguageProp) {
             {items.map((item, idx) => (
               <div
                 key={idx}
+                onClick={() => setLightboxIndex(idx)}
                 className="w-[calc(100%-16px)] shrink-0 sm:w-[calc(50%-12px)] lg:w-[calc(25%-12px)] rounded-2xl overflow-hidden shadow-md border border-slate-100 group relative aspect-[4/3] bg-slate-900 cursor-pointer"
               >
                 {/* Image */}
@@ -1827,6 +1844,70 @@ function GallerySection({ lang }: LanguageProp) {
             {lang === "en" ? "View All Media" : "सभी मीडिया देखें"} <ArrowRight className="w-3.5 h-3.5" />
           </a>
         </div>
+
+        {/* Lightbox Modal */}
+        {lightboxIndex !== null && (
+          <div 
+            className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4 backdrop-blur-sm select-none"
+            onClick={() => setLightboxIndex(null)}
+          >
+            {/* Close button */}
+            <button 
+              className="absolute top-4 right-4 text-white hover:text-brand-orange transition-colors p-2 rounded-full bg-white/10 hover:bg-white/20 cursor-pointer transition-transform active:scale-95 z-[110]"
+              onClick={(e) => { e.stopPropagation(); setLightboxIndex(null); }}
+              aria-label="Close Lightbox"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            {/* Left Arrow */}
+            <button
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-brand-orange transition-colors p-3 rounded-full bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer z-[110] transition-transform active:scale-95 hidden sm:flex items-center justify-center"
+              onClick={(e) => {
+                e.stopPropagation();
+                setLightboxIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : prev));
+              }}
+              disabled={lightboxIndex === 0}
+              aria-label="Previous image"
+            >
+              <ChevronLeft className="w-8 h-8" />
+            </button>
+
+            {/* Image Container */}
+            <div 
+              className="max-w-4xl max-h-[85vh] flex flex-col items-center gap-4 px-2"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={items[lightboxIndex].src}
+                alt={items[lightboxIndex].title}
+                className="max-w-full max-h-[72vh] object-contain rounded-xl shadow-2xl border border-white/10 animate-in zoom-in-95 duration-200"
+              />
+              {/* Title / Description */}
+              <div className="text-center bg-slate-900/60 backdrop-blur-md px-4 py-2 rounded-xl border border-white/5">
+                <h4 className="text-white text-sm font-extrabold tracking-wider uppercase">
+                  {items[lightboxIndex].title}
+                </h4>
+                <p className="text-[10px] text-white/50 mt-0.5 uppercase tracking-wider font-semibold">
+                  {items[lightboxIndex].type === "video" ? "Video Highlight" : "Photo Journey"}
+                </p>
+              </div>
+            </div>
+
+            {/* Right Arrow */}
+            <button
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-brand-orange transition-colors p-3 rounded-full bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer z-[110] transition-transform active:scale-95 hidden sm:flex items-center justify-center"
+              onClick={(e) => {
+                e.stopPropagation();
+                setLightboxIndex((prev) => (prev !== null && prev < items.length - 1 ? prev + 1 : prev));
+              }}
+              disabled={lightboxIndex === items.length - 1}
+              aria-label="Next image"
+            >
+              <ChevronRight className="w-8 h-8" />
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
