@@ -9,20 +9,43 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VolunteerPolicyRouteImport } from './routes/volunteer-policy'
 import { Route as TermsAndConditionsRouteImport } from './routes/terms-and-conditions'
+import { Route as SponsorshipPolicyRouteImport } from './routes/sponsorship-policy'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
+import { Route as PoliciesRouteImport } from './routes/policies'
+import { Route as PartnershipPolicyRouteImport } from './routes/partnership-policy'
 import { Route as NewsAndEventsRouteImport } from './routes/news-and-events'
+import { Route as MentorshipPolicyRouteImport } from './routes/mentorship-policy'
 import { Route as MembershipRouteImport } from './routes/membership'
+import { Route as MembersAndDonorsRouteImport } from './routes/members-and-donors'
+import { Route as MedicalTreatmentPolicyRouteImport } from './routes/medical-treatment-policy'
+import { Route as GrievancePolicyRouteImport } from './routes/grievance-policy'
+import { Route as GovernancePolicyRouteImport } from './routes/governance-policy'
+import { Route as FinancialTransparencyPolicyRouteImport } from './routes/financial-transparency-policy'
+import { Route as EmploymentPolicyRouteImport } from './routes/employment-policy'
+import { Route as DonationPolicyRouteImport } from './routes/donation-policy'
 import { Route as DonateRouteImport } from './routes/donate'
+import { Route as DisclaimerRouteImport } from './routes/disclaimer'
+import { Route as CookiePolicyRouteImport } from './routes/cookie-policy'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CodeOfConductRouteImport } from './routes/code-of-conduct'
+import { Route as ChildProtectionPolicyRouteImport } from './routes/child-protection-policy'
+import { Route as AntiFraudPolicyRouteImport } from './routes/anti-fraud-policy'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProgramsIndexRouteImport } from './routes/programs/index'
 import { Route as ProgramsWomenEmpowermentRouteImport } from './routes/programs/women-empowerment'
 import { Route as ProgramsSkillsDevelopmentRouteImport } from './routes/programs/skills-development'
+import { Route as ProgramsReliefAndRehabilitationRouteImport } from './routes/programs/relief-and-rehabilitation'
+import { Route as ProgramsEnvironmentRouteImport } from './routes/programs/environment'
+import { Route as ProgramsEntrepreneurDevelopmentRouteImport } from './routes/programs/entrepreneur-development'
 import { Route as ProgramsEducationRouteImport } from './routes/programs/education'
+import { Route as ProgramsAgricultureRouteImport } from './routes/programs/agriculture'
 import { Route as PatientsPatientSlugRouteImport } from './routes/patients/$patientSlug'
 import { Route as AboutVision2047RouteImport } from './routes/about_/vision-2047'
+import { Route as AboutPartnersRouteImport } from './routes/about_/partners'
 import { Route as AboutObjectiveAndVisionRouteImport } from './routes/about_/objective-and-vision'
 import { Route as AboutLegalStatusRouteImport } from './routes/about_/legal-status'
 import { Route as AboutLeadershipRouteImport } from './routes/about_/leadership'
@@ -37,9 +60,19 @@ import { Route as ProgramsHealthcareDiabetesPreventionRouteImport } from './rout
 import { Route as ProgramsHealthcareCriticalLifeSupportRouteImport } from './routes/programs/healthcare/critical-life-support'
 import { Route as ProgramsHealthcareCervicalCancerRouteImport } from './routes/programs/healthcare/cervical-cancer'
 
+const VolunteerPolicyRoute = VolunteerPolicyRouteImport.update({
+  id: '/volunteer-policy',
+  path: '/volunteer-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TermsAndConditionsRoute = TermsAndConditionsRouteImport.update({
   id: '/terms-and-conditions',
   path: '/terms-and-conditions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SponsorshipPolicyRoute = SponsorshipPolicyRouteImport.update({
+  id: '/sponsorship-policy',
+  path: '/sponsorship-policy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RefundPolicyRoute = RefundPolicyRouteImport.update({
@@ -52,9 +85,24 @@ const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
   path: '/privacy-policy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PoliciesRoute = PoliciesRouteImport.update({
+  id: '/policies',
+  path: '/policies',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartnershipPolicyRoute = PartnershipPolicyRouteImport.update({
+  id: '/partnership-policy',
+  path: '/partnership-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NewsAndEventsRoute = NewsAndEventsRouteImport.update({
   id: '/news-and-events',
   path: '/news-and-events',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MentorshipPolicyRoute = MentorshipPolicyRouteImport.update({
+  id: '/mentorship-policy',
+  path: '/mentorship-policy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MembershipRoute = MembershipRouteImport.update({
@@ -62,14 +110,75 @@ const MembershipRoute = MembershipRouteImport.update({
   path: '/membership',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MembersAndDonorsRoute = MembersAndDonorsRouteImport.update({
+  id: '/members-and-donors',
+  path: '/members-and-donors',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MedicalTreatmentPolicyRoute = MedicalTreatmentPolicyRouteImport.update({
+  id: '/medical-treatment-policy',
+  path: '/medical-treatment-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GrievancePolicyRoute = GrievancePolicyRouteImport.update({
+  id: '/grievance-policy',
+  path: '/grievance-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GovernancePolicyRoute = GovernancePolicyRouteImport.update({
+  id: '/governance-policy',
+  path: '/governance-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FinancialTransparencyPolicyRoute =
+  FinancialTransparencyPolicyRouteImport.update({
+    id: '/financial-transparency-policy',
+    path: '/financial-transparency-policy',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const EmploymentPolicyRoute = EmploymentPolicyRouteImport.update({
+  id: '/employment-policy',
+  path: '/employment-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DonationPolicyRoute = DonationPolicyRouteImport.update({
+  id: '/donation-policy',
+  path: '/donation-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DonateRoute = DonateRouteImport.update({
   id: '/donate',
   path: '/donate',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DisclaimerRoute = DisclaimerRouteImport.update({
+  id: '/disclaimer',
+  path: '/disclaimer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CookiePolicyRoute = CookiePolicyRouteImport.update({
+  id: '/cookie-policy',
+  path: '/cookie-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CodeOfConductRoute = CodeOfConductRouteImport.update({
+  id: '/code-of-conduct',
+  path: '/code-of-conduct',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChildProtectionPolicyRoute = ChildProtectionPolicyRouteImport.update({
+  id: '/child-protection-policy',
+  path: '/child-protection-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AntiFraudPolicyRoute = AntiFraudPolicyRouteImport.update({
+  id: '/anti-fraud-policy',
+  path: '/anti-fraud-policy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -80,6 +189,11 @@ const AboutRoute = AboutRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgramsIndexRoute = ProgramsIndexRouteImport.update({
+  id: '/programs/',
+  path: '/programs/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProgramsWomenEmpowermentRoute =
@@ -94,9 +208,31 @@ const ProgramsSkillsDevelopmentRoute =
     path: '/programs/skills-development',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ProgramsReliefAndRehabilitationRoute =
+  ProgramsReliefAndRehabilitationRouteImport.update({
+    id: '/programs/relief-and-rehabilitation',
+    path: '/programs/relief-and-rehabilitation',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsEnvironmentRoute = ProgramsEnvironmentRouteImport.update({
+  id: '/programs/environment',
+  path: '/programs/environment',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgramsEntrepreneurDevelopmentRoute =
+  ProgramsEntrepreneurDevelopmentRouteImport.update({
+    id: '/programs/entrepreneur-development',
+    path: '/programs/entrepreneur-development',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ProgramsEducationRoute = ProgramsEducationRouteImport.update({
   id: '/programs/education',
   path: '/programs/education',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgramsAgricultureRoute = ProgramsAgricultureRouteImport.update({
+  id: '/programs/agriculture',
+  path: '/programs/agriculture',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PatientsPatientSlugRoute = PatientsPatientSlugRouteImport.update({
@@ -107,6 +243,11 @@ const PatientsPatientSlugRoute = PatientsPatientSlugRouteImport.update({
 const AboutVision2047Route = AboutVision2047RouteImport.update({
   id: '/about_/vision-2047',
   path: '/about/vision-2047',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutPartnersRoute = AboutPartnersRouteImport.update({
+  id: '/about_/partners',
+  path: '/about/partners',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutObjectiveAndVisionRoute = AboutObjectiveAndVisionRouteImport.update({
@@ -186,22 +327,45 @@ const ProgramsHealthcareCervicalCancerRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/anti-fraud-policy': typeof AntiFraudPolicyRoute
+  '/child-protection-policy': typeof ChildProtectionPolicyRoute
+  '/code-of-conduct': typeof CodeOfConductRoute
   '/contact': typeof ContactRoute
+  '/cookie-policy': typeof CookiePolicyRoute
+  '/disclaimer': typeof DisclaimerRoute
   '/donate': typeof DonateRoute
+  '/donation-policy': typeof DonationPolicyRoute
+  '/employment-policy': typeof EmploymentPolicyRoute
+  '/financial-transparency-policy': typeof FinancialTransparencyPolicyRoute
+  '/governance-policy': typeof GovernancePolicyRoute
+  '/grievance-policy': typeof GrievancePolicyRoute
+  '/medical-treatment-policy': typeof MedicalTreatmentPolicyRoute
+  '/members-and-donors': typeof MembersAndDonorsRoute
   '/membership': typeof MembershipRoute
+  '/mentorship-policy': typeof MentorshipPolicyRoute
   '/news-and-events': typeof NewsAndEventsRoute
+  '/partnership-policy': typeof PartnershipPolicyRoute
+  '/policies': typeof PoliciesRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
+  '/sponsorship-policy': typeof SponsorshipPolicyRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
+  '/volunteer-policy': typeof VolunteerPolicyRoute
   '/about/governance': typeof AboutGovernanceRoute
   '/about/leadership': typeof AboutLeadershipRoute
   '/about/legal-status': typeof AboutLegalStatusRoute
   '/about/objective-and-vision': typeof AboutObjectiveAndVisionRoute
+  '/about/partners': typeof AboutPartnersRoute
   '/about/vision-2047': typeof AboutVision2047Route
   '/patients/$patientSlug': typeof PatientsPatientSlugRoute
+  '/programs/agriculture': typeof ProgramsAgricultureRoute
   '/programs/education': typeof ProgramsEducationRoute
+  '/programs/entrepreneur-development': typeof ProgramsEntrepreneurDevelopmentRoute
+  '/programs/environment': typeof ProgramsEnvironmentRoute
+  '/programs/relief-and-rehabilitation': typeof ProgramsReliefAndRehabilitationRoute
   '/programs/skills-development': typeof ProgramsSkillsDevelopmentRoute
   '/programs/women-empowerment': typeof ProgramsWomenEmpowermentRoute
+  '/programs/': typeof ProgramsIndexRoute
   '/programs/healthcare/cervical-cancer': typeof ProgramsHealthcareCervicalCancerRoute
   '/programs/healthcare/critical-life-support': typeof ProgramsHealthcareCriticalLifeSupportRoute
   '/programs/healthcare/diabetes-prevention': typeof ProgramsHealthcareDiabetesPreventionRoute
@@ -215,22 +379,45 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/anti-fraud-policy': typeof AntiFraudPolicyRoute
+  '/child-protection-policy': typeof ChildProtectionPolicyRoute
+  '/code-of-conduct': typeof CodeOfConductRoute
   '/contact': typeof ContactRoute
+  '/cookie-policy': typeof CookiePolicyRoute
+  '/disclaimer': typeof DisclaimerRoute
   '/donate': typeof DonateRoute
+  '/donation-policy': typeof DonationPolicyRoute
+  '/employment-policy': typeof EmploymentPolicyRoute
+  '/financial-transparency-policy': typeof FinancialTransparencyPolicyRoute
+  '/governance-policy': typeof GovernancePolicyRoute
+  '/grievance-policy': typeof GrievancePolicyRoute
+  '/medical-treatment-policy': typeof MedicalTreatmentPolicyRoute
+  '/members-and-donors': typeof MembersAndDonorsRoute
   '/membership': typeof MembershipRoute
+  '/mentorship-policy': typeof MentorshipPolicyRoute
   '/news-and-events': typeof NewsAndEventsRoute
+  '/partnership-policy': typeof PartnershipPolicyRoute
+  '/policies': typeof PoliciesRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
+  '/sponsorship-policy': typeof SponsorshipPolicyRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
+  '/volunteer-policy': typeof VolunteerPolicyRoute
   '/about/governance': typeof AboutGovernanceRoute
   '/about/leadership': typeof AboutLeadershipRoute
   '/about/legal-status': typeof AboutLegalStatusRoute
   '/about/objective-and-vision': typeof AboutObjectiveAndVisionRoute
+  '/about/partners': typeof AboutPartnersRoute
   '/about/vision-2047': typeof AboutVision2047Route
   '/patients/$patientSlug': typeof PatientsPatientSlugRoute
+  '/programs/agriculture': typeof ProgramsAgricultureRoute
   '/programs/education': typeof ProgramsEducationRoute
+  '/programs/entrepreneur-development': typeof ProgramsEntrepreneurDevelopmentRoute
+  '/programs/environment': typeof ProgramsEnvironmentRoute
+  '/programs/relief-and-rehabilitation': typeof ProgramsReliefAndRehabilitationRoute
   '/programs/skills-development': typeof ProgramsSkillsDevelopmentRoute
   '/programs/women-empowerment': typeof ProgramsWomenEmpowermentRoute
+  '/programs': typeof ProgramsIndexRoute
   '/programs/healthcare/cervical-cancer': typeof ProgramsHealthcareCervicalCancerRoute
   '/programs/healthcare/critical-life-support': typeof ProgramsHealthcareCriticalLifeSupportRoute
   '/programs/healthcare/diabetes-prevention': typeof ProgramsHealthcareDiabetesPreventionRoute
@@ -245,22 +432,45 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/anti-fraud-policy': typeof AntiFraudPolicyRoute
+  '/child-protection-policy': typeof ChildProtectionPolicyRoute
+  '/code-of-conduct': typeof CodeOfConductRoute
   '/contact': typeof ContactRoute
+  '/cookie-policy': typeof CookiePolicyRoute
+  '/disclaimer': typeof DisclaimerRoute
   '/donate': typeof DonateRoute
+  '/donation-policy': typeof DonationPolicyRoute
+  '/employment-policy': typeof EmploymentPolicyRoute
+  '/financial-transparency-policy': typeof FinancialTransparencyPolicyRoute
+  '/governance-policy': typeof GovernancePolicyRoute
+  '/grievance-policy': typeof GrievancePolicyRoute
+  '/medical-treatment-policy': typeof MedicalTreatmentPolicyRoute
+  '/members-and-donors': typeof MembersAndDonorsRoute
   '/membership': typeof MembershipRoute
+  '/mentorship-policy': typeof MentorshipPolicyRoute
   '/news-and-events': typeof NewsAndEventsRoute
+  '/partnership-policy': typeof PartnershipPolicyRoute
+  '/policies': typeof PoliciesRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
+  '/sponsorship-policy': typeof SponsorshipPolicyRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
+  '/volunteer-policy': typeof VolunteerPolicyRoute
   '/about_/governance': typeof AboutGovernanceRoute
   '/about_/leadership': typeof AboutLeadershipRoute
   '/about_/legal-status': typeof AboutLegalStatusRoute
   '/about_/objective-and-vision': typeof AboutObjectiveAndVisionRoute
+  '/about_/partners': typeof AboutPartnersRoute
   '/about_/vision-2047': typeof AboutVision2047Route
   '/patients/$patientSlug': typeof PatientsPatientSlugRoute
+  '/programs/agriculture': typeof ProgramsAgricultureRoute
   '/programs/education': typeof ProgramsEducationRoute
+  '/programs/entrepreneur-development': typeof ProgramsEntrepreneurDevelopmentRoute
+  '/programs/environment': typeof ProgramsEnvironmentRoute
+  '/programs/relief-and-rehabilitation': typeof ProgramsReliefAndRehabilitationRoute
   '/programs/skills-development': typeof ProgramsSkillsDevelopmentRoute
   '/programs/women-empowerment': typeof ProgramsWomenEmpowermentRoute
+  '/programs/': typeof ProgramsIndexRoute
   '/programs/healthcare/cervical-cancer': typeof ProgramsHealthcareCervicalCancerRoute
   '/programs/healthcare/critical-life-support': typeof ProgramsHealthcareCriticalLifeSupportRoute
   '/programs/healthcare/diabetes-prevention': typeof ProgramsHealthcareDiabetesPreventionRoute
@@ -276,22 +486,45 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/anti-fraud-policy'
+    | '/child-protection-policy'
+    | '/code-of-conduct'
     | '/contact'
+    | '/cookie-policy'
+    | '/disclaimer'
     | '/donate'
+    | '/donation-policy'
+    | '/employment-policy'
+    | '/financial-transparency-policy'
+    | '/governance-policy'
+    | '/grievance-policy'
+    | '/medical-treatment-policy'
+    | '/members-and-donors'
     | '/membership'
+    | '/mentorship-policy'
     | '/news-and-events'
+    | '/partnership-policy'
+    | '/policies'
     | '/privacy-policy'
     | '/refund-policy'
+    | '/sponsorship-policy'
     | '/terms-and-conditions'
+    | '/volunteer-policy'
     | '/about/governance'
     | '/about/leadership'
     | '/about/legal-status'
     | '/about/objective-and-vision'
+    | '/about/partners'
     | '/about/vision-2047'
     | '/patients/$patientSlug'
+    | '/programs/agriculture'
     | '/programs/education'
+    | '/programs/entrepreneur-development'
+    | '/programs/environment'
+    | '/programs/relief-and-rehabilitation'
     | '/programs/skills-development'
     | '/programs/women-empowerment'
+    | '/programs/'
     | '/programs/healthcare/cervical-cancer'
     | '/programs/healthcare/critical-life-support'
     | '/programs/healthcare/diabetes-prevention'
@@ -305,22 +538,45 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/anti-fraud-policy'
+    | '/child-protection-policy'
+    | '/code-of-conduct'
     | '/contact'
+    | '/cookie-policy'
+    | '/disclaimer'
     | '/donate'
+    | '/donation-policy'
+    | '/employment-policy'
+    | '/financial-transparency-policy'
+    | '/governance-policy'
+    | '/grievance-policy'
+    | '/medical-treatment-policy'
+    | '/members-and-donors'
     | '/membership'
+    | '/mentorship-policy'
     | '/news-and-events'
+    | '/partnership-policy'
+    | '/policies'
     | '/privacy-policy'
     | '/refund-policy'
+    | '/sponsorship-policy'
     | '/terms-and-conditions'
+    | '/volunteer-policy'
     | '/about/governance'
     | '/about/leadership'
     | '/about/legal-status'
     | '/about/objective-and-vision'
+    | '/about/partners'
     | '/about/vision-2047'
     | '/patients/$patientSlug'
+    | '/programs/agriculture'
     | '/programs/education'
+    | '/programs/entrepreneur-development'
+    | '/programs/environment'
+    | '/programs/relief-and-rehabilitation'
     | '/programs/skills-development'
     | '/programs/women-empowerment'
+    | '/programs'
     | '/programs/healthcare/cervical-cancer'
     | '/programs/healthcare/critical-life-support'
     | '/programs/healthcare/diabetes-prevention'
@@ -334,22 +590,45 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/anti-fraud-policy'
+    | '/child-protection-policy'
+    | '/code-of-conduct'
     | '/contact'
+    | '/cookie-policy'
+    | '/disclaimer'
     | '/donate'
+    | '/donation-policy'
+    | '/employment-policy'
+    | '/financial-transparency-policy'
+    | '/governance-policy'
+    | '/grievance-policy'
+    | '/medical-treatment-policy'
+    | '/members-and-donors'
     | '/membership'
+    | '/mentorship-policy'
     | '/news-and-events'
+    | '/partnership-policy'
+    | '/policies'
     | '/privacy-policy'
     | '/refund-policy'
+    | '/sponsorship-policy'
     | '/terms-and-conditions'
+    | '/volunteer-policy'
     | '/about_/governance'
     | '/about_/leadership'
     | '/about_/legal-status'
     | '/about_/objective-and-vision'
+    | '/about_/partners'
     | '/about_/vision-2047'
     | '/patients/$patientSlug'
+    | '/programs/agriculture'
     | '/programs/education'
+    | '/programs/entrepreneur-development'
+    | '/programs/environment'
+    | '/programs/relief-and-rehabilitation'
     | '/programs/skills-development'
     | '/programs/women-empowerment'
+    | '/programs/'
     | '/programs/healthcare/cervical-cancer'
     | '/programs/healthcare/critical-life-support'
     | '/programs/healthcare/diabetes-prevention'
@@ -364,22 +643,45 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AntiFraudPolicyRoute: typeof AntiFraudPolicyRoute
+  ChildProtectionPolicyRoute: typeof ChildProtectionPolicyRoute
+  CodeOfConductRoute: typeof CodeOfConductRoute
   ContactRoute: typeof ContactRoute
+  CookiePolicyRoute: typeof CookiePolicyRoute
+  DisclaimerRoute: typeof DisclaimerRoute
   DonateRoute: typeof DonateRoute
+  DonationPolicyRoute: typeof DonationPolicyRoute
+  EmploymentPolicyRoute: typeof EmploymentPolicyRoute
+  FinancialTransparencyPolicyRoute: typeof FinancialTransparencyPolicyRoute
+  GovernancePolicyRoute: typeof GovernancePolicyRoute
+  GrievancePolicyRoute: typeof GrievancePolicyRoute
+  MedicalTreatmentPolicyRoute: typeof MedicalTreatmentPolicyRoute
+  MembersAndDonorsRoute: typeof MembersAndDonorsRoute
   MembershipRoute: typeof MembershipRoute
+  MentorshipPolicyRoute: typeof MentorshipPolicyRoute
   NewsAndEventsRoute: typeof NewsAndEventsRoute
+  PartnershipPolicyRoute: typeof PartnershipPolicyRoute
+  PoliciesRoute: typeof PoliciesRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
+  SponsorshipPolicyRoute: typeof SponsorshipPolicyRoute
   TermsAndConditionsRoute: typeof TermsAndConditionsRoute
+  VolunteerPolicyRoute: typeof VolunteerPolicyRoute
   AboutGovernanceRoute: typeof AboutGovernanceRoute
   AboutLeadershipRoute: typeof AboutLeadershipRoute
   AboutLegalStatusRoute: typeof AboutLegalStatusRoute
   AboutObjectiveAndVisionRoute: typeof AboutObjectiveAndVisionRoute
+  AboutPartnersRoute: typeof AboutPartnersRoute
   AboutVision2047Route: typeof AboutVision2047Route
   PatientsPatientSlugRoute: typeof PatientsPatientSlugRoute
+  ProgramsAgricultureRoute: typeof ProgramsAgricultureRoute
   ProgramsEducationRoute: typeof ProgramsEducationRoute
+  ProgramsEntrepreneurDevelopmentRoute: typeof ProgramsEntrepreneurDevelopmentRoute
+  ProgramsEnvironmentRoute: typeof ProgramsEnvironmentRoute
+  ProgramsReliefAndRehabilitationRoute: typeof ProgramsReliefAndRehabilitationRoute
   ProgramsSkillsDevelopmentRoute: typeof ProgramsSkillsDevelopmentRoute
   ProgramsWomenEmpowermentRoute: typeof ProgramsWomenEmpowermentRoute
+  ProgramsIndexRoute: typeof ProgramsIndexRoute
   ProgramsHealthcareCervicalCancerRoute: typeof ProgramsHealthcareCervicalCancerRoute
   ProgramsHealthcareCriticalLifeSupportRoute: typeof ProgramsHealthcareCriticalLifeSupportRoute
   ProgramsHealthcareDiabetesPreventionRoute: typeof ProgramsHealthcareDiabetesPreventionRoute
@@ -393,11 +695,25 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/volunteer-policy': {
+      id: '/volunteer-policy'
+      path: '/volunteer-policy'
+      fullPath: '/volunteer-policy'
+      preLoaderRoute: typeof VolunteerPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/terms-and-conditions': {
       id: '/terms-and-conditions'
       path: '/terms-and-conditions'
       fullPath: '/terms-and-conditions'
       preLoaderRoute: typeof TermsAndConditionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sponsorship-policy': {
+      id: '/sponsorship-policy'
+      path: '/sponsorship-policy'
+      fullPath: '/sponsorship-policy'
+      preLoaderRoute: typeof SponsorshipPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/refund-policy': {
@@ -414,11 +730,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/policies': {
+      id: '/policies'
+      path: '/policies'
+      fullPath: '/policies'
+      preLoaderRoute: typeof PoliciesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partnership-policy': {
+      id: '/partnership-policy'
+      path: '/partnership-policy'
+      fullPath: '/partnership-policy'
+      preLoaderRoute: typeof PartnershipPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/news-and-events': {
       id: '/news-and-events'
       path: '/news-and-events'
       fullPath: '/news-and-events'
       preLoaderRoute: typeof NewsAndEventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mentorship-policy': {
+      id: '/mentorship-policy'
+      path: '/mentorship-policy'
+      fullPath: '/mentorship-policy'
+      preLoaderRoute: typeof MentorshipPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/membership': {
@@ -428,6 +765,55 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MembershipRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/members-and-donors': {
+      id: '/members-and-donors'
+      path: '/members-and-donors'
+      fullPath: '/members-and-donors'
+      preLoaderRoute: typeof MembersAndDonorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/medical-treatment-policy': {
+      id: '/medical-treatment-policy'
+      path: '/medical-treatment-policy'
+      fullPath: '/medical-treatment-policy'
+      preLoaderRoute: typeof MedicalTreatmentPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/grievance-policy': {
+      id: '/grievance-policy'
+      path: '/grievance-policy'
+      fullPath: '/grievance-policy'
+      preLoaderRoute: typeof GrievancePolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/governance-policy': {
+      id: '/governance-policy'
+      path: '/governance-policy'
+      fullPath: '/governance-policy'
+      preLoaderRoute: typeof GovernancePolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/financial-transparency-policy': {
+      id: '/financial-transparency-policy'
+      path: '/financial-transparency-policy'
+      fullPath: '/financial-transparency-policy'
+      preLoaderRoute: typeof FinancialTransparencyPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/employment-policy': {
+      id: '/employment-policy'
+      path: '/employment-policy'
+      fullPath: '/employment-policy'
+      preLoaderRoute: typeof EmploymentPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/donation-policy': {
+      id: '/donation-policy'
+      path: '/donation-policy'
+      fullPath: '/donation-policy'
+      preLoaderRoute: typeof DonationPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/donate': {
       id: '/donate'
       path: '/donate'
@@ -435,11 +821,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DonateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/disclaimer': {
+      id: '/disclaimer'
+      path: '/disclaimer'
+      fullPath: '/disclaimer'
+      preLoaderRoute: typeof DisclaimerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cookie-policy': {
+      id: '/cookie-policy'
+      path: '/cookie-policy'
+      fullPath: '/cookie-policy'
+      preLoaderRoute: typeof CookiePolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/code-of-conduct': {
+      id: '/code-of-conduct'
+      path: '/code-of-conduct'
+      fullPath: '/code-of-conduct'
+      preLoaderRoute: typeof CodeOfConductRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/child-protection-policy': {
+      id: '/child-protection-policy'
+      path: '/child-protection-policy'
+      fullPath: '/child-protection-policy'
+      preLoaderRoute: typeof ChildProtectionPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/anti-fraud-policy': {
+      id: '/anti-fraud-policy'
+      path: '/anti-fraud-policy'
+      fullPath: '/anti-fraud-policy'
+      preLoaderRoute: typeof AntiFraudPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -456,6 +877,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/programs/': {
+      id: '/programs/'
+      path: '/programs'
+      fullPath: '/programs/'
+      preLoaderRoute: typeof ProgramsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/programs/women-empowerment': {
       id: '/programs/women-empowerment'
       path: '/programs/women-empowerment'
@@ -470,11 +898,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProgramsSkillsDevelopmentRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/programs/relief-and-rehabilitation': {
+      id: '/programs/relief-and-rehabilitation'
+      path: '/programs/relief-and-rehabilitation'
+      fullPath: '/programs/relief-and-rehabilitation'
+      preLoaderRoute: typeof ProgramsReliefAndRehabilitationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/environment': {
+      id: '/programs/environment'
+      path: '/programs/environment'
+      fullPath: '/programs/environment'
+      preLoaderRoute: typeof ProgramsEnvironmentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/entrepreneur-development': {
+      id: '/programs/entrepreneur-development'
+      path: '/programs/entrepreneur-development'
+      fullPath: '/programs/entrepreneur-development'
+      preLoaderRoute: typeof ProgramsEntrepreneurDevelopmentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/programs/education': {
       id: '/programs/education'
       path: '/programs/education'
       fullPath: '/programs/education'
       preLoaderRoute: typeof ProgramsEducationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/agriculture': {
+      id: '/programs/agriculture'
+      path: '/programs/agriculture'
+      fullPath: '/programs/agriculture'
+      preLoaderRoute: typeof ProgramsAgricultureRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/patients/$patientSlug': {
@@ -489,6 +945,13 @@ declare module '@tanstack/react-router' {
       path: '/about/vision-2047'
       fullPath: '/about/vision-2047'
       preLoaderRoute: typeof AboutVision2047RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about_/partners': {
+      id: '/about_/partners'
+      path: '/about/partners'
+      fullPath: '/about/partners'
+      preLoaderRoute: typeof AboutPartnersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about_/objective-and-vision': {
@@ -588,22 +1051,45 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AntiFraudPolicyRoute: AntiFraudPolicyRoute,
+  ChildProtectionPolicyRoute: ChildProtectionPolicyRoute,
+  CodeOfConductRoute: CodeOfConductRoute,
   ContactRoute: ContactRoute,
+  CookiePolicyRoute: CookiePolicyRoute,
+  DisclaimerRoute: DisclaimerRoute,
   DonateRoute: DonateRoute,
+  DonationPolicyRoute: DonationPolicyRoute,
+  EmploymentPolicyRoute: EmploymentPolicyRoute,
+  FinancialTransparencyPolicyRoute: FinancialTransparencyPolicyRoute,
+  GovernancePolicyRoute: GovernancePolicyRoute,
+  GrievancePolicyRoute: GrievancePolicyRoute,
+  MedicalTreatmentPolicyRoute: MedicalTreatmentPolicyRoute,
+  MembersAndDonorsRoute: MembersAndDonorsRoute,
   MembershipRoute: MembershipRoute,
+  MentorshipPolicyRoute: MentorshipPolicyRoute,
   NewsAndEventsRoute: NewsAndEventsRoute,
+  PartnershipPolicyRoute: PartnershipPolicyRoute,
+  PoliciesRoute: PoliciesRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   RefundPolicyRoute: RefundPolicyRoute,
+  SponsorshipPolicyRoute: SponsorshipPolicyRoute,
   TermsAndConditionsRoute: TermsAndConditionsRoute,
+  VolunteerPolicyRoute: VolunteerPolicyRoute,
   AboutGovernanceRoute: AboutGovernanceRoute,
   AboutLeadershipRoute: AboutLeadershipRoute,
   AboutLegalStatusRoute: AboutLegalStatusRoute,
   AboutObjectiveAndVisionRoute: AboutObjectiveAndVisionRoute,
+  AboutPartnersRoute: AboutPartnersRoute,
   AboutVision2047Route: AboutVision2047Route,
   PatientsPatientSlugRoute: PatientsPatientSlugRoute,
+  ProgramsAgricultureRoute: ProgramsAgricultureRoute,
   ProgramsEducationRoute: ProgramsEducationRoute,
+  ProgramsEntrepreneurDevelopmentRoute: ProgramsEntrepreneurDevelopmentRoute,
+  ProgramsEnvironmentRoute: ProgramsEnvironmentRoute,
+  ProgramsReliefAndRehabilitationRoute: ProgramsReliefAndRehabilitationRoute,
   ProgramsSkillsDevelopmentRoute: ProgramsSkillsDevelopmentRoute,
   ProgramsWomenEmpowermentRoute: ProgramsWomenEmpowermentRoute,
+  ProgramsIndexRoute: ProgramsIndexRoute,
   ProgramsHealthcareCervicalCancerRoute: ProgramsHealthcareCervicalCancerRoute,
   ProgramsHealthcareCriticalLifeSupportRoute:
     ProgramsHealthcareCriticalLifeSupportRoute,
