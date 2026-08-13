@@ -52,11 +52,11 @@ function HomeFooter({ onOpenModal }: { onOpenModal: (type: RoleType) => void }) 
       <div className="bg-[#0b1f3b] text-white py-14 px-4 md:px-10 border-t border-white/10">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           <div className="space-y-4">
-            <div className="flex items-center gap-3 bg-[#fdfbf7] p-3 rounded-2xl w-fit">
-              <img src={newLogo} alt="IWF Logo" className="h-14 w-auto object-contain shrink-0" />
+            <div className="flex items-center gap-3">
+              <img src={newLogo} alt="IWF Logo" className="h-12 w-auto object-contain shrink-0" />
               <div className="flex flex-col">
-                <span className="font-extrabold text-2xl tracking-wide text-black leading-none">ISLAH</span>
-                <span className="font-light text-[10px] tracking-widest text-black mt-0.5">WELFARE FOUNDATION</span>
+                <span className="font-extrabold text-2xl tracking-widest text-white leading-none">IWF</span>
+                <span className="font-medium text-[11px] tracking-wide text-white/70 mt-0.5">Islah Welfare Foundation</span>
               </div>
             </div>
             <div className="text-brand-orange font-medium text-sm">Care | Empower | Uplift</div>
@@ -66,9 +66,15 @@ function HomeFooter({ onOpenModal }: { onOpenModal: (type: RoleType) => void }) 
             <div>
               <span className="block text-xs font-bold tracking-widest text-white uppercase mb-2">Follow Us</span>
               <div className="flex gap-2">
-                {[Facebook, Instagram, Youtube, Linkedin, Twitter].map((Icon, i) => (
-                  <a key={i} href="#" className="w-7 h-7 rounded-full bg-white/10 hover:bg-brand-orange flex items-center justify-center text-white transition-all duration-200" aria-label="Social media profile">
-                    <Icon className="w-3.5 h-3.5" />
+                {[
+                  { Icon: Facebook, color: "bg-[#1877f2] hover:bg-[#166fe5]", href: "https://facebook.com", label: "Facebook" },
+                  { Icon: Instagram, color: "bg-gradient-to-tr from-[#f9cb2f] via-[#e5195f] to-[#8134af] hover:opacity-90", href: "https://instagram.com", label: "Instagram" },
+                  { Icon: Youtube, color: "bg-[#ff0000] hover:bg-[#e60000]", href: "https://youtube.com", label: "YouTube" },
+                  { Icon: Linkedin, color: "bg-[#0077b5] hover:bg-[#00669c]", href: "https://linkedin.com", label: "LinkedIn" },
+                  { Icon: Twitter, color: "bg-[#1da1f2] hover:bg-[#0d95e8]", href: "https://twitter.com", label: "Twitter" },
+                ].map((s, i) => (
+                  <a key={i} href={s.href} target="_blank" rel="noopener noreferrer" className={`w-7 h-7 rounded-full ${s.color} flex items-center justify-center text-white transition-all duration-200 shadow-sm`} aria-label={s.label}>
+                    <s.Icon className="w-3.5 h-3.5" />
                   </a>
                 ))}
               </div>
@@ -758,13 +764,15 @@ function Header({ lang }: HeaderProps) {
                                   ? "/programs/healthcare"
                                   : item === "Impact"
                                     ? "/#impact-stats"
-                                    : item === "Media & Updates"
+                                    : item === "Media"
                                       ? "/news-and-events"
-                                      : item === "Get Involved"
-                                        ? "/#get-involved"
-                                        : item === "Contact Us"
-                                          ? "/contact"
-                                          : "#"
+                                      : item === "Membership"
+                                        ? "/membership"
+                                        : item === "Get Involved"
+                                          ? "/#get-involved"
+                                          : item === "Contact Us"
+                                            ? "/contact"
+                                            : "#"
                         }
                         className="flex-1 px-5 py-3.5 text-sm font-semibold text-slate-800 hover:text-brand-green transition-colors"
                         onClick={(event) => {
@@ -836,13 +844,13 @@ function Header({ lang }: HeaderProps) {
                                                             ? "/programs/healthcare"
                                                             : item === "Impact"
                                                               ? "/#impact-stats"
-                                                              : item === "Media & Updates" && sub === "News & Events"
+                                                              : item === "Media" && sub === "News & Events"
                                                                 ? "/news-and-events"
-                                                                : item === "Media & Updates" && sub === "Gallery"
+                                                                : item === "Media" && sub === "Gallery"
                                                                   ? "/news-and-events"
-                                                                  : item === "Media & Updates" && sub === "Press Release"
+                                                                  : item === "Media" && sub === "Press Release"
                                                                     ? "/news-and-events"
-                                                                    : item === "Media & Updates"
+                                                                    : item === "Media"
                                                                       ? "/news-and-events"
                                                                       : item === "Get Involved" && sub === "Donate & Support"
                                                                         ? "/donate"
@@ -1375,7 +1383,7 @@ function ExploreIWF({ lang }: LanguageProp) {
     },
     {
       icon: Newspaper,
-      page: lang === "en" ? "Media & Updates" : "मीडिया और अपडेट",
+      page: lang === "en" ? "Media" : "मीडिया",
       summary: lang === "en"
         ? "Stay updated with our latest field activities, news, press releases, newsletters, and view our photo gallery capturing real moments of community transformation."
         : "हमारी नवीनतम गतिविधियों, समाचारों, प्रेस विज्ञप्तियों, समाचार पत्रों से अपडेट रहें और समुदाय परिवर्तन के वास्तविक क्षणों को कैद करने वाली हमारी फोटो गैलरी देखें।",
