@@ -936,46 +936,13 @@ function HeroSection({ lang }: LanguageProp) {
     }
   }, [noticeIndex]);
 
-  const newsList = LATEST_NEWS.map((news) => {
-    let title = news.title;
-    let excerpt = news.excerpt;
-    let tag = news.tag;
 
-    if (lang === "hi") {
-      if (news.tag === "Health Camp") {
-        tag = "स्वास्थ्य शिविर";
-        title = "दरभंगा के बथिया में निःशुल्क चिकित्सा शिविर का आयोजन — 200+ मरीजों का उपचार";
-        excerpt = "आईडब्ल्यूएफ की स्वास्थ्य टीम ने दरभंगा के बथिया में एक व्यापक निःशुल्क चिकित्सा शिविर का आयोजन किया, जिसमें आसपास के गांवों के 200 से अधिक रोगियों को निःशुल्क परामर्श, दवाएं और जाँच सेवाएं प्रदान की गईं।";
-      } else if (news.tag === "Education") {
-        tag = "शिक्षा";
-        title = "मुजफ्फरपुर में आयोजित वार्षिक छात्रवृत्ति वितरण समारोह";
-        excerpt = "शिक्षा न रुके अभियान के तहत कमजोर परिवारों के 100 मेधावी छात्रों को छात्रवृत्ति प्रदान की गई, जिसमें शैक्षणिक वर्ष के लिए स्कूल की फीस, यूनिफॉर्म और अध्ययन सामग्री शामिल है।";
-      } else if (news.tag === "Women Empowerment") {
-        tag = "महिला सशक्तिकरण";
-        title = "सीतामढ़ी में नया स्वयं सहायता समूह शुरू — 30 महिलाओं ने पंजीकरण कराया";
-        excerpt = "शी कैन फ्लाई अभियान के तहत सीतामढ़ी में 30 महिलाओं के साथ एक नया स्वयं सहायता समूह बनाया गया, जो सिलाई, मोमबत्ती बनाने और खाद्य प्रसंस्करण के व्यावसायिक प्रशिक्षण में नामांकित हैं।";
-      } else if (news.tag === "Annual Report") {
-        tag = "वार्षिक रिपोर्ट";
-        title = "आईडब्ल्यूएफ वार्षिक रिपोर्ट 2024–25 प्रकाशित — 50+ गांवों तक पहुंचा प्रभाव";
-        excerpt = "वार्षिक रिपोर्ट 2024–25 शिक्षा, स्वास्थ्य और आजीविका कार्यक्रमों में आईडब्ल्यूएफ के काम का विवरण प्रस्तुत करती है, जो 50 से अधिक गांवों तक पहुंची और 5,000 से अधिक लाभार्थियों को प्रभावित किया।";
-      }
-    }
-    return { ...news, tag, title, excerpt };
-  });
 
-  const [newsIndex, setNewsIndex] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setNewsIndex((prev) => (prev + 1) % newsList.length);
-    }, 4500);
-    return () => clearInterval(timer);
-  }, [newsList.length]);
 
   return (
     <section id="welcome-hero" className="relative scroll-mt-20 bg-white py-6 border-b border-slate-100">
       <div className="max-w-7xl mx-auto px-4 md:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           {/* Left Column (50%): Welcome text & copy */}
           <div className="flex flex-col justify-center text-left">
             <h1 className="text-xl md:text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight mb-3">
@@ -1009,94 +976,42 @@ function HeroSection({ lang }: LanguageProp) {
             </div>
           </div>
 
-          {/* Right Column (50%): Events/Notices + News stacked in navbar blue container */}
-          <div className="bg-[#0b1f3b] text-white p-6 rounded-2xl border border-white/10 shadow-xl flex flex-col gap-6 justify-between">
-            {/* Events & Notices Part */}
-            <div className="flex flex-col">
-              <div className="flex items-center justify-between mb-3">
-                <h2 className="text-base md:text-lg font-extrabold text-white flex items-center gap-2">
-                  <span className="w-1.5 h-5 bg-white rounded-full"></span>
-                  {t.eventsNotices}
-                </h2>
-              </div>
+          {/* Right Column: Events & Notices — light card */}
+          <div className="bg-white text-slate-800 p-3 rounded-2xl border border-slate-200 shadow-lg flex flex-col gap-2">
 
-              {/* Notice vertical scroll ticker showing 3 compact items without desc */}
-              <div className="relative h-[190px] max-h-[190px] overflow-hidden rounded-xl bg-[#132847] p-2.5">
-                <div
-                  className="space-y-2.5"
-                  style={{
-                    transform: `translateY(-${noticeIndex * 62}px)`,
-                    transition: noticeTransition ? "transform 500ms cubic-bezier(0.4, 0, 0.2, 1)" : "none",
-                  }}
-                >
-                  {loopNotices.map((e, i) => (
-                    <div key={i} className="h-[52px] bg-[#182f52] hover:bg-[#1f3c66] rounded-lg px-3 py-2 flex gap-3 items-center border border-white/10 shadow-sm transition-colors duration-200">
-                      <div className="text-center bg-white/10 rounded px-2.5 py-0.5 w-12 shrink-0">
-                        <div className="text-[8px] font-bold text-white/90 uppercase leading-none">{e.m}</div>
-                        <div className="text-sm font-black text-white leading-none mt-0.5">{e.d}</div>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-extrabold text-xs text-white truncate">{e.title}</h4>
-                      </div>
-                      <a href="#" className="text-[10px] font-bold text-white/80 hover:text-white underline decoration-white/20 shrink-0">{t.readMore} →</a>
-                    </div>
-                  ))}
-                </div>
-              </div>
+            {/* Header */}
+            <div className="flex items-center justify-between px-1">
+              <h2 className="text-base md:text-lg font-extrabold text-[#0b1f3b] flex items-center gap-2">
+                <span className="w-1.5 h-5 bg-brand-orange rounded-full"></span>
+                {t.eventsNotices}
+              </h2>
+              <a href="/news-and-events" className="text-xs font-bold text-brand-orange hover:underline">
+                View All →
+              </a>
             </div>
 
-            {/* News & Updates Part */}
-            <div className="flex flex-col">
-              <div className="flex items-center justify-between mb-3">
-                <h2 className="text-base md:text-lg font-extrabold text-white flex items-center gap-2">
-                  <span className="w-1.5 h-5 bg-white rounded-full"></span>
-                  {t.newsUpdates}
-                </h2>
-                <a href="/news-and-events" className="text-[10px] font-bold text-white/85 hover:text-white underline decoration-white/20">
-                  {t.viewAll} →
-                </a>
-              </div>
-
-              {/* News Slider (showing 1 compact news item) */}
-              <div className="relative h-[150px] max-h-[150px] overflow-hidden rounded-xl bg-[#132847]">
-                {newsList.map((news, idx) => (
-                  <div
-                    key={idx}
-                    className={`absolute inset-0 p-4 bg-[#182f52] rounded-xl flex flex-col justify-between transition-all duration-700 ease-in-out ${newsIndex === idx
-                      ? "opacity-100 translate-y-0 pointer-events-auto z-10"
-                      : "opacity-0 translate-y-4 pointer-events-none z-0"
-                      }`}
-                  >
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-white/10 text-white">
-                          {news.tag}
-                        </span>
-                        <span className="text-[9px] text-white/60 font-semibold">{news.date}</span>
-                      </div>
-                      <h3 className="font-extrabold text-xs md:text-sm text-white leading-snug hover:underline truncate">
-                        {news.title}
-                      </h3>
-                      <p className="text-[10px] text-white/80 font-medium leading-relaxed line-clamp-2">
-                        {news.excerpt}
-                      </p>
+            {/* Notice ticker */}
+            <div className="overflow-hidden rounded-xl bg-slate-50 border border-slate-100 p-2 h-[312px]">
+              <div
+                className="space-y-2"
+                style={{
+                  transform: `translateY(-${noticeIndex * 62}px)`,
+                  transition: noticeTransition ? "transform 500ms cubic-bezier(0.4, 0, 0.2, 1)" : "none",
+                }}
+              >
+                {loopNotices.map((e, i) => (
+                  <div key={i} className="h-[56px] bg-white hover:bg-orange-50 rounded-lg px-3 py-2 flex gap-3 items-center border border-slate-200 shadow-sm transition-colors duration-200 group">
+                    {/* Date pill */}
+                    <div className="text-center bg-[#0b1f3b] rounded-lg px-2 py-1 w-11 shrink-0">
+                      <div className="text-[9px] font-bold text-white/80 uppercase leading-none">{e.m}</div>
+                      <div className="text-base font-black text-white leading-none mt-0.5">{e.d}</div>
                     </div>
-
-                    <div className="pt-2 flex items-center justify-between border-t border-white/5 mt-2">
-                      <a href="#" className="text-[10px] font-bold inline-flex items-center gap-1 text-white underline decoration-white/20">
-                        {t.readMore} <ArrowRight className="w-2.5 h-2.5" />
-                      </a>
-
-                      <div className="flex gap-1">
-                        {newsList.map((_, i) => (
-                          <button
-                            key={i}
-                            onClick={() => setNewsIndex(i)}
-                            className={`w-1 h-1 rounded-full transition-all duration-300 ${newsIndex === i ? "w-2.5 bg-white" : "bg-white/30"}`}
-                          />
-                        ))}
-                      </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-extrabold text-sm text-slate-900 truncate group-hover:text-brand-orange transition-colors">{e.title}</h4>
                     </div>
+                    <a href="#" className="text-xs font-bold text-brand-orange hover:underline shrink-0">
+                      {t.readMore} →
+                    </a>
                   </div>
                 ))}
               </div>
