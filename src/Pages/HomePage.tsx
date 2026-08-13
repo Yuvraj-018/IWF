@@ -977,50 +977,44 @@ function HeroSection({ lang }: LanguageProp) {
           </div>
 
           {/* Right Column: Events & Notices — light card */}
-          <div className="bg-white text-slate-800 p-5 rounded-2xl border border-slate-200 shadow-lg flex flex-col gap-4">
+          <div className="bg-white text-slate-800 p-3 rounded-2xl border border-slate-200 shadow-lg flex flex-col gap-2">
 
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between px-1">
               <h2 className="text-base md:text-lg font-extrabold text-[#0b1f3b] flex items-center gap-2">
                 <span className="w-1.5 h-5 bg-brand-orange rounded-full"></span>
                 {t.eventsNotices}
               </h2>
-              <a href="/news-and-events" className="text-[10px] font-bold text-brand-orange hover:underline">
+              <a href="/news-and-events" className="text-xs font-bold text-brand-orange hover:underline">
                 View All →
               </a>
             </div>
 
-            {/* Notice ticker — now fills full height */}
-            <div className="relative flex-1 overflow-hidden rounded-xl bg-slate-50 border border-slate-100 p-2.5" style={{ minHeight: "260px", maxHeight: "320px" }}>
+            {/* Notice ticker */}
+            <div className="relative flex-1 overflow-hidden rounded-xl bg-slate-50 border border-slate-100 p-2" style={{ minHeight: "280px", maxHeight: "340px" }}>
               <div
-                className="space-y-2.5"
+                className="space-y-2"
                 style={{
                   transform: `translateY(-${noticeIndex * 62}px)`,
                   transition: noticeTransition ? "transform 500ms cubic-bezier(0.4, 0, 0.2, 1)" : "none",
                 }}
               >
                 {loopNotices.map((e, i) => (
-                  <div key={i} className="h-[52px] bg-white hover:bg-orange-50 rounded-lg px-3 py-2 flex gap-3 items-center border border-slate-200 shadow-sm transition-colors duration-200 group">
+                  <div key={i} className="h-[56px] bg-white hover:bg-orange-50 rounded-lg px-3 py-2 flex gap-3 items-center border border-slate-200 shadow-sm transition-colors duration-200 group">
                     {/* Date pill */}
-                    <div className="text-center bg-[#0b1f3b] rounded-lg px-2.5 py-1 w-12 shrink-0">
-                      <div className="text-[8px] font-bold text-white/80 uppercase leading-none">{e.m}</div>
-                      <div className="text-sm font-black text-white leading-none mt-0.5">{e.d}</div>
+                    <div className="text-center bg-[#0b1f3b] rounded-lg px-2 py-1 w-11 shrink-0">
+                      <div className="text-[9px] font-bold text-white/80 uppercase leading-none">{e.m}</div>
+                      <div className="text-base font-black text-white leading-none mt-0.5">{e.d}</div>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-extrabold text-xs text-slate-900 truncate group-hover:text-brand-orange transition-colors">{e.title}</h4>
+                      <h4 className="font-extrabold text-sm text-slate-900 truncate group-hover:text-brand-orange transition-colors">{e.title}</h4>
                     </div>
-                    <a href="#" className="text-[10px] font-bold text-brand-orange hover:underline shrink-0">
+                    <a href="#" className="text-xs font-bold text-brand-orange hover:underline shrink-0">
                       {t.readMore} →
                     </a>
                   </div>
                 ))}
               </div>
-            </div>
-
-            {/* Upcoming badge */}
-            <div className="flex items-center gap-2 text-xs text-slate-500 font-medium pt-1">
-              <span className="w-2 h-2 rounded-full bg-brand-orange animate-pulse inline-block"></span>
-              Scroll to see upcoming events
             </div>
           </div>
         </div>
