@@ -197,7 +197,7 @@ export default function NewsEventsPage() {
             <div className="absolute top-0 right-0 w-80 h-80 bg-brand-orange rounded-full -translate-y-1/2 translate-x-1/2" />
           </div>
           <div className="max-w-5xl mx-auto px-4 relative z-10">
-            <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">Media</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">Media & Updates</p>
             <h1 className="text-4xl md:text-5xl font-extrabold mb-4">News & Events</h1>
             <p className="text-white/75 max-w-xl leading-relaxed">
               Stay updated with IWF's work on the ground — health camps, scholarships, community events, partnerships, and more.

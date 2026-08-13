@@ -316,7 +316,7 @@ export function RoleFormModal({ type, onClose }: RoleFormModalProps) {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({
+  } = useForm<FieldValues>({
     resolver: zodResolver(schema),
     mode: "onSubmit",
   });

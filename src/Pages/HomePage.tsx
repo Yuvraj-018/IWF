@@ -764,15 +764,13 @@ function Header({ lang }: HeaderProps) {
                                   ? "/programs/healthcare"
                                   : item === "Impact"
                                     ? "/#impact-stats"
-                                    : item === "Media"
+                                    : item === "Media & Updates"
                                       ? "/news-and-events"
-                                      : item === "Membership"
-                                        ? "/membership"
-                                        : item === "Get Involved"
-                                          ? "/#get-involved"
-                                          : item === "Contact Us"
-                                            ? "/contact"
-                                            : "#"
+                                      : item === "Get Involved"
+                                        ? "/#get-involved"
+                                        : item === "Contact Us"
+                                          ? "/contact"
+                                          : "#"
                         }
                         className="flex-1 px-5 py-3.5 text-sm font-semibold text-slate-800 hover:text-brand-green transition-colors"
                         onClick={(event) => {
@@ -844,13 +842,13 @@ function Header({ lang }: HeaderProps) {
                                                             ? "/programs/healthcare"
                                                             : item === "Impact"
                                                               ? "/#impact-stats"
-                                                              : item === "Media" && sub === "News & Events"
+                                                              : item === "Media & Updates" && sub === "News & Events"
                                                                 ? "/news-and-events"
-                                                                : item === "Media" && sub === "Gallery"
+                                                                : item === "Media & Updates" && sub === "Gallery"
                                                                   ? "/news-and-events"
-                                                                  : item === "Media" && sub === "Press Release"
+                                                                  : item === "Media & Updates" && sub === "Press Release"
                                                                     ? "/news-and-events"
-                                                                    : item === "Media"
+                                                                    : item === "Media & Updates"
                                                                       ? "/news-and-events"
                                                                       : item === "Get Involved" && sub === "Donate & Support"
                                                                         ? "/donate"
@@ -1383,7 +1381,7 @@ function ExploreIWF({ lang }: LanguageProp) {
     },
     {
       icon: Newspaper,
-      page: lang === "en" ? "Media" : "मीडिया",
+      page: lang === "en" ? "Media & Updates" : "मीडिया और अपडेट",
       summary: lang === "en"
         ? "Stay updated with our latest field activities, news, press releases, newsletters, and view our photo gallery capturing real moments of community transformation."
         : "हमारी नवीनतम गतिविधियों, समाचारों, प्रेस विज्ञप्तियों, समाचार पत्रों से अपडेट रहें और समुदाय परिवर्तन के वास्तविक क्षणों को कैद करने वाली हमारी फोटो गैलरी देखें।",

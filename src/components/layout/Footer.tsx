@@ -14,11 +14,11 @@ export function Footer() {
       </div>
       <div className="relative max-w-7xl mx-auto px-4 py-14 grid md:grid-cols-2 lg:grid-cols-5 gap-8">
         <div className="lg:col-span-1">
-          <div className="flex items-center gap-3 mb-4">
-            <img src={newLogo} alt="IWF Logo" className="h-12 w-auto object-contain shrink-0" />
-            <div className="flex flex-col">
-              <span className="font-extrabold text-2xl tracking-widest text-white leading-none">IWF</span>
-              <span className="font-medium text-[11px] tracking-wide text-white/70 mt-0.5">Islah Welfare Foundation</span>
+          <div className="flex items-center gap-3 mb-4 bg-[#fdfbf7] p-3 rounded-2xl w-fit">
+            <img src={newLogo} alt="IWF Logo" className="w-12 h-12 object-contain" />
+            <div className="leading-tight">
+              <div className="font-extrabold text-black">ISLAH</div>
+              <div className="text-[10px] tracking-wider text-black">WELFARE FOUNDATION</div>
             </div>
           </div>
           <p className="text-sm text-white/80">Islah Welfare Foundation is committed to empowering underprivileged communities through education, skill development, healthcare and social welfare initiatives for a better tomorrow.</p>
@@ -26,16 +26,8 @@ export function Footer() {
           <div className="mt-4">
             <div className="text-xs font-semibold mb-2">FOLLOW US</div>
             <div className="flex gap-2">
-              {[
-                { Icon: Facebook, color: "bg-[#1877f2] hover:bg-[#166fe5]", href: "https://facebook.com", label: "Facebook" },
-                { Icon: Instagram, color: "bg-gradient-to-tr from-[#f9cb2f] via-[#e5195f] to-[#8134af] hover:opacity-90", href: "https://instagram.com", label: "Instagram" },
-                { Icon: Youtube, color: "bg-[#ff0000] hover:bg-[#e60000]", href: "https://youtube.com", label: "YouTube" },
-                { Icon: Linkedin, color: "bg-[#0077b5] hover:bg-[#00669c]", href: "https://linkedin.com", label: "LinkedIn" },
-                { Icon: Twitter, color: "bg-[#1da1f2] hover:bg-[#0d95e8]", href: "https://twitter.com", label: "Twitter" },
-              ].map((s, i) => (
-                <a key={i} href={s.href} target="_blank" rel="noopener noreferrer" className={`w-8 h-8 rounded-full ${s.color} flex items-center justify-center text-white transition-all duration-200 shadow-sm`} aria-label={s.label}>
-                  <s.Icon className="w-4 h-4" />
-                </a>
+              {[Facebook, Twitter, Instagram, Youtube, Linkedin].map((Icon, i) => (
+                <a key={i} href="#" className="w-8 h-8 rounded-full bg-white/15 hover:bg-white/30 flex items-center justify-center"><Icon className="w-4 h-4" /></a>
               ))}
             </div>
           </div>

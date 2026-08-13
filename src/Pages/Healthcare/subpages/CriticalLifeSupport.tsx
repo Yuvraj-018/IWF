@@ -350,8 +350,8 @@ function BottomCTABanner() {
           </div>
         </div>
         <div className="flex items-center gap-3 flex-wrap justify-center lg:justify-end">
-          <Link
-            to="/donate"
+          <a
+            href="/donate"
             className="bg-[#f97316] hover:bg-orange-600 text-white font-bold text-xs py-3 px-5 rounded-xl flex items-center gap-2 transition-colors active:scale-95"
           >
             <Heart className="w-4 h-4 fill-white" />
@@ -359,7 +359,7 @@ function BottomCTABanner() {
               <div>DONATE NOW</div>
               <div className="text-[10px] font-normal opacity-80">Support a Patient</div>
             </div>
-          </Link>
+          </a>
           <button
             type="button"
             className="border border-gray-300 hover:border-gray-400 text-gray-700 font-bold text-xs py-3 px-5 rounded-xl flex items-center gap-2 transition-colors bg-white active:scale-95 cursor-pointer"

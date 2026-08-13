@@ -37,6 +37,7 @@ export const NAV_ITEMS = [
   "Home",
   "About Us",
   "What We Do",
+  "Programs",
   "Impact",
   "Media",
   "Membership",
@@ -112,8 +113,8 @@ export const MEGA_DATA: Record<string, MegaSection> = {
 function getTopNavHref(item: string) {
   if (item === "Home") return "/";
   if (item === "About Us") return "/about";
-  if (item === "What We Do") return "/#focus-areas";
-  if (item === "Programs") return "/programs/healthcare";
+  if (item === "What We Do") return "/programs";
+  if (item === "Programs") return "/programs";
   if (item === "Impact") return "/#impact-stats";
   if (item === "Media") return "/news-and-events";
   if (item === "Membership") return "/membership";
@@ -130,16 +131,20 @@ function getMegaHref(menu: string, item: string) {
   if (menu === "About Us" && item === "Leadership & Management") return "/about/leadership";
   if (menu === "About Us" && item === "Governance & Transparency") return "/about/governance";
   if (menu === "About Us" && item === "Legal Status & Registration") return "/about/legal-status";
-  if (menu === "About Us" && (item === "Members & Donors" || item === "Members & Supporters")) return "/membership";
+  if (menu === "About Us" && (item === "Members & Donors" || item === "Members & Supporters")) return "/members-and-donors";
   if (menu === "About Us" && item === "Membership Policy") return "/membership#status";
-  if (menu === "About Us" && item === "Partners & Donors") return "/about/partners";
+  if (menu === "About Us" && (item === "Our Partners & Donors" || item === "Partners & Donors")) return "/about/partners";
   // What We Do
   if (menu === "What We Do" && item === "Education") return "/programs/education";
   if (menu === "What We Do" && item === "Health Care") return "/programs/healthcare";
   if (menu === "What We Do" && item === "Skills Development") return "/programs/skills-development";
   if (menu === "What We Do" && item === "Women Empowerment") return "/programs/women-empowerment";
+  if (menu === "What We Do" && item === "Entrepreneur Development") return "/programs/entrepreneur-development";
+  if (menu === "What We Do" && item === "Relief & Rehabilitation") return "/programs/relief-and-rehabilitation";
+  if (menu === "What We Do" && item === "Environment & Sustainability") return "/programs/environment";
+  if (menu === "What We Do" && item === "Agriculture & Rural Livelihood") return "/programs/agriculture";
   // Programs
-  if (menu === "Programs" && item === "View All Programs") return "/programs/healthcare";
+  if (menu === "Programs" && item === "View All Programs") return "/programs";
   // Media & Updates
   if (menu === "Media" && item === "News & Events") return "/news-and-events";
   if (menu === "Media" && item === "Latest Updates") return "/news-and-events";
@@ -153,10 +158,10 @@ function getMegaHref(menu: string, item: string) {
   if (menu === "Get Involved" && item === "Careers & Opportunities") return "#careers";
   if (menu === "Get Involved" && item === "Donate & Support") return "/donate";
   if (menu === "Get Involved" && item === "Volunteer With Us") return "/#get-involved";
-  if (menu === "Get Involved" && item === "Partner With Us") return "/#get-involved";
+  if (menu === "Get Involved" && item === "Partner With Us") return "/about/partners";
   if (menu === "Get Involved" && item === "Sponsor a Programme") return "/#get-involved";
   if (menu === "Get Involved" && item === "Become a Mentor") return "/#get-involved";
-  if (menu === "Get Involved" && item === "Become a Member") return "/membership";
+  if (menu === "Get Involved" && item === "Become a Member") return "/members-and-donors";
   // Contact
   if (item === "Contact Us") return "/contact";
   return "#";
@@ -572,15 +577,19 @@ export function Footer({ onOpenModal }: { onOpenModal: (type: RoleType) => void 
 
           <div className="space-y-4">
             <h4 className="flex items-center gap-2 text-white font-semibold text-sm uppercase border-l-2 border-brand-orange pl-2 tracking-wide">
-              <Scale className="w-4 h-4 text-brand-orange" /> Legal
+              <Scale className="w-4 h-4 text-brand-orange" /> Legal & Policies
             </h4>
             <ul className="space-y-2.5">
               {[
+                ["All Policies & Governance", "/policies"],
                 ["Privacy Policy", "/privacy-policy"],
                 ["Refund Policy", "/refund-policy"],
                 ["Terms & Conditions", "/terms-and-conditions"],
-                ["Certificates", "/about/legal-status"],
-                ["12A & 80G", "/about/legal-status"],
+                ["Grievance Redressal Policy", "/grievance-policy"],
+                ["Child Protection Policy", "/child-protection-policy"],
+                ["Code of Conduct", "/code-of-conduct"],
+                ["Financial Transparency", "/financial-transparency-policy"],
+                ["Legal Status & Registration", "/about/legal-status"],
               ].map(([label, href]) => (
                 <li key={label}>
                   <a href={href} className="inline-flex items-center text-white text-sm hover:text-brand-orange hover:translate-x-1 transition-all duration-200">
@@ -628,6 +637,8 @@ export function Footer({ onOpenModal }: { onOpenModal: (type: RoleType) => void 
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4 text-xs text-white">
           <div>(c) 2026 Islah Welfare Foundation. All Rights Reserved.</div>
           <div className="flex flex-wrap gap-3">
+            <a href="/policies" className="hover:text-brand-orange transition-colors">All Policies</a>
+            <span>|</span>
             <a href="/privacy-policy" className="hover:text-brand-orange transition-colors">Privacy Policy</a>
             <span>|</span>
             <a href="/refund-policy" className="hover:text-brand-orange transition-colors">Refund Policy</a>

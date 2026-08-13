@@ -26,7 +26,7 @@ export function ExploreIWF() {
             },
             {
               icon: Newspaper,
-              page: "Media",
+              page: "Media & Updates",
               summary: "Stay informed with the latest news, events, newsletters, press releases, and publications from IWF's field teams. Our gallery captures real moments of transformation from the communities we serve. Follow our updates to see your support in action.",
             },
             {
