@@ -31,6 +31,15 @@ import gallery3 from "@/assets/gallery-3.jpg";
 import gallery4 from "@/assets/gallery-4.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
 import gallery6 from "@/assets/gallery-6.jpg";
+import sectorEducation1 from "@/assets/sector_education_1.png";
+import sectorEducation2 from "@/assets/sector_education_2.png";
+import sectorHealthcare1 from "@/assets/sector_healthcare_1.png";
+import sectorWomen1 from "@/assets/sector_women_1.png";
+import sectorSkills1 from "@/assets/sector_skills_1.png";
+import sectorEnvironment1 from "@/assets/sector_environment_1.png";
+import sectorAgriculture1 from "@/assets/sector_agriculture_1.png";
+import sectorRelief1 from "@/assets/sector_relief_1.png";
+import sectorEntrepreneur1 from "@/assets/sector_entrepreneur_1.png";
 
 export type SectorContent = {
   slug: "education" | "skills-development" | "women-empowerment";
@@ -39,6 +48,7 @@ export type SectorContent = {
   subtitle: string;
   quote: string;
   heroImage: string;
+  heroSlides: { image: string; caption: string }[];
   icon: LucideIcon;
   challengeTitle: string;
   challengeCopy: string;
@@ -160,6 +170,11 @@ export const SECTOR_CONTENT: Record<SectorContent["slug"], SectorContent> = {
     quote:
       "Empowering rural India through education, because inclusive development begins where the need is greatest.",
     heroImage: causeEducationImg,
+    heroSlides: [
+      { image: sectorEducation1, caption: "Rural classroom learning" },
+      { image: sectorEducation2, caption: "School kit distribution" },
+      { image: causeEducationImg, caption: "Education for all" },
+    ],
     icon: GraduationCap,
     challengeTitle: "Rural Education Landscape in India",
     challengeCopy:
@@ -207,6 +222,11 @@ export const SECTOR_CONTENT: Record<SectorContent["slug"], SectorContent> = {
     quote:
       "Empowering rural communities through skills, because sustainable development begins with self-reliance.",
     heroImage: entrepreneurImg,
+    heroSlides: [
+      { image: sectorSkills1, caption: "Vocational training workshops" },
+      { image: sectorEntrepreneur1, caption: "Entrepreneurship development" },
+      { image: entrepreneurImg, caption: "Skills for livelihood" },
+    ],
     icon: Wrench,
     challengeTitle: "Why Skill Development Matters",
     challengeCopy:
@@ -252,6 +272,11 @@ export const SECTOR_CONTENT: Record<SectorContent["slug"], SectorContent> = {
     quote:
       "Empowering women with education, skills, dignity and opportunity, building stronger families and a more inclusive future.",
     heroImage: womenAltImg,
+    heroSlides: [
+      { image: sectorWomen1, caption: "Women self-help groups" },
+      { image: causeWomenImg, caption: "Women empowerment programs" },
+      { image: womenAltImg, caption: "Building stronger communities" },
+    ],
     icon: Users,
     challengeTitle: "Women at the Centre of Community Progress",
     challengeCopy:

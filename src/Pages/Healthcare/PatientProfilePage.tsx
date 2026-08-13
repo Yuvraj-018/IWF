@@ -146,39 +146,19 @@ function HeroSection({ patient }: { patient: Patient }) {
               <p className="text-[#f97316] font-bold text-base">{patient.disease}</p>
             </div>
 
-            {/* Progress */}
+
+            {/* Goal */}
             <div className="bg-gray-50 rounded-2xl border border-gray-100 p-5">
-              <div className="flex items-end justify-between mb-3">
-                <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide font-bold mb-1">
-                    Amount Raised
-                  </p>
-                  <div className="flex items-center gap-1">
-                    <IndianRupee className="w-5 h-5 text-[#f97316]" />
-                    <span className="text-3xl font-black text-[#0b1f3b]">
-                      {patient.raisedAmount.toLocaleString("en-IN")}
-                    </span>
-                  </div>
-                  <p className="text-xs text-gray-500 mt-0.5">
-                    of ₹{patient.neededAmount.toLocaleString("en-IN")} goal
-                    <span className="ml-2 text-gray-400">• {patient.donorsCount} donors</span>
-                  </p>
-                </div>
-                <div className="text-right">
-                  <span className="text-2xl font-black text-[#f97316]">{pct}%</span>
-                  <p className="text-xs text-gray-500">funded</p>
-                </div>
+              <p className="text-xs text-gray-500 uppercase tracking-wide font-bold mb-1">Treatment Goal</p>
+              <div className="flex items-center gap-1">
+                <IndianRupee className="w-5 h-5 text-[#f97316]" />
+                <span className="text-3xl font-black text-[#0b1f3b]">
+                  {patient.neededAmount.toLocaleString("en-IN")}
+                </span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-[#f97316] to-orange-400 rounded-full transition-all duration-700"
-                  style={{ width: `${pct}%` }}
-                />
-              </div>
-              <p className="text-xs text-gray-500 mt-2">
-                ₹{remaining.toLocaleString("en-IN")} still needed to complete treatment
-              </p>
+              <p className="text-xs text-gray-500 mt-1">Total amount needed for full treatment</p>
             </div>
+
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-3">
@@ -484,10 +464,9 @@ function FinancialSection({ patient }: { patient: Patient }) {
                 Funding Status
               </p>
 
-              <div className="grid grid-cols-3 gap-4 mb-5">
+              <div className="grid grid-cols-2 gap-4 mb-4">
                 {[
                   { label: "Total Needed", value: `₹${patient.neededAmount.toLocaleString("en-IN")}`, color: "text-[#0b1f3b]" },
-                  { label: "Raised So Far", value: `₹${patient.raisedAmount.toLocaleString("en-IN")}`, color: "text-green-600" },
                   { label: "Still Needed", value: `₹${remaining.toLocaleString("en-IN")}`, color: "text-[#f97316]" },
                 ].map(({ label, value, color }) => (
                   <div key={label} className="text-center">
@@ -495,18 +474,6 @@ function FinancialSection({ patient }: { patient: Patient }) {
                     <p className="text-[10px] text-gray-500 mt-0.5">{label}</p>
                   </div>
                 ))}
-              </div>
-
-              <div className="w-full bg-orange-100 rounded-full h-4 overflow-hidden mb-2">
-                <div
-                  className="h-full bg-gradient-to-r from-green-500 to-green-400 rounded-full"
-                  style={{ width: `${pct}%` }}
-                />
-              </div>
-              <div className="flex justify-between text-xs text-gray-500">
-                <span>₹0</span>
-                <span className="font-bold text-[#0b1f3b]">{pct}% funded</span>
-                <span>₹{patient.neededAmount.toLocaleString("en-IN")}</span>
               </div>
             </div>
 
