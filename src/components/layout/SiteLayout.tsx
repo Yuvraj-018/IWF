@@ -39,7 +39,8 @@ export const NAV_ITEMS = [
   "What We Do",
   "Programs",
   "Impact",
-  "Media & Updates",
+  "Media",
+  "Membership",
   "Get Involved",
   "Contact Us",
 ];
@@ -91,7 +92,7 @@ export const MEGA_DATA: Record<string, MegaSection> = {
       "Impact Statistics Dashboard",
     ],
   },
-  "Media & Updates": {
+  Media: {
     cols: 3,
     items: ["News & Events", "Latest Updates", "Newsletters", "Publications", "Press Release", "Gallery"],
   },
@@ -115,7 +116,8 @@ function getTopNavHref(item: string) {
   if (item === "What We Do") return "/programs";
   if (item === "Programs") return "/programs";
   if (item === "Impact") return "/#impact-stats";
-  if (item === "Media & Updates") return "/news-and-events";
+  if (item === "Media") return "/news-and-events";
+  if (item === "Membership") return "/membership";
   if (item === "Get Involved") return "/#get-involved";
   if (item === "Contact Us") return "/contact";
   return "#";
@@ -144,14 +146,14 @@ function getMegaHref(menu: string, item: string) {
   // Programs
   if (menu === "Programs" && item === "View All Programs") return "/programs";
   // Media & Updates
-  if (menu === "Media & Updates" && item === "News & Events") return "/news-and-events";
-  if (menu === "Media & Updates" && item === "Latest Updates") return "/news-and-events";
-  if (menu === "Media & Updates" && item === "Gallery") return "/gallery";
-  if (menu === "Media & Updates" && item === "Publications") return "/news-and-events";
-  if (menu === "Media & Updates" && item === "Press Releases") return "/news-and-events";
-  if (menu === "Media & Updates" && item === "Annual Reports") return "/news-and-events";
-  if (menu === "Media & Updates" && item === "Success Stories") return "/news-and-events";
-  if (menu === "Media & Updates" && item === "Newsletters") return "/news-and-events";
+  if (menu === "Media" && item === "News & Events") return "/news-and-events";
+  if (menu === "Media" && item === "Latest Updates") return "/news-and-events";
+  if (menu === "Media" && item === "Gallery") return "/gallery";
+  if (menu === "Media" && item === "Publications") return "/news-and-events";
+  if (menu === "Media" && item === "Press Releases") return "/news-and-events";
+  if (menu === "Media" && item === "Annual Reports") return "/news-and-events";
+  if (menu === "Media" && item === "Success Stories") return "/news-and-events";
+  if (menu === "Media" && item === "Newsletters") return "/news-and-events";
   // Get Involved
   if (menu === "Get Involved" && item === "Careers & Opportunities") return "#careers";
   if (menu === "Get Involved" && item === "Donate & Support") return "/donate";
@@ -190,8 +192,8 @@ export function NotificationTicker() {
               href={item.href}
               className="inline-flex items-center gap-3 hover:underline underline-offset-2 text-white"
             >
-              <span className="text-[13px] font-bold tracking-wide px-3">{item.text}</span>
-              <span className="text-white/50 text-base px-1">◆</span>
+              <span className="text-sm font-semibold italic tracking-wide px-3 text-white">{item.text}</span>
+              <span className="text-white/60 text-base px-1">◆</span>
             </a>
           ))}
         </div>
@@ -234,6 +236,7 @@ export function Header() {
   const isRouteActive = (item: string) =>
     (item === "Home" && pathname === "/") ||
     (item === "About Us" && pathname.startsWith("/about")) ||
+    (item === "Membership" && pathname.startsWith("/membership")) ||
     ((item === "What We Do" || item === "Programs") && pathname.startsWith("/programs"));
 
   const getHeaderHref = (item: string) => {
@@ -325,12 +328,6 @@ export function Header() {
 
           {/* Right Group: Donate Button & Mobile Hamburger */}
           <div className="flex items-center gap-2 md:gap-3 shrink-0 py-1.5 ml-auto lg:ml-0">
-            <a
-              href="/membership"
-              className="bg-[#15803D] hover:bg-[#166534] text-white font-bold text-xs md:text-sm px-4 py-2 rounded-md shadow-md transition-all hover:scale-105 active:scale-95 uppercase tracking-wide"
-            >
-              Become Member
-            </a>
             <a
               href="/donate"
               className="bg-[#f97316] hover:bg-orange-600 text-white font-bold text-xs md:text-sm px-4 py-2 rounded-md shadow-md transition-all hover:scale-105 active:scale-95 uppercase tracking-wide"
@@ -508,11 +505,11 @@ export function Footer({ onOpenModal }: { onOpenModal: (type: RoleType) => void 
       <div className="bg-[#0b1f3b] text-white py-14 px-4 md:px-10 border-t border-white/10">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           <div className="space-y-4">
-            <div className="flex items-center gap-3 bg-[#fdfbf7] p-3 rounded-2xl w-fit">
-              <img src={newLogo} alt="IWF Logo" className="h-14 w-auto object-contain shrink-0" />
+            <div className="flex items-center gap-3">
+              <img src={newLogo} alt="IWF Logo" className="h-12 w-auto object-contain shrink-0" />
               <div className="flex flex-col">
-                <span className="font-extrabold text-2xl tracking-wide text-black leading-none">ISLAH</span>
-                <span className="font-light text-[10px] tracking-widest text-black mt-0.5">WELFARE FOUNDATION</span>
+                <span className="font-extrabold text-2xl tracking-widest text-white leading-none">IWF</span>
+                <span className="font-medium text-[11px] tracking-wide text-white/70 mt-0.5">Islah Welfare Foundation</span>
               </div>
             </div>
             <div className="text-brand-orange font-medium text-sm">Care | Empower | Uplift</div>
@@ -522,9 +519,15 @@ export function Footer({ onOpenModal }: { onOpenModal: (type: RoleType) => void 
             <div>
               <span className="block text-xs font-bold tracking-widest text-white uppercase mb-2">Follow Us</span>
               <div className="flex gap-2">
-                {[Facebook, Instagram, Youtube, Linkedin, Twitter].map((Icon, i) => (
-                  <a key={i} href="#" className="w-7 h-7 rounded-full bg-white/10 hover:bg-brand-orange flex items-center justify-center text-white transition-all duration-200" aria-label="Social media profile">
-                    <Icon className="w-3.5 h-3.5" />
+                {[
+                  { Icon: Facebook, color: "bg-[#1877f2] hover:bg-[#166fe5]", href: "https://facebook.com", label: "Facebook" },
+                  { Icon: Instagram, color: "bg-gradient-to-tr from-[#f9cb2f] via-[#e5195f] to-[#8134af] hover:opacity-90", href: "https://instagram.com", label: "Instagram" },
+                  { Icon: Youtube, color: "bg-[#ff0000] hover:bg-[#e60000]", href: "https://youtube.com", label: "YouTube" },
+                  { Icon: Linkedin, color: "bg-[#0077b5] hover:bg-[#00669c]", href: "https://linkedin.com", label: "LinkedIn" },
+                  { Icon: Twitter, color: "bg-[#1da1f2] hover:bg-[#0d95e8]", href: "https://twitter.com", label: "Twitter" },
+                ].map((s, i) => (
+                  <a key={i} href={s.href} target="_blank" rel="noopener noreferrer" className={`w-7 h-7 rounded-full ${s.color} flex items-center justify-center text-white transition-all duration-200 shadow-sm`} aria-label={s.label}>
+                    <s.Icon className="w-3.5 h-3.5" />
                   </a>
                 ))}
               </div>
