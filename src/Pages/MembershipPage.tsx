@@ -2376,7 +2376,7 @@ function Step3ContributionDetails({
                   ? val === "yes" ? "border-brand-green bg-brand-green text-white" : "border-slate-500 bg-slate-700 text-white"
                   : "border-slate-200 bg-white text-slate-600 hover:border-slate-300"
                   }`}>
-                {val === "yes" ? "✓ Yes, you may display my name on the website." : "✗ No, do not display my name."}
+                {val === "yes" ? "Yes" : "No"}
               </button>
             ))}
           </div>

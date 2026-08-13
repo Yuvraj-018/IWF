@@ -188,7 +188,8 @@ const NAV_ITEMS = [
   "About Us",
   "What We Do",
   "Impact",
-  "Media & Updates",
+  "Media",
+  "Membership",
   "Get Involved",
   "Contact Us",
 ];
@@ -242,7 +243,7 @@ const MEGA_DATA: Record<string, MegaSection> = {
       "Impact Statistics Dashboard",
     ],
   },
-  "Media & Updates": {
+  Media: {
     cols: 3,
     items: [
       "News & Events",
@@ -337,8 +338,8 @@ const TRANSLATIONS = {
 };
 
 const NAV_ITEMS_TRANSLATIONS = {
-  en: ["Home", "About Us", "What We Do", "Impact", "Media & Updates", "Get Involved", "Contact Us"],
-  hi: ["होम", "हमारे बारे में", "हम क्या करते हैं", "प्रभाव", "मीडिया और अपडेट", "जुड़ें", "संपर्क करें"]
+  en: ["Home", "About Us", "What We Do", "Impact", "Media", "Membership", "Get Involved", "Contact Us"],
+  hi: ["होम", "हमारे बारे में", "हम क्या करते हैं", "प्रभाव", "मीडिया", "सदस्यता", "जुड़ें", "संपर्क करें"]
 };
 
 interface SectionHeaderProps {
@@ -393,8 +394,8 @@ function NotificationTicker() {
               href={item.href}
               className="inline-flex items-center gap-3 hover:underline underline-offset-2 text-white"
             >
-              <span className="text-[13px] font-bold tracking-wide px-3">{item.text}</span>
-              <span className="text-white/50 text-base px-1">◆</span>
+              <span className="text-sm font-semibold italic tracking-wide px-3 text-white">{item.text}</span>
+              <span className="text-white/60 text-base px-1">◆</span>
             </a>
           ))}
         </div>
@@ -548,13 +549,15 @@ function Header({ lang }: HeaderProps) {
                               ? "/programs/healthcare"
                               : item === "Impact"
                                 ? "/#impact-stats"
-                                : item === "Media & Updates"
+                                : item === "Media"
                                   ? "/news-and-events"
-                                  : item === "Get Involved"
-                                    ? "/#get-involved"
-                                    : item === "Contact Us"
-                                      ? "/contact"
-                                      : "#"
+                                  : item === "Membership"
+                                    ? "/membership"
+                                    : item === "Get Involved"
+                                      ? "/#get-involved"
+                                      : item === "Contact Us"
+                                        ? "/contact"
+                                        : "#"
                     }
                     className="relative flex items-center gap-1.5 text-white/90 hover:text-white hover:bg-white/10 font-semibold text-sm transition-all px-4 py-3 rounded-md group"
                     onClick={(event) => {
@@ -587,9 +590,6 @@ function Header({ lang }: HeaderProps) {
 
           {/* Right Group: Donate Button & Mobile Hamburger */}
           <div className="flex items-center gap-2 md:gap-3 shrink-0 py-1.5 ml-auto lg:ml-0">
-            <a href="/membership" className="bg-brand-green hover:bg-brand-green-dark text-white font-bold text-xs md:text-sm px-4 py-2 rounded-md shadow-md transition-all hover:scale-105 active:scale-95 uppercase tracking-wide">
-              Become Member
-            </a>
             <a href="/donate" className="bg-[#f97316] hover:bg-orange-600 text-white font-bold text-xs md:text-sm px-4 py-2 rounded-md shadow-md transition-all hover:scale-105 active:scale-95 uppercase tracking-wide">
               DONATE NOW
             </a>
@@ -665,15 +665,15 @@ function Header({ lang }: HeaderProps) {
                                                         ? "/programs/healthcare"
                                                         : activeMenu === "Impact"
                                                           ? "/#impact-stats"
-                                                          : activeMenu === "Media & Updates" && subItem === "News & Events"
+                                                          : activeMenu === "Media" && subItem === "News & Events"
                                                             ? "/news-and-events"
-                                                            : activeMenu === "Media & Updates" && subItem === "Latest Updates"
+                                                            : activeMenu === "Media" && subItem === "Latest Updates"
                                                               ? "/news-and-events"
-                                                              : activeMenu === "Media & Updates" && subItem === "Gallery"
+                                                              : activeMenu === "Media" && subItem === "Gallery"
                                                                 ? "/news-and-events"
-                                                                : activeMenu === "Media & Updates" && subItem === "Press Release"
+                                                                : activeMenu === "Media" && subItem === "Press Release"
                                                                   ? "/news-and-events"
-                                                                  : activeMenu === "Media & Updates"
+                                                                  : activeMenu === "Media"
                                                                     ? "/news-and-events"
                                                                     : activeMenu === "Get Involved" && subItem === "Donate & Support"
                                                                       ? "/donate"
@@ -1229,6 +1229,8 @@ function WhatWeDo({ lang }: LanguageProp) {
     { icon: Sprout, l: lang === "en" ? "Rural Development" : "ग्रामीण विकास", s: lang === "en" ? "Infrastructure" : "बुनियादी ढांचा", route: "#" },
     { icon: Wrench, l: lang === "en" ? "Skill Development" : "कौशल विकास", s: lang === "en" ? "Vocational Training" : "व्यावसायिक प्रशिक्षण", route: "/programs/skills-development" },
     { icon: Leaf, l: lang === "en" ? "Environment" : "पर्यावरण", s: lang === "en" ? "Plantation & Green Energy" : "वृक्षारोपण और ऊर्जा", route: "#" },
+    { icon: Megaphone, l: lang === "en" ? "Relief & Rehabilitation" : "राहत एवं पुनर्वास", s: lang === "en" ? "Disaster & Emergency Aid" : "आपदा और आपातकाल", route: "#" },
+    { icon: Wind, l: lang === "en" ? "Agriculture & Livelihood" : "कृषि एवं आजीविका", s: lang === "en" ? "Farming & Rural Income" : "खेती और ग्रामीण आय", route: "#" },
   ];
 
   return (
@@ -1241,7 +1243,7 @@ function WhatWeDo({ lang }: LanguageProp) {
           />
         </ScrollReveal>
         <ScrollReveal stagger={0.07}>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-8 gap-3.5">
             {items.map(({ icon: Icon, l, s, route }, i) => {
               const col = CHEERFUL_COLORS[i % 6];
               return (

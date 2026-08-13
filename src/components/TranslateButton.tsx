@@ -26,7 +26,15 @@ const LANGUAGES = [
   { code: "en", name: "English", nativeName: "English" },
   { code: "hi", name: "Hindi", nativeName: "हिंदी" },
   { code: "ur", name: "Urdu", nativeName: "اردو" },
-  { code: "bn", name: "Bengali", nativeName: "বাংলা" }
+  { code: "bn", name: "Bengali", nativeName: "বাংলা" },
+  { code: "ta", name: "Tamil", nativeName: "தமிழ்" },
+  { code: "te", name: "Telugu", nativeName: "తెలుగు" },
+  { code: "kn", name: "Kannada", nativeName: "ಕನ್ನಡ" },
+  { code: "ml", name: "Malayalam", nativeName: "മലയാളം" },
+  { code: "mr", name: "Marathi", nativeName: "मराठी" },
+  { code: "pa", name: "Punjabi", nativeName: "ਪੰਜਾਬੀ" },
+  { code: "gu", name: "Gujarati", nativeName: "ગુજરાતી" },
+  { code: "or", name: "Odia", nativeName: "ଓଡ଼ିଆ" },
 ];
 
 const SUPPRESSION_CSS = `
@@ -73,7 +81,7 @@ function loadGoogleTranslateScript(onReady: () => void) {
 
   window.googleTranslateElementInit = () => {
     new window.google.translate.TranslateElement(
-      { pageLanguage: "en", includedLanguages: "hi,ur,bn", autoDisplay: false },
+      { pageLanguage: "en", includedLanguages: "hi,ur,bn,ta,te,kn,ml,mr,pa,gu,or", autoDisplay: false },
       GOOGLE_TRANSLATE_ELEMENT_ID
     );
     window._iwfTranslateReady = true;
@@ -171,7 +179,7 @@ export function FloatingTranslateButton() {
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="bg-[#0b1f3b]/95 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl p-2 w-44 flex flex-col gap-1 text-white animate-in slide-in-from-top-2 fade-in duration-200">
+        <div className="bg-[#0b1f3b]/95 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl p-2 w-52 flex flex-col gap-1 text-white animate-in slide-in-from-top-2 fade-in duration-200 max-h-80 overflow-y-auto">
           <div className="px-2.5 py-1.5 text-[10px] font-black tracking-wider text-white/50 uppercase border-b border-white/5 mb-1">
             Select Language
           </div>
