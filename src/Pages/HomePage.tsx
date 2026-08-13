@@ -53,7 +53,9 @@ function HomeFooter({ onOpenModal }: { onOpenModal: (type: RoleType) => void }) 
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <img src={newLogo} alt="IWF Logo" className="h-12 w-auto object-contain shrink-0" />
+              <div className="bg-white rounded-xl p-1.5 shrink-0">
+                <img src={newLogo} alt="IWF Logo" className="h-10 w-auto object-contain" />
+              </div>
               <div className="flex flex-col">
                 <span className="font-extrabold text-2xl tracking-widest text-white leading-none">IWF</span>
                 <span className="font-medium text-[11px] tracking-wide text-white/70 mt-0.5">Islah Welfare Foundation</span>
@@ -2193,8 +2195,8 @@ export default function HomePage() {
       <ProgramsAndThematic lang={lang} />
       <ExploreIWF lang={lang} />
       <GetInvolved lang={lang} onOpenModal={handleOpenModal} />
-      <GallerySection lang={lang} />
       <PreFooterHomeSections />
+      <GallerySection lang={lang} />
       <HomeFooter onOpenModal={handleOpenModal} />
 
       {/* Unified Role Forms Modal */}
