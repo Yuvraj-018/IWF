@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Lightbulb,
   Building2,
@@ -14,11 +14,22 @@ import {
 import { Footer, Header, NotificationTicker, RoleFormModal, UtilityBar } from "@/components/layout/SiteLayout";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
 import entrepreneurImg from "@/assets/thematic-entrepreneur.jpg";
+import sectorEntrepreneur1 from "@/assets/sector_entrepreneur_1.png";
+import { ChevronLeft, ChevronRight as ChevronRight2 } from "lucide-react";
 
 type RoleType = "volunteer" | "partner" | "sponsor" | "mentor" | "employee";
 
 export default function EntrepreneurDevelopmentPage() {
   const [activeModal, setActiveModal] = useState<RoleType | null>(null);
+  const [slideIndex, setSlideIndex] = useState(0);
+  const slides = [
+    { image: sectorEntrepreneur1, caption: "Entrepreneurship workshops" },
+    { image: entrepreneurImg, caption: "Rural enterprise development" },
+  ];
+  const goTo = useCallback((i: number) => setSlideIndex((i + slides.length) % slides.length), [slides.length]);
+  const next = useCallback(() => goTo(slideIndex + 1), [goTo, slideIndex]);
+  const prev = useCallback(() => goTo(slideIndex - 1), [goTo, slideIndex]);
+  useEffect(() => { const t = setInterval(next, 4500); return () => clearInterval(t); }, [next]);
 
   const workAreas = [
     {
@@ -52,52 +63,35 @@ export default function EntrepreneurDevelopmentPage() {
       <Header />
 
       <main>
-        {/* Hero Banner */}
-        <section className="bg-gradient-to-r from-[#071527] via-[#0b1f3b] to-[#15803d] text-white py-16 md:py-20 px-4 border-b border-white/10">
-          <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-7 space-y-5">
-              <div className="inline-flex items-center gap-2 bg-brand-orange/20 text-brand-orange text-xs font-extrabold uppercase tracking-widest px-3.5 py-1.5 rounded-md border border-brand-orange/30">
-                <Lightbulb className="w-4 h-4" />
-                <span>What We Do • Livelihood & Enterprise</span>
-              </div>
-              <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
-                ENTREPRENEUR DEVELOPMENT
-              </h1>
-              <p className="text-white/85 text-base md:text-lg leading-relaxed max-w-2xl">
-                Empowering rural communities through small-scale entrepreneurship, microfinance, and sustainable livelihoods—because self-reliance is the foundation of lasting social development.
-              </p>
-              <div className="pt-2 flex flex-wrap gap-3">
-                <button
-                  onClick={() => setActiveModal("partner")}
-                  className="bg-brand-orange hover:bg-orange-600 text-white font-bold text-sm px-6 py-3 rounded-md shadow-md transition-all flex items-center gap-2"
-                >
-                  <span>Partner With Us</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => setActiveModal("sponsor")}
-                  className="bg-white/10 hover:bg-white/20 text-white font-semibold text-sm px-6 py-3 rounded-md border border-white/20 transition-all"
-                >
-                  Sponsor an Enterprise
-                </button>
-              </div>
+        {/* Hero Slideshow */}
+        <section className="relative min-h-[430px] flex items-center overflow-hidden">
+          {slides.map((slide, idx) => (
+            <div key={idx} className={`absolute inset-0 transition-opacity duration-700 ${slideIndex === idx ? "opacity-100 z-10" : "opacity-0 z-0"}`}>
+              <img src={slide.image} alt={slide.caption} className="absolute inset-0 h-full w-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-900/70 to-slate-900/20" />
             </div>
-
-            <div className="lg:col-span-5">
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-white/10">
-                <img src={entrepreneurImg} alt="Rural Entrepreneurship" className="w-full h-80 object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0b1f3b]/80 via-transparent to-transparent" />
-                <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur p-4 rounded-xl text-slate-900 border border-slate-100">
-                  <div className="flex items-center gap-2 text-brand-green font-bold text-xs uppercase tracking-wider mb-1">
-                    <ShieldCheck className="w-4 h-4" />
-                    <span>Islah Microfinance Initiative</span>
-                  </div>
-                  <p className="text-xs text-slate-600 leading-snug">
-                    Interest-free microfinance options for educationally and financially backward sections to achieve social equity.
-                  </p>
-                </div>
-              </div>
+          ))}
+          <div className="relative z-20 max-w-7xl mx-auto px-4 py-16 w-full">
+            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-3.5 py-1.5 rounded-full mb-6">
+              <Lightbulb className="w-4 h-4 text-brand-orange" />
+              <span className="text-xs font-semibold uppercase tracking-wider text-white/90">What We Do • Livelihood &amp; Enterprise</span>
             </div>
+            <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-tight mb-5">Entrepreneur Development</h1>
+            <p className="text-base md:text-lg text-white/80 max-w-3xl leading-relaxed">Empowering rural communities through small-scale entrepreneurship, microfinance, and sustainable livelihoods—because self-reliance is the foundation of lasting social development.</p>
+            <div className="flex flex-wrap gap-3 mt-8">
+              <button onClick={() => setActiveModal("partner")} className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold text-sm px-5 py-3 rounded-md shadow transition-colors">
+                Partner With Us <ArrowRight className="w-4 h-4" />
+              </button>
+              <button onClick={() => setActiveModal("sponsor")} className="inline-flex items-center gap-2 border border-white/30 bg-white/10 hover:bg-white/20 text-white font-bold text-sm px-5 py-3 rounded-md transition-colors">
+                Sponsor an Enterprise
+              </button>
+            </div>
+          </div>
+          <button onClick={prev} className="absolute left-3 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center cursor-pointer"><ChevronLeft className="w-5 h-5" /></button>
+          <button onClick={next} className="absolute right-3 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center cursor-pointer"><ChevronRight2 className="w-5 h-5" /></button>
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2">
+            <p className="text-white/70 text-xs font-medium">{slides[slideIndex]?.caption}</p>
+            <div className="flex gap-2">{slides.map((_, idx) => (<button key={idx} onClick={() => goTo(idx)} className={`rounded-full transition-all duration-300 ${slideIndex === idx ? "w-6 h-2 bg-brand-orange" : "w-2 h-2 bg-white/40"}`} />))}</div>
           </div>
         </section>
 
