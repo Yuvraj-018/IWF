@@ -36,36 +36,42 @@ export default function AgriculturePage() {
       title: "Sustainable Agriculture Development",
       desc: "Promoting modern, eco-friendly farming techniques that enhance soil fertility, crop yield, and long-term agricultural sustainability.",
       icon: Sprout,
+      href: "/programs/agriculture/sustainable-agriculture",
     },
     {
       num: "02",
       title: "Farmer Awareness & Training Initiative",
       desc: "Field training workshops, crop management advice, soil health testing, demonstration plots, and pest management awareness camps.",
       icon: BookOpen,
+      href: "/programs/agriculture/farmer-training",
     },
     {
       num: "03",
       title: "Organic Farming & Natural Agriculture",
       desc: "Training farmers in vermicomposting, organic fertilizer preparation, chemical-free cultivation, and healthy food production.",
       icon: Wheat,
+      href: "/programs/agriculture/organic-farming",
     },
     {
       num: "04",
       title: "Water Conservation & Irrigation Support",
       desc: "Awareness on rainwater harvesting, farm ponds, groundwater recharge, and water-efficient irrigation methods.",
       icon: Droplets,
+      href: "/programs/agriculture/water-conservation",
     },
     {
       num: "05",
       title: "Farmer Livelihood & Income Enhancement",
       desc: "Crop diversification, vegetable cultivation, nutrition farming, mushroom cultivation, and supplementary livestock support.",
       icon: TrendingUp,
+      href: "/programs/agriculture/farmer-livelihood",
     },
     {
       num: "06",
       title: "Agri-Entrepreneurship & Business Support",
       desc: "Assisting rural youth and marginal farmers in value-added processing, local marketing, and agri-business enterprises.",
       icon: Sun,
+      href: "/programs/agriculture/farmer-livelihood",
     },
   ];
 
@@ -161,7 +167,10 @@ export default function AgriculturePage() {
                 const Icon = item.icon;
                 return (
                   <ScrollReveal key={idx}>
-                    <div className="bg-white rounded-2xl p-7 shadow-sm border border-slate-200 h-full flex flex-col justify-between hover:shadow-md transition-all">
+                    <a
+                      href={item.href}
+                      className="bg-white rounded-2xl p-7 shadow-sm border border-slate-200 h-full flex flex-col justify-between hover:shadow-md hover:border-brand-green/40 transition-all group"
+                    >
                       <div className="space-y-4">
                         <div className="flex items-center justify-between">
                           <div className="w-12 h-12 rounded-xl bg-emerald-50 text-brand-green flex items-center justify-center font-bold">
@@ -169,14 +178,20 @@ export default function AgriculturePage() {
                           </div>
                           <span className="text-xs font-extrabold text-slate-400">{item.num}</span>
                         </div>
-                        <h3 className="text-lg font-bold text-[#0b1f3b]">{item.title}</h3>
+                        <h3 className="text-lg font-bold text-[#0b1f3b] group-hover:text-brand-green transition-colors">{item.title}</h3>
                         <p className="text-sm text-slate-600 leading-relaxed">{item.desc}</p>
                       </div>
-                      <div className="pt-4 border-t border-slate-100 mt-6 flex items-center gap-2 text-xs font-bold text-brand-green">
-                        <CheckCircle2 className="w-4 h-4" />
-                        <span>Active Field Initiative</span>
+                      <div className="pt-4 border-t border-slate-100 mt-6 flex items-center justify-between text-xs font-bold text-brand-green">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle2 className="w-4 h-4" />
+                          <span>Active Field Initiative</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-brand-orange group-hover:translate-x-1 transition-transform">
+                          <span>Explore</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </div>
                       </div>
-                    </div>
+                    </a>
                   </ScrollReveal>
                 );
               })}

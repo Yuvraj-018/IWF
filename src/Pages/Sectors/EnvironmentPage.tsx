@@ -34,21 +34,25 @@ export default function EnvironmentPage() {
       title: "1. Tree Plantation & Green Village Programme",
       desc: "Community plantation drives across villages, schools, roadsides, and public spaces. Distribution of fruit-bearing, medicinal, and shade trees to expand rural green cover.",
       icon: Trees,
+      href: "/programs/environment/tree-plantation-green-village",
     },
     {
       title: "2. Plastic-Free Rural Communities Campaign",
       desc: "Village campaigns against single-use plastics, distribution of eco-friendly cloth bags, plastic collection drives, and community recycling awareness.",
       icon: Recycle,
+      href: "/programs/environment/plastic-free-communities",
     },
     {
       title: "3. Sustainable Agriculture & Organic Farming",
       desc: "Promoting eco-friendly farming practices, soil health improvement through organic composting, reducing chemical pesticides, and water-efficient agriculture.",
       icon: Sprout,
+      href: "/programs/environment/sustainable-agriculture",
     },
     {
       title: "4. Climate Change & Environmental Awareness",
       desc: "Educational climate awareness in schools, environmental rallies, observances of World Environment Day, and sustainable lifestyle practices.",
       icon: Sun,
+      href: "/programs/environment/climate-change-awareness",
     },
   ];
 
@@ -148,19 +152,28 @@ export default function EnvironmentPage() {
                 const Icon = item.icon;
                 return (
                   <ScrollReveal key={idx}>
-                    <div className="bg-white rounded-2xl p-7 shadow-sm border border-slate-200 h-full flex flex-col justify-between hover:shadow-md transition-all">
+                    <a
+                      href={item.href}
+                      className="bg-white rounded-2xl p-7 shadow-sm border border-slate-200 h-full flex flex-col justify-between hover:shadow-md hover:border-brand-green/40 transition-all group"
+                    >
                       <div className="space-y-4">
                         <div className="w-12 h-12 rounded-xl bg-emerald-50 text-brand-green flex items-center justify-center font-bold">
                           <Icon className="w-6 h-6" />
                         </div>
-                        <h3 className="text-lg font-bold text-[#0b1f3b]">{item.title}</h3>
+                        <h3 className="text-lg font-bold text-[#0b1f3b] group-hover:text-brand-green transition-colors">{item.title}</h3>
                         <p className="text-sm text-slate-600 leading-relaxed">{item.desc}</p>
                       </div>
-                      <div className="pt-4 border-t border-slate-100 mt-6 flex items-center gap-2 text-xs font-bold text-brand-green">
-                        <CheckCircle2 className="w-4 h-4" />
-                        <span>Active Community Drive</span>
+                      <div className="pt-4 border-t border-slate-100 mt-6 flex items-center justify-between text-xs font-bold text-brand-green">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle2 className="w-4 h-4" />
+                          <span>Active Community Drive</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-brand-orange group-hover:translate-x-1 transition-transform">
+                          <span>Explore</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </div>
                       </div>
-                    </div>
+                    </a>
                   </ScrollReveal>
                 );
               })}

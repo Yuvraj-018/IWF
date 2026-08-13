@@ -35,36 +35,42 @@ export default function ReliefRehabilitationPage() {
       title: "Emergency Relief & Disaster Response",
       desc: "Distribution of food packets, ration kits, safe drinking water, temporary shelter materials, and emergency healthcare during natural calamities.",
       icon: Shield,
+      href: "/programs/relief-and-rehabilitation/disaster-response",
     },
     {
       num: "02",
       title: "Food & Nutrition Support",
       desc: "Community kitchens and dry ration distribution for economically weaker households, nutrition support for children, pregnant women, and elderly persons.",
       icon: Utensils,
+      href: "/programs/relief-and-rehabilitation/food-nutrition",
     },
     {
       num: "03",
       title: "Rural Housing, Clothing & Necessities",
       desc: "Temporary shelter support, blankets, warm clothing, footwear, and essential household kits for families affected by fires, floods, or extreme weather.",
       icon: Home,
+      href: "/programs/relief-and-rehabilitation/housing-necessities",
     },
     {
       num: "04",
       title: "Support for Widows, Orphans & Vulnerable Families",
       desc: "Humanitarian care, basic livelihood needs, child welfare support, and assistance for elderly and persons with disabilities in rural areas.",
       icon: Users,
+      href: "/programs/relief-and-rehabilitation/widows-orphans",
     },
     {
       num: "05",
       title: "Marriage Assistance Support Programme",
       desc: "Dignified assistance with essential household marriage kits for underprivileged families to ease severe financial pressures.",
       icon: Heart,
+      href: "/programs/relief-and-rehabilitation/marriage-assistance",
     },
     {
       num: "06",
       title: "Seasonal Relief Support",
       desc: "Targeted winter blanket distribution drives, flood rescue support, drinking water stalls during heatwaves, and seasonal emergency outreach.",
       icon: Snowflake,
+      href: "/programs/relief-and-rehabilitation/seasonal-relief",
     },
   ];
 
@@ -158,7 +164,10 @@ export default function ReliefRehabilitationPage() {
                 const Icon = item.icon;
                 return (
                   <ScrollReveal key={idx}>
-                    <div className="bg-white rounded-2xl p-7 shadow-sm border border-slate-200 h-full flex flex-col justify-between hover:shadow-md transition-all">
+                    <a
+                      href={item.href}
+                      className="bg-white rounded-2xl p-7 shadow-sm border border-slate-200 h-full flex flex-col justify-between hover:shadow-md hover:border-brand-green/40 transition-all group"
+                    >
                       <div className="space-y-4">
                         <div className="flex items-center justify-between">
                           <div className="w-12 h-12 rounded-xl bg-orange-50 text-brand-orange flex items-center justify-center font-bold">
@@ -166,14 +175,20 @@ export default function ReliefRehabilitationPage() {
                           </div>
                           <span className="text-xs font-extrabold text-slate-400">{item.num}</span>
                         </div>
-                        <h3 className="text-lg font-bold text-[#0b1f3b]">{item.title}</h3>
+                        <h3 className="text-lg font-bold text-[#0b1f3b] group-hover:text-brand-orange transition-colors">{item.title}</h3>
                         <p className="text-sm text-slate-600 leading-relaxed">{item.desc}</p>
                       </div>
-                      <div className="pt-4 border-t border-slate-100 mt-6 flex items-center gap-2 text-xs font-bold text-brand-green">
-                        <CheckCircle2 className="w-4 h-4" />
-                        <span>Field Implemented</span>
+                      <div className="pt-4 border-t border-slate-100 mt-6 flex items-center justify-between text-xs font-bold text-brand-green">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle2 className="w-4 h-4" />
+                          <span>Field Implemented</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-brand-orange group-hover:translate-x-1 transition-transform">
+                          <span>Explore</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </div>
                       </div>
-                    </div>
+                    </a>
                   </ScrollReveal>
                 );
               })}

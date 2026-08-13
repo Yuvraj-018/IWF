@@ -559,22 +559,56 @@ export default function SectorLandingPage({ content }: { content: SectorContent 
             </ScrollReveal>
             <ScrollReveal stagger={0.05}>
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {content.initiatives.map((item, index) => (
-                  <div
-                    key={item}
-                    className="rounded-md bg-[#0b1f3b] border border-brand-green/10 p-5 shadow-sm hover:bg-white hover:border-brand-green/30 hover:shadow-md transition-all duration-300 group"
-                  >
-                    <div className="flex items-center justify-between mb-4">
-                      <Icon className="w-5 h-5 text-brand-orange" />
-                      <span className="text-xs font-bold text-white/55 group-hover:text-slate-400 transition-colors">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                    </div>
-                    <h3 className="text-sm font-bold leading-snug text-white group-hover:text-brand-green-dark transition-colors">
-                      {item}
-                    </h3>
-                  </div>
-                ))}
+                {content.initiatives.map((item, index) => {
+                  const INITIATIVE_HREFS: Record<string, string> = {
+                    "Erawin Public School (EPS)": "/programs/education/erawin-public-school",
+                    "JISNS Journal": "/programs/education/jisns-journal",
+                    "Community & Islamic Learning Centre (CILC)": "/programs/education/cilc",
+                    "Coaching Centre (CBCE)": "/programs/education/coaching-centre",
+                    "Scholarships for Higher Education": "/programs/education/scholarships",
+                    "School Kit Distribution": "/programs/education/school-kit-distribution",
+                    "Rural Academic Talent Search (RATS)": "/programs/education/rats",
+                    "Career Guidance & Mentorship (CTAG)": "/programs/education/career-guidance",
+                    "Technical Institute": "/programs/education/technical-institute",
+                    "Vocational Training Institute": "/programs/education/vocational-training-institute",
+                    "Community Skill Centre (CSC)": "/programs/skills-development/community-skill-centre",
+                    "Vocational Training Workshops (VTW)": "/programs/skills-development/vocational-training-workshops",
+                    "Women Skill & Livelihood": "/programs/women-empowerment/women-skill-livelihood",
+                    "Rural Women Entrepreneurship": "/programs/women-empowerment/rural-women-entrepreneurship",
+                    "Self-Help Groups (SHG)": "/programs/women-empowerment/self-help-groups",
+                    "Financial Literacy": "/programs/women-empowerment/financial-literacy",
+                    "Women's Rights & Legal Awareness": "/programs/women-empowerment/womens-rights",
+                    "Gender Equality & Community Advocacy": "/programs/women-empowerment/gender-equality",
+                    "Widows & Vulnerable Women Support": "/programs/women-empowerment/widows-vulnerable-women",
+                  };
+                  const href = INITIATIVE_HREFS[item];
+
+                  return (
+                    <a
+                      key={item}
+                      href={href || "#"}
+                      className="rounded-md bg-[#0b1f3b] border border-brand-green/10 p-5 shadow-sm hover:bg-white hover:border-brand-green/30 hover:shadow-md transition-all duration-300 group flex flex-col justify-between"
+                    >
+                      <div>
+                        <div className="flex items-center justify-between mb-4">
+                          <Icon className="w-5 h-5 text-brand-orange" />
+                          <span className="text-xs font-bold text-white/55 group-hover:text-slate-400 transition-colors">
+                            {String(index + 1).padStart(2, "0")}
+                          </span>
+                        </div>
+                        <h3 className="text-sm font-bold leading-snug text-white group-hover:text-brand-green-dark transition-colors">
+                          {item}
+                        </h3>
+                      </div>
+                      {href && (
+                        <div className="mt-4 pt-3 border-t border-white/10 group-hover:border-slate-100 flex items-center justify-between text-xs font-bold text-brand-orange group-hover:text-brand-green">
+                          <span>View Initiative</span>
+                          <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                        </div>
+                      )}
+                    </a>
+                  );
+                })}
               </div>
             </ScrollReveal>
           </div>

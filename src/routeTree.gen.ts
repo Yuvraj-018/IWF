@@ -36,13 +36,7 @@ import { Route as AntiFraudPolicyRouteImport } from './routes/anti-fraud-policy'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProgramsIndexRouteImport } from './routes/programs/index'
-import { Route as ProgramsWomenEmpowermentRouteImport } from './routes/programs/women-empowerment'
-import { Route as ProgramsSkillsDevelopmentRouteImport } from './routes/programs/skills-development'
-import { Route as ProgramsReliefAndRehabilitationRouteImport } from './routes/programs/relief-and-rehabilitation'
-import { Route as ProgramsEnvironmentRouteImport } from './routes/programs/environment'
 import { Route as ProgramsEntrepreneurDevelopmentRouteImport } from './routes/programs/entrepreneur-development'
-import { Route as ProgramsEducationRouteImport } from './routes/programs/education'
-import { Route as ProgramsAgricultureRouteImport } from './routes/programs/agriculture'
 import { Route as PatientsPatientSlugRouteImport } from './routes/patients/$patientSlug'
 import { Route as AboutVision2047RouteImport } from './routes/about_/vision-2047'
 import { Route as AboutPartnersRouteImport } from './routes/about_/partners'
@@ -50,7 +44,28 @@ import { Route as AboutObjectiveAndVisionRouteImport } from './routes/about_/obj
 import { Route as AboutLegalStatusRouteImport } from './routes/about_/legal-status'
 import { Route as AboutLeadershipRouteImport } from './routes/about_/leadership'
 import { Route as AboutGovernanceRouteImport } from './routes/about_/governance'
+import { Route as ProgramsWomenEmpowermentIndexRouteImport } from './routes/programs/women-empowerment/index'
+import { Route as ProgramsSkillsDevelopmentIndexRouteImport } from './routes/programs/skills-development/index'
+import { Route as ProgramsReliefAndRehabilitationIndexRouteImport } from './routes/programs/relief-and-rehabilitation/index'
 import { Route as ProgramsHealthcareIndexRouteImport } from './routes/programs/healthcare/index'
+import { Route as ProgramsEnvironmentIndexRouteImport } from './routes/programs/environment/index'
+import { Route as ProgramsEducationIndexRouteImport } from './routes/programs/education/index'
+import { Route as ProgramsAgricultureIndexRouteImport } from './routes/programs/agriculture/index'
+import { Route as ProgramsWomenEmpowermentWomensRightsRouteImport } from './routes/programs/women-empowerment/womens-rights'
+import { Route as ProgramsWomenEmpowermentWomenSkillLivelihoodRouteImport } from './routes/programs/women-empowerment/women-skill-livelihood'
+import { Route as ProgramsWomenEmpowermentWidowsVulnerableWomenRouteImport } from './routes/programs/women-empowerment/widows-vulnerable-women'
+import { Route as ProgramsWomenEmpowermentSelfHelpGroupsRouteImport } from './routes/programs/women-empowerment/self-help-groups'
+import { Route as ProgramsWomenEmpowermentRuralWomenEntrepreneurshipRouteImport } from './routes/programs/women-empowerment/rural-women-entrepreneurship'
+import { Route as ProgramsWomenEmpowermentGenderEqualityRouteImport } from './routes/programs/women-empowerment/gender-equality'
+import { Route as ProgramsWomenEmpowermentFinancialLiteracyRouteImport } from './routes/programs/women-empowerment/financial-literacy'
+import { Route as ProgramsSkillsDevelopmentVocationalTrainingWorkshopsRouteImport } from './routes/programs/skills-development/vocational-training-workshops'
+import { Route as ProgramsSkillsDevelopmentCommunitySkillCentreRouteImport } from './routes/programs/skills-development/community-skill-centre'
+import { Route as ProgramsReliefAndRehabilitationWidowsOrphansRouteImport } from './routes/programs/relief-and-rehabilitation/widows-orphans'
+import { Route as ProgramsReliefAndRehabilitationSeasonalReliefRouteImport } from './routes/programs/relief-and-rehabilitation/seasonal-relief'
+import { Route as ProgramsReliefAndRehabilitationMarriageAssistanceRouteImport } from './routes/programs/relief-and-rehabilitation/marriage-assistance'
+import { Route as ProgramsReliefAndRehabilitationHousingNecessitiesRouteImport } from './routes/programs/relief-and-rehabilitation/housing-necessities'
+import { Route as ProgramsReliefAndRehabilitationFoodNutritionRouteImport } from './routes/programs/relief-and-rehabilitation/food-nutrition'
+import { Route as ProgramsReliefAndRehabilitationDisasterResponseRouteImport } from './routes/programs/relief-and-rehabilitation/disaster-response'
 import { Route as ProgramsHealthcareWellnessCentresRouteImport } from './routes/programs/healthcare/wellness-centres'
 import { Route as ProgramsHealthcareRuralAmbulanceRouteImport } from './routes/programs/healthcare/rural-ambulance'
 import { Route as ProgramsHealthcareMenstrualHygieneRouteImport } from './routes/programs/healthcare/menstrual-hygiene'
@@ -59,6 +74,25 @@ import { Route as ProgramsHealthcareHealthCheckupCampsRouteImport } from './rout
 import { Route as ProgramsHealthcareDiabetesPreventionRouteImport } from './routes/programs/healthcare/diabetes-prevention'
 import { Route as ProgramsHealthcareCriticalLifeSupportRouteImport } from './routes/programs/healthcare/critical-life-support'
 import { Route as ProgramsHealthcareCervicalCancerRouteImport } from './routes/programs/healthcare/cervical-cancer'
+import { Route as ProgramsEnvironmentTreePlantationGreenVillageRouteImport } from './routes/programs/environment/tree-plantation-green-village'
+import { Route as ProgramsEnvironmentSustainableAgricultureRouteImport } from './routes/programs/environment/sustainable-agriculture'
+import { Route as ProgramsEnvironmentPlasticFreeCommunitiesRouteImport } from './routes/programs/environment/plastic-free-communities'
+import { Route as ProgramsEnvironmentClimateChangeAwarenessRouteImport } from './routes/programs/environment/climate-change-awareness'
+import { Route as ProgramsEducationVocationalTrainingInstituteRouteImport } from './routes/programs/education/vocational-training-institute'
+import { Route as ProgramsEducationTechnicalInstituteRouteImport } from './routes/programs/education/technical-institute'
+import { Route as ProgramsEducationSchoolKitDistributionRouteImport } from './routes/programs/education/school-kit-distribution'
+import { Route as ProgramsEducationScholarshipsRouteImport } from './routes/programs/education/scholarships'
+import { Route as ProgramsEducationRatsRouteImport } from './routes/programs/education/rats'
+import { Route as ProgramsEducationJisnsJournalRouteImport } from './routes/programs/education/jisns-journal'
+import { Route as ProgramsEducationErawinPublicSchoolRouteImport } from './routes/programs/education/erawin-public-school'
+import { Route as ProgramsEducationCoachingCentreRouteImport } from './routes/programs/education/coaching-centre'
+import { Route as ProgramsEducationCilcRouteImport } from './routes/programs/education/cilc'
+import { Route as ProgramsEducationCareerGuidanceRouteImport } from './routes/programs/education/career-guidance'
+import { Route as ProgramsAgricultureWaterConservationRouteImport } from './routes/programs/agriculture/water-conservation'
+import { Route as ProgramsAgricultureSustainableAgricultureRouteImport } from './routes/programs/agriculture/sustainable-agriculture'
+import { Route as ProgramsAgricultureOrganicFarmingRouteImport } from './routes/programs/agriculture/organic-farming'
+import { Route as ProgramsAgricultureFarmerTrainingRouteImport } from './routes/programs/agriculture/farmer-training'
+import { Route as ProgramsAgricultureFarmerLivelihoodRouteImport } from './routes/programs/agriculture/farmer-livelihood'
 
 const VolunteerPolicyRoute = VolunteerPolicyRouteImport.update({
   id: '/volunteer-policy',
@@ -196,45 +230,12 @@ const ProgramsIndexRoute = ProgramsIndexRouteImport.update({
   path: '/programs/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProgramsWomenEmpowermentRoute =
-  ProgramsWomenEmpowermentRouteImport.update({
-    id: '/programs/women-empowerment',
-    path: '/programs/women-empowerment',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ProgramsSkillsDevelopmentRoute =
-  ProgramsSkillsDevelopmentRouteImport.update({
-    id: '/programs/skills-development',
-    path: '/programs/skills-development',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ProgramsReliefAndRehabilitationRoute =
-  ProgramsReliefAndRehabilitationRouteImport.update({
-    id: '/programs/relief-and-rehabilitation',
-    path: '/programs/relief-and-rehabilitation',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ProgramsEnvironmentRoute = ProgramsEnvironmentRouteImport.update({
-  id: '/programs/environment',
-  path: '/programs/environment',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ProgramsEntrepreneurDevelopmentRoute =
   ProgramsEntrepreneurDevelopmentRouteImport.update({
     id: '/programs/entrepreneur-development',
     path: '/programs/entrepreneur-development',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ProgramsEducationRoute = ProgramsEducationRouteImport.update({
-  id: '/programs/education',
-  path: '/programs/education',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProgramsAgricultureRoute = ProgramsAgricultureRouteImport.update({
-  id: '/programs/agriculture',
-  path: '/programs/agriculture',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const PatientsPatientSlugRoute = PatientsPatientSlugRouteImport.update({
   id: '/patients/$patientSlug',
   path: '/patients/$patientSlug',
@@ -270,11 +271,136 @@ const AboutGovernanceRoute = AboutGovernanceRouteImport.update({
   path: '/about/governance',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProgramsWomenEmpowermentIndexRoute =
+  ProgramsWomenEmpowermentIndexRouteImport.update({
+    id: '/programs/women-empowerment/',
+    path: '/programs/women-empowerment/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsSkillsDevelopmentIndexRoute =
+  ProgramsSkillsDevelopmentIndexRouteImport.update({
+    id: '/programs/skills-development/',
+    path: '/programs/skills-development/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsReliefAndRehabilitationIndexRoute =
+  ProgramsReliefAndRehabilitationIndexRouteImport.update({
+    id: '/programs/relief-and-rehabilitation/',
+    path: '/programs/relief-and-rehabilitation/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ProgramsHealthcareIndexRoute = ProgramsHealthcareIndexRouteImport.update({
   id: '/programs/healthcare/',
   path: '/programs/healthcare/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProgramsEnvironmentIndexRoute =
+  ProgramsEnvironmentIndexRouteImport.update({
+    id: '/programs/environment/',
+    path: '/programs/environment/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsEducationIndexRoute = ProgramsEducationIndexRouteImport.update({
+  id: '/programs/education/',
+  path: '/programs/education/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgramsAgricultureIndexRoute =
+  ProgramsAgricultureIndexRouteImport.update({
+    id: '/programs/agriculture/',
+    path: '/programs/agriculture/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsWomenEmpowermentWomensRightsRoute =
+  ProgramsWomenEmpowermentWomensRightsRouteImport.update({
+    id: '/programs/women-empowerment/womens-rights',
+    path: '/programs/women-empowerment/womens-rights',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsWomenEmpowermentWomenSkillLivelihoodRoute =
+  ProgramsWomenEmpowermentWomenSkillLivelihoodRouteImport.update({
+    id: '/programs/women-empowerment/women-skill-livelihood',
+    path: '/programs/women-empowerment/women-skill-livelihood',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsWomenEmpowermentWidowsVulnerableWomenRoute =
+  ProgramsWomenEmpowermentWidowsVulnerableWomenRouteImport.update({
+    id: '/programs/women-empowerment/widows-vulnerable-women',
+    path: '/programs/women-empowerment/widows-vulnerable-women',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsWomenEmpowermentSelfHelpGroupsRoute =
+  ProgramsWomenEmpowermentSelfHelpGroupsRouteImport.update({
+    id: '/programs/women-empowerment/self-help-groups',
+    path: '/programs/women-empowerment/self-help-groups',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsWomenEmpowermentRuralWomenEntrepreneurshipRoute =
+  ProgramsWomenEmpowermentRuralWomenEntrepreneurshipRouteImport.update({
+    id: '/programs/women-empowerment/rural-women-entrepreneurship',
+    path: '/programs/women-empowerment/rural-women-entrepreneurship',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsWomenEmpowermentGenderEqualityRoute =
+  ProgramsWomenEmpowermentGenderEqualityRouteImport.update({
+    id: '/programs/women-empowerment/gender-equality',
+    path: '/programs/women-empowerment/gender-equality',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsWomenEmpowermentFinancialLiteracyRoute =
+  ProgramsWomenEmpowermentFinancialLiteracyRouteImport.update({
+    id: '/programs/women-empowerment/financial-literacy',
+    path: '/programs/women-empowerment/financial-literacy',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsSkillsDevelopmentVocationalTrainingWorkshopsRoute =
+  ProgramsSkillsDevelopmentVocationalTrainingWorkshopsRouteImport.update({
+    id: '/programs/skills-development/vocational-training-workshops',
+    path: '/programs/skills-development/vocational-training-workshops',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsSkillsDevelopmentCommunitySkillCentreRoute =
+  ProgramsSkillsDevelopmentCommunitySkillCentreRouteImport.update({
+    id: '/programs/skills-development/community-skill-centre',
+    path: '/programs/skills-development/community-skill-centre',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsReliefAndRehabilitationWidowsOrphansRoute =
+  ProgramsReliefAndRehabilitationWidowsOrphansRouteImport.update({
+    id: '/programs/relief-and-rehabilitation/widows-orphans',
+    path: '/programs/relief-and-rehabilitation/widows-orphans',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsReliefAndRehabilitationSeasonalReliefRoute =
+  ProgramsReliefAndRehabilitationSeasonalReliefRouteImport.update({
+    id: '/programs/relief-and-rehabilitation/seasonal-relief',
+    path: '/programs/relief-and-rehabilitation/seasonal-relief',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsReliefAndRehabilitationMarriageAssistanceRoute =
+  ProgramsReliefAndRehabilitationMarriageAssistanceRouteImport.update({
+    id: '/programs/relief-and-rehabilitation/marriage-assistance',
+    path: '/programs/relief-and-rehabilitation/marriage-assistance',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsReliefAndRehabilitationHousingNecessitiesRoute =
+  ProgramsReliefAndRehabilitationHousingNecessitiesRouteImport.update({
+    id: '/programs/relief-and-rehabilitation/housing-necessities',
+    path: '/programs/relief-and-rehabilitation/housing-necessities',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsReliefAndRehabilitationFoodNutritionRoute =
+  ProgramsReliefAndRehabilitationFoodNutritionRouteImport.update({
+    id: '/programs/relief-and-rehabilitation/food-nutrition',
+    path: '/programs/relief-and-rehabilitation/food-nutrition',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsReliefAndRehabilitationDisasterResponseRoute =
+  ProgramsReliefAndRehabilitationDisasterResponseRouteImport.update({
+    id: '/programs/relief-and-rehabilitation/disaster-response',
+    path: '/programs/relief-and-rehabilitation/disaster-response',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ProgramsHealthcareWellnessCentresRoute =
   ProgramsHealthcareWellnessCentresRouteImport.update({
     id: '/programs/healthcare/wellness-centres',
@@ -323,6 +449,118 @@ const ProgramsHealthcareCervicalCancerRoute =
     path: '/programs/healthcare/cervical-cancer',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ProgramsEnvironmentTreePlantationGreenVillageRoute =
+  ProgramsEnvironmentTreePlantationGreenVillageRouteImport.update({
+    id: '/programs/environment/tree-plantation-green-village',
+    path: '/programs/environment/tree-plantation-green-village',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsEnvironmentSustainableAgricultureRoute =
+  ProgramsEnvironmentSustainableAgricultureRouteImport.update({
+    id: '/programs/environment/sustainable-agriculture',
+    path: '/programs/environment/sustainable-agriculture',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsEnvironmentPlasticFreeCommunitiesRoute =
+  ProgramsEnvironmentPlasticFreeCommunitiesRouteImport.update({
+    id: '/programs/environment/plastic-free-communities',
+    path: '/programs/environment/plastic-free-communities',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsEnvironmentClimateChangeAwarenessRoute =
+  ProgramsEnvironmentClimateChangeAwarenessRouteImport.update({
+    id: '/programs/environment/climate-change-awareness',
+    path: '/programs/environment/climate-change-awareness',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsEducationVocationalTrainingInstituteRoute =
+  ProgramsEducationVocationalTrainingInstituteRouteImport.update({
+    id: '/programs/education/vocational-training-institute',
+    path: '/programs/education/vocational-training-institute',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsEducationTechnicalInstituteRoute =
+  ProgramsEducationTechnicalInstituteRouteImport.update({
+    id: '/programs/education/technical-institute',
+    path: '/programs/education/technical-institute',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsEducationSchoolKitDistributionRoute =
+  ProgramsEducationSchoolKitDistributionRouteImport.update({
+    id: '/programs/education/school-kit-distribution',
+    path: '/programs/education/school-kit-distribution',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsEducationScholarshipsRoute =
+  ProgramsEducationScholarshipsRouteImport.update({
+    id: '/programs/education/scholarships',
+    path: '/programs/education/scholarships',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsEducationRatsRoute = ProgramsEducationRatsRouteImport.update({
+  id: '/programs/education/rats',
+  path: '/programs/education/rats',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgramsEducationJisnsJournalRoute =
+  ProgramsEducationJisnsJournalRouteImport.update({
+    id: '/programs/education/jisns-journal',
+    path: '/programs/education/jisns-journal',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsEducationErawinPublicSchoolRoute =
+  ProgramsEducationErawinPublicSchoolRouteImport.update({
+    id: '/programs/education/erawin-public-school',
+    path: '/programs/education/erawin-public-school',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsEducationCoachingCentreRoute =
+  ProgramsEducationCoachingCentreRouteImport.update({
+    id: '/programs/education/coaching-centre',
+    path: '/programs/education/coaching-centre',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsEducationCilcRoute = ProgramsEducationCilcRouteImport.update({
+  id: '/programs/education/cilc',
+  path: '/programs/education/cilc',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgramsEducationCareerGuidanceRoute =
+  ProgramsEducationCareerGuidanceRouteImport.update({
+    id: '/programs/education/career-guidance',
+    path: '/programs/education/career-guidance',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsAgricultureWaterConservationRoute =
+  ProgramsAgricultureWaterConservationRouteImport.update({
+    id: '/programs/agriculture/water-conservation',
+    path: '/programs/agriculture/water-conservation',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsAgricultureSustainableAgricultureRoute =
+  ProgramsAgricultureSustainableAgricultureRouteImport.update({
+    id: '/programs/agriculture/sustainable-agriculture',
+    path: '/programs/agriculture/sustainable-agriculture',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsAgricultureOrganicFarmingRoute =
+  ProgramsAgricultureOrganicFarmingRouteImport.update({
+    id: '/programs/agriculture/organic-farming',
+    path: '/programs/agriculture/organic-farming',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsAgricultureFarmerTrainingRoute =
+  ProgramsAgricultureFarmerTrainingRouteImport.update({
+    id: '/programs/agriculture/farmer-training',
+    path: '/programs/agriculture/farmer-training',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProgramsAgricultureFarmerLivelihoodRoute =
+  ProgramsAgricultureFarmerLivelihoodRouteImport.update({
+    id: '/programs/agriculture/farmer-livelihood',
+    path: '/programs/agriculture/farmer-livelihood',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -358,14 +596,27 @@ export interface FileRoutesByFullPath {
   '/about/partners': typeof AboutPartnersRoute
   '/about/vision-2047': typeof AboutVision2047Route
   '/patients/$patientSlug': typeof PatientsPatientSlugRoute
-  '/programs/agriculture': typeof ProgramsAgricultureRoute
-  '/programs/education': typeof ProgramsEducationRoute
   '/programs/entrepreneur-development': typeof ProgramsEntrepreneurDevelopmentRoute
-  '/programs/environment': typeof ProgramsEnvironmentRoute
-  '/programs/relief-and-rehabilitation': typeof ProgramsReliefAndRehabilitationRoute
-  '/programs/skills-development': typeof ProgramsSkillsDevelopmentRoute
-  '/programs/women-empowerment': typeof ProgramsWomenEmpowermentRoute
   '/programs/': typeof ProgramsIndexRoute
+  '/programs/agriculture/farmer-livelihood': typeof ProgramsAgricultureFarmerLivelihoodRoute
+  '/programs/agriculture/farmer-training': typeof ProgramsAgricultureFarmerTrainingRoute
+  '/programs/agriculture/organic-farming': typeof ProgramsAgricultureOrganicFarmingRoute
+  '/programs/agriculture/sustainable-agriculture': typeof ProgramsAgricultureSustainableAgricultureRoute
+  '/programs/agriculture/water-conservation': typeof ProgramsAgricultureWaterConservationRoute
+  '/programs/education/career-guidance': typeof ProgramsEducationCareerGuidanceRoute
+  '/programs/education/cilc': typeof ProgramsEducationCilcRoute
+  '/programs/education/coaching-centre': typeof ProgramsEducationCoachingCentreRoute
+  '/programs/education/erawin-public-school': typeof ProgramsEducationErawinPublicSchoolRoute
+  '/programs/education/jisns-journal': typeof ProgramsEducationJisnsJournalRoute
+  '/programs/education/rats': typeof ProgramsEducationRatsRoute
+  '/programs/education/scholarships': typeof ProgramsEducationScholarshipsRoute
+  '/programs/education/school-kit-distribution': typeof ProgramsEducationSchoolKitDistributionRoute
+  '/programs/education/technical-institute': typeof ProgramsEducationTechnicalInstituteRoute
+  '/programs/education/vocational-training-institute': typeof ProgramsEducationVocationalTrainingInstituteRoute
+  '/programs/environment/climate-change-awareness': typeof ProgramsEnvironmentClimateChangeAwarenessRoute
+  '/programs/environment/plastic-free-communities': typeof ProgramsEnvironmentPlasticFreeCommunitiesRoute
+  '/programs/environment/sustainable-agriculture': typeof ProgramsEnvironmentSustainableAgricultureRoute
+  '/programs/environment/tree-plantation-green-village': typeof ProgramsEnvironmentTreePlantationGreenVillageRoute
   '/programs/healthcare/cervical-cancer': typeof ProgramsHealthcareCervicalCancerRoute
   '/programs/healthcare/critical-life-support': typeof ProgramsHealthcareCriticalLifeSupportRoute
   '/programs/healthcare/diabetes-prevention': typeof ProgramsHealthcareDiabetesPreventionRoute
@@ -374,7 +625,28 @@ export interface FileRoutesByFullPath {
   '/programs/healthcare/menstrual-hygiene': typeof ProgramsHealthcareMenstrualHygieneRoute
   '/programs/healthcare/rural-ambulance': typeof ProgramsHealthcareRuralAmbulanceRoute
   '/programs/healthcare/wellness-centres': typeof ProgramsHealthcareWellnessCentresRoute
+  '/programs/relief-and-rehabilitation/disaster-response': typeof ProgramsReliefAndRehabilitationDisasterResponseRoute
+  '/programs/relief-and-rehabilitation/food-nutrition': typeof ProgramsReliefAndRehabilitationFoodNutritionRoute
+  '/programs/relief-and-rehabilitation/housing-necessities': typeof ProgramsReliefAndRehabilitationHousingNecessitiesRoute
+  '/programs/relief-and-rehabilitation/marriage-assistance': typeof ProgramsReliefAndRehabilitationMarriageAssistanceRoute
+  '/programs/relief-and-rehabilitation/seasonal-relief': typeof ProgramsReliefAndRehabilitationSeasonalReliefRoute
+  '/programs/relief-and-rehabilitation/widows-orphans': typeof ProgramsReliefAndRehabilitationWidowsOrphansRoute
+  '/programs/skills-development/community-skill-centre': typeof ProgramsSkillsDevelopmentCommunitySkillCentreRoute
+  '/programs/skills-development/vocational-training-workshops': typeof ProgramsSkillsDevelopmentVocationalTrainingWorkshopsRoute
+  '/programs/women-empowerment/financial-literacy': typeof ProgramsWomenEmpowermentFinancialLiteracyRoute
+  '/programs/women-empowerment/gender-equality': typeof ProgramsWomenEmpowermentGenderEqualityRoute
+  '/programs/women-empowerment/rural-women-entrepreneurship': typeof ProgramsWomenEmpowermentRuralWomenEntrepreneurshipRoute
+  '/programs/women-empowerment/self-help-groups': typeof ProgramsWomenEmpowermentSelfHelpGroupsRoute
+  '/programs/women-empowerment/widows-vulnerable-women': typeof ProgramsWomenEmpowermentWidowsVulnerableWomenRoute
+  '/programs/women-empowerment/women-skill-livelihood': typeof ProgramsWomenEmpowermentWomenSkillLivelihoodRoute
+  '/programs/women-empowerment/womens-rights': typeof ProgramsWomenEmpowermentWomensRightsRoute
+  '/programs/agriculture/': typeof ProgramsAgricultureIndexRoute
+  '/programs/education/': typeof ProgramsEducationIndexRoute
+  '/programs/environment/': typeof ProgramsEnvironmentIndexRoute
   '/programs/healthcare/': typeof ProgramsHealthcareIndexRoute
+  '/programs/relief-and-rehabilitation/': typeof ProgramsReliefAndRehabilitationIndexRoute
+  '/programs/skills-development/': typeof ProgramsSkillsDevelopmentIndexRoute
+  '/programs/women-empowerment/': typeof ProgramsWomenEmpowermentIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -410,14 +682,27 @@ export interface FileRoutesByTo {
   '/about/partners': typeof AboutPartnersRoute
   '/about/vision-2047': typeof AboutVision2047Route
   '/patients/$patientSlug': typeof PatientsPatientSlugRoute
-  '/programs/agriculture': typeof ProgramsAgricultureRoute
-  '/programs/education': typeof ProgramsEducationRoute
   '/programs/entrepreneur-development': typeof ProgramsEntrepreneurDevelopmentRoute
-  '/programs/environment': typeof ProgramsEnvironmentRoute
-  '/programs/relief-and-rehabilitation': typeof ProgramsReliefAndRehabilitationRoute
-  '/programs/skills-development': typeof ProgramsSkillsDevelopmentRoute
-  '/programs/women-empowerment': typeof ProgramsWomenEmpowermentRoute
   '/programs': typeof ProgramsIndexRoute
+  '/programs/agriculture/farmer-livelihood': typeof ProgramsAgricultureFarmerLivelihoodRoute
+  '/programs/agriculture/farmer-training': typeof ProgramsAgricultureFarmerTrainingRoute
+  '/programs/agriculture/organic-farming': typeof ProgramsAgricultureOrganicFarmingRoute
+  '/programs/agriculture/sustainable-agriculture': typeof ProgramsAgricultureSustainableAgricultureRoute
+  '/programs/agriculture/water-conservation': typeof ProgramsAgricultureWaterConservationRoute
+  '/programs/education/career-guidance': typeof ProgramsEducationCareerGuidanceRoute
+  '/programs/education/cilc': typeof ProgramsEducationCilcRoute
+  '/programs/education/coaching-centre': typeof ProgramsEducationCoachingCentreRoute
+  '/programs/education/erawin-public-school': typeof ProgramsEducationErawinPublicSchoolRoute
+  '/programs/education/jisns-journal': typeof ProgramsEducationJisnsJournalRoute
+  '/programs/education/rats': typeof ProgramsEducationRatsRoute
+  '/programs/education/scholarships': typeof ProgramsEducationScholarshipsRoute
+  '/programs/education/school-kit-distribution': typeof ProgramsEducationSchoolKitDistributionRoute
+  '/programs/education/technical-institute': typeof ProgramsEducationTechnicalInstituteRoute
+  '/programs/education/vocational-training-institute': typeof ProgramsEducationVocationalTrainingInstituteRoute
+  '/programs/environment/climate-change-awareness': typeof ProgramsEnvironmentClimateChangeAwarenessRoute
+  '/programs/environment/plastic-free-communities': typeof ProgramsEnvironmentPlasticFreeCommunitiesRoute
+  '/programs/environment/sustainable-agriculture': typeof ProgramsEnvironmentSustainableAgricultureRoute
+  '/programs/environment/tree-plantation-green-village': typeof ProgramsEnvironmentTreePlantationGreenVillageRoute
   '/programs/healthcare/cervical-cancer': typeof ProgramsHealthcareCervicalCancerRoute
   '/programs/healthcare/critical-life-support': typeof ProgramsHealthcareCriticalLifeSupportRoute
   '/programs/healthcare/diabetes-prevention': typeof ProgramsHealthcareDiabetesPreventionRoute
@@ -426,7 +711,28 @@ export interface FileRoutesByTo {
   '/programs/healthcare/menstrual-hygiene': typeof ProgramsHealthcareMenstrualHygieneRoute
   '/programs/healthcare/rural-ambulance': typeof ProgramsHealthcareRuralAmbulanceRoute
   '/programs/healthcare/wellness-centres': typeof ProgramsHealthcareWellnessCentresRoute
+  '/programs/relief-and-rehabilitation/disaster-response': typeof ProgramsReliefAndRehabilitationDisasterResponseRoute
+  '/programs/relief-and-rehabilitation/food-nutrition': typeof ProgramsReliefAndRehabilitationFoodNutritionRoute
+  '/programs/relief-and-rehabilitation/housing-necessities': typeof ProgramsReliefAndRehabilitationHousingNecessitiesRoute
+  '/programs/relief-and-rehabilitation/marriage-assistance': typeof ProgramsReliefAndRehabilitationMarriageAssistanceRoute
+  '/programs/relief-and-rehabilitation/seasonal-relief': typeof ProgramsReliefAndRehabilitationSeasonalReliefRoute
+  '/programs/relief-and-rehabilitation/widows-orphans': typeof ProgramsReliefAndRehabilitationWidowsOrphansRoute
+  '/programs/skills-development/community-skill-centre': typeof ProgramsSkillsDevelopmentCommunitySkillCentreRoute
+  '/programs/skills-development/vocational-training-workshops': typeof ProgramsSkillsDevelopmentVocationalTrainingWorkshopsRoute
+  '/programs/women-empowerment/financial-literacy': typeof ProgramsWomenEmpowermentFinancialLiteracyRoute
+  '/programs/women-empowerment/gender-equality': typeof ProgramsWomenEmpowermentGenderEqualityRoute
+  '/programs/women-empowerment/rural-women-entrepreneurship': typeof ProgramsWomenEmpowermentRuralWomenEntrepreneurshipRoute
+  '/programs/women-empowerment/self-help-groups': typeof ProgramsWomenEmpowermentSelfHelpGroupsRoute
+  '/programs/women-empowerment/widows-vulnerable-women': typeof ProgramsWomenEmpowermentWidowsVulnerableWomenRoute
+  '/programs/women-empowerment/women-skill-livelihood': typeof ProgramsWomenEmpowermentWomenSkillLivelihoodRoute
+  '/programs/women-empowerment/womens-rights': typeof ProgramsWomenEmpowermentWomensRightsRoute
+  '/programs/agriculture': typeof ProgramsAgricultureIndexRoute
+  '/programs/education': typeof ProgramsEducationIndexRoute
+  '/programs/environment': typeof ProgramsEnvironmentIndexRoute
   '/programs/healthcare': typeof ProgramsHealthcareIndexRoute
+  '/programs/relief-and-rehabilitation': typeof ProgramsReliefAndRehabilitationIndexRoute
+  '/programs/skills-development': typeof ProgramsSkillsDevelopmentIndexRoute
+  '/programs/women-empowerment': typeof ProgramsWomenEmpowermentIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -463,14 +769,27 @@ export interface FileRoutesById {
   '/about_/partners': typeof AboutPartnersRoute
   '/about_/vision-2047': typeof AboutVision2047Route
   '/patients/$patientSlug': typeof PatientsPatientSlugRoute
-  '/programs/agriculture': typeof ProgramsAgricultureRoute
-  '/programs/education': typeof ProgramsEducationRoute
   '/programs/entrepreneur-development': typeof ProgramsEntrepreneurDevelopmentRoute
-  '/programs/environment': typeof ProgramsEnvironmentRoute
-  '/programs/relief-and-rehabilitation': typeof ProgramsReliefAndRehabilitationRoute
-  '/programs/skills-development': typeof ProgramsSkillsDevelopmentRoute
-  '/programs/women-empowerment': typeof ProgramsWomenEmpowermentRoute
   '/programs/': typeof ProgramsIndexRoute
+  '/programs/agriculture/farmer-livelihood': typeof ProgramsAgricultureFarmerLivelihoodRoute
+  '/programs/agriculture/farmer-training': typeof ProgramsAgricultureFarmerTrainingRoute
+  '/programs/agriculture/organic-farming': typeof ProgramsAgricultureOrganicFarmingRoute
+  '/programs/agriculture/sustainable-agriculture': typeof ProgramsAgricultureSustainableAgricultureRoute
+  '/programs/agriculture/water-conservation': typeof ProgramsAgricultureWaterConservationRoute
+  '/programs/education/career-guidance': typeof ProgramsEducationCareerGuidanceRoute
+  '/programs/education/cilc': typeof ProgramsEducationCilcRoute
+  '/programs/education/coaching-centre': typeof ProgramsEducationCoachingCentreRoute
+  '/programs/education/erawin-public-school': typeof ProgramsEducationErawinPublicSchoolRoute
+  '/programs/education/jisns-journal': typeof ProgramsEducationJisnsJournalRoute
+  '/programs/education/rats': typeof ProgramsEducationRatsRoute
+  '/programs/education/scholarships': typeof ProgramsEducationScholarshipsRoute
+  '/programs/education/school-kit-distribution': typeof ProgramsEducationSchoolKitDistributionRoute
+  '/programs/education/technical-institute': typeof ProgramsEducationTechnicalInstituteRoute
+  '/programs/education/vocational-training-institute': typeof ProgramsEducationVocationalTrainingInstituteRoute
+  '/programs/environment/climate-change-awareness': typeof ProgramsEnvironmentClimateChangeAwarenessRoute
+  '/programs/environment/plastic-free-communities': typeof ProgramsEnvironmentPlasticFreeCommunitiesRoute
+  '/programs/environment/sustainable-agriculture': typeof ProgramsEnvironmentSustainableAgricultureRoute
+  '/programs/environment/tree-plantation-green-village': typeof ProgramsEnvironmentTreePlantationGreenVillageRoute
   '/programs/healthcare/cervical-cancer': typeof ProgramsHealthcareCervicalCancerRoute
   '/programs/healthcare/critical-life-support': typeof ProgramsHealthcareCriticalLifeSupportRoute
   '/programs/healthcare/diabetes-prevention': typeof ProgramsHealthcareDiabetesPreventionRoute
@@ -479,7 +798,28 @@ export interface FileRoutesById {
   '/programs/healthcare/menstrual-hygiene': typeof ProgramsHealthcareMenstrualHygieneRoute
   '/programs/healthcare/rural-ambulance': typeof ProgramsHealthcareRuralAmbulanceRoute
   '/programs/healthcare/wellness-centres': typeof ProgramsHealthcareWellnessCentresRoute
+  '/programs/relief-and-rehabilitation/disaster-response': typeof ProgramsReliefAndRehabilitationDisasterResponseRoute
+  '/programs/relief-and-rehabilitation/food-nutrition': typeof ProgramsReliefAndRehabilitationFoodNutritionRoute
+  '/programs/relief-and-rehabilitation/housing-necessities': typeof ProgramsReliefAndRehabilitationHousingNecessitiesRoute
+  '/programs/relief-and-rehabilitation/marriage-assistance': typeof ProgramsReliefAndRehabilitationMarriageAssistanceRoute
+  '/programs/relief-and-rehabilitation/seasonal-relief': typeof ProgramsReliefAndRehabilitationSeasonalReliefRoute
+  '/programs/relief-and-rehabilitation/widows-orphans': typeof ProgramsReliefAndRehabilitationWidowsOrphansRoute
+  '/programs/skills-development/community-skill-centre': typeof ProgramsSkillsDevelopmentCommunitySkillCentreRoute
+  '/programs/skills-development/vocational-training-workshops': typeof ProgramsSkillsDevelopmentVocationalTrainingWorkshopsRoute
+  '/programs/women-empowerment/financial-literacy': typeof ProgramsWomenEmpowermentFinancialLiteracyRoute
+  '/programs/women-empowerment/gender-equality': typeof ProgramsWomenEmpowermentGenderEqualityRoute
+  '/programs/women-empowerment/rural-women-entrepreneurship': typeof ProgramsWomenEmpowermentRuralWomenEntrepreneurshipRoute
+  '/programs/women-empowerment/self-help-groups': typeof ProgramsWomenEmpowermentSelfHelpGroupsRoute
+  '/programs/women-empowerment/widows-vulnerable-women': typeof ProgramsWomenEmpowermentWidowsVulnerableWomenRoute
+  '/programs/women-empowerment/women-skill-livelihood': typeof ProgramsWomenEmpowermentWomenSkillLivelihoodRoute
+  '/programs/women-empowerment/womens-rights': typeof ProgramsWomenEmpowermentWomensRightsRoute
+  '/programs/agriculture/': typeof ProgramsAgricultureIndexRoute
+  '/programs/education/': typeof ProgramsEducationIndexRoute
+  '/programs/environment/': typeof ProgramsEnvironmentIndexRoute
   '/programs/healthcare/': typeof ProgramsHealthcareIndexRoute
+  '/programs/relief-and-rehabilitation/': typeof ProgramsReliefAndRehabilitationIndexRoute
+  '/programs/skills-development/': typeof ProgramsSkillsDevelopmentIndexRoute
+  '/programs/women-empowerment/': typeof ProgramsWomenEmpowermentIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -517,14 +857,27 @@ export interface FileRouteTypes {
     | '/about/partners'
     | '/about/vision-2047'
     | '/patients/$patientSlug'
-    | '/programs/agriculture'
-    | '/programs/education'
     | '/programs/entrepreneur-development'
-    | '/programs/environment'
-    | '/programs/relief-and-rehabilitation'
-    | '/programs/skills-development'
-    | '/programs/women-empowerment'
     | '/programs/'
+    | '/programs/agriculture/farmer-livelihood'
+    | '/programs/agriculture/farmer-training'
+    | '/programs/agriculture/organic-farming'
+    | '/programs/agriculture/sustainable-agriculture'
+    | '/programs/agriculture/water-conservation'
+    | '/programs/education/career-guidance'
+    | '/programs/education/cilc'
+    | '/programs/education/coaching-centre'
+    | '/programs/education/erawin-public-school'
+    | '/programs/education/jisns-journal'
+    | '/programs/education/rats'
+    | '/programs/education/scholarships'
+    | '/programs/education/school-kit-distribution'
+    | '/programs/education/technical-institute'
+    | '/programs/education/vocational-training-institute'
+    | '/programs/environment/climate-change-awareness'
+    | '/programs/environment/plastic-free-communities'
+    | '/programs/environment/sustainable-agriculture'
+    | '/programs/environment/tree-plantation-green-village'
     | '/programs/healthcare/cervical-cancer'
     | '/programs/healthcare/critical-life-support'
     | '/programs/healthcare/diabetes-prevention'
@@ -533,7 +886,28 @@ export interface FileRouteTypes {
     | '/programs/healthcare/menstrual-hygiene'
     | '/programs/healthcare/rural-ambulance'
     | '/programs/healthcare/wellness-centres'
+    | '/programs/relief-and-rehabilitation/disaster-response'
+    | '/programs/relief-and-rehabilitation/food-nutrition'
+    | '/programs/relief-and-rehabilitation/housing-necessities'
+    | '/programs/relief-and-rehabilitation/marriage-assistance'
+    | '/programs/relief-and-rehabilitation/seasonal-relief'
+    | '/programs/relief-and-rehabilitation/widows-orphans'
+    | '/programs/skills-development/community-skill-centre'
+    | '/programs/skills-development/vocational-training-workshops'
+    | '/programs/women-empowerment/financial-literacy'
+    | '/programs/women-empowerment/gender-equality'
+    | '/programs/women-empowerment/rural-women-entrepreneurship'
+    | '/programs/women-empowerment/self-help-groups'
+    | '/programs/women-empowerment/widows-vulnerable-women'
+    | '/programs/women-empowerment/women-skill-livelihood'
+    | '/programs/women-empowerment/womens-rights'
+    | '/programs/agriculture/'
+    | '/programs/education/'
+    | '/programs/environment/'
     | '/programs/healthcare/'
+    | '/programs/relief-and-rehabilitation/'
+    | '/programs/skills-development/'
+    | '/programs/women-empowerment/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -569,14 +943,27 @@ export interface FileRouteTypes {
     | '/about/partners'
     | '/about/vision-2047'
     | '/patients/$patientSlug'
-    | '/programs/agriculture'
-    | '/programs/education'
     | '/programs/entrepreneur-development'
-    | '/programs/environment'
-    | '/programs/relief-and-rehabilitation'
-    | '/programs/skills-development'
-    | '/programs/women-empowerment'
     | '/programs'
+    | '/programs/agriculture/farmer-livelihood'
+    | '/programs/agriculture/farmer-training'
+    | '/programs/agriculture/organic-farming'
+    | '/programs/agriculture/sustainable-agriculture'
+    | '/programs/agriculture/water-conservation'
+    | '/programs/education/career-guidance'
+    | '/programs/education/cilc'
+    | '/programs/education/coaching-centre'
+    | '/programs/education/erawin-public-school'
+    | '/programs/education/jisns-journal'
+    | '/programs/education/rats'
+    | '/programs/education/scholarships'
+    | '/programs/education/school-kit-distribution'
+    | '/programs/education/technical-institute'
+    | '/programs/education/vocational-training-institute'
+    | '/programs/environment/climate-change-awareness'
+    | '/programs/environment/plastic-free-communities'
+    | '/programs/environment/sustainable-agriculture'
+    | '/programs/environment/tree-plantation-green-village'
     | '/programs/healthcare/cervical-cancer'
     | '/programs/healthcare/critical-life-support'
     | '/programs/healthcare/diabetes-prevention'
@@ -585,7 +972,28 @@ export interface FileRouteTypes {
     | '/programs/healthcare/menstrual-hygiene'
     | '/programs/healthcare/rural-ambulance'
     | '/programs/healthcare/wellness-centres'
+    | '/programs/relief-and-rehabilitation/disaster-response'
+    | '/programs/relief-and-rehabilitation/food-nutrition'
+    | '/programs/relief-and-rehabilitation/housing-necessities'
+    | '/programs/relief-and-rehabilitation/marriage-assistance'
+    | '/programs/relief-and-rehabilitation/seasonal-relief'
+    | '/programs/relief-and-rehabilitation/widows-orphans'
+    | '/programs/skills-development/community-skill-centre'
+    | '/programs/skills-development/vocational-training-workshops'
+    | '/programs/women-empowerment/financial-literacy'
+    | '/programs/women-empowerment/gender-equality'
+    | '/programs/women-empowerment/rural-women-entrepreneurship'
+    | '/programs/women-empowerment/self-help-groups'
+    | '/programs/women-empowerment/widows-vulnerable-women'
+    | '/programs/women-empowerment/women-skill-livelihood'
+    | '/programs/women-empowerment/womens-rights'
+    | '/programs/agriculture'
+    | '/programs/education'
+    | '/programs/environment'
     | '/programs/healthcare'
+    | '/programs/relief-and-rehabilitation'
+    | '/programs/skills-development'
+    | '/programs/women-empowerment'
   id:
     | '__root__'
     | '/'
@@ -621,14 +1029,27 @@ export interface FileRouteTypes {
     | '/about_/partners'
     | '/about_/vision-2047'
     | '/patients/$patientSlug'
-    | '/programs/agriculture'
-    | '/programs/education'
     | '/programs/entrepreneur-development'
-    | '/programs/environment'
-    | '/programs/relief-and-rehabilitation'
-    | '/programs/skills-development'
-    | '/programs/women-empowerment'
     | '/programs/'
+    | '/programs/agriculture/farmer-livelihood'
+    | '/programs/agriculture/farmer-training'
+    | '/programs/agriculture/organic-farming'
+    | '/programs/agriculture/sustainable-agriculture'
+    | '/programs/agriculture/water-conservation'
+    | '/programs/education/career-guidance'
+    | '/programs/education/cilc'
+    | '/programs/education/coaching-centre'
+    | '/programs/education/erawin-public-school'
+    | '/programs/education/jisns-journal'
+    | '/programs/education/rats'
+    | '/programs/education/scholarships'
+    | '/programs/education/school-kit-distribution'
+    | '/programs/education/technical-institute'
+    | '/programs/education/vocational-training-institute'
+    | '/programs/environment/climate-change-awareness'
+    | '/programs/environment/plastic-free-communities'
+    | '/programs/environment/sustainable-agriculture'
+    | '/programs/environment/tree-plantation-green-village'
     | '/programs/healthcare/cervical-cancer'
     | '/programs/healthcare/critical-life-support'
     | '/programs/healthcare/diabetes-prevention'
@@ -637,7 +1058,28 @@ export interface FileRouteTypes {
     | '/programs/healthcare/menstrual-hygiene'
     | '/programs/healthcare/rural-ambulance'
     | '/programs/healthcare/wellness-centres'
+    | '/programs/relief-and-rehabilitation/disaster-response'
+    | '/programs/relief-and-rehabilitation/food-nutrition'
+    | '/programs/relief-and-rehabilitation/housing-necessities'
+    | '/programs/relief-and-rehabilitation/marriage-assistance'
+    | '/programs/relief-and-rehabilitation/seasonal-relief'
+    | '/programs/relief-and-rehabilitation/widows-orphans'
+    | '/programs/skills-development/community-skill-centre'
+    | '/programs/skills-development/vocational-training-workshops'
+    | '/programs/women-empowerment/financial-literacy'
+    | '/programs/women-empowerment/gender-equality'
+    | '/programs/women-empowerment/rural-women-entrepreneurship'
+    | '/programs/women-empowerment/self-help-groups'
+    | '/programs/women-empowerment/widows-vulnerable-women'
+    | '/programs/women-empowerment/women-skill-livelihood'
+    | '/programs/women-empowerment/womens-rights'
+    | '/programs/agriculture/'
+    | '/programs/education/'
+    | '/programs/environment/'
     | '/programs/healthcare/'
+    | '/programs/relief-and-rehabilitation/'
+    | '/programs/skills-development/'
+    | '/programs/women-empowerment/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -674,14 +1116,27 @@ export interface RootRouteChildren {
   AboutPartnersRoute: typeof AboutPartnersRoute
   AboutVision2047Route: typeof AboutVision2047Route
   PatientsPatientSlugRoute: typeof PatientsPatientSlugRoute
-  ProgramsAgricultureRoute: typeof ProgramsAgricultureRoute
-  ProgramsEducationRoute: typeof ProgramsEducationRoute
   ProgramsEntrepreneurDevelopmentRoute: typeof ProgramsEntrepreneurDevelopmentRoute
-  ProgramsEnvironmentRoute: typeof ProgramsEnvironmentRoute
-  ProgramsReliefAndRehabilitationRoute: typeof ProgramsReliefAndRehabilitationRoute
-  ProgramsSkillsDevelopmentRoute: typeof ProgramsSkillsDevelopmentRoute
-  ProgramsWomenEmpowermentRoute: typeof ProgramsWomenEmpowermentRoute
   ProgramsIndexRoute: typeof ProgramsIndexRoute
+  ProgramsAgricultureFarmerLivelihoodRoute: typeof ProgramsAgricultureFarmerLivelihoodRoute
+  ProgramsAgricultureFarmerTrainingRoute: typeof ProgramsAgricultureFarmerTrainingRoute
+  ProgramsAgricultureOrganicFarmingRoute: typeof ProgramsAgricultureOrganicFarmingRoute
+  ProgramsAgricultureSustainableAgricultureRoute: typeof ProgramsAgricultureSustainableAgricultureRoute
+  ProgramsAgricultureWaterConservationRoute: typeof ProgramsAgricultureWaterConservationRoute
+  ProgramsEducationCareerGuidanceRoute: typeof ProgramsEducationCareerGuidanceRoute
+  ProgramsEducationCilcRoute: typeof ProgramsEducationCilcRoute
+  ProgramsEducationCoachingCentreRoute: typeof ProgramsEducationCoachingCentreRoute
+  ProgramsEducationErawinPublicSchoolRoute: typeof ProgramsEducationErawinPublicSchoolRoute
+  ProgramsEducationJisnsJournalRoute: typeof ProgramsEducationJisnsJournalRoute
+  ProgramsEducationRatsRoute: typeof ProgramsEducationRatsRoute
+  ProgramsEducationScholarshipsRoute: typeof ProgramsEducationScholarshipsRoute
+  ProgramsEducationSchoolKitDistributionRoute: typeof ProgramsEducationSchoolKitDistributionRoute
+  ProgramsEducationTechnicalInstituteRoute: typeof ProgramsEducationTechnicalInstituteRoute
+  ProgramsEducationVocationalTrainingInstituteRoute: typeof ProgramsEducationVocationalTrainingInstituteRoute
+  ProgramsEnvironmentClimateChangeAwarenessRoute: typeof ProgramsEnvironmentClimateChangeAwarenessRoute
+  ProgramsEnvironmentPlasticFreeCommunitiesRoute: typeof ProgramsEnvironmentPlasticFreeCommunitiesRoute
+  ProgramsEnvironmentSustainableAgricultureRoute: typeof ProgramsEnvironmentSustainableAgricultureRoute
+  ProgramsEnvironmentTreePlantationGreenVillageRoute: typeof ProgramsEnvironmentTreePlantationGreenVillageRoute
   ProgramsHealthcareCervicalCancerRoute: typeof ProgramsHealthcareCervicalCancerRoute
   ProgramsHealthcareCriticalLifeSupportRoute: typeof ProgramsHealthcareCriticalLifeSupportRoute
   ProgramsHealthcareDiabetesPreventionRoute: typeof ProgramsHealthcareDiabetesPreventionRoute
@@ -690,7 +1145,28 @@ export interface RootRouteChildren {
   ProgramsHealthcareMenstrualHygieneRoute: typeof ProgramsHealthcareMenstrualHygieneRoute
   ProgramsHealthcareRuralAmbulanceRoute: typeof ProgramsHealthcareRuralAmbulanceRoute
   ProgramsHealthcareWellnessCentresRoute: typeof ProgramsHealthcareWellnessCentresRoute
+  ProgramsReliefAndRehabilitationDisasterResponseRoute: typeof ProgramsReliefAndRehabilitationDisasterResponseRoute
+  ProgramsReliefAndRehabilitationFoodNutritionRoute: typeof ProgramsReliefAndRehabilitationFoodNutritionRoute
+  ProgramsReliefAndRehabilitationHousingNecessitiesRoute: typeof ProgramsReliefAndRehabilitationHousingNecessitiesRoute
+  ProgramsReliefAndRehabilitationMarriageAssistanceRoute: typeof ProgramsReliefAndRehabilitationMarriageAssistanceRoute
+  ProgramsReliefAndRehabilitationSeasonalReliefRoute: typeof ProgramsReliefAndRehabilitationSeasonalReliefRoute
+  ProgramsReliefAndRehabilitationWidowsOrphansRoute: typeof ProgramsReliefAndRehabilitationWidowsOrphansRoute
+  ProgramsSkillsDevelopmentCommunitySkillCentreRoute: typeof ProgramsSkillsDevelopmentCommunitySkillCentreRoute
+  ProgramsSkillsDevelopmentVocationalTrainingWorkshopsRoute: typeof ProgramsSkillsDevelopmentVocationalTrainingWorkshopsRoute
+  ProgramsWomenEmpowermentFinancialLiteracyRoute: typeof ProgramsWomenEmpowermentFinancialLiteracyRoute
+  ProgramsWomenEmpowermentGenderEqualityRoute: typeof ProgramsWomenEmpowermentGenderEqualityRoute
+  ProgramsWomenEmpowermentRuralWomenEntrepreneurshipRoute: typeof ProgramsWomenEmpowermentRuralWomenEntrepreneurshipRoute
+  ProgramsWomenEmpowermentSelfHelpGroupsRoute: typeof ProgramsWomenEmpowermentSelfHelpGroupsRoute
+  ProgramsWomenEmpowermentWidowsVulnerableWomenRoute: typeof ProgramsWomenEmpowermentWidowsVulnerableWomenRoute
+  ProgramsWomenEmpowermentWomenSkillLivelihoodRoute: typeof ProgramsWomenEmpowermentWomenSkillLivelihoodRoute
+  ProgramsWomenEmpowermentWomensRightsRoute: typeof ProgramsWomenEmpowermentWomensRightsRoute
+  ProgramsAgricultureIndexRoute: typeof ProgramsAgricultureIndexRoute
+  ProgramsEducationIndexRoute: typeof ProgramsEducationIndexRoute
+  ProgramsEnvironmentIndexRoute: typeof ProgramsEnvironmentIndexRoute
   ProgramsHealthcareIndexRoute: typeof ProgramsHealthcareIndexRoute
+  ProgramsReliefAndRehabilitationIndexRoute: typeof ProgramsReliefAndRehabilitationIndexRoute
+  ProgramsSkillsDevelopmentIndexRoute: typeof ProgramsSkillsDevelopmentIndexRoute
+  ProgramsWomenEmpowermentIndexRoute: typeof ProgramsWomenEmpowermentIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -884,53 +1360,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProgramsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/programs/women-empowerment': {
-      id: '/programs/women-empowerment'
-      path: '/programs/women-empowerment'
-      fullPath: '/programs/women-empowerment'
-      preLoaderRoute: typeof ProgramsWomenEmpowermentRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/programs/skills-development': {
-      id: '/programs/skills-development'
-      path: '/programs/skills-development'
-      fullPath: '/programs/skills-development'
-      preLoaderRoute: typeof ProgramsSkillsDevelopmentRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/programs/relief-and-rehabilitation': {
-      id: '/programs/relief-and-rehabilitation'
-      path: '/programs/relief-and-rehabilitation'
-      fullPath: '/programs/relief-and-rehabilitation'
-      preLoaderRoute: typeof ProgramsReliefAndRehabilitationRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/programs/environment': {
-      id: '/programs/environment'
-      path: '/programs/environment'
-      fullPath: '/programs/environment'
-      preLoaderRoute: typeof ProgramsEnvironmentRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/programs/entrepreneur-development': {
       id: '/programs/entrepreneur-development'
       path: '/programs/entrepreneur-development'
       fullPath: '/programs/entrepreneur-development'
       preLoaderRoute: typeof ProgramsEntrepreneurDevelopmentRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/programs/education': {
-      id: '/programs/education'
-      path: '/programs/education'
-      fullPath: '/programs/education'
-      preLoaderRoute: typeof ProgramsEducationRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/programs/agriculture': {
-      id: '/programs/agriculture'
-      path: '/programs/agriculture'
-      fullPath: '/programs/agriculture'
-      preLoaderRoute: typeof ProgramsAgricultureRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/patients/$patientSlug': {
@@ -982,11 +1416,158 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutGovernanceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/programs/women-empowerment/': {
+      id: '/programs/women-empowerment/'
+      path: '/programs/women-empowerment'
+      fullPath: '/programs/women-empowerment/'
+      preLoaderRoute: typeof ProgramsWomenEmpowermentIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/skills-development/': {
+      id: '/programs/skills-development/'
+      path: '/programs/skills-development'
+      fullPath: '/programs/skills-development/'
+      preLoaderRoute: typeof ProgramsSkillsDevelopmentIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/relief-and-rehabilitation/': {
+      id: '/programs/relief-and-rehabilitation/'
+      path: '/programs/relief-and-rehabilitation'
+      fullPath: '/programs/relief-and-rehabilitation/'
+      preLoaderRoute: typeof ProgramsReliefAndRehabilitationIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/programs/healthcare/': {
       id: '/programs/healthcare/'
       path: '/programs/healthcare'
       fullPath: '/programs/healthcare/'
       preLoaderRoute: typeof ProgramsHealthcareIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/environment/': {
+      id: '/programs/environment/'
+      path: '/programs/environment'
+      fullPath: '/programs/environment/'
+      preLoaderRoute: typeof ProgramsEnvironmentIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/education/': {
+      id: '/programs/education/'
+      path: '/programs/education'
+      fullPath: '/programs/education/'
+      preLoaderRoute: typeof ProgramsEducationIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/agriculture/': {
+      id: '/programs/agriculture/'
+      path: '/programs/agriculture'
+      fullPath: '/programs/agriculture/'
+      preLoaderRoute: typeof ProgramsAgricultureIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/women-empowerment/womens-rights': {
+      id: '/programs/women-empowerment/womens-rights'
+      path: '/programs/women-empowerment/womens-rights'
+      fullPath: '/programs/women-empowerment/womens-rights'
+      preLoaderRoute: typeof ProgramsWomenEmpowermentWomensRightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/women-empowerment/women-skill-livelihood': {
+      id: '/programs/women-empowerment/women-skill-livelihood'
+      path: '/programs/women-empowerment/women-skill-livelihood'
+      fullPath: '/programs/women-empowerment/women-skill-livelihood'
+      preLoaderRoute: typeof ProgramsWomenEmpowermentWomenSkillLivelihoodRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/women-empowerment/widows-vulnerable-women': {
+      id: '/programs/women-empowerment/widows-vulnerable-women'
+      path: '/programs/women-empowerment/widows-vulnerable-women'
+      fullPath: '/programs/women-empowerment/widows-vulnerable-women'
+      preLoaderRoute: typeof ProgramsWomenEmpowermentWidowsVulnerableWomenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/women-empowerment/self-help-groups': {
+      id: '/programs/women-empowerment/self-help-groups'
+      path: '/programs/women-empowerment/self-help-groups'
+      fullPath: '/programs/women-empowerment/self-help-groups'
+      preLoaderRoute: typeof ProgramsWomenEmpowermentSelfHelpGroupsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/women-empowerment/rural-women-entrepreneurship': {
+      id: '/programs/women-empowerment/rural-women-entrepreneurship'
+      path: '/programs/women-empowerment/rural-women-entrepreneurship'
+      fullPath: '/programs/women-empowerment/rural-women-entrepreneurship'
+      preLoaderRoute: typeof ProgramsWomenEmpowermentRuralWomenEntrepreneurshipRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/women-empowerment/gender-equality': {
+      id: '/programs/women-empowerment/gender-equality'
+      path: '/programs/women-empowerment/gender-equality'
+      fullPath: '/programs/women-empowerment/gender-equality'
+      preLoaderRoute: typeof ProgramsWomenEmpowermentGenderEqualityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/women-empowerment/financial-literacy': {
+      id: '/programs/women-empowerment/financial-literacy'
+      path: '/programs/women-empowerment/financial-literacy'
+      fullPath: '/programs/women-empowerment/financial-literacy'
+      preLoaderRoute: typeof ProgramsWomenEmpowermentFinancialLiteracyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/skills-development/vocational-training-workshops': {
+      id: '/programs/skills-development/vocational-training-workshops'
+      path: '/programs/skills-development/vocational-training-workshops'
+      fullPath: '/programs/skills-development/vocational-training-workshops'
+      preLoaderRoute: typeof ProgramsSkillsDevelopmentVocationalTrainingWorkshopsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/skills-development/community-skill-centre': {
+      id: '/programs/skills-development/community-skill-centre'
+      path: '/programs/skills-development/community-skill-centre'
+      fullPath: '/programs/skills-development/community-skill-centre'
+      preLoaderRoute: typeof ProgramsSkillsDevelopmentCommunitySkillCentreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/relief-and-rehabilitation/widows-orphans': {
+      id: '/programs/relief-and-rehabilitation/widows-orphans'
+      path: '/programs/relief-and-rehabilitation/widows-orphans'
+      fullPath: '/programs/relief-and-rehabilitation/widows-orphans'
+      preLoaderRoute: typeof ProgramsReliefAndRehabilitationWidowsOrphansRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/relief-and-rehabilitation/seasonal-relief': {
+      id: '/programs/relief-and-rehabilitation/seasonal-relief'
+      path: '/programs/relief-and-rehabilitation/seasonal-relief'
+      fullPath: '/programs/relief-and-rehabilitation/seasonal-relief'
+      preLoaderRoute: typeof ProgramsReliefAndRehabilitationSeasonalReliefRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/relief-and-rehabilitation/marriage-assistance': {
+      id: '/programs/relief-and-rehabilitation/marriage-assistance'
+      path: '/programs/relief-and-rehabilitation/marriage-assistance'
+      fullPath: '/programs/relief-and-rehabilitation/marriage-assistance'
+      preLoaderRoute: typeof ProgramsReliefAndRehabilitationMarriageAssistanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/relief-and-rehabilitation/housing-necessities': {
+      id: '/programs/relief-and-rehabilitation/housing-necessities'
+      path: '/programs/relief-and-rehabilitation/housing-necessities'
+      fullPath: '/programs/relief-and-rehabilitation/housing-necessities'
+      preLoaderRoute: typeof ProgramsReliefAndRehabilitationHousingNecessitiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/relief-and-rehabilitation/food-nutrition': {
+      id: '/programs/relief-and-rehabilitation/food-nutrition'
+      path: '/programs/relief-and-rehabilitation/food-nutrition'
+      fullPath: '/programs/relief-and-rehabilitation/food-nutrition'
+      preLoaderRoute: typeof ProgramsReliefAndRehabilitationFoodNutritionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/relief-and-rehabilitation/disaster-response': {
+      id: '/programs/relief-and-rehabilitation/disaster-response'
+      path: '/programs/relief-and-rehabilitation/disaster-response'
+      fullPath: '/programs/relief-and-rehabilitation/disaster-response'
+      preLoaderRoute: typeof ProgramsReliefAndRehabilitationDisasterResponseRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/programs/healthcare/wellness-centres': {
@@ -1045,6 +1626,139 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProgramsHealthcareCervicalCancerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/programs/environment/tree-plantation-green-village': {
+      id: '/programs/environment/tree-plantation-green-village'
+      path: '/programs/environment/tree-plantation-green-village'
+      fullPath: '/programs/environment/tree-plantation-green-village'
+      preLoaderRoute: typeof ProgramsEnvironmentTreePlantationGreenVillageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/environment/sustainable-agriculture': {
+      id: '/programs/environment/sustainable-agriculture'
+      path: '/programs/environment/sustainable-agriculture'
+      fullPath: '/programs/environment/sustainable-agriculture'
+      preLoaderRoute: typeof ProgramsEnvironmentSustainableAgricultureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/environment/plastic-free-communities': {
+      id: '/programs/environment/plastic-free-communities'
+      path: '/programs/environment/plastic-free-communities'
+      fullPath: '/programs/environment/plastic-free-communities'
+      preLoaderRoute: typeof ProgramsEnvironmentPlasticFreeCommunitiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/environment/climate-change-awareness': {
+      id: '/programs/environment/climate-change-awareness'
+      path: '/programs/environment/climate-change-awareness'
+      fullPath: '/programs/environment/climate-change-awareness'
+      preLoaderRoute: typeof ProgramsEnvironmentClimateChangeAwarenessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/education/vocational-training-institute': {
+      id: '/programs/education/vocational-training-institute'
+      path: '/programs/education/vocational-training-institute'
+      fullPath: '/programs/education/vocational-training-institute'
+      preLoaderRoute: typeof ProgramsEducationVocationalTrainingInstituteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/education/technical-institute': {
+      id: '/programs/education/technical-institute'
+      path: '/programs/education/technical-institute'
+      fullPath: '/programs/education/technical-institute'
+      preLoaderRoute: typeof ProgramsEducationTechnicalInstituteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/education/school-kit-distribution': {
+      id: '/programs/education/school-kit-distribution'
+      path: '/programs/education/school-kit-distribution'
+      fullPath: '/programs/education/school-kit-distribution'
+      preLoaderRoute: typeof ProgramsEducationSchoolKitDistributionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/education/scholarships': {
+      id: '/programs/education/scholarships'
+      path: '/programs/education/scholarships'
+      fullPath: '/programs/education/scholarships'
+      preLoaderRoute: typeof ProgramsEducationScholarshipsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/education/rats': {
+      id: '/programs/education/rats'
+      path: '/programs/education/rats'
+      fullPath: '/programs/education/rats'
+      preLoaderRoute: typeof ProgramsEducationRatsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/education/jisns-journal': {
+      id: '/programs/education/jisns-journal'
+      path: '/programs/education/jisns-journal'
+      fullPath: '/programs/education/jisns-journal'
+      preLoaderRoute: typeof ProgramsEducationJisnsJournalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/education/erawin-public-school': {
+      id: '/programs/education/erawin-public-school'
+      path: '/programs/education/erawin-public-school'
+      fullPath: '/programs/education/erawin-public-school'
+      preLoaderRoute: typeof ProgramsEducationErawinPublicSchoolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/education/coaching-centre': {
+      id: '/programs/education/coaching-centre'
+      path: '/programs/education/coaching-centre'
+      fullPath: '/programs/education/coaching-centre'
+      preLoaderRoute: typeof ProgramsEducationCoachingCentreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/education/cilc': {
+      id: '/programs/education/cilc'
+      path: '/programs/education/cilc'
+      fullPath: '/programs/education/cilc'
+      preLoaderRoute: typeof ProgramsEducationCilcRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/education/career-guidance': {
+      id: '/programs/education/career-guidance'
+      path: '/programs/education/career-guidance'
+      fullPath: '/programs/education/career-guidance'
+      preLoaderRoute: typeof ProgramsEducationCareerGuidanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/agriculture/water-conservation': {
+      id: '/programs/agriculture/water-conservation'
+      path: '/programs/agriculture/water-conservation'
+      fullPath: '/programs/agriculture/water-conservation'
+      preLoaderRoute: typeof ProgramsAgricultureWaterConservationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/agriculture/sustainable-agriculture': {
+      id: '/programs/agriculture/sustainable-agriculture'
+      path: '/programs/agriculture/sustainable-agriculture'
+      fullPath: '/programs/agriculture/sustainable-agriculture'
+      preLoaderRoute: typeof ProgramsAgricultureSustainableAgricultureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/agriculture/organic-farming': {
+      id: '/programs/agriculture/organic-farming'
+      path: '/programs/agriculture/organic-farming'
+      fullPath: '/programs/agriculture/organic-farming'
+      preLoaderRoute: typeof ProgramsAgricultureOrganicFarmingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/agriculture/farmer-training': {
+      id: '/programs/agriculture/farmer-training'
+      path: '/programs/agriculture/farmer-training'
+      fullPath: '/programs/agriculture/farmer-training'
+      preLoaderRoute: typeof ProgramsAgricultureFarmerTrainingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs/agriculture/farmer-livelihood': {
+      id: '/programs/agriculture/farmer-livelihood'
+      path: '/programs/agriculture/farmer-livelihood'
+      fullPath: '/programs/agriculture/farmer-livelihood'
+      preLoaderRoute: typeof ProgramsAgricultureFarmerLivelihoodRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -1082,14 +1796,40 @@ const rootRouteChildren: RootRouteChildren = {
   AboutPartnersRoute: AboutPartnersRoute,
   AboutVision2047Route: AboutVision2047Route,
   PatientsPatientSlugRoute: PatientsPatientSlugRoute,
-  ProgramsAgricultureRoute: ProgramsAgricultureRoute,
-  ProgramsEducationRoute: ProgramsEducationRoute,
   ProgramsEntrepreneurDevelopmentRoute: ProgramsEntrepreneurDevelopmentRoute,
-  ProgramsEnvironmentRoute: ProgramsEnvironmentRoute,
-  ProgramsReliefAndRehabilitationRoute: ProgramsReliefAndRehabilitationRoute,
-  ProgramsSkillsDevelopmentRoute: ProgramsSkillsDevelopmentRoute,
-  ProgramsWomenEmpowermentRoute: ProgramsWomenEmpowermentRoute,
   ProgramsIndexRoute: ProgramsIndexRoute,
+  ProgramsAgricultureFarmerLivelihoodRoute:
+    ProgramsAgricultureFarmerLivelihoodRoute,
+  ProgramsAgricultureFarmerTrainingRoute:
+    ProgramsAgricultureFarmerTrainingRoute,
+  ProgramsAgricultureOrganicFarmingRoute:
+    ProgramsAgricultureOrganicFarmingRoute,
+  ProgramsAgricultureSustainableAgricultureRoute:
+    ProgramsAgricultureSustainableAgricultureRoute,
+  ProgramsAgricultureWaterConservationRoute:
+    ProgramsAgricultureWaterConservationRoute,
+  ProgramsEducationCareerGuidanceRoute: ProgramsEducationCareerGuidanceRoute,
+  ProgramsEducationCilcRoute: ProgramsEducationCilcRoute,
+  ProgramsEducationCoachingCentreRoute: ProgramsEducationCoachingCentreRoute,
+  ProgramsEducationErawinPublicSchoolRoute:
+    ProgramsEducationErawinPublicSchoolRoute,
+  ProgramsEducationJisnsJournalRoute: ProgramsEducationJisnsJournalRoute,
+  ProgramsEducationRatsRoute: ProgramsEducationRatsRoute,
+  ProgramsEducationScholarshipsRoute: ProgramsEducationScholarshipsRoute,
+  ProgramsEducationSchoolKitDistributionRoute:
+    ProgramsEducationSchoolKitDistributionRoute,
+  ProgramsEducationTechnicalInstituteRoute:
+    ProgramsEducationTechnicalInstituteRoute,
+  ProgramsEducationVocationalTrainingInstituteRoute:
+    ProgramsEducationVocationalTrainingInstituteRoute,
+  ProgramsEnvironmentClimateChangeAwarenessRoute:
+    ProgramsEnvironmentClimateChangeAwarenessRoute,
+  ProgramsEnvironmentPlasticFreeCommunitiesRoute:
+    ProgramsEnvironmentPlasticFreeCommunitiesRoute,
+  ProgramsEnvironmentSustainableAgricultureRoute:
+    ProgramsEnvironmentSustainableAgricultureRoute,
+  ProgramsEnvironmentTreePlantationGreenVillageRoute:
+    ProgramsEnvironmentTreePlantationGreenVillageRoute,
   ProgramsHealthcareCervicalCancerRoute: ProgramsHealthcareCervicalCancerRoute,
   ProgramsHealthcareCriticalLifeSupportRoute:
     ProgramsHealthcareCriticalLifeSupportRoute,
@@ -1103,7 +1843,44 @@ const rootRouteChildren: RootRouteChildren = {
   ProgramsHealthcareRuralAmbulanceRoute: ProgramsHealthcareRuralAmbulanceRoute,
   ProgramsHealthcareWellnessCentresRoute:
     ProgramsHealthcareWellnessCentresRoute,
+  ProgramsReliefAndRehabilitationDisasterResponseRoute:
+    ProgramsReliefAndRehabilitationDisasterResponseRoute,
+  ProgramsReliefAndRehabilitationFoodNutritionRoute:
+    ProgramsReliefAndRehabilitationFoodNutritionRoute,
+  ProgramsReliefAndRehabilitationHousingNecessitiesRoute:
+    ProgramsReliefAndRehabilitationHousingNecessitiesRoute,
+  ProgramsReliefAndRehabilitationMarriageAssistanceRoute:
+    ProgramsReliefAndRehabilitationMarriageAssistanceRoute,
+  ProgramsReliefAndRehabilitationSeasonalReliefRoute:
+    ProgramsReliefAndRehabilitationSeasonalReliefRoute,
+  ProgramsReliefAndRehabilitationWidowsOrphansRoute:
+    ProgramsReliefAndRehabilitationWidowsOrphansRoute,
+  ProgramsSkillsDevelopmentCommunitySkillCentreRoute:
+    ProgramsSkillsDevelopmentCommunitySkillCentreRoute,
+  ProgramsSkillsDevelopmentVocationalTrainingWorkshopsRoute:
+    ProgramsSkillsDevelopmentVocationalTrainingWorkshopsRoute,
+  ProgramsWomenEmpowermentFinancialLiteracyRoute:
+    ProgramsWomenEmpowermentFinancialLiteracyRoute,
+  ProgramsWomenEmpowermentGenderEqualityRoute:
+    ProgramsWomenEmpowermentGenderEqualityRoute,
+  ProgramsWomenEmpowermentRuralWomenEntrepreneurshipRoute:
+    ProgramsWomenEmpowermentRuralWomenEntrepreneurshipRoute,
+  ProgramsWomenEmpowermentSelfHelpGroupsRoute:
+    ProgramsWomenEmpowermentSelfHelpGroupsRoute,
+  ProgramsWomenEmpowermentWidowsVulnerableWomenRoute:
+    ProgramsWomenEmpowermentWidowsVulnerableWomenRoute,
+  ProgramsWomenEmpowermentWomenSkillLivelihoodRoute:
+    ProgramsWomenEmpowermentWomenSkillLivelihoodRoute,
+  ProgramsWomenEmpowermentWomensRightsRoute:
+    ProgramsWomenEmpowermentWomensRightsRoute,
+  ProgramsAgricultureIndexRoute: ProgramsAgricultureIndexRoute,
+  ProgramsEducationIndexRoute: ProgramsEducationIndexRoute,
+  ProgramsEnvironmentIndexRoute: ProgramsEnvironmentIndexRoute,
   ProgramsHealthcareIndexRoute: ProgramsHealthcareIndexRoute,
+  ProgramsReliefAndRehabilitationIndexRoute:
+    ProgramsReliefAndRehabilitationIndexRoute,
+  ProgramsSkillsDevelopmentIndexRoute: ProgramsSkillsDevelopmentIndexRoute,
+  ProgramsWomenEmpowermentIndexRoute: ProgramsWomenEmpowermentIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
