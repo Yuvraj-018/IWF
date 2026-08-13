@@ -942,7 +942,7 @@ function HeroSection({ lang }: LanguageProp) {
   return (
     <section id="welcome-hero" className="relative scroll-mt-20 bg-white py-6 border-b border-slate-100">
       <div className="max-w-7xl mx-auto px-4 md:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           {/* Left Column (50%): Welcome text & copy */}
           <div className="flex flex-col justify-center text-left">
             <h1 className="text-xl md:text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight mb-3">
@@ -991,7 +991,7 @@ function HeroSection({ lang }: LanguageProp) {
             </div>
 
             {/* Notice ticker */}
-            <div className="relative flex-1 overflow-hidden rounded-xl bg-slate-50 border border-slate-100 p-2" style={{ minHeight: "280px", maxHeight: "340px" }}>
+            <div className="overflow-hidden rounded-xl bg-slate-50 border border-slate-100 p-2 h-[312px]">
               <div
                 className="space-y-2"
                 style={{
