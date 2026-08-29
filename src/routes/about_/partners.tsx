@@ -4,13 +4,14 @@ import PartnersDonorsPage from "@/Pages/AboutPage/PartnersDonorsPage";
 export const Route = createFileRoute("/about_/partners")({
   head: () => ({
     meta: [
-      { title: "Our Partners & Supporters - Islah Welfare Foundation" },
+      { title: "Partner & Sponsor | ISLAH" },
       {
         name: "description",
         content:
-          "Collaborations with corporate CSR entities, government departments, educational institutions, NGOs and foundations at Islah Welfare Foundation.",
+          "Collaborations with corporate CSR entities, institutions, government departments, and foundations at ISLAH.",
       },
     ],
   }),
   component: () => <PartnersDonorsPage />,
 });
+

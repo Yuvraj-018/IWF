@@ -89,8 +89,9 @@ const BANK_DETAILS = {
 
 function getDonorTier(amount: number) {
   if (amount >= 50000) return { label: "Platinum", color: "#8B5CF6", bg: "#EDE9FE", icon: Sparkles };
-  if (amount >= 10000) return { label: "Gold", color: "#D97706", bg: "#FEF3C7", icon: Award };
-  return { label: "Silver", color: "#6B7280", bg: "#F3F4F6", icon: Star };
+  if (amount >= 20000) return { label: "Gold", color: "#D97706", bg: "#FEF3C7", icon: Award };
+  if (amount >= 5000) return { label: "Silver", color: "#2563EB", bg: "#EFF6FF", icon: Star };
+  return { label: "General", color: "#15803D", bg: "#F0FDF4", icon: Heart };
 }
 
 // ─── Schema ───────────────────────────────────────────────────────────────────
@@ -131,9 +132,10 @@ type ReceiptData = DonorFormData & {
 
 function generateReceiptPDF(data: ReceiptData) {
   const tier = getDonorTier(data.amount);
-  const tierBg = tier.label === "Platinum" ? "#ede9fe" : tier.label === "Gold" ? "#fef3c7" : "#f1f5f9";
-  const tierTxt = tier.label === "Platinum" ? "#5b21b6" : tier.label === "Gold" ? "#92400e" : "#334155";
+  const tierBg = tier.label === "Platinum" ? "#ede9fe" : tier.label === "Gold" ? "#fef3c7" : tier.label === "Silver" ? "#eff6ff" : "#f0fdf4";
+  const tierTxt = tier.label === "Platinum" ? "#5b21b6" : tier.label === "Gold" ? "#92400e" : tier.label === "Silver" ? "#1e40af" : "#166534";
   const payLabel = data.paymentMode === "online" ? "Online (UPI / Card / Net Banking)" : data.paymentMode === "bank" ? "Bank Transfer (NEFT / RTGS / IMPS)" : "Offline / Cheque / DD";
+
 
   const html = "<!DOCTYPE html><html lang=en><head><meta charset=UTF-8>" +
     "<meta http-equiv='Content-Type' content='text/html;charset=utf-8'>" +
@@ -214,7 +216,14 @@ function generateReceiptPDF(data: ReceiptData) {
 
 function generateDonorCardPDF(data: ReceiptData) {
   const tier = getDonorTier(data.amount);
-  const cardBg = tier.label === "Platinum" ? "linear-gradient(135deg,#5b21b6,#7c3aed)" : tier.label === "Gold" ? "linear-gradient(135deg,#b45309,#d97706)" : "linear-gradient(135deg,#374151,#4b5563)";
+  const cardBg =
+    tier.label === "Platinum"
+      ? "linear-gradient(135deg,#5b21b6,#7c3aed)"
+      : tier.label === "Gold"
+      ? "linear-gradient(135deg,#b45309,#d97706)"
+      : tier.label === "Silver"
+      ? "linear-gradient(135deg,#1e40af,#3b82f6)"
+      : "linear-gradient(135deg,#15803d,#16a34a)";
 
   const html = "<!DOCTYPE html><html lang=en><head><meta charset=UTF-8>" +
     "<meta http-equiv='Content-Type' content='text/html;charset=utf-8'>" +
@@ -1212,8 +1221,9 @@ export default function DonatePage() {
                 <div className="space-y-2.5">
                   {[
                     { tier: "Platinum", icon: Sparkles, amount: "₹50,000+", color: "#7C3AED", bg: "#EDE9FE" },
-                    { tier: "Gold", icon: Award, amount: "₹10,000+", color: "#B45309", bg: "#FEF3C7" },
-                    { tier: "Silver", icon: Star, amount: "Any amount", color: "#6B7280", bg: "#F3F4F6" },
+                    { tier: "Gold", icon: Award, amount: "₹20,000 – ₹49,999", color: "#B45309", bg: "#FEF3C7" },
+                    { tier: "Silver", icon: Star, amount: "₹5,000 – ₹19,999", color: "#2563EB", bg: "#EFF6FF" },
+                    { tier: "General", icon: Heart, amount: "Below ₹5,000", color: "#15803D", bg: "#F0FDF4" },
                   ].map(({ tier, icon: Icon, amount, color, bg }) => (
                     <div key={tier} className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: bg }}>
                       <Icon className="w-4 h-4 shrink-0" style={{ color }} />

@@ -1,0 +1,103 @@
+Har Pal Anmol Hai *need to change Hindi to English in next line
+Your support can help critically ill patients access timely treatment and essential medical care when every moment matters.
+How We Work 	     	View Patient Cases
+
+
+
+
+WHAT WE DO- *name of subpages shall rename and rearrange in two rows
+OUR PROGRAMS FOR SOCIAL IMPACT
+Creating Opportunities. Strengthening Communities.
+Explore All Programs →*link programs page
+
+OUR FOCUS- *name of feature causes shall rename and rearrange
+FEATURED CAUSES
+Supporting change where it matters most.
+
+Education	     Health	    Women Empower    Rural Livelihoods 	Relief & Rehabilitation
+
+
+View All Causes →
+
+OUR CAMPAIGNS- *name of campaigns shall rename
+FIVE PILLARS OF CHANGE
+Focused action. Collective purpose. Lasting change.
+
+
+Shiksha Na Ruke		Har Pal Anmol Hai	Pari Ki Udaan
+Education Must Not Stop	Medical Need for All		Empowering Women, Changing Lives
+
+
+Swabhiman			Tayyari Kal Ki
+Dignity Through Self-Reliance	Preparing for Tomorrow
+Explore Our Campaign →*link campaign page
+
+
+OUR IMPACT
+FROM ACTION TO MEASURABLE CHANGE
+Measuring progress. Demonstrating impact.
+Explore Our Impact →*link impact page
+
+
+EXPLORE ISLAH
+DISCOVER OUR WORK
+Explore the People, Programmes and Purpose Behind ISLAH.
+Discover ISLAH →
+
+
+GET INVOLVED -* pages shall link with concern page
+JOIN HANDS FOR CHANGE
+Your Time, Skills and Support Can Make a Difference.
+Volunteer	Mentor		Partner		Sponsor	Member	 Donor		Employee
+OUR PARTNERS
+TOGETHER, WE CREATE GREATER IMPACT
+Collaboration brings together knowledge, resources and people to create meaningful and sustainable change.
+
+CSR 		NGOs		Educational	     Healthcare	Government/	
+partners			institutions	   institutions	public institutions
+
+
+
+
+Development	Supporting
+Partners		organisations
+
+
+
+*It should be running icon from right to left			View All Partners → *link
+
+
+
+GALLERY
+A VISUAL JOURNEY OF IMPACT
+Stories of People, Communities and Change.
+View Full Gallery →
+Categories/filter options can include:
+Education | Healthcare | Livelihoods | Women & Youth | Environment | Humanitarian
+
+
+Note:
+CORE ACTIVITIES
+OUR PROGRAMS -This section shall be deleted/removed
+rename ISLAH everywhere instead of Islah Welfare Foundation or IWF except where need of registered name, communication address and using in coding like case ID in patient or membership ID etc.
+
+Footer
+*Footer to be change like below but colour combination same as current.
+
+
+
+OUR CAMPAIGNS- *this shall open after clicking on Explore our campaign→ at home page
+
+FIVE PILLARS OF CHANGE
+Five campaigns. One integrated purpose.
+ISLAH's five flagship campaigns translate our broader development vision into focused areas of action. Each campaign responds to a distinct dimension of human and community well-being while remaining connected to our integrated approach to development.
+From keeping children connected to education and supporting critical healthcare needs, to empowering girls, advancing dignity and access to justice, and preparing communities for the future, our campaigns seek to transform immediate needs into pathways towards lasting opportunity and resilience.
+Each campaign represents a long-term commitment to a particular dimension of human and community development, while remaining interconnected with the wider ISLAH ecosystem.
+Five campaigns. Multiple pathways. One shared purpose — empowering people and strengthening communities.
+
+01. SHIKSHA NA RUKE
+Keeping Education Within Reach
+Shiksha Na Ruke is ISLAH's education and learning campaign dedicated to ensuring that children, young people and underserved learners are not forced to discontinue their educational journey because of poverty, social circumstances, lack of resources or limited access to opportunities.
+We believe education is more than access to a classroom. It is a pathway to knowledge, confidence, capability, dignity and opportunity.
+Through Shiksha Na Ruke, ISLAH seeks to reduce barriers that prevent children and young people from learning, progressing and preparing for their future.
+Our Focus
