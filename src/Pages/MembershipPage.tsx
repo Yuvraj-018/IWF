@@ -1080,11 +1080,11 @@ async function generateMembershipReceipt(data: {
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(16);
   doc.setFont("helvetica", "bold");
-  doc.text("ISLAH WELFARE FOUNDATION", 105, 16, { align: "center" });
+  doc.text("ISLAH", 105, 16, { align: "center" });
   doc.setFontSize(8);
   doc.setFont("helvetica", "normal");
-  doc.text('"Planting Seeds of Hope and Change"', 105, 22, { align: "center" });
-  doc.text("Bathiya, Darbhanga, Bihar - 847423 | info@iwfindia.org | +91 9811861633", 105, 28, { align: "center" });
+  doc.text('"Knowledge, Opportunity, A Better Future."', 105, 22, { align: "center" });
+  doc.text("B-144, Abul Fazal Enclave-II, Okhla, New Delhi-110025, India | info@iwfindia.org | +91 9811861633", 105, 28, { align: "center" });
   doc.setFillColor(...orange);
   doc.rect(0, 45, 210, 10, "F");
   doc.setFontSize(12);
@@ -1167,7 +1167,7 @@ async function generateMembershipReceipt(data: {
   doc.setFontSize(7);
   doc.setFont("helvetica", "normal");
   doc.setTextColor(255, 255, 255);
-  doc.text("Islah Welfare Foundation (Reg.) | Bathiya, Darbhanga, Bihar - 847423 | info@iwfindia.org | +91 9811861633", 105, 293, { align: "center" });
+  doc.text("Islah Welfare Foundation (Reg.) | B-144, Abul Fazal Enclave-II, Okhla, New Delhi-110025, India | info@iwfindia.org | +91 9811861633", 105, 293, { align: "center" });
   const dataUri = doc.output("datauristring");
   const link = document.createElement("a");
   link.style.display = "none";
@@ -2632,8 +2632,8 @@ function ReceiptCard({ data, memberId, joinDate, validTill, receiptNo, period }:
       <div className="px-5 py-4 flex items-center justify-between text-white"
         style={{ background: "linear-gradient(135deg, #0b1f3b, #18325c)" }}>
         <div>
-          <p className="font-extrabold text-sm">ISLAH WELFARE FOUNDATION</p>
-          <p className="text-white/60 text-[10px]">"Planting Seeds of Hope and Change"</p>
+          <p className="font-extrabold text-sm">ISLAH</p>
+          <p className="text-white/60 text-[10px]">"Knowledge, Opportunity, A Better Future."</p>
         </div>
         <div className="text-right">
           <p className="text-white text-[10px] font-bold">MEMBERSHIP FEE RECEIPT</p>

@@ -8,10 +8,14 @@ import {
   Building2,
   ChevronDown,
   Facebook,
+  FileCheck,
   Globe,
+  Handshake,
   Heart,
   Home,
+  IndianRupee,
   Instagram,
+  Landmark,
   Leaf,
   Linkedin,
   Lock,
@@ -23,6 +27,7 @@ import {
   ShieldCheck,
   Twitter,
   UserCheck,
+  Users,
   X,
   Youtube,
 } from "lucide-react";
@@ -55,13 +60,11 @@ export const MEGA_DATA: Record<string, MegaSection> = {
     cols: 3,
     items: [
       "Overview",
-      "Our Objective & Vision",
-      "Vision 2047",
-      "Leadership & Management",
-      "Governance & Transparency",
       "Legal Status & Registration",
-      "Members & Donors",
-      "Our Partners & Donors",
+      "Governance & Transparency",
+      "Leadership & Management",
+      "Member & Donor",
+      "Partner & Sponsor",
     ],
   },
   "What We Do": {
@@ -126,14 +129,14 @@ function getTopNavHref(item: string) {
 function getMegaHref(menu: string, item: string) {
   // About Us
   if (menu === "About Us" && item === "Overview") return "/about";
+  if (menu === "About Us" && item === "Legal Status & Registration") return "/about/legal-status";
+  if (menu === "About Us" && item === "Governance & Transparency") return "/about/governance";
+  if (menu === "About Us" && item === "Leadership & Management") return "/about/leadership";
+  if (menu === "About Us" && (item === "Member & Donor" || item === "Members & Donors" || item === "Members & Supporters")) return "/members-and-donors";
+  if (menu === "About Us" && (item === "Partner & Sponsor" || item === "Our Partners & Donors" || item === "Partners & Donors" || item === "Our Partners & Sponsors")) return "/about/partners";
   if (menu === "About Us" && item === "Our Objective & Vision") return "/about/objective-and-vision";
   if (menu === "About Us" && item === "Vision 2047") return "/about/vision-2047";
-  if (menu === "About Us" && item === "Leadership & Management") return "/about/leadership";
-  if (menu === "About Us" && item === "Governance & Transparency") return "/about/governance";
-  if (menu === "About Us" && item === "Legal Status & Registration") return "/about/legal-status";
-  if (menu === "About Us" && (item === "Members & Donors" || item === "Members & Supporters")) return "/members-and-donors";
   if (menu === "About Us" && item === "Membership Policy") return "/membership#status";
-  if (menu === "About Us" && (item === "Our Partners & Donors" || item === "Partners & Donors")) return "/about/partners";
   // What We Do
   if (menu === "What We Do" && item === "Education") return "/programs/education";
   if (menu === "What We Do" && item === "Health Care") return "/programs/healthcare";
@@ -171,11 +174,11 @@ function getMegaHref(menu: string, item: string) {
 export function NotificationTicker() {
   const items = [
     { text: "Notification for change in Registration", href: "/about/legal-status" },
-    { text: "Islah Welfare Foundation — Official Website", href: "/" },
-    { text: "Registration address updated to Bathiya, Darbhanga, Bihar", href: "/about" },
+    { text: "ISLAH — Integrated Social, Livelihood, Advancement & Humanitarian Action", href: "/" },
+    { text: "Registered Address: B-144, Abul Fazal Enclave-II, Okhla, New Delhi-110025, India", href: "/about/legal-status" },
     { text: "Join our mission — volunteer, donate or partner with us", href: "/#get-involved" },
-    { text: "Free Health Camp — Bathiya, Darbhanga | June 25", href: "/news-and-events" },
-    { text: "Annual Scholarship Distribution — Muzaffarpur | July 15", href: "/news-and-events" },
+    { text: "Free Health Camp — Medical Relief & Consultations | June 25", href: "/news-and-events" },
+    { text: "Annual Scholarship Distribution — Education Support | July 15", href: "/news-and-events" },
   ];
   const loopItems = [...items, ...items];
 
@@ -263,13 +266,13 @@ export function Header() {
             <img src={newLogo} alt="IWF Logo" className="h-16 md:h-20 w-auto object-contain transition-transform group-hover:scale-105 shrink-0" />
             <div className="flex flex-col items-center md:items-start">
               <span className="text-xl md:text-3xl font-extrabold text-[#0b1f3b] tracking-wide font-sans leading-tight text-center md:text-left">
-                ISLAH WELFARE FOUNDATION
+                ISLAH
               </span>
               <span className="text-xs md:text-sm font-semibold italic text-brand-orange mt-1.5 leading-none text-center md:text-left">
-                Planting Seeds of Hope and Change
+                Knowledge, Opportunity, A Better Future.
               </span>
               <span className="text-[10px] md:text-xs text-gray-500 font-medium mt-1.5 leading-none text-center md:text-left">
-                Bathiya, Darbhanga, Bihar – 847423, India
+                B-144, Abul Fazal Enclave-II, Okhla, New Delhi-110025, India
               </span>
             </div>
           </a>
@@ -487,7 +490,7 @@ export function Header() {
   );
 }
 
-export function Footer({ onOpenModal }: { onOpenModal: (type: RoleType) => void }) {
+export function Footer({ onOpenModal }: { onOpenModal?: (type: RoleType) => void }) {
   const quickLinks = [
     ["About Us", "/about"],
     ["Education", "/programs/education"],
@@ -502,21 +505,85 @@ export function Footer({ onOpenModal }: { onOpenModal: (type: RoleType) => void 
 
   return (
     <footer className="w-full">
-      <div className="bg-[#0b1f3b] text-white py-14 px-4 md:px-10 border-t border-white/10">
+      {/* 6 Core Values Strip */}
+      <div className="bg-[#07162c] text-white border-t border-b border-white/10 py-5 px-4 md:px-8">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 divide-y md:divide-y-0 md:divide-x divide-white/10 gap-3 md:gap-0">
+          {[
+            {
+              Icon: ShieldCheck,
+              title: "TRANSPARENCY",
+              desc: "We are open and accountable",
+              link: "/financial-transparency-policy",
+            },
+            {
+              Icon: Users,
+              title: "ACCOUNTABILITY",
+              desc: "We answer to the communities we serve",
+              link: "/code-of-conduct",
+            },
+            {
+              Icon: Handshake,
+              title: "RESPONSIBLE ACTION",
+              desc: "We act with integrity and compassion",
+              link: "/policies",
+            },
+            {
+              Icon: IndianRupee,
+              title: "FINANCIAL TRANSPARENCY",
+              desc: "We ensure responsible use of resources",
+              link: "/financial-transparency-policy",
+            },
+            {
+              Icon: Landmark,
+              title: "GOVERNANCE",
+              desc: "We follow good governance practices",
+              link: "/about/legal-status",
+            },
+            {
+              Icon: FileCheck,
+              title: "POLICIES",
+              desc: "Guided by policies, driven by values",
+              link: "/policies",
+            },
+          ].map(({ Icon, title, desc, link }, idx) => (
+            <a
+              key={title}
+              href={link}
+              className={`flex items-center gap-2.5 px-2.5 py-2.5 md:py-1 hover:bg-white/5 transition-colors group ${
+                idx !== 0 ? "md:pl-3.5" : ""
+              }`}
+            >
+              <div className="w-9 h-9 rounded-full border border-sky-400/40 bg-sky-950/50 text-sky-400 flex items-center justify-center shrink-0 group-hover:border-sky-400 group-hover:scale-105 transition-all">
+                <Icon className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="font-black text-[11px] xl:text-[12px] tracking-wide text-white leading-tight uppercase group-hover:text-brand-orange transition-colors">
+                  {title}
+                </div>
+                <div className="text-[10px] text-white/70 font-normal leading-snug mt-0.5">
+                  {desc}
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div className="bg-[#0b1f3b] text-white py-12 px-4 md:px-10">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <div className="bg-white rounded-xl p-1.5 shrink-0">
-                <img src={newLogo} alt="IWF Logo" className="h-10 w-auto object-contain" />
+                <img src={newLogo} alt="ISLAH Logo" className="h-10 w-auto object-contain" />
               </div>
               <div className="flex flex-col">
-                <span className="font-extrabold text-2xl tracking-widest text-white leading-none">IWF</span>
-                <span className="font-medium text-[11px] tracking-wide text-white/70 mt-0.5">Islah Welfare Foundation</span>
+                <span className="font-extrabold text-2xl tracking-widest text-white leading-none">ISLAH</span>
+                <span className="font-medium text-[11px] tracking-wide text-white/70 mt-0.5">Knowledge, Opportunity, A Better Future.</span>
               </div>
             </div>
             <div className="text-brand-orange font-medium text-sm">Care | Empower | Uplift</div>
             <p className="text-white text-sm leading-relaxed">
-              Islah Welfare Foundation empowers underprivileged communities through education, healthcare, women empowerment, skill development and social welfare initiatives.
+              Islah empowers underprivileged communities through education, healthcare, women empowerment, skill development and social welfare initiatives.
             </p>
             <div>
               <span className="block text-xs font-bold tracking-widest text-white uppercase mb-2">Follow Us</span>
@@ -566,7 +633,7 @@ export function Footer({ onOpenModal }: { onOpenModal: (type: RoleType) => void 
               ].map(([label, type]) => (
                 <li key={label}>
                   <button
-                    onClick={() => onOpenModal(type as RoleType)}
+                    onClick={() => onOpenModal?.(type as RoleType)}
                     className="inline-flex items-center text-left text-white text-sm hover:text-brand-orange hover:translate-x-1 transition-all duration-200 cursor-pointer"
                   >
                     <span className="text-brand-orange text-xs mr-2">-&gt;</span>
@@ -637,7 +704,7 @@ export function Footer({ onOpenModal }: { onOpenModal: (type: RoleType) => void 
 
       <div className="bg-[#091f12] py-4 px-4 md:px-10">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4 text-xs text-white">
-          <div>(c) 2026 Islah Welfare Foundation. All Rights Reserved.</div>
+          <div>© 2026 Islah. All Rights Reserved.</div>
           <div className="flex flex-wrap gap-3">
             <a href="/policies" className="hover:text-brand-orange transition-colors">All Policies</a>
             <span>|</span>

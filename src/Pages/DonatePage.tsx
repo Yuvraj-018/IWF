@@ -177,8 +177,8 @@ function generateReceiptPDF(data: ReceiptData) {
     "<button class='btn btn-close' onclick='window.close()'>X Close</button></div>" +
     "<div class=page>" +
     "<div class=hdr><div class=logo>IWF</div>" +
-    "<div><div class=hdr-name>ISLAH WELFARE FOUNDATION</div>" +
-    "<div class=hdr-sub>Planting Seeds of Hope and Change - Bathiya, Darbhanga, Bihar - 847423</div>" +
+    "<div><div class=hdr-name>ISLAH</div>" +
+    "<div class=hdr-sub>Knowledge, Opportunity, A Better Future. - B-144, Abul Fazal Enclave-II, Okhla, New Delhi-110025, India</div>" +
     "<div class=hdr-sub>info@iwfindia.org - +91-9811861633 - iwfindia.org</div></div></div>" +
     "<div class=title-bar><span>OFFICIAL DONATION RECEIPT</span></div>" +
     "<div class=meta><span><strong>Receipt No.:</strong> " + data.receiptNo + "</span><span><strong>Date:</strong> " + data.date + "</span></div>" +
@@ -203,7 +203,7 @@ function generateReceiptPDF(data: ReceiptData) {
     "<div class=decl>We hereby acknowledge receiving the above-mentioned donation for charitable purposes.<br>All donations are utilized transparently and effectively.</div>" +
     "<div class=sigs><div class=sig><div class=sig-line></div><div class=sig-name>Authorized Signatory</div><div class=sig-org>Islah Welfare Foundation</div></div>" +
     "<div class=sig><div class=sig-line></div><div class=sig-name>Donor Signature</div></div></div>" +
-    "<div class=ftr>Islah Welfare Foundation (Reg.) | Bathiya, Darbhanga, Bihar - 847423 | info@iwfindia.org | +91-9811861633</div>" +
+    "<div class=ftr>Islah Welfare Foundation (Reg.) | B-144, Abul Fazal Enclave-II, Okhla, New Delhi-110025, India | info@iwfindia.org | +91-9811861633</div>" +
     "</div></body></html>";
 
   const w = window.open("", "_blank");
@@ -807,7 +807,7 @@ function Step3Payment({
                   <p className="text-xs text-slate-500 font-medium">Send to:</p>
                   <div className="flex items-start gap-2">
                     <MapPin className="w-3.5 h-3.5 text-brand-green shrink-0 mt-0.5" />
-                    <p className="text-xs text-slate-700">Village & Post - Bathiya, Via - Putai, District - Darbhanga, Bihar - 847423</p>
+                    <p className="text-xs text-slate-700">B-144, Abul Fazal Enclave-II, Okhla, New Delhi-110025, India</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <Phone className="w-3.5 h-3.5 text-brand-green" />
