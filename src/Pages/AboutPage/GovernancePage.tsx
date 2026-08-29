@@ -3,6 +3,7 @@ import { Shield, CheckCircle2, BarChart2, Monitor, Users, FileText, ArrowRight, 
 import { Footer, Header, NotificationTicker, RoleFormModal, UtilityBar } from "@/components/layout/SiteLayout";
 import type { RoleType } from "@/components/forms/RoleFormModal";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
+import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 
 const GOVERNANCE_TIERS = [
   {
@@ -121,21 +122,16 @@ export default function GovernancePage() {
       <NotificationTicker />
       <UtilityBar />
       <Header />
+      <SubpageHeroCarousel
+        tag="ABOUT ISLAH"
+        title="Governance & Transparency"
+        subtitle="Robust Institutional Architecture, Accountability Systems & Operational Credibility."
+        breadcrumbs={[
+          { label: "About Us", href: "/about" },
+          { label: "Governance & Transparency" },
+        ]}
+      />
       <main>
-        {/* Hero */}
-        <section className="bg-[#0b1f3b] text-white py-14 relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-0 right-0 w-80 h-80 bg-brand-orange rounded-full -translate-y-1/2 translate-x-1/2" />
-          </div>
-          <div className="max-w-5xl mx-auto px-4 relative z-10">
-            <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">About IWF</p>
-            <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Governance & Transparency</h1>
-            <p className="text-white/75 max-w-2xl leading-relaxed">
-              IWF operates under a robust 4-tier governance structure with complete financial transparency, independent audits, and community accountability mechanisms.
-            </p>
-          </div>
-        </section>
-
         <section className="py-14 bg-slate-50">
           <div className="max-w-5xl mx-auto px-4">
 

@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Footer, Header, NotificationTicker, RoleFormModal, UtilityBar } from "@/components/layout/SiteLayout";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
+import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 
 type RoleType = "volunteer" | "partner" | "sponsor" | "mentor" | "employee";
 
@@ -79,30 +80,33 @@ export default function MembersDonorsPage() {
       <UtilityBar />
       <Header />
 
+      <SubpageHeroCarousel
+        tag="ABOUT ISLAH"
+        title="Members & Donors"
+        subtitle="Our members and donors are the backbone of Islah Welfare Foundation. Their generous contributions and active engagement build resilient, self-reliant rural communities."
+        breadcrumbs={[
+          { label: "About Us", href: "/about" },
+          { label: "Members & Donors" },
+        ]}
+      />
+
       <main>
-        {/* Hero Banner */}
-        <section className="bg-gradient-to-r from-[#071527] via-[#0b1f3b] to-[#15803d] text-white py-16 md:py-20 px-4 border-b border-white/10">
-          <div className="max-w-7xl mx-auto text-center space-y-5">
-            <div className="inline-flex items-center gap-2 bg-brand-orange/20 text-brand-orange text-xs font-extrabold uppercase tracking-widest px-4 py-1.5 rounded-md border border-brand-orange/30">
-              <Users className="w-4 h-4" />
-              <span>Our Pillars of Strength</span>
-            </div>
-            <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
-              OUR MEMBERS & DONORS
-            </h1>
-            <p className="text-white/85 text-base md:text-lg max-w-3xl mx-auto leading-relaxed">
-              Our members and donors are the backbone of Islah Welfare Foundation. Their generous contributions and active engagement help us build stronger, self-reliant rural communities.
-            </p>
-            <div className="pt-2 flex flex-wrap justify-center gap-4">
+        {/* Action Button Bar */}
+        <section className="bg-slate-900 text-white py-3.5 border-b border-white/10">
+          <div className="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-between gap-3">
+            <span className="text-xs text-white/80 font-bold uppercase tracking-wider">
+              Join Our Network of Change-Makers
+            </span>
+            <div className="flex items-center gap-3">
               <a
                 href="/membership"
-                className="bg-brand-green hover:bg-green-700 text-white font-bold text-sm px-6 py-3 rounded-md shadow-md transition uppercase tracking-wider"
+                className="bg-brand-green hover:bg-green-700 text-white font-extrabold text-xs px-4 py-2 rounded-lg shadow-sm transition uppercase tracking-wider"
               >
                 Become a Member
               </a>
               <a
                 href="/donate"
-                className="bg-brand-orange hover:bg-orange-600 text-white font-bold text-sm px-6 py-3 rounded-md shadow-md transition uppercase tracking-wider"
+                className="bg-brand-orange hover:bg-orange-600 text-white font-extrabold text-xs px-4 py-2 rounded-lg shadow-sm transition uppercase tracking-wider"
               >
                 Donate Now
               </a>

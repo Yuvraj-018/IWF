@@ -5,6 +5,7 @@ import {
 } from "@/components/layout/SiteLayout";
 import type { RoleType } from "@/components/forms/RoleFormModal";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
+import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -118,31 +119,31 @@ export default function LeadershipPage() {
       <UtilityBar />
       <Header />
 
+      <SubpageHeroCarousel
+        tag="ABOUT ISLAH"
+        title="Leadership & Management"
+        subtitle="IWF is governed by a committed Board of Trustees, managed by a professional Executive Body, and guided by experienced advisors."
+        breadcrumbs={[
+          { label: "About Us", href: "/about" },
+          { label: "Leadership & Management" },
+        ]}
+      />
+
       <main>
-        {/* Hero */}
-        <section className="bg-[#0b1f3b] text-white py-14 relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-0 right-0 w-80 h-80 bg-brand-orange rounded-full -translate-y-1/2 translate-x-1/2" />
-          </div>
-          <div className="max-w-5xl mx-auto px-4 relative z-10">
-            <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">About IWF</p>
-            <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Leadership & Management</h1>
-            <p className="text-white/75 max-w-2xl leading-relaxed text-base">
-              IWF is governed by a committed Board of Trustees and managed by a professional Executive Body. Our advisory panel brings domain expertise to guide strategic decisions.
-            </p>
-            <div className="flex flex-wrap gap-4 mt-8">
-              {[
-                { label: "Board of Trustees", count: BOARD_OF_TRUSTEES.length },
-                { label: "Executive Body", count: EXECUTIVE_BODY.length },
-                { label: "Advisors", count: ADVISORY_BODY.length },
-                { label: "Field Team", count: FIELD_TEAM.length + "+" },
-              ].map(({ label, count }) => (
-                <div key={label} className="bg-white/10 border border-white/20 rounded-xl px-4 py-2 text-center">
-                  <div className="text-xl font-extrabold text-brand-orange">{count}</div>
-                  <div className="text-xs text-white/70 font-semibold">{label}</div>
-                </div>
-              ))}
-            </div>
+        {/* Quick Stat Badges */}
+        <section className="bg-slate-900 text-white py-4 border-b border-white/10">
+          <div className="max-w-6xl mx-auto px-4 flex flex-wrap items-center justify-center gap-4 sm:gap-8">
+            {[
+              { label: "Board of Trustees", count: BOARD_OF_TRUSTEES.length },
+              { label: "Executive Body", count: EXECUTIVE_BODY.length },
+              { label: "Domain Advisors", count: ADVISORY_BODY.length },
+              { label: "Field Team", count: FIELD_TEAM.length + "+" },
+            ].map(({ label, count }) => (
+              <div key={label} className="flex items-center gap-2.5">
+                <span className="text-xl font-black text-brand-orange">{count}</span>
+                <span className="text-xs text-white/80 font-bold uppercase tracking-wider">{label}</span>
+              </div>
+            ))}
           </div>
         </section>
 

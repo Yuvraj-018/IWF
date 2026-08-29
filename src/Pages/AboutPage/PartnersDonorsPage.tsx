@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Footer, Header, NotificationTicker, RoleFormModal, UtilityBar } from "@/components/layout/SiteLayout";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
+import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 
 type RoleType = "volunteer" | "partner" | "sponsor" | "mentor" | "employee";
 
@@ -24,39 +25,41 @@ export default function PartnersDonorsPage() {
       icon: Building2,
     },
     {
-      title: "Government Collaborations",
-      desc: "Support government welfare schemes and rural development programs through community outreach and grassroots implementation.",
-      icon: ShieldCheck,
+      title: "Institutional & NGO Alliances",
+      desc: "Joint implementation models with national and international NGOs, grassroots collectives, and research institutions.",
+      icon: Globe,
     },
     {
-      title: "Educational Institution Partnerships",
-      desc: "Engage schools, colleges, and universities in community service, student internships, research, and volunteer drives.",
+      title: "Academic & Skill Collaborations",
+      desc: "Partnerships with universities, vocational training institutes, and digital learning platforms for capacity building.",
       icon: Award,
     },
     {
-      title: "NGO & Civil Society Alliances",
-      desc: "Work together on joint community projects, awareness drives, local research, and capacity-building workshops.",
+      title: "Government & Public Schemes",
+      desc: "Facilitating last-mile delivery and awareness of welfare schemes, health missions, and agrarian support programs.",
+      icon: ShieldCheck,
+    },
+    {
+      title: "Community & Village Collectives",
+      desc: "Direct engagement with Gram Panchayats, Farmer Producer Organizations (FPOs), and Women Self-Help Groups (SHGs).",
       icon: Users,
     },
     {
-      title: "Foundation & Grant Partners",
-      desc: "Partner to support sustainable development goals through grants, program sponsorships, and technical assistance.",
+      title: "Philanthropic & Family Foundations",
+      desc: "Long-term grant partnerships targeting systemic solutions in healthcare infrastructure and underprivileged girl education.",
       icon: Handshake,
-    },
-    {
-      title: "Knowledge & Technical Partners",
-      desc: "Share technical expertise, research, technology solutions, and professional guidance to strengthen program quality.",
-      icon: Globe,
     },
   ];
 
   const PARTNER_LOGOS = [
-    "TATA TRUSTS",
-    "HCL FOUNDATION",
-    "RELIANCE FOUNDATION",
-    "ADANI FOUNDATION",
-    "TECH MAHINDRA FOUNDATION",
-    "WIPRO Cares",
+    "TCS Foundation",
+    "HCL Foundation",
+    "Infosys Foundation",
+    "Wipro Cares",
+    "Tech Mahindra Foundation",
+    "Reliance Foundation",
+    "SBI Foundation",
+    "Azim Premji Foundation",
   ];
 
   return (
@@ -65,27 +68,30 @@ export default function PartnersDonorsPage() {
       <UtilityBar />
       <Header />
 
+      <SubpageHeroCarousel
+        tag="ABOUT ISLAH"
+        title="Partner & Sponsor"
+        subtitle="We collaborate with corporate organizations, government agencies, institutions, foundations, and community leaders to create sustainable social transformation."
+        breadcrumbs={[
+          { label: "About Us", href: "/about" },
+          { label: "Partner & Sponsor" },
+        ]}
+      />
+
       <main>
-        {/* Hero Banner */}
-        <section className="bg-gradient-to-r from-[#071527] via-[#0b1f3b] to-[#15803d] text-white py-16 md:py-20 px-4 border-b border-white/10">
-          <div className="max-w-7xl mx-auto text-center space-y-5">
-            <div className="inline-flex items-center gap-2 bg-brand-orange/20 text-brand-orange text-xs font-extrabold uppercase tracking-widest px-4 py-1.5 rounded-md border border-brand-orange/30">
-              <Handshake className="w-4 h-4" />
-              <span>Stronger Partnerships • Greater Impact</span>
-            </div>
-            <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
-              OUR PARTNERS & SUPPORTERS
-            </h1>
-            <p className="text-white/85 text-base md:text-lg max-w-3xl mx-auto leading-relaxed">
-              We collaborate with corporate organizations, government agencies, educational institutions, NGOs, foundations, and community leaders to create sustainable social transformation.
-            </p>
-            <div className="pt-2 flex justify-center gap-4">
+        {/* Action Button Bar */}
+        <section className="bg-slate-900 text-white py-3.5 border-b border-white/10">
+          <div className="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-between gap-3">
+            <span className="text-xs text-white/80 font-bold uppercase tracking-wider">
+              Together, We Create Greater Impact
+            </span>
+            <div className="flex items-center gap-3">
               <button
                 onClick={() => setActiveModal("partner")}
-                className="bg-brand-orange hover:bg-orange-600 text-white font-bold text-sm px-6 py-3 rounded-md shadow-md transition flex items-center gap-2 uppercase tracking-wider"
+                className="bg-brand-orange hover:bg-orange-600 text-white font-extrabold text-xs px-5 py-2 rounded-lg shadow-sm transition uppercase tracking-wider cursor-pointer flex items-center gap-1.5"
               >
                 <span>Partner With Us</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
