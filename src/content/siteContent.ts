@@ -64,7 +64,7 @@ export const HOME_CONTENT = {
     eyebrow: "Islah Welfare Foundation (Reg.)",
     title: "Welcome to Islah Welfare Foundation",
     subtitle:
-      "Planting Seeds of Hope and Change through education, healthcare, livelihood, women empowerment and rural development.",
+      "Knowledge, Opportunity, A Better Future.",
     description:
       "IWF works with underserved communities to create practical pathways to dignity, learning, health and self-reliance.",
     image: heroImg,
@@ -403,7 +403,7 @@ export type PolicySlug = keyof typeof POLICY_CONTENT;
 export const CONTACT_DETAILS = {
   phone: "+91 9811861633",
   email: "info@iwfindia.org",
-  address: "Bathiya, Darbhanga, Bihar - 847423, India",
+  address: "B-144, Abul Fazal Enclave-II, Okhla, New Delhi-110025, India",
 };
 
 export const IMPACT_HIGHLIGHTS = [

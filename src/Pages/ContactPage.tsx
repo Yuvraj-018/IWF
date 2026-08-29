@@ -19,7 +19,7 @@ const OFFICES = [
     badge: "Headquarters",
     badgeColor: "#15803d",
     badgeBg: "#F0FDF4",
-    address: "Bathiya, Darbhanga, Bihar – 847423",
+    address: "B-144, Abul Fazal Enclave-II, Okhla, New Delhi-110025, India",
     phone: "+91 9811861633",
     email: "info@iwfindia.org",
     timing: "Mon–Sat: 9:00 AM – 5:00 PM",
