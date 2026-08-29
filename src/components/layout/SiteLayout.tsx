@@ -42,6 +42,7 @@ export const NAV_ITEMS = [
   "Home",
   "About Us",
   "What We Do",
+  "Our Campaigns",
   "Programs",
   "Impact",
   "Media",
@@ -78,6 +79,17 @@ export const MEGA_DATA: Record<string, MegaSection> = {
       "Relief & Rehabilitation",
       "Environment & Sustainability",
       "Agriculture & Rural Livelihood",
+    ],
+  },
+  "Our Campaigns": {
+    cols: 3,
+    items: [
+      "Shiksha Na Ruke",
+      "Har Pal Anmol Hai",
+      "Pari Ki Udaan",
+      "Swabhimaan",
+      "Taiyyari Kal Ki",
+      "View All Campaigns",
     ],
   },
   Programs: {
@@ -117,6 +129,7 @@ function getTopNavHref(item: string) {
   if (item === "Home") return "/";
   if (item === "About Us") return "/about";
   if (item === "What We Do") return "/programs";
+  if (item === "Our Campaigns" || item === "Campaigns") return "/campaign";
   if (item === "Programs") return "/programs";
   if (item === "Impact") return "/#impact-stats";
   if (item === "Media") return "/news-and-events";
@@ -146,6 +159,13 @@ function getMegaHref(menu: string, item: string) {
   if (menu === "What We Do" && item === "Relief & Rehabilitation") return "/programs/relief-and-rehabilitation";
   if (menu === "What We Do" && item === "Environment & Sustainability") return "/programs/environment";
   if (menu === "What We Do" && item === "Agriculture & Rural Livelihood") return "/programs/agriculture";
+  // Our Campaigns
+  if (menu === "Our Campaigns" && item === "Shiksha Na Ruke") return "/campaign/shiksha-na-ruke";
+  if (menu === "Our Campaigns" && item === "Har Pal Anmol Hai") return "/campaign/har-pal-anmol-hai";
+  if (menu === "Our Campaigns" && item === "Pari Ki Udaan") return "/campaign/pari-ki-udaan";
+  if (menu === "Our Campaigns" && (item === "Swabhimaan" || item === "Swabhiman")) return "/campaign/swabhimaan";
+  if (menu === "Our Campaigns" && (item === "Taiyyari Kal Ki" || item === "Tayyari Kal Ki")) return "/campaign/taiyyari-kal-ki";
+  if (menu === "Our Campaigns" && item === "View All Campaigns") return "/campaign";
   // Programs
   if (menu === "Programs" && item === "View All Programs") return "/programs";
   // Media & Updates

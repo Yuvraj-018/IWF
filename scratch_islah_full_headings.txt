@@ -1,0 +1,825 @@
+[0] ISLAH
+[1] Knowledge, Opportunity, A Better Future.
+[2] B-144, Abul Fazal Enclave-II, Okhla, New Delhi-110025, India
+[4] Language: EN
+[5] Indian & International
+[8] Welcome to ISLAH
+[9] ISLAH (Integrated Social, Livelihood, Advancement & Humanitarian Action)
+[10] Empowering People. Strengthening Communities. Building a Better Future.
+[12] ISLAH is the public identity of Islah Welfare Foundation, a non-profit organisation committed to advancing the well-being, dignity, and resilience of rural and underserved communities. We believe that meaningful development cannot be achieved by addressing problems in isolation. Education without livelihood, healthcare without awareness, infrastructure without participation, or economic support without dignity cannot create lasting change.
+[13] ISLAH therefore follows an integrated and community-centred approach, bringing together education, healthcare, livelihoods, agriculture, women and youth empowerment, environmental sustainability, humanitarian assistance, and community development.
+[14] Our purpose is simple:
+[15] To create the conditions in which individuals can become empowered, families can become resilient, and communities can become self-reliant.
+[17] “We ourselves feel that what we are doing is just a drop in the ocean. But the ocean would be less because of that missing drop.”
+[18] -Mother Teresa
+[19] Our doors are always open. If you feel you can fill the gap of a missing drop,
+[20] come join us….
+[25] MEDICAL EMERGENCY *Name of heading need to be rename
+[26] CRITICAL MEDICAL & EMERGENCY SUPPORT *need to be rename
+[27] When Urgent Treatment Cannot Wait
+[29] Har Pal Anmol Hai *need to change Hindi to English in next line
+[30] Your support can help critically ill patients access timely treatment and essential medical care when every moment matters.
+[31] How We Work 	     	View Patient Cases
+[36] WHAT WE DO- *name of subpages shall rename and rearrange in two rows
+[37] OUR PROGRAMS FOR SOCIAL IMPACT
+[38] Creating Opportunities. Strengthening Communities.
+[39] Explore All Programs →*link programs page
+[41] OUR FOCUS- *name of feature causes shall rename and rearrange
+[42] FEATURED CAUSES
+[43] Supporting change where it matters most.
+[45] Education	     Health	    Women Empower    Rural Livelihoods 	Relief & Rehabilitation
+[48] View All Causes →
+[50] OUR CAMPAIGNS- *name of campaigns shall rename
+[51] FIVE PILLARS OF CHANGE
+[52] Focused action. Collective purpose. Lasting change.
+[55] Shiksha Na Ruke		Har Pal Anmol Hai	Pari Ki Udaan
+[56] Education Must Not Stop	Medical Need for All		Empowering Women, Changing Lives
+[59] Swabhiman			Tayyari Kal Ki
+[60] Dignity Through Self-Reliance	Preparing for Tomorrow
+[61] Explore Our Campaign →*link campaign page
+[64] OUR IMPACT
+[65] FROM ACTION TO MEASURABLE CHANGE
+[66] Measuring progress. Demonstrating impact.
+[67] Explore Our Impact →*link impact page
+[70] EXPLORE ISLAH
+[71] DISCOVER OUR WORK
+[72] Explore the People, Programmes and Purpose Behind ISLAH.
+[73] Discover ISLAH →
+[76] GET INVOLVED -* pages shall link with concern page
+[77] JOIN HANDS FOR CHANGE
+[78] Your Time, Skills and Support Can Make a Difference.
+[79] Volunteer	Mentor		Partner		Sponsor	Member	 Donor		Employee
+[80] OUR PARTNERS
+[81] TOGETHER, WE CREATE GREATER IMPACT
+[82] Collaboration brings together knowledge, resources and people to create meaningful and sustainable change.
+[84] CSR 		NGOs		Educational	     Healthcare	Government/	
+partners			institutions	   institutions	public institutions
+[89] Development	Supporting
+[90] Partners		organisations
+[94] *It should be running icon from right to left			View All Partners → *link
+[98] GALLERY
+[99] A VISUAL JOURNEY OF IMPACT
+[100] Stories of People, Communities and Change.
+[101] View Full Gallery →
+[102] Categories/filter options can include:
+[103] Education | Healthcare | Livelihoods | Women & Youth | Environment | Humanitarian
+[106] Note:
+[107] CORE ACTIVITIES
+OUR PROGRAMS -This section shall be deleted/removed
+[108] rename ISLAH everywhere instead of Islah Welfare Foundation or IWF except where need of registered name, communication address and using in coding like case ID in patient or membership ID etc.
+[110] Footer
+[111] *Footer to be change like below but colour combination same as current.
+[115] OUR CAMPAIGNS- *this shall open after clicking on Explore our campaign→ at home page
+[117] FIVE PILLARS OF CHANGE
+[118] Five campaigns. One integrated purpose.
+[119] ISLAH's five flagship campaigns translate our broader development vision into focused areas of action. Each campaign responds to a distinct dimension of human and community well-being while remaining connected to our integrated approach to development.
+[120] From keeping children connected to education and supporting critical healthcare needs, to empowering girls, advancing dignity and access to justice, and preparing communities for the future, our campaigns seek to transform immediate needs into pathways towards lasting opportunity and resilience.
+[121] Each campaign represents a long-term commitment to a particular dimension of human and community development, while remaining interconnected with the wider ISLAH ecosystem.
+[122] Five campaigns. Multiple pathways. One shared purpose — empowering people and strengthening communities.
+[124] 01. SHIKSHA NA RUKE
+[125] Keeping Education Within Reach
+[126] Shiksha Na Ruke is ISLAH's education and learning campaign dedicated to ensuring that children, young people and underserved learners are not forced to discontinue their educational journey because of poverty, social circumstances, lack of resources or limited access to opportunities.
+[127] We believe education is more than access to a classroom. It is a pathway to knowledge, confidence, capability, dignity and opportunity.
+[128] Through Shiksha Na Ruke, ISLAH seeks to reduce barriers that prevent children and young people from learning, progressing and preparing for their future.
+[129] Our Focus
+[130] The campaign may support initiatives such as:
+[131] Educational scholarships and financial assistance
+[132] School kits and learning materials
+[133] Support for children from economically vulnerable families
+[134] Digital and technology-enabled learning
+[135] Learning centres and community education initiatives
+[136] Dropout prevention and educational continuity
+[137] Career guidance and counselling
+[138] Mentoring and academic support
+[139] Talent development
+[140] Life skills and personality development
+[141] Support for disadvantaged and underserved learners
+[142] Community awareness on the importance of education
+[143] Beyond Access to Education
+[144] ISLAH believes that keeping a child in education is only the beginning.
+[145] We seek to create a continuum:
+[146] Access → Learning → Skills → Confidence → Opportunity → Self-Reliance
+[147] Where feasible, educational interventions can therefore be connected with mentoring, skill development, career guidance and livelihood opportunities.
+[148] Who We Seek to Reach
+[149] Children and young people who face educational barriers, particularly those from:
+[150] Economically vulnerable households
+[151] Rural and underserved communities
+[152] Socially disadvantaged backgrounds
+[153] Families experiencing difficult circumstances
+[154] Communities with limited access to educational resources
+[155] Our Long-Term Vision
+[156] A future where no child or young person is compelled to abandon learning simply because opportunity was unavailable.
+[157] Every child deserves the chance to learn, dream and move forward.
+[159] 02. HAR PAL ANMOL HAI
+[160] When Every Moment Matters
+[161] Har Pal Anmol Hai is ISLAH's healthcare and humanitarian emergency campaign focused on helping vulnerable individuals access timely medical assistance when urgent treatment cannot wait.
+[162] A medical emergency can place an enormous burden on a family, particularly when the required treatment is beyond its financial capacity.
+[163] Through this campaign, ISLAH seeks to mobilise community support and resources for critical, need-based medical assistance, while also promoting preventive healthcare and health awareness.
+[164] Our Focus
+[165] Depending on available resources and eligibility, initiatives may include:
+[166] Critical medical treatment assistance
+[167] Emergency healthcare support
+[168] Support for patients requiring urgent treatment
+[169] Medical camps
+[170] Health screening and awareness programmes
+[171] Preventive healthcare initiatives
+[172] Maternal and child health awareness
+[173] Nutrition and well-being initiatives
+[174] Health education
+[175] Referral and facilitation support
+[176] Support for vulnerable families facing medical emergencies
+[177] Critical Medical Support
+[178] The campaign can feature individual patient cases where urgent financial assistance is required.
+[179] The objective is not simply to raise funds, but to create a transparent and responsible mechanism for connecting genuine medical needs with community support.
+[180] Where appropriate, assistance may be provided directly to healthcare providers or through other documented mechanisms, subject to applicable policies, verification and available resources.
+[181] From Emergency Support to Prevention
+[182] Healthcare should not begin only when a crisis occurs.
+[183] Therefore, wherever feasible, ISLAH seeks to connect emergency support with:
+[184] Awareness → Prevention → Early Intervention → Treatment → Recovery
+[185] Our Long-Term Vision
+[186] A society where financial vulnerability does not become an additional barrier between a person and essential medical care.
+[187] When every moment matters, timely support can make a difference.
+[189] 03. PARI KI UDAAN
+[190] Empowering Girls to Dream, Learn and Lead
+[191] Pari Ki Udaan is ISLAH's dedicated campaign for the empowerment and advancement of girls and young women.
+[192] We believe that empowering a girl is not simply about providing education. It is about expanding her choices, confidence, capabilities, safety, economic opportunities and ability to participate in decisions affecting her future.
+[193] The campaign seeks to create pathways through which girls and young women can move from vulnerability to confidence, capability and leadership.
+[194] Our Focus
+[195] The campaign may support:
+[196] Girls' education
+[197] Scholarships
+[198] Digital literacy
+[199] Life skills
+[200] Career guidance
+[201] Mentorship
+[202] Leadership development
+[203] Health and well-being awareness
+[204] Financial literacy
+[205] Vocational skills
+[206] Entrepreneurship
+[207] Women-led livelihood initiatives
+[208] Awareness of rights and opportunities
+[209] Confidence and personality development
+[210] Community engagement
+[211] From Learning to Leadership
+[212] Pari Ki Udaan seeks to connect different stages of empowerment:
+[213] Education → Skills → Confidence → Economic Opportunity → Leadership
+[214] This allows the campaign to complement ISLAH's work in education, skills, livelihoods, social justice and entrepreneurship.
+[215] Creating an Enabling Environment
+[216] The empowerment of girls cannot be achieved by working with girls alone.
+[217] Where appropriate, ISLAH may also engage:
+[218] Families
+[219] Schools
+[220] Teachers
+[221] Community leaders
+[222] Mentors
+[223] Employers
+[224] Women entrepreneurs
+[225] Civil society organisations
+[226] The objective is to create an environment where girls can learn, participate, aspire and lead.
+[227] Our Long-Term Vision
+[228] A future where every girl has the freedom and opportunity to develop her potential and participate meaningfully in society.
+[229] When a girl moves forward, she can inspire an entire community to move with her.
+[231] 04. SWABHIMAN
+[232] Dignity. Equality. Self-Reliance.
+[233] Swabhiman represents ISLAH's commitment to dignity, inclusion, social justice, rights awareness and empowerment.
+[234] We believe development is incomplete when people continue to experience exclusion, discrimination, exploitation, denial of opportunity or barriers to justice.
+[235] Swabhiman therefore seeks to strengthen people's ability to understand their rights, access appropriate institutions and remedies, participate in decisions affecting their lives and move towards greater social and economic self-reliance.
+[236] Our Focus
+[237] The campaign may include:
+[238] Social justice initiatives
+[239] Rights and legal awareness
+[240] Legal empowerment
+[241] Access-to-justice facilitation
+[242] Referral to qualified legal professionals and appropriate legal-aid institutions
+[243] Assistance in navigating appropriate grievance mechanisms
+[244] Awareness of government schemes and entitlements
+[245] Community participation
+[246] Inclusion of vulnerable and underserved groups
+[247] Women's social and economic empowerment
+[248] Dignified livelihoods
+[249] Community leadership
+[250] Awareness against discrimination and exploitation
+[251] Access to Justice
+[252] For vulnerable individuals who may not know how to pursue an appropriate remedy, ISLAH may, within its organisational capacity and applicable law, help facilitate access to:
+[253] Information → Documentation → Appropriate Institution → Qualified Legal Support → Follow-up
+[254] Where legal representation is required, matters may be referred to or supported through qualified advocates, legal-aid authorities or other competent professionals, as appropriate.
+[255] This distinction is important because ISLAH is a development organisation, not a law firm.
+[256] Dignity as a Development Outcome
+[257] Swabhiman goes beyond legal rights.
+[258] A person who has:
+[259] knowledge of their rights,
+[260] access to opportunity,
+[261] a sustainable livelihood,
+[262] confidence to participate,
+[263] and the ability to make informed decisions
+[264] is better positioned to live with dignity and greater self-reliance.
+[265] Our Long-Term Vision
+[266] Communities where people are aware of their rights, treated with dignity, included in development and better equipped to seek appropriate remedies when injustice occurs.
+[267] Justice begins with dignity, and dignity grows through empowerment.
+[269] 05. TAYYARI KAL KI
+[270] Preparing Communities for a Better Tomorrow
+[271] Tayyari Kal Ki is ISLAH's future-oriented campaign focused on preparing individuals, families and communities for the social, economic, environmental and technological challenges of tomorrow.
+[272] We believe development should not only respond to today's problems. It should also help communities become capable, adaptable and resilient enough to face tomorrow's uncertainties.
+[273] Our Focus
+[274] The campaign can bring together initiatives relating to:
+[275] Vocational and future skills
+[276] Employability
+[277] Youth development
+[278] Entrepreneurship
+[279] Digital literacy
+[280] Rural enterprise development
+[281] Farmer capacity building
+[282] Sustainable agriculture
+[283] Climate-resilient livelihoods
+[284] Water conservation
+[285] Environmental sustainability
+[286] Disaster preparedness
+[287] Community resilience
+[288] Model Village Development
+[289] Innovation and technology for rural development
+[290] Preparing People: The campaign seeks to strengthen:
+[291] Knowledge → Skills → Adaptability → Economic Resilience → Community Resilience
+[292] This is particularly important in a rapidly changing world where technology, climate change, employment patterns and economic conditions are continuously evolving.
+[293] Preparing Communities
+[294] Tayyari Kal Ki is not only about individuals.
+[295] ISLAH can use this campaign to promote integrated community-development models involving:
+[296] Education
+[297] Healthcare
+[298] Livelihoods
+[299] Agriculture
+[300] Environment
+[301] Sanitation
+[302] Digital connectivity
+[303] Community participation
+[304] Disaster preparedness
+[305] This makes Rural Development a natural flagship initiative under Tayyari Kal Ki.
+[306] Our Long-Term Vision
+[307] Communities that are not merely recipients of assistance, but are equipped with the knowledge, capabilities, resources and institutions needed to respond to future challenges.
+[308] The future belongs to communities prepared to shape it.
+[310] How the Five Campaigns Work Together
+[311] The real strength of ISLAH is that these campaigns are not isolated.
+[312] They form an interconnected ecosystem:
+[313] SHIKSHA NA RUKE
+[314] Create opportunity through education.
+[315] ↓
+[316] PARI KI UDAAN
+[317] Expand opportunity for girls and young women.
+[318] ↓
+[319] HAR PAL ANMOL HAI
+[320] Protect health and human well-being.
+[321] ↓
+[322] SWABHIMAN
+[323] Advance dignity, rights and self-reliance.
+[324] ↓
+[325] TAYYARI KAL KI
+[327] Prepare people and communities for the future.
+[329] The Five Campaigns and our Eight Areas of Work
+[331] One campaign can contain multiple programmes, and one programme can support multiple campaigns.
+[333] Campaign → Initiatives → Projects → Cases/Beneficiaries → Fundraising → Outcomes
+[335] Sub Pages under About Us to be rename & rearranged sequence
+[336] Overview
+[337] Objective, Vision & Mission
+[338] Vision 2047
+[339] Legal Status & Registration
+[340] Governance & Transparency
+[341] Leadership & Management
+[342] Member & Donor
+[343] Partner & Sponsor
+[344] *In four columns
+[346] Overview- * this page needs to recorrect according to this:
+[347] ISLAH (Integrated Social, Livelihood, Advancement & Humanitarian Action)
+[348] Creating Possibilities. Strengthening Communities. Transforming Lives.
+[350] ISLAH is the public identity of Islah Welfare Foundation, a non-profit organisation committed to advancing the well-being, dignity, and resilience of rural and underserved communities. We believe that meaningful development cannot be achieved by addressing problems in isolation. Education without livelihood, healthcare without awareness, infrastructure without participation, or economic support without dignity cannot create lasting change.
+[351] ISLAH therefore follows an integrated and community-centred approach, bringing together education, healthcare, livelihoods, agriculture, women and youth empowerment, environmental sustainability, humanitarian assistance, and community development.
+[352] Our purpose is simple:
+[353] To create the conditions in which individuals can become empowered, families can become resilient, and communities can become self-reliant.
+[355] Our Approach
+[356] At ISLAH, we see development not merely as the delivery of services, but as the creation of opportunities, capabilities and systems that enable communities to shape their own future.
+[357] We work with communities to understand their needs, identify practical solutions, mobilise resources, develop partnerships, and implement initiatives that are relevant to local realities.
+[358] Our interventions may range from a student receiving educational support, a farmer gaining knowledge of sustainable agriculture, a woman developing a livelihood, a patient receiving critical medical assistance, a rural improving its environment, to an entire community participating in a Rural Development Programme. Each intervention may be different, but the underlying objective remains the same:
+[359] Empower people. Strengthen livelihoods. Build resilient communities.
+[361] ISLAH Stands For
+[362] I — Integrated
+[363] We connect different dimensions of development rather than treating social challenges separately.
+[364] S — Social
+[365] We work towards inclusion, dignity, equality, education, health, participation, and social well-being.
+[366] L — Livelihood
+[367] We support skills, agriculture, entrepreneurship, employment, and sustainable income opportunities.
+[368] A — Advancement
+[369] We promote learning, innovation, technology, leadership, environmental sustainability, and opportunities for progress.
+[370] H — Humanitarian Action
+[371] We respond to urgent needs and support vulnerable individuals and communities through relief, rehabilitation, and essential assistance.
+[373] Our Areas of Work
+[374] ISLAH works across interconnected areas of community development, including:
+[375] 🎓 Education & Learning
+[376] Creating opportunities for children, students, youth and adults through education, digital learning, scholarships, mentoring and career guidance.
+[377] ❤️ Healthcare & Well-being
+[378] Promoting accessible healthcare, preventive awareness, medical assistance, maternal and child health, nutrition and emergency support.
+[379] 👩 Women & Youth Empowerment
+[380] Creating opportunities for women and young people to develop skills, confidence, leadership and economic independence.
+[381] 💼 Skills & Livelihoods
+[382] Supporting employability, vocational skills, entrepreneurship, livelihoods and sustainable income generation.
+[383] ⚖️ Social Justice & Legal Empowerment
+[384] Promoting awareness of rights and facilitating appropriate access to legal support.
+[385] 🌾 Agriculture & Rural Livelihoods
+[386] Supporting farmers and resilient rural economies.
+[387] 🌱 Environment & Sustainable Development
+[388] Promoting environmental awareness, tree plantation, sustainable agriculture, water conservation, waste management and greener communities.
+[389] 🤝 Humanitarian Relief & Rehabilitation
+[390] Supporting vulnerable people and communities during difficult circumstances.
+[392] From Assistance to Empowerment
+[393] A central principle of ISLAH is that development should move beyond short-term assistance wherever possible.
+[394] Relief can respond to an immediate need.
+Education can create opportunity.
+Skills can create livelihood.
+Livelihood can create resilience.
+Community participation can create ownership.
+And ownership can create sustainable change.
+[395] Our programmes are therefore designed, wherever feasible, to connect immediate support with longer-term empowerment.
+[397] Our Commitment to Responsible Action
+[398] ISLAH is committed to conducting its activities with integrity, transparency, accountability and respect for human dignity.
+[399] Our programmes and activities are undertaken according to organisational objectives, available resources, identified community needs and implementation capacity.
+[400] Some initiatives may be operational, while others may remain proposed or planned initiatives and will be implemented progressively, subject to availability of funds, resources, partnerships, approvals and organisational capacity.
+[401] We believe that responsible development requires not only ambition, but also honest communication about what has been achieved, what is underway, and what remains a future aspiration.
+[403] Our Vision
+[404] A society where every individual can live with dignity, develop their potential, sustain a secure livelihood, and contribute to a healthy, resilient and self-reliant community.
+[406] Our Mission
+[407] To create inclusive and sustainable opportunities for rural and underserved communities through integrated interventions in education, healthcare, livelihoods, agriculture, empowerment, environmental sustainability and humanitarian action—while fostering community participation, partnerships and responsible development.
+[409] Our Philosophy
+[410] We believe that every community possesses potential. Development is not about changing communities from the outside; it is about unlocking their potential from within:
+[411] A child with opportunity can become a learner.
+A learner can become skilled.
+A skilled person can become economically independent.
+An empowered family can become resilient.
+And resilient families can help build stronger communities.
+[412] That is the change ISLAH seeks to nurture.
+[414] Vision 2047
+[415] Empowering People. Strengthening Communities. Advancing a Developed India.
+[416] This version is more suitable for your website because it connects ISLAH's actual areas of work with the broader 2047 national development horizon, without claiming that ISLAH itself will achieve India's Vision 2047. It positions ISLAH as a contributor and community-level catalyst within that larger journey.
+[418] ISLAH
+[419] Integrated Social, Livelihood, Advancement & Humanitarian Action
+[420] “Empowering people. Strengthening livelihoods. Building resilient communities.”
+[423] Vision 2047- recorrect this page according to this
+[424] Building Communities That Shape a Developed rural India
+[425] As India moves towards 2047, the centenary of its independence, ISLAH envisions a future where the progress of the nation is reflected not only in economic growth and technological advancement, but also in the dignity, capabilities, resilience and quality of life of every community.
+[426] We believe that the journey towards a developed India must begin with strong, educated, healthy, skilled and self-reliant communities—particularly in rural and underserved regions.
+[427] Our aspiration is to contribute to this journey by developing community-driven and scalable models of social development that connect education with opportunity, healthcare with well-being, skills with livelihoods, agriculture with sustainability, technology with inclusion, and economic progress with human dignity.
+[428] By 2047, ISLAH aspires to see communities where:
+[429] Every child has meaningful opportunities to learn, grow and realise their potential.
+[430] Young people possess the skills, confidence and opportunities to participate in India's evolving economy.
+[431] Women are empowered as equal participants, leaders and contributors to social and economic development.
+[432] Farmers and rural families have access to sustainable livelihoods, knowledge, technology and resilient agricultural practices.
+[433] Communities have access to better health, sanitation, nutrition and essential support systems.
+[434] Rurals become increasingly self-reliant, environmentally responsible and economically resilient.
+[435] Technology and innovation become instruments of inclusion rather than exclusion.
+[436] Communities actively participate in solving their own challenges and shaping their own development.
+[437] Development becomes inclusive, sustainable, measurable and rooted in dignity.
+[439] Our Approach - From Beneficiaries to Change-Makers
+[440] Our 2047 vision goes beyond creating beneficiaries of development. We aspire to help create change-makers.
+[441] A child supported today can become tomorrow's professional.
+[442] A trained farmer can become an innovator in sustainable agriculture.
+[443] An empowered woman can become an economic contributor and community leader.
+[444] A skilled young person can create opportunities for others.
+[445] A strengthened rural can become a model for neighbouring communities.
+[446] In this way, individual progress can become family resilience, community transformation and ultimately national progress.
+[448] Our 2047 Aspiration
+[449] ISLAH seeks to contribute, in its own sphere and capacity, to an India where no community is left behind in the journey of development and where rural and underserved populations are not merely recipients of progress, but active architects of India's future.
+[450] We envision development that is people-centred, locally owned, environmentally responsible, technologically enabled and economically sustainable.
+[451] Our ambition is not simply to deliver programmes, but to build models, strengthen institutions, nurture leadership and create pathways through which communities can sustain and multiply the change themselves.
+[452] “A developed India is built not only through stronger cities and advanced institutions, but through empowered people, resilient rural and communities capable of shaping their own future.”
+[453] We aspire to build a society where:
+[454] • No child is deprived of education
+[455] • No individual is forced into poverty due to lack of opportunity
+[456] • Women are empowered and independent
+[457] • Every family has access to basic needs and dignity
+[458] • Communities are self-reliant and resilient
+[460] A Commitment to Change
+[461] We may not measure this journey in years alone, but in the lives transformed along the way. Our mission will continue until:
+[462] No child is seen begging or forced into labour Every child is in school or playing freely Every individual can live with dignity
+[464] STRATEGIC FOCUS AREAS
+[465] 🎓 Education
+[466] ❤️ Healthcare
+[467] 👩 Women Empowerment
+[468] 🌾 Relief & Rehabilitation
+[469] 🤝Rural Livelihoods
+[471] ISLAH 2047
+[472] Empowering People. Strengthening Communities. Advancing a Developed India.
+[473] This version is more suitable for your website because it connects ISLAH's actual areas of work with the broader 2047 national development horizon, without claiming that ISLAH itself will achieve India's Vision 2047. It positions ISLAH as a contributor and community-level catalyst within that larger journey.
+[474] Legal Status & Registration- *this page rebuilds according to this:
+[477] Registered Name: Islah Welfare Foundation
+[478] Public Identity: ISLAH
+[479] Legal Constitution: Registered Trust
+[480] Registration No.: 26/2015
+[481] Date of Registration: 01/04/2015
+[482] Registration Authority: Sub Registrar, Darbhanga, Bihar
+[483] Registered Office: Bathiya, Darbhanga, Bihar-847423, India
+[486] PAN			AABTI2820H
+[487] 12A/12AB:		AABTI2820HE2026 effective from 01 April 2026
+[488] 80G Approval	AABTI2820HF2026	effective from 01 April 2026
+[489] NGO DARPAN	BR/2016/0104660
+[490] CSR1-Registration	CSR00012345
+[491] TAN			BPL12345E
+[492] GST			Not Applicable as per current operations
+[494] 80G declaration: “Eligible donations may qualify for deduction under Section 80G, subject to applicable provisions of the Income-tax Act and the organisation's eligibility.”
+[496] DOCUMENT VERIFICATION CENTRE
+[497] Unique features of your website. Instead of simply uploading PDFs, create a:
+[498] DOCUMENT VERIFICATION CENTRE
+[499] A visitor can enter:
+[500] Document / Certificate Number
+[501] [ Search]
+[502] The system can show:
+[503] Document Verified ✓
+[504] or
+[505] No matching document found
+[506] We can eventually provide verification for:
+[507] Donation receipts
+[508] Membership certificates
+[509] Volunteer certificates
+[510] Sponsorship certificates
+[511] Programme certificates
+[512] Institutional documents
+[513] Authorisation letters
+[515] Legal Information Disclaimer
+[516] The information presented on this page is provided for institutional transparency and general information. Registration numbers, certificates, approvals and other statutory details should be interpreted in accordance with the applicable laws, rules, orders and conditions governing each registration or approval.
+[517] The inclusion of a registration, portal identification, approval or recognition on this website does not imply any endorsement, partnership or affiliation with a government authority unless expressly stated and supported by the relevant official documentation.
+[518] ISLAH will update this page when material changes occur in its legal, statutory or regulatory status.
+[520] Good Governance & Transparency
+[521] *This page should be rebuilt
+[526] Leadership & Management- *this page shall correct according to this:
+[528] Board of Trustees
+[529] The Board of Trustees provides strategic direction, oversight and responsible governance to Islah Welfare Foundation (ISLAH). It safeguards the organisation’s mission, values and long-term objectives while promoting transparency, accountability and ethical stewardship.
+[533] Executive Body
+[535] Advisory Body
+[536] Field Team
+[540] MEMBERS & DONORS- *this page shall rearrange as per below:
+[541] People Who Make the Mission Possible
+[542] Different Ways to Contribute. One Shared Purpose.
+[543] ISLAH is built on a simple belief: lasting social change is a collective responsibility.
+[544] Our members contribute through participation, time, knowledge, skills and engagement. Our donors provide financial support that helps turn ideas and programmes into practical opportunities for communities.
+[545] Together, they form an important part of the ISLAH ecosystem—helping us advance education, healthcare, empowerment, livelihoods, social justice, agriculture, environmental sustainability and humanitarian action.
+[547] BECOME A MEMBER
+[548] Membership Is More Than Association
+[549] An ISLAH membership is an opportunity to become part of a community committed to empowering people, strengthening livelihoods and building resilient communities.
+[550] Members may participate in appropriate programmes, campaigns, volunteering, mentoring, awareness activities and other organisational initiatives according to their interests, skills and membership category.
+[552] Our Membership Levels
+[553] COMMUNITY MEMBER
+[554] Connect • Participate • Belong
+[555] ₹2,500 per year
+[556] Community Members form the wider network of people who identify with the vision and values of ISLAH.
+[557] They can participate in suitable awareness activities, events, volunteering opportunities, campaigns and community initiatives.
+[558] For those who want to relate to the mission and participate in meaningful ways.
+[559] [ Become a Community Member →]
+[561] CONTRIBUTING MEMBER
+[562] Contribute • Collaborate • Create Impact
+[563] ₹4,000 per year
+[564] Contributing Members take a more active role in the ISLAH community by sharing their time, knowledge, professional skills, networks or other forms of support.
+[565] They may participate in mentoring, volunteering, programme activities, awareness initiatives and resource mobilisation.
+[566] For those who want to turn their skills and participation into meaningful contribution.
+[567] [ Become a Contributing Member →]
+[569] PATRON MEMBER
+[570] Support • Sustain • Strengthen
+[571] ₹6,000 per year
+[572] Patron Members represent a deeper level of commitment to the ISLAH mission through their continued association and support.
+[573] They may contribute to strengthening organisational initiatives, community programmes, resource mobilisation and long-term development efforts.
+[574] For those who wish to demonstrate sustained commitment to the mission of ISLAH.
+[575] [ Become a Patron Member →]
+[577] WHY BECOME AN ISLAH MEMBER?
+[578] Membership can provide opportunities to:
+[579] Participate in ISLAH programmes and campaigns
+[580] Volunteer in community initiatives
+[581] Share professional knowledge and expertise
+[582] Participate in awareness and outreach activities
+[583] Connect with like-minded individuals
+[584] Receive programme and organisational updates
+[585] Participate in selected workshops and events
+[586] Support community-led development
+[587] Contribute to the broader ISLAH mission
+[588] *Membership benefits and participation opportunities are subject to the applicable Membership Policy, programme requirements and organisational capacity.
+[590] OUR DONORS
+[591] Those Who Turn Resources into Possibilities
+[592] A donation is more than a financial contribution.
+[593] It is an expression of trust.
+[594] Our donors help ISLAH mobilise resources for programmes and initiatives addressing real community needs—from education and healthcare to livelihoods, empowerment, social justice, environmental action and humanitarian support.
+[595] We are committed to treating every contribution as a responsibility entrusted to us and to maintaining appropriate standards of transparency, accountability and responsible stewardship.
+[597] DONOR RECOGNITION LEVELS
+[599] PLATINUM DONOR
+[600] Substantial support
+[601] ₹50,000 & Above
+[602] Platinum Donors provide substantial support towards ISLAH's mission and may help strengthen larger programmes, campaigns and community development initiatives.
+[603] Recognition: Platinum-level donor recognition, subject to applicable policies and donor consent.
+[604] [ Become a Platinum Donor →]
+[606] GOLD DONOR
+[607] Significant support
+[608] ₹20,000 – ₹49,999
+[609] Gold Donors make significant contributions that help ISLAH sustain and expand meaningful programme activities.
+[610] Recognition: Gold-level donor recognition, subject to applicable policies and donor consent.
+[611] [ Become a Gold Donor →]
+[613] SILVER DONOR
+[614] Contributing Support
+[615] ₹5,000 – ₹19,999
+[616] Silver Donors contribute towards the resources required to implement community-focused programmes and initiatives.
+[617] Recognition: Silver-level donor recognition, subject to applicable policies and donor consent.
+[618] [ Become a Silver Donor →]
+[620] GENERAL DONOR
+[621] Below ₹5,000
+[622] Every contribution matters.
+[623] General Donors represent the broad community of individuals who choose to support ISLAH according to their means. A smaller contribution can become part of a much larger collective effort.
+[624] Recognition: General-level donor recognition, subject to applicable policies and donor consent.
+[625] [ Donate Now →]
+[627] WHERE YOUR SUPPORT CAN MAKE A DIFFERENCE
+[628] Your membership participation or donation may contribute, subject to the applicable programme and funding requirements, to:
+[629] 🎓 Education & Learning
+[630] Creating opportunities for children, students and young people.
+[631] ❤️ Healthcare & Well-being
+[632] Supporting healthcare access, awareness and critical assistance.
+[633] 👩 Women & Youth Empowerment
+[634] Creating opportunities for confidence, skills and participation.
+[635] 💼 Skills, Livelihoods & Entrepreneurship
+[636] Supporting employability, entrepreneurship and sustainable income opportunities.
+[637] ⚖️ Social Justice & Legal Empowerment
+[638] Promoting awareness of rights and facilitating appropriate access to legal support.
+[639] 🌾 Agriculture & Rural Livelihoods
+[640] Supporting farmers and resilient rural economies.
+[641] 🌱 Environment & Sustainable Development
+[642] Building environmentally responsible and resilient communities.
+[643] 🤝 Humanitarian Relief & Rehabilitation
+[644] Supporting vulnerable people and communities during difficult circumstances.
+[645] SUPPORT OUR FIVE CAMPAIGNS
+[646] Your contribution can also support ISLAH's flagship campaigns:
+[647] Shiksha Na Ruke
+[648] Keeping education moving forward.
+[649] Har Pal Anmol Hai
+[650] When urgent treatment cannot wait.
+[651] Pari Ki Udaan
+[652] Creating opportunities for girls and women to rise.
+[653] Swabhimaan
+[654] Dignity • Opportunity • Empowerment
+[655] Taiyyari Kal Ki
+[656] Preparing people and communities for tomorrow.
+[657] [ Explore Our Campaigns →]
+[659] YOUR TRUST. OUR RESPONSIBILITY.
+[660] At ISLAH, we believe that receiving support creates an obligation to use it responsibly.
+[661] We are committed to:
+[662] Transparency: Communicating our activities and institutional information responsibly.
+[663] Accountability: Maintaining appropriate financial and programme controls.
+[664] Responsible Stewardship: Using resources thoughtfully and for legitimate organisational purposes.
+[665] Respect for Donor Intent: Making reasonable efforts to honour accepted programme-specific designations, subject to applicable requirements.
+[666] Impact Orientation: Focusing on meaningful outcomes rather than simply counting activities.
+[667] Ethical Governance: Conducting our work with integrity and respect for human dignity.
+[668] [ Legal Status & Registrations]
+[ Financial Transparency]
+[ Annual Reports]
+[ Our Impact]
+[670] FROM PEOPLE TO POSSIBILITY
+[671] Our model is simple:
+[672] Members
+Time • Skills • Knowledge • Participation
+[674] Donors
+Resources • Trust • Philanthropy
+[675] ↓
+[676] ISLAH
+[677] Programmes • Campaigns • Partnerships
+[678] ↓
+[679] COMMUNITIES
+[680] Education • Health • Livelihood • Empowerment
+[681] ↓
+[682] GREATER CAPABILITY, DIGNITY & RESILIENCE
+[683] ↓
+[684] LASTING SOCIAL IMPACT
+[686] YOU CAN BE BOTH
+[687] Membership and donation are not mutually exclusive. A member may also become a donor, and a donor may choose to become a member.
+[688] Participation + Philanthropy = Stronger Collective Action
+[689] [ BECOME A MEMBER]  [ DONATE NOW]
+[693] PARTNERS & SPONSORS- * this page rename and rearrange content
+[694] Collaboration That Creates Possibility
+[695] One Mission. Shared Responsibility. Greater Impact.
+[696] At ISLAH, we believe that lasting social change is rarely created by one organisation working alone.
+[697] It grows when communities, institutions, professionals, businesses, philanthropists and civil society organisations bring their strengths together around a shared purpose.
+[698] Our partners and sponsors help us transform ideas into programmes, resources into opportunities, and collective commitment into meaningful social impact.
+[699] Different strengths. One shared purpose. Greater possibilities for communities.
+[701] WHY PARTNER WITH ISLAH?
+[702] Because Social Impact Works Better Together
+[703] ISLAH provides a platform for organisations and individuals who want to contribute to meaningful and responsible community development.
+[704] Through collaboration, we seek to combine:
+[705] Knowledge: Professional and technical expertise
+[706] Resources: Financial, material and institutional support
+[707] Networks: Access to people, institutions and communities
+[708] Technology: Digital and innovative solutions
+[709] Experience: Sectoral and implementation knowledge
+[710] Community Insight: Local understanding and participation
+[712] OUR PARTNERS
+[713] Partners Who Bring Strength to the Mission
+[714] An ISLAH Partner may contribute through collaboration, expertise, institutional support, technology, knowledge, networks, implementation capacity or other mutually agreed resources.
+[715] We welcome collaboration with:
+[716] Educational Institutions
+[717] Schools, colleges, universities, research institutions and learning organisations.
+[718] Healthcare Institutions
+[719] Hospitals, clinics, healthcare professionals, diagnostic centres and health organisations.
+[720] Corporate Organisations
+[721] Businesses seeking meaningful social responsibility and community-development partnerships.
+[722] NGOs & Civil Society
+[723] Organisations working in complementary areas of social and community development.
+[724] Government & Public Institutions
+[725] Where appropriate and subject to applicable procedures, permissions and institutional frameworks.
+[726] Development Organisations
+[727] Technology providers, innovators and organisations developing solutions for social good.
+[728] Supporting Organisations
+[729] Local groups and community-based organisations with knowledge of local needs and realities.
+[730] OUR SPONSORS
+[731] Those Who Help Turn Programmes into Action
+[732] Sponsors provide financial or in-kind support for programmes, campaigns, activities, events or specific community-development initiatives.
+[733] Sponsorship can help support areas such as:
+[734] Education and learning
+[735] Healthcare and emergency assistance
+[736] Women and youth empowerment
+[737] Skills and livelihoods
+[738] Entrepreneurship development
+[739] Social justice and legal empowerment
+[740] Agriculture and rural livelihoods
+[741] Environment and sustainability
+[742] Humanitarian relief and rehabilitation
+[743] Sponsor a Cause
+[744] Support an area that aligns with your social or philanthropic priorities.
+[745] Sponsor a Programme
+[746] Support the implementation or expansion of a defined programme.
+[747] Sponsor a Campaign
+[748] Support one of ISLAH's flagship campaigns.
+[749] Sponsor an Initiative
+[750] Help provide resources for a specific community intervention.
+[751] Corporate / CSR Partnership
+[752] Explore structured collaboration with ISLAH for eligible social-development initiatives, subject to applicable requirements.
+[754] PARTNERSHIP MODELS
+[755] Rather than offering only a conventional “Sponsor Us” model, ISLAH can present several collaboration pathways.
+[756] 01 — PROGRAMME PARTNERSHIP
+[757] Collaborate with ISLAH to design, implement or strengthen a specific programme.
+[758] Collaborate • Implement • Measure
+[760] 02 — KNOWLEDGE PARTNERSHIP
+[761] Bring research, expertise, training, technology or professional knowledge to community initiatives.
+[762] Knowledge • Innovation • Capacity
+[764] 03 — RESOURCE PARTNERSHIP
+[765] Contribute financial, material, technological or other appropriate resources towards identified needs.
+[766] Resources • Access • Opportunity
+[768] 04 — CSR PARTNERSHIP
+[769] Work with ISLAH to develop suitable community initiatives aligned with applicable CSR objectives and requirements.
+[770] Purpose • Partnership • Impact
+[772] 05 — IMPLEMENTATION PARTNERSHIP
+[773] Work together to deliver programmes at the community level by combining institutional capability and local participation.
+[774] Plan • Implement • Learn
+[776] 06 — STRATEGIC PARTNERSHIP
+[777] Develop longer-term collaboration around shared objectives, institutional development, innovation, research or scalable community models.
+[778] Vision • Collaboration • Scale
+[780] OUR FIVE CAMPAIGNS
+[781] Our partners and sponsors can support ISLAH's flagship campaigns:
+[782] Shiksha Na Ruke
+[783] Keeping education moving forward.
+[784] Har Pal Anmol Hai
+[785] When urgent treatment cannot wait.
+[786] Pari Ki Udaan
+[787] Creating opportunities for girls and women to rise.
+[788] Swabhimaan
+[789] Dignity • Opportunity • Empowerment
+[790] Taiyyari Kal Ki
+[791] Preparing people and communities for tomorrow.
+[792] [ Explore Our Campaigns →]
+[794] FROM PARTNERSHIP TO IMPACT
+[795] A successful partnership should create more than activity.
+[796] We seek to create a pathway:
+[797] PARTNERS & SPONSORS
+[798] Expertise • Resources • Technology • Networks
+[799] ↓
+[800] ISLAH
+[801] Planning • Implementation • Coordination
+[802] ↓
+[803] COMMUNITIES
+[804] Participation • Ownership • Capacity
+[805] ↓
+[806] OPPORTUNITIES
+[807] Education • Health • Skills • Livelihoods • Empowerment
+[808] ↓
+[809] OUTCOMES
+[810] Capability • Dignity • Resilience • Self-Reliance
+[811] ↓
+[812] SUSTAINABLE SOCIAL IMPACT
+[814] WHAT WE BRING TO THE PARTNERSHIP
+[815] ISLAH aims to contribute more than a programme name.
+[816] Community-Centred Approach
+[817] We seek to understand local realities before designing interventions.
+[818] Integrated Perspective
+[819] We connect education, healthcare, livelihoods, empowerment, environment and other dimensions of development.
+[820] Local Engagement
+[821] We value community participation and local knowledge.
+[822] Flexible Collaboration
+[823] Partnership models can be adapted according to shared objectives and available resources.
+[824] Responsible Implementation
+[825] We seek to maintain appropriate governance, documentation and accountability.
+[826] Impact Orientation
+[827] We aim to focus on meaningful outcomes rather than simply counting activities.
+[829] OUR COMMITMENT TO PARTNERS & SPONSORS
+[830] Your Trust. Our Responsibility.
+[831] ISLAH is committed to maintaining professional relationships with its partners and sponsors through:
+[832] Transparency: Clear communication regarding programmes and activities.
+[833] Accountability: Responsible management of resources and commitments.
+[834] Integrity: Ethical conduct in institutional and community engagement.
+[835] Recognition: Appropriate acknowledgement of partners and sponsors, subject to consent and applicable policies.
+[836] Communication: Relevant updates regarding supported initiatives.
+[837] Responsible Representation: Accurate presentation of partnership relationships without implying endorsement beyond the agreed scope.
+[839] PARTNER/SPONSOR DIRECTORY
+[841] RECOGNISING THOSE WHO STAND WITH US
+[842] We believe recognition should celebrate collaboration rather than hierarchy.
+[843] With appropriate permission, partners and sponsors may be acknowledged through:
+[844] Programme pages
+[845] Campaign pages
+[846] Annual Reports
+[847] Impact Reports
+[848] Recognition will always remain subject to applicable agreements, policies and the consent of the partner or sponsor.
+[850] PARTNERSHIP PRINCIPLE
+[851] We do not seek partnerships simply because resources are available.
+[852] We seek partnerships where there is a meaningful alignment between purpose, capability and community need.
+[853] The right partnership can turn a good idea into a sustainable solution.
+[855] BECOME A PARTNER
+[856] Bring Your Strength to the Mission
+[857] Whether you are a company, institution, professional, NGO, foundation, philanthropist or community organisation, there may be a meaningful way to work together. ISLAH can help explore how these strengths may contribute to a meaningful community-development initiative.
+[858] [ Partner With ISLAH →]
+[860] SPONSOR A PROGRAMME
+[861] Turn Your Support into Opportunity
+[862] Support a programme, campaign or community initiative that aligns with your social or philanthropic objectives.
+[863] [ Sponsor a Programme →]
+[864] What We Do- * clicking on what we Do then show our program page and clicking on subpage then show separate subpage. subpages shall rename and rearrange sequences as bellows:
+[866] Education & Learning- *rename page of Education
+[867] Healthcare & Well-being- *rename page of healthcare
+[868] Women & Youth Empowerment- *rename page of Women Empowerment
+[869] Skills, Livelihoods & Entrepreneurship- *rename page of Skill Development
+[870] Social Justice, Rights & Legal Empowerment- *rename page of Entrepreneur Development
+[871] Agriculture & Rural Livelihoods- *rename page of Agriculture & Rural Livelihood
+[872] Environment & Sustainable Development- *rename page Environment & Sustainability
+[873] Humanitarian Relief & Rehabilitation- *rename page Relief & rehabilitation
+=== TABLE 0 ===
+Campaign | Primary Areas of Work
+Shiksha Na Ruke | Education & Learning
+Har Pal Anmol Hai | Healthcare & Well-being; Humanitarian Relief
+Pari Ki Udaan | Women & Youth Empowerment; Education; Skills
+Swabhiman | Social Justice; Rights & Legal Empowerment; Livelihoods
+Tayyari Kal Ki | Skills; Entrepreneurship; Agriculture; Environment; Rural Livelihoods; Resilience
+=== TABLE 1 ===
+Sl. No | Photo | Name | Designation | Role & Responsibility
+1 | Er. Nasera Firdausi | Chief Officer | The Board supports sound decision-making, ensures responsible utilisation of resources, and provides guidance for sustainable growth and meaningful community impact. Together, the Board provides the foundation for responsible governance and the long-term vision of ISLAH.
+2 | Er. Ejazullah | Secretary | The Board supports sound decision-making, ensures responsible utilisation of resources, and provides guidance for sustainable growth and meaningful community impact. Together, the Board provides the foundation for responsible governance and the long-term vision of ISLAH.
+3 | Md. Sajid | Joint Secretary | The Board supports sound decision-making, ensures responsible utilisation of resources, and provides guidance for sustainable growth and meaningful community impact. Together, the Board provides the foundation for responsible governance and the long-term vision of ISLAH.
+4 | Md. Azizullah | Treasurer | The Board supports sound decision-making, ensures responsible utilisation of resources, and provides guidance for sustainable growth and meaningful community impact. Together, the Board provides the foundation for responsible governance and the long-term vision of ISLAH.
+5 | CA Sanjeet | Member | The Board supports sound decision-making, ensures responsible utilisation of resources, and provides guidance for sustainable growth and meaningful community impact. Together, the Board provides the foundation for responsible governance and the long-term vision of ISLAH.
+6 | Md. Atiqure Rahman | Member | The Board supports sound decision-making, ensures responsible utilisation of resources, and provides guidance for sustainable growth and meaningful community impact. Together, the Board provides the foundation for responsible governance and the long-term vision of ISLAH.
+7 | Saleh Hedayatullah | Member | The Board supports sound decision-making, ensures responsible utilisation of resources, and provides guidance for sustainable growth and meaningful community impact. Together, the Board provides the foundation for responsible governance and the long-term vision of ISLAH.
+=== TABLE 2 ===
+Sl. No | Photo | Name | Designation | Role & Responsibility
+1 | Er. Nasera Firdausi | Chief Executive Officer | The Executive Body is responsible for translating ISLAH’s vision and strategic priorities into effective programmes and day-to-day organisational action. It oversees implementation, coordination, resource management and operational performance while ensuring alignment with the organisation’s policies, values and objectives.
+2 | Md. Shahid Raza | Program Manager | The Executive Body is responsible for translating ISLAH’s vision and strategic priorities into effective programmes and day-to-day organisational action. It oversees implementation, coordination, resource management and operational performance while ensuring alignment with the organisation’s policies, values and objectives.
+3 | Ms. Farifa Khatoon | Admin Coordinator | The Executive Body is responsible for translating ISLAH’s vision and strategic priorities into effective programmes and day-to-day organisational action. It oversees implementation, coordination, resource management and operational performance while ensuring alignment with the organisation’s policies, values and objectives.
+4 | Mr. Arun Kumar Jha | Communications Coordinator | The Executive Body is responsible for translating ISLAH’s vision and strategic priorities into effective programmes and day-to-day organisational action. It oversees implementation, coordination, resource management and operational performance while ensuring alignment with the organisation’s policies, values and objectives.
+5 | Adv.  Kanhaiya Mishra | Legal & Compliance Coordinator | The Executive Body is responsible for translating ISLAH’s vision and strategic priorities into effective programmes and day-to-day organisational action. It oversees implementation, coordination, resource management and operational performance while ensuring alignment with the organisation’s policies, values and objectives.
+6 | Mr. Rakesh Ranjan | Finance Officer | The Executive Body is responsible for translating ISLAH’s vision and strategic priorities into effective programmes and day-to-day organisational action. It oversees implementation, coordination, resource management and operational performance while ensuring alignment with the organisation’s policies, values and objectives.
+=== TABLE 3 ===
+Sl. No | Photo | Name | Expertise | Role
+1 | Prof. (Dr.) Karan Singh | Academic Advisor | The Advisory Body of ISLAH brings together experienced professionals, subject experts and distinguished individuals who provide strategic guidance and specialised advice across areas relevant to our mission.
+The Advisory Body supports ISLAH in strengthening its programmes, institutional systems, partnerships and long-term vision by contributing diverse perspectives, professional expertise and evidence-based insights.
+2 | Prof. (Dr.) Tayyab Khan | Technical Advisor | The Advisory Body of ISLAH brings together experienced professionals, subject experts and distinguished individuals who provide strategic guidance and specialised advice across areas relevant to our mission.
+The Advisory Body supports ISLAH in strengthening its programmes, institutional systems, partnerships and long-term vision by contributing diverse perspectives, professional expertise and evidence-based insights.
+3 | Prof. (Dr.) Md. Arquam | Social Inclusion Advisor | The Advisory Body of ISLAH brings together experienced professionals, subject experts and distinguished individuals who provide strategic guidance and specialised advice across areas relevant to our mission.
+The Advisory Body supports ISLAH in strengthening its programmes, institutional systems, partnerships and long-term vision by contributing diverse perspectives, professional expertise and evidence-based insights.
+4 | Dr. Intiyaz Ahmad | Program & Policy Advisor | The Advisory Body of ISLAH brings together experienced professionals, subject experts and distinguished individuals who provide strategic guidance and specialised advice across areas relevant to our mission.
+The Advisory Body supports ISLAH in strengthening its programmes, institutional systems, partnerships and long-term vision by contributing diverse perspectives, professional expertise and evidence-based insights.
+5 | CS.  Satish Kumar | Finance Advisor | The Advisory Body of ISLAH brings together experienced professionals, subject experts and distinguished individuals who provide strategic guidance and specialised advice across areas relevant to our mission.
+The Advisory Body supports ISLAH in strengthening its programmes, institutional systems, partnerships and long-term vision by contributing diverse perspectives, professional expertise and evidence-based insights.
+6 | Adv. Pankaj Kumar | Legal Advisor | The Advisory Body of ISLAH brings together experienced professionals, subject experts and distinguished individuals who provide strategic guidance and specialised advice across areas relevant to our mission.
+The Advisory Body supports ISLAH in strengthening its programmes, institutional systems, partnerships and long-term vision by contributing diverse perspectives, professional expertise and evidence-based insights.
+=== TABLE 4 ===
+Sl. No | Photo | Name | Designation | Role & Responsibility
+1 | Mr. Mohammad Rashid | Field Coordinator | The Field Team is the frontline of ISLAH’s work. It connects the organisation with communities, understands local needs, facilitates programme delivery and ensures that initiatives reach the people they are intended to serve.
+Working closely with communities, volunteers, local institutions and programme teams, the Field Team helps translate ISLAH’s plans into practical, community-level action.
+The Advisory Body supports ISLAH in strengthening its programmes, institutional systems, partnerships and long-term vision by contributing diverse perspectives, professional expertise and evidence-based insights.
+2 | Mr. Rakesh Kumar | Field Coordinator | The Field Team is the frontline of ISLAH’s work. It connects the organisation with communities, understands local needs, facilitates programme delivery and ensures that initiatives reach the people they are intended to serve.
+Working closely with communities, volunteers, local institutions and programme teams, the Field Team helps translate ISLAH’s plans into practical, community-level action.
+The Advisory Body supports ISLAH in strengthening its programmes, institutional systems, partnerships and long-term vision by contributing diverse perspectives, professional expertise and evidence-based insights.
+3 | Ms. Saksi Kumari | Field Coordinator | The Field Team is the frontline of ISLAH’s work. It connects the organisation with communities, understands local needs, facilitates programme delivery and ensures that initiatives reach the people they are intended to serve.
+Working closely with communities, volunteers, local institutions and programme teams, the Field Team helps translate ISLAH’s plans into practical, community-level action.
+The Advisory Body supports ISLAH in strengthening its programmes, institutional systems, partnerships and long-term vision by contributing diverse perspectives, professional expertise and evidence-based insights.
+4 | Mr. Ravi Paswan | Field Documentation | The Field Team is the frontline of ISLAH’s work. It connects the organisation with communities, understands local needs, facilitates programme delivery and ensures that initiatives reach the people they are intended to serve.
+Working closely with communities, volunteers, local institutions and programme teams, the Field Team helps translate ISLAH’s plans into practical, community-level action.
+The Advisory Body supports ISLAH in strengthening its programmes, institutional systems, partnerships and long-term vision by contributing diverse perspectives, professional expertise and evidence-based insights.
+5 | Ms. Samia Khatoon | Community Volunteers | The Field Team is the frontline of ISLAH’s work. It connects the organisation with communities, understands local needs, facilitates programme delivery and ensures that initiatives reach the people they are intended to serve.
+Working closely with communities, volunteers, local institutions and programme teams, the Field Team helps translate ISLAH’s plans into practical, community-level action.
+The Advisory Body supports ISLAH in strengthening its programmes, institutional systems, partnerships and long-term vision by contributing diverse perspectives, professional expertise and evidence-based insights.
+6 | Mr. Shahab Alam | Community Mobilizer | The Field Team is the frontline of ISLAH’s work. It connects the organisation with communities, understands local needs, facilitates programme delivery and ensures that initiatives reach the people they are intended to serve.
+Working closely with communities, volunteers, local institutions and programme teams, the Field Team helps translate ISLAH’s plans into practical, community-level action.
+The Advisory Body supports ISLAH in strengthening its programmes, institutional systems, partnerships and long-term vision by contributing diverse perspectives, professional expertise and evidence-based insights.
+=== TABLE 5 ===
+Membership | Annual Contribution | Positioning
+Community Member | ₹2,500/year | Connect & participate
+Contributing Member | ₹4,000/year | Contribute & collaborate
+Patron Member | ₹6,000/year | Support & sustain
+=== TABLE 6 ===
+Donor | Donation Amounts | Positioning
+Platinum Donor | ₹50,000 & Above | Substantial support
+Gold Donor | ₹20,000 – ₹49,999 | Significant support
+Silver Donor | ₹5,000 – ₹19,999 | Contributing Support
+General Donor | Below ₹5,000 | Initial support
