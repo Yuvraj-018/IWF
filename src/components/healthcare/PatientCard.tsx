@@ -1,4 +1,4 @@
-import { Eye, IndianRupee } from "lucide-react";
+import { Eye, Heart, IndianRupee } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import type { Patient } from "@/content/patients";
 
@@ -85,15 +85,24 @@ export function PatientCard({
           </div>
         </div>
 
-        {/* CTA */}
-        <Link
-          to="/patients/$patientSlug"
-          params={{ patientSlug: slug }}
-          className="mt-1 w-full bg-[#0b1f3b] hover:bg-brand-green text-white font-extrabold text-xs py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-colors duration-200 active:scale-95"
-        >
-          <Eye className="w-3.5 h-3.5" />
-          VIEW MORE
-        </Link>
+        {/* Action Buttons */}
+        <div className="mt-2 grid grid-cols-2 gap-1.5">
+          <Link
+            to="/patients/$patientSlug"
+            params={{ patientSlug: slug }}
+            className="w-full bg-[#0b1f3b] hover:bg-slate-800 text-white font-bold text-[11px] py-1.5 px-2 rounded-lg flex items-center justify-center gap-1 transition-colors duration-200 active:scale-95 text-center"
+          >
+            <Eye className="w-3.5 h-3.5 shrink-0" />
+            <span>View More</span>
+          </Link>
+          <a
+            href={`/donate?patient=${encodeURIComponent(slug)}&name=${encodeURIComponent(name)}&amount=${encodeURIComponent(neededAmount)}`}
+            className="w-full bg-[#f97316] hover:bg-orange-600 text-white font-extrabold text-[11px] py-1.5 px-2 rounded-lg flex items-center justify-center gap-1 transition-colors duration-200 active:scale-95 text-center shadow-xs"
+          >
+            <Heart className="w-3.5 h-3.5 fill-white shrink-0" />
+            <span>Donate</span>
+          </a>
+        </div>
       </div>
     </article>
   );

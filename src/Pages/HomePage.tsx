@@ -33,248 +33,7 @@ import { RoleFormModal, type RoleType } from "@/components/forms/RoleFormModal";
 import { PatientCard } from "@/components/healthcare/PatientCard";
 import { URGENT_PATIENTS } from "@/content/patients";
 import newLogo from "@/assets/new logo.png";
-import { CONTACT_DETAILS } from "@/content/siteContent";
-
-function HomeFooter({ onOpenModal }: { onOpenModal: (type: RoleType) => void }) {
-  const quickLinks = [
-    ["About Us", "/about"],
-    ["Education", "/programs/education"],
-    ["Healthcare", "/programs/healthcare"],
-    ["Skills Development", "/programs/skills-development"],
-    ["Women Empowerment", "/programs/women-empowerment"],
-    ["Get In Touch", "/contact"],
-    ["Donate", "/donate"],
-    ["Membership", "/membership"],
-    ["News & Events", "/news-and-events"],
-  ];
-  return (
-    <footer className="w-full">
-      <div className="bg-[#0b1f3b] text-white py-14 px-4 md:px-10 border-t border-white/10">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="bg-white rounded-xl p-1.5 shrink-0">
-                <img src={newLogo} alt="IWF Logo" className="h-10 w-auto object-contain" />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-extrabold text-2xl tracking-widest text-white leading-none">IWF</span>
-                <span className="font-medium text-[11px] tracking-wide text-white/70 mt-0.5">Islah Welfare Foundation</span>
-              </div>
-            </div>
-            <div className="text-brand-orange font-medium text-sm">Care | Empower | Uplift</div>
-            <p className="text-white text-sm leading-relaxed">
-              Islah Welfare Foundation empowers underprivileged communities through education, healthcare, women empowerment, skill development and social welfare initiatives.
-            </p>
-            <div>
-              <span className="block text-xs font-bold tracking-widest text-white uppercase mb-2">Follow Us</span>
-              <div className="flex gap-2">
-                {[
-                  { Icon: Facebook, color: "bg-[#1877f2] hover:bg-[#166fe5]", href: "https://facebook.com", label: "Facebook" },
-                  { Icon: Instagram, color: "bg-gradient-to-tr from-[#f9cb2f] via-[#e5195f] to-[#8134af] hover:opacity-90", href: "https://instagram.com", label: "Instagram" },
-                  { Icon: Youtube, color: "bg-[#ff0000] hover:bg-[#e60000]", href: "https://youtube.com", label: "YouTube" },
-                  { Icon: Linkedin, color: "bg-[#0077b5] hover:bg-[#00669c]", href: "https://linkedin.com", label: "LinkedIn" },
-                  { Icon: Twitter, color: "bg-[#1da1f2] hover:bg-[#0d95e8]", href: "https://twitter.com", label: "Twitter" },
-                ].map((s, i) => (
-                  <a key={i} href={s.href} target="_blank" rel="noopener noreferrer" className={`w-7 h-7 rounded-full ${s.color} flex items-center justify-center text-white transition-all duration-200 shadow-sm`} aria-label={s.label}>
-                    <s.Icon className="w-3.5 h-3.5" />
-                  </a>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className="space-y-4">
-            <h4 className="flex items-center gap-2 text-white font-semibold text-sm uppercase border-l-2 border-brand-orange pl-2 tracking-wide">
-              <Leaf className="w-4 h-4 text-brand-orange" /> Quick Links
-            </h4>
-            <ul className="space-y-2.5">
-              {quickLinks.map(([label, href]) => (
-                <li key={label}>
-                  <a href={href} className="inline-flex items-center text-white text-sm hover:text-brand-orange hover:translate-x-1 transition-all duration-200">
-                    <span className="text-brand-orange text-xs mr-2">-&gt;</span>
-                    {label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="space-y-4">
-            <h4 className="flex items-center gap-2 text-white font-semibold text-sm uppercase border-l-2 border-brand-orange pl-2 tracking-wide">
-              <Building2 className="w-4 h-4 text-brand-orange" /> Get Involved
-            </h4>
-            <ul className="space-y-2.5">
-              {[
-                ["Volunteer With Us", "volunteer"],
-                ["Partner With Us", "partner"],
-                ["Sponsor a Programme", "sponsor"],
-                ["Become a Mentor", "mentor"],
-                ["Careers & Opportunities", "employee"],
-              ].map(([label, type]) => (
-                <li key={label}>
-                  <button
-                    onClick={() => onOpenModal(type as RoleType)}
-                    className="inline-flex items-center text-left text-white text-sm hover:text-brand-orange hover:translate-x-1 transition-all duration-200 cursor-pointer"
-                  >
-                    <span className="text-brand-orange text-xs mr-2">-&gt;</span>
-                    {label}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="space-y-4">
-            <h4 className="flex items-center gap-2 text-white font-semibold text-sm uppercase border-l-2 border-brand-orange pl-2 tracking-wide">
-              <Scale className="w-4 h-4 text-brand-orange" /> Legal
-            </h4>
-            <ul className="space-y-2.5">
-              {[
-                ["Privacy Policy", "/privacy-policy"],
-                ["Refund Policy", "/refund-policy"],
-                ["Terms & Conditions", "/terms-and-conditions"],
-                ["Certificates", "/about/legal-status"],
-                ["12A & 80G", "/about/legal-status"],
-              ].map(([label, href]) => (
-                <li key={label}>
-                  <a href={href} className="inline-flex items-center text-white text-sm hover:text-brand-orange hover:translate-x-1 transition-all duration-200">
-                    <span className="text-brand-orange text-xs mr-2">-&gt;</span>
-                    {label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="space-y-4">
-            <h4 className="flex items-center gap-2 text-white font-semibold text-sm uppercase border-l-2 border-brand-orange pl-2 tracking-wide">
-              <Phone className="w-4 h-4 text-brand-orange" /> Contact Us
-            </h4>
-            <div className="space-y-3 text-white text-sm">
-              <div className="flex gap-2 items-start">
-                <MapPin className="w-4 h-4 mt-0.5 text-brand-orange shrink-0" />
-                <span>{CONTACT_DETAILS.address}</span>
-              </div>
-              <div className="flex gap-2 items-center">
-                <Phone className="w-4 h-4 text-brand-orange shrink-0" />
-                <span>{CONTACT_DETAILS.phone}</span>
-              </div>
-              <div className="flex gap-2 items-center">
-                <Mail className="w-4 h-4 text-brand-orange shrink-0" />
-                <span>{CONTACT_DETAILS.email}</span>
-              </div>
-              <div className="flex gap-2 items-center">
-                <Globe className="w-4 h-4 text-brand-orange shrink-0" />
-                <span>www.islahwelfarefoundation.org</span>
-              </div>
-            </div>
-            <a
-              href="/donate"
-              className="w-full mt-5 bg-[#f97316] hover:bg-orange-600 text-white font-bold py-3 rounded-md flex items-center justify-center gap-2 transition-all duration-200"
-            >
-              <Heart className="w-4 h-4 fill-white" /> DONATE NOW
-            </a>
-          </div>
-        </div>
-      </div>
-      <div className="bg-[#091f12] py-4 px-4 md:px-10">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4 text-xs text-white">
-          <div>&copy; 2026 Islah Welfare Foundation. All Rights Reserved.</div>
-          <div className="flex flex-wrap gap-3">
-            <a href="/privacy-policy" className="hover:text-brand-orange transition-colors">Privacy Policy</a>
-            <span>|</span>
-            <a href="/refund-policy" className="hover:text-brand-orange transition-colors">Refund Policy</a>
-            <span>|</span>
-            <a href="/terms-and-conditions" className="hover:text-brand-orange transition-colors">Terms & Conditions</a>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
-// ─── Mega Nav Data ────────────────────────────────────────────────────────────
-
-const NAV_ITEMS = [
-  "Home",
-  "About Us",
-  "What We Do",
-  "Impact",
-  "Media",
-  "Membership",
-  "Get Involved",
-  "Contact Us",
-];
-
-interface MegaSection {
-  cols: number;
-  items: string[];
-}
-
-const MEGA_DATA: Record<string, MegaSection> = {
-  "About Us": {
-    cols: 3,
-    items: [
-      "Overview",
-      "Our Objective & Vision",
-      "Vision 2047",
-      "Leadership & Management",
-      "Governance & Transparency",
-      "Legal Status & Registration",
-      "Members & Donors",
-      "Our Partners & Donors",
-    ],
-  },
-  "What We Do": {
-    cols: 4,
-    items: [
-      "Education",
-      "Health Care",
-      "Skills Development",
-      "Women Empowerment",
-      "Entrepreneur Development",
-      "Relief & Rehabilitation",
-      "Environment & Sustainability",
-      "Agriculture & Rural Livelihood",
-    ],
-  },
-  "Programs": {
-    cols: 1,
-    items: [
-      "View All Programs →",
-    ],
-  },
-  "Impact": {
-    cols: 3,
-    items: [
-      "Our Impact",
-      "Outcomes",
-      "Where We Work",
-      "Success Stories",
-      "Annual Reports",
-      "Impact Statistics Dashboard",
-    ],
-  },
-  Media: {
-    cols: 3,
-    items: [
-      "News & Events",
-      "Latest Updates",
-      "Newsletters",
-      "Publications",
-      "Press Release",
-      "Gallery",
-    ],
-  },
-  "Get Involved": {
-    cols: 3,
-    items: [
-      "Volunteer With Us",
-      "Partner With Us",
-      "Become a Member",
-      "Sponsor a Programme",
-      "Become a Mentor",
-      "Careers & Opportunities",
-      "Donate & Support",
-    ],
-  },
-};
+import { NotificationTicker, UtilityBar, Header, Footer } from "@/components/layout/SiteLayout";
 
 // ─── Shared Components ────────────────────────────────────────────────────────
 
@@ -345,11 +104,6 @@ const TRANSLATIONS = {
   }
 };
 
-const NAV_ITEMS_TRANSLATIONS = {
-  en: ["Home", "About Us", "What We Do", "Impact", "Media", "Membership", "Get Involved", "Contact Us"],
-  hi: ["होम", "हमारे बारे में", "हम क्या करते हैं", "प्रभाव", "मीडिया", "सदस्यता", "जुड़ें", "संपर्क करें"]
-};
-
 interface SectionHeaderProps {
   tag: string;
   title: string;
@@ -375,518 +129,8 @@ function SectionHeader({ tag, title, subtitle, center = true }: SectionHeaderPro
   );
 }
 
-// ─── Page Sections ────────────────────────────────────────────────────────────
-
-function NotificationTicker() {
-  const items = [
-    { text: "Notification for change in Registration", href: "/about/legal-status" },
-    { text: "Islah Welfare Foundation — Official Website", href: "/" },
-    { text: "Registration address updated to Bathiya, Darbhanga, Bihar", href: "/about" },
-    { text: "Join our mission — volunteer, donate or partner with us", href: "/#get-involved" },
-    { text: "Free Health Camp — Bathiya, Darbhanga | June 25", href: "/news-and-events" },
-    { text: "Annual Scholarship Distribution — Muzaffarpur | July 15", href: "/news-and-events" },
-  ];
-  // Duplicate for seamless loop
-  const loopItems = [...items, ...items];
-
-  return (
-    <div className="bg-gradient-to-r from-[#0f1b2d] via-[#1c558c] to-[#2b88d8] text-white py-2 overflow-hidden flex items-center relative select-none border-b border-white/10 shadow-sm group">
-      <div className="bg-red-600 text-[10px] uppercase px-2 py-0.5 rounded font-black tracking-wider shadow z-10 shrink-0 ml-4 mr-4 animate-pulse">
-        NEW
-      </div>
-      <div className="flex-1 overflow-hidden relative w-full">
-        <div className="flex whitespace-nowrap animate-marquee group-hover:[animation-play-state:paused]">
-          {loopItems.map((item, i) => (
-            <a
-              key={i}
-              href={item.href}
-              className="inline-flex items-center gap-3 hover:underline underline-offset-2 text-white"
-            >
-              <span className="text-sm font-semibold italic tracking-wide px-3 text-white">{item.text}</span>
-              <span className="text-white/60 text-base px-1">◆</span>
-            </a>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-interface UtilityBarProps {
+interface LanguageProp {
   lang: "en" | "hi";
-  setLang: (l: "en" | "hi") => void;
-}
-
-function UtilityBar({ lang, setLang }: UtilityBarProps) {
-  return (
-    <div className="bg-brand-green text-white py-3.5 border-b border-white/10 select-none">
-      <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-8">
-
-        {/* Left: Contact Info - Stacked Vertically */}
-        <div className="flex flex-col items-center md:items-start gap-1.5 text-xs shrink-0 select-text w-full md:w-auto">
-          <a href="tel:+919811861633" className="flex items-center gap-2 hover:text-white/80 transition-colors font-medium">
-            <Phone className="w-3.5 h-3.5 text-brand-orange shrink-0" />
-            <span>+91-9811861633</span>
-          </a>
-          <a href="mailto:info@iwfindia.org" className="flex items-center gap-2 hover:text-white/80 transition-colors font-medium">
-            <Mail className="w-3.5 h-3.5 text-brand-orange shrink-0" />
-            <span>info@iwfindia.org</span>
-          </a>
-          <a href="#careers" className="flex items-center gap-2 hover:text-white/80 transition-colors font-semibold">
-            <Briefcase className="w-3.5 h-3.5 text-brand-orange shrink-0" />
-            <span>Careers</span>
-          </a>
-        </div>
-
-        {/* Center: Big White Organization Name - Enormous and Dominant */}
-        <div className="text-center flex-1 py-2 md:py-0 w-full md:w-auto">
-          <span className="font-black text-lg md:text-3xl tracking-[0.25em] uppercase text-white block select-all drop-shadow-lg leading-tight font-sans">
-            ISLAH WELFARE FOUNDATION
-          </span>
-        </div>
-
-        {/* Right: Social & Translate - Stacked Vertically */}
-        <div className="flex flex-col items-center md:items-end gap-2.5 shrink-0 w-full md:w-auto">
-          {/* Social Icons */}
-          <div className="flex items-center gap-2">
-            <span className="text-[11px] opacity-80 font-medium hidden sm:inline">Follow Us:</span>
-            {[
-              { Icon: Facebook, color: "#1877F2", label: "Facebook", href: "https://facebook.com" },
-              { Icon: Twitter, color: "#1DA1F2", label: "Twitter/X", href: "https://twitter.com" },
-              { Icon: Instagram, color: "#E1306C", label: "Instagram", href: "https://instagram.com" },
-              { Icon: Youtube, color: "#FF0000", label: "YouTube", href: "https://youtube.com" },
-              { Icon: Linkedin, color: "#0A66C2", label: "LinkedIn", href: "https://linkedin.com" },
-            ].map(({ Icon, color, label, href }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-5.5 h-5.5 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
-                style={{ backgroundColor: color }}
-                aria-label={label}
-              >
-                <Icon className="w-3.5 h-3.5 text-white" />
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-interface HeaderProps {
-  lang: "en" | "hi";
-}
-
-function Header({ lang }: HeaderProps) {
-  const [activeMenu, setActiveMenu] = useState<string | null>(null);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
-  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const openMenu = useCallback((name: string) => {
-    if (closeTimer.current) clearTimeout(closeTimer.current);
-    setActiveMenu(MEGA_DATA[name] ? name : null);
-  }, []);
-
-  const scheduleClose = useCallback(() => {
-    closeTimer.current = setTimeout(() => setActiveMenu(null), 200);
-  }, []);
-
-  const cancelClose = useCallback(() => {
-    if (closeTimer.current) clearTimeout(closeTimer.current);
-  }, []);
-
-  return (
-    <>
-      {/* White Branding Logo Banner (Scrolls away) */}
-      <div className="bg-white py-4 border-b border-gray-100 relative">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 flex items-center justify-center">
-          <a href="/" className="flex flex-col md:flex-row items-center gap-4 md:gap-6 group text-center md:text-left" aria-label="IWF Home">
-            <img src={newLogo} alt="IWF Logo" className="h-16 md:h-20 w-auto object-contain transition-transform group-hover:scale-105 shrink-0" />
-            <div className="flex flex-col items-center md:items-start">
-              <span className="text-xl md:text-3xl font-extrabold text-[#0b1f3b] tracking-wide font-sans leading-tight text-center md:text-left">
-                ISLAH WELFARE FOUNDATION
-              </span>
-              <span className="text-xs md:text-sm font-semibold italic text-brand-orange mt-1.5 leading-none text-center md:text-left">
-                Planting Seeds of Hope and Change
-              </span>
-              <span className="text-[10px] md:text-xs text-gray-500 font-medium mt-1.5 leading-none text-center md:text-left">
-                Bathiya, Darbhanga, Bihar – 847423, India
-              </span>
-            </div>
-          </a>
-        </div>
-      </div>
-
-      {/* Dark Themed Menu Navbar (Sticky) */}
-      {/* Dark Themed Menu Navbar (Sticky) */}
-      <header className="bg-[#071527] text-white sticky top-0 z-50 shadow-md transition-all duration-200 py-1 relative">
-        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
-
-          {/* Left Group: Nav Links */}
-          <nav className="hidden lg:flex items-center gap-1" aria-label="Main navigation">
-            {NAV_ITEMS.map((item, idx) => {
-              const hasMega = !!MEGA_DATA[item];
-              const isActive = activeMenu === item;
-              const label = item === "Home" ? (
-                <span className="flex items-center gap-1.5 font-bold">
-                  <Home className="w-4 h-4 text-[#f97316]" /> IWF
-                </span>
-              ) : (
-                NAV_ITEMS_TRANSLATIONS[lang][idx] || item
-              );
-
-              return (
-                <div
-                  key={item}
-                  onMouseEnter={() => hasMega && openMenu(item)}
-                  onMouseLeave={hasMega ? scheduleClose : undefined}
-                >
-                  <a
-                    href={
-                      item === "Home"
-                        ? "/"
-                        : item === "About Us"
-                          ? "/about"
-                          : item === "What We Do"
-                            ? "#focus-areas"
-                            : item === "Programs"
-                              ? "/programs/healthcare"
-                              : item === "Impact"
-                                ? "/#impact-stats"
-                                : item === "Media"
-                                  ? "/news-and-events"
-                                  : item === "Membership"
-                                    ? "/membership"
-                                    : item === "Get Involved"
-                                      ? "/#get-involved"
-                                      : item === "Contact Us"
-                                        ? "/contact"
-                                        : "#"
-                    }
-                    className="relative flex items-center gap-1.5 text-white/90 hover:text-white hover:bg-white/10 font-semibold text-sm transition-all px-4 py-3 rounded-md group"
-                    onClick={(event) => {
-                      if (item === "What We Do") {
-                        event.preventDefault();
-                        setActiveMenu(null);
-                        document.getElementById("focus-areas")?.scrollIntoView({
-                          behavior: "smooth",
-                          block: "start",
-                        });
-                      } else if (!hasMega) {
-                        setActiveMenu(null);
-                      }
-                    }}
-                  >
-                    {label}
-                    {hasMega && (
-                      <ChevronDown
-                        className={`w-3.5 h-3.5 transition-transform duration-200 ${isActive ? "rotate-180 text-white" : "text-white/60"
-                          }`}
-                      />
-                    )}
-                    {/* Sliding underline */}
-                    <span className="absolute bottom-1 left-4 right-4 h-[2px] bg-brand-orange scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-200 ease-out" />
-                  </a>
-                </div>
-              );
-            })}
-          </nav>
-
-          {/* Right Group: Donate Button & Mobile Hamburger */}
-          <div className="flex items-center gap-2 md:gap-3 shrink-0 py-1.5 ml-auto lg:ml-0">
-            <a href="/donate" className="bg-[#f97316] hover:bg-orange-600 text-white font-bold text-xs md:text-sm px-4 py-2 rounded-md shadow-md transition-all hover:scale-105 active:scale-95 uppercase tracking-wide">
-              DONATE NOW
-            </a>
-            <button
-              className="lg:hidden p-2 text-white/80 hover:text-white transition-colors cursor-pointer"
-              onClick={() => setMobileOpen(!mobileOpen)}
-              aria-label="Toggle Navigation Menu"
-            >
-              {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
-        </div>
-
-        {/* Full-Width Mega Menu Dropdown Window */}
-        {activeMenu && MEGA_DATA[activeMenu] && (
-          <div
-            className="hidden lg:block absolute top-full left-0 right-0 w-full bg-white border-b-2 border-brand-orange shadow-2xl text-slate-800 z-50 animate-in fade-in slide-in-from-top-1 duration-150 py-6 px-4 md:px-8"
-            onMouseEnter={cancelClose}
-            onMouseLeave={scheduleClose}
-          >
-            <div className="max-w-7xl mx-auto">
-              <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-brand-orange"></span>
-                  <span className="text-xs font-extrabold uppercase tracking-widest text-[#0b1f3b]">
-                    {activeMenu}
-                  </span>
-                </div>
-                <span className="text-xs text-gray-400 font-medium">Quick Links</span>
-              </div>
-              <div
-                className="grid gap-6 md:gap-8"
-                style={{ gridTemplateColumns: `repeat(${MEGA_DATA[activeMenu].cols}, minmax(0, 1fr))` }}
-              >
-                {Array.from({ length: MEGA_DATA[activeMenu].cols }).map((_, colIndex) => {
-                  const subItems = MEGA_DATA[activeMenu].items;
-                  const colsCount = MEGA_DATA[activeMenu].cols;
-                  const itemsPerCol = Math.ceil(subItems.length / colsCount);
-                  const colItems = subItems.slice(colIndex * itemsPerCol, (colIndex + 1) * itemsPerCol);
-                  return (
-                    <div key={colIndex} className="flex flex-col gap-3">
-                      {colItems.map((subItem, subIdx) => {
-                        const href =
-                          activeMenu === "About Us" && subItem === "Overview"
-                            ? "/about"
-                            : activeMenu === "About Us" && subItem === "Our Objective & Vision"
-                              ? "/about/objective-and-vision"
-                              : activeMenu === "About Us" && subItem === "Vision 2047"
-                                ? "/about/vision-2047"
-                                : activeMenu === "About Us" && subItem === "Leadership & Management"
-                                  ? "/about/leadership"
-                                  : activeMenu === "About Us" && subItem === "Governance & Transparency"
-                                    ? "/about/governance"
-                                    : activeMenu === "About Us" && subItem === "Legal Status & Registration"
-                                      ? "/about/legal-status"
-                                      : activeMenu === "About Us" && (subItem === "Members & Donors" || subItem === "Members & Supporters")
-                                        ? "/membership"
-                                        : activeMenu === "About Us" && subItem === "Our Partners & Donors"
-                                          ? "/about/legal-status"
-                                          : activeMenu === "About Us" && subItem === "Membership Policy"
-                                            ? "/membership#status"
-                                            : activeMenu === "What We Do" && subItem === "Health Care"
-                                              ? "/programs/healthcare"
-                                              : activeMenu === "What We Do" && subItem === "Education"
-                                                ? "/programs/education"
-                                                : activeMenu === "What We Do" && subItem === "Skills Development"
-                                                  ? "/programs/skills-development"
-                                                  : activeMenu === "What We Do" && subItem === "Women Empowerment"
-                                                    ? "/programs/women-empowerment"
-                                                    : activeMenu === "What We Do"
-                                                      ? "/programs/healthcare"
-                                                      : activeMenu === "Programs" && subItem === "View All Programs →"
-                                                        ? "/programs/healthcare"
-                                                        : activeMenu === "Impact"
-                                                          ? "/#impact-stats"
-                                                          : activeMenu === "Media" && subItem === "News & Events"
-                                                            ? "/news-and-events"
-                                                            : activeMenu === "Media" && subItem === "Latest Updates"
-                                                              ? "/news-and-events"
-                                                              : activeMenu === "Media" && subItem === "Gallery"
-                                                                ? "/news-and-events"
-                                                                : activeMenu === "Media" && subItem === "Press Release"
-                                                                  ? "/news-and-events"
-                                                                  : activeMenu === "Media"
-                                                                    ? "/news-and-events"
-                                                                    : activeMenu === "Get Involved" && subItem === "Donate & Support"
-                                                                      ? "/donate"
-                                                                      : activeMenu === "Get Involved"
-                                                                        ? "/#get-involved"
-                                                                        : "#";
-                        return (
-                          <a
-                            key={subItem}
-                            href={href}
-                            className="flex items-center gap-2 text-slate-900 font-bold hover:text-brand-orange text-sm md:text-base hover:translate-x-1.5 transition-all duration-200 group"
-                            style={{
-                              transitionDelay: `${(colIndex * 3 + subIdx) * 15}ms`,
-                            }}
-                            onClick={() => setActiveMenu(null)}
-                          >
-                            <span className="text-brand-orange text-sm font-semibold group-hover:translate-x-0.5 transition-transform">→</span>
-                            {subItem}
-                          </a>
-                        );
-                      })}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        )}
-      </header>
-
-      {/* Mobile Drawer Slide-in Panel */}
-      {mobileOpen && (
-        <>
-          {/* Backdrop for Mobile Drawer */}
-          <div
-            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-            onClick={() => setMobileOpen(false)}
-            aria-hidden="true"
-          />
-
-          {/* Left slide drawer */}
-          <div
-            className="fixed top-0 left-0 h-full w-80 max-w-[85vw] bg-white z-50 shadow-2xl overflow-y-auto mobile-drawer lg:hidden flex flex-col"
-            role="dialog"
-            aria-label="Mobile navigation"
-          >
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 bg-[#0b1f3b] shrink-0 text-white">
-              <div className="flex items-center gap-2.5">
-                <Leaf className="w-6 h-6 text-brand-green fill-brand-green/20" />
-                <div className="flex flex-col leading-none">
-                  <span className="font-extrabold text-white text-base">IWF</span>
-                  <span className="font-semibold text-[8px] text-white/70 tracking-wider">ISLAH WELFARE FOUNDATION</span>
-                </div>
-              </div>
-              <button
-                onClick={() => setMobileOpen(false)}
-                className="p-1.5 text-white/80 hover:text-white transition-colors rounded cursor-pointer"
-                aria-label="Close navigation menu"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Nav List */}
-            <nav className="flex-1 py-2" aria-label="Mobile navigation items">
-              {NAV_ITEMS.map((item) => {
-                const hasMega = !!MEGA_DATA[item];
-                const isExpanded = mobileExpanded === item;
-                return (
-                  <div key={item} className="border-b border-slate-100 last:border-0">
-                    <div className="flex items-center">
-                      <a
-                        href={
-                          item === "Home"
-                            ? "/"
-                            : item === "About Us"
-                              ? "/about"
-                              : item === "What We Do"
-                                ? "#focus-areas"
-                                : item === "Programs"
-                                  ? "/programs/healthcare"
-                                  : item === "Impact"
-                                    ? "/#impact-stats"
-                                    : item === "Media & Updates"
-                                      ? "/news-and-events"
-                                      : item === "Get Involved"
-                                        ? "/#get-involved"
-                                        : item === "Contact Us"
-                                          ? "/contact"
-                                          : "#"
-                        }
-                        className="flex-1 px-5 py-3.5 text-sm font-semibold text-slate-800 hover:text-brand-green transition-colors"
-                        onClick={(event) => {
-                          if (item === "What We Do") {
-                            event.preventDefault();
-                            setMobileOpen(false);
-                            document.getElementById("focus-areas")?.scrollIntoView({
-                              behavior: "smooth",
-                              block: "start",
-                            });
-                          } else if (!hasMega) {
-                            setMobileOpen(false);
-                          } else {
-                            setMobileExpanded(isExpanded ? null : item);
-                          }
-                        }}
-                      >
-                        {item}
-                      </a>
-                      {hasMega && (
-                        <button
-                          onClick={() => setMobileExpanded(isExpanded ? null : item)}
-                          className="px-4 py-3.5 text-slate-400 hover:text-brand-green transition-colors cursor-pointer"
-                          aria-label={`${isExpanded ? "Collapse" : "Expand"} ${item}`}
-                        >
-                          <ChevronDown
-                            className={`w-4 h-4 transition-transform duration-200 ${isExpanded ? "rotate-180 text-brand-green" : ""}`}
-                          />
-                        </button>
-                      )}
-                    </div>
-
-                    {/* Accordion Sub-items */}
-                    {hasMega && isExpanded && (
-                      <div className="bg-slate-50 border-l-4 border-brand-green ml-4 mr-2 rounded-sm mb-1.5 py-1">
-                        {MEGA_DATA[item].items.map((sub) => (
-                          <a
-                            key={sub}
-                            href={
-                              item === "About Us" && sub === "Overview"
-                                ? "/about"
-                                : item === "About Us" && sub === "Our Objective & Vision"
-                                  ? "/about/objective-and-vision"
-                                  : item === "About Us" && sub === "Vision 2047"
-                                    ? "/about/vision-2047"
-                                    : item === "About Us" && sub === "Leadership & Management"
-                                      ? "/about/leadership"
-                                      : item === "About Us" && sub === "Governance & Transparency"
-                                        ? "/about/governance"
-                                        : item === "About Us" && sub === "Legal Status & Registration"
-                                          ? "/about/legal-status"
-                                          : item === "About Us" && sub === "Members & Supporters"
-                                            ? "/membership"
-                                            : item === "About Us" && sub === "Our Partners & Donors"
-                                              ? "/about/legal-status"
-                                              : item === "About Us" && sub === "Membership Policy"
-                                                ? "/membership#status"
-                                                : item === "What We Do" && sub === "Health Care"
-                                                  ? "/programs/healthcare"
-                                                  : item === "What We Do" && sub === "Education"
-                                                    ? "/programs/education"
-                                                    : item === "What We Do" && sub === "Skills Development"
-                                                      ? "/programs/skills-development"
-                                                      : item === "What We Do" && sub === "Women Empowerment"
-                                                        ? "/programs/women-empowerment"
-                                                        : item === "What We Do"
-                                                          ? "/programs/healthcare"
-                                                          : item === "Programs" && sub === "View All Programs →"
-                                                            ? "/programs/healthcare"
-                                                            : item === "Impact"
-                                                              ? "/#impact-stats"
-                                                              : item === "Media & Updates" && sub === "News & Events"
-                                                                ? "/news-and-events"
-                                                                : item === "Media & Updates" && sub === "Gallery"
-                                                                  ? "/news-and-events"
-                                                                  : item === "Media & Updates" && sub === "Press Release"
-                                                                    ? "/news-and-events"
-                                                                    : item === "Media & Updates"
-                                                                      ? "/news-and-events"
-                                                                      : item === "Get Involved" && sub === "Donate & Support"
-                                                                        ? "/donate"
-                                                                        : item === "Get Involved"
-                                                                          ? "/#get-involved"
-                                                                          : "#"
-                            }
-                            className="flex items-center gap-2 px-4 py-2 text-sm text-slate-600 hover:text-brand-green hover:bg-white transition-all"
-                            onClick={() => setMobileOpen(false)}
-                          >
-                            <span className="text-brand-orange text-xs">→</span>
-                            {sub}
-                          </a>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </nav>
-
-            {/* Footer / Donate Button */}
-            <div className="p-4 border-t border-slate-100 shrink-0">
-              <a
-                href="/donate"
-                onClick={() => setMobileOpen(false)}
-                className="block w-full bg-brand-orange hover:bg-orange-600 text-white font-bold py-3 rounded transition-colors uppercase tracking-wide text-sm text-center"
-              >
-                DONATE NOW
-              </a>
-            </div>
-          </div>
-        </>
-      )}
-    </>
-  );
 }
 
 function HeroSection({ lang }: LanguageProp) {
@@ -945,33 +189,56 @@ function HeroSection({ lang }: LanguageProp) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           {/* Left Column (50%): Welcome text & copy */}
           <div className="flex flex-col justify-center text-left">
-            <h1 className="text-xl md:text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight mb-3">
-              Welcome to <span className="text-brand-orange">Islah Welfare Foundation</span>
+            <h1 className="text-xl md:text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight mb-2">
+              Welcome to <span className="text-brand-orange">ISLAH</span>
             </h1>
-
-            <p className="text-sm text-black leading-relaxed font-normal mb-4">
-              Islah Welfare Foundation is an effort to lay a positive foundation of change in the field of education for the underprivileged kids. We believe that happiness for a lifetime can only be achieved by helping and enriching the next generation. Some of us give our time, some money, and some give skills, but ultimately, we strongly feel everyone has something to give to these kids in need. Most importantly, working for ISLAH does not translate to sacrificing personal lives or needs.
+            <p className="text-xs md:text-sm font-bold text-[#0b1f3b] mb-1">
+              ISLAH (Integrated Social, Livelihood, Advancement & Humanitarian Action)
+            </p>
+            <p className="text-xs md:text-sm font-semibold text-brand-orange mb-3">
+              Empowering People. Strengthening Communities. Building a Better Future.
             </p>
 
-            <blockquote className="border-l-4 border-brand-orange bg-sky-50/50 p-3 rounded-r-lg my-4 max-w-2xl">
+            <p className="text-sm text-black leading-relaxed font-normal mb-3">
+              ISLAH is the public identity of Islah Welfare Foundation, a non-profit organisation committed to advancing the well-being, dignity, and resilience of rural and underserved communities. We believe that meaningful development cannot be achieved by addressing problems in isolation. Education without livelihood, healthcare without awareness, infrastructure without participation, or economic support without dignity cannot create lasting change.
+            </p>
+
+            <p className="text-sm text-black leading-relaxed font-normal mb-3">
+              ISLAH therefore follows an integrated and community-centred approach, bringing together education, healthcare, livelihoods, agriculture, women and youth empowerment, environmental sustainability, humanitarian assistance, and community development.
+            </p>
+
+            <div className="bg-slate-50 border-l-4 border-[#0b1f3b] p-3 rounded-r-lg mb-3">
+              <p className="text-xs md:text-sm font-bold text-slate-900">
+                Our purpose is simple:
+              </p>
+              <p className="text-xs md:text-sm text-black font-medium mt-0.5 leading-relaxed">
+                To create the conditions in which individuals can become empowered, families can become resilient, and communities can become self-reliant.
+              </p>
+            </div>
+
+            <blockquote className="border-l-4 border-brand-orange bg-sky-50/50 p-3 rounded-r-lg my-3 max-w-2xl">
               <p className="text-xs md:text-sm italic text-black font-semibold leading-relaxed">
                 “We ourselves feel that what we are doing is just a drop in the ocean. But the ocean would be less because of that missing drop.”
               </p>
               <cite className="block text-[10px] md:text-xs font-semibold text-brand-orange mt-1 not-italic">
-                — Mother Teresa
+                -Mother Teresa
               </cite>
             </blockquote>
 
             <p className="text-sm font-semibold text-black mb-4">
-              IWF‘s doors are always open. If you feel you can fill the gap of a missing drop, <span className="text-brand-orange underline underline-offset-4 decoration-brand-orange/60">come join us….</span>
+              Our doors are always open. If you feel you can fill the gap of a missing drop,<br />
+              <span className="text-brand-orange underline underline-offset-4 decoration-brand-orange/60">come join us….</span>
             </p>
 
             <div className="flex flex-wrap gap-3">
-              <a href="/donate" className="bg-[#f97316] hover:bg-orange-600 text-white font-bold px-6 py-2.5 rounded shadow transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider text-xs">
-                DONATE NOW
+              <a href="/about" className="bg-[#0b1f3b] hover:bg-[#163a69] text-white font-bold px-6 py-2.5 rounded shadow transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider text-xs">
+                KNOW MORE
               </a>
               <a href="#get-involved" className="bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-bold px-6 py-2.5 rounded shadow transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider text-xs">
                 GET INVOLVED
+              </a>
+              <a href="/donate" className="bg-[#f97316] hover:bg-orange-600 text-white font-bold px-6 py-2.5 rounded shadow transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider text-xs">
+                DONATE NOW
               </a>
             </div>
           </div>
@@ -1043,15 +310,10 @@ function HeroSection({ lang }: LanguageProp) {
   );
 }
 
-interface LanguageProp {
-  lang: "en" | "hi";
-}
+
 
 function UrgentPatientsSection({ lang }: LanguageProp) {
   const t = TRANSLATIONS[lang];
-  const urgentInlineTitle = lang === "en"
-    ? `Patients Needing Urgent Support — हर पल अनमोल है`
-    : `मदद की तत्काल आवश्यकता वाले मरीज — हर पल अनमोल है`;
   return (
     <section className="py-4 bg-white">
       <div className="max-w-7xl mx-auto px-4">
@@ -1059,8 +321,9 @@ function UrgentPatientsSection({ lang }: LanguageProp) {
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-3 border-b border-slate-100 pb-2">
             <div className="flex-1">
               <SectionHeader
-                tag={t.urgentTag}
-                title={urgentInlineTitle}
+                tag={lang === "en" ? "MEDICAL EMERGENCY" : "चिकित्सा आपातकाल"}
+                title={lang === "en" ? "CRITICAL MEDICAL & EMERGENCY SUPPORT" : "क्रिटिकल मेडिकल और आपातकालीन सहायता"}
+                subtitle="Har Pal Anmol Hai"
                 center={false}
               />
             </div>
@@ -1090,11 +353,11 @@ function UrgentPatientsSection({ lang }: LanguageProp) {
 function FeaturedCauses({ lang }: LanguageProp) {
   const t = TRANSLATIONS[lang];
   const causes = [
-    { img: causeEdu, icon: BookOpen, title: lang === "en" ? "Child Education" : "बाल शिक्षा", desc: lang === "en" ? "Scholarships, school kits & learning centres keeping children in school." : "छात्रवृत्ति, स्कूल किट और लर्निंग सेंटर बच्चों को स्कूल से जोड़े रखने के लिए।", route: "/programs/education" },
-    { img: causeMed, icon: Stethoscope, title: lang === "en" ? "Medical Help" : "चिकित्सा सहायता", desc: lang === "en" ? "Free health camps, essential medicines & emergency treatment." : "मुफ़्त स्वास्थ्य शिविर, आवश्यक दवाएं और आपातकालीन चिकित्सा सहायता।", route: "/programs/healthcare" },
-    { img: causeWomen, icon: Users, title: lang === "en" ? "Women Empowerment" : "महिला सशक्तिकरण", desc: lang === "en" ? "Self-Help Groups, vocational skills & financial literacy programs." : "स्वयं सहायता समूह, व्यावसायिक कौशल और वित्तीय साक्षरता कार्यक्रम।", route: "/programs/women-empowerment" },
-    { img: thAgr, icon: Sprout, title: lang === "en" ? "Rural Development" : "ग्रामीण विकास", desc: lang === "en" ? "Sanitation, clean water and housing for self-reliant villages." : "आत्मनिर्भर गांवों के लिए स्वच्छता, स्वच्छ पानी और आवास निर्माण।", route: "#" },
-    { img: thEnt, icon: Wrench, title: lang === "en" ? "Skill Development" : "कौशल विकास", desc: lang === "en" ? "Vocational training and micro-entrepreneurship for village youth." : "ग्रामीण युवाओं के लिए व्यावसायिक प्रशिक्षण और सूक्ष्म-उद्यम विकास।", route: "/programs/skills-development" },
+    { img: causeEdu, icon: BookOpen, title: "Education", desc: lang === "en" ? "Scholarships, school kits & learning centres keeping children in school." : "छात्रवृत्ति, स्कूल किट और लर्निंग सेंटर बच्चों को स्कूल से जोड़े रखने के लिए।", route: "/programs/education" },
+    { img: causeMed, icon: Stethoscope, title: "Health", desc: lang === "en" ? "Free health camps, essential medicines & emergency treatment." : "मुफ़्त स्वास्थ्य शिविर, आवश्यक दवाएं और आपातकालीन चिकित्सा सहायता।", route: "/programs/healthcare" },
+    { img: causeWomen, icon: Users, title: "Women Empower", desc: lang === "en" ? "Self-Help Groups, vocational skills & financial literacy programs." : "स्वयं सहायता समूह, व्यावसायिक कौशल और वित्तीय साक्षरता कार्यक्रम।", route: "/programs/women-empowerment" },
+    { img: thAgr, icon: Sprout, title: "Rural Livelihoods", desc: lang === "en" ? "Sanitation, clean water and agricultural empowerment for self-reliant villages." : "आत्मनिर्भर गांवों के लिए स्वच्छता, स्वच्छ पानी और कृषि सशक्तिकरण।", route: "/programs/agriculture" },
+    { img: thEnt, icon: Megaphone, title: "Relief & Rehabilitation", desc: lang === "en" ? "Disaster response, emergency humanitarian aid, and rehabilitation assistance." : "आपदा प्रतिक्रिया, आपातकालीन मानवीय सहायता और पुनर्वास सहायता।", route: "/programs/relief-and-rehabilitation" },
   ];
 
   return (
@@ -1104,6 +367,7 @@ function FeaturedCauses({ lang }: LanguageProp) {
           <SectionHeader
             tag={lang === "en" ? "Our Focus" : "मुख्य उद्देश्य"}
             title={t.featuredCauses}
+            subtitle={lang === "en" ? "Supporting change where it matters most." : "जहाँ सबसे ज्यादा ज़रूरत है, वहाँ बदलाव का समर्थन।"}
           />
         </ScrollReveal>
         <ScrollReveal stagger={0.08}>
@@ -1144,12 +408,11 @@ const CHEERFUL_COLORS = [
 ];
 
 function WhatWeDo({ lang }: LanguageProp) {
-  const t = TRANSLATIONS[lang];
   const items = [
     { icon: GraduationCap, l: lang === "en" ? "Education" : "शिक्षा", s: lang === "en" ? "Learning & Scholarships" : "लर्निंग और छात्रवृत्ति", route: "/programs/education" },
     { icon: HeartPulse, l: lang === "en" ? "Healthcare" : "स्वास्थ्य सेवा", s: lang === "en" ? "Free camps & awareness" : "शिविर और जागरूकता", route: "/programs/healthcare" },
     { icon: Users, l: lang === "en" ? "Women Empowerment" : "महिला सशक्तिकरण", s: lang === "en" ? "SHGs & Skills" : "एसएचजी और कौशल", route: "/programs/women-empowerment" },
-    { icon: Sprout, l: lang === "en" ? "Rural Development" : "ग्रामीण विकास", s: lang === "en" ? "Infrastructure" : "बुनियादी ढांचा", route: "#" },
+    { icon: Sprout, l: lang === "en" ? "Rural Development" : "ग्रामीण विकास", s: lang === "en" ? "Infrastructure & Sanitation" : "बुनियादी ढांचा और स्वच्छता", route: "#" },
     { icon: Wrench, l: lang === "en" ? "Skill Development" : "कौशल विकास", s: lang === "en" ? "Vocational Training" : "व्यावसायिक प्रशिक्षण", route: "/programs/skills-development" },
     { icon: Leaf, l: lang === "en" ? "Environment" : "पर्यावरण", s: lang === "en" ? "Plantation & Green Energy" : "वृक्षारोपण और ऊर्जा", route: "#" },
     { icon: Megaphone, l: lang === "en" ? "Relief & Rehabilitation" : "राहत एवं पुनर्वास", s: lang === "en" ? "Disaster & Emergency Aid" : "आपदा और आपातकाल", route: "#" },
@@ -1157,201 +420,29 @@ function WhatWeDo({ lang }: LanguageProp) {
   ];
 
   return (
-    <section id="focus-areas" className="py-6 bg-slate-50 scroll-mt-20 border-b border-slate-100">
+    <section id="focus-areas" className="py-8 bg-slate-50 scroll-mt-20 border-b border-slate-100">
       <div className="max-w-7xl mx-auto px-4">
         <ScrollReveal>
           <SectionHeader
-            tag={lang === "en" ? "Focus Areas" : "मुख्य ध्यान"}
-            title={t.whatWeDo}
+            tag={lang === "en" ? "What We Do" : "हम क्या करते हैं"}
+            title={lang === "en" ? "OUR PROGRAMS FOR SOCIAL IMPACT" : "सामाजिक प्रभाव के लिए हमारे कार्यक्रम"}
+            subtitle={lang === "en" ? "Creating Opportunities. Strengthening Communities." : "अवसरों का सृजन। समुदायों का सशक्तिकरण।"}
           />
         </ScrollReveal>
         <ScrollReveal stagger={0.07}>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-8 gap-3.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {items.map(({ icon: Icon, l, s, route }, i) => {
               const col = CHEERFUL_COLORS[i % 6];
               return (
-                <a key={l} href={route} className={`bg-white rounded-xl py-3.5 px-3 min-h-[115px] flex flex-col items-center justify-center text-center shadow-sm border ${col.border} hover:shadow-md transition block group hover:-translate-y-0.5`}>
-                  <div className={`w-9 h-9 mx-auto rounded-full ${col.bg} flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform`}>
-                    <Icon className={`w-4 h-4 ${col.text}`} />
+                <a key={l} href={route} className={`bg-white rounded-xl p-5 min-h-[125px] flex flex-col items-center justify-center text-center shadow-sm border ${col.border} hover:shadow-md transition block group hover:-translate-y-1`}>
+                  <div className={`w-11 h-11 mx-auto rounded-xl ${col.bg} flex items-center justify-center mb-2 group-hover:scale-110 transition-transform shadow-xs`}>
+                    <Icon className={`w-5 h-5 ${col.text}`} />
                   </div>
-                  <div className="text-sm font-black text-slate-900 leading-tight mb-1">{l}</div>
-                  <div className="text-xs font-semibold text-slate-600 leading-snug w-full">{s}</div>
+                  <div className="text-base font-extrabold text-slate-900 leading-tight mb-1">{l}</div>
+                  <div className="text-xs font-semibold text-slate-500 leading-snug w-full">{s}</div>
                 </a>
               );
             })}
-          </div>
-        </ScrollReveal>
-      </div>
-    </section>
-  );
-}
-
-function ProgramsAndThematic({ lang }: LanguageProp) {
-  const t = TRANSLATIONS[lang];
-  const programs = [
-    { icon: BookOpen, title: lang === "en" ? "Education Support" : "शिक्षा सहायता", desc: lang === "en" ? "We run Community Learning Centres and 'Shiksha Na Ruke' scholarships to support children." : "हम बच्चों के सहयोग के लिए सामुदायिक शिक्षा केंद्र और 'शिक्षा न रुके' छात्रवृत्ति चलाते हैं।", route: "/programs/education" },
-    { icon: HeartPulse, title: lang === "en" ? "Healthcare Camps" : "स्वास्थ्य शिविर", desc: lang === "en" ? "Under 'Health Cannot Wait', we organize free camps, check-ups and hygiene drives." : "'हेल्थ कैन नॉट वेट' के तहत, हम मुफ्त चिकित्सा शिविर और स्वच्छता अभियान आयोजित करते हैं।", route: "/programs/healthcare" },
-    { icon: Users, title: lang === "en" ? "Women Empowerment" : "महिला सशक्तिकरण", desc: lang === "en" ? "Forming Self-Help Groups (SHGs) and providing vocational and leadership training." : "स्वयं सहायता समूहों (SHGs) का गठन और व्यावसायिक एवं नेतृत्व प्रशिक्षण प्रदान करना।", route: "/programs/women-empowerment" },
-    { icon: Sprout, title: lang === "en" ? "Rural Development" : "ग्रामीण विकास", desc: lang === "en" ? "Clean water access, sanitation, and public infrastructure in 'Model Villages'." : "'मॉडल गांवों' में स्वच्छ पेयजल पहुंच, स्वच्छता और सार्वजनिक बुनियादी ढांचा।", route: "#" },
-  ];
-
-  return (
-    <section className="py-6">
-      <div className="max-w-7xl mx-auto px-4">
-        <SectionHeader
-          tag={lang === "en" ? "Core Activities" : "मुख्य कार्यक्रम"}
-          title={t.ourPrograms}
-        />
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {programs.map((p) => (
-            <div key={p.title} className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition hover:-translate-y-0.5">
-              <div className="w-10 h-10 rounded-md bg-brand-orange/15 flex items-center justify-center mb-3">
-                <p.icon className="w-5 h-5 text-brand-orange" />
-              </div>
-              <h3 className="font-extrabold text-sm text-slate-950 mb-1">{p.title}</h3>
-              <p className="text-xs text-slate-900 font-semibold mb-3 leading-relaxed">{p.desc}</p>
-              <a href={p.route} className="text-xs font-bold text-brand-green hover:text-brand-green-dark inline-flex items-center gap-1">
-                {t.readMore} <ArrowRight className="w-3 h-3" />
-              </a>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-
-
-interface GetInvolvedProps {
-  lang: "en" | "hi";
-  onOpenModal: (type: RoleType) => void;
-}
-
-function GetInvolved({ lang, onOpenModal }: GetInvolvedProps) {
-  const t = TRANSLATIONS[lang];
-  return (
-    <section id="get-involved" className="py-6 border-t border-slate-100 bg-white">
-      <div className="max-w-7xl mx-auto px-4">
-        <ScrollReveal>
-          <SectionHeader
-            tag={lang === "en" ? "Join Hands" : "हाथ मिलाएं"}
-            title={t.getInvolved}
-            subtitle={t.getInvolvedSub}
-          />
-        </ScrollReveal>
-        <div className="bg-white border border-slate-200 shadow-sm rounded-xl p-6 grid grid-cols-2 md:grid-cols-6 gap-4 items-center">
-          {[
-            { icon: Hand, l: t.volunteer, s: t.volunteerSub, type: "volunteer" as const },
-            { icon: HandHeart, l: t.partner, s: t.partnerSub, type: "partner" as const },
-            { icon: Heart, l: t.sponsor, s: t.sponsorSub, type: "sponsor" as const },
-            { icon: Users, l: t.mentor, s: t.mentorSub, type: "mentor" as const },
-            { icon: Briefcase, l: t.employee, s: t.employeeSub, type: "employee" as const },
-          ].map((item) => (
-            <div
-              key={item.l}
-              onClick={() => onOpenModal(item.type)}
-              className="text-center p-3 rounded-xl hover:bg-slate-50 transition border border-transparent hover:border-slate-100 cursor-pointer group"
-            >
-              <div className="w-12 h-12 mx-auto rounded-full bg-brand-green/10 flex items-center justify-center mb-2 group-hover:scale-105 transition-transform">
-                <item.icon className="w-5 h-5 text-brand-green" />
-              </div>
-              <div className="text-sm font-extrabold text-slate-950 group-hover:text-brand-green transition-colors">{item.l}</div>
-              <div className="text-[11px] text-slate-900 font-semibold mt-1 leading-snug">{item.s}</div>
-            </div>
-          ))}
-          <a href="/donate" className="bg-[#f97316] hover:bg-orange-600 text-white font-bold py-3 rounded-lg transition shadow-md w-full text-center text-sm tracking-wider uppercase select-none">
-            {t.donateNow}
-          </a>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function ExploreIWF({ lang }: LanguageProp) {
-  const t = TRANSLATIONS[lang];
-  const items = [
-    {
-      icon: Info,
-      page: lang === "en" ? "About Us" : "हमारे बारे में",
-      summary: lang === "en"
-        ? "We are a public charitable trust dedicated to building an equitable, self-reliant India. Guided by 'Vision 2047', we empower vulnerable communities through education and health."
-        : "हम एक सार्वजनिक धर्मार्थ ट्रस्ट हैं जो एक न्यायसंगत, आत्मनिर्भर भारत के निर्माण के लिए समर्पित है। 'विज़न 2047' के तहत हम कमजोर समुदायों को सशक्त बनाते हैं।",
-      route: "/about"
-    },
-    {
-      icon: Target,
-      page: lang === "en" ? "Programs" : "हमारे कार्यक्रम",
-      summary: lang === "en"
-        ? "We run structured development programs across key sectors, including primary education, rural healthcare, women empowerment, environment, and emergency relief."
-        : "हम प्राथमिक शिक्षा, ग्रामीण स्वास्थ्य सेवा, महिला सशक्तिकरण, पर्यावरण संरक्षण और आपातकालीन राहत सहित प्रमुख क्षेत्रों में विकास कार्यक्रम चलाते हैं।",
-      route: "/programs/healthcare"
-    },
-    {
-      icon: BarChart2,
-      page: lang === "en" ? "Impact" : "हमारा प्रभाव",
-      summary: lang === "en"
-        ? "With over 5,000 lives touched, 100 health camps conducted, and 2,000 students supported, we document and share all outcomes via our public impact dashboard."
-        : "5,000+ जीवन को प्रभावित करने, 100+ स्वास्थ्य शिविर आयोजित करने और 2,000+ छात्रों की सहायता के साथ, हम सभी परिणामों को सार्वजनिक डैशबोर्ड पर साझा करते हैं।",
-      route: "#"
-    },
-    {
-      icon: Newspaper,
-      page: lang === "en" ? "Media & Updates" : "मीडिया और अपडेट",
-      summary: lang === "en"
-        ? "Stay updated with our latest field activities, news, press releases, newsletters, and view our photo gallery capturing real moments of community transformation."
-        : "हमारी नवीनतम गतिविधियों, समाचारों, प्रेस विज्ञप्तियों, समाचार पत्रों से अपडेट रहें और समुदाय परिवर्तन के वास्तविक क्षणों को कैद करने वाली हमारी फोटो गैलरी देखें।",
-      route: "#"
-    },
-    {
-      icon: UserCheck,
-      page: lang === "en" ? "Get Involved" : "हमसे जुड़ें",
-      summary: lang === "en"
-        ? "We invite individuals, corporates, and institutions to join us. Make a lasting difference by volunteering, mentoring, partnering, or supporting a campaign."
-        : "हम व्यक्तियों, कॉर्पोरेट और संस्थानों को हमारे साथ जुड़ने के लिए आमंत्रित करते हैं। स्वयंसेवा, सलाह देने या भागीदारी के माध्यम से एक स्थायी बदलाव लाएं।",
-      route: "#"
-    },
-    {
-      icon: MessageCircle,
-      page: lang === "en" ? "Contact Us" : "संपर्क करें",
-      summary: lang === "en"
-        ? "Connect with our team at our offices in Bihar, Delhi, or Meerut. Write to us at info@iwfindia.org or call +91 9811861633 for direct inquiries."
-        : "बिहार, दिल्ली या मेरठ में हमारे कार्यालयों में हमारी टीम से जुड़ें। सीधे पूछताछ के लिए हमें info@iwfindia.org पर लिखें या +91 9811861633 पर कॉल करें।",
-      route: "#"
-    },
-  ];
-
-  return (
-    <section className="py-6 bg-slate-50 border-b border-slate-100">
-      <div className="max-w-7xl mx-auto px-4">
-        <ScrollReveal>
-          <SectionHeader
-            tag={lang === "en" ? "Discover IWF" : "आईडब्ल्यूएफ को जानें"}
-            title={t.exploreIWF}
-            subtitle={t.exploreSub}
-          />
-        </ScrollReveal>
-        <ScrollReveal stagger={0.08}>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {items.map((item) => (
-              <div key={item.page} className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition hover:-translate-y-0.5 flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-9 h-9 rounded-lg bg-orange-50 border border-orange-100 flex items-center justify-center shrink-0">
-                      <item.icon className="w-5 h-5 text-brand-orange" />
-                    </div>
-                    <h3 className="font-extrabold text-base text-[#0b1f3b] leading-snug">{item.page}</h3>
-                  </div>
-                  <p className="text-sm text-slate-700 font-medium leading-relaxed mb-4">{item.summary}</p>
-                </div>
-                <div>
-                  <a href={item.route} className="text-sm font-bold text-brand-green hover:text-brand-green-dark inline-flex items-center gap-1 hover:opacity-80 transition">
-                    {t.readMore} <ArrowRight className="w-3.5 h-3.5" />
-                  </a>
-                </div>
-              </div>
-            ))}
           </div>
         </ScrollReveal>
       </div>
@@ -1467,7 +558,7 @@ const CAMPAIGNS = [
   {
     emoji: "📚",
     name: "Shiksha Na Ruke",
-    tagline: "Education Must Not Stop",
+    tagline: "Education must not stop",
     desc: "Ensuring uninterrupted education for underprivileged children through scholarships, school kits, and community learning centres.",
     color: "#1D4ED8",
     bg: "#EFF6FF",
@@ -1476,9 +567,9 @@ const CAMPAIGNS = [
   },
   {
     emoji: "🏥",
-    name: "Health Cannot Wait",
-    tagline: "Free Medical Care for All",
-    desc: "Emergency medical aid, free health camps, and ambulance services reaching the most remote corners of rural Bihar.",
+    name: "Har Pal Anmol Hai",
+    tagline: "medical need for all",
+    desc: "Emergency medical aid, free health camps, and diagnostic support reaching the most remote corners of rural communities.",
     color: "#DC2626",
     bg: "#FEF2F2",
     border: "#FECACA",
@@ -1486,7 +577,7 @@ const CAMPAIGNS = [
   },
   {
     emoji: "✈️",
-    name: "She Can Fly",
+    name: "Pari Ki Udaan",
     tagline: "Empowering Women, Changing Lives",
     desc: "Vocational training, Self-Help Groups, and livelihood programs giving women the tools to achieve financial independence.",
     color: "#DB2777",
@@ -1524,7 +615,7 @@ function CampaignsSection({ lang }: LanguageProp) {
           <SectionHeader
             tag={lang === "en" ? "Our Campaigns" : "हमारे अभियान"}
             title={lang === "en" ? "Five Pillars of Change" : "परिवर्तन के पांच स्तंभ"}
-            subtitle={lang === "en" ? "Each campaign targets a critical dimension of poverty and inequality — together they form IWF's blueprint for a better India." : "प्रत्येक अभियान गरीबी और असमानता के एक महत्वपूर्ण आयाम को लक्षित करता है — मिलकर वे एक बेहतर भारत के लिए आईडब्ल्यूएफ का खाका तैयार करते हैं"}
+            subtitle={lang === "en" ? "Focused action. Collective purpose. Lasting change." : "केंद्रित कार्रवाई। सामूहिक उद्देश्य। स्थायी परिवर्तन।"}
           />
         </ScrollReveal>
 
@@ -1619,6 +710,65 @@ const LATEST_NEWS = [
   },
 ];
 
+// ─── Our Partners & Collaborators ───────────────────────────────────────────
+
+const PARTNERS = [
+  { name: "Tata Consultancy Services", short: "TCS", type: "Technology & Skill Partner", bg: "bg-blue-50 text-blue-700 border-blue-200" },
+  { name: "HCL Foundation", short: "HCL", type: "CSR & Rural Empowerment", bg: "bg-indigo-50 text-indigo-700 border-indigo-200" },
+  { name: "Infosys Foundation", short: "Infosys", type: "Education & Health Support", bg: "bg-sky-50 text-sky-700 border-sky-200" },
+  { name: "Wipro Cares", short: "Wipro", type: "Community Sustainability", bg: "bg-purple-50 text-purple-700 border-purple-200" },
+  { name: "Tech Mahindra Foundation", short: "Tech M", type: "Vocational & Disability", bg: "bg-red-50 text-red-700 border-red-200" },
+  { name: "Reliance Foundation", short: "Reliance", type: "Healthcare & Nutrition", bg: "bg-blue-50 text-blue-700 border-blue-200" },
+  { name: "SBI Foundation", short: "SBI", type: "Financial Inclusion & Aid", bg: "bg-cyan-50 text-cyan-800 border-cyan-200" },
+  { name: "Azim Premji Foundation", short: "APF", type: "Primary Education Initiative", bg: "bg-rose-50 text-rose-700 border-rose-200" },
+  { name: "L&T Public Charitable Trust", short: "L&T", type: "Infrastructure & Water", bg: "bg-amber-50 text-amber-700 border-amber-200" },
+  { name: "Adani Foundation", short: "Adani", type: "Community Transformation", bg: "bg-violet-50 text-violet-700 border-violet-200" },
+];
+
+function OurPartnersSection({ lang }: LanguageProp) {
+  const repeatedPartners = [...PARTNERS, ...PARTNERS];
+
+  return (
+    <section className="py-6 bg-slate-50 border-t border-slate-100 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 mb-3">
+        <ScrollReveal>
+          <SectionHeader
+            tag={lang === "en" ? "OUR PARTNERS" : "हमारे सहयोगी"}
+            title={lang === "en" ? "TOGETHER, WE CREATE GREATER IMPACT" : "साथ मिलकर हम लाते हैं बड़ा बदलाव"}
+            subtitle={lang === "en"
+              ? "Collaboration brings together knowledge, resources and people to create meaningful and sustainable change."
+              : "सहयोग ज्ञान, संसाधन और लोगों को एक साथ लाकर सार्थक और स्थायी बदलाव का निर्माण करता है।"}
+          />
+        </ScrollReveal>
+      </div>
+
+      {/* Infinite Logo Marquee */}
+      <div className="relative w-full overflow-hidden py-1">
+        <div className="animate-marquee-slow flex items-center gap-4">
+          {repeatedPartners.map((partner, index) => (
+            <div
+              key={`${partner.short}-${index}`}
+              className="bg-white rounded-xl border border-slate-200 shadow-xs hover:shadow-md p-3 px-4 flex items-center gap-3 shrink-0 min-w-[240px] max-w-[270px] hover:-translate-y-0.5 transition-all duration-300 group cursor-default"
+            >
+              <div className={`w-10 h-10 rounded-lg border ${partner.bg} flex items-center justify-center font-black text-xs shrink-0 shadow-xs group-hover:scale-105 transition-transform`}>
+                {partner.short}
+              </div>
+              <div className="min-w-0 flex-1">
+                <h4 className="font-extrabold text-slate-900 text-xs leading-tight truncate group-hover:text-brand-orange transition-colors">
+                  {partner.name}
+                </h4>
+                <p className="text-[10px] text-slate-500 font-medium truncate mt-0.5">
+                  {partner.type}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function GallerySection({ lang }: LanguageProp) {
   const t = TRANSLATIONS[lang];
   const items = [
@@ -1675,22 +825,23 @@ function GallerySection({ lang }: LanguageProp) {
   };
 
   return (
-    <section className="py-6 bg-white border-y border-slate-100 overflow-hidden">
+    <section className="py-5 bg-white border-y border-slate-100 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4">
 
-        {/* Header Title with red/orange dashes and navigation arrows */}
-        <div className="flex items-center justify-between mb-10 relative">
+        {/* Header Title and navigation arrows */}
+        <div className="flex items-center justify-between mb-4 relative">
 
-          {/* Centered Gallery Header in full width parent */}
+          {/* Centered Gallery Header */}
           <div className="flex-1">
             <SectionHeader
-              tag={lang === "en" ? "Visual Journey" : "दृश्य यात्रा"}
-              title={lang === "en" ? "Gallery" : "गैलरी"}
+              tag={lang === "en" ? "GALLERY" : "गैलरी"}
+              title={lang === "en" ? "A VISUAL JOURNEY OF IMPACT" : "दृश्य यात्रा"}
+              subtitle={lang === "en" ? "Stories of People, Communities and Change." : "लोगों, समुदायों और परिवर्तन की कहानियाँ।"}
             />
           </div>
 
           {/* Navigation controls */}
-          <div className="absolute right-0 flex items-center gap-2">
+          <div className="absolute right-0 top-2 flex items-center gap-2">
             <button
               onClick={handlePrev}
               disabled={currentIndex === 0}
@@ -1761,7 +912,7 @@ function GallerySection({ lang }: LanguageProp) {
         </div>
 
         {/* View All link below the carousel */}
-        <div className="text-center mt-8">
+        <div className="text-center mt-5">
           <a
             href="/news-and-events"
             className="inline-flex items-center gap-1.5 text-xs font-extrabold text-brand-green hover:text-brand-green-dark hover:underline transition-colors uppercase tracking-wider"
@@ -2004,90 +1155,6 @@ function HeroCarouselSection() {
 
 // ─── Main Export ──────────────────────────────────────────────────────────────
 
-function PreFooterHomeSections() {
-  return (
-    <>
-      {/* Zone A — Stay Connected & Trusted Trust Strip */}
-      <div className="bg-[#f9f9f6] text-slate-800 py-6 px-4 md:px-10 border-t border-slate-200">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
-          <div className="flex gap-4 items-start">
-            <div className="w-11 h-11 rounded-full bg-[#0b1f3b] text-white flex items-center justify-center shrink-0">
-              <Mail className="w-5 h-5 text-white" />
-            </div>
-            <div className="flex-1">
-              <h5 className="font-bold text-[#0b1f3b] text-base leading-tight">Stay Connected</h5>
-              <p className="text-gray-600 text-sm mt-1">
-                Subscribe to updates about IWF activities, campaigns and impact.
-              </p>
-              <form onSubmit={(e) => e.preventDefault()} className="flex items-center mt-2.5 shadow-sm rounded-md overflow-hidden border border-gray-200">
-                <input type="email" placeholder="Enter your email" required className="flex-1 bg-white px-3 py-2 text-sm text-slate-800 placeholder-slate-400 focus:outline-none border-0 min-w-0" />
-                <button type="submit" className="bg-[#0b1f3b] hover:bg-brand-green text-white text-xs font-semibold px-4 py-2.5 transition-colors uppercase shrink-0 cursor-pointer">
-                  Subscribe
-                </button>
-              </form>
-            </div>
-          </div>
-
-          <div className="text-center">
-            <h5 className="font-bold text-[#0b1f3b] text-sm uppercase tracking-wide mb-3">Trusted Organisation</h5>
-            <div className="grid grid-cols-4 gap-3">
-              {[
-                { label: "Registered Trust", Icon: Award },
-                { label: "12A & 80G", Icon: ShieldCheck },
-                { label: "Impact Driven", Icon: BarChart2 },
-                { label: "Transparent", Icon: Lock },
-              ].map(({ label, Icon }) => (
-                <div key={label} className="flex flex-col items-center">
-                  <div className="w-10 h-10 rounded-full border-2 border-[#0b1f3b] bg-white flex items-center justify-center">
-                    <Icon className="w-5 h-5 text-[#0b1f3b]" />
-                  </div>
-                  <span className="text-[#0b1f3b] font-semibold text-[11px] text-center mt-1.5 leading-tight">
-                    {label}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="border-t lg:border-t-0 lg:border-l border-gray-200 pt-4 lg:pt-0 lg:pl-6">
-            <p className="text-[#0b1f3b] font-medium text-sm italic leading-relaxed">
-              "Alone we can do so little, together we can do so much."
-            </p>
-            <span className="text-xs font-semibold text-[#0b1f3b] mt-2 block">— Helen Keller</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Zone B — Transparency, Accountability, Integrity, Compassion (White Background) */}
-      <div className="bg-white text-slate-800 py-5 px-4 md:px-10 border-t border-slate-200">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5 items-center">
-          {[
-            { title: "Transparency", desc: "Open and honest in every action.", Icon: ShieldCheck },
-            { title: "Accountability", desc: "Responsible for every commitment.", Icon: UserCheck },
-            { title: "Integrity", desc: "Guided by strong ethical principles.", Icon: Scale },
-            { title: "Compassion", desc: "Sensitive to the needs of others.", Icon: Heart },
-          ].map(({ title, desc, Icon }) => (
-            <div key={title} className="flex items-start gap-3">
-              <div className="w-9 h-9 rounded-lg bg-orange-50 border border-orange-100 flex items-center justify-center shrink-0">
-                <Icon className="w-5 h-5 text-[#f97316]" />
-              </div>
-              <div>
-                <h6 className="font-extrabold text-slate-900 text-sm">{title}</h6>
-                <p className="text-slate-500 font-medium text-xs mt-0.5">{desc}</p>
-              </div>
-            </div>
-          ))}
-          <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-center">
-            <p className="text-slate-700 font-serif italic text-sm leading-snug">
-              "Together, we build a better tomorrow"
-            </p>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-}
-
 export default function HomePage() {
   const [activeModal, setActiveModal] = useState<RoleType | null>(null);
   const [lang, setLang] = useState<"en" | "hi">("en");
@@ -2099,7 +1166,8 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-white font-sans text-foreground">
       <NotificationTicker />
-      <Header lang={lang} />
+      <UtilityBar />
+      <Header />
       <HeroCarouselSection />
       <HeroSection lang={lang} />
       <UrgentPatientsSection lang={lang} />
@@ -2107,12 +1175,9 @@ export default function HomePage() {
       <ImpactStats lang={lang} />
       <FeaturedCauses lang={lang} />
       <CampaignsSection lang={lang} />
-      <ProgramsAndThematic lang={lang} />
-      <ExploreIWF lang={lang} />
-      <GetInvolved lang={lang} onOpenModal={handleOpenModal} />
-      <PreFooterHomeSections />
+      <OurPartnersSection lang={lang} />
       <GallerySection lang={lang} />
-      <HomeFooter onOpenModal={handleOpenModal} />
+      <Footer onOpenModal={handleOpenModal} />
 
       {/* Unified Role Forms Modal */}
       <RoleFormModal type={activeModal} onClose={() => setActiveModal(null)} />

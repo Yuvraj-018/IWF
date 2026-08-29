@@ -9,7 +9,7 @@ export function Hero() {
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
         <div className="relative max-w-7xl mx-auto px-4 h-full flex items-center">
           <div className="max-w-2xl text-white">
-            <p className="text-sm md:text-base mb-3 font-medium">"Planting Seeds of Hope and Change" — Islah Welfare Foundation (Reg.)</p>
+            <p className="text-sm md:text-base mb-3 font-medium">"Knowledge, Opportunity, A Better Future." — ISLAH</p>
             <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">
               Empowering Lives Through<br />
               <span className="text-brand-orange">Education</span>, <span className="text-brand-orange">Healthcare</span><br />
