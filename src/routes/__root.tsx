@@ -25,6 +25,14 @@ import {
 } from "lucide-react";
 import PageTransition, { ScrollProgressBar } from "@/components/PageTransition";
 import { FloatingTranslateButton } from "@/components/TranslateButton";
+import {
+  blockNumbersOnKeyDown,
+  sanitizeName,
+  blockNonDigitsOnKeyDown,
+  sanitizeDigits,
+  isValidEmail,
+  COUNTRY_CODES,
+} from "@/utils/formValidation";
 
 import appCss from "../styles.css?url";
 
@@ -128,7 +136,14 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const [msgOpen, setMsgOpen] = useState(false);
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    countryCode: "+91",
+    mobile: "",
+    message: "",
+  });
+  const [formErrors, setFormErrors] = useState<{ [k: string]: string }>({});
   const [formStatus, setFormStatus] = useState<"idle" | "loading" | "success">("idle");
 
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -136,11 +151,29 @@ function RootComponent() {
 
   const handleMsgSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const errors: { [k: string]: string } = {};
+    if (!formData.name.trim() || /[0-9]/.test(formData.name)) {
+      errors.name = "Name cannot contain numbers";
+    }
+    if (!formData.email.trim() || !isValidEmail(formData.email)) {
+      errors.email = "Please enter a valid email address";
+    }
+    if (!formData.mobile.trim() || !/^\d{10}$/.test(formData.mobile)) {
+      errors.mobile = "Please enter a valid 10-digit mobile number";
+    }
+    if (!formData.message.trim() || formData.message.trim().length < 5) {
+      errors.message = "Message must be at least 5 characters";
+    }
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+    setFormErrors({});
     setFormStatus("loading");
     // Simulate API submission
     setTimeout(() => {
       setFormStatus("success");
-      setFormData({ name: "", email: "", message: "" });
+      setFormData({ name: "", email: "", countryCode: "+91", mobile: "", message: "" });
     }, 1200);
   };
 
@@ -191,7 +224,7 @@ function RootComponent() {
       <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end select-none">
         {/* Floating Message Card */}
         {msgOpen && (
-          <div className="mb-4 w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden transition-all duration-300 animate-in slide-in-from-bottom-5 fade-in">
+          <div className="mb-4 w-84 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden transition-all duration-300 animate-in slide-in-from-bottom-5 fade-in">
             {/* Header */}
             <div className="bg-[#0b1f3b] text-white p-4 flex items-center justify-between">
               <div>
@@ -199,7 +232,7 @@ function RootComponent() {
                 <p className="text-[10px] text-white/70">Let us know how we can help you</p>
               </div>
               <button 
-                onClick={() => { setMsgOpen(false); setFormStatus("idle"); }}
+                onClick={() => { setMsgOpen(false); setFormStatus("idle"); setFormErrors({}); }}
                 className="p-1 hover:bg-white/10 rounded-full transition-colors cursor-pointer"
                 aria-label="Close message form"
               >
@@ -229,7 +262,7 @@ function RootComponent() {
                     <p className="text-xs text-gray-600 mt-1">Your message has been sent successfully. We will get back to you shortly.</p>
                   </div>
                   <button
-                    onClick={() => setFormStatus("idle")}
+                    onClick={() => { setFormStatus("idle"); setFormErrors({}); }}
                     className="mt-2 text-xs font-semibold text-brand-orange hover:underline cursor-pointer"
                   >
                     Send another message
@@ -241,46 +274,118 @@ function RootComponent() {
                   <span className="text-xs text-gray-500 font-medium">Sending your message...</span>
                 </div>
               ) : (
-                <form onSubmit={handleMsgSubmit} className="flex flex-col gap-3">
+                <form onSubmit={handleMsgSubmit} className="flex flex-col gap-2.5">
                   <div>
-                    <label htmlFor="msg-name" className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">Your Name</label>
+                    <label htmlFor="msg-name" className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">
+                      Your Name <span className="text-red-500">*</span>
+                    </label>
                     <input
                       id="msg-name"
                       type="text"
                       required
-                      placeholder="Enter name"
+                      placeholder="Enter name (letters only)"
                       value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full bg-slate-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand-orange/30 text-slate-800"
+                      onKeyDown={blockNumbersOnKeyDown}
+                      onChange={(e) => {
+                        setFormData({ ...formData, name: sanitizeName(e.target.value) });
+                        if (formErrors.name) setFormErrors({ ...formErrors, name: "" });
+                      }}
+                      className={`w-full bg-slate-50 border rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand-orange/30 text-slate-800 ${
+                        formErrors.name ? "border-red-500 bg-red-50/20" : "border-gray-200"
+                      }`}
                     />
+                    {formErrors.name && (
+                      <p className="text-[10px] text-red-600 font-medium mt-0.5">{formErrors.name}</p>
+                    )}
                   </div>
+
                   <div>
-                    <label htmlFor="msg-email" className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">Your Email</label>
+                    <label htmlFor="msg-email" className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">
+                      Your Email <span className="text-red-500">*</span>
+                    </label>
                     <input
                       id="msg-email"
                       type="email"
                       required
-                      placeholder="Enter email"
+                      placeholder="Enter email address"
                       value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full bg-slate-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand-orange/30 text-slate-800"
+                      onChange={(e) => {
+                        setFormData({ ...formData, email: e.target.value });
+                        if (formErrors.email) setFormErrors({ ...formErrors, email: "" });
+                      }}
+                      className={`w-full bg-slate-50 border rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand-orange/30 text-slate-800 ${
+                        formErrors.email ? "border-red-500 bg-red-50/20" : "border-gray-200"
+                      }`}
                     />
+                    {formErrors.email && (
+                      <p className="text-[10px] text-red-600 font-medium mt-0.5">{formErrors.email}</p>
+                    )}
                   </div>
+
                   <div>
-                    <label htmlFor="msg-text" className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">Message</label>
+                    <label htmlFor="msg-mobile" className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">
+                      Mobile Number <span className="text-red-500">*</span>
+                    </label>
+                    <div className="flex gap-1.5">
+                      <select
+                        value={formData.countryCode}
+                        onChange={(e) => setFormData({ ...formData, countryCode: e.target.value })}
+                        className="w-20 bg-slate-50 border border-gray-200 rounded-lg px-1.5 py-2 text-[11px] font-medium text-slate-800 focus:outline-none shrink-0"
+                      >
+                        {COUNTRY_CODES.map((c) => (
+                          <option key={c.code} value={c.code}>
+                            {c.code}
+                          </option>
+                        ))}
+                      </select>
+                      <input
+                        id="msg-mobile"
+                        type="tel"
+                        required
+                        maxLength={10}
+                        placeholder="10-digit mobile number"
+                        value={formData.mobile}
+                        onKeyDown={blockNonDigitsOnKeyDown}
+                        onChange={(e) => {
+                          setFormData({ ...formData, mobile: sanitizeDigits(e.target.value, 10) });
+                          if (formErrors.mobile) setFormErrors({ ...formErrors, mobile: "" });
+                        }}
+                        className={`flex-1 bg-slate-50 border rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand-orange/30 text-slate-800 ${
+                          formErrors.mobile ? "border-red-500 bg-red-50/20" : "border-gray-200"
+                        }`}
+                      />
+                    </div>
+                    {formErrors.mobile && (
+                      <p className="text-[10px] text-red-600 font-medium mt-0.5">{formErrors.mobile}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label htmlFor="msg-text" className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">
+                      Message <span className="text-red-500">*</span>
+                    </label>
                     <textarea
                       id="msg-text"
                       required
                       rows={3}
                       placeholder="How can we assist you?"
                       value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className="w-full bg-slate-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand-orange/30 text-slate-800 resize-none"
+                      onChange={(e) => {
+                        setFormData({ ...formData, message: e.target.value });
+                        if (formErrors.message) setFormErrors({ ...formErrors, message: "" });
+                      }}
+                      className={`w-full bg-slate-50 border rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand-orange/30 text-slate-800 resize-none ${
+                        formErrors.message ? "border-red-500 bg-red-50/20" : "border-gray-200"
+                      }`}
                     />
+                    {formErrors.message && (
+                      <p className="text-[10px] text-red-600 font-medium mt-0.5">{formErrors.message}</p>
+                    )}
                   </div>
+
                   <button
                     type="submit"
-                    className="w-full bg-brand-orange hover:bg-brand-orange-dark text-white font-bold py-2 rounded-lg text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md"
+                    className="w-full bg-brand-orange hover:bg-brand-orange-dark text-white font-bold py-2 rounded-lg text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md mt-1"
                   >
                     <Send className="w-3 h-3" /> Send Message
                   </button>

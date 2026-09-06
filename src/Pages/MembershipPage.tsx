@@ -47,7 +47,7 @@ const CATEGORY_CONFIG: Record<MemberCategory, {
     icon: Shield,
   },
   Yellow: {
-    code: "YL", amount: 4000, color: "#D97706", darkColor: "#92400E",
+    code: "YL", amount: 1000, color: "#D97706", darkColor: "#92400E",
     bg: "#FFFBEB", border: "#FDE68A", badge: "bg-amber-100 text-amber-700 border-amber-200",
     features: [
       "Recognition for active contribution and engagement",
@@ -57,7 +57,7 @@ const CATEGORY_CONFIG: Record<MemberCategory, {
     icon: Award,
   },
   Green: {
-    code: "GR", amount: 6000, color: "#15803D", darkColor: "#14532D",
+    code: "GR", amount: 500, color: "#15803D", darkColor: "#14532D",
     bg: "#F0FDF4", border: "#BBF7D0", badge: "bg-green-100 text-green-700 border-green-200",
     features: [
       "Special recognition as key supporter of IWF",
@@ -1178,19 +1178,42 @@ async function generateMembershipReceipt(data: {
   document.body.removeChild(link);
 }
 
+import {
+  COUNTRY_CODES,
+  blockNumbersOnKeyDown,
+  sanitizeName,
+  blockNonDigitsOnKeyDown,
+  sanitizeDigits,
+} from "@/utils/formValidation";
+
 // ══════════════════════════════════════════════════════════════════
 //  ZOD SCHEMA
 // ══════════════════════════════════════════════════════════════════
 
 const memberSchema = z.object({
-  fullName: z.string().trim().min(2, "Full name is required"),
-  fatherName: z.string().trim().optional(),
-  mobile: z.string().trim().regex(/^[6-9]\d{9}$/, "Enter a valid 10-digit mobile number"),
+  fullName: z
+    .string()
+    .trim()
+    .min(2, "Full name is required")
+    .regex(/^[^0-9]+$/, "Full name cannot contain numbers"),
+  fatherName: z
+    .string()
+    .trim()
+    .regex(/^[^0-9]*$/, "Name cannot contain numbers")
+    .optional(),
+  countryCode: z.string().default("+91"),
+  mobile: z
+    .string()
+    .trim()
+    .regex(/^\d{10}$/, "Enter a valid 10-digit mobile number"),
   email: z.string().trim().email("Enter a valid email address"),
   address: z.string().trim().min(5, "Address is required"),
   district: z.string().min(1, "Please select a district"),
   state: z.string().trim().min(2, "State is required"),
-  pincode: z.string().trim().regex(/^\d{6}$/, "Enter a valid 6-digit pincode"),
+  pincode: z
+    .string()
+    .trim()
+    .regex(/^\d{6}$/, "Enter a valid 6-digit pincode"),
   category: z.enum(["Blue", "Yellow", "Green"], { required_error: "Select a membership category" }),
   membershipPeriod: z.enum(["1", "2"]),
   paymentMode: z.enum(["UPI", "Card", "Net Banking", "Wallet"]),
@@ -2073,16 +2096,60 @@ function Step1PersonalDetails({
         <div className="grid sm:grid-cols-3 gap-4">
           <div>
             <InputLabel required>Full Name</InputLabel>
-            <input {...register("fullName")} placeholder="Enter your full name" className={inputCls} />
+            <input
+              {...register("fullName", {
+                onChange: (e) => {
+                  e.target.value = sanitizeName(e.target.value);
+                },
+              })}
+              onKeyDown={blockNumbersOnKeyDown}
+              placeholder="Enter your full name"
+              className={inputCls}
+            />
             <FieldError msg={errors.fullName?.message} />
           </div>
           <div>
             <InputLabel>Father / Mother Name</InputLabel>
-            <input {...register("fatherName")} placeholder="Enter father / mother name" className={inputCls} />
+            <input
+              {...register("fatherName", {
+                onChange: (e) => {
+                  e.target.value = sanitizeName(e.target.value);
+                },
+              })}
+              onKeyDown={blockNumbersOnKeyDown}
+              placeholder="Enter father / mother name"
+              className={inputCls}
+            />
+            <FieldError msg={errors.fatherName?.message} />
           </div>
           <div>
             <InputLabel required>Mobile Number</InputLabel>
-            <input {...register("mobile")} type="tel" placeholder="10-digit mobile number" className={inputCls} />
+            <div className="flex rounded-lg border border-slate-200 bg-white overflow-hidden focus-within:border-brand-green focus-within:ring-2 focus-within:ring-brand-green/20">
+              <select
+                value={watch("countryCode") || "+91"}
+                onChange={(e) => setValue("countryCode", e.target.value)}
+                className="bg-slate-50 border-r border-slate-200 px-2 text-xs font-bold text-slate-700 outline-none cursor-pointer"
+                aria-label="Country Code"
+              >
+                {COUNTRY_CODES.map((c) => (
+                  <option key={c.code} value={c.code}>
+                    {c.flag} {c.code}
+                  </option>
+                ))}
+              </select>
+              <input
+                {...register("mobile", {
+                  onChange: (e) => {
+                    e.target.value = sanitizeDigits(e.target.value, 10);
+                  },
+                })}
+                type="tel"
+                placeholder="10-digit mobile number"
+                maxLength={10}
+                onKeyDown={blockNonDigitsOnKeyDown}
+                className="h-10 w-full px-3 text-sm text-slate-800 outline-none placeholder:text-slate-400"
+              />
+            </div>
             <FieldError msg={errors.mobile?.message} />
           </div>
         </div>
@@ -2120,7 +2187,17 @@ function Step1PersonalDetails({
           </div>
           <div>
             <InputLabel required>Pincode</InputLabel>
-            <input {...register("pincode")} placeholder="6-digit pincode" maxLength={6} className={inputCls} />
+            <input
+              {...register("pincode", {
+                onChange: (e) => {
+                  e.target.value = sanitizeDigits(e.target.value, 6);
+                },
+              })}
+              onKeyDown={blockNonDigitsOnKeyDown}
+              placeholder="6-digit pincode"
+              maxLength={6}
+              className={inputCls}
+            />
             <FieldError msg={errors.pincode?.message} />
           </div>
         </div>
@@ -2394,7 +2471,24 @@ function Step3ContributionDetails({
               className="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand-green focus:ring-brand-green cursor-pointer" />
             <label htmlFor="disclaimer-cb" className="text-xs text-slate-700 leading-relaxed cursor-pointer select-none">
               I hereby declare that the information provided above is true and correct. I have read and agree to the{" "}
-              <button type="button" onClick={(e) => { e.preventDefault(); setShowTerms(true); }} className="font-semibold text-brand-green hover:underline">Membership Terms &amp; Conditions</button> of Islah Welfare Foundation (IWF). I understand that the membership fee is valid and non-refundable after 14 days.{" "}
+              <a
+                href="/terms-and-conditions"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-brand-green hover:underline"
+              >
+                Membership Terms &amp; Conditions
+              </a>{" "}
+              and{" "}
+              <a
+                href="/privacy-policy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-brand-green hover:underline"
+              >
+                Privacy Policy
+              </a>{" "}
+              of Islah Welfare Foundation (IWF). I understand that the membership fee is valid and non-refundable after 14 days.{" "}
               <span className="text-red-500">*</span>
             </label>
           </div>
@@ -2902,6 +2996,7 @@ function ApplicationFormSection({ preSelectedCategory, onViewMembership }: { pre
     defaultValues: {
       paymentMode: "UPI",
       state: "Bihar",
+      countryCode: "+91",
       membershipPeriod: "1" as "1" | "2",
       disclaimerAccepted: false,
       ...(preSelectedCategory ? { category: preSelectedCategory } : {}),
@@ -3233,8 +3328,14 @@ function MemberStatusCheck({
                   <div>
                     <InputLabel required>Enter OTP</InputLabel>
                     <div className="flex gap-2">
-                      <input value={otp} onChange={e => setOtp(e.target.value)} placeholder="• • • • • •"
-                        maxLength={6} className={`${inputCls} flex-1 text-center tracking-widest font-bold text-xl`} />
+                      <input
+                        value={otp}
+                        onChange={e => setOtp(sanitizeDigits(e.target.value, 6))}
+                        onKeyDown={blockNonDigitsOnKeyDown}
+                        placeholder="• • • • • •"
+                        maxLength={6}
+                        className={`${inputCls} flex-1 text-center tracking-widest font-bold text-xl`}
+                      />
                       <button onClick={handleVerify} disabled={otp.length < 4 || loading}
                         className="px-5 py-2 bg-brand-orange text-white font-bold rounded-lg hover:bg-brand-orange-dark transition disabled:opacity-50">
                         {loading ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin block" /> : "Verify"}
@@ -3449,8 +3550,14 @@ function RenewalSection({
                     <Phone className="w-4 h-4" /> OTP sent to ****{result.phone.slice(-4)}
                   </div>
                   <div className="flex gap-2">
-                    <input value={otp} onChange={e => setOtp(e.target.value)} placeholder="Enter OTP"
-                      maxLength={6} className={`${inputCls} flex-1 text-center text-xl font-bold tracking-widest`} />
+                    <input
+                      value={otp}
+                      onChange={e => setOtp(sanitizeDigits(e.target.value, 6))}
+                      onKeyDown={blockNonDigitsOnKeyDown}
+                      placeholder="Enter OTP"
+                      maxLength={6}
+                      className={`${inputCls} flex-1 text-center text-xl font-bold tracking-widest`}
+                    />
                     <button onClick={handleVerify} disabled={otp.length < 4 || loading}
                       className="px-5 py-2 bg-brand-orange text-white font-bold rounded-lg hover:bg-brand-orange-dark transition disabled:opacity-50">
                       {loading ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin block" /> : "Verify"}
@@ -3780,7 +3887,7 @@ function YourMembershipTab({
 export default function MembershipPage() {
   const [activeTab, setActiveTab] = useState<PageTab>("Members");
   const [preSelectedCategory, setPreSelectedCategory] = useState<MemberCategory | null>(null);
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState(true);
   const [activeModal, setActiveModal] = useState<RoleType | null>(null);
   const [loadedMember, setLoadedMember] = useState<MockMember | null>(null);
 

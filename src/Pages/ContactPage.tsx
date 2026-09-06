@@ -93,15 +93,39 @@ const CONTACT_PERSONS = [
   },
 ];
 
+import {
+  COUNTRY_CODES,
+  blockNumbersOnKeyDown,
+  sanitizeName,
+  blockNonDigitsOnKeyDown,
+  sanitizeDigits,
+} from "@/utils/formValidation";
+
 // ─── Schema ───────────────────────────────────────────────────────────────────
 
 const contactSchema = z.object({
-  firstName: z.string().trim().min(2, "First name is required"),
-  lastName: z.string().trim().min(1, "Last name is required"),
+  firstName: z
+    .string()
+    .trim()
+    .min(2, "First name is required")
+    .regex(/^[^0-9]+$/, "First name cannot contain numbers"),
+  lastName: z
+    .string()
+    .trim()
+    .min(1, "Last name is required")
+    .regex(/^[^0-9]+$/, "Last name cannot contain numbers"),
   email: z.string().trim().email("Valid email required"),
-  phone: z.string().trim().min(10, "Valid phone number required"),
+  countryCode: z.string().default("+91"),
+  phone: z
+    .string()
+    .trim()
+    .regex(/^\d{10}$/, "Enter a valid 10-digit phone number"),
   address: z.string().trim().optional(),
-  zip: z.string().trim().optional(),
+  zip: z
+    .string()
+    .trim()
+    .refine((v) => !v || /^\d{6}$/.test(v), { message: "PIN code must be a 6-digit number" })
+    .optional(),
   subject: z.string().trim().min(2, "Subject is required"),
   message: z.string().trim().min(10, "Message must be at least 10 characters"),
   privacy: z.literal(true, { errorMap: () => ({ message: "Please accept the privacy policy" }) }),
@@ -124,8 +148,12 @@ function FieldError({ msg }: { msg?: string }) {
 
 function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<ContactFormData>({
+  const [countryCode, setCountryCode] = useState("+91");
+  const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
+    defaultValues: {
+      countryCode: "+91",
+    },
   });
 
   const onSubmit = async (_data: ContactFormData) => {
@@ -176,12 +204,30 @@ function ContactForm() {
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-slate-600 mb-1.5">First Name <span className="text-red-500">*</span></label>
-                  <input {...register("firstName")} placeholder="Anjali" className={inputCls} />
+                  <input
+                    {...register("firstName", {
+                      onChange: (e) => {
+                        e.target.value = sanitizeName(e.target.value);
+                      },
+                    })}
+                    onKeyDown={blockNumbersOnKeyDown}
+                    placeholder="Anjali"
+                    className={inputCls}
+                  />
                   <FieldError msg={errors.firstName?.message} />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-slate-600 mb-1.5">Last Name <span className="text-red-500">*</span></label>
-                  <input {...register("lastName")} placeholder="Verma" className={inputCls} />
+                  <input
+                    {...register("lastName", {
+                      onChange: (e) => {
+                        e.target.value = sanitizeName(e.target.value);
+                      },
+                    })}
+                    onKeyDown={blockNumbersOnKeyDown}
+                    placeholder="Verma"
+                    className={inputCls}
+                  />
                   <FieldError msg={errors.lastName?.message} />
                 </div>
               </div>
@@ -194,7 +240,35 @@ function ContactForm() {
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-slate-600 mb-1.5">Phone Number <span className="text-red-500">*</span></label>
-                  <input {...register("phone")} type="tel" placeholder="+91 98765 43210" className={inputCls} />
+                  <div className="flex rounded-lg border border-slate-200 bg-white overflow-hidden focus-within:border-brand-green focus-within:ring-2 focus-within:ring-brand-green/20">
+                    <select
+                      value={countryCode}
+                      onChange={(e) => {
+                        setCountryCode(e.target.value);
+                        setValue("countryCode", e.target.value);
+                      }}
+                      className="bg-slate-50 border-r border-slate-200 px-2 text-xs font-bold text-slate-700 outline-none cursor-pointer"
+                      aria-label="Country Code"
+                    >
+                      {COUNTRY_CODES.map((c) => (
+                        <option key={c.code} value={c.code}>
+                          {c.flag} {c.code}
+                        </option>
+                      ))}
+                    </select>
+                    <input
+                      {...register("phone", {
+                        onChange: (e) => {
+                          e.target.value = sanitizeDigits(e.target.value, 10);
+                        },
+                      })}
+                      type="tel"
+                      placeholder="98765 43210"
+                      maxLength={10}
+                      onKeyDown={blockNonDigitsOnKeyDown}
+                      className="h-10 w-full px-3 text-sm text-slate-800 outline-none placeholder:text-slate-400"
+                    />
+                  </div>
                   <FieldError msg={errors.phone?.message} />
                 </div>
               </div>
@@ -206,7 +280,18 @@ function ContactForm() {
                 </div>
                 <div className="w-28">
                   <label className="block text-xs font-semibold text-slate-600 mb-1.5">PIN Code</label>
-                  <input {...register("zip")} placeholder="847423" maxLength={6} className={inputCls} />
+                  <input
+                    {...register("zip", {
+                      onChange: (e) => {
+                        e.target.value = sanitizeDigits(e.target.value, 6);
+                      },
+                    })}
+                    onKeyDown={blockNonDigitsOnKeyDown}
+                    placeholder="847423"
+                    maxLength={6}
+                    className={inputCls}
+                  />
+                  <FieldError msg={errors.zip?.message} />
                 </div>
               </div>
 
@@ -232,10 +317,19 @@ function ContactForm() {
                   id="contact-privacy"
                   type="checkbox"
                   {...register("privacy")}
-                  className="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand-green"
+                  className="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand-green cursor-pointer"
                 />
                 <label htmlFor="contact-privacy" className="text-xs text-slate-600 leading-relaxed cursor-pointer">
-                  I agree to the <a href="/privacy-policy" className="text-brand-green font-semibold hover:underline">Privacy Policy</a>. IWF will use my information solely to respond to this inquiry.
+                  I agree to the{" "}
+                  <a
+                    href="/privacy-policy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-brand-green font-semibold hover:underline"
+                  >
+                    Privacy Policy
+                  </a>
+                  . IWF will use my information solely to respond to this inquiry.
                 </label>
               </div>
               {errors.privacy && <FieldError msg={errors.privacy.message} />}
@@ -438,8 +532,8 @@ export default function ContactPage() {
                     <p className="text-xs text-slate-500">Give your time and skills</p>
                   </div>
                 </div>
-                <a href="/#get-involved" className="block w-full text-center bg-brand-green/10 hover:bg-brand-green/20 text-brand-green font-bold py-2.5 rounded-lg transition text-sm border border-brand-green/20">
-                  Get Involved
+                <a href="/volunteer" className="block w-full text-center bg-brand-green/10 hover:bg-brand-green/20 text-brand-green font-bold py-2.5 rounded-lg transition text-sm border border-brand-green/20">
+                  Apply to Volunteer
                 </a>
               </div>
             </div>
