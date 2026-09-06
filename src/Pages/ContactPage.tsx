@@ -982,7 +982,7 @@ export default function ContactPage() {
 
               <div className="shrink-0 w-full md:w-auto">
                 <Link
-                  to="/about/partner-and-sponsor"
+                  to="/about/partners"
                   className="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-[#071527] hover:bg-[#0d223f] text-white text-xs sm:text-sm font-bold py-2.5 px-6 rounded-xl transition-all shadow-sm"
                 >
                   <Handshake className="w-4 h-4 text-sky-400" />
