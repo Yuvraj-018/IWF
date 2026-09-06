@@ -134,7 +134,7 @@ function getTopNavHref(item: string) {
   if (item === "Impact") return "/#impact-stats";
   if (item === "Media") return "/news-and-events";
   if (item === "Membership") return "/membership";
-  if (item === "Get Involved") return "/#get-involved";
+  if (item === "Get Involved") return "/get-involved";
   if (item === "Contact Us") return "/contact";
   return "#";
 }
@@ -178,13 +178,13 @@ function getMegaHref(menu: string, item: string) {
   if (menu === "Media" && item === "Success Stories") return "/news-and-events";
   if (menu === "Media" && item === "Newsletters") return "/news-and-events";
   // Get Involved
-  if (menu === "Get Involved" && item === "Careers & Opportunities") return "#careers";
+  if (menu === "Get Involved" && item === "Careers & Opportunities") return "/careers";
   if (menu === "Get Involved" && item === "Donate & Support") return "/donate";
-  if (menu === "Get Involved" && item === "Volunteer With Us") return "/#get-involved";
-  if (menu === "Get Involved" && item === "Partner With Us") return "/about/partners";
-  if (menu === "Get Involved" && item === "Sponsor a Programme") return "/#get-involved";
-  if (menu === "Get Involved" && item === "Become a Mentor") return "/#get-involved";
-  if (menu === "Get Involved" && item === "Become a Member") return "/members-and-donors";
+  if (menu === "Get Involved" && item === "Volunteer With Us") return "/volunteer";
+  if (menu === "Get Involved" && item === "Partner With Us") return "/partner";
+  if (menu === "Get Involved" && item === "Sponsor a Programme") return "/sponsor";
+  if (menu === "Get Involved" && item === "Become a Mentor") return "/mentor";
+  if (menu === "Get Involved" && item === "Become a Member") return "/membership";
   // Contact
   if (item === "Contact Us") return "/contact";
   return "#";
@@ -196,7 +196,7 @@ export function NotificationTicker() {
     { text: "Notification for change in Registration", href: "/about/legal-status" },
     { text: "ISLAH — Integrated Social, Livelihood, Advancement & Humanitarian Action", href: "/" },
     { text: "Registered Address: B-144, Abul Fazal Enclave-II, Okhla, New Delhi-110025, India", href: "/about/legal-status" },
-    { text: "Join our mission — volunteer, donate or partner with us", href: "/#get-involved" },
+    { text: "Join our mission — volunteer, donate or partner with us", href: "/volunteer" },
     { text: "Free Health Camp — Medical Relief & Consultations | June 25", href: "/news-and-events" },
     { text: "Annual Scholarship Distribution — Education Support | July 15", href: "/news-and-events" },
   ];
@@ -260,6 +260,7 @@ export function Header() {
     (item === "Home" && pathname === "/") ||
     (item === "About Us" && pathname.startsWith("/about")) ||
     (item === "Membership" && pathname.startsWith("/membership")) ||
+    (item === "Get Involved" && (pathname.startsWith("/get-involved") || pathname.startsWith("/volunteer"))) ||
     ((item === "What We Do" || item === "Programs") && pathname.startsWith("/programs"));
 
   const getHeaderHref = (item: string) => {
@@ -518,6 +519,7 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: RoleType) => void
     ["Skills Development", "/programs/skills-development"],
     ["Women Empowerment", "/programs/women-empowerment"],
     ["Get In Touch", "/contact"],
+    ["Get Involved", "/get-involved"],
     ["Donate", "/donate"],
     ["Membership", "/membership"],
     ["News & Events", "/news-and-events"],

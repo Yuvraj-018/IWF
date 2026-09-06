@@ -232,7 +232,7 @@ function HeroSection({ lang }: LanguageProp) {
               <a href="/about" className="bg-[#0b1f3b] hover:bg-[#163a69] text-white font-bold px-6 py-2.5 rounded shadow transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider text-xs">
                 KNOW MORE
               </a>
-              <a href="#get-involved" className="bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-bold px-6 py-2.5 rounded shadow transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider text-xs">
+              <a href="/volunteer" className="bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-bold px-6 py-2.5 rounded shadow transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider text-xs">
                 GET INVOLVED
               </a>
               <a href="/donate" className="bg-[#f97316] hover:bg-orange-600 text-white font-bold px-6 py-2.5 rounded shadow transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider text-xs">
