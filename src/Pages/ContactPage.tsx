@@ -5,93 +5,14 @@ import { z } from "zod";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Phone, Mail, MapPin, Building2, Send, CheckCircle2,
-  AlertCircle, Clock, Globe, Users, MessageCircle, ArrowRight,
-  Facebook, Twitter, Instagram, Youtube, Linkedin,
+  AlertCircle, Clock, Globe, Users, MessageSquare, ArrowRight,
+  Facebook, Twitter, Instagram, Youtube, Linkedin, Heart,
+  Sprout, Handshake, ChevronRight
 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Footer, Header, NotificationTicker, RoleFormModal, UtilityBar } from "@/components/layout/SiteLayout";
 import type { RoleType } from "@/components/forms/RoleFormModal";
-
-// ─── Data ─────────────────────────────────────────────────────────────────────
-
-const OFFICES = [
-  {
-    type: "Registered Office",
-    badge: "Headquarters",
-    badgeColor: "#15803d",
-    badgeBg: "#F0FDF4",
-    address: "B-144, Abul Fazal Enclave-II, Okhla, New Delhi-110025, India",
-    phone: "+91 9811861633",
-    email: "info@iwfindia.org",
-    timing: "Mon–Sat: 9:00 AM – 5:00 PM",
-    icon: Building2,
-  },
-  {
-    type: "Patna Office",
-    badge: "State Capital",
-    badgeColor: "#1D4ED8",
-    badgeBg: "#EFF6FF",
-    address: "Patna, Bihar – Contact for exact address",
-    phone: "+91 9811861633",
-    email: "info@iwfindia.org",
-    timing: "Mon–Fri: 10:00 AM – 4:00 PM",
-    icon: Building2,
-  },
-  {
-    type: "Delhi Office",
-    badge: "National Capital",
-    badgeColor: "#D97706",
-    badgeBg: "#FFFBEB",
-    address: "New Delhi – Contact for exact address",
-    phone: "+91 9811861633",
-    email: "info@iwfindia.org",
-    timing: "Mon–Fri: 10:00 AM – 4:00 PM",
-    icon: Building2,
-  },
-  {
-    type: "Meerut Office",
-    badge: "UP",
-    badgeColor: "#7C3AED",
-    badgeBg: "#F5F3FF",
-    address: "Meerut, Uttar Pradesh – Contact for exact address",
-    phone: "+91 9811861633",
-    email: "info@iwfindia.org",
-    timing: "Mon–Fri: 10:00 AM – 4:00 PM",
-    icon: Building2,
-  },
-];
-
-const CONTACT_PERSONS = [
-  {
-    name: "Md. Imteyazullah",
-    title: "Chairman",
-    initials: "MI",
-    color: "#15803d",
-    bg: "#F0FDF4",
-    phone: "+91 9811861633",
-    email: "chairman@iwfindia.org",
-    desc: "Visionary leader guiding IWF's mission since inception.",
-  },
-  {
-    name: "Md. Azizullah",
-    title: "Treasurer",
-    initials: "MA",
-    color: "#D97706",
-    bg: "#FFFBEB",
-    phone: "+91 9811861633",
-    email: "treasurer@iwfindia.org",
-    desc: "Oversees all financial operations and fund management.",
-  },
-  {
-    name: "Dr. Nasera Firdausi",
-    title: "Chief Executive Officer",
-    initials: "NF",
-    color: "#DB2777",
-    bg: "#FDF2F8",
-    phone: "+91 9811861633",
-    email: "ceo@iwfindia.org",
-    desc: "Leads program execution, partnerships, and field operations.",
-  },
-];
+import contactHandsImg from "@/assets/contact-hands-hero.jpg";
 
 import {
   COUNTRY_CODES,
@@ -100,6 +21,96 @@ import {
   blockNonDigitsOnKeyDown,
   sanitizeDigits,
 } from "@/utils/formValidation";
+
+// ─── Data from Contact Us page.docx ──────────────────────────────────────────
+
+const OFFICES = [
+  {
+    type: "Registered Office: Bathiya, Darbhanga, Bihar – 847423",
+    shortName: "Registered Office",
+    badge: "HEADQUARTERS",
+    badgeCls: "bg-emerald-700 text-white",
+    iconBg: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    themeColor: "#15803d",
+    address: "Bathiya, Darbhanga, Bihar – 847423",
+    inCharge: "Md. Azizullah",
+    phone: "+91 9811861633",
+    email: "info@iwfindia.org",
+    timing: "Mon–Sat: 10:00 AM – 4:00 PM",
+  },
+  {
+    type: "Patna Office",
+    shortName: "Patna Office",
+    badge: "BIHAR OFFICE",
+    badgeCls: "bg-blue-600 text-white",
+    iconBg: "bg-blue-50 text-blue-700 border-blue-200",
+    themeColor: "#1d4ed8",
+    address: "Sector-B, New Azimabad Colony, Patna, Bihar- 800006",
+    inCharge: "Md. Sharique",
+    phone: "+91 9811861633",
+    email: "info@iwfindia.org",
+    timing: "Mon–Fri: 10:00 AM – 4:00 PM",
+  },
+  {
+    type: "Meerut Office",
+    shortName: "Meerut Office",
+    badge: "UP OFFICE",
+    badgeCls: "bg-amber-600 text-white",
+    iconBg: "bg-amber-50 text-amber-700 border-amber-200",
+    themeColor: "#d97706",
+    address: "Sisoli, Garh Road, Meerut, Uttar Pradesh- 250004",
+    inCharge: "Md. Irshad Ali",
+    phone: "+91 9811861633",
+    email: "info@iwfindia.org",
+    timing: "Mon–Fri: 10:00 AM – 4:00 PM",
+  },
+  {
+    type: "Delhi Office",
+    shortName: "Delhi Office",
+    badge: "ADMINISTRATIVE OFFICE",
+    badgeCls: "bg-purple-700 text-white",
+    iconBg: "bg-purple-50 text-purple-700 border-purple-200",
+    themeColor: "#7c3aed",
+    address: "B-144, Abul Fazal Enclave-II, Okhla, New Delhi, Delhi-110025",
+    inCharge: "Er. Nasera Firdausi",
+    phone: "+91 9811861633",
+    email: "info@iwfindia.org",
+    timing: "Mon–Fri: 9:00 AM – 5:00 PM",
+  },
+];
+
+const CONTACT_PERSONS = [
+  {
+    name: "Er. Nasera Firdausi",
+    title: "V. Chairman",
+    initials: "NF",
+    color: "#2563eb",
+    bg: "bg-blue-50",
+    badgeCls: "bg-blue-100 text-blue-800 border-blue-200",
+    phone: "+91 9811861633",
+    email: "vchairman@iwfindia.org",
+  },
+  {
+    name: "Er. Md. Ejazullah",
+    title: "Secretary",
+    initials: "ME",
+    color: "#16a34a",
+    bg: "bg-emerald-50",
+    badgeCls: "bg-emerald-100 text-emerald-800 border-emerald-200",
+    phone: "+91 9811861633",
+    email: "secretary@iwfindia.org",
+  },
+  {
+    name: "Mr. Md. Azizullah",
+    title: "Treasurer",
+    initials: "MA",
+    color: "#ea580c",
+    bg: "bg-amber-50",
+    badgeCls: "bg-amber-100 text-amber-800 border-amber-200",
+    phone: "+91 9811861633",
+    email: "treasurer@iwfindia.org",
+  },
+];
 
 // ─── Schema ───────────────────────────────────────────────────────────────────
 
@@ -120,36 +131,42 @@ const contactSchema = z.object({
     .string()
     .trim()
     .regex(/^\d{10}$/, "Enter a valid 10-digit phone number"),
-  address: z.string().trim().optional(),
+  address: z.string().trim().min(2, "Address is required"),
   zip: z
     .string()
     .trim()
-    .refine((v) => !v || /^\d{6}$/.test(v), { message: "PIN code must be a 6-digit number" })
-    .optional(),
+    .regex(/^\d{6}$/, "Enter a valid 6-digit PIN code"),
   subject: z.string().trim().min(2, "Subject is required"),
   message: z.string().trim().min(10, "Message must be at least 10 characters"),
-  privacy: z.literal(true, { errorMap: () => ({ message: "Please accept the privacy policy" }) }),
+  privacy: z.literal(true, { errorMap: () => ({ message: "Please agree to the privacy policy" }) }),
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
 
-const inputCls = "h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-800 outline-none transition focus:border-brand-green focus:ring-2 focus:ring-brand-green/20 placeholder:text-slate-400";
+const inputCls =
+  "h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-800 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 placeholder:text-slate-400";
 
 function FieldError({ msg }: { msg?: string }) {
   if (!msg) return null;
   return (
-    <p className="flex items-center gap-1 mt-1.5 text-xs font-medium text-red-600">
-      <AlertCircle className="w-3 h-3" /> {msg}
+    <p className="flex items-center gap-1 mt-1 text-xs font-medium text-red-600">
+      <AlertCircle className="w-3 h-3 shrink-0" /> {msg}
     </p>
   );
 }
 
-// ─── Contact Form ─────────────────────────────────────────────────────────────
+// ─── Contact Form Component ───────────────────────────────────────────────────
 
 function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
   const [countryCode, setCountryCode] = useState("+91");
-  const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm<ContactFormData>({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
       countryCode: "+91",
@@ -157,40 +174,48 @@ function ContactForm() {
   });
 
   const onSubmit = async (_data: ContactFormData) => {
-    await new Promise((r) => setTimeout(r, 1000));
+    await new Promise((r) => setTimeout(r, 900));
     setSubmitted(true);
   };
 
+  const handleReset = () => {
+    reset();
+    setSubmitted(false);
+  };
+
   return (
-    <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
-      <div className="bg-gradient-to-r from-brand-green to-[#0b1f3b] px-6 py-5">
-        <h2 className="text-white font-extrabold text-xl flex items-center gap-2">
-          <MessageCircle className="w-5 h-5 text-brand-orange" /> Send Us a Message
-        </h2>
-        <p className="text-white/70 text-xs mt-1">We typically respond within 24–48 hours.</p>
+    <div className="bg-white rounded-2xl shadow-sm border border-slate-200/90 overflow-hidden">
+      {/* Header bar styled with Deep Navy #071527 */}
+      <div className="bg-[#071527] px-6 py-4 border-b border-slate-800">
+        <h3 className="text-white font-bold text-lg flex items-center gap-2.5">
+          <MessageSquare className="w-5 h-5 text-sky-400" />
+          <span>Send Us a Message</span>
+        </h3>
+        <p className="text-slate-300 text-xs mt-1">We typically respond within 24–48 hours.</p>
       </div>
 
-      <div className="p-6 sm:p-8">
+      <div className="p-5 sm:p-7">
         <AnimatePresence mode="wait">
           {submitted ? (
             <motion.div
               key="success"
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               className="text-center py-8"
             >
-              <div className="w-16 h-16 rounded-full bg-brand-green/10 flex items-center justify-center mx-auto mb-4 border-4 border-brand-green/20">
-                <CheckCircle2 className="w-8 h-8 text-brand-green" />
+              <div className="w-14 h-14 rounded-full bg-emerald-50 border-2 border-emerald-200 flex items-center justify-center mx-auto mb-3.5">
+                <CheckCircle2 className="w-7 h-7 text-emerald-600" />
               </div>
-              <h3 className="text-xl font-extrabold text-brand-green-dark mb-2">Message Sent!</h3>
-              <p className="text-slate-500 text-sm max-w-sm mx-auto">
-                Thank you for reaching out. Our team will get back to you at your registered email within 24–48 hours.
+              <h4 className="text-xl font-bold text-slate-800 mb-2">Thank You for Reaching Out!</h4>
+              <p className="text-slate-600 text-xs sm:text-sm max-w-md mx-auto leading-relaxed">
+                Your message has been received. Our dedicated team will review your query and get in touch with you shortly.
               </p>
               <button
-                onClick={() => setSubmitted(false)}
-                className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-brand-green hover:text-brand-green-dark transition-colors"
+                type="button"
+                onClick={handleReset}
+                className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-sky-600 hover:bg-sky-700 text-white text-xs sm:text-sm font-semibold transition shadow-sm"
               >
-                Send another message <ArrowRight className="w-4 h-4" />
+                Send Another Message <ArrowRight className="w-4 h-4" />
               </button>
             </motion.div>
           ) : (
@@ -199,11 +224,14 @@ function ContactForm() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               onSubmit={handleSubmit(onSubmit)}
-              className="space-y-4"
+              className="space-y-3.5"
             >
-              <div className="grid sm:grid-cols-2 gap-4">
+              {/* Row 1: First Name & Last Name */}
+              <div className="grid sm:grid-cols-2 gap-3.5">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">First Name <span className="text-red-500">*</span></label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    First Name <span className="text-red-500">*</span>
+                  </label>
                   <input
                     {...register("firstName", {
                       onChange: (e) => {
@@ -217,7 +245,9 @@ function ContactForm() {
                   <FieldError msg={errors.firstName?.message} />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">Last Name <span className="text-red-500">*</span></label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Last Name <span className="text-red-500">*</span>
+                  </label>
                   <input
                     {...register("lastName", {
                       onChange: (e) => {
@@ -232,15 +262,25 @@ function ContactForm() {
                 </div>
               </div>
 
-              <div className="grid sm:grid-cols-2 gap-4">
+              {/* Row 2: Email Address & Phone Number */}
+              <div className="grid sm:grid-cols-2 gap-3.5">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">Email Address <span className="text-red-500">*</span></label>
-                  <input {...register("email")} type="email" placeholder="you@example.com" className={inputCls} />
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Email Address <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    {...register("email")}
+                    type="email"
+                    placeholder="you@example.com"
+                    className={inputCls}
+                  />
                   <FieldError msg={errors.email?.message} />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">Phone Number <span className="text-red-500">*</span></label>
-                  <div className="flex rounded-lg border border-slate-200 bg-white overflow-hidden focus-within:border-brand-green focus-within:ring-2 focus-within:ring-brand-green/20">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Phone Number <span className="text-red-500">*</span>
+                  </label>
+                  <div className="flex rounded-lg border border-slate-200 bg-white overflow-hidden focus-within:border-sky-500 focus-within:ring-2 focus-within:ring-sky-500/20">
                     <select
                       value={countryCode}
                       onChange={(e) => {
@@ -273,13 +313,23 @@ function ContactForm() {
                 </div>
               </div>
 
-              <div className="grid sm:grid-cols-[1fr_auto] gap-4">
+              {/* Row 3: Address & PIN Code */}
+              <div className="grid sm:grid-cols-[1fr_140px] gap-3.5">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">Address</label>
-                  <input {...register("address")} placeholder="Your city / village" className={inputCls} />
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Address <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    {...register("address")}
+                    placeholder="Your city / village"
+                    className={inputCls}
+                  />
+                  <FieldError msg={errors.address?.message} />
                 </div>
-                <div className="w-28">
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">PIN Code</label>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    PIN Code : <span className="text-red-500">*</span>
+                  </label>
                   <input
                     {...register("zip", {
                       onChange: (e) => {
@@ -295,56 +345,72 @@ function ContactForm() {
                 </div>
               </div>
 
+              {/* Row 4: Subject */}
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1.5">Subject <span className="text-red-500">*</span></label>
-                <input {...register("subject")} placeholder="How can we help you?" className={inputCls} />
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Subject <span className="text-red-500">*</span>
+                </label>
+                <input
+                  {...register("subject")}
+                  placeholder="How can we help you?"
+                  className={inputCls}
+                />
                 <FieldError msg={errors.subject?.message} />
               </div>
 
+              {/* Row 5: Message */}
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1.5">Message <span className="text-red-500">*</span></label>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Message <span className="text-red-500">*</span>
+                </label>
                 <textarea
                   {...register("message")}
-                  rows={5}
+                  rows={4}
                   placeholder="Tell us more about your query, suggestion, or collaboration idea..."
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-brand-green focus:ring-2 focus:ring-brand-green/20 placeholder:text-slate-400 resize-none"
+                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 placeholder:text-slate-400 resize-none"
                 />
                 <FieldError msg={errors.message?.message} />
               </div>
 
-              <div className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
+              {/* Privacy Policy Checkbox - explicitly opens in new tab as documented */}
+              <div className="flex items-start gap-2.5 p-2.5 bg-slate-50/80 rounded-lg border border-slate-200">
                 <input
-                  id="contact-privacy"
+                  id="contact-privacy-check"
                   type="checkbox"
                   {...register("privacy")}
-                  className="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand-green cursor-pointer"
+                  className="mt-0.5 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500 cursor-pointer"
                 />
-                <label htmlFor="contact-privacy" className="text-xs text-slate-600 leading-relaxed cursor-pointer">
+                <label
+                  htmlFor="contact-privacy-check"
+                  className="text-xs text-slate-600 leading-snug cursor-pointer"
+                >
                   I agree to the{" "}
                   <a
                     href="/privacy-policy"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-brand-green font-semibold hover:underline"
+                    className="text-sky-700 font-semibold hover:underline"
                   >
                     Privacy Policy
                   </a>
-                  . IWF will use my information solely to respond to this inquiry.
+                  . IWF will use my information solely to respond to this inquiry.{" "}
+                  <span className="text-red-500">*</span>
                 </label>
               </div>
               {errors.privacy && <FieldError msg={errors.privacy.message} />}
 
+              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full flex items-center justify-center gap-2 bg-brand-orange hover:bg-brand-orange-dark text-white font-bold py-3.5 rounded-xl shadow-lg transition-all hover:scale-[1.01] disabled:opacity-60"
+                className="w-full flex items-center justify-center gap-2 bg-[#0284c7] hover:bg-[#0369a1] text-white font-bold py-3 px-6 rounded-xl shadow-md transition-all hover:scale-[1.008] disabled:opacity-60 text-sm mt-2"
               >
                 {isSubmitting ? (
                   <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 ) : (
                   <Send className="w-4 h-4" />
                 )}
-                {isSubmitting ? "Sending…" : "Send Message"}
+                <span>{isSubmitting ? "Sending..." : "Send Message"}</span>
               </button>
             </motion.form>
           )}
@@ -354,79 +420,345 @@ function ContactForm() {
   );
 }
 
-// ─── Main Page ────────────────────────────────────────────────────────────────
+// ─── Main Contact Page Component ──────────────────────────────────────────────
 
 export default function ContactPage() {
   const [activeModal, setActiveModal] = useState<RoleType | null>(null);
 
   return (
-    <div className="min-h-screen bg-white font-sans">
+    <div className="min-h-screen bg-slate-50 font-sans flex flex-col selection:bg-sky-100 selection:text-sky-900">
+      {/* Universal Top Layout Elements */}
       <NotificationTicker />
       <UtilityBar />
       <Header />
 
-      <main>
-        {/* Hero */}
-        <section className="bg-[#0b1f3b] text-white py-14 relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-0 right-0 w-80 h-80 bg-brand-orange rounded-full -translate-y-1/2 translate-x-1/2" />
-            <div className="absolute bottom-0 left-0 w-56 h-56 bg-brand-green rounded-full translate-y-1/2 -translate-x-1/2" />
+      <main className="flex-1">
+        {/* ─── Hero Section: 100% Native Vector & High-Res Build ───────────────── */}
+        <section className="bg-[#071527] text-white pt-6 sm:pt-10 relative overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            {/* Top Breadcrumb */}
+            <div className="flex items-center gap-2 text-xs font-medium text-slate-400 mb-4 select-none">
+              <Link to="/" className="hover:text-white transition-colors">
+                Home
+              </Link>
+              <ChevronRight className="w-3.5 h-3.5 text-slate-500" />
+              <span className="text-slate-200">Contact</span>
+            </div>
+
+            {/* Main Hero Grid: Left Content + Right Organic Composition */}
+            <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-8 lg:gap-12 items-center pb-8 sm:pb-12">
+              {/* Left Column: Heading, Copy & 4 Cards */}
+              <div className="space-y-4 sm:space-y-5">
+                <div className="inline-flex items-center gap-2.5">
+                  <span className="w-8 h-[2px] bg-sky-400 inline-block rounded-full" />
+                  <span className="text-xs font-bold uppercase tracking-[0.25em] text-sky-400">
+                    LET'S STAY CONNECTED
+                  </span>
+                </div>
+
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.08]">
+                  Contact <span className="text-[#90cdf4]">Us</span>
+                </h1>
+
+                <p className="text-slate-300 text-xs sm:text-sm md:text-base leading-relaxed max-w-xl font-normal">
+                  We're here to listen, collaborate and create a brighter tomorrow together. Whether you
+                  have a question, want to volunteer, explore a partnership, or simply learn more about
+                  our work — we'd love to hear from you.
+                </p>
+
+                {/* 4 Dark Rounded Quick Cards */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2">
+                  {/* Card 1: Call Us */}
+                  <a
+                    href="tel:+919811861633"
+                    className="bg-[#0b1f36] border border-[#163559] hover:border-sky-400/80 hover:bg-[#0f2947] rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between transition group shadow-sm"
+                  >
+                    <div className="w-9 h-9 rounded-full bg-[#1b4478] text-sky-300 flex items-center justify-center mb-2.5 group-hover:scale-105 transition-transform">
+                      <Phone className="w-4 h-4 text-sky-300" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-white group-hover:text-sky-200 transition-colors">
+                        Call Us
+                      </h4>
+                      <p className="text-[11px] text-slate-300 font-medium mt-0.5 whitespace-nowrap">
+                        +91 98118 61633
+                      </p>
+                    </div>
+                  </a>
+
+                  {/* Card 2: Email Us */}
+                  <a
+                    href="mailto:info@iwfindia.org"
+                    className="bg-[#0b1f36] border border-[#163559] hover:border-sky-400/80 hover:bg-[#0f2947] rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between transition group shadow-sm"
+                  >
+                    <div className="w-9 h-9 rounded-full bg-[#1b4478] text-sky-300 flex items-center justify-center mb-2.5 group-hover:scale-105 transition-transform">
+                      <Mail className="w-4 h-4 text-sky-300" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-white group-hover:text-sky-200 transition-colors">
+                        Email Us
+                      </h4>
+                      <p className="text-[11px] text-slate-300 font-medium mt-0.5 truncate" title="info@iwfindia.org">
+                        info@iwfindia.org
+                      </p>
+                    </div>
+                  </a>
+
+                  {/* Card 3: Visit Us */}
+                  <a
+                    href="#offices"
+                    className="bg-[#0b1f36] border border-[#163559] hover:border-sky-400/80 hover:bg-[#0f2947] rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between transition group shadow-sm"
+                  >
+                    <div className="w-9 h-9 rounded-full bg-[#1b4478] text-sky-300 flex items-center justify-center mb-2.5 group-hover:scale-105 transition-transform">
+                      <MapPin className="w-4 h-4 text-sky-300" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-white group-hover:text-sky-200 transition-colors">
+                        Visit Us
+                      </h4>
+                      <p className="text-[11px] text-slate-300 font-medium mt-0.5 whitespace-nowrap">
+                        New Delhi, India
+                      </p>
+                    </div>
+                  </a>
+
+                  {/* Card 4: Connect */}
+                  <a
+                    href="#send-message"
+                    className="bg-[#0b1f36] border border-[#163559] hover:border-sky-400/80 hover:bg-[#0f2947] rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between transition group shadow-sm"
+                  >
+                    <div className="w-9 h-9 rounded-full bg-[#1b4478] text-sky-300 flex items-center justify-center mb-2.5 group-hover:scale-105 transition-transform">
+                      <Users className="w-4 h-4 text-sky-300" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-white group-hover:text-sky-200 transition-colors">
+                        Connect
+                      </h4>
+                      <p className="text-[11px] text-slate-300 font-medium mt-0.5 whitespace-nowrap">
+                        Let's Make an Impact
+                      </p>
+                    </div>
+                  </a>
+                </div>
+              </div>
+
+              {/* Right Column: Native Organic Composition */}
+              <div className="relative flex items-center justify-center lg:justify-end">
+                <div className="relative w-full max-w-[440px] sm:max-w-[480px] aspect-[1.15/1]">
+                  {/* Background Soft Blue Organic Backdrop Layer */}
+                  <div
+                    className="absolute inset-2 bg-[#122e54] -rotate-3 scale-105 opacity-90 transition-transform pointer-events-none"
+                    style={{
+                      borderRadius: "50% 50% 65% 35% / 45% 45% 55% 55%",
+                    }}
+                  />
+
+                  {/* Organic Frame with Razor-Sharp High-Res Photograph */}
+                  <div
+                    className="relative w-full h-full overflow-hidden border-[5px] sm:border-[6px] border-white shadow-2xl z-10"
+                    style={{
+                      borderRadius: "44% 56% 68% 32% / 42% 44% 56% 58%",
+                    }}
+                  >
+                    <img
+                      src={contactHandsImg}
+                      alt="Together We Can Do More — Hands Reaching with Care and Compassion"
+                      className="w-full h-full object-cover object-[center_30%] select-none scale-105"
+                      loading="eager"
+                    />
+                  </div>
+
+                  {/* Left Botanical Leaves SVG */}
+                  <div className="absolute -left-6 sm:-left-8 top-1/4 w-12 sm:w-16 h-24 sm:h-32 pointer-events-none z-20">
+                    <svg viewBox="0 0 60 120" fill="none" className="w-full h-full text-[#4a729e]">
+                      <path
+                        d="M50,110 Q35,80 15,60 Q5,40 10,15 Q30,20 40,40 Q48,60 50,110 Z"
+                        fill="currentColor"
+                        opacity="0.9"
+                      />
+                      <path
+                        d="M48,80 Q25,70 18,48 Q35,45 42,65 Z"
+                        fill="#385e88"
+                        opacity="0.95"
+                      />
+                      <path
+                        d="M52,45 Q38,30 35,10 Q50,15 52,45 Z"
+                        fill="currentColor"
+                        opacity="0.85"
+                      />
+                    </svg>
+                  </div>
+
+                  {/* Handwritten Note: Together We Can Do More ♡ */}
+                  <div className="absolute -top-3 right-0 sm:right-2 z-20 select-none text-right">
+                    <p className="font-['Caveat',cursive] text-2xl sm:text-3xl lg:text-[32px] font-bold text-white leading-tight rotate-[-6deg] drop-shadow-md">
+                      Together<br />
+                      We Can Do<br />
+                      More <span className="inline-block text-sky-200">♡</span>
+                    </p>
+                    <div className="w-10 sm:w-12 h-[2px] bg-sky-300 ml-auto mt-0.5 rounded-full rotate-[-6deg]" />
+                  </div>
+
+                  {/* Bottom Right Botanical Leaves & Tagline */}
+                  <div className="absolute -bottom-2 sm:bottom-1 right-0 sm:right-1 z-20 select-none flex flex-col items-end">
+                    {/* Small leaf motif */}
+                    <div className="w-10 h-10 mb-1 pointer-events-none">
+                      <svg viewBox="0 0 40 40" fill="none" className="w-full h-full text-[#4a729e]">
+                        <path
+                          d="M35,5 Q20,15 10,28 Q15,35 28,25 Q35,18 35,5 Z"
+                          fill="currentColor"
+                          opacity="0.85"
+                        />
+                        <path
+                          d="M25,20 Q12,25 5,38 Q18,36 25,20 Z"
+                          fill="#385e88"
+                          opacity="0.9"
+                        />
+                      </svg>
+                    </div>
+
+                    <div className="w-8 sm:w-10 h-[1.5px] bg-sky-400/60 mb-2" />
+
+                    <div className="text-[9px] sm:text-[10px] font-extrabold tracking-[0.22em] text-slate-300 uppercase space-y-0.5 text-right leading-tight">
+                      <p>PEOPLE</p>
+                      <p>SUPPORT</p>
+                      <p>CHANGE</p>
+                      <p>TOGETHER</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="max-w-5xl mx-auto px-4 relative z-10">
-            <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">Get in Touch</p>
-            <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Contact IWF</h1>
-            <p className="text-white/75 max-w-xl leading-relaxed text-base">
-              Reach us at our offices across Bihar, Delhi, and Uttar Pradesh — or write to us and we'll respond within 24–48 hours.
-            </p>
-            <div className="flex flex-wrap gap-5 mt-8">
-              <a href="tel:+919811861633" className="flex items-center gap-2 text-white/90 hover:text-white text-sm font-semibold">
-                <Phone className="w-4 h-4 text-brand-orange" /> +91 9811861633
-              </a>
-              <a href="mailto:info@iwfindia.org" className="flex items-center gap-2 text-white/90 hover:text-white text-sm font-semibold">
-                <Mail className="w-4 h-4 text-brand-orange" /> info@iwfindia.org
-              </a>
-              <span className="flex items-center gap-2 text-white/90 text-sm font-semibold">
-                <Globe className="w-4 h-4 text-brand-orange" /> iwfindia.org
-              </span>
+
+          {/* ─── Curved Bottom Wave & 3 Core Values Pillar Bar ─────────────────── */}
+          <div className="relative w-full overflow-hidden leading-none z-10">
+            {/* Multi-layered Organic Wave Transition in Vector SVG */}
+            <svg
+              viewBox="0 0 1440 90"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-full h-12 sm:h-16 md:h-20 block"
+              preserveAspectRatio="none"
+            >
+              <path
+                d="M0,60 C380,85 760,25 1440,65 L1440,90 L0,90 Z"
+                fill="#122e54"
+                opacity="0.35"
+              />
+              <path
+                d="M0,68 C420,95 820,35 1440,75 L1440,90 L0,90 Z"
+                fill="#1e4675"
+                opacity="0.45"
+              />
+              <path
+                d="M0,50 C400,80 840,15 1440,60 L1440,90 L0,90 Z"
+                fill="#ffffff"
+              />
+            </svg>
+
+            {/* Core Values Strip sitting on the transition */}
+            <div className="bg-white pb-3 pt-0 border-b border-slate-200/80">
+              <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-center sm:justify-start gap-5 sm:gap-8 text-xs font-bold text-slate-700">
+                <div className="flex items-center gap-2">
+                  <Sprout className="w-4 h-4 text-emerald-600" />
+                  <span className="tracking-wider uppercase text-[11px] sm:text-xs font-black text-slate-800">
+                    STRONGER PEOPLE
+                  </span>
+                </div>
+                <div className="hidden sm:block w-[1px] h-3.5 bg-slate-300" />
+                <div className="flex items-center gap-2">
+                  <Users className="w-4 h-4 text-blue-600" />
+                  <span className="tracking-wider uppercase text-[11px] sm:text-xs font-black text-slate-800">
+                    BRIGHTER COMMUNITIES
+                  </span>
+                </div>
+                <div className="hidden sm:block w-[1px] h-3.5 bg-slate-300" />
+                <div className="flex items-center gap-2">
+                  <Heart className="w-4 h-4 text-red-500" />
+                  <span className="tracking-wider uppercase text-[11px] sm:text-xs font-black text-slate-800">
+                    A KINDER TOMORROW
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Office Cards */}
-        <section className="py-14 bg-slate-50">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="text-center mb-10">
-              <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2">Our Offices</p>
-              <h2 className="text-2xl md:text-3xl font-extrabold text-brand-green-dark">Where to Find Us</h2>
+        {/* ─── Section 2: Our Offices ────────────────────────────────────────────── */}
+        <section id="offices" className="py-8 sm:py-10 bg-white">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+            <div className="text-center mb-6 sm:mb-8">
+              <div className="inline-flex items-center justify-center gap-2 text-slate-800 mb-1.5">
+                <Building2 className="w-5 h-5 text-sky-700" />
+                <h2 className="text-xl sm:text-2xl font-black tracking-wider uppercase">OUR OFFICES</h2>
+              </div>
+              <p className="text-xs sm:text-sm text-slate-500">
+                We are present across multiple locations to serve communities better.
+              </p>
             </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {OFFICES.map((office) => (
-                <div key={office.type} className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition-all hover:-translate-y-0.5">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: office.badgeBg }}>
-                      <office.icon className="w-5 h-5" style={{ color: office.badgeColor }} />
+                <div
+                  key={office.shortName}
+                  className="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-4 sm:p-5 flex flex-col justify-between hover:shadow-md hover:-translate-y-0.5 transition-all"
+                >
+                  <div>
+                    {/* Badge & Icon Row */}
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <div
+                        className={`w-9 h-9 rounded-xl border flex items-center justify-center ${office.iconBg}`}
+                      >
+                        <Building2 className="w-4 h-4" />
+                      </div>
+                      <span
+                        className={`text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${office.badgeCls}`}
+                      >
+                        {office.badge}
+                      </span>
                     </div>
-                    <span className="text-[10px] font-bold px-2.5 py-1 rounded-full" style={{ color: office.badgeColor, backgroundColor: office.badgeBg }}>
-                      {office.badge}
-                    </span>
+
+                    {/* Title */}
+                    <h3 className="font-extrabold text-slate-900 text-sm leading-snug mb-2">
+                      {office.shortName}
+                    </h3>
+
+                    {/* In-Charge & Address */}
+                    <div className="space-y-1.5 text-xs mb-3.5">
+                      <p className="font-semibold text-slate-800">
+                        Office In charge: <span className="font-bold text-slate-900">{office.inCharge}</span>
+                      </p>
+                      <div className="flex items-start gap-1.5 text-slate-600">
+                        <MapPin className="w-3.5 h-3.5 shrink-0 text-slate-400 mt-0.5" />
+                        <span className="leading-snug">{office.address}</span>
+                      </div>
+                    </div>
                   </div>
-                  <h3 className="font-extrabold text-slate-800 text-sm mb-3">{office.type}</h3>
-                  <div className="space-y-2.5">
-                    <div className="flex items-start gap-2">
-                      <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: office.badgeColor }} />
-                      <p className="text-xs text-slate-600 leading-snug">{office.address}</p>
+
+                  {/* Contact Links & Timing */}
+                  <div className="pt-3 border-t border-slate-100 space-y-1.5 text-xs">
+                    <div className="flex items-center gap-1.5">
+                      <Phone className="w-3.5 h-3.5 text-sky-600 shrink-0" />
+                      <a
+                        href={`tel:${office.phone.replace(/\s+/g, "")}`}
+                        className="text-slate-700 font-semibold hover:text-sky-700 hover:underline"
+                      >
+                        {office.phone}
+                      </a>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Phone className="w-3.5 h-3.5 shrink-0" style={{ color: office.badgeColor }} />
-                      <a href={`tel:${office.phone.replace(/\s/g, "")}`} className="text-xs font-semibold text-slate-700 hover:underline">{office.phone}</a>
+                    <div className="flex items-center gap-1.5">
+                      <Mail className="w-3.5 h-3.5 text-sky-600 shrink-0" />
+                      <a
+                        href={`mailto:${office.email}`}
+                        className="text-slate-700 font-semibold hover:text-sky-700 hover:underline truncate"
+                      >
+                        {office.email}
+                      </a>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Mail className="w-3.5 h-3.5 shrink-0" style={{ color: office.badgeColor }} />
-                      <a href={`mailto:${office.email}`} className="text-xs font-semibold text-slate-700 hover:underline">{office.email}</a>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Clock className="w-3.5 h-3.5 shrink-0" style={{ color: office.badgeColor }} />
-                      <p className="text-xs text-slate-500">{office.timing}</p>
+                    <div className="flex items-center gap-1.5 text-slate-500 pt-0.5">
+                      <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <span className="text-[11px]">{office.timing}</span>
                     </div>
                   </div>
                 </div>
@@ -435,29 +767,61 @@ export default function ContactPage() {
           </div>
         </section>
 
-        {/* Key Contact Persons */}
-        <section className="py-14 bg-white">
-          <div className="max-w-5xl mx-auto px-4">
-            <div className="text-center mb-10">
-              <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2">Leadership</p>
-              <h2 className="text-2xl md:text-3xl font-extrabold text-brand-green-dark">Key Contact Persons</h2>
-              <p className="text-slate-500 text-sm mt-2">For specific inquiries, reach out directly to our leadership team.</p>
+        {/* ─── Section 3: Key Contact Persons ─────────────────────────────────────── */}
+        <section className="py-8 sm:py-10 bg-slate-50 border-y border-slate-200/80">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+            <div className="text-center mb-6 sm:mb-8">
+              <div className="inline-flex items-center justify-center gap-2 text-slate-800 mb-1.5">
+                <Users className="w-5 h-5 text-emerald-700" />
+                <h2 className="text-xl sm:text-2xl font-black tracking-wider uppercase">
+                  KEY CONTACT PERSONS
+                </h2>
+              </div>
+              <p className="text-xs sm:text-sm text-slate-500">
+                Reach out to the right person for your queries and collaboration.
+              </p>
             </div>
-            <div className="grid sm:grid-cols-3 gap-6">
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
               {CONTACT_PERSONS.map((person) => (
-                <div key={person.name} className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 text-center hover:shadow-md transition-all">
-                  <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-extrabold" style={{ backgroundColor: person.bg, color: person.color }}>
-                    {person.initials}
+                <div
+                  key={person.name}
+                  className="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5 hover:shadow-md hover:-translate-y-0.5 transition-all text-center flex flex-col items-center justify-between"
+                >
+                  <div className="w-full">
+                    {/* Avatar Initials Circle */}
+                    <div
+                      className={`w-14 h-14 rounded-full ${person.bg} border-2 flex items-center justify-center mx-auto mb-3 text-base font-bold`}
+                      style={{ color: person.color, borderColor: `${person.color}30` }}
+                    >
+                      {person.initials}
+                    </div>
+
+                    <h3 className="font-extrabold text-slate-900 text-base">{person.name}</h3>
+
+                    <div className="mt-1.5 mb-4">
+                      <span
+                        className={`inline-block text-[11px] font-bold px-3 py-0.5 rounded-full border ${person.badgeCls}`}
+                      >
+                        {person.title}
+                      </span>
+                    </div>
                   </div>
-                  <h3 className="font-extrabold text-slate-800 text-base">{person.name}</h3>
-                  <p className="text-xs font-bold mb-3" style={{ color: person.color }}>{person.title}</p>
-                  <p className="text-xs text-slate-500 leading-relaxed mb-4">{person.desc}</p>
-                  <div className="space-y-2">
-                    <a href={`tel:${person.phone.replace(/\s/g, "")}`} className="flex items-center justify-center gap-2 text-xs font-semibold text-slate-700 hover:text-brand-green transition-colors">
-                      <Phone className="w-3.5 h-3.5" style={{ color: person.color }} /> {person.phone}
+
+                  <div className="w-full pt-3 border-t border-slate-100 space-y-2 text-xs">
+                    <a
+                      href={`tel:${person.phone.replace(/\s+/g, "")}`}
+                      className="flex items-center justify-center gap-2 text-slate-700 font-semibold hover:text-sky-700 transition-colors"
+                    >
+                      <Phone className="w-3.5 h-3.5 text-sky-600" />
+                      <span>{person.phone}</span>
                     </a>
-                    <a href={`mailto:${person.email}`} className="flex items-center justify-center gap-2 text-xs font-semibold text-slate-700 hover:text-brand-green transition-colors">
-                      <Mail className="w-3.5 h-3.5" style={{ color: person.color }} /> {person.email}
+                    <a
+                      href={`mailto:${person.email}`}
+                      className="flex items-center justify-center gap-2 text-slate-700 font-semibold hover:text-sky-700 transition-colors"
+                    >
+                      <Mail className="w-3.5 h-3.5 text-sky-600" />
+                      <span>{person.email}</span>
                     </a>
                   </div>
                 </div>
@@ -466,81 +830,171 @@ export default function ContactPage() {
           </div>
         </section>
 
-        {/* Contact Form + Social */}
-        <section className="py-14 bg-slate-50">
-          <div className="max-w-6xl mx-auto px-4 grid lg:grid-cols-[1fr_340px] gap-8 items-start">
-            <ContactForm />
+        {/* ─── Section 4: Send Us a Message + Sidebar ─────────────────────────────── */}
+        <section id="send-message" className="py-8 sm:py-10 bg-white">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+            <div className="grid lg:grid-cols-[1fr_340px] gap-6 sm:gap-8 items-start">
+              {/* Form Column */}
+              <ContactForm />
 
-            <div className="space-y-5">
-              {/* Quick contact */}
-              <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
-                <h3 className="font-bold text-brand-green-dark text-sm mb-4 uppercase tracking-wide">Quick Contact</h3>
-                <div className="space-y-3">
-                  {[
-                    { icon: Phone, label: "Phone", value: "+91 9811861633", href: "tel:+919811861633" },
-                    { icon: Mail, label: "Email", value: "info@iwfindia.org", href: "mailto:info@iwfindia.org" },
-                    { icon: Globe, label: "Website", value: "iwfindia.org", href: "#" },
-                  ].map(({ icon: Icon, label, value, href }) => (
-                    <a key={label} href={href} className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition group">
-                      <div className="w-8 h-8 rounded-lg bg-brand-green/10 flex items-center justify-center shrink-0">
-                        <Icon className="w-3.5 h-3.5 text-brand-green" />
+              {/* Sidebar Column */}
+              <div className="space-y-4">
+                {/* 1. Quick Contact */}
+                <div className="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-4 sm:p-5">
+                  <h4 className="text-[11px] font-black uppercase tracking-wider text-slate-500 mb-3">
+                    QUICK CONTACT
+                  </h4>
+                  <div className="space-y-2.5">
+                    <a
+                      href="tel:+919811861633"
+                      className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 transition group"
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-sky-50 text-sky-700 flex items-center justify-center shrink-0 border border-sky-100">
+                        <Phone className="w-4 h-4" />
                       </div>
                       <div>
-                        <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">{label}</p>
-                        <p className="text-sm font-bold text-slate-700 group-hover:text-brand-green transition-colors">{value}</p>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">PHONE</p>
+                        <p className="text-xs font-bold text-slate-800 group-hover:text-sky-700 transition-colors">
+                          +91 9811861633
+                        </p>
                       </div>
                     </a>
-                  ))}
-                </div>
-              </div>
 
-              {/* Social */}
-              <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
-                <h3 className="font-bold text-brand-green-dark text-sm mb-4 uppercase tracking-wide">Follow Us</h3>
-                <div className="grid grid-cols-5 gap-2">
-                  {[
-                    { Icon: Facebook, color: "#1877F2", label: "Facebook" },
-                    { Icon: Twitter, color: "#1DA1F2", label: "Twitter" },
-                    { Icon: Instagram, color: "#E1306C", label: "Instagram" },
-                    { Icon: Youtube, color: "#FF0000", label: "YouTube" },
-                    { Icon: Linkedin, color: "#0A66C2", label: "LinkedIn" },
-                  ].map(({ Icon, color, label }) => (
-                    <a key={label} href="#" aria-label={label} className="w-10 h-10 rounded-xl flex items-center justify-center hover:scale-110 transition-transform" style={{ backgroundColor: `${color}15` }}>
-                      <Icon className="w-4 h-4" style={{ color }} />
+                    <a
+                      href="mailto:info@iwfindia.org"
+                      className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 transition group"
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-100">
+                        <Mail className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">EMAIL</p>
+                        <p className="text-xs font-bold text-slate-800 group-hover:text-emerald-700 transition-colors truncate">
+                          info@iwfindia.org
+                        </p>
+                      </div>
                     </a>
-                  ))}
+
+                    <Link
+                      to="/"
+                      className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 transition group"
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center shrink-0 border border-blue-100">
+                        <Globe className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">WEBSITE</p>
+                        <p className="text-xs font-bold text-slate-800 group-hover:text-blue-700 transition-colors">
+                          iwfindia.org
+                        </p>
+                      </div>
+                    </Link>
+                  </div>
+                </div>
+
+                {/* 2. Follow Us */}
+                <div className="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-4 sm:p-5">
+                  <h4 className="text-[11px] font-black uppercase tracking-wider text-slate-500 mb-3">
+                    FOLLOW US
+                  </h4>
+                  <div className="flex items-center gap-2.5">
+                    {[
+                      { Icon: Facebook, color: "#1877F2", label: "Facebook", href: "https://facebook.com" },
+                      { Icon: Twitter, color: "#1DA1F2", label: "Twitter", href: "https://twitter.com" },
+                      { Icon: Instagram, color: "#E1306C", label: "Instagram", href: "https://instagram.com" },
+                      { Icon: Youtube, color: "#FF0000", label: "YouTube", href: "https://youtube.com" },
+                      { Icon: Linkedin, color: "#0A66C2", label: "LinkedIn", href: "https://linkedin.com" },
+                    ].map(({ Icon, color, label, href }) => (
+                      <a
+                        key={label}
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={label}
+                        className="w-9 h-9 rounded-xl flex items-center justify-center border border-slate-200 bg-slate-50 hover:scale-105 hover:border-transparent transition-all shadow-2xs"
+                        style={{ color }}
+                      >
+                        <Icon className="w-4 h-4" />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 3. Support Our Mission (Deep Navy card #071527) */}
+                <div className="bg-[#071527] rounded-2xl p-5 text-white border border-slate-800 shadow-sm">
+                  <h4 className="font-black text-sm mb-1.5 flex items-center gap-2">
+                    <Heart className="w-4 h-4 text-red-400" />
+                    <span>Support Our Mission</span>
+                  </h4>
+                  <p className="text-slate-300 text-xs leading-relaxed mb-4">
+                    Every contribution goes directly to our programs in education, healthcare, and livelihood.
+                  </p>
+                  <Link
+                    to="/donate"
+                    className="block w-full text-center bg-[#0284c7] hover:bg-[#0369a1] text-white font-bold py-2.5 rounded-xl transition text-xs sm:text-sm shadow"
+                  >
+                    Donate Now
+                  </Link>
+                </div>
+
+                {/* 4. Join as Volunteer */}
+                <div className="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-4 sm:p-5">
+                  <div className="flex items-center gap-2.5 mb-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-sky-50 text-sky-700 flex items-center justify-center border border-sky-100">
+                      <Users className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-900">Join as Volunteer</h4>
+                      <p className="text-[11px] text-slate-500">Give your time and skills</p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setActiveModal("volunteer")}
+                    className="w-full text-center bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2 rounded-xl transition text-xs border border-slate-200/80"
+                  >
+                    Get Involved
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ─── Section 5: Bottom Community CTA Banner ──────────────────────────────── */}
+        <section className="py-6 sm:py-8 bg-white border-t border-slate-200/80">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+            <div className="bg-gradient-to-r from-emerald-50/90 via-teal-50/50 to-emerald-50/90 rounded-2xl border border-emerald-200/70 p-5 sm:p-6 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-4 text-center md:text-left flex-col md:flex-row">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-600/10 text-emerald-700 border border-emerald-200 flex items-center justify-center shrink-0">
+                  <Handshake className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-sm sm:text-base font-black text-slate-900 uppercase tracking-wide">
+                    TOGETHER, WE CAN CREATE STRONGER COMMUNITIES
+                  </h3>
+                  <p className="text-xs text-slate-600 max-w-xl mt-0.5 leading-relaxed">
+                    Your support and partnership help us bring hope, opportunity and positive change to those
+                    who need it most.
+                  </p>
                 </div>
               </div>
 
-              {/* CTA to donate */}
-              <div className="bg-gradient-to-br from-brand-green to-[#0b1f3b] rounded-xl p-5 text-white">
-                <h3 className="font-extrabold text-base mb-1">Support Our Mission</h3>
-                <p className="text-white/70 text-xs leading-relaxed mb-4">Every contribution goes directly to our programs in education, healthcare, and livelihood.</p>
-                <a href="/donate" className="block w-full text-center bg-brand-orange hover:bg-brand-orange-dark text-white font-bold py-3 rounded-lg transition text-sm">
-                  Donate Now
-                </a>
-              </div>
-
-              {/* Volunteer CTA */}
-              <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-9 h-9 rounded-lg bg-brand-orange/10 flex items-center justify-center">
-                    <Users className="w-4 h-4 text-brand-orange" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-slate-800">Join as Volunteer</p>
-                    <p className="text-xs text-slate-500">Give your time and skills</p>
-                  </div>
-                </div>
-                <a href="/volunteer" className="block w-full text-center bg-brand-green/10 hover:bg-brand-green/20 text-brand-green font-bold py-2.5 rounded-lg transition text-sm border border-brand-green/20">
-                  Apply to Volunteer
-                </a>
+              <div className="shrink-0 w-full md:w-auto">
+                <Link
+                  to="/about/partner-and-sponsor"
+                  className="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-[#071527] hover:bg-[#0d223f] text-white text-xs sm:text-sm font-bold py-2.5 px-6 rounded-xl transition-all shadow-sm"
+                >
+                  <Handshake className="w-4 h-4 text-sky-400" />
+                  <span>Partner With Us</span>
+                </Link>
               </div>
             </div>
           </div>
         </section>
       </main>
 
+      {/* Universal Footer and Role Form Modal */}
       <Footer onOpenModal={setActiveModal} />
       <RoleFormModal type={activeModal} onClose={() => setActiveModal(null)} />
     </div>
