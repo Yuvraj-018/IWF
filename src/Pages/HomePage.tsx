@@ -137,13 +137,14 @@ function HeroSection({ lang }: LanguageProp) {
   const t = TRANSLATIONS[lang];
   const notices = [
     { d: "25", m: "MAY", title: lang === "en" ? "Free Health Camp — Darbhanga" : "निःशुल्क स्वास्थ्य शिविर — दरभंगा" },
-    { d: "05", m: "JUN", title: lang === "en" ? "Environment Day Plantation" : "पर्यावरण दिवस वृक्षारोपण अभियान" },
-    { d: "15", m: "JUL", title: lang === "en" ? "Shiksha Na Ruke Distribution" : "शिक्षा न रुके छात्रवृत्ति वितरण" },
-    { d: "10", m: "NOV", title: lang === "en" ? "Winter Relief Blanket Drive" : "शीतकालीन राहत कंबल वितरण अभियान" },
-    { d: "12", m: "DEC", title: lang === "en" ? "Livelihood Toolkit Distribution" : "आजीविका टूलकिट वितरण कार्यक्रम" },
+    { d: "05", m: "JUN", title: lang === "en" ? "Environment Day Tree Plantation Drive" : "पर्यावरण दिवस वृक्षारोपण अभियान" },
+    { d: "15", m: "JUL", title: lang === "en" ? "Shiksha Na Ruke Scholarship Distribution" : "शिक्षा न रुके छात्रवृत्ति वितरण" },
+    { d: "20", m: "AUG", title: lang === "en" ? "Pari Ki Udaan Menstrual Hygiene Drive" : "परी की उड़ान स्वच्छता अभियान" },
+    { d: "10", m: "NOV", title: lang === "en" ? "Winter Relief Blanket Distribution" : "शीतकालीन राहत कंबल वितरण अभियान" },
+    { d: "12", m: "DEC", title: lang === "en" ? "Swabhimaan Livelihood Toolkit Drive" : "स्वाभिमान आजीविका टूलकिट वितरण" },
   ];
 
-  const loopNotices = [...notices, ...notices.slice(0, 3)];
+  const loopNotices = [...notices, ...notices.slice(0, 4)];
   const [noticeIndex, setNoticeIndex] = useState(0);
   const [noticeTransition, setNoticeTransition] = useState(true);
   const noticeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -161,7 +162,7 @@ function HeroSection({ lang }: LanguageProp) {
       noticeTimeoutRef.current = setTimeout(() => {
         tick();
         run();
-      }, 3500);
+      }, 3200);
     };
 
     run();
@@ -171,7 +172,7 @@ function HeroSection({ lang }: LanguageProp) {
   }, []);
 
   useEffect(() => {
-    if (noticeIndex === 5) {
+    if (noticeIndex === 6) {
       const snapTimer = setTimeout(() => {
         setNoticeTransition(false);
         setNoticeIndex(0);
@@ -179,9 +180,6 @@ function HeroSection({ lang }: LanguageProp) {
       return () => clearTimeout(snapTimer);
     }
   }, [noticeIndex]);
-
-
-
 
   return (
     <section id="welcome-hero" className="relative scroll-mt-20 bg-white py-6 border-b border-slate-100">
@@ -243,67 +241,68 @@ function HeroSection({ lang }: LanguageProp) {
             </div>
           </div>
 
-          {/* Right Column: Events & Notices — light card */}
-          <div className="bg-white text-slate-800 p-3 rounded-2xl border border-slate-200 shadow-lg flex flex-col gap-2">
+          {/* Right Column: Events & Notices + Big 2x2 Stats Grid beneath */}
+          <div className="flex flex-col gap-4">
+            {/* Header & Notice Ticker Card */}
+            <div className="bg-white text-slate-800 p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-2.5">
+              <div className="flex items-center justify-between px-1">
+                <h2 className="text-base md:text-lg font-extrabold text-[#0b1f3b] flex items-center gap-2">
+                  <span className="w-1.5 h-5 bg-brand-orange rounded-full"></span>
+                  {t.eventsNotices}
+                </h2>
+                <a href="/news-and-events" className="text-xs font-bold text-brand-orange hover:underline">
+                  View All →
+                </a>
+              </div>
 
-            {/* Header */}
-            <div className="flex items-center justify-between px-1">
-              <h2 className="text-base md:text-lg font-extrabold text-[#0b1f3b] flex items-center gap-2">
-                <span className="w-1.5 h-5 bg-brand-orange rounded-full"></span>
-                {t.eventsNotices}
-              </h2>
-              <a href="/news-and-events" className="text-xs font-bold text-brand-orange hover:underline">
-                View All →
-              </a>
+              {/* Notice ticker — tall container for 5-6 events */}
+              <div className="overflow-hidden rounded-xl bg-slate-50 border border-slate-100 p-2.5 h-[280px]">
+                <div
+                  className="space-y-2.5"
+                  style={{
+                    transform: `translateY(-${noticeIndex * 66}px)`,
+                    transition: noticeTransition ? "transform 500ms cubic-bezier(0.4, 0, 0.2, 1)" : "none",
+                  }}
+                >
+                  {loopNotices.map((e, i) => (
+                    <div key={i} className="h-[58px] bg-white hover:bg-orange-50 rounded-xl px-3 py-2 flex gap-3 items-center border border-slate-200 shadow-2xs transition-colors duration-200 group">
+                      {/* Date pill */}
+                      <div className="text-center bg-[#0b1f3b] rounded-lg px-2 py-1 w-11 shrink-0">
+                        <div className="text-[9px] font-bold text-white/80 uppercase leading-none">{e.m}</div>
+                        <div className="text-base font-black text-white leading-none mt-0.5">{e.d}</div>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-extrabold text-xs sm:text-sm text-slate-900 truncate group-hover:text-brand-orange transition-colors">{e.title}</h4>
+                      </div>
+                      <a href="/news-and-events" className="text-xs font-bold text-brand-orange hover:underline shrink-0">
+                        {t.readMore} →
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
 
-            {/* Notice ticker */}
-            <div className="overflow-hidden rounded-xl bg-slate-50 border border-slate-100 p-2 h-[312px]">
-              <div
-                className="space-y-2"
-                style={{
-                  transform: `translateY(-${noticeIndex * 62}px)`,
-                  transition: noticeTransition ? "transform 500ms cubic-bezier(0.4, 0, 0.2, 1)" : "none",
-                }}
-              >
-                {loopNotices.map((e, i) => (
-                  <div key={i} className="h-[56px] bg-white hover:bg-orange-50 rounded-lg px-3 py-2 flex gap-3 items-center border border-slate-200 shadow-sm transition-colors duration-200 group">
-                    {/* Date pill */}
-                    <div className="text-center bg-[#0b1f3b] rounded-lg px-2 py-1 w-11 shrink-0">
-                      <div className="text-[9px] font-bold text-white/80 uppercase leading-none">{e.m}</div>
-                      <div className="text-base font-black text-white leading-none mt-0.5">{e.d}</div>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-extrabold text-sm text-slate-900 truncate group-hover:text-brand-orange transition-colors">{e.title}</h4>
-                    </div>
-                    <a href="#" className="text-xs font-bold text-brand-orange hover:underline shrink-0">
-                      {t.readMore} →
-                    </a>
+            {/* Big 2 x 2 Stats Grid (Square-like, filling width & space) */}
+            <div className="bg-[#f0f7ff] border border-sky-200/80 rounded-2xl p-3.5 sm:p-4 grid grid-cols-2 gap-3.5 shadow-sm">
+              {[
+                { icon: Users, n: "5,000+", l: "Lives Impacted" },
+                { icon: HeartPulse, n: "100+", l: "Health Camps" },
+                { icon: GraduationCap, n: "2,000+", l: "Students Supported" },
+                { icon: Leaf, n: "10,000+", l: "Beneficiaries" },
+              ].map(({ icon: Icon, n, l }) => (
+                <div key={l} className="bg-white/95 border border-sky-100/90 rounded-2xl p-4 sm:p-5 flex flex-col justify-between shadow-2xs hover:shadow-md transition group min-h-[115px]">
+                  <div className="w-11 h-11 rounded-xl bg-sky-50 text-[#0284c7] flex items-center justify-center mb-1 group-hover:scale-105 transition-transform">
+                    <Icon className="w-6 h-6" />
                   </div>
-                ))}
-              </div>
+                  <div>
+                    <div className="text-2xl sm:text-3xl font-black text-[#0b1f3b] tracking-tight leading-none">{n}</div>
+                    <div className="text-xs sm:text-sm font-bold text-slate-600 leading-tight mt-1">{l}</div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Floating Stats Bar */}
-      <div className="max-w-7xl mx-auto px-4 mt-8 relative z-20">
-        <div className="bg-sky-50 border border-sky-100/80 text-[#0b1f3b] rounded-xl shadow-lg grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-sky-200/60">
-          {[
-            { icon: Users, n: "5,000+", l: "Lives Impacted" },
-            { icon: HeartPulse, n: "100+", l: "Health Camps" },
-            { icon: GraduationCap, n: "2,000+", l: "Students Supported" },
-            { icon: Leaf, n: "10,000+", l: "Beneficiaries" },
-          ].map(({ icon: Icon, n, l }) => (
-            <div key={l} className="py-3 px-4 flex items-center gap-3 justify-center">
-              <Icon className="w-8 h-8 text-brand-orange shrink-0" />
-              <div>
-                <div className="text-xl font-extrabold text-[#0b1f3b] leading-tight">{n}</div>
-                <div className="text-xs font-semibold text-gray-600 mt-0.5 leading-tight">{l}</div>
-              </div>
-            </div>
-          ))}
         </div>
       </div>
     </section>
@@ -558,111 +557,163 @@ const CAMPAIGNS = [
   {
     emoji: "📚",
     name: "Shiksha Na Ruke",
-    tagline: "Education must not stop",
+    slug: "shiksha-na-ruke",
+    tagline: "Keeping Education Within Reach",
     desc: "Ensuring uninterrupted education for underprivileged children through scholarships, school kits, and community learning centres.",
-    color: "#1D4ED8",
-    bg: "#EFF6FF",
-    border: "#BFDBFE",
+    color: "#15803d",
+    bg: "#F0FDF4",
+    border: "#BBF7D0",
     cta: "Support Education",
   },
   {
     emoji: "🏥",
     name: "Har Pal Anmol Hai",
-    tagline: "medical need for all",
+    slug: "har-pal-anmol-hai",
+    tagline: "When Every Moment Matters",
     desc: "Emergency medical aid, free health camps, and diagnostic support reaching the most remote corners of rural communities.",
-    color: "#DC2626",
-    bg: "#FEF2F2",
-    border: "#FECACA",
+    color: "#e11d48",
+    bg: "#FFF1F2",
+    border: "#FECDD3",
     cta: "Support Health",
   },
   {
     emoji: "✈️",
     name: "Pari Ki Udaan",
-    tagline: "Empowering Women, Changing Lives",
-    desc: "Vocational training, Self-Help Groups, and livelihood programs giving women the tools to achieve financial independence.",
-    color: "#DB2777",
+    slug: "pari-ki-udaan",
+    tagline: "Empowering Girls to Dream, Learn & Lead",
+    desc: "Vocational training, hygiene kits, scholarships, and livelihood programs giving women and girls tools for independence.",
+    color: "#db2777",
     bg: "#FDF2F8",
     border: "#FBCFE8",
-    cta: "Support Women",
+    cta: "Support Girls",
   },
   {
-    emoji: "🤝",
-    name: "Swabhiman",
-    tagline: "Dignity Through Self-Reliance",
-    desc: "Skill development, micro-finance, and entrepreneurship training turning vulnerable communities into self-sufficient contributors.",
-    color: "#D97706",
+    emoji: "⚖️",
+    name: "Swabhimaan",
+    slug: "swabhimaan",
+    tagline: "Dignity. Equality. Self-Reliance.",
+    desc: "Social justice, legal empowerment, government entitlement facilitation, and starter toolkits for sustainable livelihoods.",
+    color: "#d97706",
     bg: "#FFFBEB",
     border: "#FDE68A",
-    cta: "Support Livelihoods",
+    cta: "Support Dignity",
   },
   {
     emoji: "🌱",
-    name: "Tayyari Kal Ki",
-    tagline: "Preparing for Tomorrow",
-    desc: "Rural development, environmental sustainability, and community infrastructure building for a resilient, future-ready India.",
-    color: "#15803d",
-    bg: "#F0FDF4",
-    border: "#BBF7D0",
-    cta: "Support Development",
+    name: "Taiyyari Kal Ki",
+    slug: "taiyyari-kal-ki",
+    tagline: "Preparing Communities for Tomorrow",
+    desc: "Future skills, digital training, sustainable agriculture, and climate resilience building future-ready communities.",
+    color: "#0d9488",
+    bg: "#F0FDFA",
+    border: "#99F6E4",
+    cta: "Support Future",
   },
 ];
 
 function CampaignsSection({ lang }: LanguageProp) {
   return (
-    <section className="py-6 bg-slate-50">
+    <section className="py-8 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4">
         <ScrollReveal>
-          <SectionHeader
-            tag={lang === "en" ? "Our Campaigns" : "हमारे अभियान"}
-            title={lang === "en" ? "Five Pillars of Change" : "परिवर्तन के पांच स्तंभ"}
-            subtitle={lang === "en" ? "Focused action. Collective purpose. Lasting change." : "केंद्रित कार्रवाई। सामूहिक उद्देश्य। स्थायी परिवर्तन।"}
-          />
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-widest text-[#f97316] mb-1.5">
+                {lang === "en" ? "OUR CAMPAIGNS" : "हमारे अभियान"}
+              </p>
+              <h2 className="text-2xl md:text-3xl font-black text-[#0b1f3b] uppercase tracking-wide">
+                {lang === "en" ? "FIVE PILLARS OF CHANGE" : "परिवर्तन के पांच स्तंभ"}
+              </h2>
+              <p className="text-slate-700 font-medium text-xs sm:text-sm mt-1">
+                {lang === "en"
+                  ? "Focused action. Collective purpose. Lasting change."
+                  : "केंद्रित कार्रवाई। सामूहिक उद्देश्य। स्थायी परिवर्तन।"}
+              </p>
+            </div>
+            <a
+              href="/campaign"
+              className="inline-flex items-center gap-1.5 text-xs font-black text-[#0b1f3b] hover:text-[#15803d] transition shrink-0 self-start sm:self-end"
+            >
+              <span>Explore All Campaigns</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </a>
+          </div>
         </ScrollReveal>
 
         <ScrollReveal stagger={0.08}>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {CAMPAIGNS.map((c, i) => (
+            {CAMPAIGNS.map((c) => (
               <div
-                key={c.name}
-                className="bg-white rounded-2xl border-2 p-6 shadow-sm hover:shadow-md transition-all hover:-translate-y-1 group flex flex-col justify-between h-full"
-                style={{ borderColor: i === 0 ? "transparent" : "transparent" }}
+                key={c.slug}
+                className="bg-white rounded-2xl border border-slate-200 p-5 shadow-2xs hover:shadow-md transition-all hover:-translate-y-1 group flex flex-col justify-between h-full"
               >
                 <div>
-                  <div className="flex items-start gap-4 mb-4">
-                    <div className="text-3xl shrink-0">{c.emoji}</div>
-                    <div>
-                      <h3 className="font-extrabold text-slate-800 text-base">{c.name}</h3>
-                      <p className="text-xs font-semibold" style={{ color: c.color }}>{c.tagline}</p>
-                    </div>
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <div className="text-2xl shrink-0">{c.emoji}</div>
+                    <a
+                      href={`/campaign/${c.slug}`}
+                      className="text-[11px] font-bold text-slate-500 group-hover:text-[#15803d] transition flex items-center gap-1"
+                    >
+                      <span>Read Story</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </a>
                   </div>
-                  <div className="w-full h-1 rounded-full mb-4" style={{ backgroundColor: c.color, opacity: 0.2 }} />
-                  <p className="text-sm text-slate-600 leading-relaxed mb-5">{c.desc}</p>
+
+                  <div>
+                    <h3 className="font-black text-slate-900 text-base group-hover:text-[#0b1f3b]">
+                      <a href={`/campaign/${c.slug}`}>{c.name}</a>
+                    </h3>
+                    <p className="text-xs font-bold mt-0.5" style={{ color: c.color }}>
+                      {c.tagline}
+                    </p>
+                  </div>
+
+                  <div className="w-full h-1 rounded-full my-3" style={{ backgroundColor: c.color, opacity: 0.2 }} />
+                  <p className="text-xs text-slate-600 leading-relaxed mb-4">{c.desc}</p>
                 </div>
-                <a
-                  href="/donate"
-                  className="inline-flex items-center gap-2 text-xs font-bold px-4 py-2 rounded-lg transition-all hover:scale-[1.02] self-start"
-                  style={{ backgroundColor: c.bg, color: c.color, border: `1.5px solid ${c.border}` }}
-                >
-                  {c.cta} <ArrowRight className="w-3 h-3" />
-                </a>
+
+                <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
+                  <a
+                    href={`/campaign/${c.slug}`}
+                    className="text-xs font-extrabold text-[#0b1f3b] hover:text-[#15803d] transition inline-flex items-center gap-1"
+                  >
+                    <span>Know More</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </a>
+                  <a
+                    href={`/donate?campaign=${c.slug}`}
+                    className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-all hover:scale-[1.02]"
+                    style={{ backgroundColor: c.bg, color: c.color, border: `1.5px solid ${c.border}` }}
+                  >
+                    {c.cta} <ArrowRight className="w-3 h-3" />
+                  </a>
+                </div>
               </div>
             ))}
 
             {/* CTA card */}
-            <div className="bg-gradient-to-br from-brand-green to-[#0b1f3b] rounded-2xl p-6 flex flex-col justify-between h-full">
+            <div className="bg-gradient-to-br from-brand-green to-[#0b1f3b] rounded-2xl p-5 flex flex-col justify-between h-full text-white shadow-xs">
               <div>
-                <div className="flex items-center gap-3 mb-3">
+                <div className="flex items-center gap-2.5 mb-2">
                   <span className="text-2xl shrink-0">🌟</span>
                   <h3 className="font-extrabold text-white text-base leading-none">Join the Movement</h3>
                 </div>
-                <p className="text-white/70 text-sm leading-relaxed mb-4">Volunteer, donate, or partner with IWF to amplify the impact of these campaigns across rural India.</p>
+                <p className="text-white/80 text-xs leading-relaxed mb-3">
+                  Volunteer, donate, or partner with ISLAH to multiply the impact of these 5 campaigns across underserved communities.
+                </p>
               </div>
               <div className="flex flex-col gap-2 mt-auto">
-                <a href="/donate" className="w-full text-center bg-[#f97316] hover:bg-orange-600 text-white font-bold text-sm py-2.5 rounded-lg transition shadow-md">
+                <a
+                  href="/donate"
+                  className="w-full text-center bg-[#f97316] hover:bg-orange-600 text-white font-bold text-xs py-2 rounded-lg transition shadow-xs"
+                >
                   Donate Now
                 </a>
-                <a href="/membership" className="w-full text-center bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold text-sm py-2.5 rounded-lg transition">
-                  Become a Member
+                <a
+                  href="/campaign"
+                  className="w-full text-center bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold text-xs py-2 rounded-lg transition"
+                >
+                  View All Campaigns
                 </a>
               </div>
             </div>

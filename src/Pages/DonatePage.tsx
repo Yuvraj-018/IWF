@@ -79,6 +79,15 @@ const OFFLINE_BANK_DETAILS = {
   contactEmail: "info@iwfindia.org",
 };
 
+// ─── Donor Tier Logic ─────────────────────────────────────────────────────────
+
+function getDonorTier(amount: number) {
+  if (amount >= 50000) return { label: "Platinum", color: "#8B5CF6", bg: "#EDE9FE", icon: Sparkles };
+  if (amount >= 20000) return { label: "Gold", color: "#D97706", bg: "#FEF3C7", icon: Award };
+  if (amount >= 5000) return { label: "Silver", color: "#2563EB", bg: "#EFF6FF", icon: Star };
+  return { label: "General", color: "#15803D", bg: "#F0FDF4", icon: Heart };
+}
+
 // ─── Schema Matching Page 70 ──────────────────────────────────────────────────
 const donorSchema = z.object({
   financialType: z.string().min(1, "Please select a financial type"),
@@ -1122,6 +1131,27 @@ export default function DonatePage() {
               </p>
               <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 text-[11px] font-medium leading-relaxed">
                 <strong>NOTE:</strong> For Tax Year 2026–27 onward, eligible reporting entities use <strong>Form 113</strong> to report qualifying donations and <strong>Form 114</strong> is the official donor certificate generated after the filing.
+              </div>
+
+              {/* Donor Tiers */}
+              <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+                <h3 className="font-bold text-brand-green-dark text-sm mb-4 uppercase tracking-wide">Donor Recognition</h3>
+                <div className="space-y-2.5">
+                  {[
+                    { tier: "Platinum", icon: Sparkles, amount: "₹50,000+", color: "#7C3AED", bg: "#EDE9FE" },
+                    { tier: "Gold", icon: Award, amount: "₹20,000 – ₹49,999", color: "#B45309", bg: "#FEF3C7" },
+                    { tier: "Silver", icon: Star, amount: "₹5,000 – ₹19,999", color: "#2563EB", bg: "#EFF6FF" },
+                    { tier: "General", icon: Heart, amount: "Below ₹5,000", color: "#15803D", bg: "#F0FDF4" },
+                  ].map(({ tier, icon: Icon, amount, color, bg }) => (
+                    <div key={tier} className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: bg }}>
+                      <Icon className="w-4 h-4 shrink-0" style={{ color }} />
+                      <div>
+                        <p className="text-xs font-bold" style={{ color }}>{tier} Donor</p>
+                        <p className="text-xs text-slate-500">{amount} — Special recognition + Donor Card</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <div className="space-y-3 pt-2 text-xs">

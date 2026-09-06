@@ -42,8 +42,10 @@ import { Route as AntiFraudPolicyRouteImport } from './routes/anti-fraud-policy'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProgramsIndexRouteImport } from './routes/programs/index'
+import { Route as CampaignIndexRouteImport } from './routes/campaign/index'
 import { Route as ProgramsEntrepreneurDevelopmentRouteImport } from './routes/programs/entrepreneur-development'
 import { Route as PatientsPatientSlugRouteImport } from './routes/patients/$patientSlug'
+import { Route as CampaignCampaignSlugRouteImport } from './routes/campaign/$campaignSlug'
 import { Route as AboutVision2047RouteImport } from './routes/about_/vision-2047'
 import { Route as AboutPartnersRouteImport } from './routes/about_/partners'
 import { Route as AboutObjectiveAndVisionRouteImport } from './routes/about_/objective-and-vision'
@@ -266,6 +268,11 @@ const ProgramsIndexRoute = ProgramsIndexRouteImport.update({
   path: '/programs/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CampaignIndexRoute = CampaignIndexRouteImport.update({
+  id: '/campaign/',
+  path: '/campaign/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProgramsEntrepreneurDevelopmentRoute =
   ProgramsEntrepreneurDevelopmentRouteImport.update({
     id: '/programs/entrepreneur-development',
@@ -275,6 +282,11 @@ const ProgramsEntrepreneurDevelopmentRoute =
 const PatientsPatientSlugRoute = PatientsPatientSlugRouteImport.update({
   id: '/patients/$patientSlug',
   path: '/patients/$patientSlug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CampaignCampaignSlugRoute = CampaignCampaignSlugRouteImport.update({
+  id: '/campaign/$campaignSlug',
+  path: '/campaign/$campaignSlug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutVision2047Route = AboutVision2047RouteImport.update({
@@ -637,8 +649,10 @@ export interface FileRoutesByFullPath {
   '/about/objective-and-vision': typeof AboutObjectiveAndVisionRoute
   '/about/partners': typeof AboutPartnersRoute
   '/about/vision-2047': typeof AboutVision2047Route
+  '/campaign/$campaignSlug': typeof CampaignCampaignSlugRoute
   '/patients/$patientSlug': typeof PatientsPatientSlugRoute
   '/programs/entrepreneur-development': typeof ProgramsEntrepreneurDevelopmentRoute
+  '/campaign/': typeof CampaignIndexRoute
   '/programs/': typeof ProgramsIndexRoute
   '/programs/agriculture/farmer-livelihood': typeof ProgramsAgricultureFarmerLivelihoodRoute
   '/programs/agriculture/farmer-training': typeof ProgramsAgricultureFarmerTrainingRoute
@@ -729,8 +743,10 @@ export interface FileRoutesByTo {
   '/about/objective-and-vision': typeof AboutObjectiveAndVisionRoute
   '/about/partners': typeof AboutPartnersRoute
   '/about/vision-2047': typeof AboutVision2047Route
+  '/campaign/$campaignSlug': typeof CampaignCampaignSlugRoute
   '/patients/$patientSlug': typeof PatientsPatientSlugRoute
   '/programs/entrepreneur-development': typeof ProgramsEntrepreneurDevelopmentRoute
+  '/campaign': typeof CampaignIndexRoute
   '/programs': typeof ProgramsIndexRoute
   '/programs/agriculture/farmer-livelihood': typeof ProgramsAgricultureFarmerLivelihoodRoute
   '/programs/agriculture/farmer-training': typeof ProgramsAgricultureFarmerTrainingRoute
@@ -822,8 +838,10 @@ export interface FileRoutesById {
   '/about_/objective-and-vision': typeof AboutObjectiveAndVisionRoute
   '/about_/partners': typeof AboutPartnersRoute
   '/about_/vision-2047': typeof AboutVision2047Route
+  '/campaign/$campaignSlug': typeof CampaignCampaignSlugRoute
   '/patients/$patientSlug': typeof PatientsPatientSlugRoute
   '/programs/entrepreneur-development': typeof ProgramsEntrepreneurDevelopmentRoute
+  '/campaign/': typeof CampaignIndexRoute
   '/programs/': typeof ProgramsIndexRoute
   '/programs/agriculture/farmer-livelihood': typeof ProgramsAgricultureFarmerLivelihoodRoute
   '/programs/agriculture/farmer-training': typeof ProgramsAgricultureFarmerTrainingRoute
@@ -916,8 +934,10 @@ export interface FileRouteTypes {
     | '/about/objective-and-vision'
     | '/about/partners'
     | '/about/vision-2047'
+    | '/campaign/$campaignSlug'
     | '/patients/$patientSlug'
     | '/programs/entrepreneur-development'
+    | '/campaign/'
     | '/programs/'
     | '/programs/agriculture/farmer-livelihood'
     | '/programs/agriculture/farmer-training'
@@ -1008,8 +1028,10 @@ export interface FileRouteTypes {
     | '/about/objective-and-vision'
     | '/about/partners'
     | '/about/vision-2047'
+    | '/campaign/$campaignSlug'
     | '/patients/$patientSlug'
     | '/programs/entrepreneur-development'
+    | '/campaign'
     | '/programs'
     | '/programs/agriculture/farmer-livelihood'
     | '/programs/agriculture/farmer-training'
@@ -1100,8 +1122,10 @@ export interface FileRouteTypes {
     | '/about_/objective-and-vision'
     | '/about_/partners'
     | '/about_/vision-2047'
+    | '/campaign/$campaignSlug'
     | '/patients/$patientSlug'
     | '/programs/entrepreneur-development'
+    | '/campaign/'
     | '/programs/'
     | '/programs/agriculture/farmer-livelihood'
     | '/programs/agriculture/farmer-training'
@@ -1193,8 +1217,10 @@ export interface RootRouteChildren {
   AboutObjectiveAndVisionRoute: typeof AboutObjectiveAndVisionRoute
   AboutPartnersRoute: typeof AboutPartnersRoute
   AboutVision2047Route: typeof AboutVision2047Route
+  CampaignCampaignSlugRoute: typeof CampaignCampaignSlugRoute
   PatientsPatientSlugRoute: typeof PatientsPatientSlugRoute
   ProgramsEntrepreneurDevelopmentRoute: typeof ProgramsEntrepreneurDevelopmentRoute
+  CampaignIndexRoute: typeof CampaignIndexRoute
   ProgramsIndexRoute: typeof ProgramsIndexRoute
   ProgramsAgricultureFarmerLivelihoodRoute: typeof ProgramsAgricultureFarmerLivelihoodRoute
   ProgramsAgricultureFarmerTrainingRoute: typeof ProgramsAgricultureFarmerTrainingRoute
@@ -1480,6 +1506,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProgramsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/campaign/': {
+      id: '/campaign/'
+      path: '/campaign'
+      fullPath: '/campaign/'
+      preLoaderRoute: typeof CampaignIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/programs/entrepreneur-development': {
       id: '/programs/entrepreneur-development'
       path: '/programs/entrepreneur-development'
@@ -1492,6 +1525,13 @@ declare module '@tanstack/react-router' {
       path: '/patients/$patientSlug'
       fullPath: '/patients/$patientSlug'
       preLoaderRoute: typeof PatientsPatientSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/campaign/$campaignSlug': {
+      id: '/campaign/$campaignSlug'
+      path: '/campaign/$campaignSlug'
+      fullPath: '/campaign/$campaignSlug'
+      preLoaderRoute: typeof CampaignCampaignSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about_/vision-2047': {
@@ -1921,8 +1961,10 @@ const rootRouteChildren: RootRouteChildren = {
   AboutObjectiveAndVisionRoute: AboutObjectiveAndVisionRoute,
   AboutPartnersRoute: AboutPartnersRoute,
   AboutVision2047Route: AboutVision2047Route,
+  CampaignCampaignSlugRoute: CampaignCampaignSlugRoute,
   PatientsPatientSlugRoute: PatientsPatientSlugRoute,
   ProgramsEntrepreneurDevelopmentRoute: ProgramsEntrepreneurDevelopmentRoute,
+  CampaignIndexRoute: CampaignIndexRoute,
   ProgramsIndexRoute: ProgramsIndexRoute,
   ProgramsAgricultureFarmerLivelihoodRoute:
     ProgramsAgricultureFarmerLivelihoodRoute,
