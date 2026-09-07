@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import DonatePage from "@/Pages/DonatePage";
 
 export const Route = createFileRoute("/donate")({
-  validateSearch: (search: Record<string, unknown>) => ({
+  validateSearch: (search: Record<string, unknown>): { patientId?: string; amount?: string } => ({
     patientId: search.patientId as string | undefined,
     amount: search.amount as string | undefined,
   }),

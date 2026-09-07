@@ -43,7 +43,6 @@ export const NAV_ITEMS = [
   "About Us",
   "What We Do",
   "Our Campaigns",
-  "Programs",
   "Impact",
   "Media",
   "Membership",
@@ -69,8 +68,9 @@ export const MEGA_DATA: Record<string, MegaSection> = {
     ],
   },
   "What We Do": {
-    cols: 4,
+    cols: 3,
     items: [
+      "View All Programs",
       "Education",
       "Health Care",
       "Skills Development",
@@ -91,10 +91,6 @@ export const MEGA_DATA: Record<string, MegaSection> = {
       "Taiyyari Kal Ki",
       "View All Campaigns",
     ],
-  },
-  Programs: {
-    cols: 1,
-    items: ["View All Programs"],
   },
   Impact: {
     cols: 3,
@@ -151,6 +147,7 @@ function getMegaHref(menu: string, item: string) {
   if (menu === "About Us" && item === "Vision 2047") return "/about/vision-2047";
   if (menu === "About Us" && item === "Membership Policy") return "/membership#status";
   // What We Do
+  if (menu === "What We Do" && (item === "View All Programs" || item === "All Programs" || item === "Our Programs")) return "/programs";
   if (menu === "What We Do" && item === "Education") return "/programs/education";
   if (menu === "What We Do" && item === "Health Care") return "/programs/healthcare";
   if (menu === "What We Do" && item === "Skills Development") return "/programs/skills-development";
@@ -259,23 +256,17 @@ export function Header() {
   const isRouteActive = (item: string) =>
     (item === "Home" && pathname === "/") ||
     (item === "About Us" && pathname.startsWith("/about")) ||
+    (item === "Our Campaigns" && pathname.startsWith("/campaign")) ||
     (item === "Membership" && pathname.startsWith("/membership")) ||
     (item === "Get Involved" && (pathname.startsWith("/get-involved") || pathname.startsWith("/volunteer"))) ||
-    ((item === "What We Do" || item === "Programs") && pathname.startsWith("/programs"));
+    (item === "What We Do" && pathname.startsWith("/programs"));
 
   const getHeaderHref = (item: string) => {
-    if (item === "What We Do" && pathname === "/") return "#focus-areas";
     return getTopNavHref(item);
   };
 
-  const handleHeaderClick = (item: string, event: MouseEvent<HTMLAnchorElement>) => {
-    if (item !== "What We Do" || pathname !== "/") return;
-    event.preventDefault();
+  const handleHeaderClick = (_item: string, _event: MouseEvent<HTMLAnchorElement>) => {
     setActiveMenu(null);
-    document.getElementById("focus-areas")?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
   };
 
   return (

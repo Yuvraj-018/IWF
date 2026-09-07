@@ -29,6 +29,9 @@ import {
   FileText,
   Upload,
   Lock,
+  Printer,
+  RotateCcw,
+  HelpCircle,
 } from "lucide-react";
 import {
   Footer,
@@ -38,6 +41,9 @@ import {
   UtilityBar,
 } from "@/components/layout/SiteLayout";
 import type { RoleType } from "@/components/forms/RoleFormModal";
+import { DonationReceipt, type DonationReceiptData } from "@/components/donation/DonationReceipt";
+import { DonationSummaryCard } from "@/components/donation/DonationSummaryCard";
+import { DonorMembershipCard } from "@/components/donation/DonorMembershipCard";
 import {
   COUNTRY_CODES,
   blockNumbersOnKeyDown,
@@ -93,16 +99,16 @@ const donorSchema = z.object({
   financialType: z.string().min(1, "Please select a financial type"),
   frequency: z.enum(["One Time", "Monthly", "Quarterly", "Yearly"]),
   amount: z.number({ invalid_type_error: "Enter a valid amount" }).min(100, "Minimum donation amount is ₹100"),
-  recurringPledge: z.boolean().default(false),
-  pledgeMonths: z.string().default("12 Months"),
+  recurringPledge: z.boolean(),
+  pledgeMonths: z.string(),
 
-  donorType: z.enum(["Individual", "Corporate"]).default("Individual"),
+  donorType: z.enum(["Individual", "Corporate"]),
   fullName: z
     .string()
     .trim()
     .min(2, "Full Name is required")
     .regex(/^[^0-9]+$/, "Name cannot contain numbers"),
-  countryCode: z.string().default("+91"),
+  countryCode: z.string(),
   phone: z
     .string()
     .trim()
@@ -116,12 +122,12 @@ const donorSchema = z.object({
     .trim()
     .regex(/^\d{6}$/, "Enter a valid 6-digit PIN code"),
 
-  taxExemption: z.boolean().default(false),
+  taxExemption: z.boolean(),
   pan: z.string().trim().optional(),
   panFile: z.any().optional(),
   photoFile: z.any().optional(),
 
-  websiteConsent: z.enum(["Yes", "No"]).default("Yes"),
+  websiteConsent: z.enum(["Yes", "No"]),
   citizenDeclaration: z.literal(true, {
     errorMap: () => ({ message: "Please confirm that you are a citizen of India donating your own funds" }),
   }),
@@ -209,12 +215,53 @@ export default function DonatePage() {
   const watchFrequency = watch("frequency");
   const watchAmount = watch("amount") || 0;
   const watchRecurringPledge = watch("recurringPledge");
+  const watchPledgeMonths = watch("pledgeMonths");
   const watchDonorType = watch("donorType");
   const watchFullName = watch("fullName");
+  const watchCountryCode = watch("countryCode");
   const watchPhone = watch("phone");
   const watchEmail = watch("email");
   const watchAddress = watch("address");
   const watchState = watch("state");
+  const watchCity = watch("city");
+  const watchPincode = watch("pincode");
+  const watchTaxExemption = watch("taxExemption");
+  const watchPan = watch("pan");
+
+  const [emailNotice, setEmailNotice] = useState<string | null>(null);
+  const receiptRef = useRef<HTMLDivElement>(null);
+
+  // Formatted composite address if standard address field is sparse
+  const fullFormattedAddress = watchAddress
+    ? watchAddress
+    : [watchCity, watchState ? `${watchState}${watchPincode ? ` - ${watchPincode}` : ""}` : "", "India"]
+        .filter(Boolean)
+        .join(", ");
+
+  const receiptData: DonationReceiptData = {
+    receiptNo: receiptNumber,
+    receiptDate: paymentDate ? paymentDate.split(" | ")[0] : "22 May 2025",
+    donorName: watchFullName || "Md. Aftab Alam",
+    mobileNo: watchPhone ? `${watchCountryCode || "+91"} ${watchPhone}` : "+91 9123456780",
+    email: watchEmail || "aftabalam@email.com",
+    address: fullFormattedAddress || "Darbhanga, Bihar - 846004, India",
+    financialType: watchFinancialType || "Medical Emergency",
+    frequency: watchFrequency || "One Time",
+    amount: Number(watchAmount) || 2500,
+    contributionFor: contextPatient ? `Patient: ${contextPatient.name}` : "--",
+    paymentMode: "UPI / Online",
+    transactionId: "pay_QR12345abcde67890",
+    paymentDate: paymentDate || "22 May 2025 | 10:45 AM",
+  };
+
+  const handleDownloadNow = () => {
+    window.print();
+  };
+
+  const handleSendEmail = () => {
+    setEmailNotice(`Receipt successfully sent to ${watchEmail || "your email address"}!`);
+    setTimeout(() => setEmailNotice(null), 5000);
+  };
 
   useEffect(() => {
     if (contextAmount) {
@@ -240,9 +287,9 @@ export default function DonatePage() {
 
   const onSubmit = async (data: DonorFormData) => {
     await new Promise((r) => setTimeout(r, 600));
-    const randomReceiptNum = Math.floor(100000 + Math.random() * 900000);
+    const randomReceiptNum = String(Math.floor(100000 + Math.random() * 900000));
     const now = new Date();
-    const formattedDate = now.toLocaleDateString("en-IN", {
+    const formattedDate = now.toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "short",
       year: "numeric",
@@ -250,11 +297,14 @@ export default function DonatePage() {
     const formattedTime = now.toLocaleTimeString("en-IN", {
       hour: "2-digit",
       minute: "2-digit",
+      hour12: true,
     });
     setReceiptNumber(`IWF/RCPT/${now.getFullYear()}-${(now.getFullYear() + 1).toString().slice(-2)}/${randomReceiptNum}`);
     setPaymentDate(`${formattedDate} | ${formattedTime}`);
     setSubmitted(true);
-    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    setTimeout(() => {
+      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
   };
 
   const printReceipt = () => {
@@ -316,7 +366,138 @@ export default function DonatePage() {
         {/* ─── Two-Column Donation Section (Exact Reproduction of Page 70) ──── */}
         <section ref={formRef} className="py-12 sm:py-16 bg-slate-50 border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid lg:grid-cols-12 gap-8 items-start">
+            {submitted ? (
+              /* ── Dedicated Post-Payment Presentation (Upper Thank You + Receipt + Bottom Actions) ── */
+              <div className="max-w-3xl mx-auto space-y-8 text-center">
+                {/* Upper side: Celebratory Thank You Message */}
+                <div className="bg-gradient-to-br from-[#00381e] via-[#005a30] to-[#014725] text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-white/20 text-center space-y-4">
+                  <div className="w-16 h-16 rounded-full bg-white/20 text-white flex items-center justify-center mx-auto shadow-inner">
+                    <CheckCircle2 className="w-9 h-9 text-emerald-300" />
+                  </div>
+                  <div className="space-y-1.5">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-emerald-300 text-xs font-bold uppercase tracking-wider">
+                      <Sparkles className="w-3.5 h-3.5" /> Payment Successful &amp; Verified
+                    </div>
+                    <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+                      Thank You for Your Generous Donation!
+                    </h2>
+                    <p className="text-emerald-100 text-xs sm:text-sm max-w-xl mx-auto leading-relaxed">
+                      Your contribution of{" "}
+                      <strong className="text-white font-black text-base sm:text-lg">
+                        ₹{Number(watchAmount).toLocaleString("en-IN")}
+                      </strong>{" "}
+                      empowers lives, educates underprivileged children, and strengthens communities.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 text-left">
+                    <div className="bg-white/10 rounded-xl p-2.5 backdrop-blur-xs">
+                      <span className="text-[10px] text-emerald-200 block uppercase font-bold">Receipt ID</span>
+                      <span className="text-xs font-mono font-bold text-white truncate block">{receiptNumber}</span>
+                    </div>
+                    <div className="bg-white/10 rounded-xl p-2.5 backdrop-blur-xs">
+                      <span className="text-[10px] text-emerald-200 block uppercase font-bold">Amount Paid</span>
+                      <span className="text-xs font-bold text-white">₹{Number(watchAmount).toLocaleString("en-IN")}</span>
+                    </div>
+                    <div className="bg-white/10 rounded-xl p-2.5 backdrop-blur-xs">
+                      <span className="text-[10px] text-emerald-200 block uppercase font-bold">Tax Benefit</span>
+                      <span className="text-xs font-bold text-white">100% 80G Eligible</span>
+                    </div>
+                    <div className="bg-white/10 rounded-xl p-2.5 backdrop-blur-xs">
+                      <span className="text-[10px] text-emerald-200 block uppercase font-bold">Sent To</span>
+                      <span className="text-xs font-bold text-white truncate block">{watchEmail}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Center: Exact Donation Receipt matching uploaded design 1:1 */}
+                <div className="text-left">
+                  <DonationReceipt ref={receiptRef} data={receiptData} />
+                </div>
+
+                {/* Bottom: Action Buttons (Download Now, Send to Email, Print Receipt, Make Another Donation) */}
+                <div className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-xl space-y-4 text-center">
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                    Receipt Actions &amp; Verification
+                  </p>
+                  <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
+                    <button
+                      type="button"
+                      onClick={handleDownloadNow}
+                      className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-brand-green hover:bg-brand-green-dark text-white font-bold text-sm shadow-md transition hover:scale-[1.02] cursor-pointer"
+                    >
+                      <Download className="w-4 h-4" /> Download Now
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleSendEmail}
+                      className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#071527] hover:bg-[#0c2340] text-white font-bold text-sm shadow-md transition hover:scale-[1.02] cursor-pointer"
+                    >
+                      <Mail className="w-4 h-4 text-sky-400" /> Send to Email
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => window.print()}
+                      className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-sm transition cursor-pointer"
+                    >
+                      <Printer className="w-4 h-4 text-slate-500" /> Print Receipt
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSubmitted(false);
+                        window.scrollTo({ top: formRef.current?.offsetTop || 300, behavior: "smooth" });
+                      }}
+                      className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-sm transition cursor-pointer"
+                    >
+                      <RotateCcw className="w-4 h-4 text-slate-500" /> Make Another Donation
+                    </button>
+                  </div>
+
+                  {emailNotice && (
+                    <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-semibold text-brand-green flex items-center justify-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 shrink-0" />
+                      <span>{emailNotice}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* What Happens Next & Donor Helpline Card */}
+                <div className="grid md:grid-cols-2 gap-4 text-left">
+                  <div className="p-5 bg-white border border-slate-200 rounded-2xl space-y-2.5 text-xs text-slate-600 shadow-sm">
+                    <h4 className="font-black text-slate-800 text-xs uppercase tracking-wider flex items-center gap-2">
+                      <Shield className="w-4 h-4 text-brand-green" /> What Happens Next?
+                    </h4>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-brand-green shrink-0 mt-0.5" />
+                      <span>Official 80G tax-exempt receipt dispatched to {watchEmail}.</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <Mail className="w-4 h-4 text-brand-orange shrink-0 mt-0.5" />
+                      <span>You will receive regular progress reports on how your contribution is making an impact.</span>
+                    </div>
+                  </div>
+
+                  <div className="p-5 bg-white border border-slate-200 rounded-2xl space-y-2.5 text-xs text-slate-600 shadow-sm">
+                    <h4 className="font-black text-slate-800 text-xs uppercase tracking-wider flex items-center gap-2">
+                      <Phone className="w-4 h-4 text-brand-green" /> Donor Care &amp; Support
+                    </h4>
+                    <p className="text-slate-500">
+                      Need a revised 80G certificate or have questions regarding your transaction?
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-3 pt-1">
+                      <a href="tel:+919811861633" className="text-brand-green font-bold hover:underline flex items-center gap-1.5">
+                        <Phone className="w-3.5 h-3.5" /> +91 9811861633
+                      </a>
+                      <a href="mailto:info@iwfindia.org" className="text-brand-green font-bold hover:underline flex items-center gap-1.5">
+                        <Mail className="w-3.5 h-3.5" /> info@iwfindia.org
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="grid lg:grid-cols-12 gap-8 items-start">
               {/* ── LEFT COLUMN: Donation Form ── */}
               <div className="lg:col-span-7">
                 <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl space-y-8">
@@ -809,210 +990,60 @@ export default function DonatePage() {
                 </div>
               </div>
 
-              {/* ── RIGHT COLUMN: Live Donation Summary & Instant Receipt (Page 70) ── */}
+              {/* ── RIGHT COLUMN: Symmetrical Live Donation Summary Card ── */}
               <div className="lg:col-span-5 space-y-6">
-                {/* Donation Summary Card */}
-                <div className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-xl space-y-5 text-left">
-                  {submitted && (
-                    <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl space-y-1">
-                      <div className="flex items-center gap-2 text-brand-green font-extrabold text-sm">
-                        <CheckCircle2 className="w-5 h-5 shrink-0" />
-                        <span>Thank You for Your Generous Donation!</span>
-                      </div>
-                      <p className="text-xs text-slate-600">
-                        Your contribution can bring real change in someone's life.
-                      </p>
-                      <p className="text-xs text-slate-700 font-medium pt-1">
-                        Your donation of <strong>₹{watchAmount.toLocaleString("en-IN")}</strong> has been received successfully. A receipt has been sent to <strong>{watchEmail}</strong>
-                      </p>
-                    </div>
-                  )}
+                <div className="lg:sticky lg:top-24 space-y-5">
+                  <DonationSummaryCard
+                    financialType={watchFinancialType}
+                    frequency={watchFrequency}
+                    amount={Number(watchAmount) || 0}
+                    recurringPledge={watchRecurringPledge}
+                    pledgeMonths={watchPledgeMonths}
+                    donorType={watchDonorType}
+                    fullName={watchFullName}
+                    email={watchEmail}
+                    phone={watchPhone}
+                    countryCode={watchCountryCode}
+                    taxExemption={watchTaxExemption}
+                    pan={watchPan}
+                    contextPatient={contextPatient}
+                  />
 
-                  {/* Official Receipt Card Box */}
-                  <div className="border-2 border-slate-200 rounded-2xl p-5 bg-white space-y-4 shadow-sm">
-                    <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                      <div>
-                        <h3 className="text-sm font-black text-[#006837] tracking-wide">
-                          Donation Summary
-                        </h3>
-                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                          ISLAH WELFARE FOUNDATION
-                        </p>
-                        <p className="text-[9px] text-slate-400 italic">
-                          (Empowering Youth | Enriching Communities | Transforming Lives)
-                        </p>
-                      </div>
-                      <div className="w-10 h-10 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center font-black text-brand-green text-xs">
-                        IWF
-                      </div>
-                    </div>
+                  {/* Donor Recognition & Membership Status Card */}
+                  <DonorMembershipCard
+                    fullName={watchFullName}
+                    currentAmount={Number(watchAmount) || 0}
+                    donorType={watchDonorType}
+                  />
 
-                    {/* Receipt Meta */}
-                    <div className="grid grid-cols-2 gap-2 text-[11px] bg-slate-50 p-2.5 rounded-xl font-mono">
-                      <div>
-                        <span className="text-slate-400 block font-sans text-[10px]">Receipt No. :</span>
-                        <span className="font-bold text-slate-800">{receiptNumber}</span>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-slate-400 block font-sans text-[10px]">Receipt Date :</span>
-                        <span className="font-bold text-slate-800">{paymentDate.split(" | ")[0]}</span>
-                      </div>
+                  {/* Donor Care & Assistance Card */}
+                  <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-2 text-left">
+                    <p className="text-xs font-black text-slate-800 uppercase tracking-wide flex items-center gap-1.5">
+                      <HelpCircle className="w-3.5 h-3.5 text-brand-green" />
+                      Questions or Need Assistance?
+                    </p>
+                    <p className="text-xs text-slate-500 leading-relaxed">
+                      Our donor care team is here to assist with bank wire instructions, 80G tax exemptions, or custom CSR sponsorships.
+                    </p>
+                    <div className="pt-2 flex flex-col sm:flex-row gap-3">
+                      <a
+                        href="tel:+919811861633"
+                        className="flex items-center gap-2 text-xs text-brand-green font-bold hover:underline"
+                      >
+                        <Phone className="w-3.5 h-3.5" /> +91 9811861633
+                      </a>
+                      <a
+                        href="mailto:info@iwfindia.org"
+                        className="flex items-center gap-2 text-xs text-brand-green font-bold hover:underline"
+                      >
+                        <Mail className="w-3.5 h-3.5" /> info@iwfindia.org
+                      </a>
                     </div>
-
-                    {/* Donor Details */}
-                    <div className="space-y-1.5 text-xs border-b border-slate-100 pb-3">
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                        Donor Details
-                      </p>
-                      <div className="flex justify-between">
-                        <span className="text-slate-500">Name :</span>
-                        <span className="font-bold text-slate-800">{watchFullName || "--"}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-slate-500">Mobile No. :</span>
-                        <span className="font-bold text-slate-800">
-                          {watchPhone ? `+91 ${watchPhone}` : "--"}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-slate-500">Email :</span>
-                        <span className="font-bold text-slate-800">{watchEmail || "--"}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-slate-500">Address :</span>
-                        <span className="font-bold text-slate-800 text-right max-w-[200px] truncate">
-                          {watchAddress || `${"Darbhanga"}, ${watchState}`}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Donation Details */}
-                    <div className="space-y-1.5 text-xs border-b border-slate-100 pb-3">
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                        Donation Details
-                      </p>
-                      <div className="flex justify-between">
-                        <span className="text-slate-500">Financial Type :</span>
-                        <span className="font-bold text-brand-green">{watchFinancialType}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-slate-500">Frequency :</span>
-                        <span className="font-bold text-slate-800">{watchFrequency}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-slate-500">Amount :</span>
-                        <span className="font-black text-brand-orange text-sm">
-                          ₹ {watchAmount.toLocaleString("en-IN")}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-slate-500">Contribution For :</span>
-                        <span className="font-bold text-slate-800">
-                          {contextPatient ? `Patient ${contextPatient.name}` : "--"}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-slate-500">Payment Mode :</span>
-                        <span className="font-bold text-slate-800">UPI / Online</span>
-                      </div>
-                      <div className="flex justify-between font-mono text-[11px]">
-                        <span className="text-slate-500 font-sans">Transaction ID :</span>
-                        <span className="font-bold text-slate-800">pay_OR12345abcdef67890</span>
-                      </div>
-                      <div className="flex justify-between font-mono text-[11px]">
-                        <span className="text-slate-500 font-sans">Payment Date :</span>
-                        <span className="font-bold text-slate-800">{paymentDate}</span>
-                      </div>
-                    </div>
-
-                    {/* Signatory & Mission Quote */}
-                    <div className="pt-2 text-center space-y-2">
-                      <p className="text-[11px] text-slate-500 italic leading-snug">
-                        Thank you for supporting our mission. Your generosity helps us create a lasting social impact.
-                      </p>
-                      <div className="pt-2 flex flex-col items-center">
-                        <div className="w-32 h-10 border-b border-slate-300 flex items-end justify-center pb-1">
-                          <span className="font-serif italic text-sm text-slate-600">Authorised Signatory</span>
-                        </div>
-                        <span className="text-[10px] font-bold text-slate-400 mt-1 uppercase">
-                          Islah Welfare Foundation
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Actions: Download Receipt & Send on Email (Page 70) */}
-                  <div className="grid grid-cols-2 gap-3 pt-1">
-                    <button
-                      type="button"
-                      onClick={printReceipt}
-                      className="inline-flex items-center justify-center gap-2 h-11 rounded-xl bg-brand-green hover:bg-brand-green-dark text-white font-bold text-xs uppercase tracking-wider transition cursor-pointer shadow-xs"
-                    >
-                      <Download className="w-4 h-4" /> Download Receipt
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => alert(`Receipt dispatched to ${watchEmail || "your email"}`)}
-                      className="inline-flex items-center justify-center gap-2 h-11 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold text-xs uppercase tracking-wider transition cursor-pointer"
-                    >
-                      <Mail className="w-4 h-4 text-brand-orange" /> Send on Email
-                    </button>
-                  </div>
-
-                  {/* What Happens Next? (Page 70) */}
-                  <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-3 text-xs text-slate-600">
-                    <h4 className="font-black text-slate-800 text-xs uppercase tracking-wider">
-                      What Happens Next?
-                    </h4>
-                    <div className="flex items-start gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-brand-green shrink-0 mt-0.5" />
-                      <span>Receipt has been sent to your email.</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <Mail className="w-4 h-4 text-brand-orange shrink-0 mt-0.5" />
-                      <span>You will also receive updates on how your contribution is making an impact.</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <Phone className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                      <span>
-                        For any queries, contact us at{" "}
-                        <a href="mailto:info@iwfindia.org" className="text-brand-green font-bold hover:underline">
-                          info@iwfindia.org
-                        </a>{" "}
-                        |{" "}
-                        <a href="tel:+919811861633" className="text-brand-green font-bold hover:underline">
-                          +91 9811861633
-                        </a>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Contact Us Card */}
-                <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-2 text-left">
-                  <p className="text-xs font-black text-slate-700 uppercase tracking-wide">
-                    Questions or Need Assistance?
-                  </p>
-                  <p className="text-xs text-slate-500">
-                    Our donor care team is here to support you at every step of your giving journey.
-                  </p>
-                  <div className="pt-2 flex flex-col sm:flex-row gap-3">
-                    <a
-                      href="tel:+919811861633"
-                      className="flex items-center gap-2 text-xs text-brand-green font-bold hover:underline"
-                    >
-                      <Phone className="w-3.5 h-3.5" /> +91 9811861633
-                    </a>
-                    <a
-                      href="mailto:info@iwfindia.org"
-                      className="flex items-center gap-2 text-xs text-brand-green font-bold hover:underline"
-                    >
-                      <Mail className="w-3.5 h-3.5" /> info@iwfindia.org
-                    </a>
                   </div>
                 </div>
               </div>
             </div>
+          )}
           </div>
         </section>
 
