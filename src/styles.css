@@ -469,3 +469,22 @@ html {
   animation-play-state: paused;
 }
 
+/* ── Donation Receipt Print Formatting ────────────────────────────────────── */
+@media print {
+  body {
+    background: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  header, footer, nav, button, .no-print {
+    display: none !important;
+  }
+  #donation-receipt-canvas {
+    box-shadow: none !important;
+    border: none !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    border-radius: 0 !important;
+  }
+}
+
