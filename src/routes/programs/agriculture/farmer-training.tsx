@@ -4,10 +4,14 @@ import FarmerTraining from "@/Pages/Agriculture/subpages/FarmerTraining";
 export const Route = createFileRoute("/programs/agriculture/farmer-training")({
   head: () => ({
     meta: [
-      { title: "Farmer Training & Capacity Building — IWF Agriculture" },
+      {
+        title:
+          "Farmer Awareness & Training Initiative (FAT) - IWF | Islah Welfare Foundation",
+      },
       {
         name: "description",
-        content: "Empowering farmers with practical agronomy, agri-tech, and bio-input skills.",
+        content:
+          "Knowledge for Farmers. Skills for Better Decisions. Awareness for Stronger Livelihoods. Village-level awareness camps, practical workshops, and peer knowledge exchange.",
       },
     ],
   }),

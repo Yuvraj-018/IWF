@@ -27,13 +27,13 @@ import {
 const OFFICES = [
   {
     type: "Registered Office: Bathiya, Darbhanga, Bihar – 847423",
-    shortName: "Registered Office",
+    shortName: "Registered Office Headquarter",
     badge: "HEADQUARTERS",
     badgeCls: "bg-emerald-700 text-white",
     iconBg: "bg-emerald-50 text-emerald-700 border-emerald-200",
     themeColor: "#15803d",
     address: "Bathiya, Darbhanga, Bihar – 847423",
-    inCharge: "Md. Azizullah",
+    inCharge: "Mr. Md. Azizullah",
     phone: "+91 9811861633",
     email: "info@iwfindia.org",
     timing: "Mon–Sat: 10:00 AM – 4:00 PM",
@@ -46,7 +46,7 @@ const OFFICES = [
     iconBg: "bg-blue-50 text-blue-700 border-blue-200",
     themeColor: "#1d4ed8",
     address: "Sector-B, New Azimabad Colony, Patna, Bihar- 800006",
-    inCharge: "Md. Sharique",
+    inCharge: "Mr. Md. Sharique",
     phone: "+91 9811861633",
     email: "info@iwfindia.org",
     timing: "Mon–Fri: 10:00 AM – 4:00 PM",
@@ -59,14 +59,14 @@ const OFFICES = [
     iconBg: "bg-amber-50 text-amber-700 border-amber-200",
     themeColor: "#d97706",
     address: "Sisoli, Garh Road, Meerut, Uttar Pradesh- 250004",
-    inCharge: "Md. Irshad Ali",
+    inCharge: "Mr. Md. Irshad Ali",
     phone: "+91 9811861633",
     email: "info@iwfindia.org",
     timing: "Mon–Fri: 10:00 AM – 4:00 PM",
   },
   {
     type: "Delhi Office",
-    shortName: "Delhi Office",
+    shortName: "Delhi Administrative Office",
     badge: "ADMINISTRATIVE OFFICE",
     badgeCls: "bg-purple-700 text-white",
     iconBg: "bg-purple-50 text-purple-700 border-purple-200",
@@ -82,13 +82,13 @@ const OFFICES = [
 const CONTACT_PERSONS = [
   {
     name: "Er. Nasera Firdausi",
-    title: "V. Chairman",
+    title: "Acting Chairman",
     initials: "NF",
     color: "#2563eb",
     bg: "bg-blue-50",
     badgeCls: "bg-blue-100 text-blue-800 border-blue-200",
     phone: "+91 9811861633",
-    email: "vchairman@iwfindia.org",
+    email: "chairman@iwfindia.org",
   },
   {
     name: "Er. Md. Ejazullah",
@@ -726,8 +726,8 @@ export default function ContactPage() {
 
                     {/* In-Charge & Address */}
                     <div className="space-y-1.5 text-xs mb-3.5">
-                      <p className="font-semibold text-slate-800">
-                        Office In charge: <span className="font-bold text-slate-900">{office.inCharge}</span>
+                      <p className="text-[11px] text-slate-600 font-medium">
+                        Contact: <span className="font-bold text-slate-800 text-xs">{office.inCharge}</span>
                       </p>
                       <div className="flex items-start gap-1.5 text-slate-600">
                         <MapPin className="w-3.5 h-3.5 shrink-0 text-slate-400 mt-0.5" />

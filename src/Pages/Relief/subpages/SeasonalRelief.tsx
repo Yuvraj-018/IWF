@@ -1,145 +1,461 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { NotificationTicker, UtilityBar, Header, Footer, RoleFormModal } from "@/components/layout/SiteLayout";
-import { Home, ChevronRight, ArrowLeft, ArrowRight, Snowflake, Sun, CloudRain, Shield, CheckCircle2, ShieldCheck, Heart, Sparkles } from "lucide-react";
+import {
+  NotificationTicker,
+  UtilityBar,
+  Header,
+  Footer,
+  RoleFormModal,
+} from "@/components/layout/SiteLayout";
+import {
+  Home,
+  ChevronRight,
+  ArrowLeft,
+  ArrowRight,
+  CloudRain,
+  Snowflake,
+  Sun,
+  Wind,
+  Flame,
+  LifeBuoy,
+  Users,
+  CheckCircle2,
+  TrendingUp,
+  Sparkles,
+  ShieldCheck,
+  Package,
+} from "lucide-react";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
 import heroImg from "@/assets/sector_relief_1.png";
 
-export default function SeasonalRelief() {
-  const [activeModal, setActiveModal] = useState<"volunteer" | "partner" | "sponsor" | "mentor" | "employee" | null>(null);
+// ─── Data ─────────────────────────────────────────────────────────────────────
 
-  const SEASONS = [
-    {
-      icon: Snowflake,
-      num: "Winter",
-      title: "Winter Blanket & Warm Clothes Drive",
-      desc: "Distributing heavyweight woolen blankets, thermal inners, sweaters, socks, and shawls to pavement dwellers, rickshaw pullers, and rural elderly facing sub-zero winter temperatures.",
-      highlights: ["High-grade heavy woolen blankets", "Children's warm jackets & caps", "Midnight on-ground street distribution"],
-    },
-    {
-      icon: Sun,
-      num: "Summer",
-      title: "Summer Heatwave Drinking Water Hubs (Chhabeel)",
-      desc: "Setting up shaded community water kiosks offering cold, purified drinking water, ORS hydration sachets, and lemon water along busy rural bus stops and market intersections.",
-      highlights: ["Free cold drinking water points", "ORS & glucose distribution", "Heat stroke first-aid stations"],
-    },
-    {
-      icon: CloudRain,
-      num: "Monsoon",
-      title: "Monsoon Anti-Vector & Water Disinfection Drive",
-      desc: "Mass distribution of long-lasting insecticidal mosquito nets (LLIN), chlorine tablets for rural open wells, and bleaching powder spraying to prevent malaria, dengue, and diarrhea.",
-      highlights: ["Medicated mosquito bed nets", "Well chlorination & bleaching", "Vector-borne disease awareness"],
-    },
-  ];
+const APPROACH_PILLARS = [
+  {
+    num: "01",
+    icon: CloudRain,
+    title: "Flood Relief Support",
+    desc: "Facilitating emergency dry ration packets, clean drinking water pouches, chlorine purification tablets, tarpaulins, and clothing for flood-affected families.",
+  },
+  {
+    num: "02",
+    icon: Snowflake,
+    title: "Winter Relief Support",
+    desc: "Distributing thick thermal blankets, woollen shawls, sweaters, and sleeping bedding to protect vulnerable rural elders and children during severe cold waves.",
+  },
+  {
+    num: "03",
+    icon: Sun,
+    title: "Heatwave & Summer Support",
+    desc: "Setting up village hydration points, distributing oral rehydration salts (ORS), and conducting sunstroke awareness during peak summer heatwaves.",
+  },
+  {
+    num: "04",
+    icon: Wind,
+    title: "Storm & Extreme Weather Response",
+    desc: "Deploying rapid assistance for rural settlements struck by violent cyclonic storms, hail, and unseasonal downpours to secure roofs and protect crops.",
+  },
+  {
+    num: "05",
+    icon: Flame,
+    title: "Fire & Local Emergency Support",
+    desc: "Providing emergency shelter materials, utensils, clothing, and food grain assistance to families devastated by sudden village or slum fire accidents.",
+  },
+];
+
+const IMPLEMENTATION_MODULES = [
+  { icon: CloudRain, title: "Monsoon Flood Relief Deployment", desc: "Boat-delivered food rations, clean water pouches, and temporary elevated shelter kits for marooned villages." },
+  { icon: Snowflake, title: "Winter Warmth & Blanket Distribution", desc: "Targeted distribution of high-grade woollen blankets and thermal innerwear to homeless and destitute villagers." },
+  { icon: Sun, title: "Heatwave Hydration & Health Desks", desc: "Community water huts, distribution of ORS and glucose packets, and advisories to protect outdoor farm laborers." },
+  { icon: Wind, title: "Storm Debris Clearing & Roof Repair", desc: "Assisting rural households in replacing blown-off tin sheets, securing thatch walls, and clearing uprooted trees." },
+  { icon: Flame, title: "Accidental Fire Emergency Packages", desc: "Emergency grain bins, cooking vessels, bedding, and temporary tarpaulin shelters following devastating fire incidents." },
+  { icon: Package, title: "Pre-Positioned Emergency Stockpiles", desc: "Maintaining buffer reserves of essential non-perishable relief goods in regional hubs for zero-delay deployment." },
+  { icon: Users, title: "Community Early Warning Coordination", desc: "Disseminating vernacular meteorological alerts to farmers and coastal/riverine residents ahead of seasonal threats." },
+  { icon: ShieldCheck, title: "Voluntary Seasonal Taskforces", desc: "Training grassroots youth cadres in emergency triage, swimmer rescue, and community safety during floods." },
+];
+
+const TARGET_PARTICIPANTS = [
+  "Vulnerable rural households living in flood-prone riverine and low-lying plains",
+  "Families impacted by seasonal flash floods, severe storms, or localized fires",
+  "Elderly persons and young infants with elevated sensitivity to cold waves and heatwaves",
+  "Women-headed families and households with disabled dependents",
+  "Economically disadvantaged agricultural laborers without insulated housing",
+  "Small and marginal farmers facing sudden storm crop or livestock losses",
+  "Families suffering unexpected complete loss of shelter or household possessions",
+  "Other vulnerable rural clusters identified through seasonal risk assessments",
+];
+
+const SEASONAL_PATHWAY = [
+  { step: "01", label: "ANTICIPATE", tag: "Meteorological Alert", desc: "Monitor weather warnings, monsoon tracks, and seasonal cold fronts." },
+  { step: "02", label: "PRE-POSITION", tag: "Stock Reserves", desc: "Pre-stage blankets, tarpaulins, water tablets, and dry rations at local hubs." },
+  { step: "03", label: "MOBILISE", tag: "Deploy Cadres", desc: "Activate local youth volunteers and panchayat coordination units." },
+  { step: "04", label: "REACH", tag: "Direct Distribution", desc: "Deliver relief supplies directly to cut-off, marooned, or destitute families." },
+  { step: "05", label: "STABILISE", tag: "Safe Transition", desc: "Ensure families transition safely past peak seasonal hazards into recovery." },
+];
+
+const EXPECTED_IMPACTS = [
+  "Timely, dignified seasonal protection saving vulnerable lives during harsh extremes",
+  "Critical material support for families facing localized natural disasters",
+  "Improved access to safe drinking water and nutritious food during flood inundations",
+  "Heightened community awareness and proactive preparedness for recurring seasonal risks",
+  "High levels of grassroots voluntary civic mobilization in emergency response",
+  "Reduced incidence of seasonal hypothermia, heatstroke, and flood-borne epidemics",
+  "Stronger operational links connecting seasonal relief to long-term rural recovery",
+];
+
+// ─── Shared Components ────────────────────────────────────────────────────────
+
+function SectionTitle({ label, title, subtitle }: { label: string; title: string; subtitle?: string }) {
+  return (
+    <div className="text-center mb-12">
+      <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">{label}</p>
+      <div className="flex items-center justify-center gap-3 mb-4">
+        <span className="h-px w-8 bg-brand-green" />
+        <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark tracking-wide">{title}</h2>
+        <span className="h-px w-8 bg-brand-green" />
+      </div>
+      {subtitle && <p className="text-slate-600 max-w-2xl mx-auto text-sm leading-relaxed">{subtitle}</p>}
+    </div>
+  );
+}
+
+export default function SeasonalRelief() {
+  const [modalRole, setModalRole] = useState<"partner" | "volunteer" | "sponsor" | "mentor" | null>(null);
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
-      <NotificationTicker /><UtilityBar /><Header />
-      <main>
-        {/* Clean Hero */}
-        <section className="relative min-h-[420px] flex items-center overflow-hidden">
-          <img src={heroImg} alt="Seasonal Relief" className="absolute inset-0 h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-900/65 to-transparent" />
-          <div className="relative z-10 max-w-7xl mx-auto px-4 py-16 w-full">
-            <nav className="flex items-center gap-2 text-xs text-white/70 mb-6 font-medium flex-wrap">
-              <Link to="/" className="hover:text-white flex items-center gap-1"><Home className="w-3 h-3" /> Home</Link>
-              <ChevronRight className="w-3 h-3" />
-              <Link to="/programs/relief-and-rehabilitation" className="hover:text-white">Relief & Rehabilitation</Link>
-              <ChevronRight className="w-3 h-3" />
-              <span className="text-white/90 font-semibold">Seasonal Relief</span>
-            </nav>
-            <Link to="/programs/relief-and-rehabilitation" className="inline-flex items-center gap-2 text-xs font-semibold text-white/80 hover:text-white border border-white/20 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded transition-all mb-5">
-              <ArrowLeft className="w-3.5 h-3.5" /> All Relief Programmes
+    <div className="min-h-screen flex flex-col bg-white text-slate-800 antialiased">
+      <NotificationTicker />
+      <UtilityBar />
+      <Header />
+
+      {/* Hero Banner */}
+      <section className="relative bg-[#07162c] text-white pt-24 pb-20 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#07162c] via-[#0b2246]/95 to-transparent z-10" />
+        <img
+          src={heroImg}
+          alt="Seasonal & Disaster-Specific Relief Support"
+          className="absolute inset-0 w-full h-full object-cover object-center opacity-25"
+        />
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Breadcrumb */}
+          <nav className="flex items-center gap-2 text-xs text-white/60 mb-8" aria-label="Breadcrumb">
+            <Link to="/" className="hover:text-white transition-colors flex items-center gap-1">
+              <Home className="w-3.5 h-3.5" />
+              <span>Home</span>
             </Link>
-            <div className="inline-flex items-center gap-2 bg-brand-orange/20 border border-brand-orange/40 text-brand-orange px-3.5 py-1 rounded-full mb-4">
-              <Snowflake className="w-3.5 h-3.5" />
-              <span className="text-xs font-bold tracking-wider uppercase text-white">Year-Round Protection</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4">
-              Seasonal Emergency Relief Drives<br />
-              <span className="text-brand-orange">Year-Round Protection Against Climate Extremes</span>
+            <ChevronRight className="w-3 h-3 text-white/40" />
+            <Link to="/programs/relief-and-rehabilitation" className="hover:text-white transition-colors">
+              Humanitarian Relief &amp; Rehabilitation
+            </Link>
+            <ChevronRight className="w-3 h-3 text-white/40" />
+            <span className="text-brand-orange font-medium">Seasonal &amp; Disaster-Specific Relief</span>
+          </nav>
+
+          <div className="max-w-3xl">
+            <span className="inline-block bg-brand-orange/20 border border-brand-orange/40 text-brand-orange text-xs font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-full mb-4">
+              Initiative 03 • SDSR
+            </span>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4">
+              Seasonal &amp; Disaster-Specific Relief Support
             </h1>
-            <p className="text-sm md:text-base text-white/85 max-w-2xl leading-relaxed">
-              Targeted winter blanket drives, summer drinking water kiosks (Chhabeel), and monsoon anti-vector sanitation campaigns safeguarding vulnerable communities.
+            <p className="text-lg md:text-xl text-white/80 font-medium mb-4">
+              Responding to Seasonal Vulnerability. Supporting Communities When Needs Rise.
             </p>
+            <p className="text-sm md:text-base text-white/70 leading-relaxed max-w-2xl mb-8">
+              Delivering timely, need-based humanitarian assistance during monsoon floods, severe winter cold waves,
+              heatwaves, storms, and localized fire emergencies.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <button
+                onClick={() => setModalRole("sponsor")}
+                className="inline-flex items-center gap-2 bg-brand-green text-white font-semibold text-sm px-6 py-3 rounded-lg hover:bg-brand-green-dark transition-colors shadow-sm"
+              >
+                Sponsor Seasonal Relief Kits
+                <ArrowRight className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setModalRole("volunteer")}
+                className="inline-flex items-center gap-2 border border-white/30 text-white font-semibold text-sm px-6 py-3 rounded-lg hover:bg-white/10 transition-colors"
+              >
+                Join Seasonal Response Team
+              </button>
+            </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* 3 Seasonal Feature Rows */}
-        <section className="py-16 bg-slate-50">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2">Seasonal Interventions</p>
-              <div className="flex items-center justify-center gap-3 mb-3">
-                <span className="h-px w-8 bg-brand-green" />
-                <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark">Protection for Every Season</h2>
-                <span className="h-px w-8 bg-brand-green" />
-              </div>
-              <p className="text-slate-600 max-w-2xl mx-auto text-sm">Timely seasonal outreach shielding poor families from extreme winter frost, heatwaves, and monsoon epidemics.</p>
+      {/* Overview & Objective */}
+      <section className="py-16 bg-white border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-7">
+              <ScrollReveal>
+                <span className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2 block">
+                  Targeted Protection
+                </span>
+                <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark mb-6 leading-snug">
+                  When Vulnerability Peaks
+                </h2>
+                <div className="space-y-4 text-slate-600 text-sm leading-relaxed">
+                  <p>
+                    Seasonal conditions and local disasters can create serious challenges for vulnerable households.
+                    Floods may affect homes, agriculture and mobility; severe winter can create hardship for people
+                    without adequate clothing or bedding; heatwaves can increase health and water-related risks;
+                    storms, fires and other local emergencies can suddenly disrupt family life and livelihoods.
+                  </p>
+                  <p>
+                    The Seasonal &amp; Disaster-Specific Relief Support initiative seeks to facilitate timely, need-based
+                    support during such periods, with particular attention to vulnerable and underserved rural communities.
+                  </p>
+                  <p>
+                    We emphasize proactive pre-positioning and rapid localized mobilization so that vulnerable lives
+                    are protected before seasonal hardship escalates into catastrophe.
+                  </p>
+                </div>
+              </ScrollReveal>
             </div>
 
-            <div className="space-y-6">
-              {SEASONS.map((row, idx) => {
-                const Icon = row.icon;
-                return (
-                  <div key={idx} className="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-all">
-                    <div className="grid lg:grid-cols-12 gap-6 items-center">
-                      <div className="lg:col-span-8 space-y-3">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-orange-50 text-brand-orange flex items-center justify-center font-bold">
-                            <Icon className="w-5 h-5" />
-                          </div>
-                          <span className="text-xs font-extrabold text-brand-orange tracking-widest uppercase">{row.num} Campaign</span>
-                        </div>
-                        <h3 className="text-xl font-extrabold text-slate-900">{row.title}</h3>
-                        <p className="text-sm text-slate-600 leading-relaxed">{row.desc}</p>
-                      </div>
-                      <div className="lg:col-span-4 bg-slate-50 rounded-xl p-5 border border-slate-100 space-y-2.5">
-                        <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Drive Highlights</p>
-                        {row.highlights.map((h, i) => (
-                          <div key={i} className="flex items-center gap-2 text-xs font-medium text-slate-700">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-brand-green shrink-0" />
-                            <span>{h}</span>
-                          </div>
-                        ))}
-                      </div>
+            <div className="lg:col-span-5">
+              <ScrollReveal>
+                <div className="bg-[#f8faf8] border border-brand-green/20 rounded-xl p-8 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-brand-green/5 rounded-full -mr-10 -mt-10" />
+                  <div className="relative">
+                    <span className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3 block">
+                      Our Objective
+                    </span>
+                    <h3 className="text-xl font-bold text-brand-green-dark mb-4">
+                      Timely Seasonal Safeguards
+                    </h3>
+                    <p className="text-slate-600 text-sm leading-relaxed mb-4">
+                      To support communities facing seasonal hardship or disaster-specific emergencies through appropriate
+                      relief, awareness and community-based interventions, subject to assessed needs and available resources.
+                    </p>
+                    <div className="flex items-center gap-2 pt-2 text-xs font-bold text-brand-green">
+                      <CloudRain className="w-4 h-4" />
+                      <span>Floods • Winter Cold • Heatwaves • Storms • Fires</span>
                     </div>
                   </div>
-                );
-              })}
+                </div>
+              </ScrollReveal>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Navy High-Contrast Banner */}
-        <section className="py-14 bg-[#0b1f3b] text-white">
-          <div className="max-w-4xl mx-auto px-4 text-center space-y-5">
-            <ShieldCheck className="w-10 h-10 text-brand-orange mx-auto" />
-            <p className="text-xl md:text-2xl font-semibold leading-relaxed italic text-white/95">
-              "Whether in biting winter frost or scorching summer heatwaves, our volunteers are on the ground ensuring warmth, water, and life-saving care."
+      {/* Our Approach (5 Pillars) */}
+      <section className="py-20 bg-[#fbfdfa]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ScrollReveal>
+            <SectionTitle
+              label="Hazard Modules"
+              title="Our Approach"
+              subtitle="Specific humanitarian interventions calibrated for flood inundation, winter cold waves, heatwaves, storms, and fires."
+            />
+          </ScrollReveal>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {APPROACH_PILLARS.map((pillar, index) => {
+              const IconComp = pillar.icon;
+              return (
+                <ScrollReveal key={pillar.num} delay={index * 0.05}>
+                  <div className="bg-white rounded-xl border border-slate-200/80 p-6 hover:shadow-md hover:border-brand-green/40 transition-all flex flex-col justify-between h-full">
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="w-10 h-10 rounded-lg bg-[#004724]/10 text-brand-green flex items-center justify-center">
+                          <IconComp className="w-5 h-5" />
+                        </span>
+                        <span className="text-xs font-mono font-bold text-slate-400">{pillar.num}</span>
+                      </div>
+                      <h3 className="font-bold text-base text-brand-green-dark mb-2">{pillar.title}</h3>
+                      <p className="text-xs text-slate-600 leading-relaxed">{pillar.desc}</p>
+                    </div>
+                  </div>
+                </ScrollReveal>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Implementation Modules */}
+      <section className="py-20 bg-white border-y border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ScrollReveal>
+            <SectionTitle
+              label="Field Operations"
+              title="Implementation Approach"
+              subtitle="Pre-positioned buffer stocks, boat distribution, warm blanket drives, and early warning communications."
+            />
+          </ScrollReveal>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {IMPLEMENTATION_MODULES.map((mod, index) => {
+              const IconComp = mod.icon;
+              return (
+                <ScrollReveal key={mod.title} delay={index * 0.03}>
+                  <div className="bg-[#f9fbf9] border border-slate-200/70 rounded-lg p-5 hover:bg-white hover:border-brand-green/30 hover:shadow-sm transition-all h-full flex flex-col justify-between">
+                    <div>
+                      <div className="w-8 h-8 rounded bg-brand-green/10 text-brand-green flex items-center justify-center mb-3">
+                        <IconComp className="w-4 h-4" />
+                      </div>
+                      <h3 className="font-bold text-sm text-slate-900 mb-1.5 leading-snug">{mod.title}</h3>
+                      <p className="text-xs text-slate-600 leading-relaxed">{mod.desc}</p>
+                    </div>
+                  </div>
+                </ScrollReveal>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Seasonal Pathway (5 Steps) */}
+      <section className="py-20 bg-[#0b1f3b] text-white overflow-hidden relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <ScrollReveal>
+            <div className="text-center max-w-3xl mx-auto mb-14">
+              <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">
+                Readiness Model
+              </p>
+              <h2 className="text-2xl md:text-4xl font-extrabold text-white mb-4">
+                Seasonal Intervention Pathway
+              </h2>
+              <p className="text-white/70 text-sm leading-relaxed">
+                Prepared communities respond better. Our five-stage framework ensures seamless transition from weather
+                forecasts to pre-positioning, volunteer mobilization, direct distribution, and family stabilization.
+              </p>
+            </div>
+          </ScrollReveal>
+
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {SEASONAL_PATHWAY.map((stage, idx) => (
+              <ScrollReveal key={stage.step} delay={idx * 0.05}>
+                <div className="bg-white/5 border border-white/10 rounded-xl p-5 hover:bg-white/10 transition-colors h-full flex flex-col justify-between">
+                  <div>
+                    <span className="text-[10px] font-mono font-bold text-brand-orange mb-2 block">
+                      STAGE {stage.step}
+                    </span>
+                    <h3 className="text-base font-bold text-white mb-1">{stage.label}</h3>
+                    <p className="text-[11px] font-medium text-brand-orange/90 mb-2">{stage.tag}</p>
+                    <p className="text-xs text-white/70 leading-relaxed">{stage.desc}</p>
+                  </div>
+                  {idx < SEASONAL_PATHWAY.length - 1 && (
+                    <div className="hidden lg:flex justify-end pt-4">
+                      <ArrowRight className="w-4 h-4 text-white/30" />
+                    </div>
+                  )}
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Target Beneficiaries & Impact */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-12 gap-12 items-start">
+            {/* Target Beneficiaries */}
+            <div className="lg:col-span-6">
+              <ScrollReveal>
+                <span className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2 block">
+                  Vulnerable Demographics
+                </span>
+                <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark mb-6">
+                  Who We Seek to Support
+                </h2>
+                <div className="bg-[#f8faf8] border border-slate-200/80 rounded-xl p-6 sm:p-8">
+                  <ul className="space-y-3.5">
+                    {TARGET_PARTICIPANTS.map((item) => (
+                      <li key={item} className="flex items-start gap-3 text-sm text-slate-700 leading-snug">
+                        <CheckCircle2 className="w-4 h-4 text-brand-green shrink-0 mt-0.5" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </ScrollReveal>
+            </div>
+
+            {/* Expected Impact */}
+            <div className="lg:col-span-6">
+              <ScrollReveal>
+                <span className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2 block">
+                  Measured Protection
+                </span>
+                <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark mb-6">
+                  Expected Impact
+                </h2>
+                <div className="bg-[#fbfcfb] border border-brand-green/20 rounded-xl p-6 sm:p-8">
+                  <ul className="space-y-3.5">
+                    {EXPECTED_IMPACTS.map((outcome) => (
+                      <li key={outcome} className="flex items-start gap-3 text-sm text-slate-700 leading-snug">
+                        <TrendingUp className="w-4 h-4 text-brand-orange shrink-0 mt-0.5" />
+                        <span>{outcome}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </ScrollReveal>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Vision & Quote */}
+      <section className="py-20 bg-[#004724] text-white relative overflow-hidden">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+          <ScrollReveal>
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-4 block">
+              Readiness &amp; Action
+            </span>
+            <h2 className="text-2xl md:text-3xl font-extrabold mb-6 leading-snug">
+              Prepared Communities Recover Stronger
+            </h2>
+            <p className="text-white/80 text-base leading-relaxed max-w-3xl mx-auto mb-10">
+              Communities should be better prepared to face seasonal and disaster-related challenges, with vulnerable
+              families able to access appropriate support when climate circumstances become difficult.
             </p>
-            <div className="flex items-center justify-center gap-3 pt-2">
-              <span className="h-px w-8 bg-brand-orange/60" />
-              <span className="text-brand-orange font-semibold text-xs uppercase tracking-widest">Islah Welfare Foundation</span>
-              <span className="h-px w-8 bg-brand-orange/60" />
+            <div className="border-t border-white/20 pt-8 max-w-2xl mx-auto">
+              <blockquote className="text-xl md:text-2xl font-serif italic text-white/95 leading-relaxed mb-4">
+                “Prepared communities respond better. Compassionate action helps them recover stronger.”
+              </blockquote>
+              <p className="text-xs font-bold tracking-widest uppercase text-brand-orange">— ISLAH</p>
             </div>
-          </div>
-        </section>
+          </ScrollReveal>
+        </div>
+      </section>
 
-        {/* Navigation */}
-        <section className="py-8 bg-slate-100 border-t border-slate-200">
-          <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <Link to="/programs/relief-and-rehabilitation/marriage-assistance" className="inline-flex items-center gap-2 text-sm font-bold text-brand-green-dark hover:text-brand-green border border-slate-300 bg-white hover:bg-slate-50 px-5 py-2.5 rounded-lg transition-all shadow-sm">
-              <ArrowLeft className="w-4 h-4" /> Prev: Marriage Assistance
-            </Link>
-            <Link to="/programs/environment" className="inline-flex items-center gap-2 text-sm font-bold text-white bg-brand-green hover:bg-brand-green-dark px-5 py-2.5 rounded-lg transition-all shadow-sm">
-              Environment Sector →
-            </Link>
-          </div>
-        </section>
-      </main>
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal type={activeModal} onClose={() => setActiveModal(null)} />
+      {/* Subpage Navigation */}
+      <section className="py-12 bg-slate-50 border-t border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <Link
+            to="/programs/relief-and-rehabilitation/shelter-clothing-necessities"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-brand-green transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Previous: Shelter, Clothing &amp; Necessities (SCN)
+          </Link>
+          <Link
+            to="/programs/relief-and-rehabilitation/livelihood-recovery-rehabilitation"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-brand-green hover:text-brand-green-dark transition-colors"
+          >
+            Next: Livelihood Recovery &amp; Rehabilitation (LRR)
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </section>
+
+      <Footer />
+
+      {modalRole && (
+        <RoleFormModal
+          isOpen={true}
+          role={modalRole}
+          onClose={() => setModalRole(null)}
+          title={`Support Seasonal & Disaster-Specific Relief`}
+        />
+      )}
     </div>
   );
 }

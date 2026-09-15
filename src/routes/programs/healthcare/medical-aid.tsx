@@ -4,11 +4,14 @@ import MedicalAidProgramme from "@/Pages/Healthcare/subpages/MedicalAidProgramme
 export const Route = createFileRoute("/programs/healthcare/medical-aid")({
   head: () => ({
     meta: [
-      { title: "Medical Aid Programme for Poor Patients — IWF Healthcare" },
+      {
+        title:
+          "Medical Assistance for Poor Patients (MAP) - IWF | Islah Welfare Foundation",
+      },
       {
         name: "description",
         content:
-          "IWF's Medical Aid Programme provides financial assistance and healthcare support to poor and underprivileged patients.",
+          "Extending care and compassion to those who need it most—Financial assistance covering hospitalisation, costly medicines, diagnostics, and surgical expenses.",
       },
     ],
   }),

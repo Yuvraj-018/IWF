@@ -4,10 +4,14 @@ import SustainableAgricultureAgri from "@/Pages/Agriculture/subpages/Sustainable
 export const Route = createFileRoute("/programs/agriculture/sustainable-agriculture")({
   head: () => ({
     meta: [
-      { title: "Sustainable Agriculture — IWF Agriculture" },
+      {
+        title:
+          "Sustainable Agriculture Development Programme (SAD) - IWF | Islah Welfare Foundation",
+      },
       {
         name: "description",
-        content: "Agronomic excellence, soil enrichment, and crop diversification for farmers.",
+        content:
+          "Growing Responsibly. Farming Sustainably. Building Resilient Rural Livelihoods. Capacity building, soil health, water stewardship, and climate-resilient farming.",
       },
     ],
   }),

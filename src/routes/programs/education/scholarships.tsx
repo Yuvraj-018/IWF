@@ -4,10 +4,14 @@ import ScholarshipsPage from "@/Pages/Education/subpages/ScholarshipsPage";
 export const Route = createFileRoute("/programs/education/scholarships")({
   head: () => ({
     meta: [
-      { title: "Scholarships — IWF Education" },
+      {
+        title:
+          "Scholarships for Higher Education (SHE) - IWF | Islah Welfare Foundation",
+      },
       {
         name: "description",
-        content: "Merit and need-based educational scholarships.",
+        content:
+          "Supporting meritorious and financially needy students in rural areas to pursue secondary, undergraduate, and higher education with dignity and confidence.",
       },
     ],
   }),

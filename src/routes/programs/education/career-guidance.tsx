@@ -4,10 +4,14 @@ import CareerGuidance from "@/Pages/Education/subpages/CareerGuidance";
 export const Route = createFileRoute("/programs/education/career-guidance")({
   head: () => ({
     meta: [
-      { title: "Career Guidance (CTAG) — IWF Education" },
+      {
+        title:
+          "Career Guidance & Mentorship (CGM) - IWF | Islah Welfare Foundation",
+      },
       {
         name: "description",
-        content: "Career counselling, mentorship, and guidance for rural youth.",
+        content:
+          "Guiding rural students towards better educational & career opportunities through counselling, academic guidance, and lifelong mentorship.",
       },
     ],
   }),

@@ -1,15 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import ErawinPublicSchool from "@/Pages/Education/subpages/ErawinPublicSchool";
+import PrimarySchoolPage from "@/Pages/Education/subpages/PrimarySchoolPage";
 
 export const Route = createFileRoute("/programs/education/erawin-public-school")({
   head: () => ({
     meta: [
-      { title: "Erawin Public School — IWF Education" },
+      { title: "Primary School (EPS) - IWF | Islah Welfare Foundation" },
       {
         name: "description",
-        content: "Comprehensive modern education rooted in ethics for rural children.",
+        content: "Building strong foundations for rural education through Erawin Public School (EPS).",
       },
     ],
   }),
-  component: ErawinPublicSchool,
+  component: PrimarySchoolPage,
 });

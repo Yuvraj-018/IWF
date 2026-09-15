@@ -39,6 +39,7 @@ import ScrollReveal from "@/components/healthcare/ScrollReveal";
 import { PatientCard } from "@/components/healthcare/PatientCard";
 import { URGENT_PATIENTS } from "@/content/patients";
 import criticalLifeSupportImg from "@/assets/critical_life_support.png";
+import MedicalEmergencyWorkflow from "@/components/healthcare/MedicalEmergencyWorkflow";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -155,9 +156,9 @@ function RedesignHeroSection() {
           <h1 className="text-4xl lg:text-5xl font-black leading-tight">
             <span className="text-[#0b1f3b]">CRITICAL LIFE &</span>
             <br />
-            <span className="text-[#f97316]">EMERGENCY SUPPORT</span>
+            <span className="text-[#ea580c]">EMERGENCY SUPPORT</span>
             <br />
-            <span className="text-[#0b1f3b]">INITIATIVE</span>
+            <span className="text-[#004724] text-2xl lg:text-3xl font-bold">(CLES)</span>
           </h1>
           <p className="mt-4 text-sm italic text-gray-700 font-medium before:content-['\201C'] after:content-['\201D']">
             Har Pal Anmol Hai—when every second counts, we stand to save lives.
@@ -541,31 +542,7 @@ function SupportAreasSection() {
 
 function ImplementationSection() {
   return (
-    <section className="py-16 bg-slate-50">
-      <div className="max-w-5xl mx-auto px-4">
-        <ScrollReveal>
-          <SectionTitle label="How We Work" title="Implementation Approach" />
-        </ScrollReveal>
-
-        <ScrollReveal stagger={0.1}>
-          <div className="relative">
-            {/* Connecting line — desktop */}
-            <div className="hidden lg:block absolute top-11 left-0 right-0 h-0.5 bg-brand-green/20 z-0" />
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 relative z-10">
-              {IMPLEMENTATION_STEPS.map(({ icon: Icon, text }, i) => (
-                <div key={i} className="flex flex-col items-center text-center group">
-                  <div className="w-22 h-22 rounded-full bg-white border-2 border-brand-green/30 flex flex-col items-center justify-center mb-4 shadow-sm group-hover:border-brand-green group-hover:shadow-md transition-all duration-300 p-5">
-                    <Icon className="w-6 h-6 text-brand-green mb-1" />
-                    <span className="text-[10px] font-bold text-brand-green">{String(i + 1).padStart(2, "0")}</span>
-                  </div>
-                  <p className="text-xs text-slate-600 font-medium leading-relaxed group-hover:text-slate-800 transition-colors">{text}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </ScrollReveal>
-      </div>
-    </section>
+    <MedicalEmergencyWorkflow showImageToggle={true} />
   );
 }
 
@@ -612,6 +589,121 @@ function ImpactSection() {
   );
 }
 
+function PolicySection() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <section className="py-12 bg-slate-50 border-t border-slate-200" id="fundraising-policy">
+      <div className="max-w-5xl mx-auto px-4">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-8">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-200 pb-6">
+            <div>
+              <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-2">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                Transparency & Governance Policy
+              </div>
+              <h3 className="text-xl md:text-2xl font-black text-slate-900">
+                Fundraising for Critical Medical Treatment Policy
+              </h3>
+              <p className="text-xs text-slate-500 mt-1">
+                Effective Date: 01/04/2026 • Registered Charitable Trust Governance Document
+              </p>
+            </div>
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="px-4 py-2 text-xs font-bold text-[#004724] border border-[#004724]/30 hover:bg-emerald-50 rounded-lg transition-colors shrink-0"
+            >
+              {isOpen ? "Collapse Full Policy" : "Read Full Policy Document"}
+            </button>
+          </div>
+
+          <div className="mt-6 text-xs text-slate-600 space-y-3">
+            <p className="font-semibold text-slate-800">
+              Islah Welfare Foundation conducts transparent fundraising campaigns to provide critical medical aid for individuals unable to meet life-saving medical costs.
+            </p>
+            <div className="grid sm:grid-cols-3 gap-3 pt-2">
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                <div className="font-bold text-slate-900 mb-1">Direct Provider Payments</div>
+                <p className="text-[11px] text-slate-500">
+                  Payments are routed directly to verified hospitals, pharmacies, and diagnostic centres with receipts.
+                </p>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                <div className="font-bold text-slate-900 mb-1">Surplus Fund Governance</div>
+                <p className="text-[11px] text-slate-500">
+                  Any excess funds after verified treatment are transferred to the Health & Well-Being Surplus Fund for emergency patients.
+                </p>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                <div className="font-bold text-slate-900 mb-1">Independent Verification</div>
+                <p className="text-[11px] text-slate-500">
+                  Every patient case undergoes multi-tier physical and clinical verification before fundraising commences.
+                </p>
+              </div>
+            </div>
+
+            {isOpen && (
+              <div className="mt-6 pt-6 border-t border-slate-200 space-y-4 text-slate-700 leading-relaxed text-xs">
+                <div>
+                  <h4 className="font-bold text-slate-900 text-sm mb-1">1. Purpose:</h4>
+                  <p>
+                    Islah Welfare Foundation conducts fundraising campaigns to provide financial assistance for individuals requiring critical medical treatment who are unable to meet the cost of their medical care. This policy explains how funds collected through individual medical fundraising campaigns are managed, utilised, and accounted for, ensuring transparency, fairness, and responsible stewardship of donor contributions.
+                  </p>
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 text-sm mb-1">2. Individual Medical Fundraising Campaigns:</h4>
+                  <p>
+                    Each fundraising campaign is launched based on information and supporting medical documents provided by the beneficiary or their authorised representative. The campaign specifies an estimated treatment cost, which serves as the fundraising target. Actual treatment expenses may vary depending on the patient's medical condition, hospital requirements, and treatment progress.
+                  </p>
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 text-sm mb-1">3. Administrative & Fund Management Cost:</h4>
+                  <p>
+                    To support the planning, verification, fundraising, campaign management, payment processing, documentation, compliance, monitoring, communication, and overall administration of medical fundraising activities, 20% of the total funds raised may be utilised towards administrative, campaign management, compliance, verification, payment processing, monitoring, and program management expenses incurred in operating the medical fundraising program. The actual percentage applied may vary depending on the circumstances of each campaign.
+                  </p>
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 text-sm mb-1">4. Where Total Funds Collected Are Less Than the Estimated Treatment Cost:</h4>
+                  <p>
+                    If the total amount raised for an individual beneficiary is less than the estimated treatment cost: (a) Islah Welfare Foundation may allocate up to 20% of the total amount collected towards administrative and program management expenses; (b) The remaining amount will be utilised exclusively towards the beneficiary's eligible medical treatment and related approved medical expenses; (c) Donors acknowledge that, in such cases, the total amount collected may not be sufficient to fully meet the beneficiary's treatment requirements.
+                  </p>
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 text-sm mb-1">5. Where Total Funds Collected Exceed the Required Treatment Cost:</h4>
+                  <p>
+                    If the total amount collected exceeds the amount reasonably required for the beneficiary's eligible medical treatment: (1) The beneficiary's verified medical expenses shall be paid first; (2) Administrative and program management costs, as provided under this policy, may be retained by IWF; (3) Any remaining surplus amount shall not be refunded to individual donors; (4) The surplus shall be transferred to Health & Well-Being Surplus Fund and utilised for: critical medical treatment assistance, emergency healthcare support, medical aid for economically weaker patients, health camps and community healthcare initiatives, and other healthcare programs consistent with the charitable objectives of Islah Welfare Foundation.
+                  </p>
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 text-sm mb-1">6. Change in Treatment Circumstances:</h4>
+                  <p>
+                    If treatment is completed at a lower cost, discontinued, the beneficiary no longer requires assistance, becomes ineligible, unfortunately passes away before full utilisation of the funds, or the hospital refuses or returns payment, then after settling all verified eligible medical expenses and applicable administrative costs, any remaining balance may be transferred to the Health & Well-Being Surplus Fund.
+                  </p>
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 text-sm mb-1">7. Payment of Medical Assistance:</h4>
+                  <p>
+                    Wherever reasonably possible, payments shall be made directly to hospitals, medical institutions, pharmacies, diagnostic centres, or other authorised healthcare providers. Direct payment to beneficiaries may be made only where appropriate documentation and verification are available.
+                  </p>
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 text-sm mb-1">8. Verification & Donor Consent:</h4>
+                  <p>
+                    By donating, donors acknowledge that donations are voluntary and irrevocable, support charitable medical assistance programs, and will be managed in accordance with this policy. Treatment costs are estimates, and donations are non-refundable except where required by law.
+                  </p>
+                </div>
+                <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                  <span className="font-bold">Registered Office:</span> B-144, Abul Fazal Enclave-II, Okhla, New Delhi, Delhi-110025 • Email: info@iwfindia.org • Website: www.iwfindia.org
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function BackNav() {
   return (
     <section className="py-10 bg-slate-50 border-t border-slate-100">
@@ -621,13 +713,13 @@ function BackNav() {
           className="inline-flex items-center gap-2 text-sm font-bold text-brand-green-dark hover:text-brand-green border-2 border-brand-green/20 hover:border-brand-green/60 px-5 py-2.5 rounded transition-all duration-200 hover:-translate-x-0.5"
         >
           <ArrowLeft className="w-4 h-4" />
-          All Healthcare Programmes
+          All Healthcare Initiatives
         </Link>
         <Link
-          to="/programs/healthcare/medical-aid"
+          to="/programs/healthcare/rural-ambulance"
           className="inline-flex items-center gap-2 text-sm font-bold text-white bg-brand-orange hover:bg-brand-orange-dark px-5 py-2.5 rounded transition-all duration-200 shadow-md"
         >
-          Next: Medical Aid Programme
+          Next: Rural Ambulance & Emergency Response (RAER)
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
@@ -657,6 +749,7 @@ export default function CriticalLifeSupport() {
         <SupportAreasSection />
         <ImplementationSection />
         <ImpactSection />
+        <PolicySection />
         <BackNav />
       </main>
       <Footer onOpenModal={setActiveModal} />
@@ -664,3 +757,4 @@ export default function CriticalLifeSupport() {
     </div>
   );
 }
+

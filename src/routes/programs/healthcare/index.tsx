@@ -4,11 +4,14 @@ import HealthcareLanding from "@/Pages/Healthcare/HealthcareLanding";
 export const Route = createFileRoute("/programs/healthcare/")({
   head: () => ({
     meta: [
-      { title: "Healthcare — IWF | Islah Welfare Foundation" },
+      {
+        title:
+          "Healthcare & Well-Being - IWF | Islah Welfare Foundation",
+      },
       {
         name: "description",
         content:
-          "IWF's Healthcare initiatives bring affordable, preventive, and community-based medical services to rural India's most underserved populations.",
+          "Ensuring healthcare reaches the last mile through emergency support, ambulance services, medical aid, preventive camps, and rural wellness centres.",
       },
     ],
   }),

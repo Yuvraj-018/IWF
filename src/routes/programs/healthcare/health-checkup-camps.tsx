@@ -1,14 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import HealthCheckupCamps from "@/Pages/Healthcare/subpages/HealthCheckupCamps";
 
-export const Route = createFileRoute("/programs/healthcare/health-checkup-camps")({
+export const Route = createFileRoute(
+  "/programs/healthcare/health-checkup-camps"
+)({
   head: () => ({
     meta: [
-      { title: "Medical Health Check-up Camps — IWF Healthcare" },
+      {
+        title:
+          "Community Health Check-up Camps (CHC) - IWF | Islah Welfare Foundation",
+      },
       {
         name: "description",
         content:
-          "IWF organises free medical health check-up camps to improve access to preventive healthcare for underserved rural communities.",
+          "Taking healthcare to the community—Free preventive medical consultations, diagnostic screenings, and health awareness camps for underserved rural populations.",
       },
     ],
   }),

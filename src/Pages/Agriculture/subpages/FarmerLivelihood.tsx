@@ -1,120 +1,475 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { NotificationTicker, UtilityBar, Header, Footer, RoleFormModal } from "@/components/layout/SiteLayout";
-import { Home, ChevronRight, ArrowLeft, ArrowRight, TrendingUp, Users, Store, ShieldCheck, DollarSign, Package, CheckCircle2, Sparkles, Tractor } from "lucide-react";
+import {
+  NotificationTicker,
+  UtilityBar,
+  Header,
+  Footer,
+  RoleFormModal,
+} from "@/components/layout/SiteLayout";
+import {
+  Home,
+  ChevronRight,
+  ArrowLeft,
+  ArrowRight,
+  TrendingUp,
+  CheckCircle2,
+  Briefcase,
+  Layers,
+  Store,
+  Users,
+  Target,
+  Sparkles,
+  Wheat,
+  PieChart,
+  DollarSign,
+  PackageCheck,
+  Building,
+} from "lucide-react";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
 import heroImg from "@/assets/thematic-agriculture.jpg";
 
-export default function FarmerLivelihood() {
-  const [activeModal, setActiveModal] = useState<"volunteer" | "partner" | "sponsor" | "mentor" | "employee" | null>(null);
+// ─── Data ─────────────────────────────────────────────────────────────────────
 
-  const INTERVENTIONS = [
-    { icon: Users, title: "Farmer Producer Organisation (FPO) Formation", desc: "Aggregating small and marginal farmers into legally registered producer companies to gain collective bargaining power for buying inputs and selling crops." },
-    { icon: DollarSign, title: "Bulk Input Procurement at Wholesale Rates", desc: "Eliminating local retail markups by purchasing certified seeds, bio-fertilizers, and equipment directly from manufacturers in bulk." },
-    { icon: Package, title: "Post-Harvest Primary Processing & Storage", desc: "Setting up village-level grain cleaners, graders, moisture meters, and hermetic storage bags to prevent distress selling at harvest time." },
-    { icon: Store, title: "Direct Mandi & Institutional Buyer Contracts", desc: "Negotiating fair-price contracts with flour mills, spice exporters, and retail supermarket chains to bypass exploitative intermediaries." },
-    { icon: Tractor, title: "Custom Hiring Centres (CHC) for Machinery", desc: "Establishing community toolbanks where small farmers can rent tractors, seed drills, and harvesters at heavily subsidized hourly rates." },
-    { icon: TrendingUp, title: "Crop Value Addition (Flour, Oil & Spices)", desc: "Enabling farmer collectives to mill mustard oil, grind stone-milled wheat flour, and package turmeric for higher retail profit margins." },
-  ];
+const APPROACH_PILLARS = [
+  {
+    num: "01",
+    icon: TrendingUp,
+    title: "Livelihood Diversification",
+    desc: "Creating awareness of additional, multi-stream livelihood opportunities that complement seasonal farming income and buffer against crop failure.",
+  },
+  {
+    num: "02",
+    icon: Wheat,
+    title: "Agriculture-Allied Activities",
+    desc: "Encouraging awareness of suitable allied activities—dairy, goat rearing, poultry, apiculture, mushroom cultivation—linked to local agro-climatic resources.",
+  },
+  {
+    num: "03",
+    icon: PackageCheck,
+    title: "Value Addition",
+    desc: "Promoting awareness of opportunities to process, grade, pack, and add substantial market value to primary agricultural produce at the village level.",
+  },
+  {
+    num: "04",
+    icon: Store,
+    title: "Local Enterprise Opportunities",
+    desc: "Encouraging rural households and youth to explore viable micro-enterprises based on local trade skills, community demand, and raw materials.",
+  },
+  {
+    num: "05",
+    icon: Users,
+    title: "Women & Youth Participation",
+    desc: "Promoting greater active leadership and financial participation of rural women and young people in household enterprise and production clusters.",
+  },
+  {
+    num: "06",
+    icon: Building,
+    title: "Market & Institutional Linkages",
+    desc: "Creating awareness of relevant rural haats, buyer cooperatives, financial institutions, schemes, and market aggregation channels.",
+  },
+];
+
+const IMPLEMENTATION_MODULES = [
+  { icon: Briefcase, title: "Rural Livelihood Awareness Programmes", desc: "Interactive orientations on household income mapping, seasonal risk mitigation, and alternative employment avenues." },
+  { icon: TrendingUp, title: "Livelihood Diversification Training", desc: "Structured training modules on managing multiple complementary income streams alongside traditional agriculture." },
+  { icon: Wheat, title: "Agriculture-Allied Livelihood Orientations", desc: "Practical guidance on small-scale dairy, backyard poultry, goat farming, vermi-compost production, and sericulture." },
+  { icon: PackageCheck, title: "Value-Addition & Primary Processing", desc: "Knowledge sessions on cleaning, grading, sun-drying, cold-pressing oilseeds, and flour milling for enhanced margins." },
+  { icon: Store, title: "Food Processing & Local Enterprise", desc: "Training in pickle making, spice blending, fruit preservation, bakery items, and traditional packaged food products." },
+  { icon: Sparkles, title: "Skill & Entrepreneurship Orientations", desc: "Equipping rural innovators with fundamental vocational capabilities, bookkeeping basics, and cost estimation." },
+  { icon: Users, title: "Women & Youth Livelihood Initiatives", desc: "Specialized enterprise cohorts for self-help groups and rural school leavers to foster self-reliance." },
+  { icon: PieChart, title: "Business Planning Awareness", desc: "Simple, visual business model canvas training tailored for rural micro-entrepreneurs and collective village ventures." },
+  { icon: DollarSign, title: "Market-Linkage Facilitation", desc: "Connecting producers with weekly village markets, semi-urban wholesale mandis, retail buyers, and collective logistics." },
+  { icon: Building, title: "Institutional Opportunity Awareness", desc: "Demystifying subsidized government credit facilities, NABARD schemes, priority sector lending, and SHG bank linkages." },
+  { icon: Target, title: "Community-Based Livelihood Development", desc: "Mobilizing village development committees and producer groups to build shared processing and storage assets." },
+];
+
+const TARGET_PARTICIPANTS = [
+  "Small and marginal farmers vulnerable to monoculture crop risks",
+  "Rural farming households seeking steady round-the-year cash flow",
+  "Agricultural landless laborers and seasonal rural wage workers",
+  "Women-led households, Self-Help Groups (SHGs), and joint liability groups",
+  "Rural youth seeking dignified non-migratory enterprise opportunities",
+  "Small agro-producers and traditional artisanal creators",
+  "Emerging rural micro-entrepreneurs and village shopkeepers",
+  "Economically vulnerable families needing urgent income stabilization",
+];
+
+const LIVELIHOOD_PATHWAY = [
+  { step: "01", label: "ASSESS", tag: "Resource Audit", desc: "Evaluate household strengths, land assets, local resources, and market demand." },
+  { step: "02", label: "LEARN", tag: "Capacity Building", desc: "Gain practical technical skills in allied farming, processing, and management." },
+  { step: "03", label: "DIVERSIFY", tag: "Allied Adoption", desc: "Establish supplementary enterprises such as dairy, poultry, or mushroom units." },
+  { step: "04", label: "ADD VALUE", tag: "Produce Upgrade", desc: "Process, sort, package, and brand goods to capture higher farm-gate value." },
+  { step: "05", label: "CONNECT", tag: "Market Access", desc: "Bridge directly with local haats, aggregators, retailers, and institutions." },
+  { step: "06", label: "EARN", tag: "Revenue Stream", desc: "Generate predictable, resilient, multi-season income for the household." },
+  { step: "07", label: "GROW", tag: "Asset Building", desc: "Reinvest margins, expand productive assets, and strengthen long-term security." },
+];
+
+const EXPECTED_IMPACTS = [
+  "Greater awareness and proactive adoption of diversified livelihood strategies",
+  "Increased understanding and uptake of profitable agriculture-allied activities",
+  "Higher local value addition and processing of village produce",
+  "Surge in grassroots rural micro-enterprises and local entrepreneurial confidence",
+  "Empowered economic leadership and financial inclusion of rural women and youth",
+  "Expanded awareness of sustainable self-employment options",
+  "Reduced catastrophic vulnerability to single-crop and seasonal uncertainties",
+  "Dramatically stronger overall household economic resilience and food security",
+  "Deepened local economic circulation, wealth retention, and village self-reliance",
+];
+
+// ─── Shared Components ────────────────────────────────────────────────────────
+
+function SectionTitle({ label, title, subtitle }: { label: string; title: string; subtitle?: string }) {
+  return (
+    <div className="text-center mb-12">
+      <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">{label}</p>
+      <div className="flex items-center justify-center gap-3 mb-4">
+        <span className="h-px w-8 bg-brand-green" />
+        <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark tracking-wide">{title}</h2>
+        <span className="h-px w-8 bg-brand-green" />
+      </div>
+      {subtitle && <p className="text-slate-600 max-w-2xl mx-auto text-sm leading-relaxed">{subtitle}</p>}
+    </div>
+  );
+}
+
+export default function FarmerLivelihood() {
+  const [modalRole, setModalRole] = useState<"partner" | "volunteer" | "sponsor" | "mentor" | null>(null);
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
-      <NotificationTicker /><UtilityBar /><Header />
-      <main>
-        {/* Clean Hero */}
-        <section className="relative min-h-[420px] flex items-center overflow-hidden">
-          <img src={heroImg} alt="Farmer Livelihood & FPO" className="absolute inset-0 h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-900/65 to-transparent" />
-          <div className="relative z-10 max-w-7xl mx-auto px-4 py-16 w-full">
-            <nav className="flex items-center gap-2 text-xs text-white/70 mb-6 font-medium flex-wrap">
-              <Link to="/" className="hover:text-white flex items-center gap-1"><Home className="w-3 h-3" /> Home</Link>
-              <ChevronRight className="w-3 h-3" />
-              <Link to="/programs/agriculture" className="hover:text-white">Agriculture</Link>
-              <ChevronRight className="w-3 h-3" />
-              <span className="text-white/90 font-semibold">Farmer Livelihood & FPO</span>
-            </nav>
-            <Link to="/programs/agriculture" className="inline-flex items-center gap-2 text-xs font-semibold text-white/80 hover:text-white border border-white/20 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded transition-all mb-5">
-              <ArrowLeft className="w-3.5 h-3.5" /> All Agriculture Programmes
+    <div className="min-h-screen flex flex-col bg-white text-slate-800 antialiased">
+      <NotificationTicker />
+      <UtilityBar />
+      <Header />
+
+      {/* Hero Banner */}
+      <section className="relative bg-[#07162c] text-white pt-24 pb-20 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#07162c] via-[#0b2246]/95 to-transparent z-10" />
+        <img
+          src={heroImg}
+          alt="Farmer Livelihood & Income Enhancement Initiative"
+          className="absolute inset-0 w-full h-full object-cover object-center opacity-25"
+        />
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Breadcrumb */}
+          <nav className="flex items-center gap-2 text-xs text-white/60 mb-8" aria-label="Breadcrumb">
+            <Link to="/" className="hover:text-white transition-colors flex items-center gap-1">
+              <Home className="w-3.5 h-3.5" />
+              <span>Home</span>
             </Link>
-            <div className="inline-flex items-center gap-2 bg-brand-orange/20 border border-brand-orange/40 text-brand-orange px-3.5 py-1 rounded-full mb-4">
-              <TrendingUp className="w-3.5 h-3.5" />
-              <span className="text-xs font-bold tracking-wider uppercase text-white">Market Linkage</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4">
-              Farmer Livelihood & FPO Collectives<br />
-              <span className="text-brand-orange">Collective Power, Fair Price, Doubled Incomes</span>
+            <ChevronRight className="w-3 h-3 text-white/40" />
+            <Link to="/programs/agriculture" className="hover:text-white transition-colors">
+              Agriculture &amp; Rural Livelihoods
+            </Link>
+            <ChevronRight className="w-3 h-3 text-white/40" />
+            <span className="text-brand-orange font-medium">Farmer Livelihood &amp; Income</span>
+          </nav>
+
+          <div className="max-w-3xl">
+            <span className="inline-block bg-brand-orange/20 border border-brand-orange/40 text-brand-orange text-xs font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-full mb-4">
+              Initiative 04 • FLI
+            </span>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4">
+              Farmer Livelihood &amp; Income Enhancement Initiative
             </h1>
-            <p className="text-sm md:text-base text-white/85 max-w-2xl leading-relaxed">
-              Forming Farmer Producer Organisations (FPOs), setting up custom machinery hiring centres, primary processing units, and direct linkages to institutional buyers.
+            <p className="text-lg md:text-xl text-white/80 font-medium mb-4">
+              Beyond Cultivation. Diversifying Livelihoods. Strengthening Rural Household Resilience.
             </p>
+            <p className="text-sm md:text-base text-white/70 leading-relaxed max-w-2xl mb-8">
+              Enabling farmers and rural households to explore livelihood diversification, agriculture-allied activities,
+              value addition, and micro-enterprise to overcome monoculture vulnerability and build multi-stream economic security.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <button
+                onClick={() => setModalRole("partner")}
+                className="inline-flex items-center gap-2 bg-brand-green text-white font-semibold text-sm px-6 py-3 rounded-lg hover:bg-brand-green-dark transition-colors shadow-sm"
+              >
+                Partner with Rural Livelihoods
+                <ArrowRight className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setModalRole("sponsor")}
+                className="inline-flex items-center gap-2 border border-white/30 text-white font-semibold text-sm px-6 py-3 rounded-lg hover:bg-white/10 transition-colors"
+              >
+                Sponsor Allied Activity Units
+              </button>
+            </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* 6 Interventions Grid */}
-        <section className="py-16 bg-white border-b border-slate-200">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2">FPO Value Chain</p>
-              <div className="flex items-center justify-center gap-3 mb-3">
-                <span className="h-px w-8 bg-brand-green" />
-                <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark">6 Pillars of Farm Market Power</h2>
-                <span className="h-px w-8 bg-brand-green" />
-              </div>
-              <p className="text-slate-600 max-w-2xl mx-auto text-sm">Transforming marginal producers into organized market players with ownership of the entire value chain.</p>
+      {/* Overview & Objective */}
+      <section className="py-16 bg-white border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-7">
+              <ScrollReveal>
+                <span className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2 block">
+                  Beyond Cultivation Alone
+                </span>
+                <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark mb-6 leading-snug">
+                  Strengthening Household Economic Resilience
+                </h2>
+                <div className="space-y-4 text-slate-600 text-sm leading-relaxed">
+                  <p>
+                    For many rural families, agriculture remains a primary source of livelihood. However, dependence on
+                    a single or seasonal source of income can leave households exceptionally vulnerable to crop losses,
+                    market fluctuations, rising input costs, erratic weather patterns, and unpredictable economic uncertainties.
+                  </p>
+                  <p>
+                    The Farmer Livelihood &amp; Income Enhancement Initiative of ISLAH seeks to encourage rural households
+                    to explore livelihood diversification, agriculture-allied activities, value addition, local enterprise,
+                    and other suitable income-generating opportunities.
+                  </p>
+                  <p>
+                    The initiative recognises that building true, long-term rural stability requires looking strategically
+                    beyond cultivation alone—empowering families with diversified productive assets and resilient local markets.
+                  </p>
+                </div>
+              </ScrollReveal>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {INTERVENTIONS.map((item, idx) => {
-                const Icon = item.icon;
-                return (
-                  <div key={idx} className="bg-slate-50 rounded-2xl p-7 border border-slate-200 shadow-sm hover:shadow-md hover:border-brand-green/40 transition-all flex flex-col justify-between group">
-                    <div>
-                      <div className="w-12 h-12 rounded-xl bg-orange-50 text-brand-orange flex items-center justify-center font-bold mb-4">
-                        <Icon className="w-6 h-6" />
-                      </div>
-                      <h3 className="text-base font-bold text-slate-900 group-hover:text-brand-green transition-colors mb-2">{item.title}</h3>
-                      <p className="text-xs text-slate-600 leading-relaxed">{item.desc}</p>
-                    </div>
-                    <div className="pt-4 border-t border-slate-200/60 mt-5 flex items-center gap-1.5 text-xs font-bold text-brand-green">
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                      <span>Direct Farmer Benefit</span>
+            <div className="lg:col-span-5">
+              <ScrollReveal>
+                <div className="bg-[#f8faf8] border border-brand-green/20 rounded-xl p-8 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-brand-green/5 rounded-full -mr-10 -mt-10" />
+                  <div className="relative">
+                    <span className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3 block">
+                      Our Objective
+                    </span>
+                    <h3 className="text-xl font-bold text-brand-green-dark mb-4">
+                      Diversified, Sustainable Household Incomes
+                    </h3>
+                    <p className="text-slate-600 text-sm leading-relaxed mb-4">
+                      To support farmers and rural households in exploring diversified, sustainable and locally relevant
+                      livelihood opportunities that can contribute to greater household economic resilience and income security.
+                    </p>
+                    <div className="flex items-center gap-2 pt-2 text-xs font-bold text-brand-green">
+                      <TrendingUp className="w-4 h-4" />
+                      <span>Diversification • Value Addition • Enterprise Resilience</span>
                     </div>
                   </div>
-                );
-              })}
+                </div>
+              </ScrollReveal>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Navy High-Contrast Banner */}
-        <section className="py-14 bg-[#0b1f3b] text-white">
-          <div className="max-w-4xl mx-auto px-4 text-center space-y-5">
-            <Tractor className="w-10 h-10 text-brand-orange mx-auto" />
-            <p className="text-xl md:text-2xl font-semibold leading-relaxed italic text-white/95">
-              "When farmers unite, they dictate terms, eliminate exploitation, and secure the true value of their sweat and soil."
+      {/* Our Approach (6 Pillars) */}
+      <section className="py-20 bg-[#fbfdfa]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ScrollReveal>
+            <SectionTitle
+              label="Strategic Pillars"
+              title="Our Approach"
+              subtitle="Cultivating complementary income channels, value-addition capabilities, and vibrant village enterprises."
+            />
+          </ScrollReveal>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {APPROACH_PILLARS.map((pillar, index) => {
+              const IconComp = pillar.icon;
+              return (
+                <ScrollReveal key={pillar.num} delay={index * 0.05}>
+                  <div className="bg-white rounded-xl border border-slate-200/80 p-6 hover:shadow-md hover:border-brand-green/40 transition-all flex flex-col justify-between h-full">
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="w-10 h-10 rounded-lg bg-[#004724]/10 text-brand-green flex items-center justify-center">
+                          <IconComp className="w-5 h-5" />
+                        </span>
+                        <span className="text-xs font-mono font-bold text-slate-400">{pillar.num}</span>
+                      </div>
+                      <h3 className="font-bold text-base text-brand-green-dark mb-2">{pillar.title}</h3>
+                      <p className="text-xs text-slate-600 leading-relaxed">{pillar.desc}</p>
+                    </div>
+                  </div>
+                </ScrollReveal>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Implementation Modules */}
+      <section className="py-20 bg-white border-y border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ScrollReveal>
+            <SectionTitle
+              label="Field Interventions"
+              title="Implementation Approach"
+              subtitle="Concrete, hands-on programmes in vocational training, allied livestock units, processing, and financial linkages."
+            />
+          </ScrollReveal>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {IMPLEMENTATION_MODULES.map((mod, index) => {
+              const IconComp = mod.icon;
+              return (
+                <ScrollReveal key={mod.title} delay={index * 0.03}>
+                  <div className="bg-[#f9fbf9] border border-slate-200/70 rounded-lg p-5 hover:bg-white hover:border-brand-green/30 hover:shadow-sm transition-all h-full flex flex-col justify-between">
+                    <div>
+                      <div className="w-8 h-8 rounded bg-brand-green/10 text-brand-green flex items-center justify-center mb-3">
+                        <IconComp className="w-4 h-4" />
+                      </div>
+                      <h3 className="font-bold text-sm text-slate-900 mb-1.5 leading-snug">{mod.title}</h3>
+                      <p className="text-xs text-slate-600 leading-relaxed">{mod.desc}</p>
+                    </div>
+                  </div>
+                </ScrollReveal>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Livelihood Pathway (7 Stages) */}
+      <section className="py-20 bg-[#0b1f3b] text-white overflow-hidden relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <ScrollReveal>
+            <div className="text-center max-w-3xl mx-auto mb-14">
+              <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">
+                Empowerment Architecture
+              </p>
+              <h2 className="text-2xl md:text-4xl font-extrabold text-white mb-4">
+                Our Livelihood Pathway
+              </h2>
+              <p className="text-white/70 text-sm leading-relaxed">
+                Rural livelihood development becomes stronger when communities combine agriculture, skills,
+                enterprise, value addition, and market opportunities.
+              </p>
+            </div>
+          </ScrollReveal>
+
+          <div className="grid sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3.5">
+            {LIVELIHOOD_PATHWAY.map((stage, idx) => (
+              <ScrollReveal key={stage.step} delay={idx * 0.04}>
+                <div className="bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-colors h-full flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between mb-2.5">
+                      <span className="text-[10px] font-mono font-bold text-brand-orange">STEP {stage.step}</span>
+                    </div>
+                    <h3 className="text-base font-bold text-white mb-1">{stage.label}</h3>
+                    <p className="text-[11px] font-medium text-brand-orange/90 mb-2">{stage.tag}</p>
+                    <p className="text-[11px] text-white/70 leading-relaxed">{stage.desc}</p>
+                  </div>
+                  {idx < LIVELIHOOD_PATHWAY.length - 1 && (
+                    <div className="hidden lg:flex justify-end pt-3">
+                      <ArrowRight className="w-3.5 h-3.5 text-white/30" />
+                    </div>
+                  )}
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Target Beneficiaries & Impact */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-12 gap-12 items-start">
+            {/* Target Beneficiaries */}
+            <div className="lg:col-span-6">
+              <ScrollReveal>
+                <span className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2 block">
+                  Participants
+                </span>
+                <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark mb-6">
+                  Who We Seek to Support
+                </h2>
+                <div className="bg-[#f8faf8] border border-slate-200/80 rounded-xl p-6 sm:p-8">
+                  <ul className="space-y-3.5">
+                    {TARGET_PARTICIPANTS.map((item) => (
+                      <li key={item} className="flex items-start gap-3 text-sm text-slate-700 leading-snug">
+                        <CheckCircle2 className="w-4 h-4 text-brand-green shrink-0 mt-0.5" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </ScrollReveal>
+            </div>
+
+            {/* Expected Impact */}
+            <div className="lg:col-span-6">
+              <ScrollReveal>
+                <span className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2 block">
+                  Long-Term Outcomes
+                </span>
+                <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark mb-6">
+                  Expected Impact
+                </h2>
+                <div className="bg-[#fbfcfb] border border-brand-green/20 rounded-xl p-6 sm:p-8">
+                  <ul className="space-y-3.5">
+                    {EXPECTED_IMPACTS.map((outcome) => (
+                      <li key={outcome} className="flex items-start gap-3 text-sm text-slate-700 leading-snug">
+                        <TrendingUp className="w-4 h-4 text-brand-orange shrink-0 mt-0.5" />
+                        <span>{outcome}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </ScrollReveal>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Vision & Quote */}
+      <section className="py-20 bg-[#004724] text-white relative overflow-hidden">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+          <ScrollReveal>
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-4 block">
+              Household Dignity &amp; Security
+            </span>
+            <h2 className="text-2xl md:text-3xl font-extrabold mb-6 leading-snug">
+              Sustainable Livelihood Pathways
+            </h2>
+            <p className="text-white/80 text-base leading-relaxed max-w-3xl mx-auto mb-10">
+              Our objective is not simply to increase income, but to help rural households explore dignified,
+              sustainable and locally relevant livelihood pathways that withstand economic and climate vulnerabilities.
             </p>
-            <div className="flex items-center justify-center gap-3 pt-2">
-              <span className="h-px w-8 bg-brand-orange/60" />
-              <span className="text-brand-orange font-semibold text-xs uppercase tracking-widest">Islah Welfare Foundation</span>
-              <span className="h-px w-8 bg-brand-orange/60" />
+            <div className="border-t border-white/20 pt-8 max-w-2xl mx-auto">
+              <blockquote className="text-xl md:text-2xl font-serif italic text-white/95 leading-relaxed mb-4">
+                “A resilient rural household is one that has the knowledge, skills and opportunities to build more than one pathway to livelihood security.”
+              </blockquote>
+              <p className="text-xs font-bold tracking-widest uppercase text-brand-orange">— ISLAH</p>
             </div>
-          </div>
-        </section>
+          </ScrollReveal>
+        </div>
+      </section>
 
-        {/* Navigation */}
-        <section className="py-8 bg-slate-100 border-t border-slate-200">
-          <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <Link to="/programs/agriculture/water-conservation" className="inline-flex items-center gap-2 text-sm font-bold text-brand-green-dark hover:text-brand-green border border-slate-300 bg-white hover:bg-slate-50 px-5 py-2.5 rounded-lg transition-all shadow-sm">
-              <ArrowLeft className="w-4 h-4" /> Prev: Water Conservation
-            </Link>
-            <Link to="/programs" className="inline-flex items-center gap-2 text-sm font-bold text-white bg-brand-green hover:bg-brand-green-dark px-5 py-2.5 rounded-lg transition-all shadow-sm">
-              All Programmes Directory →
-            </Link>
-          </div>
-        </section>
-      </main>
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal type={activeModal} onClose={() => setActiveModal(null)} />
+      {/* Subpage Navigation */}
+      <section className="py-12 bg-slate-50 border-t border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <Link
+            to="/programs/agriculture/organic-farming"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-brand-green transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Previous: Organic Farming &amp; Natural Agriculture (ONA)
+          </Link>
+          <Link
+            to="/programs/agriculture"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-brand-green hover:text-brand-green-dark transition-colors"
+          >
+            Return to Agriculture Sector Overview
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </section>
+
+      <Footer />
+
+      {modalRole && (
+        <RoleFormModal
+          isOpen={true}
+          role={modalRole}
+          onClose={() => setModalRole(null)}
+          title={`Support Farmer Livelihoods & Income Enhancement`}
+        />
+      )}
     </div>
   );
 }

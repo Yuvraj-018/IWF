@@ -1,15 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
-import JISNSJournal from "@/Pages/Education/subpages/JISNSJournal";
+import KnowledgeResearchPage from "@/Pages/Education/subpages/KnowledgeResearchPage";
 
 export const Route = createFileRoute("/programs/education/jisns-journal")({
   head: () => ({
     meta: [
-      { title: "JISNS Journal — IWF Education" },
+      {
+        title:
+          "Knowledge, Research & Publication (KRP) - IWF | Islah Welfare Foundation",
+      },
       {
         name: "description",
-        content: "Peer-reviewed research and scholarly discourse under Islah Welfare Foundation.",
+        content:
+          "JISNS Journal is now part of IWF Knowledge, Research & Publication (KRP) initiative.",
       },
     ],
   }),
-  component: JISNSJournal,
+  component: KnowledgeResearchPage,
 });

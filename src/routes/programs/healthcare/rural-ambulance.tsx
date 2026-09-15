@@ -1,14 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import RuralAmbulance from "@/Pages/Healthcare/subpages/RuralAmbulance";
 
-export const Route = createFileRoute("/programs/healthcare/rural-ambulance")({
+export const Route = createFileRoute(
+  "/programs/healthcare/rural-ambulance"
+)({
   head: () => ({
     meta: [
-      { title: "Rural Ambulance & Emergency Response Service — IWF Healthcare" },
+      {
+        title:
+          "Rural Ambulance & Emergency Response (RAER) - IWF | Islah Welfare Foundation",
+      },
       {
         name: "description",
         content:
-          "IWF's Rural Ambulance & Emergency Response Service provides timely emergency medical transportation to rural and economically weaker communities.",
+          "Reaching every life in time—Providing accessible, affordable, and rapid emergency ambulance transportation for rural communities.",
       },
     ],
   }),

@@ -1,0 +1,465 @@
+import { useState } from "react";
+import { Link } from "@tanstack/react-router";
+import {
+  NotificationTicker,
+  UtilityBar,
+  Header,
+  Footer,
+  RoleFormModal,
+} from "@/components/layout/SiteLayout";
+import {
+  Home,
+  ChevronRight,
+  ArrowLeft,
+  ArrowRight,
+  Compass,
+  Briefcase,
+  TrendingUp,
+  Lightbulb,
+  Users,
+  Smartphone,
+  CheckCircle2,
+  GraduationCap,
+  Sparkles,
+  Target,
+  Rocket,
+  Store,
+} from "lucide-react";
+import ScrollReveal from "@/components/healthcare/ScrollReveal";
+import heroImg from "@/assets/sector_entrepreneur_1.png";
+import overviewHero from "@/assets/overview-hero.jpg";
+
+// ─── Data ─────────────────────────────────────────────────────────────────────
+
+const APPROACH_AREAS = [
+  {
+    num: "01",
+    icon: Compass,
+    title: "Career Awareness & Exploration",
+    desc: "Helping youth understand different education, training, employment and career pathways while encouraging them to identify their interests, strengths and aspirations.",
+  },
+  {
+    num: "02",
+    icon: Target,
+    title: "Career Guidance & Planning",
+    desc: "Supporting young people in setting realistic career goals and developing individual pathways towards further education, employment, skill development or entrepreneurship.",
+  },
+  {
+    num: "03",
+    icon: Lightbulb,
+    title: "Entrepreneurship Orientation",
+    desc: "Introducing entrepreneurial thinking and helping aspiring young entrepreneurs understand opportunities, business basics, innovation and responsible enterprise development.",
+  },
+  {
+    num: "04",
+    icon: Store,
+    title: "Business Planning & Enterprise Skills",
+    desc: "Building practical knowledge in areas such as idea development, business planning, costing, pricing, customer understanding, marketing and basic financial management.",
+  },
+  {
+    num: "05",
+    icon: Users,
+    title: "Mentorship & Professional Exposure",
+    desc: "Where feasible, connecting youth with professionals, entrepreneurs, educators and experienced mentors who can provide guidance, inspiration and practical perspectives.",
+  },
+  {
+    num: "06",
+    icon: Smartphone,
+    title: "Digital & Emerging Opportunities",
+    desc: "Creating awareness of digital careers, technology-enabled work, online opportunities and emerging areas of employment and entrepreneurship.",
+  },
+  {
+    num: "07",
+    icon: Rocket,
+    title: "Opportunity Linkages",
+    desc: "Where feasible, facilitating connections with educational institutions, training providers, employers, businesses, entrepreneurship networks and other relevant opportunities.",
+  },
+];
+
+const TARGET_YOUTH = [
+  "Rural and underserved youth seeking direction and livelihood",
+  "School and senior secondary college students exploring future pathways",
+  "Recent graduates and first-time job seekers preparing for interviews",
+  "Unemployed and underemployed youth needing market-relevant skills",
+  "Youth exploring career alternatives and vocational trade pathways",
+  "Aspiring young rural entrepreneurs ready to pilot micro-enterprises",
+  "Young people from economically vulnerable and distressed families",
+];
+
+const YOUTH_PATHWAY = [
+  { step: "01", label: "DISCOVER", desc: "Recognising personal strengths & aspirations" },
+  { step: "02", label: "EXPLORE", desc: "Investigating market demands & career options" },
+  { step: "03", label: "PLAN", desc: "Setting realistic goals & mapping educational steps" },
+  { step: "04", label: "DEVELOP", desc: "Acquiring technical, business & digital skills" },
+  { step: "05", label: "CREATE", desc: "Launching enterprise or securing employment" },
+  { step: "06", label: "PROGRESS", desc: "Ongoing career growth, leadership & mentoring" },
+];
+
+const IMPACT_OUTCOMES = [
+  "Greater career awareness and informed decision-making",
+  "Improved understanding of education and employment pathways",
+  "Stronger career planning capabilities and goal discipline",
+  "Increased entrepreneurial awareness and innovation mindset",
+  "Better understanding of basic enterprise development and finance",
+  "Greater access to mentors, educators and professional networks",
+  "Improved confidence in pursuing career and livelihood goals",
+  "Increased readiness for employment, self-employment and entrepreneurship",
+];
+
+// ─── Shared SectionTitle ──────────────────────────────────────────────────────
+
+function SectionTitle({ label, title, subtitle }: { label: string; title: string; subtitle?: string }) {
+  return (
+    <div className="text-center mb-12">
+      <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">{label}</p>
+      <div className="flex items-center justify-center gap-3 mb-4">
+        <span className="h-px w-8 bg-brand-green" />
+        <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark tracking-wide">{title}</h2>
+        <span className="h-px w-8 bg-brand-green" />
+      </div>
+      {subtitle && (
+        <p className="text-slate-600 max-w-2xl mx-auto text-sm leading-relaxed">{subtitle}</p>
+      )}
+    </div>
+  );
+}
+
+// ─── Component ────────────────────────────────────────────────────────────────
+
+export default function YouthCareerEntrepreneurship() {
+  const [activeModal, setActiveModal] = useState<
+    "volunteer" | "partner" | "sponsor" | "mentor" | "employee" | null
+  >(null);
+
+  return (
+    <div className="min-h-screen bg-white font-sans text-foreground">
+      <NotificationTicker />
+      <UtilityBar />
+      <Header />
+
+      <main>
+        {/* ── HERO ── */}
+        <section className="relative min-h-[440px] flex items-center overflow-hidden bg-slate-900">
+          <img
+            src={heroImg}
+            alt="Youth Career & Entrepreneurship Development"
+            className="absolute inset-0 h-full w-full object-cover object-center opacity-30"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-900/80 to-transparent" />
+
+          <div className="relative z-10 max-w-7xl mx-auto px-4 py-16 w-full">
+            <nav className="flex items-center gap-2 text-xs text-white/60 mb-6 font-medium flex-wrap">
+              <Link to="/" className="hover:text-white transition-colors flex items-center gap-1">
+                <Home className="w-3 h-3" /> Home
+              </Link>
+              <ChevronRight className="w-3 h-3" />
+              <Link to="/programs/women-empowerment" className="hover:text-white transition-colors">
+                Women &amp; Youth Empowerment
+              </Link>
+              <ChevronRight className="w-3 h-3" />
+              <span className="text-white/80">Youth Career &amp; Entrepreneurship</span>
+            </nav>
+
+            <Link
+              to="/programs/women-empowerment"
+              className="inline-flex items-center gap-2 text-xs font-semibold text-white/70 hover:text-white border border-white/20 hover:border-white/40 px-3 py-1.5 rounded transition-all mb-6 hover:-translate-x-0.5"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              All Women &amp; Youth Initiatives
+            </Link>
+
+            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-3.5 py-1.5 rounded-full mb-5">
+              <Compass className="w-3.5 h-3.5 text-brand-orange" />
+              <span className="text-xs font-bold tracking-widest uppercase text-white/90">
+                Initiative 04 • YCED
+              </span>
+            </div>
+
+            <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight mb-4 max-w-3xl">
+              Youth Career &amp;<br />
+              <span className="text-brand-orange">Entrepreneurship Development</span>
+            </h1>
+
+            <p className="text-lg text-white/90 font-medium mb-3">
+              Discover Direction. Build Capability. Create Opportunity.
+            </p>
+
+            <p className="text-sm md:text-base text-white/75 max-w-2xl leading-relaxed italic">
+              "A clear direction can change a young person’s future; the right opportunity can help them build it."
+            </p>
+          </div>
+        </section>
+
+        {/* ── OVERVIEW ── */}
+        <section className="py-16 bg-white overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4">
+            <ScrollReveal>
+              <SectionTitle label="Overview" title="Connecting Ambition With Practical Direction" />
+            </ScrollReveal>
+
+            <div className="grid lg:grid-cols-12 gap-8 items-center mb-12">
+              <div className="lg:col-span-7">
+                <ScrollReveal>
+                  <div className="bg-brand-green p-6 md:p-8 rounded-2xl border border-brand-green/20 shadow-sm relative overflow-hidden text-white">
+                    <div className="absolute -top-4 -right-4 text-white/10 select-none pointer-events-none">
+                      <Compass className="w-32 h-32" />
+                    </div>
+                    <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/20 border border-white/30 text-[10px] font-bold text-white uppercase tracking-wider mb-4">
+                      <span>🌿</span> Youth Mandate
+                    </div>
+                    <div className="space-y-4 relative z-10">
+                      <p className="text-white text-sm font-semibold leading-relaxed border-l-3 border-white/60 pl-3">
+                        The Youth Career &amp; Entrepreneurship Development Programme is an ISLAH initiative designed to help young people in rural and underserved communities make informed career choices, develop entrepreneurial thinking and build pathways towards meaningful employment, self-employment and sustainable livelihoods.
+                      </p>
+                      <p className="text-white/80 text-sm leading-relaxed pl-3 border-l-3 border-brand-orange/60">
+                        For many young people, choosing a career can be difficult without access to reliable information, professional guidance, mentors, exposure to different career pathways and practical knowledge about entrepreneurship.
+                      </p>
+                      <p className="text-white/90 text-sm font-semibold leading-relaxed pl-3 border-l-3 border-white/40">
+                        ISLAH seeks to bridge this gap by connecting career awareness with skills, mentorship and enterprise development.
+                      </p>
+                    </div>
+                  </div>
+                </ScrollReveal>
+              </div>
+
+              <div className="lg:col-span-5">
+                <ScrollReveal delay={0.1}>
+                  <div className="relative group">
+                    <div className="absolute -inset-1 bg-gradient-to-tr from-brand-green to-brand-orange rounded-2xl opacity-15 blur-sm group-hover:opacity-25 transition-opacity duration-300" />
+                    <div className="relative overflow-hidden rounded-2xl shadow-md border border-slate-100 bg-white hover:shadow-xl transition-all duration-300">
+                      <img
+                        src={overviewHero}
+                        alt="Rural youth mentorship"
+                        className="w-full h-72 object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-4">
+                        <span className="text-white text-xs font-semibold">
+                          Career Mentorship &amp; Enterprise Incubation
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </ScrollReveal>
+              </div>
+            </div>
+
+            {/* Objective Card */}
+            <ScrollReveal>
+              <div className="max-w-4xl mx-auto bg-gradient-to-br from-slate-50 to-brand-green/5 p-6 md:p-8 rounded-2xl border border-brand-green/20 text-center shadow-sm">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-green/10 text-brand-green text-xs font-bold uppercase tracking-wider mb-3">
+                  <Target className="w-3.5 h-3.5" /> Programme Objective
+                </div>
+                <p className="text-sm md:text-base text-slate-800 font-medium max-w-3xl mx-auto leading-relaxed">
+                  The programme aims to help young people move from uncertainty to informed action—understanding their strengths, exploring opportunities, developing relevant capabilities and taking practical steps towards their chosen career or enterprise pathway.
+                </p>
+              </div>
+            </ScrollReveal>
+          </div>
+        </section>
+
+        {/* ── OUR APPROACH (7 AREAS) ── */}
+        <section className="py-16 bg-slate-50 border-t border-slate-100">
+          <div className="max-w-7xl mx-auto px-4">
+            <ScrollReveal>
+              <SectionTitle
+                label="Programme Approach"
+                title="7 Pillars of Youth Development"
+                subtitle="From career discovery to business planning, mentorship, digital skills, and institutional linkages."
+              />
+            </ScrollReveal>
+
+            <ScrollReveal stagger={0.07}>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-5">
+                {APPROACH_AREAS.slice(0, 6).map((area) => {
+                  const Icon = area.icon;
+                  return (
+                    <div
+                      key={area.num}
+                      className="group bg-[#0b1f3b] hover:bg-white rounded-xl p-6 border border-brand-green/10 hover:border-brand-green/30 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between relative overflow-hidden"
+                    >
+                      <span className="absolute top-2 right-4 text-5xl font-extrabold text-white/5 select-none group-hover:text-brand-green/5 transition-colors">
+                        {area.num}
+                      </span>
+                      <div className="relative z-10">
+                        <div className="w-11 h-11 rounded-lg bg-white/10 group-hover:bg-brand-green/10 flex items-center justify-center mb-4 transition-colors">
+                          <Icon className="w-5 h-5 text-white group-hover:text-brand-green transition-colors" />
+                        </div>
+                        <h3 className="font-bold text-base text-white group-hover:text-brand-green-dark mb-2 transition-colors">
+                          {area.num}. {area.title}
+                        </h3>
+                        <p className="text-xs text-slate-200 group-hover:text-slate-600 leading-relaxed transition-colors">
+                          {area.desc}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* 7th Centered Area */}
+              <div className="max-w-md mx-auto">
+                {APPROACH_AREAS.slice(6).map((area) => {
+                  const Icon = area.icon;
+                  return (
+                    <div
+                      key={area.num}
+                      className="group bg-[#0b1f3b] hover:bg-white rounded-xl p-6 border border-brand-green/10 hover:border-brand-green/30 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between relative overflow-hidden"
+                    >
+                      <span className="absolute top-2 right-4 text-5xl font-extrabold text-white/5 select-none group-hover:text-brand-green/5 transition-colors">
+                        {area.num}
+                      </span>
+                      <div className="relative z-10">
+                        <div className="w-11 h-11 rounded-lg bg-white/10 group-hover:bg-brand-green/10 flex items-center justify-center mb-4 transition-colors">
+                          <Icon className="w-5 h-5 text-white group-hover:text-brand-green transition-colors" />
+                        </div>
+                        <h3 className="font-bold text-base text-white group-hover:text-brand-green-dark mb-2 transition-colors">
+                          {area.num}. {area.title}
+                        </h3>
+                        <p className="text-xs text-slate-200 group-hover:text-slate-600 leading-relaxed transition-colors">
+                          {area.desc}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </ScrollReveal>
+          </div>
+        </section>
+
+        {/* ── WHO WE AIM TO SUPPORT ── */}
+        <section className="py-14 bg-white border-t border-slate-100">
+          <div className="max-w-4xl mx-auto px-4">
+            <ScrollReveal>
+              <SectionTitle label="Target Beneficiaries" title="Who We Aim to Support" />
+            </ScrollReveal>
+
+            <ScrollReveal stagger={0.06}>
+              <div className="grid sm:grid-cols-2 gap-3.5">
+                {TARGET_YOUTH.map((item, i) => (
+                  <div
+                    key={i}
+                    className="flex items-start gap-3 p-4 rounded-xl bg-slate-50 border border-slate-200 shadow-sm hover:border-brand-green/30 transition-colors"
+                  >
+                    <div className="w-5 h-5 rounded-full bg-brand-green/10 text-brand-green flex items-center justify-center shrink-0 mt-0.5">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="text-xs md:text-sm text-slate-800 font-medium leading-relaxed">
+                      {item}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </ScrollReveal>
+          </div>
+        </section>
+
+        {/* ── THE ISLAH YOUTH PATHWAY ── */}
+        <section className="py-16 bg-slate-50 border-t border-slate-100">
+          <div className="max-w-6xl mx-auto px-4">
+            <ScrollReveal>
+              <SectionTitle
+                label="Youth Progression"
+                title="The ISLAH Youth Pathway"
+                subtitle="We believe young people need more than information—they need direction, confidence, relevant capabilities and access to opportunity."
+              />
+            </ScrollReveal>
+
+            <ScrollReveal stagger={0.08}>
+              <div className="grid grid-cols-2 md:grid-cols-6 gap-3 mb-10">
+                {YOUTH_PATHWAY.map((p, i) => (
+                  <div
+                    key={i}
+                    className="bg-[#0b1f3b] text-white rounded-xl p-4 text-center border border-brand-green/20 relative group hover:border-brand-orange transition-all"
+                  >
+                    <span className="text-[10px] font-bold text-brand-orange uppercase tracking-wider block mb-1">
+                      Step {p.step}
+                    </span>
+                    <p className="text-sm md:text-base font-extrabold text-white tracking-wide mb-1">
+                      {p.label}
+                    </p>
+                    <p className="text-[10px] text-slate-300 leading-tight">
+                      {p.desc}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </ScrollReveal>
+          </div>
+        </section>
+
+        {/* ── EXPECTED IMPACT ── */}
+        <section className="py-16 bg-white border-t border-slate-100">
+          <div className="max-w-7xl mx-auto px-4">
+            <ScrollReveal>
+              <SectionTitle label="Outcomes" title="Expected Impact" />
+            </ScrollReveal>
+
+            <ScrollReveal stagger={0.06}>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {IMPACT_OUTCOMES.map((impact, i) => (
+                  <div
+                    key={i}
+                    className="flex items-start gap-3 p-4 bg-slate-50 rounded-xl border border-slate-200/80 shadow-sm hover:border-brand-green/30 hover:shadow-md transition-all"
+                  >
+                    <div className="w-6 h-6 rounded-full bg-brand-green/10 text-brand-green flex items-center justify-center shrink-0 mt-0.5">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                    </div>
+                    <p className="text-xs md:text-sm font-medium text-slate-800 leading-relaxed">
+                      {impact}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </ScrollReveal>
+
+            {/* Vision Quote Banner */}
+            <ScrollReveal delay={0.15}>
+              <div className="mt-12 bg-brand-green-darker rounded-2xl p-8 md:p-10 text-center text-white relative overflow-hidden shadow-lg">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-brand-orange text-xs font-bold uppercase tracking-wider mb-4">
+                  <span>🚀</span> Our Vision
+                </div>
+                <p className="text-sm md:text-base text-white/90 max-w-2xl mx-auto mb-4 leading-relaxed">
+                  To enable rural and underserved youth to make informed career choices, develop entrepreneurial capabilities and build meaningful pathways towards employment, enterprise and sustainable livelihoods.
+                </p>
+                <blockquote className="text-lg md:text-xl font-bold italic text-white max-w-2xl mx-auto leading-relaxed pt-3 border-t border-white/10">
+                  "A clear direction can change a young person’s future; the right opportunity can help them build it."
+                </blockquote>
+                <div className="mt-4 flex items-center justify-center gap-3">
+                  <span className="h-px w-8 bg-brand-orange/60" />
+                  <span className="text-brand-orange font-semibold text-xs tracking-wide uppercase">
+                    Part of Women &amp; Youth Empowerment — ISLAH
+                  </span>
+                  <span className="h-px w-8 bg-brand-orange/60" />
+                </div>
+              </div>
+            </ScrollReveal>
+          </div>
+        </section>
+
+        {/* ── BACK / NEXT NAV ── */}
+        <section className="py-10 bg-slate-50 border-t border-slate-100">
+          <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <Link
+              to="/programs/women-empowerment/womens-rights"
+              className="inline-flex items-center gap-2 text-sm font-bold text-brand-green-dark hover:text-brand-green border-2 border-brand-green/20 hover:border-brand-green/60 px-5 py-2.5 rounded transition-all duration-200 hover:-translate-x-0.5"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Prev: Women's Rights &amp; Gender Equality (WRGE)
+            </Link>
+            <Link
+              to="/programs/women-empowerment"
+              className="inline-flex items-center gap-2 text-sm font-bold text-white bg-brand-orange hover:bg-brand-orange-dark px-5 py-2.5 rounded transition-all duration-200 shadow-md hover:translate-x-0.5"
+            >
+              All Women &amp; Youth Initiatives
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </section>
+      </main>
+
+      <Footer onOpenModal={setActiveModal} />
+      <RoleFormModal type={activeModal} onClose={() => setActiveModal(null)} />
+    </div>
+  );
+}

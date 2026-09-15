@@ -1,14 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import CriticalLifeSupport from "@/Pages/Healthcare/subpages/CriticalLifeSupport";
 
-export const Route = createFileRoute("/programs/healthcare/critical-life-support")({
+export const Route = createFileRoute(
+  "/programs/healthcare/critical-life-support"
+)({
   head: () => ({
     meta: [
-      { title: "Critical Life & Emergency Support — IWF Healthcare" },
+      {
+        title:
+          "Critical Life & Emergency Support (CLES) - IWF | Islah Welfare Foundation",
+      },
       {
         name: "description",
         content:
-          "IWF's Critical Life & Emergency Support Initiative provides timely emergency assistance and life-saving support to poor and vulnerable patients.",
+          "Har Pal Anmol Hai—Providing immediate financial and ICU medical support to critically ill underprivileged patients during life-threatening emergencies.",
       },
     ],
   }),

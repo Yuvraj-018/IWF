@@ -75,6 +75,7 @@ export const MEGA_DATA: Record<string, MegaSection> = {
       "Health Care",
       "Skills Development",
       "Women Empowerment",
+      "Social Justice & Legal Empowerment",
       "Entrepreneur Development",
       "Relief & Rehabilitation",
       "Environment & Sustainability",
@@ -152,6 +153,7 @@ function getMegaHref(menu: string, item: string) {
   if (menu === "What We Do" && item === "Health Care") return "/programs/healthcare";
   if (menu === "What We Do" && item === "Skills Development") return "/programs/skills-development";
   if (menu === "What We Do" && item === "Women Empowerment") return "/programs/women-empowerment";
+  if (menu === "What We Do" && (item === "Social Justice & Legal Empowerment" || item === "Social Justice")) return "/programs/social-justice";
   if (menu === "What We Do" && item === "Entrepreneur Development") return "/programs/entrepreneur-development";
   if (menu === "What We Do" && item === "Relief & Rehabilitation") return "/programs/relief-and-rehabilitation";
   if (menu === "What We Do" && item === "Environment & Sustainability") return "/programs/environment";
@@ -602,11 +604,11 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: RoleType) => void
               <span className="block text-xs font-bold tracking-widest text-white uppercase mb-2">Follow Us</span>
               <div className="flex gap-2">
                 {[
-                  { Icon: Facebook, color: "bg-[#1877f2] hover:bg-[#166fe5]", href: "https://facebook.com", label: "Facebook" },
-                  { Icon: Instagram, color: "bg-gradient-to-tr from-[#f9cb2f] via-[#e5195f] to-[#8134af] hover:opacity-90", href: "https://instagram.com", label: "Instagram" },
-                  { Icon: Youtube, color: "bg-[#ff0000] hover:bg-[#e60000]", href: "https://youtube.com", label: "YouTube" },
-                  { Icon: Linkedin, color: "bg-[#0077b5] hover:bg-[#00669c]", href: "https://linkedin.com", label: "LinkedIn" },
-                  { Icon: Twitter, color: "bg-[#1da1f2] hover:bg-[#0d95e8]", href: "https://twitter.com", label: "Twitter" },
+                  { Icon: Facebook, color: "bg-[#1877f2] hover:bg-[#166fe5]", href: "https://www.facebook.com/islahindia/", label: "Facebook" },
+                  { Icon: Instagram, color: "bg-gradient-to-tr from-[#f9cb2f] via-[#e5195f] to-[#8134af] hover:opacity-90", href: "https://www.instagram.com/islahwelfarefoundation/", label: "Instagram" },
+                  { Icon: Youtube, color: "bg-[#ff0000] hover:bg-[#e60000]", href: "https://www.youtube.com/channel/UC5sty9L25QQwC89JwGmEIVw/", label: "YouTube" },
+                  { Icon: Linkedin, color: "bg-[#0077b5] hover:bg-[#00669c]", href: "https://www.linkedin.com/in/islah-welfare-foundation-6a028b432/", label: "LinkedIn" },
+                  { Icon: Twitter, color: "bg-[#1da1f2] hover:bg-[#0d95e8]", href: "https://x.com/islahindia/", label: "Twitter / X" },
                 ].map((s, i) => (
                   <a key={i} href={s.href} target="_blank" rel="noopener noreferrer" className={`w-7 h-7 rounded-full ${s.color} flex items-center justify-center text-white transition-all duration-200 shadow-sm`} aria-label={s.label}>
                     <s.Icon className="w-3.5 h-3.5" />
@@ -664,13 +666,14 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: RoleType) => void
             <ul className="space-y-2.5">
               {[
                 ["All Policies & Governance", "/policies"],
+                ["Medical Fundraising Policy", "/medical-treatment-policy"],
+                ["Financial Transparency", "/financial-transparency-policy"],
                 ["Privacy Policy", "/privacy-policy"],
                 ["Refund Policy", "/refund-policy"],
                 ["Terms & Conditions", "/terms-and-conditions"],
                 ["Grievance Redressal Policy", "/grievance-policy"],
                 ["Child Protection Policy", "/child-protection-policy"],
                 ["Code of Conduct", "/code-of-conduct"],
-                ["Financial Transparency", "/financial-transparency-policy"],
                 ["Legal Status & Registration", "/about/legal-status"],
               ].map(([label, href]) => (
                 <li key={label}>
