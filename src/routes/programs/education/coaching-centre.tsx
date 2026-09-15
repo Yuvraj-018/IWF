@@ -1,15 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
-import CoachingCentre from "@/Pages/Education/subpages/CoachingCentre";
+import AcademicPathwaysPage from "@/Pages/Education/subpages/AcademicPathwaysPage";
 
 export const Route = createFileRoute("/programs/education/coaching-centre")({
   head: () => ({
     meta: [
-      { title: "Coaching Centre (CBCE) — IWF Education" },
+      {
+        title:
+          "Academic Pathways & Talent Development (APTD) - IWF | Islah Welfare Foundation",
+      },
       {
         name: "description",
-        content: "Academic coaching for board and competitive examinations.",
+        content:
+          "Identifying, nurturing, and guiding rural students toward academic excellence and competitive career opportunities through RATS and CES.",
       },
     ],
   }),
-  component: CoachingCentre,
+  component: AcademicPathwaysPage,
 });

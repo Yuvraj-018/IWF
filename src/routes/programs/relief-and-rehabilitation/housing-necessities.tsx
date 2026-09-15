@@ -1,15 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import HousingNecessities from "@/Pages/Relief/subpages/HousingNecessities";
+import ShelterClothingNecessities from "@/Pages/Relief/subpages/ShelterClothingNecessities";
 
 export const Route = createFileRoute("/programs/relief-and-rehabilitation/housing-necessities")({
   head: () => ({
     meta: [
-      { title: "Housing & Necessities — IWF Relief" },
+      { title: "Shelter, Clothing & Necessities (SCN) — ISLAH Relief" },
       {
         name: "description",
-        content: "Shelter repairs, clean water, sanitation, and essential household kits.",
+        content: "Emergency shelter materials, warm seasonal clothing, bedding, and essential household utility kits.",
       },
     ],
   }),
-  component: HousingNecessities,
+  component: ShelterClothingNecessities,
 });

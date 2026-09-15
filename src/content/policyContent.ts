@@ -112,32 +112,79 @@ export const EXTENDED_POLICY_CONTENT: Record<ExtendedPolicySlug, PolicyData> = {
   },
   "medical-treatment-policy": {
     title: "Fundraising for Critical Medical Treatment Policy",
-    subtitle: "Governing the collection, verification, allocation, and management of funds raised for emergency healthcare patients.",
-    effectiveDate: "August 2026",
+    subtitle: "Explaining how funds collected through individual medical fundraising campaigns are managed, utilised, and accounted for with transparency, fairness, and responsible stewardship.",
+    effectiveDate: "01/04/2026",
     sections: [
       {
-        heading: "1. Purpose & Scope",
-        body: "Islah Welfare Foundation conducts medical fundraising campaigns to assist critically ill or injured individuals who cannot afford essential hospital care, surgeries, ICU support, or life-saving procedures."
+        heading: "1. Purpose",
+        body: "Islah Welfare Foundation conducts fundraising campaigns to provide financial assistance for individuals requiring critical medical treatment who are unable to meet the cost of their medical care. This policy explains how funds collected through individual medical fundraising campaigns are managed, utilised, and accounted for, ensuring transparency, fairness, and responsible stewardship of donor contributions."
       },
       {
-        heading: "2. Individual Medical Campaigns & Treatment Targets",
-        body: "Each fundraising campaign specifies an estimated treatment cost provided by treating hospitals or medical professionals. Actual treatment expenses may fluctuate based on patient diagnosis, medical complications, and hospital billing."
+        heading: "2. Individual Medical Fundraising Campaigns",
+        body: "Each fundraising campaign is launched based on information and supporting medical documents provided by the beneficiary or their authorised representative. The campaign specifies an estimated treatment cost, which serves as the fundraising target. Actual treatment expenses may vary depending on the patient's medical condition, hospital requirements, and treatment progress."
       },
       {
-        heading: "3. Administrative & Program Management Cost Allocation",
-        body: "Up to 20% of funds raised in medical fundraising campaigns may be allocated toward campaign verification, administrative overhead, compliance monitoring, diagnostic documentation, and program operational expenses. The actual percentage applied depends on individual campaign requirements."
+        heading: "3. Administrative & Fund Management Cost",
+        body: "To support the planning, verification, fundraising, campaign management, payment processing, documentation, compliance, monitoring, communication, and overall administration of medical fundraising activities, 20% of the total funds raised may be utilised towards administrative, campaign management, compliance, verification, payment processing, monitoring, and program management expenses incurred in operating the medical fundraising program. The actual percentage applied may vary depending on the circumstances of each campaign."
       },
       {
-        heading: "4. Shortfall & Surplus Fund Management",
+        heading: "4. Where Total Funds Collected Are Less Than the Estimated Treatment Cost",
         body: [
-          "If funds raised are less than estimated costs, collected funds (after administrative allocation) are paid directly to treating hospitals/providers for eligible medical care.",
-          "If total funds raised exceed required treatment costs or if treatment circumstances change (e.g. earlier discharge, hospital discount), verified medical expenses are settled first.",
-          "Any remaining surplus is transferred to the IWF Medical Assistance Fund to support other needy medical emergency patients. Surplus amounts are non-refundable to individual donors."
+          "If the total amount raised for an individual beneficiary is less than the estimated treatment cost:",
+          "Islah Welfare Foundation may allocate up to 20% of the total amount collected towards administrative and program management expenses.",
+          "The remaining amount will be utilised exclusively towards the beneficiary's eligible medical treatment and related approved medical expenses.",
+          "Donors acknowledge that, in such cases, the total amount collected may not be sufficient to fully meet the beneficiary's treatment requirements."
         ]
       },
       {
-        heading: "5. Direct Disbursement & Strict Verification",
-        body: "Payments are made directly to hospitals, medical institutions, diagnostic centres, or pharmacies wherever possible. IWF reserves full right to verify identity, inspect medical documents, request progress updates, or suspend campaigns if fraudulent details are discovered."
+        heading: "5. Where Total Funds Collected Exceed the Required Treatment Cost",
+        body: [
+          "If the total amount collected exceeds the amount reasonably required for the beneficiary's eligible medical treatment:",
+          "1. The beneficiary's verified medical expenses shall be paid first.",
+          "2. Administrative and program management costs, as provided under this policy, may be retained by IWF.",
+          "3. Any remaining surplus amount shall not be refunded to individual donors.",
+          "4. The surplus shall be transferred to Health & Well-Being Surplus Fund and utilised for: critical medical treatment assistance for other impoverished patients, urgent life-support emergencies, and community healthcare initiatives."
+        ]
+      },
+      {
+        heading: "6. Surplus Funds Transfer",
+        body: [
+          "If any of the following occurs: (a) Treatment is completed at a lower cost; (b) Treatment is discontinued; (c) The beneficiary no longer requires assistance; (d) The beneficiary becomes ineligible; (e) The beneficiary unfortunately passes away before full utilisation of the funds; or (f) The hospital or medical provider refuses or returns payment;",
+          "Then, after settling all verified eligible medical expenses and applicable administrative costs, any remaining balance may be transferred to the Health & Well-Being Surplus Fund for use in supporting other eligible medical beneficiaries and healthcare initiatives."
+        ]
+      },
+      {
+        heading: "7. Payment of Medical Assistance",
+        body: [
+          "Wherever reasonably possible, payments shall be made directly to hospitals, medical institutions, pharmacies, diagnostic centres, and other authorised healthcare providers.",
+          "Direct payment to beneficiaries may be made only where appropriate documentation, extreme urgency, and rigorous field verification are available."
+        ]
+      },
+      {
+        heading: "8. Verification & Right to Suspend",
+        body: [
+          "Islah Welfare Foundation reserves the right to: verify medical documents, verify beneficiary identity, obtain direct hospital treatment updates, seek additional supporting records, and suspend or discontinue fundraising if false, misleading, or fraudulent information is discovered."
+        ]
+      },
+      {
+        heading: "9. Donor Consent & Irrevocable Contributions",
+        body: [
+          "By donating, donors acknowledge and agree that: donations are voluntary and irrevocable; donations support charitable medical assistance programs; funds will be managed strictly in accordance with this policy; treatment costs are estimates and may increase or decrease; surplus funds may be transferred to the Health & Well-Being Surplus Fund as described; and donations are generally non-refundable except where required by law or in cases of duplicate or erroneous transactions."
+        ]
+      },
+      {
+        heading: "10. Transparency & Governance Records",
+        body: [
+          "Islah Welfare Foundation is committed to maintaining proper records of funds received, medical disbursements, administrative allocations, surplus transfers, and program utilisation. These records shall be maintained in accordance with applicable laws and internal governance procedures."
+        ]
+      },
+      {
+        heading: "11. Right to Amend",
+        body: "Islah Welfare Foundation reserves the right to amend this policy at any time to comply with applicable laws, regulatory requirements, and organisational needs."
+      },
+      {
+        heading: "12. Contact Us",
+        body: "Islah Welfare Foundation · Email: info@iwfindia.org · Website: www.iwfindia.org · Phone: +91 9811861633 · Administrative Office: B-144, Abul Fazal Enclave-II, Okhla, New Delhi, Delhi-110025"
       }
     ]
   },

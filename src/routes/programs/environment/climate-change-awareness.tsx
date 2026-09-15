@@ -1,15 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
-import ClimateChangeAwareness from "@/Pages/Environment/subpages/ClimateChangeAwareness";
+import EnvironmentalAwareness from "@/Pages/Environment/subpages/EnvironmentalAwareness";
 
 export const Route = createFileRoute("/programs/environment/climate-change-awareness")({
   head: () => ({
     meta: [
-      { title: "Climate Change Awareness — IWF Environment" },
+      { title: "Environmental Awareness Programme (EAP) — ISLAH Environment" },
       {
         name: "description",
-        content: "Grassroots climate literacy, renewable energy, and community adaptation.",
+        content: "Grassroots climate literacy, ecological education, and community adaptation.",
       },
     ],
   }),
-  component: ClimateChangeAwareness,
+  component: EnvironmentalAwareness,
 });
+

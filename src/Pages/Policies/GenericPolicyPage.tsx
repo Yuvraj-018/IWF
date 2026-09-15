@@ -3,6 +3,7 @@ import { ShieldCheck, Calendar, Mail, Phone, FileText, CheckCircle2, ChevronRigh
 import { Footer, Header, NotificationTicker, RoleFormModal, UtilityBar } from "@/components/layout/SiteLayout";
 import { EXTENDED_POLICY_CONTENT, type ExtendedPolicySlug } from "@/content/policyContent";
 import { CONTACT_DETAILS } from "@/content/siteContent";
+import MedicalEmergencyWorkflow from "@/components/healthcare/MedicalEmergencyWorkflow";
 
 type RoleType = "volunteer" | "partner" | "sponsor" | "mentor" | "employee";
 
@@ -115,6 +116,12 @@ export default function GenericPolicyPage({ slug }: { slug: ExtendedPolicySlug }
             </div>
           </div>
         </section>
+
+        {slug === "medical-treatment-policy" && (
+          <div className="pb-12">
+            <MedicalEmergencyWorkflow showImageToggle={true} />
+          </div>
+        )}
       </main>
 
       <Footer onOpenModal={setActiveModal} />

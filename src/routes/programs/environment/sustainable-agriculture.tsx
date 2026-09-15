@@ -1,15 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
-import SustainableAgricultureEnv from "@/Pages/Environment/subpages/SustainableAgriculture";
+import SustainableRuralDevelopment from "@/Pages/Environment/subpages/SustainableRuralDevelopment";
 
 export const Route = createFileRoute("/programs/environment/sustainable-agriculture")({
   head: () => ({
     meta: [
-      { title: "Sustainable Agriculture — IWF Environment" },
+      { title: "Sustainable Rural Development (SRD) — ISLAH Environment" },
       {
         name: "description",
-        content: "Regenerative and ecological farming methods restoring soil and water.",
+        content: "Connecting agriculture, natural resources, livelihoods, and rural resilience.",
       },
     ],
   }),
-  component: SustainableAgricultureEnv,
+  component: SustainableRuralDevelopment,
 });
+

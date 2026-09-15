@@ -4,10 +4,10 @@ import FarmerLivelihood from "@/Pages/Agriculture/subpages/FarmerLivelihood";
 export const Route = createFileRoute("/programs/agriculture/farmer-livelihood")({
   head: () => ({
     meta: [
-      { title: "Farmer Livelihood & FPO — IWF Agriculture" },
+      { title: "Farmer Livelihood & Income Enhancement (FLI) — ISLAH Agriculture" },
       {
         name: "description",
-        content: "Farmer Producer Organizations, cold storage, and direct market linkage.",
+        content: "Livelihood diversification, agriculture-allied activities, value addition, and rural micro-enterprise support.",
       },
     ],
   }),

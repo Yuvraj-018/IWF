@@ -157,7 +157,7 @@ function HeroSection() {
           <ChevronRight className="w-3 h-3" />
           <Link to="/programs/healthcare" className="hover:text-white transition-colors">Healthcare</Link>
           <ChevronRight className="w-3 h-3" />
-          <span className="text-white/80">Cervical Cancer Prevention</span>
+          <span className="text-white/80">Cervical Cancer Prevention (CCPA)</span>
         </nav>
 
         <Link
@@ -165,17 +165,17 @@ function HeroSection() {
           className="inline-flex items-center gap-2 text-xs font-semibold text-white/70 hover:text-white border border-white/20 hover:border-white/40 px-3 py-1.5 rounded transition-all mb-6 hover:-translate-x-0.5"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          All Healthcare Programmes
+          All Healthcare Initiatives
         </Link>
 
         <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-3.5 py-1.5 rounded-full mb-5">
           <Ribbon className="w-3.5 h-3.5 text-brand-orange" />
-          <span className="text-xs font-bold tracking-widest uppercase text-white/90">Programme 05</span>
+          <span className="text-xs font-bold tracking-widest uppercase text-white/90">Initiative 07 • CCPA</span>
         </div>
 
         <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight mb-5">
           Cervical Cancer Prevention<br />
-          <span className="text-brand-orange">&amp; Awareness Programme</span>
+          <span className="text-brand-orange">&amp; Awareness (CCPA)</span>
         </h1>
 
         <p className="text-sm md:text-base text-white/75 max-w-2xl leading-relaxed italic">
@@ -483,17 +483,17 @@ function BackNav() {
     <section className="py-10 bg-slate-50 border-t border-slate-100">
       <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
         <Link
-          to="/programs/healthcare/health-checkup-camps"
+          to="/programs/healthcare/menstrual-hygiene"
           className="inline-flex items-center gap-2 text-sm font-bold text-brand-green-dark hover:text-brand-green border-2 border-brand-green/20 hover:border-brand-green/60 px-5 py-2.5 rounded transition-all duration-200 hover:-translate-x-0.5"
         >
           <ArrowLeft className="w-4 h-4" />
-          Prev: Health Check-up Camps
+          Prev: Menstrual Health &amp; Hygiene (MHHS)
         </Link>
         <Link
-          to="/programs/healthcare/diabetes-prevention"
-          className="inline-flex items-center gap-2 text-sm font-bold text-white bg-brand-orange hover:bg-brand-orange-dark px-5 py-2.5 rounded transition-all duration-200 shadow-md"
+          to="/programs/healthcare/wellness-centres"
+          className="inline-flex items-center gap-2 text-sm font-bold text-white bg-brand-orange hover:bg-brand-orange-dark px-5 py-2.5 rounded transition-all duration-200 shadow-md hover:translate-x-0.5"
         >
-          Next: Diabetes Prevention
+          Next: Rural Healthcare &amp; Wellness Centres (RHWC)
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>

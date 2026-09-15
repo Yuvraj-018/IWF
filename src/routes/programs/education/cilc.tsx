@@ -1,15 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import CILCPage from "@/Pages/Education/subpages/CILCPage";
+import CommunityLearningCentrePage from "@/Pages/Education/subpages/CommunityLearningCentrePage";
 
 export const Route = createFileRoute("/programs/education/cilc")({
   head: () => ({
     meta: [
-      { title: "Community & Islamic Learning Centre (CILC) — IWF Education" },
+      { title: "Community Learning Centre (CLC) - IWF | Islah Welfare Foundation" },
       {
         name: "description",
-        content: "Holistic community learning and values education.",
+        content: "Promoting values, character building, life skills, and community development for rural youth.",
       },
     ],
   }),
-  component: CILCPage,
+  component: CommunityLearningCentrePage,
 });

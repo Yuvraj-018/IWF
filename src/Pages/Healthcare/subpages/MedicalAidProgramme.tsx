@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
 import medicalAidImg from "@/assets/medical_aid.png";
+import MedicalEmergencyWorkflow from "@/components/healthcare/MedicalEmergencyWorkflow";
 import medicalAid from "@/assets/medical-aid.jpg";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
@@ -148,13 +149,13 @@ function HeroSection() {
         {/* Badge */}
         <div className="flex items-center gap-2 mb-5">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-3.5 py-1.5 rounded-full">
-            <span className="text-xs font-bold tracking-widest uppercase text-white/90">Programme 02</span>
+            <span className="text-xs font-bold tracking-widest uppercase text-white/90">Initiative 03 • MAP</span>
           </div>
         </div>
 
         <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight mb-5">
-          Medical Aid Programme<br />
-          <span className="text-brand-orange">for Poor Patients</span>
+          Medical Assistance<br />
+          <span className="text-brand-orange">for Poor Patients (MAP)</span>
         </h1>
 
         <p className="text-sm md:text-base text-white/75 max-w-2xl leading-relaxed italic">
@@ -334,35 +335,7 @@ function ApproachSection() {
 
 function ImplementationSection() {
   return (
-    <section className="py-16 bg-slate-50">
-      <div className="max-w-5xl mx-auto px-4">
-        <ScrollReveal>
-          <SectionTitle label="How We Work" title="Implementation Approach" />
-        </ScrollReveal>
-
-        <ScrollReveal stagger={0.1}>
-          <div className="relative">
-            {/* Connecting line — desktop */}
-            <div className="hidden lg:block absolute top-11 left-0 right-0 h-0.5 bg-brand-green/20 z-0" />
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 relative z-10">
-              {IMPLEMENTATION_STEPS.map(({ icon: Icon, text }, i) => (
-                <div key={i} className="flex flex-col items-center text-center group">
-                  <div className="w-[88px] h-[88px] rounded-full bg-white border-2 border-brand-green/30 flex flex-col items-center justify-center mb-4 shadow-sm group-hover:border-brand-green group-hover:shadow-md transition-all duration-300">
-                    <Icon className="w-6 h-6 text-brand-green mb-1" />
-                    <span className="text-[10px] font-bold text-brand-green">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                  </div>
-                  <p className="text-xs text-slate-600 font-medium leading-relaxed group-hover:text-slate-800 transition-colors">
-                    {text}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </ScrollReveal>
-      </div>
-    </section>
+    <MedicalEmergencyWorkflow showImageToggle={true} />
   );
 }
 
@@ -423,17 +396,17 @@ function BackNav() {
     <section className="py-10 bg-slate-50 border-t border-slate-100">
       <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
         <Link
-          to="/programs/healthcare/critical-life-support"
+          to="/programs/healthcare/rural-ambulance"
           className="inline-flex items-center gap-2 text-sm font-bold text-brand-green-dark hover:text-brand-green border-2 border-brand-green/20 hover:border-brand-green/60 px-5 py-2.5 rounded transition-all duration-200 hover:-translate-x-0.5"
         >
           <ArrowLeft className="w-4 h-4" />
-          Prev: Critical Life Support
+          Prev: Rural Ambulance & Emergency Response (RAER)
         </Link>
         <Link
-          to="/programs/healthcare/menstrual-hygiene"
+          to="/programs/healthcare/health-checkup-camps"
           className="inline-flex items-center gap-2 text-sm font-bold text-white bg-brand-orange hover:bg-brand-orange-dark px-5 py-2.5 rounded transition-all duration-200 shadow-md"
         >
-          Next: Menstrual Hygiene Support
+          Next: Community Health Check-up Camps (CHC)
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>

@@ -165,12 +165,12 @@ function HeroSection() {
         </Link>
 
         <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-3.5 py-1.5 rounded-full mb-5">
-          <span className="text-xs font-bold tracking-widest uppercase text-white/90">Programme 04</span>
+          <span className="text-xs font-bold tracking-widest uppercase text-white/90">Initiative 04 • CHC</span>
         </div>
 
         <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight mb-5">
-          Medical Health<br />
-          <span className="text-brand-orange">Check-up Camp Programme</span>
+          Community Health<br />
+          <span className="text-brand-orange">Check-up Camps (CHC)</span>
         </h1>
 
         <p className="text-sm md:text-base text-white/75 max-w-2xl leading-relaxed italic">
@@ -446,17 +446,17 @@ function BackNav() {
     <section className="py-10 bg-slate-50 border-t border-slate-100">
       <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
         <Link
-          to="/programs/healthcare/menstrual-hygiene"
+          to="/programs/healthcare/medical-aid"
           className="inline-flex items-center gap-2 text-sm font-bold text-brand-green-dark hover:text-brand-green border-2 border-brand-green/20 hover:border-brand-green/60 px-5 py-2.5 rounded transition-all duration-200 hover:-translate-x-0.5"
         >
           <ArrowLeft className="w-4 h-4" />
-          Prev: Menstrual Hygiene
+          Prev: Medical Assistance for Poor Patients (MAP)
         </Link>
         <Link
-          to="/programs/healthcare/cervical-cancer"
+          to="/programs/healthcare/diabetes-prevention"
           className="inline-flex items-center gap-2 text-sm font-bold text-white bg-brand-orange hover:bg-brand-orange-dark px-5 py-2.5 rounded transition-all duration-200 shadow-md"
         >
-          Next: Cervical Cancer Prevention
+          Next: Diabetes Prevention & Lifestyle Awareness (DPLA)
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>

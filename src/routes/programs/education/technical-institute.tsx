@@ -1,15 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
-import TechnicalInstitute from "@/Pages/Education/subpages/TechnicalInstitute";
+import TechnicalVocationalPage from "@/Pages/Education/subpages/TechnicalVocationalPage";
 
-export const Route = createFileRoute("/programs/education/technical-institute")({
+export const Route = createFileRoute(
+  "/programs/education/technical-institute"
+)({
   head: () => ({
     meta: [
-      { title: "Technical Institute — IWF Education" },
+      {
+        title:
+          "Technical & Vocational Education and Training (TVET) - IWF | Islah Welfare Foundation",
+      },
       {
         name: "description",
-        content: "Diploma and technical education across IT, electrical, and mechanical fields.",
+        content:
+          "Technical Institute is now part of IWF Technical & Vocational Education and Training (TVET) initiative.",
       },
     ],
   }),
-  component: TechnicalInstitute,
+  component: TechnicalVocationalPage,
 });
