@@ -4,7 +4,7 @@ import GenericPolicyPage from "@/Pages/Policies/GenericPolicyPage";
 export const Route = createFileRoute("/medical-treatment-policy")({
   head: () => ({
     meta: [
-      { title: "Fundraising for Critical Medical Treatment Policy - IWF" },
+      { title: "Fundraising for Critical Medical Treatment Policy - Islah" },
       { name: "description", content: "Policy governing critical medical treatment fundraising campaigns." },
     ],
   }),

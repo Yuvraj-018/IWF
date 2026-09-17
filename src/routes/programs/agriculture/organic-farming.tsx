@@ -4,7 +4,7 @@ import OrganicFarming from "@/Pages/Agriculture/subpages/OrganicFarming";
 export const Route = createFileRoute("/programs/agriculture/organic-farming")({
   head: () => ({
     meta: [
-      { title: "Organic Farming & Certification — IWF Agriculture" },
+      { title: "Organic Farming & Certification — Islah Agriculture" },
       {
         name: "description",
         content: "PGS organic certification, bio-formulations, and premium organic markets.",

@@ -79,7 +79,7 @@ export default function ObjectivesSection() {
               className="w-full h-44 object-cover rounded-lg mb-5"
             />
             <p className="text-sm text-slate-700 leading-relaxed mb-4">
-              Islah Welfare Foundation (IWF) is planning to create educational, health and housing facilities to improve the lot of millions of poor people in the country under Islah Welfare Foundation as "Vision 2047".
+              Islah Welfare Foundation (Islah) is planning to create educational, health and housing facilities to improve the lot of millions of poor people in the country under Islah Welfare Foundation as "Vision 2047".
             </p>
             <p className="text-sm text-slate-700 leading-relaxed mb-4">
               "Vision 2047" is an ambitious plan to bring about transformation in the social landscape of the country. The plan envisages the establishment of multifarious institutions across the country.
@@ -104,7 +104,7 @@ export default function ObjectivesSection() {
               Our mission is to serve the poor and deprived sections of society by providing them with basic amenities like education, healthcare, food and shelter that equip individuals to become an equal partner in the progress of the nation and by helping the sufferers of natural calamities to move towards a world free from hunger, ignorance, deprivation and exploitation.
             </p>
             <p className="text-sm text-slate-700 leading-relaxed mb-4">
-              The Islah Welfare Foundation (IWF) is engaged in helping people with little or no resources. With the high spirit and dedication of its volunteers, IWF strives to alleviate human suffering and to help them achieve real improvement in the quality of their lives.
+              The Islah Welfare Foundation (Islah) is engaged in helping people with little or no resources. With the high spirit and dedication of its volunteers, Islah strives to alleviate human suffering and to help them achieve real improvement in the quality of their lives.
             </p>
 
             <div className="grid grid-cols-3 gap-2 mt-6">

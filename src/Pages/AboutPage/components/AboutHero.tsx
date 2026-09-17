@@ -5,7 +5,7 @@ export default function AboutHero() {
   return (
     <section className="relative min-h-[430px] flex flex-col justify-between overflow-hidden">
       {/* Background */}
-      <img src={heroBg} alt="About IWF" className="absolute inset-0 h-full w-full object-cover" />
+      <img src={heroBg} alt="About Islah" className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/75 to-slate-900/40" />
 
       {/* Content */}
@@ -27,7 +27,7 @@ export default function AboutHero() {
             Empowering Lives. Enriching Communities.
           </p>
           <p className="text-sm text-slate-300 leading-relaxed max-w-2xl mb-8">
-            The Islah Welfare Foundation (IWF) is a public charitable trust committed to the socio-economic development of weaker sections of society — through education, healthcare, women empowerment, and sustainable livelihood programmes.
+            The Islah Welfare Foundation (Islah) is a public charitable trust committed to the socio-economic development of weaker sections of society — through education, healthcare, women empowerment, and sustainable livelihood programmes.
           </p>
 
           {/* Buttons */}

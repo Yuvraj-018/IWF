@@ -6,7 +6,7 @@ export const Route = createFileRoute("/programs/agriculture/farmer-training")({
     meta: [
       {
         title:
-          "Farmer Awareness & Training Initiative (FAT) - IWF | Islah Welfare Foundation",
+          "Farmer Awareness & Training Initiative (FAT) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",

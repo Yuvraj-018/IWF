@@ -49,7 +49,7 @@ interface MemberRecord {
 
 const MEMBERS_DATA: MemberRecord[] = [
   {
-    id: "IWF-BL-2025-001",
+    id: "Islah-BL-2025-001",
     name: "Md. Aftab Alam",
     category: "Blue",
     categoryLabel: "Blue Member",
@@ -58,7 +58,7 @@ const MEMBERS_DATA: MemberRecord[] = [
     validTill: "30 Apr 2026",
   },
   {
-    id: "IWF-BL-2025-002",
+    id: "Islah-BL-2025-002",
     name: "Nazia Parveen",
     category: "Blue",
     categoryLabel: "Blue Member",
@@ -67,7 +67,7 @@ const MEMBERS_DATA: MemberRecord[] = [
     validTill: "14 Apr 2026",
   },
   {
-    id: "IWF-YL-2025-001",
+    id: "Islah-YL-2025-001",
     name: "Shabana Khatoon",
     category: "Yellow",
     categoryLabel: "Yellow Member",
@@ -76,7 +76,7 @@ const MEMBERS_DATA: MemberRecord[] = [
     validTill: "09 May 2026",
   },
   {
-    id: "IWF-GR-2025-001",
+    id: "Islah-GR-2025-001",
     name: "Md. Irfan Alam",
     category: "Green",
     categoryLabel: "Green Member",
@@ -85,7 +85,7 @@ const MEMBERS_DATA: MemberRecord[] = [
     validTill: "19 Apr 2026",
   },
   {
-    id: "IWF-GR-2025-002",
+    id: "Islah-GR-2025-002",
     name: "Hope Foundation",
     category: "Green",
     categoryLabel: "Green Member",
@@ -94,7 +94,7 @@ const MEMBERS_DATA: MemberRecord[] = [
     validTill: "21 May 2026",
   },
   {
-    id: "IWF-BL-2025-003",
+    id: "Islah-BL-2025-003",
     name: "Javed Akhtar",
     category: "Blue",
     categoryLabel: "Blue Member",
@@ -103,7 +103,7 @@ const MEMBERS_DATA: MemberRecord[] = [
     validTill: "11 Jun 2026",
   },
   {
-    id: "IWF-YL-2025-002",
+    id: "Islah-YL-2025-002",
     name: "Dr. Amaan Siddiqui",
     category: "Yellow",
     categoryLabel: "Yellow Member",
@@ -112,7 +112,7 @@ const MEMBERS_DATA: MemberRecord[] = [
     validTill: "15 Jul 2026",
   },
   {
-    id: "IWF-GR-2025-003",
+    id: "Islah-GR-2025-003",
     name: "Rehana Parveen",
     category: "Green",
     categoryLabel: "Green Member",

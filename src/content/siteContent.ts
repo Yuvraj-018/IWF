@@ -66,7 +66,7 @@ export const HOME_CONTENT = {
     subtitle:
       "Knowledge, Opportunity, A Better Future.",
     description:
-      "IWF works with underserved communities to create practical pathways to dignity, learning, health and self-reliance.",
+      "Islah works with underserved communities to create practical pathways to dignity, learning, health and self-reliance.",
     image: heroImg,
   },
   stats: [
@@ -154,7 +154,7 @@ export const HOME_CONTENT = {
     image: programsHeroImg,
     title: "Vision 2047: Transforming Lives, Building a New India",
     copy:
-      "IWF envisions a progressive, inclusive and self-reliant India where every individual has access to quality education, healthcare, dignified housing and sustainable livelihood opportunities.",
+      "Islah envisions a progressive, inclusive and self-reliant India where every individual has access to quality education, healthcare, dignified housing and sustainable livelihood opportunities.",
     pillars: ["Education", "Healthcare", "Housing & Basic Needs", "Skill Development & Livelihood", "Women Empowerment"],
   },
   gallery: [gallery1, gallery2, gallery3, gallery4, gallery5, gallery6],
@@ -178,7 +178,7 @@ export const SECTOR_CONTENT: Record<SectorContent["slug"], SectorContent> = {
     icon: GraduationCap,
     challengeTitle: "Rural Education Landscape in India",
     challengeCopy:
-      "Rural communities continue to face gaps in literacy, learning outcomes, quality infrastructure, trained teachers and access to digital education. IWF prioritises education as a core driver of transformation.",
+      "Rural communities continue to face gaps in literacy, learning outcomes, quality infrastructure, trained teachers and access to digital education. Islah prioritises education as a core driver of transformation.",
     challenges: [
       "Lower literacy rates compared to urban areas",
       "High dropout rates, especially at secondary levels",
@@ -211,7 +211,7 @@ export const SECTOR_CONTENT: Record<SectorContent["slug"], SectorContent> = {
       "A skilled, confident and self-reliant rural generation",
     ],
     vision:
-      "IWF aims to create model educational institutions and community learning spaces that make quality education accessible to underserved rural children.",
+      "Islah aims to create model educational institutions and community learning spaces that make quality education accessible to underserved rural children.",
   },
   "skills-development": {
     slug: "skills-development",
@@ -230,7 +230,7 @@ export const SECTOR_CONTENT: Record<SectorContent["slug"], SectorContent> = {
     icon: Wrench,
     challengeTitle: "Why Skill Development Matters",
     challengeCopy:
-      "Many rural youth and women remain excluded from stable livelihoods because academic learning does not always translate into employable skills. IWF focuses on practical, locally relevant training.",
+      "Many rural youth and women remain excluded from stable livelihoods because academic learning does not always translate into employable skills. Islah focuses on practical, locally relevant training.",
     challenges: [
       "Limited access to vocational and technical training institutions",
       "High unemployment and underemployment among rural youth",
@@ -257,7 +257,7 @@ export const SECTOR_CONTENT: Record<SectorContent["slug"], SectorContent> = {
       "A skilled and self-reliant rural workforce",
     ],
     vision:
-      "IWF aims to build community-based skill centres that become rural empowerment hubs for training, mentorship and livelihood creation.",
+      "Islah aims to build community-based skill centres that become rural empowerment hubs for training, mentorship and livelihood creation.",
   },
   "women-empowerment": {
     slug: "women-empowerment",
@@ -308,7 +308,7 @@ export const SECTOR_CONTENT: Record<SectorContent["slug"], SectorContent> = {
       "Stronger families and more inclusive communities",
     ],
     vision:
-      "IWF envisions a society where every woman has equal opportunity, confidence and dignity to contribute meaningfully to family, community and national development.",
+      "Islah envisions a society where every woman has equal opportunity, confidence and dignity to contribute meaningfully to family, community and national development.",
   },
 };
 
@@ -321,7 +321,7 @@ export const POLICY_CONTENT = {
       {
         heading: "Information We Collect",
         body:
-          "IWF may collect personal information when users donate, subscribe to updates, fill out forms, apply for volunteering or partnership, or contact the organisation. This can include name, address, phone number, email, occupation and organisation details.",
+          "Islah may collect personal information when users donate, subscribe to updates, fill out forms, apply for volunteering or partnership, or contact the organisation. This can include name, address, phone number, email, occupation and organisation details.",
       },
       {
         heading: "Purpose of Collection",
@@ -331,12 +331,12 @@ export const POLICY_CONTENT = {
       {
         heading: "Donation and Payment Security",
         body:
-          "Online payment information should be processed through authorised payment gateways. Sensitive payment credentials are not intended to be stored on IWF servers.",
+          "Online payment information should be processed through authorised payment gateways. Sensitive payment credentials are not intended to be stored on Islah servers.",
       },
       {
         heading: "Data Sharing",
         body:
-          "IWF does not sell or rent personal information. Information may be disclosed only for legal compliance, authorised service providers, payment processing or organisational safety.",
+          "Islah does not sell or rent personal information. Information may be disclosed only for legal compliance, authorised service providers, payment processing or organisational safety.",
       },
     ],
   },
@@ -348,7 +348,7 @@ export const POLICY_CONTENT = {
       {
         heading: "Nature of Donations",
         body:
-          "Donations made to IWF are voluntary contributions toward charitable, educational, healthcare, livelihood and community development activities.",
+          "Donations made to Islah are voluntary contributions toward charitable, educational, healthcare, livelihood and community development activities.",
       },
       {
         heading: "Cancellation and Refund Requests",
@@ -385,7 +385,7 @@ export const POLICY_CONTENT = {
       {
         heading: "Donations and Contributions",
         body:
-          "Donations are voluntary and may be used for welfare programmes at the discretion of IWF unless specifically earmarked and accepted under applicable conditions.",
+          "Donations are voluntary and may be used for welfare programmes at the discretion of Islah unless specifically earmarked and accepted under applicable conditions.",
       },
       {
         heading: "Applications",

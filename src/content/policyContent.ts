@@ -73,7 +73,7 @@ export const EXTENDED_POLICY_CONTENT: Record<ExtendedPolicySlug, PolicyData> = {
     sections: [
       {
         heading: "1. Purpose & Commitment",
-        body: "Islah Welfare Foundation (IWF) is committed to maintaining high standards of transparency, accountability, fairness, and ethical conduct. We value constructive feedback, concerns, and suggestions from beneficiaries, donors, members, volunteers, partners, and the public."
+        body: "Islah Welfare Foundation (Islah) is committed to maintaining high standards of transparency, accountability, fairness, and ethical conduct. We value constructive feedback, concerns, and suggestions from beneficiaries, donors, members, volunteers, partners, and the public."
       },
       {
         heading: "2. Who Can Submit a Grievance?",
@@ -82,7 +82,7 @@ export const EXTENDED_POLICY_CONTENT: Record<ExtendedPolicySlug, PolicyData> = {
           "Donors, sponsors, and philanthropic partners.",
           "Registered members and active volunteers.",
           "Employees, consultants, and contractors.",
-          "Any community member or individual affected by IWF's activities."
+          "Any community member or individual affected by Islah's activities."
         ]
       },
       {
@@ -141,7 +141,7 @@ export const EXTENDED_POLICY_CONTENT: Record<ExtendedPolicySlug, PolicyData> = {
         body: [
           "If the total amount collected exceeds the amount reasonably required for the beneficiary's eligible medical treatment:",
           "1. The beneficiary's verified medical expenses shall be paid first.",
-          "2. Administrative and program management costs, as provided under this policy, may be retained by IWF.",
+          "2. Administrative and program management costs, as provided under this policy, may be retained by Islah.",
           "3. Any remaining surplus amount shall not be refunded to individual donors.",
           "4. The surplus shall be transferred to Health & Well-Being Surplus Fund and utilised for: critical medical treatment assistance for other impoverished patients, urgent life-support emergencies, and community healthcare initiatives."
         ]
@@ -190,7 +190,7 @@ export const EXTENDED_POLICY_CONTENT: Record<ExtendedPolicySlug, PolicyData> = {
   },
   "child-protection-policy": {
     title: "Child Protection & Safeguarding Policy",
-    subtitle: "Ensuring zero-tolerance against abuse, neglect, exploitation, and harm across all IWF child and youth initiatives.",
+    subtitle: "Ensuring zero-tolerance against abuse, neglect, exploitation, and harm across all Islah child and youth initiatives.",
     effectiveDate: "August 2026",
     sections: [
       {
@@ -199,7 +199,7 @@ export const EXTENDED_POLICY_CONTENT: Record<ExtendedPolicySlug, PolicyData> = {
       },
       {
         heading: "2. Scope of Applicability",
-        body: "This policy applies to all Trustees, staff members, volunteers, mentors, educators, partners, contractors, and visitors participating in or representing IWF programs, field visits, or online engagements."
+        body: "This policy applies to all Trustees, staff members, volunteers, mentors, educators, partners, contractors, and visitors participating in or representing Islah programs, field visits, or online engagements."
       },
       {
         heading: "3. Mandatory Code of Conduct",
@@ -224,7 +224,7 @@ export const EXTENDED_POLICY_CONTENT: Record<ExtendedPolicySlug, PolicyData> = {
     sections: [
       {
         heading: "1. Core Values",
-        body: "Representatives of IWF must uphold integrity, honesty, human dignity, transparency, professionalism, non-discrimination, compassion, and strict compliance with applicable laws."
+        body: "Representatives of Islah must uphold integrity, honesty, human dignity, transparency, professionalism, non-discrimination, compassion, and strict compliance with applicable laws."
       },
       {
         heading: "2. Professional Standards & Inclusive Workplace",
@@ -242,7 +242,7 @@ export const EXTENDED_POLICY_CONTENT: Record<ExtendedPolicySlug, PolicyData> = {
   },
   "financial-transparency-policy": {
     title: "Financial Transparency Policy",
-    subtitle: "Principles of responsible stewardship, financial control, auditing, and public accountability at IWF.",
+    subtitle: "Principles of responsible stewardship, financial control, auditing, and public accountability at Islah.",
     effectiveDate: "August 2026",
     sections: [
       {
@@ -260,13 +260,13 @@ export const EXTENDED_POLICY_CONTENT: Record<ExtendedPolicySlug, PolicyData> = {
       },
       {
         heading: "3. Reporting & Public Disclosure",
-        body: "IWF publishes audited financial statements, annual reports, program financial summaries, and statutory filings to maintain public confidence and donor trust."
+        body: "Islah publishes audited financial statements, annual reports, program financial summaries, and statutory filings to maintain public confidence and donor trust."
       }
     ]
   },
   "governance-policy": {
     title: "Governance Policy",
-    subtitle: "Four-tier organizational governance framework guiding leadership oversight and management at IWF.",
+    subtitle: "Four-tier organizational governance framework guiding leadership oversight and management at Islah.",
     effectiveDate: "August 2026",
     sections: [
       {
@@ -280,7 +280,7 @@ export const EXTENDED_POLICY_CONTENT: Record<ExtendedPolicySlug, PolicyData> = {
       },
       {
         heading: "2. Accountability & Risk Management",
-        body: "IWF remains accountable to beneficiaries, donors, government bodies, and the public by enforcing credibility norms, risk assessment procedures, and periodic reviews."
+        body: "Islah remains accountable to beneficiaries, donors, government bodies, and the public by enforcing credibility norms, risk assessment procedures, and periodic reviews."
       }
     ]
   },
@@ -291,11 +291,11 @@ export const EXTENDED_POLICY_CONTENT: Record<ExtendedPolicySlug, PolicyData> = {
     sections: [
       {
         heading: "1. Zero-Tolerance Statement",
-        body: "IWF maintains zero tolerance for fraud, corruption, bribery, embezzlement, kickbacks, falsification of records, or abuse of authority across all operations."
+        body: "Islah maintains zero tolerance for fraud, corruption, bribery, embezzlement, kickbacks, falsification of records, or abuse of authority across all operations."
       },
       {
         heading: "2. Prohibited Conduct & Controls",
-        body: "No person representing IWF shall offer or accept bribes, misappropriate funds, submit false claims, or manipulate procurement processes. Financial segregation of duties and audit trails are enforced."
+        body: "No person representing Islah shall offer or accept bribes, misappropriate funds, submit false claims, or manipulate procurement processes. Financial segregation of duties and audit trails are enforced."
       },
       {
         heading: "3. Investigation & Non-Retaliation",
@@ -310,13 +310,13 @@ export const EXTENDED_POLICY_CONTENT: Record<ExtendedPolicySlug, PolicyData> = {
     sections: [
       {
         heading: "1. Principles of Volunteering",
-        body: "Volunteers are vital partners in creating positive community impact. Volunteering with IWF is voluntary and does not constitute an employment relationship."
+        body: "Volunteers are vital partners in creating positive community impact. Volunteering with Islah is voluntary and does not constitute an employment relationship."
       },
       {
         heading: "2. Volunteer Rights & Responsibilities",
         body: [
           "Rights: To be treated with respect, receive clear orientation/guidance, work in safe environments, and receive certificates of appreciation.",
-          "Responsibilities: Represent IWF ethically, uphold child safeguarding, protect confidential information, respect local customs, and refrain from political campaigning while representing IWF."
+          "Responsibilities: Represent Islah ethically, uphold child safeguarding, protect confidential information, respect local customs, and refrain from political campaigning while representing Islah."
         ]
       },
       {
@@ -332,7 +332,7 @@ export const EXTENDED_POLICY_CONTENT: Record<ExtendedPolicySlug, PolicyData> = {
     sections: [
       {
         heading: "1. Purpose & Eligible Partners",
-        body: "IWF welcomes strategic collaborations with CSR corporate entities, government departments, educational institutions, healthcare centers, NGOs, and philanthropic foundations to amplify social impact."
+        body: "Islah welcomes strategic collaborations with CSR corporate entities, government departments, educational institutions, healthcare centers, NGOs, and philanthropic foundations to amplify social impact."
       },
       {
         heading: "2. Core Partnership Principles",
@@ -347,12 +347,12 @@ export const EXTENDED_POLICY_CONTENT: Record<ExtendedPolicySlug, PolicyData> = {
   },
   "sponsorship-policy": {
     title: "Sponsorship Policy",
-    subtitle: "Terms governing program, project, event, and initiative sponsorships at IWF.",
+    subtitle: "Terms governing program, project, event, and initiative sponsorships at Islah.",
     effectiveDate: "August 2026",
     sections: [
       {
         heading: "1. Types of Sponsorship",
-        body: "IWF accepts Program, Project, Event, Education, Healthcare, Infrastructure, and In-kind sponsorships from corporate CSR entities, foundations, businesses, and individual sponsors."
+        body: "Islah accepts Program, Project, Event, Education, Healthcare, Infrastructure, and In-kind sponsorships from corporate CSR entities, foundations, businesses, and individual sponsors."
       },
       {
         heading: "2. Transparency & Recognition",
@@ -373,7 +373,7 @@ export const EXTENDED_POLICY_CONTENT: Record<ExtendedPolicySlug, PolicyData> = {
         heading: "2. Mentor Guidelines",
         body: [
           "Mentors must possess relevant academic or professional experience.",
-          "Mentors must comply with IWF Code of Conduct and Child Safeguarding guidelines.",
+          "Mentors must comply with Islah Code of Conduct and Child Safeguarding guidelines.",
           "Mentors act in a supportive capacity without seeking commercial or personal benefits."
         ]
       }
@@ -386,7 +386,7 @@ export const EXTENDED_POLICY_CONTENT: Record<ExtendedPolicySlug, PolicyData> = {
     sections: [
       {
         heading: "1. Voluntary Contributions",
-        body: "All donations to IWF are voluntary contributions supporting education, healthcare, skill development, women empowerment, emergency relief, and rural development."
+        body: "All donations to Islah are voluntary contributions supporting education, healthcare, skill development, women empowerment, emergency relief, and rural development."
       },
       {
         heading: "2. Tax Exemption & Receipts",
@@ -400,12 +400,12 @@ export const EXTENDED_POLICY_CONTENT: Record<ExtendedPolicySlug, PolicyData> = {
   },
   "employment-policy": {
     title: "Employment Policy",
-    subtitle: "Recruitment standards, equal opportunity, workplace ethics, and professional conduct for IWF staff.",
+    subtitle: "Recruitment standards, equal opportunity, workplace ethics, and professional conduct for Islah staff.",
     effectiveDate: "August 2026",
     sections: [
       {
         heading: "1. Equal Opportunity Employer",
-        body: "IWF is an equal opportunity employer. Selection is strictly based on merit, qualifications, competence, and integrity without discrimination."
+        body: "Islah is an equal opportunity employer. Selection is strictly based on merit, qualifications, competence, and integrity without discrimination."
       },
       {
         heading: "2. Workplace Culture & Obligations",
@@ -420,11 +420,11 @@ export const EXTENDED_POLICY_CONTENT: Record<ExtendedPolicySlug, PolicyData> = {
     sections: [
       {
         heading: "1. General Information Purpose",
-        body: "Information provided on this website reflects the vision, objectives, and activities of Islah Welfare Foundation (IWF). Some featured programs are operational while others represent proposed or planned initiatives subject to funds, capacity, and community needs."
+        body: "Information provided on this website reflects the vision, objectives, and activities of Islah Welfare Foundation (Islah). Some featured programs are operational while others represent proposed or planned initiatives subject to funds, capacity, and community needs."
       },
       {
         heading: "2. Program Scope & Modifications",
-        body: "Inclusion of any project or initiative does not guarantee immediate execution. IWF reserves the right to modify, adjust, postpone, or discontinue programs without prior notice as resources evolve."
+        body: "Inclusion of any project or initiative does not guarantee immediate execution. Islah reserves the right to modify, adjust, postpone, or discontinue programs without prior notice as resources evolve."
       }
     ]
   }

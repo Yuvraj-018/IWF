@@ -6,7 +6,7 @@ export const Route = createFileRoute("/programs/education/career-guidance")({
     meta: [
       {
         title:
-          "Career Guidance & Mentorship (CGM) - IWF | Islah Welfare Foundation",
+          "Career Guidance & Mentorship (CGM) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",

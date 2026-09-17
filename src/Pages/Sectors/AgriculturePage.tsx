@@ -83,7 +83,7 @@ export default function AgriculturePage() {
 
       <main>
         {/* Hero Slideshow */}
-        <section className="relative min-h-[430px] flex items-center overflow-hidden">
+        <section className="relative min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex items-center overflow-hidden">
           {slides.map((slide, idx) => (
             <div key={idx} className={`absolute inset-0 transition-opacity duration-700 ${slideIndex === idx ? "opacity-100 z-10" : "opacity-0 z-0"}`}>
               <img src={slide.image} alt={slide.caption} className="absolute inset-0 h-full w-full object-cover" />
@@ -127,7 +127,7 @@ export default function AgriculturePage() {
                     Transforming Rural Agriculture & Livelihoods
                   </h2>
                   <p className="text-slate-600 text-sm md:text-base leading-relaxed mb-6">
-                    Agriculture is the backbone of rural India. However, small and marginal farmers continue to face challenges such as low crop productivity, water scarcity, high input costs, climate risks, and lack of market linkages. IWF equips farming communities with practical knowledge, organic methods, and sustainable livelihood support.
+                    Agriculture is the backbone of rural India. However, small and marginal farmers continue to face challenges such as low crop productivity, water scarcity, high input costs, climate risks, and lack of market linkages. Islah equips farming communities with practical knowledge, organic methods, and sustainable livelihood support.
                   </p>
                 </div>
 

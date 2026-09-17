@@ -4,7 +4,7 @@ import AgricultureLanding from "@/Pages/Agriculture/AgricultureLanding";
 export const Route = createFileRoute("/programs/agriculture/")({
   head: () => ({
     meta: [
-      { title: "Agriculture & Rural Livelihoods - IWF | Islah Welfare Foundation" },
+      { title: "Agriculture & Rural Livelihoods - Islah | Islah Welfare Foundation" },
       {
         name: "description",
         content:

@@ -266,7 +266,7 @@ function OverviewSection() {
               As a result, diabetes not only affects individual health but also places a heavy financial and emotional burden on families and communities.
             </p>
             <p className="text-slate-700 text-sm font-semibold leading-relaxed max-w-3xl mx-auto mb-4">
-              Recognising this growing public health concern, Islah Welfare Foundation (IWF) proposes the Diabetes Prevention &amp; Lifestyle Awareness Programme to promote awareness, preventive healthcare, early detection, and healthy lifestyle practices among rural and underserved populations.
+              Recognising this growing public health concern, Islah Welfare Foundation (Islah) proposes the Diabetes Prevention &amp; Lifestyle Awareness Programme to promote awareness, preventive healthcare, early detection, and healthy lifestyle practices among rural and underserved populations.
             </p>
             <div className="inline-block text-xs font-bold text-brand-orange uppercase tracking-wider bg-brand-orange/10 border border-brand-orange/20 px-4 py-1.5 rounded-full max-w-full text-center whitespace-normal">
               Our Goal: Educate communities about diabetes prevention and encourage healthier living to reduce the burden of lifestyle-related diseases.

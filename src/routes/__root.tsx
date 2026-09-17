@@ -274,7 +274,7 @@ function RootComponent() {
                   <span className="text-xs text-gray-500 font-medium">Sending your message...</span>
                 </div>
               ) : (
-                <form onSubmit={handleMsgSubmit} className="flex flex-col gap-2.5">
+                <form onSubmit={handleMsgSubmit} className="flex flex-col gap-2.5 notranslate" translate="no">
                   <div>
                     <label htmlFor="msg-name" className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">
                       Your Name <span className="text-red-500">*</span>
@@ -326,35 +326,22 @@ function RootComponent() {
                     <label htmlFor="msg-mobile" className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">
                       Mobile Number <span className="text-red-500">*</span>
                     </label>
-                    <div className="flex gap-1.5">
-                      <select
-                        value={formData.countryCode}
-                        onChange={(e) => setFormData({ ...formData, countryCode: e.target.value })}
-                        className="w-20 bg-slate-50 border border-gray-200 rounded-lg px-1.5 py-2 text-[11px] font-medium text-slate-800 focus:outline-none shrink-0"
-                      >
-                        {COUNTRY_CODES.map((c) => (
-                          <option key={c.code} value={c.code}>
-                            {c.code}
-                          </option>
-                        ))}
-                      </select>
-                      <input
-                        id="msg-mobile"
-                        type="tel"
-                        required
-                        maxLength={10}
-                        placeholder="10-digit mobile number"
-                        value={formData.mobile}
-                        onKeyDown={blockNonDigitsOnKeyDown}
-                        onChange={(e) => {
-                          setFormData({ ...formData, mobile: sanitizeDigits(e.target.value, 10) });
-                          if (formErrors.mobile) setFormErrors({ ...formErrors, mobile: "" });
-                        }}
-                        className={`flex-1 bg-slate-50 border rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand-orange/30 text-slate-800 ${
-                          formErrors.mobile ? "border-red-500 bg-red-50/20" : "border-gray-200"
-                        }`}
-                      />
-                    </div>
+                    <input
+                      id="msg-mobile"
+                      type="tel"
+                      required
+                      maxLength={10}
+                      placeholder="Enter 10-digit mobile number"
+                      value={formData.mobile}
+                      onKeyDown={blockNonDigitsOnKeyDown}
+                      onChange={(e) => {
+                        setFormData({ ...formData, mobile: sanitizeDigits(e.target.value, 10) });
+                        if (formErrors.mobile) setFormErrors({ ...formErrors, mobile: "" });
+                      }}
+                      className={`w-full bg-slate-50 border rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand-orange/30 text-slate-800 ${
+                        formErrors.mobile ? "border-red-500 bg-red-50/20" : "border-gray-200"
+                      }`}
+                    />
                     {formErrors.mobile && (
                       <p className="text-[10px] text-red-600 font-medium mt-0.5">{formErrors.mobile}</p>
                     )}

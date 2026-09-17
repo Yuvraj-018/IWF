@@ -20,7 +20,7 @@ export default function PlasticFreeCommunities() {
       icon: ShoppingBag,
       num: "02",
       title: "Cloth & Jute Bag Distribution in Rural Haats",
-      desc: "Replacing non-biodegradable polythene carry bags with durable cloth and jute tote bags stitched by IWF women SHGs, distributing them freely across weekly vegetable markets.",
+      desc: "Replacing non-biodegradable polythene carry bags with durable cloth and jute tote bags stitched by Islah women SHGs, distributing them freely across weekly vegetable markets.",
       highlights: ["SHG-stitched eco cotton bags", "Vendor polythene ban agreements", "Consumer behavioral change campaigns"],
     },
     {

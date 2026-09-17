@@ -258,7 +258,7 @@ export default function GalleryPage() {
         </div>
 
         {/* Hero Banner */}
-        <section className="bg-gradient-to-r from-[#071527] via-[#0b1f3b] to-[#15803d] text-white py-16 px-4 md:px-8 border-b border-white/10">
+        <section className="bg-gradient-to-r from-[#071527] via-[#0b1f3b] to-[#15803d] text-white min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex items-center py-16 px-4 md:px-8 border-b border-white/10">
           <div className="max-w-7xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-brand-orange text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">
               <Camera className="w-3.5 h-3.5" />

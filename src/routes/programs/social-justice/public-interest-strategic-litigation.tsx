@@ -8,7 +8,7 @@ export const Route = createFileRoute(
     meta: [
       {
         title:
-          "Public Interest & Strategic Litigation (PISL) - IWF | Islah Welfare Foundation",
+          "Public Interest & Strategic Litigation (PISL) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",

@@ -6,7 +6,7 @@ export const Route = createFileRoute("/programs/healthcare/medical-aid")({
     meta: [
       {
         title:
-          "Medical Assistance for Poor Patients (MAP) - IWF | Islah Welfare Foundation",
+          "Medical Assistance for Poor Patients (MAP) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",

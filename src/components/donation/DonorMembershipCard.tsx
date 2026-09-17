@@ -79,7 +79,7 @@ const TIERS: Record<string, TierConfig> = {
     perks: [
       "All Community Supporter benefits included",
       "Direct WhatsApp field updates & patient recovery briefs",
-      "Annual IWF Printed Impact Magazine mailed to address",
+      "Annual Islah Printed Impact Magazine mailed to address",
       "Acknowledgment on Foundation Annual Honor Roll",
     ],
   },
@@ -116,7 +116,7 @@ const TIERS: Record<string, TierConfig> = {
     icon: Crown,
     perks: [
       "All Gold Champion benefits included",
-      "Permanent Memorial/Honor Plaque at IWF Healthcare Unit",
+      "Permanent Memorial/Honor Plaque at Islah Healthcare Unit",
       "Direct advisory dialogue with Foundation Board & Trustees",
       "Dedicated naming recognition for sponsored community initiatives",
     ],
@@ -164,7 +164,7 @@ export const DonorMembershipCard: React.FC<DonorMembershipCardProps> = ({
     : 0;
 
   const donorDisplayName = (fullName || "Valued Contributor").trim().toUpperCase();
-  const donorId = isReturning ? "IWF-DON-2024-8841" : "IWF-NEW-2025";
+  const donorId = isReturning ? "Islah-DON-2024-8841" : "Islah-NEW-2025";
 
   return (
     <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-200/50 overflow-hidden text-left transition-all space-y-4 p-5 sm:p-6">

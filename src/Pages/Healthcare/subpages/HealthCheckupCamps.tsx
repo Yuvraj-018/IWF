@@ -258,7 +258,7 @@ function OverviewSection() {
               <ShieldCheck className="w-5 h-5" />
             </div>
             <p className="text-slate-600 text-sm leading-relaxed mb-4">
-              Recognising this critical healthcare gap, Islah Welfare Foundation (IWF) proposes the Medical Health Check-up Camp Programme to provide accessible, affordable, and community-based preventive healthcare services to underserved populations.
+              Recognising this critical healthcare gap, Islah Welfare Foundation (Islah) proposes the Medical Health Check-up Camp Programme to provide accessible, affordable, and community-based preventive healthcare services to underserved populations.
             </p>
             <div className="inline-block text-xs font-bold text-brand-orange uppercase tracking-wider bg-brand-orange/10 border border-brand-orange/20 px-4 py-1.5 rounded-full">
               Our Goal: Bring healthcare directly to communities through organised medical camps, screenings, awareness sessions, and basic treatment support.

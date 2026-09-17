@@ -8,7 +8,7 @@ export const Route = createFileRoute("/donate")({
   }),
   head: () => ({
     meta: [
-      { title: "Donate — IWF | Islah Welfare Foundation" },
+      { title: "Donate — Islah | Islah Welfare Foundation" },
       {
         name: "description",
         content:

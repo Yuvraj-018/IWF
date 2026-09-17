@@ -4,7 +4,7 @@ import ContactPage from "@/Pages/ContactPage";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact Us — IWF | Islah Welfare Foundation" },
+      { title: "Contact Us — Islah | Islah Welfare Foundation" },
       {
         name: "description",
         content:

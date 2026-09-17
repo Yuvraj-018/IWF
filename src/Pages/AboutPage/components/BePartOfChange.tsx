@@ -22,7 +22,7 @@ export default function BePartOfChange({ onOpenModal }: BePartOfChangeProps) {
           </span>
         </h2>
         <p className="text-slate-300 text-base mb-10 max-w-xl mx-auto">
-          Whether you want to donate, volunteer, or partner with us — there is a place for you at IWF. Together, we can build a better tomorrow for thousands of families across India.
+          Whether you want to donate, volunteer, or partner with us — there is a place for you at Islah. Together, we can build a better tomorrow for thousands of families across India.
         </p>
         <div className="flex flex-wrap gap-4 justify-center">
           <button

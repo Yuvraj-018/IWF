@@ -4,7 +4,7 @@ import FoodNutrition from "@/Pages/Relief/subpages/FoodNutrition";
 export const Route = createFileRoute("/programs/relief-and-rehabilitation/food-nutrition")({
   head: () => ({
     meta: [
-      { title: "Food & Nutrition — IWF Relief" },
+      { title: "Food & Nutrition — Islah Relief" },
       {
         name: "description",
         content: "Community kitchens, ration distribution, and nutritional security.",

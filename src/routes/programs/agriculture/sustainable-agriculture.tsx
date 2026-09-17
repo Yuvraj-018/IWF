@@ -6,7 +6,7 @@ export const Route = createFileRoute("/programs/agriculture/sustainable-agricult
     meta: [
       {
         title:
-          "Sustainable Agriculture Development Programme (SAD) - IWF | Islah Welfare Foundation",
+          "Sustainable Agriculture Development Programme (SAD) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",

@@ -92,7 +92,7 @@ export default function TreePlantation() {
                   </span>
                   <h3 className="text-2xl font-extrabold leading-snug">Every Tree Adopted & Nurtured for 3 Years</h3>
                   <p className="text-sm text-slate-200 leading-relaxed">
-                    Unlike standard plantation drives, IWF assigns each sapling to a local student or village elder equipped with a protective bamboo tree-guard and regular watering schedule.
+                    Unlike standard plantation drives, Islah assigns each sapling to a local student or village elder equipped with a protective bamboo tree-guard and regular watering schedule.
                   </p>
                 </div>
                 <div className="relative z-10 pt-6 border-t border-white/15 mt-6">

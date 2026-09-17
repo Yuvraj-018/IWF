@@ -239,7 +239,7 @@ export default function SkillsLanding() {
 
       <main>
         {/* ── 1. HERO SECTION ── */}
-        <section className="relative min-h-[520px] flex items-center overflow-hidden bg-slate-900">
+        <section className="relative min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex items-center overflow-hidden bg-slate-900">
           <img
             src={entrepreneurImg}
             alt="Skills, Livelihoods & Entrepreneurship"

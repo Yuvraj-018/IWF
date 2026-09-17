@@ -112,7 +112,7 @@ export default function WidowsVulnerableWomen() {
           <div className="max-w-4xl mx-auto px-4 text-center space-y-5">
             <HandHeart className="w-10 h-10 text-brand-orange mx-auto" />
             <p className="text-xl md:text-2xl font-semibold leading-relaxed italic text-white/95">
-              "No widow should face grief and extreme poverty alone. IWF stands beside every vulnerable woman — with unconditional care, compassion, and concrete support."
+              "No widow should face grief and extreme poverty alone. Islah stands beside every vulnerable woman — with unconditional care, compassion, and concrete support."
             </p>
             <div className="flex items-center justify-center gap-3 pt-2">
               <span className="h-px w-8 bg-brand-orange/60" />

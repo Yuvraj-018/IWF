@@ -206,7 +206,7 @@ export default function PrimarySchoolPage() {
                 </div>
 
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Recognising that primary education is the foundation of lifelong learning, Islah Welfare Foundation (IWF) has established Erawin Public School (EPS) in a rural area in Darbhanga, Bihar, to address these critical gaps at the grassroots level.
+                  Recognising that primary education is the foundation of lifelong learning, Islah Welfare Foundation (Islah) has established Erawin Public School (EPS) in a rural area in Darbhanga, Bihar, to address these critical gaps at the grassroots level.
                 </p>
 
                 <p className="text-xs text-slate-600 leading-relaxed">
@@ -251,7 +251,7 @@ export default function PrimarySchoolPage() {
                 </div>
 
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Erawin Public School (EPS) is a flagship initiative of IWF, dedicated to providing accessible, affordable, and value-based modern education in rural areas.
+                  Erawin Public School (EPS) is a flagship initiative of Islah, dedicated to providing accessible, affordable, and value-based modern education in rural areas.
                 </p>
 
                 <div className="space-y-2.5 pt-1">
@@ -325,7 +325,7 @@ export default function PrimarySchoolPage() {
                 FUTURE VISION &amp; EXPANSION
               </h3>
               <p className="text-xs sm:text-sm text-slate-600">
-                Building on the success of Erawin Public School, IWF plans to replicate this model in other underserved rural areas across India.
+                Building on the success of Erawin Public School, Islah plans to replicate this model in other underserved rural areas across India.
               </p>
             </div>
 

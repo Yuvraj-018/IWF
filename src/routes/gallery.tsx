@@ -4,7 +4,7 @@ import GalleryPage from "@/Pages/GalleryPage";
 export const Route = createFileRoute("/gallery")({
   head: () => ({
     meta: [
-      { title: "Programme Gallery - IWF | Islah Welfare Foundation" },
+      { title: "Programme Gallery - Islah | Islah Welfare Foundation" },
       {
         name: "description",
         content:

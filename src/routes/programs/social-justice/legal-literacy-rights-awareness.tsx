@@ -8,7 +8,7 @@ export const Route = createFileRoute(
     meta: [
       {
         title:
-          "Legal Literacy & Rights Awareness Programme (LLRA) - IWF | Islah Welfare Foundation",
+          "Legal Literacy & Rights Awareness Programme (LLRA) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",

@@ -42,7 +42,7 @@ export default function PartnerPage() {
 
       <main>
         {/* ─── Hero Section (Pages 13 & 15 of PDF) ───────────────────────────── */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-[#07162c] via-[#0b1f3b] to-[#144272] text-white py-16 sm:py-20">
+        <section className="relative overflow-hidden bg-gradient-to-br from-[#07162c] via-[#0b1f3b] to-[#144272] text-white min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex items-center py-16 sm:py-20">
           <div className="absolute inset-0 bg-[radial-gradient(#2b88d8_1px,transparent_1px)] [background-size:24px_24px] opacity-15" />
 
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

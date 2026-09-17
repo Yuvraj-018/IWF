@@ -77,8 +77,8 @@ export function RoleFormModal({ type, onClose }: RoleFormModalProps) {
   const Icon = cfg.icon;
 
   return createPortal(
-    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/70 p-3 sm:p-4 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-white/20 bg-white shadow-2xl">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/70 p-3 sm:p-4 backdrop-blur-xs animate-in fade-in duration-200 notranslate" translate="no">
+      <div className="flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-white/20 bg-white shadow-2xl notranslate" translate="no">
         {/* Modal Header */}
         <div className={`sticky top-0 z-10 flex items-start justify-between gap-4 bg-gradient-to-r ${cfg.bgGradient} px-6 py-5 text-white shadow-md`}>
           <div className="flex items-center gap-3">

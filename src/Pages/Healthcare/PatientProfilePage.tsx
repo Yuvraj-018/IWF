@@ -94,7 +94,7 @@ export default function PatientProfilePage() {
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: `Help ${patient.name} — IWF`,
+        title: `Help ${patient.name} — Islah`,
         text: `${patient.name} needs urgent medical treatment support.`,
         url: window.location.href,
       });
@@ -173,7 +173,7 @@ export default function PatientProfilePage() {
                     </span>
                     <span className="inline-flex items-center gap-1 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full">
                       <BadgeCheck className="w-3.5 h-3.5 text-emerald-600" />
-                      IWF Verified
+                      Islah Verified
                     </span>
                     <span className="text-xs text-slate-500 font-medium">
                       Admitted {formatDate(patient.admissionDate)}
@@ -275,7 +275,7 @@ export default function PatientProfilePage() {
                     TRANSPARENCY &amp; VERIFICATION
                   </div>
                   <h2 className="text-2xl font-black text-[#0b1f3b] mb-2">
-                    100% Verified by IWF Field Team
+                    100% Verified by Islah Field Team
                   </h2>
                   <p className="text-xs sm:text-sm text-slate-600 mb-6">
                     Every patient case is personally verified by our field coordinator and medical experts before we accept a single rupee of donations.
@@ -412,13 +412,13 @@ export default function PatientProfilePage() {
                 </div>
               </div>
 
-              {/* Contact IWF Box */}
+              {/* Contact Islah Box */}
               <div className="bg-[#0b1f3b] text-white rounded-3xl p-5 text-center shadow-sm">
                 <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-2 text-[#ea580c]">
                   <Phone className="w-5 h-5" />
                 </div>
                 <p className="text-xs font-black uppercase tracking-wider mb-1">
-                  CONTACT IWF
+                  CONTACT Islah
                 </p>
                 <p className="text-xs text-slate-300 mb-3">
                   Questions about this case? Our team is here.
@@ -431,12 +431,12 @@ export default function PatientProfilePage() {
                 </a>
               </div>
 
-              {/* IWF's Transparency Pledge */}
+              {/* Islah's Transparency Pledge */}
               <div className="bg-[#0b1f3b] text-white rounded-3xl p-6 shadow-md space-y-4">
                 <div className="flex items-center gap-2.5 border-b border-white/15 pb-3">
                   <BadgeCheck className="w-6 h-6 text-[#ea580c]" />
                   <h3 className="text-sm font-black uppercase tracking-wider">
-                    IWF's Transparency Pledge
+                    Islah's Transparency Pledge
                   </h3>
                 </div>
 
@@ -485,7 +485,7 @@ export default function PatientProfilePage() {
               {/* Case Progress Timeline (Right Column in Design) */}
               <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm">
                 <span className="text-[11px] font-black text-[#ea580c] uppercase tracking-wider block mb-1">
-                  IWF FIELD UPDATES
+                  Islah FIELD UPDATES
                 </span>
                 <h3 className="text-lg font-black text-[#0b1f3b] mb-4">
                   Case Progress Timeline

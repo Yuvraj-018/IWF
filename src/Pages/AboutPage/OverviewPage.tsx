@@ -13,6 +13,7 @@ import {
   Target,
   Sparkles,
   Compass,
+  Play,
   CheckCircle2,
   Layers,
   Heart,
@@ -40,6 +41,7 @@ import slide2 from "@/assets/hero-carousel/hero-slide-2.jpg";
 export default function OverviewPage() {
   const [activeModal, setActiveModal] = useState<RoleType | null>(null);
   const [activeTab, setActiveTab] = useState<"I" | "S" | "L" | "A" | "H">("I");
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
   const standsFor = [
     {
@@ -256,36 +258,41 @@ export default function OverviewPage() {
               </div>
             </div>
 
-            {/* Approach Card in Right Column */}
-            <div className="lg:col-span-5 bg-[#0b1f3b] text-white rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-xl relative overflow-hidden">
-              <div className="absolute -right-12 -bottom-12 w-48 h-48 bg-brand-orange/20 rounded-full blur-2xl pointer-events-none" />
-              <div className="relative z-10 space-y-4">
-                <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full text-xs font-bold text-brand-orange uppercase tracking-wider">
-                  <Compass className="w-3.5 h-3.5" />
-                  Our Approach
-                </div>
-                <h3 className="text-xl sm:text-2xl font-black text-white leading-tight">
-                  Development as Opportunity, Capability & Systems
-                </h3>
-                <p className="text-white/80 text-xs sm:text-sm leading-relaxed">
-                  At ISLAH, we see development not merely as the delivery of services, but as the
-                  creation of opportunities, capabilities and systems that enable communities to shape
-                  their own future.
-                </p>
-                <p className="text-white/80 text-xs sm:text-sm leading-relaxed">
-                  We work with communities to understand their needs, identify practical solutions,
-                  mobilise resources, develop partnerships, and implement initiatives that are
-                  relevant to local realities.
-                </p>
-              </div>
+            {/* Right Column: Welfare Foundation Video extending vertically */}
+            <div className="lg:col-span-5 h-full min-h-[380px] sm:min-h-[440px] flex flex-col">
+              <div className="relative w-full h-full flex-1 rounded-3xl overflow-hidden shadow-2xl border border-slate-200/90 bg-slate-950 group">
+                {isVideoPlaying ? (
+                  <iframe
+                    className="absolute -top-14 left-0 w-full h-[calc(100%+64px)] object-cover"
+                    src="https://www.youtube-nocookie.com/embed/ScMzIvxBSi4?autoplay=1&rel=0&modestbranding=1&controls=1&showinfo=0"
+                    title="Islah Welfare Foundation Video"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  />
+                ) : (
+                  <div
+                    onClick={() => setIsVideoPlaying(true)}
+                    className="relative w-full h-full min-h-[380px] sm:min-h-[440px] cursor-pointer"
+                  >
+                    <img
+                      src={overviewHero}
+                      alt="Islah Welfare Foundation in Action"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/30 transition-opacity duration-300 group-hover:bg-black/40" />
 
-              <div className="relative z-10 mt-6 pt-5 border-t border-white/15">
-                <p className="text-xs font-bold uppercase tracking-wider text-brand-orange mb-1">
-                  Underlying Objective
-                </p>
-                <p className="text-base sm:text-lg font-black text-white tracking-wide leading-snug">
-                  Empower people. Strengthen livelihoods. Build resilient communities.
-                </p>
+                    {/* Centered Pulse Play Button */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="relative flex items-center justify-center">
+                        <span className="absolute w-20 h-20 rounded-full bg-brand-orange/40 animate-ping" />
+                        <span className="absolute w-16 h-16 rounded-full bg-brand-orange/60" />
+                        <div className="relative w-16 h-16 rounded-full bg-brand-orange text-white flex items-center justify-center shadow-2xl transition-transform duration-300 group-hover:scale-110">
+                          <Play className="w-7 h-7 fill-white text-white ml-1" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

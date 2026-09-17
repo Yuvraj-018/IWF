@@ -6,7 +6,7 @@ export const Route = createFileRoute("/programs/healthcare/")({
     meta: [
       {
         title:
-          "Healthcare & Well-Being - IWF | Islah Welfare Foundation",
+          "Healthcare & Well-Being - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",

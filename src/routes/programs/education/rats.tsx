@@ -6,12 +6,12 @@ export const Route = createFileRoute("/programs/education/rats")({
     meta: [
       {
         title:
-          "Rural Academic Talent Search (RATS) - IWF | Islah Welfare Foundation",
+          "Rural Academic Talent Search (RATS) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",
         content:
-          "RATS is part of IWF Academic Pathways & Talent Development (APTD) program.",
+          "RATS is part of Islah Academic Pathways & Talent Development (APTD) program.",
       },
     ],
   }),

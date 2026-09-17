@@ -224,7 +224,8 @@ function ContactForm() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               onSubmit={handleSubmit(onSubmit)}
-              className="space-y-3.5"
+              className="space-y-3.5 notranslate"
+              translate="no"
             >
               {/* Row 1: First Name & Last Name */}
               <div className="grid sm:grid-cols-2 gap-3.5">
@@ -393,7 +394,7 @@ function ContactForm() {
                   >
                     Privacy Policy
                   </a>
-                  . IWF will use my information solely to respond to this inquiry.{" "}
+                  . Islah will use my information solely to respond to this inquiry.{" "}
                   <span className="text-red-500">*</span>
                 </label>
               </div>
@@ -434,10 +435,10 @@ export default function ContactPage() {
 
       <main className="flex-1">
         {/* ─── Hero Section: 100% Native Vector & High-Res Build ───────────────── */}
-        <section className="bg-[#071527] text-white pt-6 sm:pt-10 relative overflow-hidden">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <section className="bg-[#071527] text-white min-h-[480px] md:min-h-[540px] flex flex-col justify-center pt-10 sm:pt-16 pb-12 sm:pb-20 relative overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
             {/* Top Breadcrumb */}
-            <div className="flex items-center gap-2 text-xs font-medium text-slate-400 mb-4 select-none">
+            <div className="flex items-center gap-2 text-xs font-medium text-slate-400 mb-6 select-none">
               <Link to="/" className="hover:text-white transition-colors">
                 Home
               </Link>
@@ -446,7 +447,7 @@ export default function ContactPage() {
             </div>
 
             {/* Main Hero Grid: Left Content + Right Organic Composition */}
-            <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-8 lg:gap-12 items-center pb-8 sm:pb-12">
+            <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-8 lg:gap-12 items-center">
               {/* Left Column: Heading, Copy & 4 Cards */}
               <div className="space-y-4 sm:space-y-5">
                 <div className="inline-flex items-center gap-2.5">

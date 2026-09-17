@@ -8,7 +8,7 @@ export const Route = createFileRoute(
     meta: [
       {
         title:
-          "Academic Pathways & Talent Development (APTD) - IWF | Islah Welfare Foundation",
+          "Academic Pathways & Talent Development (APTD) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",

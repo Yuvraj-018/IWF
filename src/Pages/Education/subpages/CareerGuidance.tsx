@@ -368,7 +368,7 @@ export default function CareerGuidance() {
                     <p className="text-sm text-slate-700 leading-relaxed mb-4">
                       Recognising this critical gap,{" "}
                       <strong className="text-[#004724]">
-                        Islah Welfare Foundation (IWF)
+                        Islah Welfare Foundation (Islah)
                       </strong>{" "}
                       proposes the Career Guidance & Mentorship (CGM) Programme
                       as a structured initiative to guide and support rural

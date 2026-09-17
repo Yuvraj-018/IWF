@@ -55,7 +55,7 @@ export type Patient = {
   costBreakdown: CostBreakdown[];
 
   // Transparency
-  verificationId: string; // IWF case reference e.g. "IWF-CLS-2026-001"
+  verificationId: string; // Islah case reference e.g. "Islah-CLS-2026-001"
   verifiedBy: string;
   verificationDate: string;
   documents: PatientDocument[];
@@ -100,7 +100,7 @@ export const URGENT_PATIENTS: Patient[] = [
       { label: "Nurse & Attendant Support", amount: 5000 },
     ],
 
-    verificationId: "IWF-CLS-2026-001",
+    verificationId: "Islah-CLS-2026-001",
     verifiedBy: "Dr. Anjum Ara, Senior Physician, PMCH",
     verificationDate: "2026-06-29",
     documents: [
@@ -114,7 +114,7 @@ export const URGENT_PATIENTS: Patient[] = [
     story: [
       "Mohammed Salim, 62, is a daily wage labourer from Darbhanga district who was brought to Patna Medical College & Hospital in a critical state after struggling to breathe for several days. His family, unable to afford even a rickshaw to the hospital, borrowed money from neighbours to bring him to Patna.",
       "Doctors diagnosed him with severe bilateral pneumonia leading to respiratory failure. He was immediately placed on ventilator support in the ICU. His wife and two children are back in the village, with no source of income while he is hospitalised. The family has exhausted their savings of just ₹3,000.",
-      "IWF's field team verified his case within 24 hours of admission and has been coordinating with the hospital. Every rupee donated goes directly to his treatment. With your support, Mohammed Salim can survive this crisis and return to his family.",
+      "Islah's field team verified his case within 24 hours of admission and has been coordinating with the hospital. Every rupee donated goes directly to his treatment. With your support, Mohammed Salim can survive this crisis and return to his family.",
     ],
     familyBackground:
       "Wife (homemaker), one son (18, daily labourer), one daughter (16, studying in Class 10). The family earns approximately ₹250–300 per day on good days. They have no health insurance or government coverage.",
@@ -124,13 +124,13 @@ export const URGENT_PATIENTS: Patient[] = [
         date: "2026-06-28",
         type: "admission",
         title: "Patient Admitted to ICU",
-        text: "Mohammed Salim was admitted to PMCH ICU with severe breathing difficulty. Placed on ventilator support. IWF case opened immediately.",
+        text: "Mohammed Salim was admitted to PMCH ICU with severe breathing difficulty. Placed on ventilator support. Islah case opened immediately.",
       },
       {
         date: "2026-06-29",
         type: "treatment",
-        title: "IWF Verification Completed",
-        text: "IWF field team visited PMCH. Case verified by Dr. Anjum Ara. Hospital confirmed he qualifies for emergency support. Initial ₹8,000 released for medicines.",
+        title: "Islah Verification Completed",
+        text: "Islah field team visited PMCH. Case verified by Dr. Anjum Ara. Hospital confirmed he qualifies for emergency support. Initial ₹8,000 released for medicines.",
       },
       {
         date: "2026-07-02",
@@ -142,7 +142,7 @@ export const URGENT_PATIENTS: Patient[] = [
         date: "2026-07-08",
         type: "funding",
         title: "34 Donors Have Contributed",
-        text: "₹21,000 raised so far by 34 compassionate donors. IWF has utilised ₹18,000 for medicines and ICU charges. ₹64,000 still needed.",
+        text: "₹21,000 raised so far by 34 compassionate donors. Islah has utilised ₹18,000 for medicines and ICU charges. ₹64,000 still needed.",
       },
     ],
 
@@ -184,7 +184,7 @@ export const URGENT_PATIENTS: Patient[] = [
       { label: "Nursing Care & Attendant", amount: 7000 },
     ],
 
-    verificationId: "IWF-CLS-2026-002",
+    verificationId: "Islah-CLS-2026-002",
     verifiedBy: "Dr. Rakesh Sharma, Cardiologist, AIIMS Patna",
     verificationDate: "2026-06-26",
     documents: [
@@ -198,7 +198,7 @@ export const URGENT_PATIENTS: Patient[] = [
     story: [
       "Shakuntala Devi, 58, a homemaker from Muzaffarpur, Bihar, collapsed at home while cooking. Her son rushed her to the nearest primary health centre, which immediately referred her to AIIMS Patna given the severity of her condition. She was diagnosed with acute heart failure on arrival.",
       "Shakuntala is the backbone of her family. Her husband passed away three years ago, and her two sons work as auto-rickshaw drivers earning barely enough to sustain the household. The sudden hospitalisation has put the family in severe financial distress. They have sold what little gold jewellery they had to fund the initial days of treatment.",
-      "IWF's team has been supporting them in navigating the hospital system and arranging urgent funds. The doctors are cautiously optimistic about her recovery with continued care, but the financial burden is overwhelming for the family. Your support can help Shakuntala Devi go home to her children.",
+      "Islah's team has been supporting them in navigating the hospital system and arranging urgent funds. The doctors are cautiously optimistic about her recovery with continued care, but the financial burden is overwhelming for the family. Your support can help Shakuntala Devi go home to her children.",
     ],
     familyBackground:
       "Widow, two sons (both auto-rickshaw drivers, earning ₹400–500/day combined). Lives in rented accommodation in Muzaffarpur. No health insurance.",
@@ -213,8 +213,8 @@ export const URGENT_PATIENTS: Patient[] = [
       {
         date: "2026-06-26",
         type: "treatment",
-        title: "IWF Case Verified",
-        text: "IWF field coordinator visited AIIMS. Case verified by Dr. Rakesh Sharma. BPL certificate and income proof confirmed. Initial ₹15,000 released.",
+        title: "Islah Case Verified",
+        text: "Islah field coordinator visited AIIMS. Case verified by Dr. Rakesh Sharma. BPL certificate and income proof confirmed. Initial ₹15,000 released.",
       },
       {
         date: "2026-07-01",
@@ -268,7 +268,7 @@ export const URGENT_PATIENTS: Patient[] = [
       { label: "Nutrition Support & Nursing", amount: 5000 },
     ],
 
-    verificationId: "IWF-CLS-2026-003",
+    verificationId: "Islah-CLS-2026-003",
     verifiedBy: "Dr. Priya Mishra, Gastroenterologist, Paras HMRI",
     verificationDate: "2026-07-02",
     documents: [
@@ -282,7 +282,7 @@ export const URGENT_PATIENTS: Patient[] = [
     story: [
       "Ramesh Kumar, 47, is a small farmer from Nalanda district who was brought to Paras HMRI in a critical condition after vomiting blood. He has been suffering from liver disease for the past two years but could never afford proper treatment. His condition deteriorated rapidly, requiring immediate hospitalisation.",
       "Ramesh is the sole breadwinner for his wife and three children aged between 8 and 15. His farmland, barely 1 acre, is not enough to sustain the family. The monsoon season means no additional income from daily labour. The family is in extreme financial distress and has taken a loan from a local moneylender at high interest just for the admission deposit.",
-      "IWF intervened within hours of being alerted by the hospital's social worker. Multiple blood transfusions have been administered and his condition has stabilised slightly, but he is still in the ICU. Every donation brings him closer to seeing his children again.",
+      "Islah intervened within hours of being alerted by the hospital's social worker. Multiple blood transfusions have been administered and his condition has stabilised slightly, but he is still in the ICU. Every donation brings him closer to seeing his children again.",
     ],
     familyBackground:
       "Married with 3 children (ages 8, 12, 15). Wife is a homemaker. Owns 1 acre of farmland in Nalanda district. Monthly family income approximately ₹5,000–6,000.",
@@ -297,8 +297,8 @@ export const URGENT_PATIENTS: Patient[] = [
       {
         date: "2026-07-02",
         type: "treatment",
-        title: "IWF Verification & Initial Support",
-        text: "IWF case verified by Dr. Priya Mishra. ₹12,000 released for emergency blood and medicines. Endoscopy procedure completed.",
+        title: "Islah Verification & Initial Support",
+        text: "Islah case verified by Dr. Priya Mishra. ₹12,000 released for emergency blood and medicines. Endoscopy procedure completed.",
       },
       {
         date: "2026-07-06",
@@ -352,7 +352,7 @@ export const URGENT_PATIENTS: Patient[] = [
       { label: "Nutrition & Support Care", amount: 5000 },
     ],
 
-    verificationId: "IWF-CLS-2026-004",
+    verificationId: "Islah-CLS-2026-004",
     verifiedBy: "Dr. Sana Fatima, Nephrologist, Medanta Patna",
     verificationDate: "2026-06-21",
     documents: [
@@ -366,7 +366,7 @@ export const URGENT_PATIENTS: Patient[] = [
     story: [
       "Abdul Rahman, 66, is a retired school teacher from Gaya, Bihar, who was admitted to Medanta Hospital after his kidneys suddenly stopped functioning. He had been managing mild kidney disease for years on basic medication, but a sudden infection caused his kidneys to fail completely, requiring immediate dialysis.",
       "Abdul Rahman's pension of ₹4,000 per month barely covers household expenses. His children are working in different cities but earn modest wages and are already stretched thin. Dialysis at ₹3,000 per session, needed three times a week, is financially impossible for the family without external support.",
-      "IWF has been by his side since day one, coordinating with the hospital and managing the funds transparently. Abdul Rahman's gentle spirit and the way he speaks about returning to his students move everyone who visits him. With your help, he can complete his treatment and go home.",
+      "Islah has been by his side since day one, coordinating with the hospital and managing the funds transparently. Abdul Rahman's gentle spirit and the way he speaks about returning to his students move everyone who visits him. With your help, he can complete his treatment and go home.",
     ],
     familyBackground:
       "Retired school teacher. Wife (homemaker, 62). Three children — one son working in Delhi, one daughter married in Bhagalpur, one son in Patna. Monthly pension: ₹4,000.",
@@ -376,13 +376,13 @@ export const URGENT_PATIENTS: Patient[] = [
         date: "2026-06-20",
         type: "admission",
         title: "Admitted with Complete Kidney Failure",
-        text: "Abdul Rahman admitted to Medanta Nephrology with complete kidney failure. Emergency dialysis initiated. IWF alerted by family.",
+        text: "Abdul Rahman admitted to Medanta Nephrology with complete kidney failure. Emergency dialysis initiated. Islah alerted by family.",
       },
       {
         date: "2026-06-21",
         type: "treatment",
-        title: "IWF Verified — First Dialysis Funded",
-        text: "Case verified by Dr. Sana Fatima. All documents confirmed. IWF funded first 5 dialysis sessions (₹15,000). Patient responding well.",
+        title: "Islah Verified — First Dialysis Funded",
+        text: "Case verified by Dr. Sana Fatima. All documents confirmed. Islah funded first 5 dialysis sessions (₹15,000). Patient responding well.",
       },
       {
         date: "2026-07-03",

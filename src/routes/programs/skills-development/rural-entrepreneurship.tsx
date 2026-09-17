@@ -5,7 +5,7 @@ export const Route = createFileRoute("/programs/skills-development/rural-entrepr
   head: () => ({
     meta: [
       {
-        title: "Rural Entrepreneurship Initiative (REI) - IWF | Islah Welfare Foundation",
+        title: "Rural Entrepreneurship Initiative (REI) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",

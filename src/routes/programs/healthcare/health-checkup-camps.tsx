@@ -8,7 +8,7 @@ export const Route = createFileRoute(
     meta: [
       {
         title:
-          "Community Health Check-up Camps (CHC) - IWF | Islah Welfare Foundation",
+          "Community Health Check-up Camps (CHC) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",

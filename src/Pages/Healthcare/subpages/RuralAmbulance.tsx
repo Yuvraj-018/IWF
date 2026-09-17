@@ -316,7 +316,7 @@ function OverviewSection() {
               As a result, many preventable deaths and complications occur simply because patients are unable to access timely medical transportation and emergency care.
             </p>
             <p className="text-slate-700 text-sm font-semibold leading-relaxed max-w-3xl mx-auto mb-4">
-              Recognising this urgent healthcare need, Islah Welfare Foundation (IWF) proposes the Rural Ambulance &amp; Emergency Response Service to provide accessible, affordable, and timely emergency medical transportation and response support to rural and underserved communities.
+              Recognising this urgent healthcare need, Islah Welfare Foundation (Islah) proposes the Rural Ambulance &amp; Emergency Response Service to provide accessible, affordable, and timely emergency medical transportation and response support to rural and underserved communities.
             </p>
             <div className="inline-block text-xs font-bold text-brand-orange uppercase tracking-wider bg-brand-orange/10 border border-brand-orange/20 px-4 py-1.5 rounded-full max-w-full text-center whitespace-normal">
               Our Goal: Ensure that no life is lost due to delayed access to emergency healthcare services.
@@ -353,7 +353,7 @@ function ApproachSection() {
           <SectionTitle
             label="Project Approach"
             title="5 Areas of Emergency Support"
-            subtitle="IWF's Rural Ambulance Service addresses the full spectrum of emergency healthcare needs — from transport to awareness."
+            subtitle="Islah's Rural Ambulance Service addresses the full spectrum of emergency healthcare needs — from transport to awareness."
           />
         </ScrollReveal>
 
@@ -512,7 +512,7 @@ function ImpactSection() {
         <ScrollReveal delay={0.15}>
           <div className="mt-12 bg-brand-green-darker rounded-md p-10 text-center">
             <p className="text-lg md:text-xl font-semibold text-white max-w-3xl mx-auto leading-relaxed italic">
-              "IWF believes that timely emergency response can save lives, and every individual deserves quick access to healthcare support during critical moments, regardless of location or financial condition."
+              "Islah believes that timely emergency response can save lives, and every individual deserves quick access to healthcare support during critical moments, regardless of location or financial condition."
             </p>
             <p className="text-white/70 text-sm mt-4 max-w-xl mx-auto">
               "Reaching every life in time — because emergency care should never be delayed by distance or poverty."

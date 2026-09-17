@@ -302,10 +302,10 @@ export default function HealthcareLanding() {
 
       <main>
         {/* 1. HERO SECTION */}
-        <section className="relative min-h-[480px] flex items-center overflow-hidden bg-slate-900">
+        <section className="relative min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex items-center overflow-hidden bg-slate-900">
           <img
             src={overviewHero}
-            alt="IWF Healthcare & Well-Being Initiatives"
+            alt="Islah Healthcare & Well-Being Initiatives"
             className="absolute inset-0 h-full w-full object-cover opacity-35 filter saturate-110"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#00381c]/95 via-[#004724]/85 to-slate-950/80" />
@@ -547,7 +547,7 @@ export default function HealthcareLanding() {
               <SectionTitle
                 label="Strategic Model"
                 title="Our Approach"
-                subtitle="To address these critical gaps, IWF develops community-focused healthcare solutions that are affordable, accessible, preventive, and sustainable."
+                subtitle="To address these critical gaps, Islah develops community-focused healthcare solutions that are affordable, accessible, preventive, and sustainable."
               />
             </ScrollReveal>
 

@@ -250,7 +250,7 @@ function SectorIdentity({ content }: { content: SectorContent }) {
                       <BookOpen className="w-6 h-6 text-brand-orange mb-5" />
                       <h3 className="font-bold text-brand-green-dark mb-2">{step}</h3>
                       <p className="text-xs text-slate-600 leading-relaxed">
-                        A focused layer in IWF's education pathway for rural children and youth.
+                        A focused layer in Islah's education pathway for rural children and youth.
                       </p>
                     </div>
                   ))}
@@ -360,7 +360,7 @@ function SectorIdentity({ content }: { content: SectorContent }) {
                       {item}
                     </h3>
                     <p className={index % 2 === 0 ? "text-xs text-slate-600 leading-relaxed mt-2" : "text-xs text-white/70 leading-relaxed mt-2"}>
-                      A core pillar of IWF's women empowerment ecosystem.
+                      A core pillar of Islah's women empowerment ecosystem.
                     </p>
                   </div>
                 ))}
@@ -395,7 +395,7 @@ export default function SectorLandingPage({ content }: { content: SectorContent 
       <Header />
       <main>
         {/* Hero Slideshow */}
-        <section className="relative min-h-[430px] flex items-center overflow-hidden">
+        <section className="relative min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex items-center overflow-hidden">
           {/* Slides */}
           {slides.map((slide, idx) => (
             <div
@@ -527,7 +527,7 @@ export default function SectorLandingPage({ content }: { content: SectorContent 
             <ScrollReveal>
               <SectionTitle
                 eyebrow="Strategic Focus"
-                title={`How IWF Advances ${content.title}`}
+                title={`How Islah Advances ${content.title}`}
               />
             </ScrollReveal>
             <ScrollReveal stagger={0.06}>

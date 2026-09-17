@@ -15,8 +15,8 @@ export function EventsGallery() {
           <div className="space-y-3">
             {[
               { d: "25", m: "MAY", title: "Free Health Camp — Bathiya, Darbhanga", desc: "Free check-up camp under our 'Health Cannot Wait' initiative. Open to all community members. Medicines and consultations provided free of charge." },
-              { d: "05", m: "JUN", title: "World Environment Day Plantation Drive", desc: "Tree plantation & sustainability awareness drive in local villages — part of IWF's Environment & Rural Livelihood programme. Join us to plant saplings." },
-              { d: "15", m: "JUL", title: "Shiksha Na Ruke — Scholarship Distribution", desc: "IWF distributes scholarships to bright students under the 'Shiksha Na Ruke' campaign. Supporting eligible students for a better, educated tomorrow." },
+              { d: "05", m: "JUN", title: "World Environment Day Plantation Drive", desc: "Tree plantation & sustainability awareness drive in local villages — part of Islah's Environment & Rural Livelihood programme. Join us to plant saplings." },
+              { d: "15", m: "JUL", title: "Shiksha Na Ruke — Scholarship Distribution", desc: "Islah distributes scholarships to bright students under the 'Shiksha Na Ruke' campaign. Supporting eligible students for a better, educated tomorrow." },
             ].map((e) => (
               <div key={e.title} className="bg-white rounded-md p-4 flex gap-4 items-center border border-slate-100 shadow-sm">
                 <div className="text-center bg-brand-green/10 rounded px-3 py-2 w-16">

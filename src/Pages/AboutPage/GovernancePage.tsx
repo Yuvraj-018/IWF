@@ -13,7 +13,7 @@ const GOVERNANCE_TIERS = [
     color: "#15803d",
     bg: "#F0FDF4",
     border: "#BBF7D0",
-    desc: "The apex governing body of IWF. Responsible for setting strategic direction, approving annual budgets, reviewing audit reports, and ensuring compliance with the Trust Deed and applicable laws.",
+    desc: "The apex governing body of Islah. Responsible for setting strategic direction, approving annual budgets, reviewing audit reports, and ensuring compliance with the Trust Deed and applicable laws.",
     responsibilities: [
       "Annual general body meetings (minimum twice yearly)",
       "Approval of budgets, programs, and policies",
@@ -61,7 +61,7 @@ const GOVERNANCE_TIERS = [
     color: "#D97706",
     bg: "#FFFBEB",
     border: "#FDE68A",
-    desc: "Community-level coordinators and mobilizers who directly interact with beneficiaries. They are the frontline workers who ensure last-mile delivery of all IWF programs.",
+    desc: "Community-level coordinators and mobilizers who directly interact with beneficiaries. They are the frontline workers who ensure last-mile delivery of all Islah programs.",
     responsibilities: [
       "Direct beneficiary identification and registration",
       "Camp and event coordination",
@@ -140,7 +140,7 @@ export default function GovernancePage() {
               <div className="mb-10">
                 <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2">Structure</p>
                 <h2 className="text-2xl font-extrabold text-brand-green-dark mb-2">4-Tier Decision System</h2>
-                <p className="text-slate-500 text-sm max-w-2xl">IWF's governance follows a clear hierarchy ensuring accountability at every level — from strategy to last-mile delivery.</p>
+                <p className="text-slate-500 text-sm max-w-2xl">Islah's governance follows a clear hierarchy ensuring accountability at every level — from strategy to last-mile delivery.</p>
               </div>
             </ScrollReveal>
 

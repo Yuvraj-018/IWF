@@ -6,7 +6,7 @@ export const Route = createFileRoute("/programs/women-empowerment/women-skill-li
     meta: [
       {
         title:
-          "Women Skill Development & Livelihood Programme (WSDL) - IWF | Islah Welfare Foundation",
+          "Women Skill Development & Livelihood Programme (WSDL) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",

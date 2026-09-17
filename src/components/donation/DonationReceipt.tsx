@@ -347,7 +347,7 @@ export const DonationReceipt = forwardRef<HTMLDivElement, DonationReceiptProps>(
                   className="text-sm font-black font-sans tracking-wider"
                   fill="currentColor"
                 >
-                  IWF
+                  Islah
                 </text>
                 <circle cx="28" cy="50" r="1.5" fill="currentColor" />
                 <circle cx="72" cy="50" r="1.5" fill="currentColor" />

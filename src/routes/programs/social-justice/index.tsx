@@ -6,7 +6,7 @@ export const Route = createFileRoute("/programs/social-justice/")({
     meta: [
       {
         title:
-          "Social Justice & Legal Empowerment - IWF | Islah Welfare Foundation",
+          "Social Justice & Legal Empowerment - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",

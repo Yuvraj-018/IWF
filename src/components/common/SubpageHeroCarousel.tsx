@@ -28,7 +28,7 @@ export default function SubpageHeroCarousel({
   subtitle,
   breadcrumbs = [{ label: "Home", href: "/" }, { label: "About Us", href: "/about" }],
   images = DEFAULT_SLIDES,
-  heightClass = "min-h-[260px] md:min-h-[300px] lg:min-h-[320px]",
+  heightClass = "min-h-[480px] md:min-h-[520px] lg:min-h-[580px]",
 }: SubpageHeroCarouselProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -94,7 +94,7 @@ export default function SubpageHeroCarousel({
       <div className="absolute inset-0 bg-radial from-transparent via-transparent to-black/50 z-[2]" />
 
       {/* Foreground Content */}
-      <div className="relative z-[3] max-w-7xl mx-auto px-4 md:px-8 py-8 w-full">
+      <div className="relative z-[3] max-w-7xl mx-auto px-4 md:px-8 py-14 md:py-24 w-full">
         {/* Breadcrumb Navigation */}
         <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-white/70 mb-3 flex-wrap">
           <a href="/" className="hover:text-white transition-colors flex items-center gap-1">

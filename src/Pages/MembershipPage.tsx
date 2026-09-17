@@ -40,7 +40,7 @@ const CATEGORY_CONFIG: Record<MemberCategory, {
     code: "BL", amount: 2500, color: "#1D4ED8", darkColor: "#1E3A8A",
     bg: "#EFF6FF", border: "#BFDBFE", badge: "bg-blue-100 text-blue-700 border-blue-200",
     features: [
-      "Recognition as a Supporting Member of IWF",
+      "Recognition as a Supporting Member of Islah",
       "Participation in selected programs and awareness activities",
       "Engagement in community initiatives",
     ],
@@ -60,7 +60,7 @@ const CATEGORY_CONFIG: Record<MemberCategory, {
     code: "GR", amount: 500, color: "#15803D", darkColor: "#14532D",
     bg: "#F0FDF4", border: "#BBF7D0", badge: "bg-green-100 text-green-700 border-green-200",
     features: [
-      "Special recognition as key supporter of IWF",
+      "Special recognition as key supporter of Islah",
       "Invitation to major programs and special events",
       "Opportunity to contribute ideas and support initiatives",
     ],
@@ -104,18 +104,18 @@ type MockMember = {
 };
 
 const MOCK_MEMBERS: MockMember[] = [
-  { id: "IWF-BL-2025-001", name: "Md. Aftab Alam", category: "Blue", district: "Darbhanga", state: "Bihar", status: "Active", validTill: "2026-04-30", phone: "9876543210", joined: "2025-04-30" },
-  { id: "IWF-BL-2025-002", name: "Sunita Kumari", category: "Blue", district: "Madhubani", state: "Bihar", status: "Expired", validTill: "2025-04-14", phone: "9765432109", joined: "2024-04-14" },
-  { id: "IWF-YL-2025-001", name: "Rajesh Kumar", category: "Yellow", district: "Darbhanga", state: "Bihar", status: "Active", validTill: "2026-05-09", phone: "9654321098", joined: "2025-05-09" },
-  { id: "IWF-GR-2025-001", name: "Pankaj Sharma", category: "Green", district: "Samastipur", state: "Bihar", status: "Active", validTill: "2026-04-19", phone: "9543210987", joined: "2025-04-19" },
-  { id: "IWF-GR-2025-002", name: "Hope Foundation", category: "Green", district: "New Delhi", state: "Delhi", status: "Active", validTill: "2026-05-21", phone: "9432109876", joined: "2025-05-21" },
-  { id: "IWF-BL-2025-003", name: "Dr. Amit Singh", category: "Blue", district: "Bengaluru", state: "Karnataka", status: "Active", validTill: "2026-06-15", phone: "9321098765", joined: "2025-06-15" },
-  { id: "IWF-YL-2025-002", name: "Priya Devi", category: "Yellow", district: "Gaya", state: "Bihar", status: "Active", validTill: "2026-07-22", phone: "9210987654", joined: "2025-07-22" },
-  { id: "IWF-GR-2025-003", name: "Rakesh Yadav", category: "Green", district: "Darbhanga", state: "Bihar", status: "Active", validTill: "2026-03-01", phone: "9109876543", joined: "2025-03-01" },
-  { id: "IWF-BL-2025-004", name: "Faizan Ahmad", category: "Blue", district: "Lucknow", state: "Uttar Pradesh", status: "Active", validTill: "2026-08-10", phone: "9098765432", joined: "2025-08-10" },
-  { id: "IWF-YL-2025-003", name: "Anjali Mishra", category: "Yellow", district: "Ranchi", state: "Jharkhand", status: "Active", validTill: "2026-09-05", phone: "8987654321", joined: "2025-09-05" },
-  { id: "IWF-BL-2025-005", name: "Vikram Choudhary", category: "Blue", district: "Kolkata", state: "West Bengal", status: "Active", validTill: "2026-10-12", phone: "8876543210", joined: "2025-10-12" },
-  { id: "IWF-YL-2025-004", name: "Zeba Siddiqui", category: "Yellow", district: "Darbhanga", state: "Bihar", status: "Active", validTill: "2026-11-15", phone: "8765432109", joined: "2025-11-15" },
+  { id: "Islah-BL-2025-001", name: "Md. Aftab Alam", category: "Blue", district: "Darbhanga", state: "Bihar", status: "Active", validTill: "2026-04-30", phone: "9876543210", joined: "2025-04-30" },
+  { id: "Islah-BL-2025-002", name: "Sunita Kumari", category: "Blue", district: "Madhubani", state: "Bihar", status: "Expired", validTill: "2025-04-14", phone: "9765432109", joined: "2024-04-14" },
+  { id: "Islah-YL-2025-001", name: "Rajesh Kumar", category: "Yellow", district: "Darbhanga", state: "Bihar", status: "Active", validTill: "2026-05-09", phone: "9654321098", joined: "2025-05-09" },
+  { id: "Islah-GR-2025-001", name: "Pankaj Sharma", category: "Green", district: "Samastipur", state: "Bihar", status: "Active", validTill: "2026-04-19", phone: "9543210987", joined: "2025-04-19" },
+  { id: "Islah-GR-2025-002", name: "Hope Foundation", category: "Green", district: "New Delhi", state: "Delhi", status: "Active", validTill: "2026-05-21", phone: "9432109876", joined: "2025-05-21" },
+  { id: "Islah-BL-2025-003", name: "Dr. Amit Singh", category: "Blue", district: "Bengaluru", state: "Karnataka", status: "Active", validTill: "2026-06-15", phone: "9321098765", joined: "2025-06-15" },
+  { id: "Islah-YL-2025-002", name: "Priya Devi", category: "Yellow", district: "Gaya", state: "Bihar", status: "Active", validTill: "2026-07-22", phone: "9210987654", joined: "2025-07-22" },
+  { id: "Islah-GR-2025-003", name: "Rakesh Yadav", category: "Green", district: "Darbhanga", state: "Bihar", status: "Active", validTill: "2026-03-01", phone: "9109876543", joined: "2025-03-01" },
+  { id: "Islah-BL-2025-004", name: "Faizan Ahmad", category: "Blue", district: "Lucknow", state: "Uttar Pradesh", status: "Active", validTill: "2026-08-10", phone: "9098765432", joined: "2025-08-10" },
+  { id: "Islah-YL-2025-003", name: "Anjali Mishra", category: "Yellow", district: "Ranchi", state: "Jharkhand", status: "Active", validTill: "2026-09-05", phone: "8987654321", joined: "2025-09-05" },
+  { id: "Islah-BL-2025-005", name: "Vikram Choudhary", category: "Blue", district: "Kolkata", state: "West Bengal", status: "Active", validTill: "2026-10-12", phone: "8876543210", joined: "2025-10-12" },
+  { id: "Islah-YL-2025-004", name: "Zeba Siddiqui", category: "Yellow", district: "Darbhanga", state: "Bihar", status: "Active", validTill: "2026-11-15", phone: "8765432109", joined: "2025-11-15" },
 ];
 
 type MockDonor = {
@@ -955,14 +955,14 @@ const BIHAR_DISTRICTS = STATE_DISTRICTS.Bihar;
 function generateMemberId(category: MemberCategory, seq: number) {
   const code = CATEGORY_CONFIG[category].code;
   const year = new Date().getFullYear();
-  return `IWF-${code}-${year}-${String(seq).padStart(3, "0")}`;
+  return `Islah-${code}-${year}-${String(seq).padStart(3, "0")}`;
 }
 
 function generateReceiptNo() {
   const now = new Date();
   const y = now.getFullYear();
   const m = String(now.getMonth() + 1).padStart(2, "0");
-  return `IWF-MEM-${y}${m}-${Math.floor(1000 + Math.random() * 9000)}`;
+  return `Islah-MEM-${y}${m}-${Math.floor(1000 + Math.random() * 9000)}`;
 }
 
 function addYears(dateStr: string, years: number) {
@@ -1056,7 +1056,7 @@ async function generateMembershipCard(data: {
   const link = document.createElement("a");
   link.style.display = "none";
   link.href = dataUri;
-  link.download = `IWF-Member-Card-${data.memberId}.pdf`;
+  link.download = `Islah-Member-Card-${data.memberId}.pdf`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -1172,7 +1172,7 @@ async function generateMembershipReceipt(data: {
   const link = document.createElement("a");
   link.style.display = "none";
   link.href = dataUri;
-  link.download = `IWF-Membership-Receipt-${data.receiptNo}.pdf`;
+  link.download = `Islah-Membership-Receipt-${data.receiptNo}.pdf`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -1304,7 +1304,7 @@ function MemberCardVisual({ category, name, memberId, validTill, district, state
       {/* Header row */}
       <div className="absolute inset-x-0 top-0 px-5 pt-3.5 flex items-start justify-between">
         <div>
-          <p className="text-white font-extrabold text-[10px] tracking-widest">IWF</p>
+          <p className="text-white font-extrabold text-[10px] tracking-widest">Islah</p>
           <p className="text-white/70 text-[7px] tracking-wider uppercase">Islah Welfare Foundation</p>
           <p className="text-white/50 text-[6.5px] mt-0.5">Non-Executive & Non-Voting Member</p>
         </div>
@@ -1354,7 +1354,7 @@ function MemberCardVisual({ category, name, memberId, validTill, district, state
 function MembersAndDonorsHero({ activeTab, setActiveTab }: { activeTab: PageTab; setActiveTab: (t: PageTab) => void }) {
   const tabs: PageTab[] = ["Members", "Donors", "Your Membership"];
   return (
-    <section id="community-tabs" className="relative bg-[#0b1f3b] text-white pt-14 pb-8 overflow-hidden">
+    <section id="community-tabs" className="relative bg-[#0b1f3b] text-white min-h-[480px] md:min-h-[520px] lg:min-h-[560px] flex flex-col justify-center pt-16 sm:pt-20 pb-12 sm:pb-16 overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-24 right-8 w-96 h-96 rounded-full bg-brand-orange/10 blur-3xl" />
         <div className="absolute bottom-4 right-1/3 w-48 h-48 rounded-full bg-blue-400/8 blur-2xl" />
@@ -1365,14 +1365,14 @@ function MembersAndDonorsHero({ activeTab, setActiveTab }: { activeTab: PageTab;
         }} />
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
+      <div className="max-w-4xl mx-auto px-4 text-center relative z-10 w-full">
         <div className="flex items-center justify-center gap-3 mb-4">
           <div className="h-px w-12 bg-brand-orange/40" />
-          <span className="text-brand-orange text-xs font-bold uppercase tracking-widest">IWF Community</span>
+          <span className="text-brand-orange text-xs font-bold uppercase tracking-widest">Islah Community</span>
           <div className="h-px w-12 bg-brand-orange/40" />
         </div>
-        <h1 className="text-3xl md:text-4xl font-extrabold mb-4 leading-tight">Our Members &amp; Donors</h1>
-        <p className="text-white/65 text-sm max-w-xl mx-auto leading-relaxed mb-10">
+        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold mb-4 leading-tight">Our Members &amp; Donors</h1>
+        <p className="text-white/75 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed mb-10">
           Our members and donors are the strength behind our mission. Their support helps us build stronger communities and create lasting social impact.
         </p>
 
@@ -2488,7 +2488,7 @@ function Step3ContributionDetails({
               >
                 Privacy Policy
               </a>{" "}
-              of Islah Welfare Foundation (IWF). I understand that the membership fee is valid and non-refundable after 14 days.{" "}
+              of Islah Welfare Foundation (Islah). I understand that the membership fee is valid and non-refundable after 14 days.{" "}
               <span className="text-red-500">*</span>
             </label>
           </div>
@@ -3026,7 +3026,7 @@ function ApplicationFormSection({ preSelectedCategory, onViewMembership }: { pre
   const data = form.getValues();
 
   return (
-    <section id="register" className="py-16 relative overflow-hidden">
+    <section id="register" className="py-16 relative overflow-hidden notranslate" translate="no">
       <div className="absolute inset-0 pointer-events-none">
         {/* background blurs removed */}
       </div>
@@ -3040,7 +3040,7 @@ function ApplicationFormSection({ preSelectedCategory, onViewMembership }: { pre
           </div>
           <h2 className="text-2xl md:text-3xl font-extrabold text-slate-800 mb-2">Become a Supporting Member</h2>
           <p className="text-slate-500 text-sm max-w-xl mx-auto">
-            Join Islah Welfare Foundation (IWF) as a Supporting Member and help build stronger communities. Fill out the form below to become a Supporting Member.
+            Join Islah Welfare Foundation (Islah) as a Supporting Member and help build stronger communities. Fill out the form below to become a Supporting Member.
           </p>
         </div>
 
@@ -3133,9 +3133,9 @@ function ApplicationFormSection({ preSelectedCategory, onViewMembership }: { pre
 function MemberCardPreviewSection() {
   const [activeCard, setActiveCard] = useState<MemberCategory>("Green");
   const sampleData: Record<MemberCategory, { name: string; memberId: string; validTill: string; district: string; state: string }> = {
-    Blue: { name: "Mohammad Rashid", memberId: "IWF-BL-2025-001", validTill: "30 Apr 2026", district: "Darbhanga", state: "Bihar" },
-    Yellow: { name: "Fatima Begum", memberId: "IWF-YL-2025-001", validTill: "15 Jun 2026", district: "Patna", state: "Bihar" },
-    Green: { name: "Md. Irfan Alam", memberId: "IWF-GR-2025-001", validTill: "22 Sep 2026", district: "Muzaffarpur", state: "Bihar" },
+    Blue: { name: "Mohammad Rashid", memberId: "Islah-BL-2025-001", validTill: "30 Apr 2026", district: "Darbhanga", state: "Bihar" },
+    Yellow: { name: "Fatima Begum", memberId: "Islah-YL-2025-001", validTill: "15 Jun 2026", district: "Patna", state: "Bihar" },
+    Green: { name: "Md. Irfan Alam", memberId: "Islah-GR-2025-001", validTill: "22 Sep 2026", district: "Muzaffarpur", state: "Bihar" },
   };
   return (
     <section className="py-16 relative overflow-hidden"
@@ -3156,7 +3156,7 @@ function MemberCardPreviewSection() {
             <div className="h-px w-10 bg-brand-orange/40" />
           </div>
           <h2 className="text-white text-2xl md:text-3xl font-extrabold mb-2">Your Membership Card</h2>
-          <p className="text-white/60 text-sm">Downloadable digital membership ID card — your verified identity as an IWF member.</p>
+          <p className="text-white/60 text-sm">Downloadable digital membership ID card — your verified identity as an Islah member.</p>
         </div>
 
         <div className="flex flex-col lg:flex-row items-center gap-12">
@@ -3204,7 +3204,7 @@ function MemberCardPreviewSection() {
               { Icon: CreditCard, title: "Physical-style Card", desc: "Professional landscape card in PDF format" },
               { Icon: Download, title: "Instant Download", desc: "Available immediately after registration" },
               { Icon: Mail, title: "Email Delivery", desc: "Sent directly to your registered inbox" },
-              { Icon: BadgeCheck, title: "Verified Identity", desc: "Official IWF membership proof" },
+              { Icon: BadgeCheck, title: "Verified Identity", desc: "Official Islah membership proof" },
             ].map(({ Icon, title, desc }) => (
               <div key={title} className="flex items-start gap-3">
                 <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
@@ -3301,7 +3301,7 @@ function MemberStatusCheck({
                   <div className="flex gap-2">
                     <input value={query} onChange={e => { setQuery(e.target.value); setNotFound(false); }}
                       onKeyDown={e => e.key === "Enter" && handleSearch()}
-                      placeholder="e.g. IWF-BL-2025-001 or 9876543210"
+                      placeholder="e.g. Islah-BL-2025-001 or 9876543210"
                       className={`${inputCls} flex-1`} />
                     <button onClick={handleSearch} disabled={!query.trim()}
                       className="px-5 py-2 bg-brand-green text-white font-bold rounded-lg hover:bg-brand-green-dark transition disabled:opacity-50">
@@ -3312,11 +3312,11 @@ function MemberStatusCheck({
                     {notFound && (
                       <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
                         className="mt-3 flex items-center gap-2 text-red-600 text-sm bg-red-50 border border-red-200 rounded-lg p-3">
-                        <XCircle className="w-4 h-4 shrink-0" /> No member found. Try IWF-BL-2025-001 or phone 9876543210 (demo)
+                        <XCircle className="w-4 h-4 shrink-0" /> No member found. Try Islah-BL-2025-001 or phone 9876543210 (demo)
                       </motion.div>
                     )}
                   </AnimatePresence>
-                  <p className="text-xs text-slate-400 mt-3">Demo: Try IWF-BL-2025-001 or phone 9876543210</p>
+                  <p className="text-xs text-slate-400 mt-3">Demo: Try Islah-BL-2025-001 or phone 9876543210</p>
                 </motion.div>
               )}
 
@@ -3519,7 +3519,7 @@ function RenewalSection({
                   <div className="flex gap-2">
                     <input value={query} onChange={e => { setQuery(e.target.value); setNotFound(false); }}
                       onKeyDown={e => e.key === "Enter" && handleSearch()}
-                      placeholder="IWF-BL-2025-001 or mobile number"
+                      placeholder="Islah-BL-2025-001 or mobile number"
                       className={`${inputCls} flex-1`} />
                     <button onClick={handleSearch} disabled={!query.trim()}
                       className="px-5 py-2 bg-brand-green text-white font-bold rounded-lg hover:bg-brand-green-dark transition disabled:opacity-50">
@@ -3528,10 +3528,10 @@ function RenewalSection({
                   </div>
                   {notFound && (
                     <div className="flex items-center gap-2 text-red-600 text-sm bg-red-50 border border-red-200 rounded-lg p-3">
-                      <XCircle className="w-4 h-4 shrink-0" /> Member not found. Try IWF-BL-2025-001 or phone 9876543210
+                      <XCircle className="w-4 h-4 shrink-0" /> Member not found. Try Islah-BL-2025-001 or phone 9876543210
                     </div>
                   )}
-                  <p className="text-xs text-slate-400">Demo: Try IWF-BL-2025-002 (expired) for renewal demo</p>
+                  <p className="text-xs text-slate-400">Demo: Try Islah-BL-2025-002 (expired) for renewal demo</p>
                 </motion.div>
               )}
 

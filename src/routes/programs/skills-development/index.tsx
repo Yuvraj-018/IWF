@@ -4,7 +4,7 @@ import SkillsLanding from "@/Pages/Skills/SkillsLanding";
 export const Route = createFileRoute("/programs/skills-development/")({
   head: () => ({
     meta: [
-      { title: "Skills, Livelihoods & Entrepreneurship - IWF | Islah Welfare Foundation" },
+      { title: "Skills, Livelihoods & Entrepreneurship - Islah | Islah Welfare Foundation" },
       {
         name: "description",
         content:
