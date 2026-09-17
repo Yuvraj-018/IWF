@@ -88,7 +88,7 @@ export default function GenericPolicyPage({ slug }: { slug: ExtendedPolicySlug }
                 <div className="space-y-3 pt-2 text-xs">
                   <div className="flex items-center justify-between p-2.5 rounded bg-slate-50 border border-slate-100">
                     <span className="font-semibold text-slate-600">Organization:</span>
-                    <span className="font-bold text-[#0b1f3b]">IWF India</span>
+                    <span className="font-bold text-[#0b1f3b]">Islah India</span>
                   </div>
                   <div className="flex items-center justify-between p-2.5 rounded bg-slate-50 border border-slate-100">
                     <span className="font-semibold text-slate-600">Compliance:</span>

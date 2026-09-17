@@ -6,7 +6,7 @@ export function GetInvolved() {
     <section className="py-12">
       <div className="max-w-7xl mx-auto px-4">
         <SectionTitle>Get Involved</SectionTitle>
-        <p className="text-center text-slate-600 text-sm max-w-2xl mx-auto mb-6">IWF's doors are always open to individuals, corporates, and institutions. Whether you have time, skills, resources, or ideas — there is a place for you here. Join us in being a drop that makes the ocean.</p>
+        <p className="text-center text-slate-600 text-sm max-w-2xl mx-auto mb-6">Islah's doors are always open to individuals, corporates, and institutions. Whether you have time, skills, resources, or ideas — there is a place for you here. Join us in being a drop that makes the ocean.</p>
         <div className="bg-white border border-slate-100 shadow-sm rounded-md p-6 grid grid-cols-2 md:grid-cols-6 gap-4 items-center">
           {[
             { icon: Hand, l: "Volunteer", s: "Give your time & skills" },

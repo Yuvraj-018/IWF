@@ -5,7 +5,7 @@ export const Route = createFileRoute("/programs/skills-development/skills-employ
   head: () => ({
     meta: [
       {
-        title: "Skills & Employability Programme (SEP) - IWF | Islah Welfare Foundation",
+        title: "Skills & Employability Programme (SEP) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",

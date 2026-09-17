@@ -35,7 +35,7 @@ import { CONTACT_DETAILS } from "@/content/siteContent";
 import type { RoleType } from "@/components/forms/RoleFormModal";
 
 export { RoleFormModal } from "@/components/forms/RoleFormModal";
-import { TranslateButton } from "@/components/TranslateButton";
+import { TranslateButton, useCurrentLanguage, getLocalizedAddress } from "@/components/TranslateButton";
 import newLogo from "@/assets/new logo.png";
 
 export const NAV_ITEMS = [
@@ -191,10 +191,12 @@ function getMegaHref(menu: string, item: string) {
 
 
 export function NotificationTicker() {
+  const currentLang = useCurrentLanguage();
+  const localizedAddress = getLocalizedAddress(currentLang);
   const items = [
     { text: "Notification for change in Registration", href: "/about/legal-status" },
     { text: "ISLAH — Integrated Social, Livelihood, Advancement & Humanitarian Action", href: "/" },
-    { text: "Registered Address: B-144, Abul Fazal Enclave-II, Okhla, New Delhi-110025, India", href: "/about/legal-status" },
+    { text: `Registered Address: ${localizedAddress}`, href: "/about/legal-status" },
     { text: "Join our mission — volunteer, donate or partner with us", href: "/volunteer" },
     { text: "Free Health Camp — Medical Relief & Consultations | June 25", href: "/news-and-events" },
     { text: "Annual Scholarship Distribution — Education Support | July 15", href: "/news-and-events" },
@@ -234,6 +236,8 @@ export function UtilityBar({ lang = "en", setLang }: UtilityBarProps) {
 }
 
 export function Header() {
+  const currentLang = useCurrentLanguage();
+  const localizedAddress = getLocalizedAddress(currentLang);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
@@ -276,8 +280,8 @@ export function Header() {
       {/* White Branding Logo Banner (Scrolls away) */}
       <div className="bg-white py-4 border-b border-gray-100 relative">
         <div className="max-w-7xl mx-auto px-4 md:px-6 flex items-center justify-center">
-          <a href="/" className="flex flex-col md:flex-row items-center gap-4 md:gap-6 group text-center md:text-left" aria-label="IWF Home">
-            <img src={newLogo} alt="IWF Logo" className="h-16 md:h-20 w-auto object-contain transition-transform group-hover:scale-105 shrink-0" />
+          <a href="/" className="flex flex-col md:flex-row items-center gap-4 md:gap-6 group text-center md:text-left" aria-label="Islah Home">
+            <img src={newLogo} alt="Islah Logo" className="h-16 md:h-20 w-auto object-contain transition-transform group-hover:scale-105 shrink-0" />
             <div className="flex flex-col items-center md:items-start">
               <span className="text-xl md:text-3xl font-extrabold text-[#0b1f3b] tracking-wide font-sans leading-tight text-center md:text-left">
                 ISLAH
@@ -285,8 +289,8 @@ export function Header() {
               <span className="text-xs md:text-sm font-semibold italic text-brand-orange mt-1.5 leading-none text-center md:text-left">
                 Knowledge, Opportunity, A Better Future.
               </span>
-              <span className="text-[10px] md:text-xs text-gray-500 font-medium mt-1.5 leading-none text-center md:text-left">
-                B-144, Abul Fazal Enclave-II, Okhla, New Delhi-110025, India
+              <span className="text-[10px] md:text-xs text-gray-500 font-medium mt-1.5 leading-none text-center md:text-left notranslate" translate="no">
+                {localizedAddress}
               </span>
             </div>
           </a>
@@ -303,7 +307,7 @@ export function Header() {
               const isActive = activeMenu === item;
               const label = item === "Home" ? (
                 <span className="flex items-center gap-1.5 font-bold">
-                  <Home className="w-4 h-4 text-[#f97316]" /> IWF
+                  <Home className="w-4 h-4 text-[#f97316]" /> Islah
                 </span>
               ) : (
                 item
@@ -419,7 +423,7 @@ export function Header() {
             <div className="flex items-center gap-2.5">
               <Leaf className="w-6 h-6 text-brand-green fill-brand-green/20" />
               <div className="flex flex-col leading-none">
-                <span className="font-extrabold text-white text-base">IWF</span>
+                <span className="font-extrabold text-white text-base">Islah</span>
                 <span className="font-semibold text-[8px] text-white/70 tracking-wider">ISLAH WELFARE FOUNDATION</span>
               </div>
             </div>
@@ -454,7 +458,7 @@ export function Header() {
                     >
                       {item === "Home" ? (
                         <span className="flex items-center gap-1.5 font-bold">
-                          <Home className="w-4 h-4 text-[#f97316]" /> IWF
+                          <Home className="w-4 h-4 text-[#f97316]" /> Islah
                         </span>
                       ) : (
                         item
@@ -505,6 +509,8 @@ export function Header() {
 }
 
 export function Footer({ onOpenModal }: { onOpenModal?: (type: RoleType) => void }) {
+  const currentLang = useCurrentLanguage();
+  const localizedAddress = getLocalizedAddress(currentLang);
   const quickLinks = [
     ["About Us", "/about"],
     ["Education", "/programs/education"],
@@ -693,7 +699,7 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: RoleType) => void
             <div className="space-y-3 text-white text-sm">
               <div className="flex gap-2 items-start">
                 <MapPin className="w-4 h-4 mt-0.5 text-brand-orange shrink-0" />
-                <span>{CONTACT_DETAILS.address}</span>
+                <span className="notranslate" translate="no">{localizedAddress}</span>
               </div>
               <div className="flex gap-2 items-center">
                 <Phone className="w-4 h-4 text-brand-orange shrink-0" />

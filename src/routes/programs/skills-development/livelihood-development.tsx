@@ -5,7 +5,7 @@ export const Route = createFileRoute("/programs/skills-development/livelihood-de
   head: () => ({
     meta: [
       {
-        title: "Livelihood Development Initiative (LDI) - IWF | Islah Welfare Foundation",
+        title: "Livelihood Development Initiative (LDI) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",

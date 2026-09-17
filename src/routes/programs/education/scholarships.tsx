@@ -6,7 +6,7 @@ export const Route = createFileRoute("/programs/education/scholarships")({
     meta: [
       {
         title:
-          "Scholarships for Higher Education (SHE) - IWF | Islah Welfare Foundation",
+          "Scholarships for Higher Education (SHE) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",

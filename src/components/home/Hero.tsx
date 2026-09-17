@@ -15,7 +15,7 @@ export function Hero() {
               <span className="text-brand-orange">Education</span>, <span className="text-brand-orange">Healthcare</span><br />
               &amp; <span className="text-brand-orange">Livelihood</span>
             </h1>
-            <p className="mt-4 text-base md:text-lg text-white/90">IWF is an effort to lay a positive foundation of change in the field of education for the underprivileged. We believe happiness for a lifetime can only be achieved by helping &amp; enriching the next generation. IWF's doors are always open — if you feel you can fill the gap of a missing drop, come join us.</p>
+            <p className="mt-4 text-base md:text-lg text-white/90">Islah is an effort to lay a positive foundation of change in the field of education for the underprivileged. We believe happiness for a lifetime can only be achieved by helping &amp; enriching the next generation. Islah's doors are always open — if you feel you can fill the gap of a missing drop, come join us.</p>
             <div className="mt-7 flex flex-wrap gap-3">
               <button className="bg-brand-orange hover:bg-brand-orange-dark text-white font-semibold px-6 py-3 rounded shadow-lg transition">DONATE NOW</button>
               <button className="bg-white/95 hover:bg-white text-brand-green-dark font-semibold px-6 py-3 rounded shadow-lg transition">GET INVOLVED</button>

@@ -4,7 +4,7 @@ import CommunityLearningCentrePage from "@/Pages/Education/subpages/CommunityLea
 export const Route = createFileRoute("/programs/education/cilc")({
   head: () => ({
     meta: [
-      { title: "Community Learning Centre (CLC) - IWF | Islah Welfare Foundation" },
+      { title: "Community Learning Centre (CLC) - Islah | Islah Welfare Foundation" },
       {
         name: "description",
         content: "Promoting values, character building, life skills, and community development for rural youth.",

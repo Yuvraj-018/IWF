@@ -25,7 +25,7 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
         </h2>
         <span className="h-px w-8 bg-brand-green" />
       </div>
-      <p className="text-slate-600 mt-2 text-sm text-center">To achieve this vision, IWF will work across key sectors:</p>
+      <p className="text-slate-600 mt-2 text-sm text-center">To achieve this vision, Islah will work across key sectors:</p>
     </div>
   );
 }

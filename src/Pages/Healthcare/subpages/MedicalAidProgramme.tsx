@@ -246,7 +246,7 @@ function OverviewSection() {
               As a result, many patients suffer from delayed treatment, worsening health conditions, financial hardship, and loss of dignity.
             </p>
             <p className="text-slate-700 text-sm font-semibold leading-relaxed max-w-3xl mx-auto mb-4">
-              Recognising this urgent humanitarian need, Islah Welfare Foundation (IWF) proposes the Medical Aid Programme for Poor Patients to provide financial assistance and healthcare support to economically disadvantaged individuals who are unable to afford medical treatment expenses.
+              Recognising this urgent humanitarian need, Islah Welfare Foundation (Islah) proposes the Medical Aid Programme for Poor Patients to provide financial assistance and healthcare support to economically disadvantaged individuals who are unable to afford medical treatment expenses.
             </p>
             <div className="inline-block text-xs font-bold text-brand-orange uppercase tracking-wider bg-brand-orange/10 border border-brand-orange/20 px-4 py-1.5 rounded-full">
               Our Goal: Ensure that no patient is deprived of essential healthcare due to financial constraints.
@@ -285,7 +285,7 @@ function ApproachSection() {
           <SectionTitle
             label="Programme Approach"
             title="3 Areas of Support"
-            subtitle="IWF's Medical Aid Programme provides targeted support across three critical areas ensuring no patient is deprived of healthcare due to financial constraints."
+            subtitle="Islah's Medical Aid Programme provides targeted support across three critical areas ensuring no patient is deprived of healthcare due to financial constraints."
           />
         </ScrollReveal>
 
@@ -372,7 +372,7 @@ function ImpactSection() {
         <ScrollReveal delay={0.15}>
           <div className="mt-12 bg-brand-green-darker rounded-md p-10 text-center">
             <p className="text-lg md:text-xl font-semibold text-white max-w-3xl mx-auto leading-relaxed italic">
-              "IWF believes that healthcare is a basic human necessity, and no individual should suffer or lose access to treatment due to poverty."
+              "Islah believes that healthcare is a basic human necessity, and no individual should suffer or lose access to treatment due to poverty."
             </p>
             <p className="text-white/70 text-sm mt-4 max-w-xl mx-auto">
               "Extending care and compassion to those who need it most — because every life deserves access to treatment and hope."

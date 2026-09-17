@@ -251,7 +251,7 @@ export function VolunteerApplicationForm({ onSuccess, isModal = false }: Volunte
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 text-left">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 text-left notranslate" translate="no">
       {/* ── Personal Information ── */}
       <div>
         <div className="border-b border-slate-200 pb-2 mb-4">
@@ -593,7 +593,7 @@ export function VolunteerApplicationForm({ onSuccess, isModal = false }: Volunte
 
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-              Why do you want to volunteer with IWF?
+              Why do you want to volunteer with Islah?
             </label>
             <textarea
               rows={3}

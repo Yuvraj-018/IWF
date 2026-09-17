@@ -4,7 +4,7 @@ import MembershipPage from "@/Pages/MembershipPage";
 export const Route = createFileRoute("/membership")({
   head: () => ({
     meta: [
-      { title: "Membership — IWF | Islah Welfare Foundation" },
+      { title: "Membership — Islah | Islah Welfare Foundation" },
       {
         name: "description",
         content:

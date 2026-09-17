@@ -301,7 +301,7 @@ function OverviewSection() {
               As a result, many cases are detected only at advanced stages, reducing the chances of successful treatment and survival.
             </p>
             <p className="text-slate-700 text-sm font-semibold leading-relaxed max-w-3xl mx-auto mb-4">
-              Recognising this urgent healthcare challenge, Islah Welfare Foundation (IWF) proposes the Cervical Cancer Prevention &amp; Awareness Programme to promote awareness, preventive healthcare, early screening, and women’s health education, especially in rural and underserved communities.
+              Recognising this urgent healthcare challenge, Islah Welfare Foundation (Islah) proposes the Cervical Cancer Prevention &amp; Awareness Programme to promote awareness, preventive healthcare, early screening, and women’s health education, especially in rural and underserved communities.
             </p>
             <div className="inline-block text-xs font-bold text-brand-orange uppercase tracking-wider bg-brand-orange/10 border border-brand-orange/20 px-4 py-1.5 rounded-full max-w-full text-center whitespace-normal">
               Our Goal: Empower women with knowledge, encourage early detection, and reduce the burden of cervical cancer through awareness and preventive action.
@@ -340,7 +340,7 @@ function ApproachSection() {
           <SectionTitle
             label="Programme Approach"
             title="5 Pillars of Action"
-            subtitle="From awareness campaigns to rural outreach and economic support — IWF takes a holistic approach to women's health."
+            subtitle="From awareness campaigns to rural outreach and economic support — Islah takes a holistic approach to women's health."
           />
         </ScrollReveal>
 

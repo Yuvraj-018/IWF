@@ -6,12 +6,12 @@ export const Route = createFileRoute("/programs/women-empowerment/self-help-grou
     meta: [
       {
         title:
-          "Self-Help Group Capacity Building (SHG) - IWF | Islah Welfare Foundation",
+          "Self-Help Group Capacity Building (SHG) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",
         content:
-          "Strengthening Groups. Building Confidence. Creating Collective Opportunity. IWF provides governance, financial literacy, and enterprise support to women-led Self-Help Groups.",
+          "Strengthening Groups. Building Confidence. Creating Collective Opportunity. Islah provides governance, financial literacy, and enterprise support to women-led Self-Help Groups.",
       },
     ],
   }),

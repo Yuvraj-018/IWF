@@ -4,7 +4,7 @@ import WidowsOrphans from "@/Pages/Relief/subpages/WidowsOrphans";
 export const Route = createFileRoute("/programs/relief-and-rehabilitation/widows-orphans")({
   head: () => ({
     meta: [
-      { title: "Widows & Orphans — IWF Relief" },
+      { title: "Widows & Orphans — Islah Relief" },
       {
         name: "description",
         content: "Holistic monthly stipends, education funds, and care for widows and orphans.",

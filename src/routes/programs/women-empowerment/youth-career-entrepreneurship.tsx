@@ -8,12 +8,12 @@ export const Route = createFileRoute(
     meta: [
       {
         title:
-          "Youth Career & Entrepreneurship Development (YCED) - IWF | Islah Welfare Foundation",
+          "Youth Career & Entrepreneurship Development (YCED) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",
         content:
-          "Discover Direction. Build Capability. Create Opportunity. IWF's Youth Career & Entrepreneurship Development programme helps rural youth with career exploration, mentorship, and enterprise skills.",
+          "Discover Direction. Build Capability. Create Opportunity. Islah's Youth Career & Entrepreneurship Development programme helps rural youth with career exploration, mentorship, and enterprise skills.",
       },
     ],
   }),

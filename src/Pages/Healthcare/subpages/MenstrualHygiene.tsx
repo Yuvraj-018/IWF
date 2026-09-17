@@ -250,7 +250,7 @@ function OverviewSection() {
               As a result, menstrual health challenges directly impact the education, health, dignity, confidence, and well-being of girls and women.
             </p>
             <p className="text-slate-700 text-sm font-semibold leading-relaxed max-w-3xl mx-auto mb-4">
-              Recognising this urgent need, Islah Welfare Foundation (IWF) proposes the Menstrual Hygiene Support Programme to promote menstrual health awareness, improve access to hygiene products, and support the dignity and well-being of adolescent girls and women from underserved communities.
+              Recognising this urgent need, Islah Welfare Foundation (Islah) proposes the Menstrual Hygiene Support Programme to promote menstrual health awareness, improve access to hygiene products, and support the dignity and well-being of adolescent girls and women from underserved communities.
             </p>
             <div className="inline-block text-xs font-bold text-brand-orange uppercase tracking-wider bg-brand-orange/10 border border-brand-orange/20 px-4 py-1.5 rounded-full">
               Our Goal: Ensure that no girl or woman suffers due to lack of awareness, affordability, or access to menstrual hygiene support.
@@ -289,7 +289,7 @@ function ApproachSection() {
           <SectionTitle
             label="Programme Approach"
             title="4 Areas of Action"
-            subtitle="From product distribution to awareness and dignity — IWF's approach is comprehensive and community-rooted."
+            subtitle="From product distribution to awareness and dignity — Islah's approach is comprehensive and community-rooted."
           />
         </ScrollReveal>
 
@@ -390,7 +390,7 @@ function ImpactSection() {
         <ScrollReveal delay={0.15}>
           <div className="mt-12 bg-brand-green-darker rounded-md p-10 text-center">
             <p className="text-lg md:text-xl font-semibold text-white max-w-3xl mx-auto leading-relaxed italic">
-              "IWF believes that menstrual hygiene is a basic health and dignity issue, and every girl and woman deserves access to safe hygiene support, awareness, and care."
+              "Islah believes that menstrual hygiene is a basic health and dignity issue, and every girl and woman deserves access to safe hygiene support, awareness, and care."
             </p>
             <p className="text-white/70 text-sm mt-4 max-w-xl mx-auto">
               "Supporting dignity, health, and confidence — because no girl should be held back by menstruation."

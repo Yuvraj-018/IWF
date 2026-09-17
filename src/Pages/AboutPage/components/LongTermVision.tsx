@@ -22,7 +22,7 @@ export default function LongTermVision() {
           {/* LEFT: Text */}
           <div className="flex flex-col gap-6">
             <p className="text-slate-700 leading-relaxed text-sm md:text-base">
-              Islah Welfare Foundation (IWF) envisions a progressive, inclusive, and self-reliant India by the year 2047—marking 100 years of independence—where every individual has access to quality education, healthcare, dignified housing, and sustainable livelihood opportunities.
+              Islah Welfare Foundation (Islah) envisions a progressive, inclusive, and self-reliant India by the year 2047—marking 100 years of independence—where every individual has access to quality education, healthcare, dignified housing, and sustainable livelihood opportunities.
             </p>
             <p className="text-slate-700 leading-relaxed text-sm md:text-base">
               "Vision 2047" is an ambitious and transformative roadmap aimed at uplifting millions of underserved and marginalized people across the country through a structured and integrated development approach.

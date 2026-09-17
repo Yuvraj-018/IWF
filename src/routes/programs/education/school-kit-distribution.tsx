@@ -4,7 +4,7 @@ import SchoolKitPage from "@/Pages/Education/subpages/SchoolKitPage";
 export const Route = createFileRoute("/programs/education/school-kit-distribution")({
   head: () => ({
     meta: [
-      { title: "School Kit & Learning Support (SKLS) - IWF | Islah Welfare Foundation" },
+      { title: "School Kit & Learning Support (SKLS) - Islah | Islah Welfare Foundation" },
       {
         name: "description",
         content: "Providing essential school kits to underprivileged children for a brighter and confident future.",

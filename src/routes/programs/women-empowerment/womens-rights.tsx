@@ -6,12 +6,12 @@ export const Route = createFileRoute("/programs/women-empowerment/womens-rights"
     meta: [
       {
         title:
-          "Women’s Rights & Gender Equality Awareness (WRGE) - IWF | Islah Welfare Foundation",
+          "Women’s Rights & Gender Equality Awareness (WRGE) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",
         content:
-          "Know Your Rights. Strengthen Your Voice. Build a More Equal Future. IWF promotes legal awareness, gender equality, safety, and women's participation.",
+          "Know Your Rights. Strengthen Your Voice. Build a More Equal Future. Islah promotes legal awareness, gender equality, safety, and women's participation.",
       },
     ],
   }),

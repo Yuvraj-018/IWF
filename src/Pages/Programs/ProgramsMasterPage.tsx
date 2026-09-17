@@ -168,7 +168,7 @@ export default function ProgramsMasterPage() {
 
       <main>
         {/* Hero Header */}
-        <section className="bg-gradient-to-r from-[#071527] via-[#0b1f3b] to-[#15803d] text-white py-16 md:py-20 px-4 border-b border-white/10">
+        <section className="bg-gradient-to-r from-[#071527] via-[#0b1f3b] to-[#15803d] text-white min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex items-center py-16 md:py-20 px-4 border-b border-white/10">
           <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-7 space-y-5">
               <div className="inline-flex items-center gap-2 bg-white/10 text-brand-orange text-xs font-extrabold uppercase tracking-widest px-3.5 py-1.5 rounded-md border border-white/15">

@@ -4,7 +4,7 @@ import PolicyPage from "@/Pages/PolicyPage";
 export const Route = createFileRoute("/refund-policy")({
   head: () => ({
     meta: [
-      { title: "Refund Policy - IWF | Islah Welfare Foundation" },
+      { title: "Refund Policy - Islah | Islah Welfare Foundation" },
       {
         name: "description",
         content: "Refund and cancellation policy for Islah Welfare Foundation donations.",

@@ -6,12 +6,12 @@ export const Route = createFileRoute("/programs/education/jisns-journal")({
     meta: [
       {
         title:
-          "Knowledge, Research & Publication (KRP) - IWF | Islah Welfare Foundation",
+          "Knowledge, Research & Publication (KRP) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",
         content:
-          "JISNS Journal is now part of IWF Knowledge, Research & Publication (KRP) initiative.",
+          "JISNS Journal is now part of Islah Knowledge, Research & Publication (KRP) initiative.",
       },
     ],
   }),

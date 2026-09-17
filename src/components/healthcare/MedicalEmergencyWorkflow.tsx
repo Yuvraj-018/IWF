@@ -53,7 +53,7 @@ const WORKFLOW_STEPS = [
     title: "VERIFICATION",
     icon: ShieldCheck,
     description:
-      "IWF field team verifies admission, medical reports, financial vulnerability and supporting documents.",
+      "Islah field team verifies admission, medical reports, financial vulnerability and supporting documents.",
     color: "#004724",
     bg: "bg-emerald-50",
     border: "border-emerald-100",
@@ -75,7 +75,7 @@ const WORKFLOW_STEPS = [
     title: "SUPPORT DECISION",
     icon: ClipboardCheck,
     description:
-      "Case reviewed/approved according to IWF programme and available resources.",
+      "Case reviewed/approved according to Islah programme and available resources.",
     color: "#ea580c",
     bg: "bg-amber-50",
     border: "border-amber-100",
@@ -268,7 +268,7 @@ export default function MedicalEmergencyWorkflow({
                   to="/medical-treatment-policy"
                   className="font-bold text-emerald-700 hover:underline"
                 >
-                  IWF Fundraising for Critical Medical Treatment Policy
+                  Islah Fundraising for Critical Medical Treatment Policy
                 </Link>
                 . Direct payments made to hospitals, institutions, and pharmacies.
               </p>

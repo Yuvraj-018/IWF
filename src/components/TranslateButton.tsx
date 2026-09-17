@@ -26,6 +26,7 @@ const LANGUAGES = [
   { code: "en", name: "English", nativeName: "English" },
   { code: "hi", name: "Hindi", nativeName: "हिंदी" },
   { code: "ur", name: "Urdu", nativeName: "اردو" },
+  { code: "ar", name: "Arabic", nativeName: "العربية" },
   { code: "bn", name: "Bengali", nativeName: "বাংলা" },
   { code: "ta", name: "Tamil", nativeName: "தமிழ்" },
   { code: "te", name: "Telugu", nativeName: "తెలుగు" },
@@ -36,6 +37,52 @@ const LANGUAGES = [
   { code: "gu", name: "Gujarati", nativeName: "ગુજરાતી" },
   { code: "or", name: "Odia", nativeName: "ଓଡ଼ିଆ" },
 ];
+
+export const FOUNDATION_ADDRESSES: Record<string, string> = {
+  en: "B-144, Abul Fazal Enclave-II, Okhla, New Delhi-110025, India",
+  ur: "بی-144، ابوالفضل انکلیو-II، اوکھلا، نئی دہلی-110025، ہندوستان",
+  ar: "بي-144، مجمع أبو الفضل الثاني، أوكلا، نيو دلهي - 110025، الهند",
+  hi: "बी-144, अबुल फज़ल एन्क्लेव-II, ओखला, नई दिल्ली-110025, भारत",
+  bn: "বি-১৪৪, আবুল ফজল এনক্লেভ-২, ওখলা, নতুন দিল্লি-১১০0২৫, ভারত",
+};
+
+export function getLocalizedAddress(langCode?: string): string {
+  const code = langCode || (typeof document !== "undefined" ? getCookieLang() : "en");
+  return FOUNDATION_ADDRESSES[code] || FOUNDATION_ADDRESSES.en;
+}
+
+export function useCurrentLanguage(): string {
+  const [lang, setLang] = useState<string>(() => {
+    if (typeof document === "undefined") return "en";
+    return getCookieLang();
+  });
+
+  useEffect(() => {
+    const onLangChange = (e: Event) => {
+      const customEvent = e as CustomEvent<string>;
+      if (customEvent.detail) {
+        setLang(customEvent.detail);
+      } else {
+        setLang(getCookieLang());
+      }
+    };
+
+    window.addEventListener("islahLanguageChange", onLangChange);
+
+    // Observer for googtrans cookie or html lang changes
+    const interval = setInterval(() => {
+      const current = getCookieLang();
+      setLang((prev) => (prev !== current ? current : prev));
+    }, 400);
+
+    return () => {
+      window.removeEventListener("islahLanguageChange", onLangChange);
+      clearInterval(interval);
+    };
+  }, []);
+
+  return lang;
+}
 
 const SUPPRESSION_CSS = `
   /* Hide Google's top banner frame */
@@ -56,6 +103,11 @@ const SUPPRESSION_CSS = `
 
   /* Hide the widget container itself */
   #${GOOGLE_TRANSLATE_ELEMENT_ID} { display: none !important; }
+
+  /* Ensure all forms and inputs remain untranslated in English */
+  .notranslate, form, form input, form textarea, form select, form label, form button {
+    -webkit-user-modify: read-write-plaintext-only;
+  }
 `;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -81,7 +133,7 @@ function loadGoogleTranslateScript(onReady: () => void) {
 
   window.googleTranslateElementInit = () => {
     new window.google.translate.TranslateElement(
-      { pageLanguage: "en", includedLanguages: "hi,ur,bn,ta,te,kn,ml,mr,pa,gu,or", autoDisplay: false },
+      { pageLanguage: "en", includedLanguages: "hi,ur,ar,bn,ta,te,kn,ml,mr,pa,gu,or", autoDisplay: false },
       GOOGLE_TRANSLATE_ELEMENT_ID
     );
     window._iwfTranslateReady = true;
@@ -103,12 +155,14 @@ function waitForCombo(cb: (select: HTMLSelectElement) => void, attempts = 0) {
 }
 
 function getCookieLang(): string {
+  if (typeof document === "undefined") return "en";
   const match = document.cookie.match(/googtrans=\/en\/([^;]+)/);
   return match ? match[1] : "en";
 }
 
 // Helper to switch language
 function setGoogleLanguage(langCode: string, callback: () => void) {
+  window.dispatchEvent(new CustomEvent("islahLanguageChange", { detail: langCode }));
   if (langCode === "en") {
     const past = "expires=Thu, 01 Jan 1970 00:00:00 UTC";
     const hostname = window.location.hostname;
@@ -121,7 +175,10 @@ function setGoogleLanguage(langCode: string, callback: () => void) {
       select.value = langCode;
       select.dispatchEvent(new Event("change", { bubbles: true }));
       select.dispatchEvent(new Event("input", { bubbles: true }));
-      setTimeout(callback, 500);
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent("islahLanguageChange", { detail: langCode }));
+        callback();
+      }, 500);
     });
   }
 }

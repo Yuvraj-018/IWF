@@ -72,7 +72,7 @@ export default function SchoolKitDistribution() {
         <section className="py-16 bg-white border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-4">
             <div className="text-center mb-12">
-              <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2">Inside the IWF School Kit</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2">Inside the Islah School Kit</p>
               <div className="flex items-center justify-center gap-3 mb-3">
                 <span className="h-px w-8 bg-brand-green" />
                 <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark">4 Essential Kit Components</h2>

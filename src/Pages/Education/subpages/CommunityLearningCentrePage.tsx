@@ -355,7 +355,7 @@ export default function CommunityLearningCentrePage() {
                   <span>FUTURE VISION</span>
                 </div>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  IWF aims to scale this model across multiple rural areas, creating a network of Community Learning Centres that promote:
+                  Islah aims to scale this model across multiple rural areas, creating a network of Community Learning Centres that promote:
                 </p>
                 <div className="space-y-1.5 text-xs text-slate-700">
                   <div className="flex items-center gap-2">

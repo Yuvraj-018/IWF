@@ -8,7 +8,7 @@ export const Route = createFileRoute(
     meta: [
       {
         title:
-          "Grievance & Accountability Initiative (GAI) - IWF | Islah Welfare Foundation",
+          "Grievance & Accountability Initiative (GAI) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",

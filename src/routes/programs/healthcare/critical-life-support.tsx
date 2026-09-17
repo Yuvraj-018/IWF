@@ -8,7 +8,7 @@ export const Route = createFileRoute(
     meta: [
       {
         title:
-          "Critical Life & Emergency Support (CLES) - IWF | Islah Welfare Foundation",
+          "Critical Life & Emergency Support (CLES) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",

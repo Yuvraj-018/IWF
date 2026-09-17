@@ -8,7 +8,7 @@ export const Route = createFileRoute(
     meta: [
       {
         title:
-          "Rural Ambulance & Emergency Response (RAER) - IWF | Islah Welfare Foundation",
+          "Rural Ambulance & Emergency Response (RAER) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",

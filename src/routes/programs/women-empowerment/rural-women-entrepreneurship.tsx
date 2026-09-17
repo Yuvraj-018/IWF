@@ -4,7 +4,7 @@ import RuralWomenEntrepreneurship from "@/Pages/Women/subpages/RuralWomenEntrepr
 export const Route = createFileRoute("/programs/women-empowerment/rural-women-entrepreneurship")({
   head: () => ({
     meta: [
-      { title: "Rural Women Entrepreneurship — IWF Women Empowerment" },
+      { title: "Rural Women Entrepreneurship — Islah Women Empowerment" },
       {
         name: "description",
         content: "Incubating micro-enterprises and business ownership for rural women.",

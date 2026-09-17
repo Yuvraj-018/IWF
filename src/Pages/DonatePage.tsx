@@ -168,7 +168,7 @@ export default function DonatePage() {
   const [photoFileName, setPhotoFileName] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState<string | null>(null);
 
-  const [receiptNumber, setReceiptNumber] = useState("IWF/RCPT/2025-26/000125");
+  const [receiptNumber, setReceiptNumber] = useState("ISLAH/RCPT/2025-26/000125");
   const [paymentDate, setPaymentDate] = useState("22 May 2025 | 10:45 AM");
 
   // Read URL search params (e.g. ?patientId=mohammed-salim&amount=64000)
@@ -299,7 +299,7 @@ export default function DonatePage() {
       minute: "2-digit",
       hour12: true,
     });
-    setReceiptNumber(`IWF/RCPT/${now.getFullYear()}-${(now.getFullYear() + 1).toString().slice(-2)}/${randomReceiptNum}`);
+    setReceiptNumber(`ISLAH/RCPT/${now.getFullYear()}-${(now.getFullYear() + 1).toString().slice(-2)}/${randomReceiptNum}`);
     setPaymentDate(`${formattedDate} | ${formattedTime}`);
     setSubmitted(true);
     setTimeout(() => {
@@ -319,17 +319,17 @@ export default function DonatePage() {
 
       <main>
         {/* ─── Hero Header (Matching Top of Page 70) ─────────────────────────── */}
-        <section className="relative overflow-hidden bg-gradient-to-r from-[#00381e] via-[#005a30] to-[#014725] text-white py-12 sm:py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="relative overflow-hidden bg-gradient-to-r from-[#00381e] via-[#005a30] to-[#014725] text-white min-h-[480px] md:min-h-[520px] lg:min-h-[560px] flex items-center py-16 sm:py-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div className="grid lg:grid-cols-12 gap-8 items-center">
-              <div className="lg:col-span-8 text-left space-y-3">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-emerald-300 text-xs font-bold uppercase tracking-wider">
+              <div className="lg:col-span-8 text-left space-y-4">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 text-emerald-300 text-xs font-bold uppercase tracking-wider">
                   <Heart className="w-3.5 h-3.5 fill-emerald-300" /> DONATE US
                 </div>
-                <h1 className="text-3xl sm:text-5xl font-black text-white leading-tight">
+                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-tight">
                   Donate &amp; Make a Difference
                 </h1>
-                <p className="text-emerald-100 text-sm sm:text-base max-w-xl leading-relaxed">
+                <p className="text-emerald-100 text-sm sm:text-lg max-w-2xl leading-relaxed">
                   Your contribution helps us empower lives and build stronger communities across rural and underserved areas.
                 </p>
 
@@ -501,7 +501,7 @@ export default function DonatePage() {
               {/* ── LEFT COLUMN: Donation Form ── */}
               <div className="lg:col-span-7">
                 <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl space-y-8">
-                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 text-left">
+                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 text-left notranslate" translate="no">
                     {/* Part 1: Choose Donation Type */}
                     <div>
                       <div className="flex items-center gap-2.5 pb-2 mb-4 border-b border-slate-100">
@@ -888,7 +888,7 @@ export default function DonatePage() {
                             Consent for Display on Website (Optional but Recommended)
                           </label>
                           <p className="text-[11px] text-slate-500 leading-relaxed">
-                            We value your privacy and respect your choice. I authorize for my / our name to be displayed on the official website of Islah Welfare Foundation (IWF) as a Supporting Member/Donor. This will help inspire others and promote transparency.
+                            We value your privacy and respect your choice. I authorize for my / our name to be displayed on the official website of Islah Welfare Foundation (Islah) as a Supporting Member/Donor. This will help inspire others and promote transparency.
                           </p>
                           <div className="space-y-1.5 pt-1">
                             <label className="flex items-center gap-2 text-xs text-slate-700 cursor-pointer">

@@ -49,7 +49,7 @@ export default function PolicyPage({ slug }: { slug: PolicySlug }) {
                   Contact
                 </h2>
                 <p className="text-sm text-slate-700 leading-relaxed">
-                  For questions, contact IWF at{" "}
+                  For questions, contact Islah at{" "}
                   <a href={`mailto:${CONTACT_DETAILS.email}`} className="font-semibold text-brand-green">
                     {CONTACT_DETAILS.email}
                   </a>{" "}

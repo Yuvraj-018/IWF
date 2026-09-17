@@ -8,7 +8,7 @@ export const Route = createFileRoute(
     meta: [
       {
         title:
-          "Social Justice Legal Action (SJLA) - IWF | Islah Welfare Foundation",
+          "Social Justice Legal Action (SJLA) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",

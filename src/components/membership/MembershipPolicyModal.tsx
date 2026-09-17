@@ -42,10 +42,10 @@ export function MembershipPolicyModal({
                 <strong>2. Non-Transferable:</strong> Membership is non-transferable and non-refundable under any circumstances.
               </p>
               <p>
-                <strong>3. Code of Conduct:</strong> Members are expected to uphold the values and mission of Islah Welfare Foundation (IWF). Any action detrimental to the organization's reputation may result in termination of membership.
+                <strong>3. Code of Conduct:</strong> Members are expected to uphold the values and mission of Islah Welfare Foundation (Islah). Any action detrimental to the organization's reputation may result in termination of membership.
               </p>
               <p>
-                <strong>4. Privacy:</strong> We value your privacy. Your data will only be used for official IWF communication and will not be shared with unauthorized third parties.
+                <strong>4. Privacy:</strong> We value your privacy. Your data will only be used for official Islah communication and will not be shared with unauthorized third parties.
               </p>
               <p>
                 <strong>5. Non-Executive Roles:</strong> All Supporting Members are Non-Executive &amp; Non-Voting Members.

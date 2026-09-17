@@ -184,7 +184,7 @@ export function MentorApplicationForm({ onSuccess, isModal = false }: MentorAppl
 
   const onSubmit = async (data: MentorFormData) => {
     await new Promise((r) => setTimeout(r, 600));
-    const generatedId = `IWF-MNT-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 90000)}`;
+    const generatedId = `Islah-MNT-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 90000)}`;
     setAppId(generatedId);
     setSubmitted(true);
     onSuccess?.(generatedId);
@@ -257,7 +257,7 @@ export function MentorApplicationForm({ onSuccess, isModal = false }: MentorAppl
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 text-left">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 text-left notranslate" translate="no">
       {/* ── 1. BASIC INFORMATION ── */}
       <div>
         <div className="border-b border-slate-200 pb-2 mb-4">

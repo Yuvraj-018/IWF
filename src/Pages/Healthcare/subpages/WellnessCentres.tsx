@@ -354,7 +354,7 @@ function OverviewSection() {
               <ShieldCheck className="w-5 h-5" />
             </div>
             <p className="text-slate-700 text-sm font-semibold leading-relaxed max-w-3xl mx-auto mb-4">
-              Recognising this critical healthcare gap, Islah Welfare Foundation (IWF) proposes the Establishment of Rural Healthcare &amp; Wellness Centres to provide accessible, affordable, preventive, and community-focused healthcare services in rural and underserved areas.
+              Recognising this critical healthcare gap, Islah Welfare Foundation (Islah) proposes the Establishment of Rural Healthcare &amp; Wellness Centres to provide accessible, affordable, preventive, and community-focused healthcare services in rural and underserved areas.
             </p>
             <div className="inline-block text-xs font-bold text-brand-orange uppercase tracking-wider bg-brand-orange/10 border border-brand-orange/20 px-4 py-1.5 rounded-full max-w-full text-center whitespace-normal">
               Our Goal: Strengthen primary healthcare systems at the grassroots level while promoting overall health, wellness, and preventive care within communities.
@@ -395,7 +395,7 @@ function ApproachAccordionSection() {
           <SectionTitle
             label="Project Approach"
             title="5 Service Areas"
-            subtitle="Click each area to explore the full details of how IWF's Rural Wellness Centres will serve communities."
+            subtitle="Click each area to explore the full details of how Islah's Rural Wellness Centres will serve communities."
           />
         </ScrollReveal>
 
@@ -478,7 +478,7 @@ function ImpactSection() {
         <ScrollReveal delay={0.15}>
           <div className="mt-12 bg-brand-green-darker rounded-md p-10 text-center">
             <p className="text-sm md:text-base text-white/80 max-w-3xl mx-auto mb-6 leading-relaxed">
-              IWF believes that healthcare is a fundamental necessity, and every individual deserves access to affordable, timely, and quality healthcare services regardless of their socio-economic condition or geographic location.
+              Islah believes that healthcare is a fundamental necessity, and every individual deserves access to affordable, timely, and quality healthcare services regardless of their socio-economic condition or geographic location.
             </p>
             <p className="text-lg md:text-xl font-semibold text-white max-w-3xl mx-auto leading-relaxed italic border-t border-white/10 pt-6">
               "Bringing healthcare closer to rural communities — building healthier lives through accessible care, awareness, and wellness."

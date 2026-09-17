@@ -463,7 +463,7 @@ function OverviewSection() {
               As a result, many underprivileged patients face delays in treatment at the most critical moments, putting their lives at serious risk.
             </p>
             <p className="text-slate-700 text-sm font-semibold leading-relaxed max-w-3xl mx-auto mb-4">
-              Recognising this urgent humanitarian need, Islah Welfare Foundation (IWF) proposes the Critical Life &amp; Emergency Support Initiative to provide emergency assistance and life-saving support to poor and vulnerable patients admitted to hospitals in critical condition.
+              Recognising this urgent humanitarian need, Islah Welfare Foundation (Islah) proposes the Critical Life &amp; Emergency Support Initiative to provide emergency assistance and life-saving support to poor and vulnerable patients admitted to hospitals in critical condition.
             </p>
             <div className="inline-block text-xs font-bold text-brand-orange uppercase tracking-wider bg-brand-orange/10 border border-brand-orange/20 px-4 py-1.5 rounded-full">
               Our Goal: Ensure that no individual is denied emergency medical care due to poverty or financial hardship.
@@ -500,7 +500,7 @@ function SupportAreasSection() {
           <SectionTitle
             label="Our Support Areas"
             title="4 Areas of Intervention"
-            subtitle="IWF provides targeted emergency support across four critical areas to ensure no patient is denied life-saving care."
+            subtitle="Islah provides targeted emergency support across four critical areas to ensure no patient is denied life-saving care."
           />
         </ScrollReveal>
 
@@ -671,7 +671,7 @@ function PolicySection() {
                 <div>
                   <h4 className="font-bold text-slate-900 text-sm mb-1">5. Where Total Funds Collected Exceed the Required Treatment Cost:</h4>
                   <p>
-                    If the total amount collected exceeds the amount reasonably required for the beneficiary's eligible medical treatment: (1) The beneficiary's verified medical expenses shall be paid first; (2) Administrative and program management costs, as provided under this policy, may be retained by IWF; (3) Any remaining surplus amount shall not be refunded to individual donors; (4) The surplus shall be transferred to Health & Well-Being Surplus Fund and utilised for: critical medical treatment assistance, emergency healthcare support, medical aid for economically weaker patients, health camps and community healthcare initiatives, and other healthcare programs consistent with the charitable objectives of Islah Welfare Foundation.
+                    If the total amount collected exceeds the amount reasonably required for the beneficiary's eligible medical treatment: (1) The beneficiary's verified medical expenses shall be paid first; (2) Administrative and program management costs, as provided under this policy, may be retained by Islah; (3) Any remaining surplus amount shall not be refunded to individual donors; (4) The surplus shall be transferred to Health & Well-Being Surplus Fund and utilised for: critical medical treatment assistance, emergency healthcare support, medical aid for economically weaker patients, health camps and community healthcare initiatives, and other healthcare programs consistent with the charitable objectives of Islah Welfare Foundation.
                   </p>
                 </div>
                 <div>

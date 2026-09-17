@@ -6,7 +6,7 @@ export const Route = createFileRoute("/programs/skills-development/micro-enterpr
     meta: [
       {
         title:
-          "Micro-Enterprise & Self-Employment Support (MSES) - IWF | Islah Welfare Foundation",
+          "Micro-Enterprise & Self-Employment Support (MSES) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",

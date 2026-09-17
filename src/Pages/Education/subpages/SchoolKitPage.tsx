@@ -212,7 +212,7 @@ export default function SchoolKitPage() {
                 </div>
 
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Recognising this fundamental gap, Islah Welfare Foundation (IWF) proposes the School Kit Distribution Programme to ensure that no child is deprived of education due to a lack of basic resources.
+                  Recognising this fundamental gap, Islah Welfare Foundation (Islah) proposes the School Kit Distribution Programme to ensure that no child is deprived of education due to a lack of basic resources.
                 </p>
 
                 <p className="text-xs text-slate-600 leading-relaxed">

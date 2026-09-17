@@ -96,7 +96,7 @@ export default function HousingNecessities() {
           <div className="max-w-4xl mx-auto px-4 text-center space-y-5">
             <ShieldCheck className="w-10 h-10 text-brand-orange mx-auto" />
             <p className="text-xl md:text-2xl font-semibold leading-relaxed italic text-white/95">
-              "A safe roof overhead and access to clean drinking water are basic human rights. IWF works tirelessly to ensure no rural family is left without shelter."
+              "A safe roof overhead and access to clean drinking water are basic human rights. Islah works tirelessly to ensure no rural family is left without shelter."
             </p>
             <div className="flex items-center justify-center gap-3 pt-2">
               <span className="h-px w-8 bg-brand-orange/60" />

@@ -4,7 +4,7 @@ import PolicyPage from "@/Pages/PolicyPage";
 export const Route = createFileRoute("/terms-and-conditions")({
   head: () => ({
     meta: [
-      { title: "Terms & Conditions - IWF | Islah Welfare Foundation" },
+      { title: "Terms & Conditions - Islah | Islah Welfare Foundation" },
       {
         name: "description",
         content: "Terms and conditions for using the Islah Welfare Foundation website.",

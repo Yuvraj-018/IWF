@@ -162,7 +162,7 @@ export function CareerApplicationForm({ onSuccess, isModal = false }: CareerAppl
 
   const onSubmit = async (data: CareerFormData) => {
     await new Promise((r) => setTimeout(r, 600));
-    const generatedId = `IWF-JOB-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 90000)}`;
+    const generatedId = `Islah-JOB-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 90000)}`;
     setAppId(generatedId);
     setSubmitted(true);
     onSuccess?.(generatedId);
@@ -224,7 +224,7 @@ export function CareerApplicationForm({ onSuccess, isModal = false }: CareerAppl
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 text-left">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 text-left notranslate" translate="no">
       <div className="mb-2">
         <p className="text-xs text-slate-500">
           Please fill in your details and upload your CV. Our team will review your profile and contact you for suitable opportunities.
@@ -512,7 +512,7 @@ export function CareerApplicationForm({ onSuccess, isModal = false }: CareerAppl
                 >
                   Privacy Policy
                 </a>{" "}
-                and consent to keep my details in IWF's talent database for future opportunities. <span className="text-red-500">*</span>
+                and consent to keep my details in Islah's talent database for future opportunities. <span className="text-red-500">*</span>
               </label>
             </div>
             <FieldError msg={errors.agreePrivacy?.message} />

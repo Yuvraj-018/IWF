@@ -4,7 +4,7 @@ import VocationalTrainingWorkshops from "@/Pages/Skills/subpages/VocationalTrain
 export const Route = createFileRoute("/programs/skills-development/vocational-training-workshops")({
   head: () => ({
     meta: [
-      { title: "Vocational Training Workshops (VTW) — IWF Skills" },
+      { title: "Vocational Training Workshops (VTW) — Islah Skills" },
       {
         name: "description",
         content: "Short-term intensive mobile skill workshops delivered directly in rural villages.",

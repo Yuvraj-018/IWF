@@ -8,7 +8,7 @@ export const Route = createFileRoute(
     meta: [
       {
         title:
-          "Knowledge, Research & Publication (KRP) - IWF | Islah Welfare Foundation",
+          "Knowledge, Research & Publication (KRP) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",

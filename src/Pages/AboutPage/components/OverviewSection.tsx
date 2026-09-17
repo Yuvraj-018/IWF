@@ -11,9 +11,9 @@ export default function OverviewSection() {
           <p className="text-brand-green font-bold text-xs uppercase tracking-widest mb-4">🌿 OVERVIEW</p>
           <div className="space-y-4">
             {[
-              "The Islah Welfare Foundation (IWF) is a public charitable trust working for the socio-economic development of the weaker sections of society.",
-              "The IWF is working to establish multifarious institutions for the betterment of weaker sections of society. Education, healthcare, micro-finance and women empowerment are some of the areas the IWF is mainly focusing upon.",
-              "The goal of the foundation is to help create a society where everyone is equal and prosperous, and there is justice for all. With an aim to reduce the gap between haves and have-nots, the IWF is working to provide all the basic resources to the poor and needy that are necessary to live, survive and grow gracefully in a society.",
+              "The Islah Welfare Foundation (Islah) is a public charitable trust working for the socio-economic development of the weaker sections of society.",
+              "The Islah is working to establish multifarious institutions for the betterment of weaker sections of society. Education, healthcare, micro-finance and women empowerment are some of the areas the Islah is mainly focusing upon.",
+              "The goal of the foundation is to help create a society where everyone is equal and prosperous, and there is justice for all. With an aim to reduce the gap between haves and have-nots, the Islah is working to provide all the basic resources to the poor and needy that are necessary to live, survive and grow gracefully in a society.",
             ].map((para, i) => (
               <p key={i} className="border-l-4 border-brand-green pl-4 text-sm text-slate-700 leading-relaxed">
                 {para}
@@ -23,7 +23,7 @@ export default function OverviewSection() {
 
           {/* Overview image */}
           <div className="mt-8 rounded-xl overflow-hidden h-52">
-            <img src={overviewImg} alt="IWF Overview" className="w-full h-full object-cover" />
+            <img src={overviewImg} alt="Islah Overview" className="w-full h-full object-cover" />
           </div>
         </div>
 

@@ -8,12 +8,12 @@ export const Route = createFileRoute(
     meta: [
       {
         title:
-          "Technical & Vocational Education and Training (TVET) - IWF | Islah Welfare Foundation",
+          "Technical & Vocational Education and Training (TVET) - Islah | Islah Welfare Foundation",
       },
       {
         name: "description",
         content:
-          "Technical Institute is now part of IWF Technical & Vocational Education and Training (TVET) initiative.",
+          "Technical Institute is now part of Islah Technical & Vocational Education and Training (TVET) initiative.",
       },
     ],
   }),

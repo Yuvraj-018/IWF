@@ -8,7 +8,7 @@ export const Route = createFileRoute("/about_/objective-and-vision")({
       {
         name: "description",
         content:
-          "Discover IWF's objectives, vision and mission — working towards an equitable, empowered and compassionate India where no one is left behind.",
+          "Discover Islah's objectives, vision and mission — working towards an equitable, empowered and compassionate India where no one is left behind.",
       },
     ],
   }),

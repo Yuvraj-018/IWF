@@ -64,7 +64,7 @@ export default function EnvironmentPage() {
 
       <main>
         {/* Hero Slideshow */}
-        <section className="relative min-h-[430px] flex items-center overflow-hidden">
+        <section className="relative min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex items-center overflow-hidden">
           {slides.map((slide, idx) => (
             <div key={idx} className={`absolute inset-0 transition-opacity duration-700 ${slideIndex === idx ? "opacity-100 z-10" : "opacity-0 z-0"}`}>
               <img src={slide.image} alt={slide.caption} className="absolute inset-0 h-full w-full object-cover" />
@@ -108,7 +108,7 @@ export default function EnvironmentPage() {
                     Protecting Rural Natural Ecosystems
                   </h2>
                   <p className="text-slate-600 text-sm md:text-base leading-relaxed mb-6">
-                    Rural areas face pressing environmental challenges such as deforestation, water scarcity, plastic pollution, soil degradation, and extreme weather impacts. Economically weaker agricultural families depend heavily on natural resources for survival. IWF promotes community-based environmental protection to build clean, green, climate-resilient villages.
+                    Rural areas face pressing environmental challenges such as deforestation, water scarcity, plastic pollution, soil degradation, and extreme weather impacts. Economically weaker agricultural families depend heavily on natural resources for survival. Islah promotes community-based environmental protection to build clean, green, climate-resilient villages.
                   </p>
                 </div>
 
