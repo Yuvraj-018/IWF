@@ -139,7 +139,7 @@ function SectionTitle({ label, title, subtitle }: { label: string; title: string
 
 function HeroSection() {
   return (
-    <section className="relative min-h-[430px] flex items-center overflow-hidden">
+    <section className="relative min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex items-center overflow-hidden">
       {/* Background Image */}
       <img
         src={diabetesHero}

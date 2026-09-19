@@ -1354,7 +1354,7 @@ function MemberCardVisual({ category, name, memberId, validTill, district, state
 function MembersAndDonorsHero({ activeTab, setActiveTab }: { activeTab: PageTab; setActiveTab: (t: PageTab) => void }) {
   const tabs: PageTab[] = ["Members", "Donors", "Your Membership"];
   return (
-    <section id="community-tabs" className="relative bg-[#0b1f3b] text-white min-h-[480px] md:min-h-[520px] lg:min-h-[560px] flex flex-col justify-center pt-16 sm:pt-20 pb-12 sm:pb-16 overflow-hidden">
+    <section id="community-tabs" className="relative bg-[#0b1f3b] text-white min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex flex-col justify-center pt-16 sm:pt-20 pb-12 sm:pb-16 overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-24 right-8 w-96 h-96 rounded-full bg-brand-orange/10 blur-3xl" />
         <div className="absolute bottom-4 right-1/3 w-48 h-48 rounded-full bg-blue-400/8 blur-2xl" />

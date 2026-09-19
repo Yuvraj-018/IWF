@@ -5,7 +5,7 @@ import img from "@/assets/thematic-women-2.png"
 
 export default function ObjVisionHero() {
   return (
-    <section className="relative w-full min-h-[430px] flex flex-col justify-between overflow-hidden">
+    <section className="relative w-full min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex flex-col justify-between overflow-hidden">
       {/* Background Image & Gradient */}
       <img src={img} alt="Our Objectives & Vision" className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0 bg-gradient-to-b from-slate-900/90 via-slate-900/75 to-slate-900/40" />

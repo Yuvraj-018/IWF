@@ -189,11 +189,11 @@ function RootComponent() {
       {/* Sticky Social Links Sidebar on Right Edge */}
       <div className="fixed right-0 top-[62%] -translate-y-1/2 z-50 flex flex-col shadow-2xl rounded-l-xl overflow-hidden select-none">
         {[
-          { Icon: Facebook, color: "bg-[#1877f2] hover:bg-[#166fe5]", href: "https://facebook.com", name: "Facebook" },
-          { Icon: Twitter, color: "bg-[#1da1f2] hover:bg-[#0d95e8]", href: "https://twitter.com", name: "Twitter" },
-          { Icon: Instagram, color: "bg-gradient-to-tr from-[#f9cb2f] via-[#e5195f] to-[#8134af]", href: "https://instagram.com", name: "Instagram" },
-          { Icon: Linkedin, color: "bg-[#0077b5] hover:bg-[#00669c]", href: "https://linkedin.com", name: "LinkedIn" },
-          { Icon: Youtube, color: "bg-[#ff0000] hover:bg-[#e60000]", href: "https://youtube.com", name: "YouTube" },
+          { Icon: Facebook, color: "bg-[#1877f2] hover:bg-[#166fe5]", href: "https://www.facebook.com/islahindia/", name: "Facebook" },
+          { Icon: Twitter, color: "bg-[#1da1f2] hover:bg-[#0d95e8]", href: "https://x.com/islahindia/", name: "Twitter / X" },
+          { Icon: Instagram, color: "bg-gradient-to-tr from-[#f9cb2f] via-[#e5195f] to-[#8134af]", href: "https://www.instagram.com/islahwelfarefoundation/", name: "Instagram" },
+          { Icon: Linkedin, color: "bg-[#0077b5] hover:bg-[#00669c]", href: "https://www.linkedin.com/in/islah-welfare-foundation-6a028b432/", name: "LinkedIn" },
+          { Icon: Youtube, color: "bg-[#ff0000] hover:bg-[#e60000]", href: "https://www.youtube.com/channel/UC5sty9L25QQwC89JwGmEIVw/", name: "YouTube" },
         ].map((social, i) => (
           <a
             key={i}

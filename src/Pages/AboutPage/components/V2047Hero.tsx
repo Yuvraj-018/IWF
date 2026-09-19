@@ -4,7 +4,7 @@ import v2047HeroBg from "@/assets/vision2047/hero.png";
 
 export default function V2047Hero() {
   return (
-    <section className="relative w-full min-h-[430px] flex flex-col justify-between overflow-hidden">
+    <section className="relative w-full min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex flex-col justify-between overflow-hidden">
       {/* Background Image & Gradient */}
       <img src={v2047HeroBg} alt="Vision 2047" className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0 bg-gradient-to-r from-[#0b1f3b]/95 via-slate-900/80 to-transparent" />

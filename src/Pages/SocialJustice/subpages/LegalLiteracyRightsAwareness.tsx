@@ -166,7 +166,7 @@ export default function LegalLiteracyRightsAwareness() {
       <Header />
 
       {/* Hero Banner */}
-      <section className="relative bg-[#07162c] text-white pt-24 pb-20 overflow-hidden">
+      <section className="relative bg-[#07162c] text-white min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex items-center pt-24 pb-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-[#07162c] via-[#0b2246]/95 to-transparent z-10" />
         <img
           src={heroImg}

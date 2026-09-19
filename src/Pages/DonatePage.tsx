@@ -319,7 +319,7 @@ export default function DonatePage() {
 
       <main>
         {/* ─── Hero Header (Matching Top of Page 70) ─────────────────────────── */}
-        <section className="relative overflow-hidden bg-gradient-to-r from-[#00381e] via-[#005a30] to-[#014725] text-white min-h-[480px] md:min-h-[520px] lg:min-h-[560px] flex items-center py-16 sm:py-24">
+        <section className="relative overflow-hidden bg-gradient-to-r from-[#00381e] via-[#005a30] to-[#014725] text-white min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex items-center py-16 sm:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div className="grid lg:grid-cols-12 gap-8 items-center">
               <div className="lg:col-span-8 text-left space-y-4">

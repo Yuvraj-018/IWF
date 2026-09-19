@@ -73,7 +73,7 @@ export default function CampaignDetailPage({
 
       {/* ─── Hero Section (Theme-Specific Gradient) ───────────────────────── */}
       <section
-        className={`relative bg-gradient-to-b ${campaign.bgGradient} text-white py-12 md:py-16 overflow-hidden border-b border-slate-800`}
+        className={`relative bg-gradient-to-b ${campaign.bgGradient} text-white min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex items-center py-12 md:py-16 overflow-hidden border-b border-slate-800`}
       >
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none" />
 
