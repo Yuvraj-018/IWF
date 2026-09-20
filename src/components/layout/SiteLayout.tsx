@@ -511,16 +511,24 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: RoleType) => void
   const currentLang = useCurrentLanguage();
   const localizedAddress = getLocalizedAddress(currentLang);
   const quickLinks = [
+    ["Home", "/"],
     ["About Us", "/about"],
-    ["Education", "/programs/education"],
-    ["Healthcare", "/programs/healthcare"],
-    ["Skills Development", "/programs/skills-development"],
+    ["What We Do", "/programs"],
+    ["Our Impact", "/#impact-stats"],
+    ["Media & News", "/news-and-events"],
+    ["Contact Us", "/contact"],
+    ["Donate Now", "/donate"],
+  ];
+
+  const ourWorkLinks = [
+    ["Education & Learning", "/programs/education"],
+    ["Healthcare & Medical Relief", "/programs/healthcare"],
+    ["Skills & Livelihoods", "/programs/skills-development"],
     ["Women Empowerment", "/programs/women-empowerment"],
-    ["Get In Touch", "/contact"],
-    ["Get Involved", "/get-involved"],
-    ["Donate", "/donate"],
-    ["Membership", "/membership"],
-    ["News & Events", "/news-and-events"],
+    ["Shiksha Na Ruke Campaign", "/campaign/shiksha-na-ruke"],
+    ["Har Pal Anmol Hai Campaign", "/campaign/har-pal-anmol-hai"],
+    ["Swabhimaan Campaign", "/campaign/swabhimaan"],
+    ["View All Programs", "/programs"],
   ];
 
   return (
@@ -623,6 +631,7 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: RoleType) => void
             </div>
           </div>
 
+          {/* Section 1: Quick Links */}
           <div className="space-y-4">
             <h4 className="flex items-center gap-2 text-white font-semibold text-sm uppercase border-l-2 border-brand-orange pl-2 tracking-wide">
               <Leaf className="w-4 h-4 text-brand-orange" /> Quick Links
@@ -639,48 +648,50 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: RoleType) => void
             </ul>
           </div>
 
+          {/* Section 2: Get Involved */}
           <div className="space-y-4">
             <h4 className="flex items-center gap-2 text-white font-semibold text-sm uppercase border-l-2 border-brand-orange pl-2 tracking-wide">
               <Building2 className="w-4 h-4 text-brand-orange" /> Get Involved
             </h4>
             <ul className="space-y-2.5">
               {[
-                ["Volunteer With Us", "volunteer"],
-                ["Partner With Us", "partner"],
-                ["Sponsor a Programme", "sponsor"],
-                ["Become a Mentor", "mentor"],
-                ["Careers & Opportunities", "employee"],
-              ].map(([label, type]) => (
-                <li key={label}>
-                  <button
-                    onClick={() => onOpenModal?.(type as RoleType)}
-                    className="inline-flex items-center text-left text-white text-sm hover:text-brand-orange hover:translate-x-1 transition-all duration-200 cursor-pointer"
-                  >
-                    <span className="text-brand-orange text-xs mr-2">-&gt;</span>
-                    {label}
-                  </button>
+                { label: "Volunteer With Us", type: "volunteer" },
+                { label: "Partner With Us", type: "partner" },
+                { label: "Sponsor a Programme", type: "sponsor" },
+                { label: "Become a Mentor", type: "mentor" },
+                { label: "Become a Member", href: "/membership" },
+                { label: "Careers & Opportunities", type: "employee" },
+              ].map((item) => (
+                <li key={item.label}>
+                  {item.href ? (
+                    <a
+                      href={item.href}
+                      className="inline-flex items-center text-left text-white text-sm hover:text-brand-orange hover:translate-x-1 transition-all duration-200"
+                    >
+                      <span className="text-brand-orange text-xs mr-2">-&gt;</span>
+                      {item.label}
+                    </a>
+                  ) : (
+                    <button
+                      onClick={() => onOpenModal?.(item.type as RoleType)}
+                      className="inline-flex items-center text-left text-white text-sm hover:text-brand-orange hover:translate-x-1 transition-all duration-200 cursor-pointer"
+                    >
+                      <span className="text-brand-orange text-xs mr-2">-&gt;</span>
+                      {item.label}
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>
           </div>
 
+          {/* Section 3: Our Work */}
           <div className="space-y-4">
             <h4 className="flex items-center gap-2 text-white font-semibold text-sm uppercase border-l-2 border-brand-orange pl-2 tracking-wide">
-              <Scale className="w-4 h-4 text-brand-orange" /> Legal & Policies
+              <Briefcase className="w-4 h-4 text-brand-orange" /> Our Work
             </h4>
             <ul className="space-y-2.5">
-              {[
-                ["All Policies & Governance", "/policies"],
-                ["Medical Fundraising Policy", "/medical-treatment-policy"],
-                ["Financial Transparency", "/financial-transparency-policy"],
-                ["Privacy Policy", "/privacy-policy"],
-                ["Refund Policy", "/refund-policy"],
-                ["Terms & Conditions", "/terms-and-conditions"],
-                ["Grievance Redressal Policy", "/grievance-policy"],
-                ["Child Protection Policy", "/child-protection-policy"],
-                ["Code of Conduct", "/code-of-conduct"],
-                ["Legal Status & Registration", "/about/legal-status"],
-              ].map(([label, href]) => (
+              {ourWorkLinks.map(([label, href]) => (
                 <li key={label}>
                   <a href={href} className="inline-flex items-center text-white text-sm hover:text-brand-orange hover:translate-x-1 transition-all duration-200">
                     <span className="text-brand-orange text-xs mr-2">-&gt;</span>
@@ -691,6 +702,7 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: RoleType) => void
             </ul>
           </div>
 
+          {/* Contact Column */}
           <div className="space-y-4">
             <h4 className="flex items-center gap-2 text-white font-semibold text-sm uppercase border-l-2 border-brand-orange pl-2 tracking-wide">
               <Phone className="w-4 h-4 text-brand-orange" /> Contact Us
@@ -723,17 +735,21 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: RoleType) => void
         </div>
       </div>
 
+      {/* Small Bottom Strip Footer with Legal & Policies */}
       <div className="bg-[#091f12] py-4 px-4 md:px-10">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4 text-xs text-white">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white">
           <div>© 2026 Islah. All Rights Reserved.</div>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-[11px] sm:text-xs">
+            <span className="text-brand-orange font-bold">Legal &amp; Policies:</span>
             <a href="/policies" className="hover:text-brand-orange transition-colors">All Policies</a>
             <span>|</span>
             <a href="/privacy-policy" className="hover:text-brand-orange transition-colors">Privacy Policy</a>
             <span>|</span>
             <a href="/refund-policy" className="hover:text-brand-orange transition-colors">Refund Policy</a>
             <span>|</span>
-            <a href="/terms-and-conditions" className="hover:text-brand-orange transition-colors">Terms & Conditions</a>
+            <a href="/terms-and-conditions" className="hover:text-brand-orange transition-colors">Terms &amp; Conditions</a>
+            <span>|</span>
+            <a href="/financial-transparency-policy" className="hover:text-brand-orange transition-colors">Financial Transparency</a>
           </div>
         </div>
       </div>
