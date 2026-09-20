@@ -45,7 +45,6 @@ export const NAV_ITEMS = [
   "Our Campaigns",
   "Impact",
   "Media",
-  "Membership",
   "Get Involved",
   "Contact Us",
 ];
@@ -70,7 +69,6 @@ export const MEGA_DATA: Record<string, MegaSection> = {
   "What We Do": {
     cols: 3,
     items: [
-      "View All Programs",
       "Education",
       "Health Care",
       "Skills Development",
@@ -80,6 +78,7 @@ export const MEGA_DATA: Record<string, MegaSection> = {
       "Relief & Rehabilitation",
       "Environment & Sustainability",
       "Agriculture & Rural Livelihood",
+      "View All Programs",
     ],
   },
   "Our Campaigns": {
@@ -196,7 +195,8 @@ export function NotificationTicker() {
   const items = [
     { text: "Notification for change in Registration", href: "/about/legal-status" },
     { text: "ISLAH — Integrated Social, Livelihood, Advancement & Humanitarian Action", href: "/" },
-    { text: `Registered Address: ${localizedAddress}`, href: "/about/legal-status" },
+    { text: "Registered Office: Bathiya, Darbhanga, Bihar – 847423", href: "/about/legal-status" },
+    { text: `Delhi Administrative Office: ${localizedAddress}`, href: "/contact" },
     { text: "Join our mission — volunteer, donate or partner with us", href: "/volunteer" },
     { text: "Free Health Camp — Medical Relief & Consultations | June 25", href: "/news-and-events" },
     { text: "Annual Scholarship Distribution — Education Support | July 15", href: "/news-and-events" },
@@ -263,8 +263,7 @@ export function Header() {
     (item === "Home" && pathname === "/") ||
     (item === "About Us" && pathname.startsWith("/about")) ||
     (item === "Our Campaigns" && pathname.startsWith("/campaign")) ||
-    (item === "Membership" && pathname.startsWith("/membership")) ||
-    (item === "Get Involved" && (pathname.startsWith("/get-involved") || pathname.startsWith("/volunteer"))) ||
+    (item === "Get Involved" && (pathname.startsWith("/get-involved") || pathname.startsWith("/volunteer") || pathname.startsWith("/membership"))) ||
     (item === "What We Do" && pathname.startsWith("/programs"));
 
   const getHeaderHref = (item: string) => {

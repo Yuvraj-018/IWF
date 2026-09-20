@@ -40,7 +40,7 @@ export default function WidowsOrphans() {
       <NotificationTicker /><UtilityBar /><Header />
       <main>
         {/* Clean Hero */}
-        <section className="relative min-h-[420px] flex items-center overflow-hidden">
+        <section className="relative min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex items-center overflow-hidden">
           <img src={heroImg} alt="Widows & Orphans" className="absolute inset-0 h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-900/65 to-transparent" />
           <div className="relative z-10 max-w-7xl mx-auto px-4 py-16 w-full">

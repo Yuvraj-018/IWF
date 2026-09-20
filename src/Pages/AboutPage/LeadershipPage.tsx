@@ -39,9 +39,9 @@ const BOARD_PRINCIPAL_OFFICERS = [
   {
     sno: 1,
     name: "Er. Nasera Firdausi",
-    designation: "Chief Officer",
+    designation: "Acting Chairman",
     portfolio: "Governance Stewardship & Strategic Direction",
-    email: "chief.officer@iwfindia.org",
+    email: "chairman@iwfindia.org",
     badgeColor: "bg-emerald-600",
     gender: "female" as const,
   },
@@ -111,9 +111,9 @@ const EXECUTIVE_BODY = [
   {
     sno: 1,
     name: "Er. Nasera Firdausi",
-    designation: "Chief Executive Officer",
+    designation: "Acting Chairman",
     portfolio: "Executive Leadership, Strategic Operations & Institutional Management",
-    email: "ceo@iwfindia.org",
+    email: "chairman@iwfindia.org",
     icon: Compass,
     gender: "female" as const,
   },
@@ -321,7 +321,7 @@ export default function LeadershipPage() {
       <Header />
 
       {/* ─── Hero Section (Navy Split Banner) ───────────────────────────────── */}
-      <section className="relative bg-gradient-to-b from-[#0b1f3b] via-[#0f284e] to-[#0b1f3b] text-white py-10 md:py-14 overflow-hidden border-b border-slate-800">
+      <section className="relative bg-gradient-to-b from-[#0b1f3b] via-[#0f284e] to-[#0b1f3b] text-white min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex items-center py-10 md:py-14 overflow-hidden border-b border-slate-800">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
@@ -477,7 +477,7 @@ export default function LeadershipPage() {
 
               {viewMode === "cards" ? (
                 <div className="space-y-5 pt-1">
-                  {/* Row 1: 4 Principal Officers (Chief Officer, Secretary, Joint Secretary, Treasurer) */}
+                  {/* Row 1: 4 Principal Officers (Acting Chairman, Secretary, Joint Secretary, Treasurer) */}
                   <div>
                     <div className="flex items-center justify-between mb-2.5">
                       <span className="text-[11px] font-black uppercase tracking-wider text-slate-500 flex items-center gap-1.5">

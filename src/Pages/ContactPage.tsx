@@ -435,7 +435,7 @@ export default function ContactPage() {
 
       <main className="flex-1">
         {/* ─── Hero Section: 100% Native Vector & High-Res Build ───────────────── */}
-        <section className="bg-[#071527] text-white min-h-[480px] md:min-h-[540px] flex flex-col justify-center pt-10 sm:pt-16 pb-12 sm:pb-20 relative overflow-hidden">
+        <section className="bg-[#071527] text-white min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex flex-col justify-center pt-10 sm:pt-16 pb-12 sm:pb-20 relative overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
             {/* Top Breadcrumb */}
             <div className="flex items-center gap-2 text-xs font-medium text-slate-400 mb-6 select-none">
@@ -900,11 +900,11 @@ export default function ContactPage() {
                   </h4>
                   <div className="flex items-center gap-2.5">
                     {[
-                      { Icon: Facebook, color: "#1877F2", label: "Facebook", href: "https://facebook.com" },
-                      { Icon: Twitter, color: "#1DA1F2", label: "Twitter", href: "https://twitter.com" },
-                      { Icon: Instagram, color: "#E1306C", label: "Instagram", href: "https://instagram.com" },
-                      { Icon: Youtube, color: "#FF0000", label: "YouTube", href: "https://youtube.com" },
-                      { Icon: Linkedin, color: "#0A66C2", label: "LinkedIn", href: "https://linkedin.com" },
+                      { Icon: Facebook, color: "#1877F2", label: "Facebook", href: "https://www.facebook.com/islahindia/" },
+                      { Icon: Twitter, color: "#1DA1F2", label: "Twitter / X", href: "https://x.com/islahindia/" },
+                      { Icon: Instagram, color: "#E1306C", label: "Instagram", href: "https://www.instagram.com/islahwelfarefoundation/" },
+                      { Icon: Youtube, color: "#FF0000", label: "YouTube", href: "https://www.youtube.com/channel/UC5sty9L25QQwC89JwGmEIVw/" },
+                      { Icon: Linkedin, color: "#0A66C2", label: "LinkedIn", href: "https://www.linkedin.com/in/islah-welfare-foundation-6a028b432/" },
                     ].map(({ Icon, color, label, href }) => (
                       <a
                         key={label}

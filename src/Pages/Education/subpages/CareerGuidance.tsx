@@ -176,7 +176,7 @@ export default function CareerGuidance() {
 
       <main>
         {/* HERO SECTION */}
-        <section className="relative min-h-[440px] flex items-center overflow-hidden bg-slate-900">
+        <section className="relative min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex items-center overflow-hidden bg-slate-900">
           <img
             src={heroImg}
             alt="Career Guidance & Mentorship"

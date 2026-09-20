@@ -44,7 +44,7 @@ export default function GetInvolvedPage() {
 
       <main>
         {/* ─── Hero Section (Matching Page 1 of PDF) ────────────────────────────── */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-[#072417] via-[#0d3f27] to-[#0b1f3b] text-white py-16 sm:py-20">
+        <section className="relative overflow-hidden bg-gradient-to-br from-[#072417] via-[#0d3f27] to-[#0b1f3b] text-white min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex items-center py-16 sm:py-20">
           <div className="absolute inset-0 bg-[radial-gradient(#15803d_1px,transparent_1px)] [background-size:24px_24px] opacity-15" />
 
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

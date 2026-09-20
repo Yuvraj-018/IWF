@@ -20,7 +20,7 @@ export default function PolicyPage({ slug }: { slug: PolicySlug }) {
       <UtilityBar />
       <Header />
       <main>
-        <section className="bg-[#0b1f3b] text-white py-16">
+        <section className="bg-[#0b1f3b] text-white min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex items-center py-16">
           <div className="max-w-5xl mx-auto px-4">
             <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">
               Islah Welfare Foundation
