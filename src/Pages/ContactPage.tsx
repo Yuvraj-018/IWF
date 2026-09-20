@@ -7,7 +7,7 @@ import {
   Phone, Mail, MapPin, Building2, Send, CheckCircle2,
   AlertCircle, Clock, Globe, Users, MessageSquare, ArrowRight,
   Facebook, Twitter, Instagram, Youtube, Linkedin, Heart,
-  Sprout, Handshake, ChevronRight
+  Sprout, Handshake, ChevronRight, Home
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Footer, Header, NotificationTicker, RoleFormModal, UtilityBar } from "@/components/layout/SiteLayout";
@@ -435,30 +435,29 @@ export default function ContactPage() {
 
       <main className="flex-1">
         {/* ─── Hero Section: 100% Native Vector & High-Res Build ───────────────── */}
-        <section className="bg-[#071527] text-white min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex flex-col justify-center pt-10 sm:pt-16 pb-12 sm:pb-20 relative overflow-hidden">
+        <section className="bg-[#071527] text-white min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex flex-col justify-center py-10 md:py-14 relative overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
             {/* Top Breadcrumb */}
-            <div className="flex items-center gap-2 text-xs font-medium text-slate-400 mb-6 select-none">
-              <Link to="/" className="hover:text-white transition-colors">
-                Home
+            <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-white/70 mb-4 flex-wrap select-none">
+              <Link to="/" className="hover:text-white transition-colors flex items-center gap-1">
+                <Home className="w-3.5 h-3.5 text-brand-orange" />
+                <span>Home</span>
               </Link>
-              <ChevronRight className="w-3.5 h-3.5 text-slate-500" />
-              <span className="text-slate-200">Contact</span>
-            </div>
+              <ChevronRight className="w-3 h-3 text-white/40" />
+              <span className="text-brand-orange font-bold">Contact Us</span>
+            </nav>
 
             {/* Main Hero Grid: Left Content + Right Organic Composition */}
             <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-8 lg:gap-12 items-center">
               {/* Left Column: Heading, Copy & 4 Cards */}
               <div className="space-y-4 sm:space-y-5">
-                <div className="inline-flex items-center gap-2.5">
-                  <span className="w-8 h-[2px] bg-sky-400 inline-block rounded-full" />
-                  <span className="text-xs font-bold uppercase tracking-[0.25em] text-sky-400">
-                    LET'S STAY CONNECTED
-                  </span>
+                <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-widest text-brand-orange mb-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand-orange animate-pulse" />
+                  LET'S STAY CONNECTED
                 </div>
 
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.08]">
-                  Contact <span className="text-[#90cdf4]">Us</span>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
+                  Contact Us
                 </h1>
 
                 <p className="text-slate-300 text-xs sm:text-sm md:text-base leading-relaxed max-w-xl font-normal">

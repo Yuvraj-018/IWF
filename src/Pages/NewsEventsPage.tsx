@@ -3,6 +3,13 @@ import { ArrowRight, Search, Calendar, Tag, Eye, X } from "lucide-react";
 import { Footer, Header, NotificationTicker, RoleFormModal, UtilityBar } from "@/components/layout/SiteLayout";
 import type { RoleType } from "@/components/forms/RoleFormModal";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
+import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
+import g1 from "@/assets/gallery-1.jpg";
+import g2 from "@/assets/gallery-2.jpg";
+import g3 from "@/assets/gallery-3.jpg";
+import g4 from "@/assets/gallery-4.jpg";
+import g5 from "@/assets/gallery-5.jpg";
+import g6 from "@/assets/gallery-6.jpg";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -191,19 +198,14 @@ export default function NewsEventsPage() {
       <UtilityBar />
       <Header />
       <main>
-        {/* Hero */}
-        <section className="bg-[#0b1f3b] text-white min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex items-center py-14 relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-0 right-0 w-80 h-80 bg-brand-orange rounded-full -translate-y-1/2 translate-x-1/2" />
-          </div>
-          <div className="max-w-5xl mx-auto px-4 relative z-10">
-            <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">Media & Updates</p>
-            <h1 className="text-4xl md:text-5xl font-extrabold mb-4">News & Events</h1>
-            <p className="text-white/75 max-w-xl leading-relaxed">
-              Stay updated with Islah's work on the ground — health camps, scholarships, community events, partnerships, and more.
-            </p>
-          </div>
-        </section>
+        {/* Standardized Hero Carousel matching About Us */}
+        <SubpageHeroCarousel
+          tag="MEDIA & UPDATES"
+          title="News & Events"
+          subtitle="Stay updated with Islah's work on the ground — health camps, scholarships, community events, partnerships, and more."
+          breadcrumbs={[{ label: "Media & Updates" }]}
+          images={[g1, g2, g3, g4, g5, g6]}
+        />
 
         {/* Filters */}
         <div className="sticky top-0 z-30 bg-white border-b border-slate-100 shadow-sm py-4">

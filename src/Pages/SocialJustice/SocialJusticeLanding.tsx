@@ -201,7 +201,7 @@ export default function SocialJusticeLanding() {
       <Header />
 
       {/* Hero Section */}
-      <section className="relative bg-[#07162c] text-white min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex items-center pt-24 pb-20 overflow-hidden">
+      <section className="relative bg-[#07162c] text-white min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex items-center py-10 md:py-14 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-[#07162c] via-[#0b2246]/95 to-transparent z-10" />
         <img
           src={heroImg}
@@ -210,7 +210,7 @@ export default function SocialJusticeLanding() {
         />
         <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumbs */}
-          <nav className="flex items-center gap-2 text-xs text-white/60 mb-8" aria-label="Breadcrumb">
+          <nav className="flex items-center gap-2 text-xs text-white/60 mb-4" aria-label="Breadcrumb">
             <Link to="/" className="hover:text-white transition-colors flex items-center gap-1">
               <Home className="w-3.5 h-3.5" />
               <span>Home</span>

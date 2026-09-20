@@ -310,33 +310,35 @@ export default function HealthcareLanding() {
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#00381c]/95 via-[#004724]/85 to-slate-950/80" />
 
-          <div className="relative z-10 max-w-7xl mx-auto px-4 py-16 w-full">
-            <nav className="flex items-center gap-2 text-xs text-emerald-200/80 mb-6 font-medium flex-wrap">
+          <div className="relative z-10 max-w-7xl mx-auto px-4 py-10 md:py-14 w-full">
+            <nav className="flex items-center gap-1.5 text-xs text-white/70 mb-4 font-medium flex-wrap">
               <Link to="/" className="hover:text-white flex items-center gap-1">
-                <Home className="w-3.5 h-3.5" /> Home
+                <Home className="w-3.5 h-3.5 text-brand-orange" /> Home
               </Link>
-              <ChevronRight className="w-3.5 h-3.5" />
-              <span className="text-white font-semibold">
-                Healthcare & Well-Being
+              <ChevronRight className="w-3 h-3 text-white/40" />
+              <Link to="/programs" className="hover:text-white">What We Do</Link>
+              <ChevronRight className="w-3 h-3 text-white/40" />
+              <span className="text-brand-orange font-bold">
+                Healthcare &amp; Well-Being
               </span>
             </nav>
 
-            <div className="inline-flex items-center gap-2 bg-[#ea580c]/20 border border-[#ea580c]/50 text-orange-200 px-3.5 py-1 rounded-full text-xs font-bold tracking-wider uppercase mb-4 backdrop-blur-sm">
-              <HeartPulse className="w-3.5 h-3.5 text-[#ea580c]" />
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-widest text-brand-orange mb-3">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-orange animate-pulse" />
               Accessible Healthcare. Healthier Communities.
             </div>
 
-            <div className="grid lg:grid-cols-12 gap-8 items-center mb-8">
+            <div className="grid lg:grid-cols-12 gap-8 items-center mb-6">
               <div className="lg:col-span-8">
-                <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-4 tracking-tight">
-                  Healthcare & Well-Being
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight mb-3 tracking-tight">
+                  Healthcare &amp; Well-Being
                 </h1>
-                <p className="text-base md:text-lg text-emerald-100/95 max-w-3xl leading-relaxed font-normal mb-4">
+                <p className="text-sm md:text-base text-white/90 max-w-3xl leading-relaxed font-normal mb-3">
                   We are committed to improving healthcare access in rural and
                   underserved communities through preventive care, awareness,
                   medical support, and emergency services.
                 </p>
-                <p className="text-xs md:text-sm text-slate-300 max-w-2xl leading-relaxed italic border-l-2 border-amber-400 pl-3">
+                <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed italic border-l-2 border-brand-orange pl-3">
                   “Ensuring healthcare reaches the last mile—because no life
                   should be lost due to lack of access to timely medical care.”
                 </p>

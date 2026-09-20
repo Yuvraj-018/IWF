@@ -162,7 +162,7 @@ function HeroSection({ lang }: LanguageProp) {
       noticeTimeoutRef.current = setTimeout(() => {
         tick();
         run();
-      }, 3200);
+      }, 1800);
     };
 
     run();
@@ -176,7 +176,7 @@ function HeroSection({ lang }: LanguageProp) {
       const snapTimer = setTimeout(() => {
         setNoticeTransition(false);
         setNoticeIndex(0);
-      }, 500);
+      }, 400);
       return () => clearTimeout(snapTimer);
     }
   }, [noticeIndex]);
@@ -261,7 +261,7 @@ function HeroSection({ lang }: LanguageProp) {
                   className="space-y-2.5"
                   style={{
                     transform: `translateY(-${noticeIndex * 66}px)`,
-                    transition: noticeTransition ? "transform 500ms cubic-bezier(0.4, 0, 0.2, 1)" : "none",
+                    transition: noticeTransition ? "transform 400ms cubic-bezier(0.4, 0, 0.2, 1)" : "none",
                   }}
                 >
                   {loopNotices.map((e, i) => (

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Home, ChevronRight } from "lucide-react";
 import {
   Footer,
   Header,
@@ -20,15 +21,29 @@ export default function PolicyPage({ slug }: { slug: PolicySlug }) {
       <UtilityBar />
       <Header />
       <main>
-        <section className="bg-[#0b1f3b] text-white min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex items-center py-16">
-          <div className="max-w-5xl mx-auto px-4">
-            <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">
-              Islah Welfare Foundation
-            </p>
-            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-4">
+        <section className="relative bg-[#07162c] text-white min-h-[480px] md:min-h-[520px] lg:min-h-[580px] flex items-center py-10 md:py-14 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#07162c] via-[#0b2246]/95 to-[#07162c]/80 z-10" />
+          <div className="relative z-20 max-w-5xl mx-auto px-4 w-full">
+            {/* Breadcrumb */}
+            <nav className="flex items-center gap-1.5 text-xs text-white/70 mb-4 font-medium flex-wrap" aria-label="Breadcrumb">
+              <a href="/" className="hover:text-white transition-colors flex items-center gap-1">
+                <Home className="w-3.5 h-3.5 text-brand-orange" /> Home
+              </a>
+              <ChevronRight className="w-3 h-3 text-white/40" />
+              <span className="text-white/70">Legal &amp; Policies</span>
+              <ChevronRight className="w-3 h-3 text-white/40" />
+              <span className="text-brand-orange font-bold">{content.title}</span>
+            </nav>
+
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-widest text-brand-orange mb-3">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-orange animate-pulse" />
+              LEGAL &amp; COMPLIANCE
+            </div>
+
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-tight tracking-tight mb-3">
               {content.title}
             </h1>
-            <p className="text-white/75 max-w-2xl leading-relaxed">{content.subtitle}</p>
+            <p className="text-sm md:text-base text-white/80 max-w-2xl leading-relaxed">{content.subtitle}</p>
           </div>
         </section>
         <section className="py-14 bg-slate-50">

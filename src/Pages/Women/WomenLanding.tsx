@@ -247,38 +247,35 @@ export default function WomenLanding() {
           />
           <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-900/80 to-transparent" />
 
-          <div className="relative z-10 max-w-7xl mx-auto px-4 py-16 w-full">
+          <div className="relative z-10 max-w-7xl mx-auto px-4 py-10 md:py-14 w-full">
             {/* Breadcrumb */}
-            <nav className="flex items-center gap-2 text-xs text-white/60 mb-6 font-medium flex-wrap">
+            <nav className="flex items-center gap-1.5 text-xs text-white/70 mb-4 font-medium flex-wrap">
               <Link to="/" className="hover:text-white transition-colors flex items-center gap-1">
-                <Home className="w-3 h-3" /> Home
+                <Home className="w-3.5 h-3.5 text-brand-orange" /> Home
               </Link>
-              <ChevronRight className="w-3 h-3" />
+              <ChevronRight className="w-3 h-3 text-white/40" />
               <Link to="/programs" className="hover:text-white transition-colors">What We Do</Link>
-              <ChevronRight className="w-3 h-3" />
-              <span className="text-white/80">Women &amp; Youth Empowerment</span>
+              <ChevronRight className="w-3 h-3 text-white/40" />
+              <span className="text-brand-orange font-bold">Women &amp; Youth Empowerment</span>
             </nav>
 
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-brand-orange/20 border border-brand-orange/40 text-brand-orange px-3.5 py-1.5 rounded-full mb-5 backdrop-blur-sm">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span className="text-xs font-bold tracking-widest uppercase text-white/90">
-                Sector 03 • Capability, Dignity &amp; Livelihood
-              </span>
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-widest text-brand-orange mb-3">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-orange animate-pulse" />
+              Sector 03 • Capability, Dignity &amp; Livelihood
             </div>
 
             {/* Heading */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight tracking-tight mb-4 max-w-4xl">
-              Women &amp; Youth<br />
-              <span className="text-brand-orange">Empowerment</span>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight tracking-tight mb-3 max-w-4xl">
+              Women &amp; Youth Empowerment
             </h1>
 
             {/* Tagline / Subtitle */}
-            <p className="text-lg md:text-xl text-white/90 font-medium tracking-wide mb-3 max-w-2xl">
+            <p className="text-sm md:text-base text-white/90 font-medium tracking-wide mb-2 max-w-2xl">
               Creating Opportunity. Building Confidence. Strengthening Communities.
             </p>
 
-            <p className="text-sm md:text-base text-white/75 max-w-2xl leading-relaxed mb-8">
+            <p className="text-xs sm:text-sm text-white/75 max-w-2xl leading-relaxed mb-6">
               Unlocking capability, financial self-reliance, leadership, and equality for rural women and young people across Bihar.
             </p>
 
