@@ -69,15 +69,14 @@ export const MEGA_DATA: Record<string, MegaSection> = {
   "What We Do": {
     cols: 3,
     items: [
-      "Education",
-      "Health Care",
-      "Skills Development",
-      "Women Empowerment",
+      "Education & Learning",
+      "Healthcare & Well-being",
+      "Women & Youth Empowerment",
+      "Skills, Livelihoods & Entrepreneurship",
       "Social Justice & Legal Empowerment",
-      "Entrepreneur Development",
-      "Relief & Rehabilitation",
-      "Environment & Sustainability",
-      "Agriculture & Rural Livelihood",
+      "Agriculture & Rural Livelihoods",
+      "Environment & Sustainable Development",
+      "Humanitarian Relief & Rehabilitation",
       "View All Programs",
     ],
   },
@@ -146,17 +145,17 @@ function getMegaHref(menu: string, item: string) {
   if (menu === "About Us" && item === "Our Objective & Vision") return "/about/objective-and-vision";
   if (menu === "About Us" && item === "Vision 2047") return "/about/vision-2047";
   if (menu === "About Us" && item === "Membership Policy") return "/membership#status";
-  // What We Do
+  // What We Do (Canonical 8 Focus Sectors + View All)
   if (menu === "What We Do" && (item === "View All Programs" || item === "All Programs" || item === "Our Programs")) return "/programs";
-  if (menu === "What We Do" && item === "Education") return "/programs/education";
-  if (menu === "What We Do" && item === "Health Care") return "/programs/healthcare";
-  if (menu === "What We Do" && item === "Skills Development") return "/programs/skills-development";
-  if (menu === "What We Do" && item === "Women Empowerment") return "/programs/women-empowerment";
+  if (menu === "What We Do" && (item === "Education & Learning" || item === "Education")) return "/programs/education";
+  if (menu === "What We Do" && (item === "Healthcare & Well-being" || item === "Health Care" || item === "Healthcare")) return "/programs/healthcare";
+  if (menu === "What We Do" && (item === "Women & Youth Empowerment" || item === "Women Empowerment")) return "/programs/women-empowerment";
+  if (menu === "What We Do" && (item === "Skills, Livelihoods & Entrepreneurship" || item === "Skills Development" || item === "Skills & Livelihoods")) return "/programs/skills-development";
   if (menu === "What We Do" && (item === "Social Justice & Legal Empowerment" || item === "Social Justice")) return "/programs/social-justice";
+  if (menu === "What We Do" && (item === "Agriculture & Rural Livelihoods" || item === "Agriculture & Rural Livelihood" || item === "Agriculture")) return "/programs/agriculture";
+  if (menu === "What We Do" && (item === "Environment & Sustainable Development" || item === "Environment & Sustainability" || item === "Environment")) return "/programs/environment";
+  if (menu === "What We Do" && (item === "Humanitarian Relief & Rehabilitation" || item === "Relief & Rehabilitation" || item === "Relief")) return "/programs/relief-and-rehabilitation";
   if (menu === "What We Do" && item === "Entrepreneur Development") return "/programs/entrepreneur-development";
-  if (menu === "What We Do" && item === "Relief & Rehabilitation") return "/programs/relief-and-rehabilitation";
-  if (menu === "What We Do" && item === "Environment & Sustainability") return "/programs/environment";
-  if (menu === "What We Do" && item === "Agriculture & Rural Livelihood") return "/programs/agriculture";
   // Our Campaigns
   if (menu === "Our Campaigns" && item === "Shiksha Na Ruke") return "/campaign/shiksha-na-ruke";
   if (menu === "Our Campaigns" && item === "Har Pal Anmol Hai") return "/campaign/har-pal-anmol-hai";
@@ -522,12 +521,13 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: RoleType) => void
 
   const ourWorkLinks = [
     ["Education & Learning", "/programs/education"],
-    ["Healthcare & Medical Relief", "/programs/healthcare"],
-    ["Skills & Livelihoods", "/programs/skills-development"],
-    ["Women Empowerment", "/programs/women-empowerment"],
-    ["Shiksha Na Ruke Campaign", "/campaign/shiksha-na-ruke"],
-    ["Har Pal Anmol Hai Campaign", "/campaign/har-pal-anmol-hai"],
-    ["Swabhimaan Campaign", "/campaign/swabhimaan"],
+    ["Healthcare & Well-being", "/programs/healthcare"],
+    ["Women & Youth Empowerment", "/programs/women-empowerment"],
+    ["Skills, Livelihoods & Entrepreneurship", "/programs/skills-development"],
+    ["Social Justice & Legal Empowerment", "/programs/social-justice"],
+    ["Agriculture & Rural Livelihoods", "/programs/agriculture"],
+    ["Environment & Sustainable Development", "/programs/environment"],
+    ["Humanitarian Relief & Rehabilitation", "/programs/relief-and-rehabilitation"],
     ["View All Programs", "/programs"],
   ];
 
