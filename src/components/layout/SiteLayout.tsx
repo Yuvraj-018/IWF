@@ -523,11 +523,8 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: RoleType) => void
     ["Education & Learning", "/programs/education"],
     ["Healthcare & Well-being", "/programs/healthcare"],
     ["Women & Youth Empowerment", "/programs/women-empowerment"],
-    ["Skills, Livelihoods & Entrepreneurship", "/programs/skills-development"],
-    ["Social Justice & Legal Empowerment", "/programs/social-justice"],
-    ["Agriculture & Rural Livelihoods", "/programs/agriculture"],
-    ["Environment & Sustainable Development", "/programs/environment"],
-    ["Humanitarian Relief & Rehabilitation", "/programs/relief-and-rehabilitation"],
+    ["Skills & Livelihoods", "/programs/skills-development"],
+    ["Relief & Rehabilitation", "/programs/relief-and-rehabilitation"],
     ["View All Programs", "/programs"],
   ];
 
@@ -640,7 +637,7 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: RoleType) => void
               {quickLinks.map(([label, href]) => (
                 <li key={label}>
                   <a href={href} className="inline-flex items-center text-white text-sm hover:text-brand-orange hover:translate-x-1 transition-all duration-200">
-                    <span className="text-brand-orange text-xs mr-2">-&gt;</span>
+                    <span className="text-brand-orange text-xs mr-2 shrink-0 select-none">→</span>
                     {label}
                   </a>
                 </li>
@@ -668,7 +665,7 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: RoleType) => void
                       href={item.href}
                       className="inline-flex items-center text-left text-white text-sm hover:text-brand-orange hover:translate-x-1 transition-all duration-200"
                     >
-                      <span className="text-brand-orange text-xs mr-2">-&gt;</span>
+                      <span className="text-brand-orange text-xs mr-2 shrink-0 select-none">→</span>
                       {item.label}
                     </a>
                   ) : (
@@ -676,7 +673,7 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: RoleType) => void
                       onClick={() => onOpenModal?.(item.type as RoleType)}
                       className="inline-flex items-center text-left text-white text-sm hover:text-brand-orange hover:translate-x-1 transition-all duration-200 cursor-pointer"
                     >
-                      <span className="text-brand-orange text-xs mr-2">-&gt;</span>
+                      <span className="text-brand-orange text-xs mr-2 shrink-0 select-none">→</span>
                       {item.label}
                     </button>
                   )}
@@ -693,9 +690,9 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: RoleType) => void
             <ul className="space-y-2.5">
               {ourWorkLinks.map(([label, href]) => (
                 <li key={label}>
-                  <a href={href} className="inline-flex items-center text-white text-sm hover:text-brand-orange hover:translate-x-1 transition-all duration-200">
-                    <span className="text-brand-orange text-xs mr-2">-&gt;</span>
-                    {label}
+                  <a href={href} className="flex items-start text-white text-sm hover:text-brand-orange hover:translate-x-1 transition-all duration-200">
+                    <span className="text-brand-orange text-xs mr-2 mt-1 shrink-0 select-none">→</span>
+                    <span>{label}</span>
                   </a>
                 </li>
               ))}
