@@ -198,8 +198,8 @@ export const CAMPAIGNS_DATA: Record<string, CampaignData> = {
       { amount: 12000, label: "Full-Year Education Patron", impact: "Ensures comprehensive education, health checkups, and mentorship for 1 full academic year." },
     ],
     relatedPrograms: [
-      { title: "Education for All", href: "/programs/education" },
-      { title: "Skills Development & Vocational Training", href: "/programs/skills-development" },
+      { title: "Education & Learning", href: "/programs/education" },
+      { title: "Skills, Livelihoods & Entrepreneurship", href: "/programs/skills-development" },
       { title: "Pari Ki Udaan (Girl Child Empowerment)", href: "/campaign/pari-ki-udaan" },
     ],
   },
@@ -309,8 +309,8 @@ export const CAMPAIGNS_DATA: Record<string, CampaignData> = {
       { amount: 15000, label: "Emergency Surgery Patron", impact: "Funds life-saving surgical intervention and comprehensive hospital recovery." },
     ],
     relatedPrograms: [
-      { title: "Healthcare & Community Wellness", href: "/programs/healthcare" },
-      { title: "Critical Life Support & Patients", href: "/programs/healthcare/critical-life-support" },
+      { title: "Healthcare & Well-being", href: "/programs/healthcare" },
+      { title: "Critical Life & Emergency Support", href: "/programs/healthcare/critical-life-support" },
       { title: "Humanitarian Relief & Rehabilitation", href: "/programs/relief-and-rehabilitation" },
     ],
   },
@@ -420,9 +420,9 @@ export const CAMPAIGNS_DATA: Record<string, CampaignData> = {
       { amount: 15000, label: "Annual Girl Scholar Patron", impact: "Covers full tuition, transport, books, and mentorship for a girl pursuing higher education." },
     ],
     relatedPrograms: [
-      { title: "Women Empowerment Initiatives", href: "/programs/women-empowerment" },
-      { title: "Skills Development & Vocational Training", href: "/programs/skills-development" },
-      { title: "Education for All", href: "/programs/education" },
+      { title: "Women & Youth Empowerment", href: "/programs/women-empowerment" },
+      { title: "Skills, Livelihoods & Entrepreneurship", href: "/programs/skills-development" },
+      { title: "Education & Learning", href: "/programs/education" },
     ],
   },
 
@@ -526,8 +526,8 @@ export const CAMPAIGNS_DATA: Record<string, CampaignData> = {
       { amount: 15000, label: "Community Swabhimaan Patron", impact: "Sponsors an entire legal literacy and entitlement camp in a remote cluster." },
     ],
     relatedPrograms: [
-      { title: "Rural Entrepreneurship & Microfinance", href: "/programs/entrepreneur-development" },
-      { title: "Skills Development & Vocational Training", href: "/programs/skills-development" },
+      { title: "Social Justice & Legal Empowerment", href: "/programs/social-justice" },
+      { title: "Skills, Livelihoods & Entrepreneurship", href: "/programs/skills-development" },
       { title: "Humanitarian Relief & Rehabilitation", href: "/programs/relief-and-rehabilitation" },
     ],
   },
@@ -632,9 +632,9 @@ export const CAMPAIGNS_DATA: Record<string, CampaignData> = {
       { amount: 15000, label: "Model Village Sustenance Patron", impact: "Supports community water harvesting or solar lighting installation in an underserved hamlet." },
     ],
     relatedPrograms: [
-      { title: "Environment Protection & Green Village", href: "/programs/environment" },
-      { title: "Agriculture & Farmer Support", href: "/programs/agriculture" },
-      { title: "Skills Development & Vocational Training", href: "/programs/skills-development" },
+      { title: "Environment & Sustainable Development", href: "/programs/environment" },
+      { title: "Agriculture & Rural Livelihoods", href: "/programs/agriculture" },
+      { title: "Skills, Livelihoods & Entrepreneurship", href: "/programs/skills-development" },
     ],
   },
 };

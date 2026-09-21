@@ -229,7 +229,7 @@ export default function ReliefLanding() {
               Our Programs
             </Link>
             <ChevronRight className="w-3 h-3 text-white/40" />
-            <span className="text-brand-orange font-bold">Relief &amp; Rehabilitation</span>
+            <span className="text-brand-orange font-bold">Humanitarian Relief &amp; Rehabilitation</span>
           </nav>
 
           <div className="max-w-3xl">

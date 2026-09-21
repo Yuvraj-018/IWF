@@ -227,7 +227,7 @@ export default function EnvironmentLanding() {
               Our Programs
             </Link>
             <ChevronRight className="w-3 h-3 text-white/40" />
-            <span className="text-brand-orange font-bold">Environment</span>
+            <span className="text-brand-orange font-bold">Environment &amp; Sustainable Development</span>
           </nav>
 
           <div className="max-w-3xl">

@@ -408,14 +408,14 @@ const CHEERFUL_COLORS = [
 
 function WhatWeDo({ lang }: LanguageProp) {
   const items = [
-    { icon: GraduationCap, l: lang === "en" ? "Education" : "शिक्षा", s: lang === "en" ? "Learning & Scholarships" : "लर्निंग और छात्रवृत्ति", route: "/programs/education" },
-    { icon: HeartPulse, l: lang === "en" ? "Healthcare" : "स्वास्थ्य सेवा", s: lang === "en" ? "Free camps & awareness" : "शिविर और जागरूकता", route: "/programs/healthcare" },
-    { icon: Users, l: lang === "en" ? "Women Empowerment" : "महिला सशक्तिकरण", s: lang === "en" ? "SHGs & Skills" : "एसएचजी और कौशल", route: "/programs/women-empowerment" },
-    { icon: Sprout, l: lang === "en" ? "Rural Development" : "ग्रामीण विकास", s: lang === "en" ? "Infrastructure & Sanitation" : "बुनियादी ढांचा और स्वच्छता", route: "#" },
-    { icon: Wrench, l: lang === "en" ? "Skill Development" : "कौशल विकास", s: lang === "en" ? "Vocational Training" : "व्यावसायिक प्रशिक्षण", route: "/programs/skills-development" },
-    { icon: Leaf, l: lang === "en" ? "Environment" : "पर्यावरण", s: lang === "en" ? "Plantation & Green Energy" : "वृक्षारोपण और ऊर्जा", route: "#" },
-    { icon: Megaphone, l: lang === "en" ? "Relief & Rehabilitation" : "राहत एवं पुनर्वास", s: lang === "en" ? "Disaster & Emergency Aid" : "आपदा और आपातकाल", route: "#" },
-    { icon: Wind, l: lang === "en" ? "Agriculture & Livelihood" : "कृषि एवं आजीविका", s: lang === "en" ? "Farming & Rural Income" : "खेती और ग्रामीण आय", route: "#" },
+    { icon: GraduationCap, l: lang === "en" ? "Education & Learning" : "शिक्षा और शिक्षण", s: lang === "en" ? "Learning, CLCs & Scholarships" : "लर्निंग और छात्रवृत्ति", route: "/programs/education" },
+    { icon: HeartPulse, l: lang === "en" ? "Healthcare & Well-being" : "स्वास्थ्य और कल्याण", s: lang === "en" ? "Free camps & emergency care" : "शिविर और आपातकालीन देखभाल", route: "/programs/healthcare" },
+    { icon: Users, l: lang === "en" ? "Women & Youth Empowerment" : "महिला एवं युवा सशक्तिकरण", s: lang === "en" ? "SHGs, leadership & livelihood" : "एसएचजी, नेतृत्व और आजीविका", route: "/programs/women-empowerment" },
+    { icon: Wrench, l: lang === "en" ? "Skills, Livelihoods & Entrepreneurship" : "कौशल, आजीविका और उद्यमशीलता", s: lang === "en" ? "Vocational training & micro-enterprises" : "व्यावसायिक प्रशिक्षण और उद्यम", route: "/programs/skills-development" },
+    { icon: Scale, l: lang === "en" ? "Social Justice & Legal Empowerment" : "सामाजिक न्याय और कानूनी सशक्तिकरण", s: lang === "en" ? "Rights awareness & legal action" : "अधिकार जागरूकता और कानूनी कार्रवाई", route: "/programs/social-justice" },
+    { icon: Sprout, l: lang === "en" ? "Agriculture & Rural Livelihoods" : "कृषि और ग्रामीण आजीविका", s: lang === "en" ? "Sustainable farming & income" : "टिकाऊ खेती और ग्रामीण आय", route: "/programs/agriculture" },
+    { icon: Leaf, l: lang === "en" ? "Environment & Sustainable Development" : "पर्यावरण और सतत विकास", s: lang === "en" ? "Green villages & tree plantation" : "स्वच्छ गांव और वृक्षारोपण", route: "/programs/environment" },
+    { icon: Megaphone, l: lang === "en" ? "Humanitarian Relief & Rehabilitation" : "मानवीय राहत और पुनर्वास", s: lang === "en" ? "Disaster response & seasonal relief" : "आपदा प्रतिक्रिया और मौसमी राहत", route: "/programs/relief-and-rehabilitation" },
   ];
 
   return (

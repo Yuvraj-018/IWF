@@ -29,121 +29,181 @@ import programsHeroImg from "@/assets/programs-hero.jpg";
 
 type RoleType = "volunteer" | "partner" | "sponsor" | "mentor" | "employee";
 
+interface ProgramInitiative {
+  name: string;
+  href: string;
+}
+
 interface ProgramItem {
   id: string;
   category: string;
+  sectorNum: string;
   title: string;
   desc: string;
   image: string;
   stats: string;
   icon: any;
   href: string;
+  initiatives: ProgramInitiative[];
 }
 
 const PROGRAM_LIST: ProgramItem[] = [
   {
     id: "edu-1",
-    category: "Education",
-    title: "Education for All",
-    desc: "Promoting quality primary & secondary education, scholarships, school kit distribution, and digital learning opportunities for rural children.",
+    category: "Education & Learning",
+    sectorNum: "01",
+    title: "Education & Learning",
+    desc: "Promoting quality primary & secondary schooling, school kit distribution, community learning centres, academic talent coaching, higher education scholarships, and technical vocational training.",
     image: causeEducationImg,
-    stats: "18,500+ Students Supported",
+    stats: "8 Key Initiatives • 18,500+ Students",
     icon: BookOpen,
     href: "/programs/education",
+    initiatives: [
+      { name: "Primary School (EPS)", href: "/programs/education/primary-school" },
+      { name: "School Kit & Learning Support (SKLS)", href: "/programs/education/school-kit-learning-support" },
+      { name: "Community Learning Centre (CLC)", href: "/programs/education/community-learning-centre" },
+      { name: "Academic Pathways & Talent (APTD)", href: "/programs/education/academic-pathways-talent-development" },
+      { name: "Scholarships for Higher Education (SHE)", href: "/programs/education/scholarships" },
+      { name: "Career Guidance & Mentorship (CGM)", href: "/programs/education/career-guidance" },
+      { name: "Technical & Vocational Training (TVET)", href: "/programs/education/technical-vocational-training" },
+      { name: "Knowledge, Research & Publication (KRP)", href: "/programs/education/knowledge-research-publication" },
+    ],
   },
   {
     id: "health-1",
-    category: "Healthcare",
-    title: "Healthcare & Community Wellness",
-    desc: "Providing accessible primary healthcare, medical camps, critical emergency support, cervical cancer screening, and rural ambulance services.",
+    category: "Healthcare & Well-being",
+    sectorNum: "02",
+    title: "Healthcare & Well-being",
+    desc: "Providing accessible primary care, free medical checkup camps, critical emergency support, patient financial assistance, diabetes awareness, menstrual hygiene, cervical cancer screening, and rural clinics.",
     image: causeMedicalImg,
-    stats: "1,20,000+ Patients Treated",
+    stats: "8 Key Initiatives • 1,20,000+ Patients",
     icon: Stethoscope,
     href: "/programs/healthcare",
-  },
-  {
-    id: "skills-1",
-    category: "Livelihood & Skills",
-    title: "Skills Development & Vocational Training",
-    desc: "Community skill centres, hands-on technical workshops, digital literacy, and youth employability training.",
-    image: entrepreneurImg,
-    stats: "1,200+ Trainees Certified",
-    icon: Wrench,
-    href: "/programs/skills-development",
+    initiatives: [
+      { name: "Critical Life & Emergency Support (CLES)", href: "/programs/healthcare/critical-life-support" },
+      { name: "Rural Ambulance & Response (RAER)", href: "/programs/healthcare/rural-ambulance" },
+      { name: "Medical Assistance for Poor (MAP)", href: "/programs/healthcare/medical-aid" },
+      { name: "Health Check-up Camps (CHC)", href: "/programs/healthcare/health-checkup-camps" },
+      { name: "Diabetes Prevention Awareness (DPLA)", href: "/programs/healthcare/diabetes-prevention" },
+      { name: "Menstrual Health & Hygiene (MHHS)", href: "/programs/healthcare/menstrual-hygiene" },
+      { name: "Cervical Cancer Screening (CCPA)", href: "/programs/healthcare/cervical-cancer" },
+      { name: "Rural Healthcare Centres (RHWC)", href: "/programs/healthcare/wellness-centres" },
+    ],
   },
   {
     id: "women-1",
-    category: "Women Empowerment",
-    title: "Women Empowerment Initiatives",
-    desc: "Tailoring & garment training, Self-Help Groups (SHG) promotion, financial literacy, and women's rights awareness.",
+    category: "Women & Youth Empowerment",
+    sectorNum: "03",
+    title: "Women & Youth Empowerment",
+    desc: "Unlocking capability, financial self-reliance, leadership, and equality for rural women and young people through vocational trades, Self-Help Groups (SHGs), rights awareness, and youth entrepreneurship.",
     image: causeWomenImg,
-    stats: "2,000+ Women Empowered",
+    stats: "4 Key Initiatives • 2,000+ Women",
     icon: Users,
     href: "/programs/women-empowerment",
+    initiatives: [
+      { name: "Women Skill & Livelihood Programme", href: "/programs/women-empowerment/women-skill-livelihood" },
+      { name: "Self-Help Group Capacity Building", href: "/programs/women-empowerment/self-help-groups" },
+      { name: "Women’s Rights & Equality Awareness", href: "/programs/women-empowerment/womens-rights" },
+      { name: "Youth Career & Entrepreneurship", href: "/programs/women-empowerment/youth-career-entrepreneurship" },
+    ],
   },
   {
-    id: "entrepreneur-1",
-    category: "Entrepreneur Development",
-    title: "Rural Entrepreneurship & Microfinance",
-    desc: "Supporting small rural enterprises, youth entrepreneurship guidance, and interest-free Islah Microfinance options.",
+    id: "skills-1",
+    category: "Skills, Livelihoods & Entrepreneurship",
+    sectorNum: "04",
+    title: "Skills, Livelihoods & Entrepreneurship",
+    desc: "Transforming raw potential into productive capability through market-relevant technical trades, livelihood market linkages, rural enterprise development, and micro-business self-employment mentoring.",
     image: entrepreneurImg,
-    stats: "500+ Micro-Enterprises",
-    icon: Lightbulb,
-    href: "/programs/entrepreneur-development",
+    stats: "4 Key Initiatives • 1,200+ Trainees",
+    icon: Wrench,
+    href: "/programs/skills-development",
+    initiatives: [
+      { name: "Skills & Employability Programme (SEP)", href: "/programs/skills-development/skills-employability" },
+      { name: "Livelihood Development Initiative (LDI)", href: "/programs/skills-development/livelihood-development" },
+      { name: "Rural Entrepreneurship Initiative (REI)", href: "/programs/skills-development/rural-entrepreneurship" },
+      { name: "Micro-Enterprise Support (MSES)", href: "/programs/skills-development/micro-enterprise-support" },
+    ],
   },
   {
     id: "social-justice-1",
-    category: "Social Justice",
+    category: "Social Justice & Legal Empowerment",
+    sectorNum: "05",
     title: "Social Justice & Legal Empowerment",
-    desc: "Rights awareness, community legal literacy camps, institutional accountability, and strategic public interest litigation.",
+    desc: "Safeguarding constitutional dignity, equal opportunity, and social inclusion through grassroots legal literacy camps, lawful judicial remedies, public interest litigation (PIL), and grievance accountability.",
     image: causeWomenImg,
-    stats: "Constitutional & Legal Aid",
+    stats: "4 Key Initiatives • Constitutional Aid",
     icon: Scale,
     href: "/programs/social-justice",
-  },
-  {
-    id: "relief-1",
-    category: "Relief & Rehabilitation",
-    title: "Humanitarian Relief & Disaster Response",
-    desc: "Immediate food packets, ration kits, flood rescue, winter blanket distribution, and marriage assistance for vulnerable families.",
-    image: causeMedicalImg,
-    stats: "8,750+ Families Assisted",
-    icon: Heart,
-    href: "/programs/relief-and-rehabilitation",
-  },
-  {
-    id: "environment-1",
-    category: "Environment",
-    title: "Environment Protection & Green Village",
-    desc: "Tree plantation drives, plastic-free rural campaigns, organic farming promotion, and climate change awareness.",
-    image: environmentImg,
-    stats: "15,000+ Trees Planted",
-    icon: Trees,
-    href: "/programs/environment",
+    initiatives: [
+      { name: "Legal Literacy & Rights Awareness (LRA)", href: "/programs/social-justice/legal-literacy-rights-awareness" },
+      { name: "Social Justice Legal Action (SJLA)", href: "/programs/social-justice/social-justice-legal-action" },
+      { name: "Public Interest Strategic Litigation (PISL)", href: "/programs/social-justice/public-interest-strategic-litigation" },
+      { name: "Grievance & Accountability Initiative (GA)", href: "/programs/social-justice/grievance-accountability" },
+    ],
   },
   {
     id: "agriculture-1",
-    category: "Agriculture",
-    title: "Agriculture & Farmer Support",
-    desc: "Farmer awareness workshops, natural farming methods, water conservation, and agricultural livelihood enhancement.",
+    category: "Agriculture & Rural Livelihoods",
+    sectorNum: "06",
+    title: "Agriculture & Rural Livelihoods",
+    desc: "Empowering smallholder farming households with sustainable agricultural methods, farmer training workshops, organic bio-farming, soil regeneration, and allied livelihood diversification.",
     image: agricultureImg,
-    stats: "2,500+ Farmers Trained",
+    stats: "4 Key Initiatives • 2,500+ Farmers",
     icon: Wheat,
     href: "/programs/agriculture",
+    initiatives: [
+      { name: "Sustainable Agriculture Development (SAD)", href: "/programs/agriculture/sustainable-agriculture" },
+      { name: "Farmer Awareness & Training (FAT)", href: "/programs/agriculture/farmer-training" },
+      { name: "Organic Farming & Natural Agri (ONA)", href: "/programs/agriculture/organic-farming" },
+      { name: "Farmer Livelihood & Income (FLI)", href: "/programs/agriculture/farmer-livelihood" },
+    ],
+  },
+  {
+    id: "environment-1",
+    category: "Environment & Sustainable Development",
+    sectorNum: "07",
+    title: "Environment & Sustainable Development",
+    desc: "Building long-term ecological resilience through grassroots environmental literacy, plastic reduction, village clean community drives, native tree plantations, and sustainable rural resource stewardship.",
+    image: environmentImg,
+    stats: "4 Key Initiatives • 15,000+ Trees",
+    icon: Trees,
+    href: "/programs/environment",
+    initiatives: [
+      { name: "Environmental Awareness Programme (EAP)", href: "/programs/environment/environmental-awareness" },
+      { name: "Green Village & Clean Community (GCC)", href: "/programs/environment/green-village-clean-community" },
+      { name: "Tree Plantation & Greening (TPCG)", href: "/programs/environment/tree-plantation-greening" },
+      { name: "Sustainable Rural Development (SRD)", href: "/programs/environment/sustainable-rural-development" },
+    ],
+  },
+  {
+    id: "relief-1",
+    category: "Humanitarian Relief & Rehabilitation",
+    sectorNum: "08",
+    title: "Humanitarian Relief & Rehabilitation",
+    desc: "Standing with vulnerable families during crisis through emergency disaster response, dry ration kits, flood rescue, seasonal winter warmth, dignified shelter support, and productive livelihood rehabilitation.",
+    image: causeMedicalImg,
+    stats: "4 Key Initiatives • 8,750+ Families",
+    icon: Heart,
+    href: "/programs/relief-and-rehabilitation",
+    initiatives: [
+      { name: "Emergency Relief & Disaster Response (EDR)", href: "/programs/relief-and-rehabilitation/emergency-disaster-response" },
+      { name: "Shelter, Clothing & Necessities (SCN)", href: "/programs/relief-and-rehabilitation/shelter-clothing-necessities" },
+      { name: "Seasonal & Disaster Relief Support (SDSR)", href: "/programs/relief-and-rehabilitation/seasonal-disaster-relief" },
+      { name: "Livelihood Recovery & Rehabilitation (LRR)", href: "/programs/relief-and-rehabilitation/livelihood-recovery-rehabilitation" },
+    ],
   },
 ];
 
 const CATEGORIES = [
   "All Programs",
-  "Education",
-  "Healthcare",
-  "Livelihood & Skills",
-  "Women Empowerment",
-  "Social Justice",
-  "Entrepreneur Development",
-  "Relief & Rehabilitation",
-  "Environment",
-  "Agriculture",
+  "Education & Learning",
+  "Healthcare & Well-being",
+  "Women & Youth Empowerment",
+  "Skills, Livelihoods & Entrepreneurship",
+  "Social Justice & Legal Empowerment",
+  "Agriculture & Rural Livelihoods",
+  "Environment & Sustainable Development",
+  "Humanitarian Relief & Rehabilitation",
 ];
 
 export default function ProgramsMasterPage() {
@@ -197,8 +257,8 @@ export default function ProgramsMasterPage() {
 
               <div className="lg:col-span-5 grid grid-cols-2 gap-4">
                 <div className="bg-white/10 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-white/15 text-center">
-                  <span className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-brand-orange block">25+</span>
-                  <span className="text-[11px] font-semibold text-white/80 uppercase tracking-wider">Programs</span>
+                  <span className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-brand-orange block">36</span>
+                  <span className="text-[11px] font-semibold text-white/80 uppercase tracking-wider">Key Initiatives</span>
                 </div>
                 <div className="bg-white/10 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-white/15 text-center">
                   <span className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-emerald-400 block">1,25,000+</span>
@@ -209,8 +269,8 @@ export default function ProgramsMasterPage() {
                   <span className="text-[11px] font-semibold text-white/80 uppercase tracking-wider">Villages</span>
                 </div>
                 <div className="bg-white/10 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-white/15 text-center">
-                  <span className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-brand-orange block">10+</span>
-                  <span className="text-[11px] font-semibold text-white/80 uppercase tracking-wider">Sectors</span>
+                  <span className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-brand-orange block">8</span>
+                  <span className="text-[11px] font-semibold text-white/80 uppercase tracking-wider">Focus Sectors</span>
                 </div>
               </div>
             </div>
@@ -301,16 +361,41 @@ export default function ProgramsMasterPage() {
                             </div>
                           </div>
                           <div className="p-6 space-y-3">
-                            <div className="flex items-center gap-2 text-brand-green font-bold text-xs uppercase tracking-wider">
-                              <Icon className="w-4 h-4" />
-                              <span>{prog.stats}</span>
+                            <div className="flex items-center justify-between gap-2 text-brand-green font-bold text-xs uppercase tracking-wider">
+                              <div className="flex items-center gap-1.5">
+                                <Icon className="w-4 h-4" />
+                                <span>{prog.stats}</span>
+                              </div>
+                              <span className="text-[11px] font-black text-slate-400 bg-slate-100 px-2 py-0.5 rounded">
+                                Sector {prog.sectorNum}
+                              </span>
                             </div>
-                            <h3 className="text-lg font-bold text-[#0b1f3b] group-hover:text-brand-green transition-colors">
+                            <h3 className="text-xl font-extrabold text-[#0b1f3b] group-hover:text-brand-green transition-colors">
                               {prog.title}
                             </h3>
                             <p className="text-xs text-slate-600 leading-relaxed">
                               {prog.desc}
                             </p>
+
+                            {/* Key Initiatives List */}
+                            {prog.initiatives && prog.initiatives.length > 0 && (
+                              <div className="pt-3 border-t border-slate-100 space-y-1.5">
+                                <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                                  Key Initiatives ({prog.initiatives.length}):
+                                </div>
+                                <div className="flex flex-wrap gap-1.5">
+                                  {prog.initiatives.map((init) => (
+                                    <a
+                                      key={init.name}
+                                      href={init.href}
+                                      className="inline-flex items-center text-[11px] font-medium bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 px-2 py-0.5 rounded transition-colors"
+                                    >
+                                      {init.name}
+                                    </a>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
                           </div>
                         </div>
 
