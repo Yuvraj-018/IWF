@@ -1,3 +1,4 @@
+import { toast } from "@/utils/toast";
 import { useState } from "react";
 import {
   Shield,
@@ -50,6 +51,7 @@ export default function LegalStatusPage() {
   const handleCopy = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
     setCopiedField(label);
+    toast.success(`${label} copied to clipboard!`);
     setTimeout(() => setCopiedField(null), 2000);
   };
 
@@ -70,6 +72,7 @@ export default function LegalStatusPage() {
           docNumber: json.data.documentNo || q,
           details: `Authenticity confirmed in official ISLAH Registry. Issued to: ${json.data.issuedTo} (Date: ${json.data.issueDate})`,
         });
+        toast.success("Document verified successfully in ISLAH registry!");
         return;
       }
     } catch (apiErr) {

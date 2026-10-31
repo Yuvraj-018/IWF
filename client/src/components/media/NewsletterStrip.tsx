@@ -1,3 +1,4 @@
+import { toast } from "@/utils/toast";
 import React, { useState } from "react";
 import { Mail, CheckCircle2 } from "lucide-react";
 
@@ -22,6 +23,7 @@ export function NewsletterStrip({
     if (email.trim()) {
       setSubmitted(true);
       setEmail("");
+      toast.success("Thank you for subscribing to our newsletter!");
       setTimeout(() => setSubmitted(false), 5000);
     }
   };

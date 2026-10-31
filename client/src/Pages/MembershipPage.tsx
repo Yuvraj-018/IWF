@@ -1,10 +1,11 @@
+import { toast } from "sonner";
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Users, Shield, Sparkles, Award, CheckCircle2,
+  Loader2, ShieldCheck, Users, Shield, Sparkles, Award, CheckCircle2,
   Download, ArrowRight, ArrowLeft, Check, AlertCircle,
   Calendar, CreditCard, Smartphone, Building2, Banknote,
   Search, FileText, QrCode, RefreshCw, X,
@@ -106,7 +107,7 @@ const DONOR_TIER_CONFIG: Record<DonorTier, {
 
 type MockMember = {
   id: string; name: string; category: MemberCategory;
-  district: string; state: string; status: "Active" | "Expired";
+  district: string; state: string; status: "Active" | "Expired" | "Pending";
   validTill: string; phone: string; joined: string;
 };
 
@@ -1404,11 +1405,10 @@ function CommunitySelectiveBar({
                   <button
                     key={p.id}
                     onClick={() => setActiveTab(p.id)}
-                    className={`flex items-center gap-2 px-4 sm:px-5 py-2 rounded-xl sm:rounded-full text-xs sm:text-sm font-extrabold transition-all duration-200 whitespace-nowrap cursor-pointer ${
-                      isSelected
+                    className={`flex items-center gap-2 px-4 sm:px-5 py-2 rounded-xl sm:rounded-full text-xs sm:text-sm font-extrabold transition-all duration-200 whitespace-nowrap cursor-pointer ${isSelected
                         ? "bg-[#0b1f3b] text-white shadow-md scale-[1.02]"
                         : "text-slate-600 hover:text-slate-900 hover:bg-white/70"
-                    }`}
+                      }`}
                   >
                     <Icon className={`w-4 h-4 ${isSelected ? "text-brand-orange" : "text-slate-500"}`} />
                     <span>{p.label}</span>
@@ -1422,11 +1422,10 @@ function CommunitySelectiveBar({
           <div className="w-full sm:w-auto flex justify-end shrink-0">
             <button
               onClick={() => setActiveTab("Your Membership")}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl sm:rounded-full text-xs sm:text-sm font-bold border transition-all duration-200 cursor-pointer shadow-xs ${
-                activeTab === "Your Membership"
+              className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl sm:rounded-full text-xs sm:text-sm font-bold border transition-all duration-200 cursor-pointer shadow-xs ${activeTab === "Your Membership"
                   ? "bg-brand-orange text-white border-brand-orange shadow-md"
                   : "bg-white text-slate-700 border-slate-200 hover:border-brand-orange/60 hover:text-brand-orange"
-              }`}
+                }`}
             >
               <Search className="w-3.5 h-3.5" />
               <span>Verify Member ID</span>
@@ -1460,6 +1459,42 @@ function MemberAvatar({ name, category }: { name: string; category: MemberCatego
 // ══════════════════════════════════════════════════════════════════
 
 function MembersTab({ onRenewClick }: { onRenewClick: () => void }) {
+  const [liveMembers, setLiveMembers] = useState<MockMember[]>(MOCK_MEMBERS);
+  const [loadingMembers, setLoadingMembers] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function fetchDirectory() {
+      try {
+        setLoadingMembers(true);
+        const { listMembers } = await import("@/services/memberService");
+        const res = await listMembers({ status: "Active" });
+        if (isMounted && res.success && res.data && res.data.length > 0) {
+          const mapped: MockMember[] = res.data.map((m: any) => ({
+            id: m.id || m.memberNo,
+            name: m.name,
+            category: (["Blue", "Yellow", "Green"].includes(m.category) ? m.category : "Blue") as MemberCategory,
+            district: m.district,
+            state: m.state,
+            status: (m.status === "Expired" ? "Expired" : m.status === "Pending" ? "Pending" : "Active") as "Active" | "Expired" | "Pending",
+            validTill: m.validTill,
+            joined: m.joined || "2026-01-01",
+            phone: m.phone || "Private",
+          }));
+          setLiveMembers(mapped);
+        }
+      } catch (err) {
+        console.warn("Could not load members from backend, using default list:", err);
+      } finally {
+        if (isMounted) setLoadingMembers(false);
+      }
+    }
+    fetchDirectory();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const [categoryFilter, setCategoryFilter] = useState<MemberCategory | "All">("All");
   const [stateFilter, setStateFilter] = useState("All");
   const [districtFilter, setDistrictFilter] = useState("All");
@@ -1467,7 +1502,7 @@ function MembersTab({ onRenewClick }: { onRenewClick: () => void }) {
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 5;
 
-  const filtered = useMemo(() => MOCK_MEMBERS.filter(m => {
+  const filtered = useMemo(() => liveMembers.filter(m => {
     const matchCat = categoryFilter === "All" || m.category === categoryFilter;
     const matchState = stateFilter === "All" || m.state === stateFilter;
     const matchDist = districtFilter === "All" || m.district === districtFilter;
@@ -1488,14 +1523,14 @@ function MembersTab({ onRenewClick }: { onRenewClick: () => void }) {
     setCurrentPage(1);
   };
 
-  const states = useMemo(() => ["All", ...Array.from(new Set(MOCK_MEMBERS.map(m => m.state))).sort()], []);
+  const states = useMemo(() => ["All", ...Array.from(new Set(liveMembers.map(m => m.state))).sort()], [liveMembers]);
 
   const districts = useMemo(() => {
     const list = stateFilter === "All"
-      ? MOCK_MEMBERS.map(m => m.district)
-      : MOCK_MEMBERS.filter(m => m.state === stateFilter).map(m => m.district);
+      ? liveMembers.map(m => m.district)
+      : liveMembers.filter(m => m.state === stateFilter).map(m => m.district);
     return ["All", ...Array.from(new Set(list)).sort()];
-  }, [stateFilter]);
+  }, [liveMembers, stateFilter]);
 
   return (
     <div className="max-w-6xl mx-auto px-4 pt-3">
@@ -2562,28 +2597,21 @@ function Step3ContributionDetails({
 // ══════════════════════════════════════════════════════════════════
 
 function Step4ReviewPayment({
-  form, memberId, joinDate, validTill, onBack, onSubmit,
+  form, memberId, joinDate, validTill, onBack, onSubmit, paying,
 }: {
   form: ReturnType<typeof useForm<MemberFormData, any, MemberFormData>>;
   memberId: string; joinDate: string; validTill: string;
   onBack: () => void; onSubmit: () => void;
+  paying?: boolean;
 }) {
-  const { watch, setValue, register, formState: { errors } } = form;
+  const { watch } = form;
   const data = form.getValues();
   const category = watch("category");
-  const paymentMode = watch("paymentMode");
   const period = watch("membershipPeriod") || "1";
-  const cfg = CATEGORY_CONFIG[category];
+  const cfg = CATEGORY_CONFIG[category] || CATEGORY_CONFIG.Blue;
   const baseAmount = cfg.amount * Number(period);
   const convenienceFee = 50;
   const totalAmount = baseAmount + convenienceFee;
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText("islah-foundation@upi");
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   const reviewRows: [string, string][] = [
     ["Full Name", data.fullName || "—"],
@@ -2647,81 +2675,30 @@ function Step4ReviewPayment({
         </div>
       </div>
 
-      {/* Payment Method */}
-      <div className="mb-5">
-        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Payment Method</p>
+      {/* Razorpay Online Payment Gateway Notice */}
+      <div className="bg-gradient-to-br from-slate-50 to-emerald-50/40 border border-emerald-200/60 rounded-xl p-5 mb-5 shadow-sm">
+        <div className="flex items-center gap-2 mb-2.5">
+          <ShieldCheck className="w-5 h-5 text-emerald-600" />
+          <span className="text-sm font-bold text-slate-800">Secure Online Checkout via Razorpay</span>
+        </div>
+        <p className="text-xs text-slate-600 leading-relaxed mb-4">
+          Complete your membership contribution securely via Razorpay. Supported methods include UPI, Debit &amp; Credit Cards, Net Banking, and Wallets. Your official Member ID and 80G tax receipt are issued instantly.
+        </p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          {([
-            { mode: "UPI" as const, Icon: Smartphone, label: "UPI / QR Code", sub: "Pay using any UPI app" },
-            { mode: "Card" as const, Icon: CreditCard, label: "Credit / Debit Card", sub: "Visa, Mastercard, RuPay" },
-            { mode: "Net Banking" as const, Icon: Building2, label: "Net Banking", sub: "All major banks" },
-            { mode: "Wallet" as const, Icon: Wallet, label: "Wallet", sub: "PhonePe, Paytm etc." },
-          ]).map(({ mode, Icon, label, sub }) => (
-            <button key={mode} type="button"
-              onClick={() => setValue("paymentMode", mode)}
-              className={`flex flex-col items-center gap-1.5 py-3.5 rounded-xl border-2 transition-all text-center ${paymentMode === mode ? "border-brand-green bg-brand-green/5" : "border-slate-200 hover:border-slate-300 bg-white"
-                }`}>
-              <Icon className={`w-5 h-5 ${paymentMode === mode ? "text-brand-green" : "text-slate-400"}`} />
-              <span className={`text-[10px] font-bold leading-tight ${paymentMode === mode ? "text-brand-green" : "text-slate-700"}`}>{label}</span>
-              <span className="text-[9px] text-slate-400 leading-tight">{sub}</span>
-            </button>
+          {[
+            { Icon: Smartphone, label: "UPI & QR", sub: "GPay, PhonePe, Paytm" },
+            { Icon: CreditCard, label: "Cards", sub: "Visa, Mastercard, RuPay" },
+            { Icon: Building2, label: "Net Banking", sub: "All Major Banks" },
+            { Icon: Wallet, label: "Wallets", sub: "Amazon Pay, Mobikwik" },
+          ].map(({ Icon, label, sub }) => (
+            <div key={label} className="flex flex-col items-center p-2.5 rounded-lg bg-white border border-slate-200/80 text-center">
+              <Icon className="w-4 h-4 text-emerald-600 mb-1" />
+              <span className="text-[11px] font-bold text-slate-700">{label}</span>
+              <span className="text-[9px] text-slate-400">{sub}</span>
+            </div>
           ))}
         </div>
       </div>
-
-      {/* UPI QR */}
-      {paymentMode === "UPI" && (
-        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-          className="p-5 bg-gradient-to-br from-brand-green/5 to-emerald-50 border border-brand-green/20 rounded-xl mb-5">
-          <p className="text-xs font-bold text-brand-green-dark mb-3 flex items-center gap-1.5">
-            <QrCode className="w-4 h-4" /> Scan &amp; Pay Using Any UPI App
-          </p>
-          <div className="flex flex-col sm:flex-row items-center gap-6">
-            <div className="w-28 h-28 rounded-xl bg-white border-2 border-brand-green/20 flex items-center justify-center shadow-sm">
-              <QrCode className="w-16 h-16 text-brand-green/40" />
-            </div>
-            <div className="flex-1 space-y-3">
-              <div>
-                <p className="text-xs text-slate-500 mb-1">UPI ID</p>
-                <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 py-2">
-                  <span className="font-mono font-bold text-slate-800 text-sm flex-1">islah-foundation@upi</span>
-                  <button type="button" onClick={handleCopy}
-                    className={`transition text-xs font-bold flex items-center gap-1 ${copied ? "text-brand-green" : "text-slate-400 hover:text-brand-green"}`}>
-                    <Copy className="w-3.5 h-3.5" /> {copied ? "Copied!" : "Copy"}
-                  </button>
-                </div>
-              </div>
-              <p className="text-xs text-slate-500">After payment, enter your transaction ID below and click Submit.</p>
-            </div>
-          </div>
-        </motion.div>
-      )}
-
-      {/* Transaction ID */}
-      <div className="mb-5">
-        <InputLabel>Transaction / UTR / Reference ID</InputLabel>
-        <input {...register("transactionId")} placeholder="e.g. T2507051234567" className={inputCls} />
-      </div>
-
-      {/* Bank details */}
-      {paymentMode === "Net Banking" && (
-        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-          className="p-4 bg-slate-50 border border-slate-200 rounded-xl mb-5">
-          <p className="text-xs font-bold text-slate-700 mb-3">Bank Transfer Details</p>
-          {[
-            ["Account Name", "ISLAH WELFARE FOUNDATION"],
-            ["Account No.", "1004451030069725"],
-            ["Bank", "Uttar Bihar Gramin Bank"],
-            ["IFSC Code", "CBIN0R10001"],
-            ["Account Type", "Saving Account"],
-          ].map(([k, v]) => (
-            <div key={k} className="flex justify-between text-xs py-1 border-b border-slate-100 last:border-0">
-              <span className="text-slate-500 font-semibold">{k}</span>
-              <span className="text-slate-800 font-mono font-bold">{v}</span>
-            </div>
-          ))}
-        </motion.div>
-      )}
 
       {/* Feature footer */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-5 border-t border-slate-100 mb-5">
@@ -2742,13 +2719,21 @@ function Step4ReviewPayment({
       </div>
 
       <div className="flex items-center justify-between">
-        <button type="button" onClick={onBack}
-          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-slate-700 transition">
+        <button type="button" onClick={onBack} disabled={paying}
+          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-slate-700 transition disabled:opacity-50">
           <ArrowLeft className="w-4 h-4" /> Back
         </button>
-        <button type="button" onClick={onSubmit}
-          className="inline-flex items-center gap-2 bg-brand-orange hover:bg-brand-orange-dark text-white font-bold px-8 py-3.5 rounded-xl shadow-lg hover:scale-[1.02] transition-all">
-          <UserCheck className="w-4 h-4" /> Submit Application
+        <button type="button" onClick={onSubmit} disabled={paying}
+          className="inline-flex items-center gap-2 bg-brand-orange hover:bg-brand-orange-dark text-white font-bold px-8 py-3.5 rounded-xl shadow-lg hover:scale-[1.02] transition-all disabled:opacity-50">
+          {paying ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" /> Processing Payment...
+            </>
+          ) : (
+            <>
+              <Lock className="w-4 h-4" /> Pay ₹{totalAmount.toLocaleString("en-IN")} via Razorpay
+            </>
+          )}
         </button>
       </div>
     </motion.div>
@@ -3054,6 +3039,7 @@ function ApplicationFormSection({ preSelectedCategory, onViewMembership }: { pre
 
   const [memberId] = useState(() => generateMemberId(preSelectedCategory || "Blue", Math.floor(10 + Math.random() * 990)));
   const [currentMemberId, setCurrentMemberId] = useState(memberId);
+  const [paying, setPaying] = useState(false);
 
   const scrollToForm = () => {
     document.getElementById("register")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -3066,35 +3052,78 @@ function ApplicationFormSection({ preSelectedCategory, onViewMembership }: { pre
   };
   const handleBack = () => { setStep(s => s - 1); scrollToForm(); };
   const handleSubmit = async () => {
+    setPaying(true);
     try {
       const formData = form.getValues();
-      const { registerMember } = await import("@/services/memberService");
-      const json = await registerMember({
-        fullName: formData.fullName,
-        fatherName: formData.fatherName,
-        category: formData.category,
-        email: formData.email,
-        mobile: formData.mobile,
-        countryCode: formData.countryCode,
-        state: formData.state,
-        district: formData.district,
-        address: formData.address,
-        pincode: formData.pincode,
-        membershipPeriod: formData.membershipPeriod,
-        paymentMode: formData.paymentMode,
-        transactionId: formData.transactionId,
-        paymentDate: formData.paymentDate,
-        consentDisplay: formData.consentDisplay,
+      const cfg = CATEGORY_CONFIG[formData.category] || CATEGORY_CONFIG.Blue;
+      const baseAmount = cfg.amount * Number(formData.membershipPeriod || "1");
+      const convenienceFee = 50;
+      const totalAmount = baseAmount + convenienceFee;
+
+      const { createPaymentOrder, verifyPayment } = await import("@/services/donationService");
+      const { openRazorpayModal } = await import("@/utils/razorpay");
+
+      // 1. Create order on backend
+      const orderRes = await createPaymentOrder({
+        amount: totalAmount,
+        receipt: `mem_${Date.now()}`.slice(0, 40),
       });
-      if (json && json.success && json.member) {
-        if (json.member.memberNo) setCurrentMemberId(json.member.memberNo);
-        if (json.member.receiptNo) setReceiptNo(json.member.receiptNo);
+
+      if (!orderRes.success || !orderRes.order_id) {
+        throw new Error(orderRes.message || "Failed to initialize payment gateway");
       }
-    } catch (err) {
-      console.warn("Could not register member to backend, using client generation:", err);
+
+      // 2. Open Razorpay modal
+      const rzpPayment = await openRazorpayModal({
+        orderId: orderRes.order_id,
+        amount: totalAmount * 100,
+        name: "Islah Welfare Foundation",
+        description: `${formData.category} Membership Subscription (${formData.membershipPeriod || "1"} Year)`,
+        prefill: {
+          name: formData.fullName,
+          email: formData.email,
+          contact: formData.mobile,
+        },
+      });
+
+      // 3. Verify payment signature on backend & persist member
+      const verifyRes = await verifyPayment({
+        razorpay_order_id: rzpPayment.razorpay_order_id,
+        razorpay_payment_id: rzpPayment.razorpay_payment_id,
+        razorpay_signature: rzpPayment.razorpay_signature,
+        memberData: {
+          fullName: formData.fullName,
+          fatherName: formData.fatherName,
+          category: formData.category,
+          amount: totalAmount,
+          membershipPeriod: formData.membershipPeriod,
+          email: formData.email,
+          mobile: formData.mobile,
+          countryCode: formData.countryCode,
+          state: formData.state,
+          district: formData.district,
+          address: formData.address,
+          pincode: formData.pincode,
+          consentDisplay: formData.consentDisplay,
+          paymentMode: "Razorpay / Online",
+        },
+      });
+
+      if (verifyRes.success) {
+        if (verifyRes.entity?.memberNo) setCurrentMemberId(verifyRes.entity.memberNo);
+        if (verifyRes.receiptNo) setReceiptNo(verifyRes.receiptNo);
+        toast.success("Membership payment verified successfully!");
+        setSubmitted(true);
+        scrollToForm();
+      } else {
+        throw new Error(verifyRes.message || "Payment verification could not be completed.");
+      }
+    } catch (err: any) {
+      console.warn("Membership registration payment failed:", err);
+      toast.error(err.message || "Payment cancelled or failed. Please try again.");
+    } finally {
+      setPaying(false);
     }
-    setSubmitted(true);
-    scrollToForm();
   };
 
   const data = form.getValues();
@@ -3145,7 +3174,7 @@ function ApplicationFormSection({ preSelectedCategory, onViewMembership }: { pre
                     photoPreview={photoPreview} setPhotoPreview={setPhotoPreview} />
                 ) : (
                   <Step4ReviewPayment key="s4" form={form} memberId={currentMemberId}
-                    joinDate={joinDate} validTill={validTill} onBack={handleBack} onSubmit={handleSubmit} />
+                    joinDate={joinDate} validTill={validTill} onBack={handleBack} onSubmit={handleSubmit} paying={paying} />
                 )}
               </AnimatePresence>
 
@@ -3327,7 +3356,9 @@ function MemberStatusCheck({
     }
   }, [loadedMember]);
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
+
+
     const found = MOCK_MEMBERS.find(m =>
       m.id.toLowerCase() === query.trim().toLowerCase() || m.phone === query.trim()
     );
@@ -3335,7 +3366,7 @@ function MemberStatusCheck({
     else { setNotFound(true); setOtpSent(false); setResult(null); }
   };
 
-  const handleVerify = () => {
+  const handleVerify = async () => {
     setLoading(true);
     setTimeout(() => {
       setVerified(true);
@@ -3517,27 +3548,31 @@ function RenewalSection({
 
   const handleSearch = async () => {
     const q = query.trim();
+    if (!q) return;
     try {
-      const { checkMemberStatus } = await import("@/services/memberService");
+      const { checkMemberStatus, sendMemberOtp } = await import("@/services/memberService");
       const json = await checkMemberStatus(q);
       if (json && json.success && json.member) {
+        const cat = (["Blue", "Yellow", "Green"].includes(json.member.category) ? json.member.category : "Blue") as MemberCategory;
+        const stat = (json.member.status === "Expired" ? "Expired" : json.member.status === "Pending" ? "Pending" : "Active") as "Active" | "Expired" | "Pending";
         setResult({
           id: json.member.id,
           name: json.member.name,
-          category: json.member.category as MemberCategory,
+          category: cat,
           state: json.member.state,
           district: json.member.district,
-          status: (json.member.status === "Expired" ? "Expired" : "Active") as "Active" | "Expired",
+          status: stat,
           validTill: json.member.validTill,
           joined: json.member.joined,
-          phone: "9811861633",
+          phone: (json.member as any).phone || "9811861633",
         });
+        sendMemberOtp(json.member.id).catch(() => { });
         setStep("otp");
         setNotFound(false);
         return;
       }
     } catch (err) {
-      console.warn("Backend membership query failed, falling back to local records:", err);
+      console.warn("Backend membership query fallback:", err);
     }
 
     const found = MOCK_MEMBERS.find(m =>
@@ -3547,16 +3582,77 @@ function RenewalSection({
     else { setNotFound(true); }
   };
 
-  const handleVerify = () => {
+  const handleVerify = async () => {
     setLoading(true);
-    setTimeout(() => { setStep("select"); setLoading(false); }, 1000);
+    try {
+      if (result) {
+        const { verifyMemberOtp } = await import("@/services/memberService");
+        await verifyMemberOtp(result.id, otp);
+      }
+    } catch (e) {
+      console.warn("OTP verify error:", e);
+    } finally {
+      setLoading(false);
+      setStep("select");
+    }
   };
 
   const handleProceedPayment = () => setStep("payment");
 
-  const handleComplete = () => {
-    if (result) {
-      const newValidTill = addYears(new Date().toISOString().split("T")[0], Number(selectedPeriod));
+  const handleComplete = async () => {
+    if (!result) return;
+    setLoading(true);
+    try {
+      const renewalFee = CATEGORY_CONFIG[result.category].amount * Number(selectedPeriod);
+      const convenienceFee = 50;
+      const totalAmount = renewalFee + convenienceFee;
+
+      const { createPaymentOrder, verifyPayment } = await import("@/services/donationService");
+      const { openRazorpayModal } = await import("@/utils/razorpay");
+
+      const orderRes = await createPaymentOrder({
+        amount: totalAmount,
+        receipt: `ren_${result.id.replace(/[^a-zA-Z0-9]/g, "")}_${Date.now()}`.slice(0, 40),
+      });
+
+      if (!orderRes.success || !orderRes.order_id) {
+        throw new Error(orderRes.message || "Failed to initialize payment gateway");
+      }
+
+      const rzpPayment = await openRazorpayModal({
+        orderId: orderRes.order_id,
+        amount: totalAmount * 100,
+        name: "Islah Welfare Foundation",
+        description: `${result.category} Membership Renewal (${selectedPeriod} Year)`,
+        prefill: {
+          name: result.name,
+          contact: result.phone,
+        },
+      });
+
+      const verifyRes = await verifyPayment({
+        razorpay_order_id: rzpPayment.razorpay_order_id,
+        razorpay_payment_id: rzpPayment.razorpay_payment_id,
+        razorpay_signature: rzpPayment.razorpay_signature,
+        memberData: {
+          isRenewal: true,
+          memberNo: result.id,
+          membershipPeriod: Number(selectedPeriod),
+          amount: totalAmount,
+          paymentMode: "Razorpay / Online",
+          category: result.category,
+          name: result.name,
+          phone: result.phone,
+          state: result.state,
+          district: result.district,
+          email: "",
+        },
+      });
+
+      const newValidTill = verifyRes.entity?.validTill
+        ? new Date(verifyRes.entity.validTill).toISOString().split("T")[0]
+        : addYears(new Date().toISOString().split("T")[0], Number(selectedPeriod));
+
       const updatedMember = {
         ...result,
         validTill: newValidTill,
@@ -3564,8 +3660,14 @@ function RenewalSection({
       };
       setLoadedMember(updatedMember);
       setResult(updatedMember);
+      toast.success("Membership renewed successfully!");
+      setStep("done");
+    } catch (err: any) {
+      console.warn("Renewal payment failed or cancelled:", err);
+      toast.error(err.message || "Payment cancelled or failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    setStep("done");
   };
 
   return (
@@ -3717,7 +3819,7 @@ function RenewalSection({
                       <span className="font-bold">₹{(CATEGORY_CONFIG[result.category].amount * Number(selectedPeriod)).toLocaleString("en-IN")}</span>
                     </div>
                     <div className="flex justify-between text-sm mb-3">
-                      <span className="text-slate-600">Convenience Fee</span>
+                      <span className="text-slate-600">Convenience Fee (Online Processing)</span>
                       <span className="font-bold">₹50</span>
                     </div>
                     <div className="border-t border-slate-200 pt-2 flex justify-between text-base font-extrabold text-brand-green-dark">
@@ -3726,23 +3828,32 @@ function RenewalSection({
                     </div>
                   </div>
 
-                  <div className="p-4 bg-brand-green/5 border border-brand-green/20 rounded-xl">
-                    <p className="text-xs font-bold text-brand-green-dark mb-3"><QrCode className="w-4 h-4 inline mr-1" />Pay via UPI</p>
-                    <p className="text-sm font-mono font-bold text-slate-800 bg-white border border-slate-200 rounded-lg px-3 py-2 flex items-center justify-between">
-                      islah-foundation@upi
-                      <button type="button" onClick={() => navigator.clipboard.writeText("islah-foundation@upi")}
-                        className="text-brand-green"><Copy className="w-4 h-4" /></button>
+                  <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+                    <div className="flex items-center gap-2 text-xs font-bold text-slate-800">
+                      <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                      <span>Instant Renewal via Razorpay Secure Gateway</span>
+                    </div>
+                    <p className="text-xs text-slate-500">
+                      Supports UPI (GPay, PhonePe, Paytm), Credit &amp; Debit Cards (Visa, Mastercard, RuPay), and Net Banking. Your validity is extended instantly upon completion.
                     </p>
                   </div>
 
                   <div className="flex gap-3">
-                    <button onClick={() => setStep("select")}
-                      className="flex-1 py-3 rounded-xl border-2 border-slate-200 text-sm font-semibold text-slate-600 hover:border-slate-300 transition flex items-center justify-center gap-1">
+                    <button onClick={() => setStep("select")} disabled={loading}
+                      className="flex-1 py-3 rounded-xl border-2 border-slate-200 text-sm font-semibold text-slate-600 hover:border-slate-300 transition flex items-center justify-center gap-1 disabled:opacity-50">
                       <ArrowLeft className="w-4 h-4" /> Back
                     </button>
-                    <button onClick={handleComplete}
-                      className="flex-2 flex-1 py-3 rounded-xl bg-brand-orange text-white font-bold text-sm hover:bg-brand-orange-dark transition shadow-md flex items-center justify-center gap-1">
-                      Confirm Renewal <ArrowRight className="w-4 h-4" />
+                    <button onClick={handleComplete} disabled={loading}
+                      className="flex-2 flex-1 py-3 rounded-xl bg-brand-orange text-white font-bold text-sm hover:bg-brand-orange-dark transition shadow-md flex items-center justify-center gap-2 disabled:opacity-50">
+                      {loading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" /> Processing...
+                        </>
+                      ) : (
+                        <>
+                          <Lock className="w-4 h-4" /> Pay &amp; Confirm Renewal
+                        </>
+                      )}
                     </button>
                   </div>
                 </motion.div>

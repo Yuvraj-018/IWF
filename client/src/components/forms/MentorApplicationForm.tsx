@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -213,12 +214,14 @@ export function MentorApplicationForm({ onSuccess, isModal = false }: MentorAppl
       const generatedId = json.applicationId || `ISLAH-MNT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
       setAppId(generatedId);
       setSubmitted(true);
+      toast.success("Mentorship registration submitted successfully!");
       onSuccess?.(generatedId);
     } catch (err: any) {
       console.error("Mentor application error:", err);
       const generatedId = `ISLAH-MNT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
       setAppId(generatedId);
       setSubmitted(true);
+      toast.error(err, "Mentorship registration queued for review.");
       onSuccess?.(generatedId);
     }
   };

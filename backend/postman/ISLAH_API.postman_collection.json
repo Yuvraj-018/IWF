@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "a92e105e-88e2-45e3-9821-islah-collection",
     "name": "ISLAH Backend API",
-    "description": "Complete Postman collection for ISLAH (Islah Welfare Foundation) API services including Donations, 80G Receipts, Memberships, Medical Emergency Patients, Role Applications, Document Verification, and Contact inquiries.",
+    "description": "Complete Postman collection for ISLAH (Islah Welfare Foundation) API services: Razorpay Payments, Memberships, 80G Donations, Emergency Medical Cases, Applications, Document Verification, Contact Queries, File Uploads, and CMS Media.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -14,19 +14,347 @@
   ],
   "item": [
     {
-      "name": "Health Check",
+      "name": "Health & System Status",
       "item": [
         {
-          "name": "Service Health Check",
+          "name": "Health Check",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/health",
-              "host": ["{{baseUrl}}"],
-              "path": ["health"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
             },
-            "description": "Checks the operational status of the ISLAH backend service."
+            "description": "Returns service health and current server timestamp."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Razorpay & Online Payments",
+      "item": [
+        {
+          "name": "Create Razorpay Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 2550,\n  \"receipt\": \"order_rcpt_101\",\n  \"notes\": {\n    \"purpose\": \"Blue Membership Fee\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/create-order",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "create-order"
+              ]
+            },
+            "description": "Creates a real Razorpay order on Razorpay servers and returns order_id, amount, currency, and key_id."
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Payment - Membership Registration",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"razorpay_order_id\": \"order_test_123456789\",\n  \"razorpay_payment_id\": \"pay_test_987654321\",\n  \"razorpay_signature\": \"test_signature_hash\",\n  \"memberData\": {\n    \"fullName\": \"Mohammad Tariq\",\n    \"fatherName\": \"Abdul Rahman\",\n    \"category\": \"Blue\",\n    \"amount\": 2550,\n    \"membershipPeriod\": 1,\n    \"email\": \"tariq@example.com\",\n    \"mobile\": \"9876543210\",\n    \"countryCode\": \"+91\",\n    \"state\": \"Bihar\",\n    \"district\": \"Darbhanga\",\n    \"address\": \"Ward 4, Near Jama Masjid\",\n    \"pincode\": \"846004\",\n    \"consentDisplay\": \"yes\",\n    \"paymentMode\": \"Razorpay / Online\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/verify-payment",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "verify-payment"
+              ]
+            },
+            "description": "Verifies HMAC SHA256 payment signature, activates the member in MongoDB, creates verification certificate, generates receipt number, and dispatches the welcome email."
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Payment - Membership Renewal",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"razorpay_order_id\": \"order_test_ren_123\",\n  \"razorpay_payment_id\": \"pay_test_ren_456\",\n  \"razorpay_signature\": \"test_signature_hash\",\n  \"memberData\": {\n    \"isRenewal\": true,\n    \"memberNo\": \"Islah-BL-2025-001\",\n    \"membershipPeriod\": 1,\n    \"amount\": 2550,\n    \"paymentMode\": \"Razorpay / Online\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/verify-payment",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "verify-payment"
+              ]
+            },
+            "description": "Verifies payment for renewal, extends the member validity date by the selected years, and updates verification certificate."
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Payment - 80G Donation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"razorpay_order_id\": \"order_test_don_123\",\n  \"razorpay_payment_id\": \"pay_test_don_456\",\n  \"razorpay_signature\": \"test_signature_hash\",\n  \"donationData\": {\n    \"donorName\": \"Dr. Zameer Ahmad\",\n    \"donorType\": \"Individual\",\n    \"email\": \"zameer@example.com\",\n    \"phone\": \"9812345678\",\n    \"countryCode\": \"+91\",\n    \"address\": \"Flat 402, Green Valley Apartments\",\n    \"city\": \"Patna\",\n    \"state\": \"Bihar\",\n    \"pincode\": \"800001\",\n    \"financialType\": \"Medical Emergency\",\n    \"amount\": 5000,\n    \"taxExemption\": true,\n    \"pan\": \"ABCDE1234F\",\n    \"patientSlug\": \"mohammed-salim\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/verify-payment",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "verify-payment"
+              ]
+            },
+            "description": "Verifies donation payment, increments raised amount on patient, issues official 80G tax exemption receipt, and emails receipt to donor."
+          },
+          "response": []
+        },
+        {
+          "name": "Razorpay Webhook",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-razorpay-signature",
+                "value": "sample_webhook_signature"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event\": \"payment.captured\",\n  \"payload\": {\n    \"payment\": {\n      \"entity\": {\n        \"id\": \"pay_12345678\",\n        \"order_id\": \"order_12345678\",\n        \"amount\": 255000,\n        \"status\": \"captured\"\n      }\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/webhook/razorpay",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "webhook",
+                "razorpay"
+              ]
+            },
+            "description": "Webhook listener for Razorpay asynchronous payment events (e.g. payment.captured, payment.failed)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Memberships & Community Directory",
+      "item": [
+        {
+          "name": "Register Member (Direct)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Md. Danish Alam\",\n  \"fatherName\": \"Nurul Hoda\",\n  \"category\": \"Yellow\",\n  \"email\": \"danish@example.com\",\n  \"mobile\": \"9811223344\",\n  \"countryCode\": \"+91\",\n  \"state\": \"Bihar\",\n  \"district\": \"Samastipur\",\n  \"address\": \"Main Bazaar Road\",\n  \"pincode\": \"848101\",\n  \"membershipPeriod\": 1,\n  \"paymentMode\": \"Online\",\n  \"consentDisplay\": \"yes\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/members",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "members"
+              ]
+            },
+            "description": "Creates a new member directly in the database with auto-generated memberNo and receipt."
+          },
+          "response": []
+        },
+        {
+          "name": "Check Membership Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/members/status/:memberNo",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "members",
+                "status",
+                ":memberNo"
+              ],
+              "variable": [
+                {
+                  "key": "memberNo",
+                  "value": "Islah-BL-2025-001"
+                }
+              ]
+            },
+            "description": "Checks membership status, category, validTill, and joined date by memberNo or registered phone number."
+          },
+          "response": []
+        },
+        {
+          "name": "List Active Members (Directory)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/members?status=Active&category=All&state=All",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "members"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "Active"
+                },
+                {
+                  "key": "category",
+                  "value": "All"
+                },
+                {
+                  "key": "state",
+                  "value": "All"
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Returns active public members filtered by consentDisplay !== no, sorted by highest annualFee first, then newest joined."
+          },
+          "response": []
+        },
+        {
+          "name": "Send Membership OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"Islah-BL-2025-001\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/members/send-otp",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "members",
+                "send-otp"
+              ]
+            },
+            "description": "Sends a 6-digit OTP for membership renewal/verification. Logs to console with zero cost in dev mode."
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Membership OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"Islah-BL-2025-001\",\n  \"code\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/members/verify-otp",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "members",
+                "verify-otp"
+              ]
+            },
+            "description": "Verifies the OTP code. Supports instant dev bypass with code 123456."
+          },
+          "response": []
+        },
+        {
+          "name": "Renew Membership",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"memberNo\": \"Islah-BL-2025-001\",\n  \"membershipPeriod\": 1,\n  \"paymentMode\": \"Online\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/members/renew",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "members",
+                "renew"
+              ]
+            },
+            "description": "Direct renewal endpoint to extend member validity."
           },
           "response": []
         }
@@ -36,7 +364,7 @@
       "name": "Donations & 80G Receipts",
       "item": [
         {
-          "name": "Create 80G Donation",
+          "name": "Create Donation Record",
           "request": {
             "method": "POST",
             "header": [
@@ -51,22 +379,30 @@
             },
             "url": {
               "raw": "{{baseUrl}}/donations",
-              "host": ["{{baseUrl}}"],
-              "path": ["donations"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "donations"
+              ]
             },
-            "description": "Creates a new donation record, allocates a sequential 80G receipt number (e.g. ISLAH/RCPT/2026-27/000001), links to patient case if provided, and adds to verification registry."
+            "description": "Creates a donation record and generates an 80G receipt number."
           },
           "response": []
         },
         {
-          "name": "List All Donations",
+          "name": "List Donations (Paginated)",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/donations?page=1&limit=20",
-              "host": ["{{baseUrl}}"],
-              "path": ["donations"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "donations"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -78,127 +414,53 @@
                 }
               ]
             },
-            "description": "Lists all donations with pagination."
+            "description": "Retrieves paginated list of donations."
           },
           "response": []
         },
         {
-          "name": "Get Donation by Receipt Number",
+          "name": "Get Donation by Receipt No",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/donations/:receiptNo",
-              "host": ["{{baseUrl}}"],
-              "path": ["donations", ":receiptNo"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "donations",
+                ":receiptNo"
+              ],
               "variable": [
                 {
                   "key": "receiptNo",
-                  "value": "ISLAH/RCPT/2026-27/000001",
-                  "description": "Sequential 80G receipt number"
+                  "value": "ISLAH/RCPT/2026-27/000001"
                 }
               ]
             },
-            "description": "Fetches a specific donation and 80G receipt by its unique receipt number."
+            "description": "Fetches full donation details and tax exemption certificate data by receipt number."
           },
           "response": []
         }
       ]
     },
     {
-      "name": "Memberships",
+      "name": "Emergency Medical Cases (Patients)",
       "item": [
         {
-          "name": "Register New Member",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"Md. Aftab Alam\",\n  \"category\": \"Community\",\n  \"email\": \"aftabalam@email.com\",\n  \"phone\": \"9876543210\",\n  \"state\": \"Bihar\",\n  \"district\": \"Darbhanga\",\n  \"address\": \"Bathiya, Darbhanga, Bihar - 847423\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/members",
-              "host": ["{{baseUrl}}"],
-              "path": ["members"]
-            },
-            "description": "Registers a new member under Community (₹2,500), Contributing (₹4,000), or Patron (₹6,000) tiers, auto-generates Member ID (e.g. ISLAH-CM-2026-001) and adds to Document Verification registry."
-          },
-          "response": []
-        },
-        {
-          "name": "Check Membership Status (Live Lookup)",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/members/status/:memberNo",
-              "host": ["{{baseUrl}}"],
-              "path": ["members", "status", ":memberNo"],
-              "variable": [
-                {
-                  "key": "memberNo",
-                  "value": "ISLAH-CM-2026-001",
-                  "description": "Unique Membership number"
-                }
-              ]
-            },
-            "description": "Verifies membership status (Active vs. Expired), validity dates, tier, and member profile."
-          },
-          "response": []
-        },
-        {
-          "name": "List Members (With Filters)",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/members?category=Community&state=Bihar&status=Active",
-              "host": ["{{baseUrl}}"],
-              "path": ["members"],
-              "query": [
-                {
-                  "key": "category",
-                  "value": "Community"
-                },
-                {
-                  "key": "state",
-                  "value": "Bihar"
-                },
-                {
-                  "key": "status",
-                  "value": "Active"
-                },
-                {
-                  "key": "search",
-                  "value": "Aftab",
-                  "disabled": true
-                }
-              ]
-            },
-            "description": "Retrieves members list filtered by category, state, active status, or search query."
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Patients (Emergency Medical Cases)",
-      "item": [
-        {
-          "name": "List Active Medical Cases",
+          "name": "List Patients",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/patients?urgent=true",
-              "host": ["{{baseUrl}}"],
-              "path": ["patients"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "patients"
+              ],
               "query": [
                 {
                   "key": "urgent",
@@ -206,7 +468,7 @@
                 }
               ]
             },
-            "description": "Returns active emergency medical patient cases, needed amounts, raised funds, and current conditions."
+            "description": "Retrieves urgent emergency patients requiring critical healthcare funding."
           },
           "response": []
         },
@@ -217,22 +479,26 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/patients/:slug",
-              "host": ["{{baseUrl}}"],
-              "path": ["patients", ":slug"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "patients",
+                ":slug"
+              ],
               "variable": [
                 {
                   "key": "slug",
-                  "value": "mohammed-salim",
-                  "description": "Patient slug identifier"
+                  "value": "mohammed-salim"
                 }
               ]
             },
-            "description": "Returns full clinical breakdown, hospital address, admission dates, cost breakdowns, and verification IDs."
+            "description": "Retrieves patient details, hospital estimate, medical history, and fundraising goal status."
           },
           "response": []
         },
         {
-          "name": "Create Patient Medical Case",
+          "name": "Create Patient Case",
           "request": {
             "method": "POST",
             "header": [
@@ -243,40 +509,18 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"slug\": \"mohammed-salim\",\n  \"name\": \"Mohammed Salim\",\n  \"age\": 42,\n  \"gender\": \"Male\",\n  \"disease\": \"Acute Coronary Syndrome with Severe Multi-Vessel Disease\",\n  \"diagnosis\": \"Requires urgent coronary artery bypass graft (CABG) surgery to prevent life-threatening cardiac event.\",\n  \"hospital\": \"AIIMS Patna / Paras HMRI Hospital\",\n  \"hospitalAddress\": \"NH-98, Bailey Road, Patna, Bihar\",\n  \"ward\": \"Cardiology ICU - Bed 14\",\n  \"admissionDate\": \"2026-05-18\",\n  \"condition\": \"Critical\",\n  \"urgent\": true,\n  \"neededAmount\": 285000,\n  \"raisedAmount\": 142000,\n  \"donorsCount\": 28,\n  \"costBreakdown\": [\n    { \"label\": \"CABG Surgery & Surgeon Fees\", \"amount\": 165000 },\n    { \"label\": \"ICU & Post-Operative Monitoring (5 Days)\", \"amount\": 55000 },\n    { \"label\": \"Medications, Consumables & Lab Tests\", \"amount\": 40000 },\n    { \"label\": \"Post-Discharge Rehabilitation (1 Month)\", \"amount\": 25000 }\n  ],\n  \"verificationId\": \"Islah-CLS-2026-001\",\n  \"verifiedBy\": \"ISLAH Medical Welfare Board\",\n  \"verificationDate\": \"2026-05-19\"\n}"
+              "raw": "{\n  \"name\": \"Mohammed Salim\",\n  \"age\": 8,\n  \"gender\": \"Male\",\n  \"condition\": \"Acute Lymphoblastic Leukemia\",\n  \"targetAmount\": 350000,\n  \"hospital\": \"AIIMS New Delhi\",\n  \"location\": \"Darbhanga, Bihar\",\n  \"summary\": \"8-year-old child from an economically weaker family undergoing urgent chemotherapy.\",\n  \"isUrgent\": true,\n  \"slug\": \"mohammed-salim\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/patients",
-              "host": ["{{baseUrl}}"],
-              "path": ["patients"]
-            },
-            "description": "Enrolls a verified emergency patient case under the Har Pal Anmol Hai campaign."
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Document Verification Centre",
-      "item": [
-        {
-          "name": "Verify Any Document / Certificate Number",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/verify/:documentNo",
-              "host": ["{{baseUrl}}"],
-              "path": ["verify", ":documentNo"],
-              "variable": [
-                {
-                  "key": "documentNo",
-                  "value": "ISLAH/RCPT/2026-27/000001",
-                  "description": "Receipt No, Member ID, or Certificate No"
-                }
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "patients"
               ]
             },
-            "description": "Public verification endpoint from legal.txt. Verifies Donation Receipts, Membership Certificates, Volunteer Certificates, and Authorisation Letters."
+            "description": "Registers a new emergency patient profile."
           },
           "response": []
         }
@@ -286,7 +530,7 @@
       "name": "Applications (Get Involved)",
       "item": [
         {
-          "name": "Submit Volunteer Application",
+          "name": "Submit Application (Volunteer / Partner / Sponsor / Mentor)",
           "request": {
             "method": "POST",
             "header": [
@@ -297,49 +541,34 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"type\": \"volunteer\",\n  \"fullName\": \"Zaid Khan\",\n  \"email\": \"zaid.khan@example.com\",\n  \"phone\": \"9876543210\",\n  \"countryCode\": \"+91\",\n  \"city\": \"Darbhanga\",\n  \"state\": \"Bihar\",\n  \"selectedSectors\": [\"Education & Learning\", \"Healthcare & Well-being\"],\n  \"subclassifications\": [\"Digital Education\", \"Community Health Camps\"],\n  \"message\": \"I want to volunteer my weekends teaching students and assisting in health camps.\"\n}"
+              "raw": "{\n  \"type\": \"volunteer\",\n  \"fullName\": \"Aisha Siddiqui\",\n  \"email\": \"aisha@example.com\",\n  \"mobile\": \"9876501234\",\n  \"countryCode\": \"+91\",\n  \"address\": \"Civil Lines, Aligarh\",\n  \"city\": \"Aligarh\",\n  \"state\": \"Uttar Pradesh\",\n  \"pincode\": \"202001\",\n  \"skills\": [\n    \"Community Outreach\",\n    \"Teaching\",\n    \"Health Support\"\n  ],\n  \"motivation\": \"Passionate about grassroots social work.\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/applications",
-              "host": ["{{baseUrl}}"],
-              "path": ["applications"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "applications"
+              ]
             },
-            "description": "Submits a Volunteer application with sector selections."
+            "description": "Submits a role application for volunteers, partners, sponsors, or mentors."
           },
           "response": []
         },
         {
-          "name": "Submit Partner / CSR Application",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"type\": \"partner\",\n  \"fullName\": \"Dr. Amit Sharma\",\n  \"organization\": \"Care & Smile Foundation\",\n  \"email\": \"amit@careandsmile.org\",\n  \"phone\": \"9123456789\",\n  \"countryCode\": \"+91\",\n  \"city\": \"Patna\",\n  \"state\": \"Bihar\",\n  \"selectedSectors\": [\"Healthcare & Well-being\"],\n  \"message\": \"We would like to partner with ISLAH for rural cancer screening initiatives.\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/applications",
-              "host": ["{{baseUrl}}"],
-              "path": ["applications"]
-            },
-            "description": "Submits an institutional, CSR, or NGO partnership proposal."
-          },
-          "response": []
-        },
-        {
-          "name": "List Submitted Applications",
+          "name": "List Applications",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/applications?type=volunteer&status=Pending",
-              "host": ["{{baseUrl}}"],
-              "path": ["applications"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "applications"
+              ],
               "query": [
                 {
                   "key": "type",
@@ -351,7 +580,62 @@
                 }
               ]
             },
-            "description": "Administrative endpoint to review submitted applications."
+            "description": "Lists submitted applications with status and type filtering."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Application by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/applications/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "applications",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "60c72b2f9b1d8b3a4c8e4d2a"
+                }
+              ]
+            },
+            "description": "Fetches single application details."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Document Verification Centre",
+      "item": [
+        {
+          "name": "Verify Document",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/verify/:documentNo",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "verify",
+                ":documentNo"
+              ],
+              "variable": [
+                {
+                  "key": "documentNo",
+                  "value": "ISLAH/RCPT/2026-27/000001"
+                }
+              ]
+            },
+            "description": "Public verification check for 80G Receipts, Member IDs, Volunteer Certificates, and Internship credentials."
           },
           "response": []
         }
@@ -361,7 +645,7 @@
       "name": "Contact & Quick Messages",
       "item": [
         {
-          "name": "Submit Quick Floating Message",
+          "name": "Submit Contact Enquiry",
           "request": {
             "method": "POST",
             "header": [
@@ -372,21 +656,106 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Ravi Ranjan\",\n  \"email\": \"ravi.ranjan@example.com\",\n  \"phone\": \"9811861633\",\n  \"countryCode\": \"+91\",\n  \"message\": \"Can I sponsor a learning kit for rural children in Darbhanga?\",\n  \"source\": \"Quick Float Modal\"\n}"
+              "raw": "{\n  \"name\": \"Ishaan Aggrawal\",\n  \"email\": \"ishaan@example.com\",\n  \"phone\": \"9258895224\",\n  \"countryCode\": \"+91\",\n  \"subject\": \"Partnership Inquiry\",\n  \"message\": \"We would like to partner with Islah Welfare Foundation on upcoming community health camps.\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/contact",
-              "host": ["{{baseUrl}}"],
-              "path": ["contact"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contact"
+              ]
             },
-            "description": "Submits a message from the bottom-right floating quick message widget."
+            "description": "Submits general enquiry or partnership request from contact form."
           },
           "response": []
         },
         {
-          "name": "Submit Contact Page Form",
+          "name": "List Contact Enquiries",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/contact",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contact"
+              ]
+            },
+            "description": "Lists all contact messages received."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Uploads (Cloudinary Service)",
+      "item": [
+        {
+          "name": "Upload Single File",
           "request": {
             "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/upload/single",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "upload",
+                "single"
+              ]
+            },
+            "description": "Uploads a single image/document to Cloudinary and returns secure URL, publicId, and format."
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Multiple Files",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/upload/multiple",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "upload",
+                "multiple"
+              ]
+            },
+            "description": "Uploads up to 10 files in a single request."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Uploaded File",
+          "request": {
+            "method": "DELETE",
             "header": [
               {
                 "key": "Content-Type",
@@ -395,14 +764,136 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Priya Singh\",\n  \"email\": \"priya.singh@example.com\",\n  \"phone\": \"9876543211\",\n  \"countryCode\": \"+91\",\n  \"subject\": \"General Inquiry on Women Skill Center\",\n  \"message\": \"I would like more information on upcoming self-help group capacity workshops.\",\n  \"source\": \"Contact Page\"\n}"
+              "raw": "{\n  \"publicId\": \"islah/uploads/sample_id_123\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/contact",
-              "host": ["{{baseUrl}}"],
-              "path": ["contact"]
+              "raw": "{{baseUrl}}/upload/:publicId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "upload",
+                ":publicId"
+              ],
+              "variable": [
+                {
+                  "key": "publicId",
+                  "value": "islah/uploads/sample_id_123"
+                }
+              ]
             },
-            "description": "Submits a full inquiry from the Contact Us page."
+            "description": "Deletes file from Cloudinary storage by public ID."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Media (CMS Dynamic Assets)",
+      "item": [
+        {
+          "name": "List Media Assets",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/media",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "media"
+              ]
+            },
+            "description": "Lists all dynamic media assets configured for the CMS."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Media by Key",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/media/:key",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "media",
+                ":key"
+              ],
+              "variable": [
+                {
+                  "key": "key",
+                  "value": "home_hero_banner"
+                }
+              ]
+            },
+            "description": "Gets media asset by its unique key."
+          },
+          "response": []
+        },
+        {
+          "name": "Upsert Media Asset",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "key",
+                  "value": "home_hero_banner",
+                  "type": "text"
+                },
+                {
+                  "key": "title",
+                  "value": "Empowering Communities Banner",
+                  "type": "text"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/media",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "media"
+              ]
+            },
+            "description": "Uploads or updates media asset by key."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Media Asset",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/media/:key",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "media",
+                ":key"
+              ],
+              "variable": [
+                {
+                  "key": "key",
+                  "value": "home_hero_banner"
+                }
+              ]
+            },
+            "description": "Deletes media asset by key."
           },
           "response": []
         }

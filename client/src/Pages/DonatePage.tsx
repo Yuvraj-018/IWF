@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -384,6 +385,7 @@ export default function DonatePage() {
       setReceiptNumber(assignedReceiptNo);
       setPaymentDate(`${formattedDate} | ${formattedTime}`);
       setSubmitted(true);
+      toast.success("Donation payment verified successfully! 80G tax receipt issued.");
 
       setTimeout(() => {
         formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });

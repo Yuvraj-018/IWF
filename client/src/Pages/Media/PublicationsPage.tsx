@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { useState, useMemo } from "react";
 import { Download, Search, BookOpen, CheckCircle2, FileText, Mail, ArrowRight } from "lucide-react";
 import { MediaSubpageHero } from "@/components/media/MediaSubpageHero";
@@ -274,7 +275,7 @@ export function PublicationsPage() {
                     className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50"
                   />
                   <button
-                    onClick={() => alert("Thank you for subscribing to our newsletter!")}
+                    onClick={() => toast.success("Thank you for subscribing to our newsletter!")}
                     className="w-full py-2 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl text-xs font-bold transition uppercase tracking-wider"
                   >
                     Subscribe Free

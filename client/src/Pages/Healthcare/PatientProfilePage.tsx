@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { Link, useParams } from "@tanstack/react-router";
 import {
   Home,
@@ -120,7 +121,7 @@ export default function PatientProfilePage() {
       });
     } else {
       navigator.clipboard.writeText(window.location.href);
-      alert("Link copied to clipboard!");
+      toast.success("Link copied to clipboard!");
     }
   };
 

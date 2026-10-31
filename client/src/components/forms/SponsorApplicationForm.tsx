@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -186,12 +187,14 @@ export function SponsorApplicationForm({ onSuccess, isModal = false }: SponsorAp
       const generatedId = json.applicationId || `ISLAH-SPN-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
       setAppId(generatedId);
       setSubmitted(true);
+      toast.success("Sponsorship inquiry submitted successfully!");
       onSuccess?.(generatedId);
     } catch (err: any) {
       console.error("Sponsor application error:", err);
       const generatedId = `ISLAH-SPN-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
       setAppId(generatedId);
       setSubmitted(true);
+      toast.error(err, "Sponsorship inquiry queued for review.");
       onSuccess?.(generatedId);
     }
   };

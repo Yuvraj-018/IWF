@@ -40,15 +40,25 @@ export interface VerifyPaymentParams {
     pledgeMonths?: string;
   };
   memberData?: {
-    name: string;
+    name?: string;
+    fullName?: string;
+    fatherName?: string;
     category: string;
     annualFee?: number;
     amount?: number;
+    membershipPeriod?: number | string;
     email: string;
-    phone: string;
-    state: string;
-    district: string;
+    phone?: string;
+    mobile?: string;
+    countryCode?: string;
+    state?: string;
+    district?: string;
     address?: string;
+    pincode?: string;
+    consentDisplay?: string;
+    paymentMode?: string;
+    isRenewal?: boolean;
+    memberNo?: string;
   };
 }
 

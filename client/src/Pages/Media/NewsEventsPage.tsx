@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   Search,
@@ -9,6 +9,7 @@ import {
   Mail,
   Phone,
   ShieldCheck,
+  Loader2,
 } from "lucide-react";
 import { MediaSubpageHero } from "@/components/media/MediaSubpageHero";
 import { ActionStrip } from "@/components/media/ActionStrip";
@@ -17,14 +18,58 @@ import { StoryModal } from "@/components/media/StoryModal";
 import { MediaLayout } from "@/components/media/MediaLayout";
 import { NEWS_EVENTS_DATA } from "@/content/mediaContent";
 import type { SuccessStoryItem } from "@/content/mediaContent";
+import {
+  fetchNewsEvents,
+  type NewsEventItem,
+  FALLBACK_NEWS_EVENTS,
+  FALLBACK_UPCOMING_EVENTS,
+} from "@/services/newsService";
 
 export function NewsEventsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [activeStory, setActiveStory] = useState<SuccessStoryItem | null>(null);
 
+  // Database news & events state with bundled fallback defaults
+  const [liveItems, setLiveItems] = useState<NewsEventItem[]>(FALLBACK_NEWS_EVENTS);
+  const [liveUpcoming, setLiveUpcoming] = useState<any[]>(FALLBACK_UPCOMING_EVENTS);
+  const [liveCounts, setLiveCounts] = useState<{ name: string; count: number }[] | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+
+    fetchNewsEvents()
+      .then((res) => {
+        if (isMounted && res.success && res.data && res.data.length > 0) {
+          setLiveItems(res.data);
+          if (res.upcomingEvents && res.upcomingEvents.length > 0) {
+            setLiveUpcoming(res.upcomingEvents);
+          }
+          if (res.categoryCounts && res.categoryCounts.length > 0) {
+            setLiveCounts(res.categoryCounts);
+          }
+        }
+      })
+      .catch((err) => {
+        console.warn("Could not load news from backend DB, using fallback content:", err);
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const itemsToDisplay = liveItems || NEWS_EVENTS_DATA.items;
+  const upcomingEvents = liveUpcoming || NEWS_EVENTS_DATA.upcomingEvents;
+  const categoryCounts = liveCounts || NEWS_EVENTS_DATA.categoryCounts;
+
   const filteredItems = useMemo(() => {
-    return NEWS_EVENTS_DATA.items.filter((item) => {
+    return itemsToDisplay.filter((item) => {
       const matchesCat =
         selectedCategory === "All" || item.category === selectedCategory;
       const matchesSearch =
@@ -33,24 +78,26 @@ export function NewsEventsPage() {
         item.category.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesCat && matchesSearch;
     });
-  }, [selectedCategory, searchQuery]);
+  }, [itemsToDisplay, selectedCategory, searchQuery]);
 
-  const handleReadMore = (item: (typeof NEWS_EVENTS_DATA.items)[0]) => {
+  const handleReadMore = (item: any) => {
     const story: SuccessStoryItem = {
-      id: String(item.id),
+      id: String(item.slug || item.id || item._id),
       category: item.category,
       title: item.title,
-      personName: "Media & Communications Desk",
+      personName: item.author || "Media & Communications Desk",
       village: item.date,
-      state: "Field Dispatches & Press",
+      state: item.location || "Field Dispatches & Press",
       excerpt: item.excerpt,
-      fullStory: `${item.excerpt}\n\nISLAH WELFARE FOUNDATION — OFFICIAL DISPATCH\n\nIslah Welfare Foundation (IWF) continues to mobilize localized field leadership, volunteer coordination, and programmatic resources to bring measurable, community-driven change to the grassroots. Through regular monitoring, transparent communication, and dedicated volunteer action, our programs achieve tangible, lasting results for every family and village involved.\n\nFor media queries or on-the-ground interview facilitation, contact the Media Relations Desk at ${NEWS_EVENTS_DATA.sidebarContact.email}.`,
+      fullStory: item.fullStory || `${item.excerpt}\n\nISLAH WELFARE FOUNDATION — OFFICIAL DISPATCH\n\nIslah Welfare Foundation (IWF) continues to mobilize localized field leadership, volunteer coordination, and programmatic resources to bring measurable, community-driven change to the grassroots. Through regular monitoring, transparent communication, and dedicated volunteer action, our programs achieve tangible, lasting results for every family and village involved.\n\nFor media queries or on-the-ground interview facilitation, contact the Media Relations Desk at ${NEWS_EVENTS_DATA.sidebarContact.email}.`,
       image: item.image,
-      impactMetrics: [
-        "Verified Field Report",
-        "Community Participation 100%",
-        "Active Programmatic Oversight",
-      ],
+      impactMetrics: item.impactMetrics && item.impactMetrics.length > 0
+        ? item.impactMetrics
+        : [
+          "Verified Field Report",
+          "Community Participation 100%",
+          "Active Programmatic Oversight",
+        ],
     };
     setActiveStory(story);
   };
@@ -73,21 +120,19 @@ export function NewsEventsPage() {
             <div className="flex flex-wrap gap-2.5">
               <button
                 onClick={() => setSelectedCategory("News & Updates")}
-                className={`px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-wider transition cursor-pointer shadow-sm ${
-                  selectedCategory === "News & Updates"
+                className={`px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-wider transition cursor-pointer shadow-sm ${selectedCategory === "News & Updates"
                     ? "bg-brand-orange text-white"
                     : "bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-sm"
-                }`}
+                  }`}
               >
                 News & Updates
               </button>
               <button
                 onClick={() => setSelectedCategory("Press Releases")}
-                className={`px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-wider transition cursor-pointer shadow-sm ${
-                  selectedCategory === "Press Releases"
+                className={`px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-wider transition cursor-pointer shadow-sm ${selectedCategory === "Press Releases"
                     ? "bg-brand-orange text-white"
                     : "bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-sm"
-                }`}
+                  }`}
               >
                 Press Releases
               </button>
@@ -110,11 +155,10 @@ export function NewsEventsPage() {
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition cursor-pointer ${
-                      selectedCategory === cat
+                    className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition cursor-pointer ${selectedCategory === cat
                         ? "bg-emerald-800 text-white shadow-sm"
                         : "bg-slate-100 hover:bg-slate-200 text-slate-700"
-                    }`}
+                      }`}
                   >
                     {cat}
                   </button>
@@ -138,7 +182,12 @@ export function NewsEventsPage() {
           <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             {/* Main News/Events/Press (8 cols) */}
             <div className="lg:col-span-8">
-              {filteredItems.length === 0 ? (
+              {loading && !liveItems ? (
+                <div className="bg-white rounded-2xl p-12 text-center border border-slate-200 flex flex-col items-center justify-center gap-2 text-slate-500">
+                  <Loader2 className="w-6 h-6 animate-spin text-emerald-700" />
+                  <p className="text-xs font-semibold">Loading verified dispatches from ISLAH database...</p>
+                </div>
+              ) : filteredItems.length === 0 ? (
                 <div className="bg-white rounded-2xl p-12 text-center border border-slate-200">
                   <p className="text-sm font-semibold text-slate-500">
                     No items found matching your selection.
@@ -155,9 +204,9 @@ export function NewsEventsPage() {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {filteredItems.map((item) => (
+                  {filteredItems.map((item: any) => (
                     <div
-                      key={item.id}
+                      key={item.slug || item.id || item._id}
                       className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-md transition flex flex-col group"
                     >
                       <div className="relative h-48 w-full overflow-hidden bg-slate-100">
@@ -198,9 +247,9 @@ export function NewsEventsPage() {
                             <ArrowRight className="w-3.5 h-3.5" />
                           </button>
 
-                          {"pdfUrl" in item && item.pdfUrl && (
+                          {item.pdfUrl && (
                             <a
-                              href={item.pdfUrl as string}
+                              href={item.pdfUrl}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-800 text-[11px] font-bold transition"
@@ -227,7 +276,7 @@ export function NewsEventsPage() {
                 </h3>
 
                 <div className="divide-y divide-slate-100 mt-2">
-                  {NEWS_EVENTS_DATA.upcomingEvents.map((evt, idx) => (
+                  {upcomingEvents.map((evt: any, idx: number) => (
                     <div key={idx} className="py-3.5 flex items-start gap-3">
                       <div className="p-2 rounded-xl bg-emerald-50 text-emerald-800 text-center shrink-0 w-14 border border-emerald-100">
                         <div className="text-[10px] font-bold uppercase tracking-wider">
@@ -241,7 +290,7 @@ export function NewsEventsPage() {
                         </h4>
                         <div className="flex items-center gap-1 text-[11px] text-slate-500 mt-1">
                           <MapPin className="w-3 h-3 text-emerald-600" />
-                          <span>{evt.location}</span>
+                          <span>{evt.location || "Bihar"}</span>
                         </div>
                       </div>
                     </div>
@@ -265,7 +314,7 @@ export function NewsEventsPage() {
                   Categories
                 </h3>
                 <div className="divide-y divide-slate-100 mt-2">
-                  {NEWS_EVENTS_DATA.categoryCounts.map((cat, idx) => (
+                  {categoryCounts.map((cat: any, idx: number) => (
                     <div
                       key={idx}
                       onClick={() => setSelectedCategory(cat.name)}
