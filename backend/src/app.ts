@@ -39,7 +39,9 @@ export function createApp() {
           !origin ||
           /^http:\/\/localhost(:\d+)?$/.test(origin) ||
           /^http:\/\/127\.0\.0\.1(:\d+)?$/.test(origin) ||
-          (process.env.CLIENT_URL && origin === process.env.CLIENT_URL)
+          (process.env.CLIENT_URL && origin === process.env.CLIENT_URL) ||
+          (process.env.CMS_URL && origin === process.env.CMS_URL) ||
+          (process.env.ADMIN_URL && origin === process.env.ADMIN_URL)
         ) {
           callback(null, true);
         } else {
