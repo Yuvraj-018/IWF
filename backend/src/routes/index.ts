@@ -9,6 +9,7 @@ import { uploadRouter } from "./uploadRoutes.js";
 import { paymentRouter } from "./paymentRoutes.js";
 import { mediaRouter } from "./mediaRoutes.js";
 import { newsRouter } from "./newsRoutes.js";
+import { authRouter } from "./authRoutes.js";
 import {
   createOrderController,
   verifyPaymentController,
@@ -40,6 +41,7 @@ apiRouter.use("/upload", uploadRouter);
 apiRouter.use("/payment", paymentRouter);
 apiRouter.use("/media", mediaRouter);
 apiRouter.use("/news", newsRouter);
+apiRouter.use("/auth", authRouter);
 
 // Razorpay Direct Route Aliases
 apiRouter.post("/create-order", orderRateLimiter, createOrderController);
