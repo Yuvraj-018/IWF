@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { toast } from "@/utils/toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -313,11 +314,12 @@ function ContactForm() {
 
       setSubmissionReference(generatedRef);
       setSubmitted(true);
+      toast.success("Enquiry submitted successfully! Reference: " + generatedRef);
     } catch (err: any) {
       console.error("Contact Form error:", err);
-      setSubmitError(
-        err.message || "We couldn't submit your enquiry. Please check your details and try again."
-      );
+      const msg = err?.message || "We couldn't submit your enquiry. Please check your details and try again.";
+      setSubmitError(msg);
+      toast.error(err, "We couldn't submit your enquiry. Please check your details and try again.");
     }
   };
 

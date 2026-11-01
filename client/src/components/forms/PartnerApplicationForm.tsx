@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -191,12 +192,14 @@ export function PartnerApplicationForm({ onSuccess, isModal = false }: PartnerAp
       const generatedId = json.applicationId || `ISLAH-PRT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
       setAppId(generatedId);
       setSubmitted(true);
+      toast.success("Partnership proposal submitted successfully!");
       onSuccess?.(generatedId);
     } catch (err: any) {
       console.error("Partner application error:", err);
       const generatedId = `ISLAH-PRT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
       setAppId(generatedId);
       setSubmitted(true);
+      toast.error(err, "Partnership proposal queued for review.");
       onSuccess?.(generatedId);
     }
   };

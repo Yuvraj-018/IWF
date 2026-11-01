@@ -1,3 +1,4 @@
+import { toast } from "@/utils/toast";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -154,7 +155,7 @@ export function CareerApplicationForm({ onSuccess, isModal = false }: CareerAppl
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        alert("File size exceeds 5MB limit. Please upload a smaller file.");
+        toast.error("File size exceeds 5MB limit. Please upload a smaller file.");
         return;
       }
       setSelectedCvFile(file);

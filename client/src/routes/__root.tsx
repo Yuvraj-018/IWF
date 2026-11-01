@@ -34,6 +34,7 @@ import {
   COUNTRY_CODES,
 } from "@/utils/formValidation";
 
+import { Toaster } from "@/components/ui/sonner";
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
@@ -99,18 +100,63 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Islah Welfare Foundation — Empowering Lives Through Education, Healthcare & Livelihood" },
-      { name: "description", content: "Islah Welfare Foundation works in rural India through education, healthcare, women empowerment and rural development." },
+      { name: "description", content: "Islah Welfare Foundation is a registered non-profit organization in India dedicated to healthcare, quality education, women empowerment, sustainable agriculture, and community welfare with 80G tax exemption." },
+      { name: "keywords", content: "Islah Welfare Foundation, NGO India, 80G Tax Exemption, Healthcare Charity, Education NGO Bihar, Women Empowerment, Rural Development, Donation, Social Justice, Relief" },
       { name: "author", content: "Islah Welfare Foundation" },
-      { property: "og:title", content: "Islah Welfare Foundation" },
-      { property: "og:description", content: "Empowering Lives Through Education, Healthcare & Livelihood" },
+      { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" },
+      { property: "og:locale", content: "en_IN" },
+      { property: "og:site_name", content: "Islah Welfare Foundation" },
+      { property: "og:title", content: "Islah Welfare Foundation — Empowering Communities" },
+      { property: "og:description", content: "Empowering Lives Through Education, Healthcare, Livelihood & Emergency Relief with 80G Tax Exemption." },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
+      { property: "og:url", content: "https://islahwelfare.org" },
+      { property: "og:image", content: "https://islahwelfare.org/og-cover.jpg" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Islah Welfare Foundation — Empowering Communities" },
+      { name: "twitter:description", content: "Dedicated to education, critical healthcare, livelihood, and community relief with 80G tax benefits." },
+      { name: "twitter:image", content: "https://islahwelfare.org/og-cover.jpg" },
     ],
     links: [
+      { rel: "canonical", href: "https://islahwelfare.org" },
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "NGO",
+          "name": "Islah Welfare Foundation",
+          "alternateName": "ISLAH",
+          "url": "https://islahwelfare.org",
+          "logo": "https://islahwelfare.org/logo.png",
+          "description": "Registered non-profit organization in India working in healthcare, education, livelihood, emergency relief, and community welfare with 80G tax exemption.",
+          "taxID": "80G Certified Non-Profit",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Darbhanga",
+            "addressRegion": "Bihar",
+            "postalCode": "846004",
+            "addressCountry": "IN"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+91-9811861633",
+            "contactType": "Customer Support",
+            "email": "contact@islahwelfare.org"
+          },
+          "sameAs": [
+            "https://www.facebook.com",
+            "https://twitter.com",
+            "https://www.instagram.com",
+            "https://www.linkedin.com",
+            "https://youtube.com"
+          ]
+        }),
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -127,6 +173,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
+        <Toaster position="top-right" richColors closeButton />
         <Scripts />
       </body>
     </html>

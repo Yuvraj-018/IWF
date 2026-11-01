@@ -1,3 +1,4 @@
+import { toast } from "@/utils/toast";
 import { useState, useMemo } from "react";
 import { Download, Search, BookOpen, CheckCircle2, FileText, Mail, ArrowRight } from "lucide-react";
 import { MediaSubpageHero } from "@/components/media/MediaSubpageHero";
@@ -256,6 +257,30 @@ export function PublicationsPage() {
                 </div>
               </div>
 
+              {/* Newsletter Subscription Card in Sidebar */}
+              <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                <div className="flex items-center gap-2 text-brand-orange text-xs font-bold uppercase tracking-wider mb-2">
+                  <Mail className="w-4 h-4" />
+                  <span>Quarterly Newsletters</span>
+                </div>
+                <h4 className="text-sm font-semibold text-[#0b1f3b]">Get Our Quarterly Digest</h4>
+                <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
+                  Join 50,000+ donors and changemakers who receive our digital quarterly impact roundup.
+                </p>
+                <div className="mt-4 space-y-2">
+                  <input
+                    type="email"
+                    placeholder="Enter your email address"
+                    className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-orange bg-slate-50"
+                  />
+                  <button
+                    onClick={() => toast.success("Thank you for subscribing to our newsletter!")}
+                    className="w-full py-2 bg-brand-orange hover:bg-orange-600 text-white rounded-xl text-xs font-bold transition uppercase tracking-wider cursor-pointer"
+                  >
+                    Subscribe Free
+                  </button>
+                </div>
+              </div>
               {/* Open Access Card */}
               <div className="bg-gradient-to-br from-[#071527] to-[#0c2340] text-white rounded-2xl p-6 shadow-md border border-slate-800">
                 <div className="text-[10px] font-bold uppercase tracking-wider text-brand-orange mb-2">

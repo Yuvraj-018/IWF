@@ -23,19 +23,21 @@ export interface RegisterMemberPayload {
 }
 
 export interface MemberRecord {
-  memberNo: string;
+  memberNo?: string;
+  id?: string;
   name: string;
-  category: string;
+  category: MemberCategory | string;
   annualFee: number;
-  email: string;
+  email?: string;
   phone: string;
   state: string;
   district: string;
   address?: string;
   status: "Active" | "Expired" | "Pending";
-  validFrom: string;
+  validFrom?: string;
   validTill: string;
-  receiptNo: string;
+  receiptNo?: string;
+  joined?: string;
 }
 
 export interface RegisterMemberResponse {
@@ -60,6 +62,41 @@ export interface MemberStatusResponse {
   };
 }
 
+export interface ListMembersResponse {
+  success: boolean;
+  count: number;
+  data: MemberRecord[];
+}
+
+export interface OtpResponse {
+  success: boolean;
+  message: string;
+  devHint?: string;
+  maskedPhone?: string;
+}
+
+export interface RenewMemberPayload {
+  memberNo: string;
+  membershipPeriod: number;
+  paymentMode?: string;
+  transactionId?: string;
+}
+
+export interface RenewMemberResponse {
+  success: boolean;
+  message: string;
+  member: {
+    id: string;
+    name: string;
+    category: MemberCategory;
+    state: string;
+    district: string;
+    status: string;
+    validTill: string;
+    receiptNo: string;
+  };
+}
+
 export async function registerMember(
   payload: RegisterMemberPayload
 ): Promise<RegisterMemberResponse> {
@@ -75,4 +112,46 @@ export async function checkMemberStatus(
   return apiRequest<MemberStatusResponse>(
     `/members/status/${encodeURIComponent(memberNo)}`
   );
+}
+
+export async function listMembers(params?: {
+  category?: string;
+  state?: string;
+  search?: string;
+  status?: string;
+}): Promise<ListMembersResponse> {
+  const query = new URLSearchParams();
+  if (params?.category && params.category !== "All") query.set("category", params.category);
+  if (params?.state && params.state !== "All") query.set("state", params.state);
+  if (params?.search) query.set("search", params.search);
+  if (params?.status) query.set("status", params.status);
+
+  const qs = query.toString();
+  return apiRequest<ListMembersResponse>(`/members${qs ? `?${qs}` : ""}`);
+}
+
+export async function sendMemberOtp(identifier: string): Promise<OtpResponse> {
+  return apiRequest<OtpResponse>("/members/send-otp", {
+    method: "POST",
+    body: JSON.stringify({ identifier }),
+  });
+}
+
+export async function verifyMemberOtp(
+  identifier: string,
+  code: string
+): Promise<{ success: boolean; message: string }> {
+  return apiRequest<{ success: boolean; message: string }>("/members/verify-otp", {
+    method: "POST",
+    body: JSON.stringify({ identifier, code }),
+  });
+}
+
+export async function renewMember(
+  payload: RenewMemberPayload
+): Promise<RenewMemberResponse> {
+  return apiRequest<RenewMemberResponse>("/members/renew", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
 }

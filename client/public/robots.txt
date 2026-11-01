@@ -1,0 +1,31 @@
+# robots.txt for Islah Welfare Foundation (https://islahwelfare.org)
+
+# ── General Search Engine Crawlers (Googlebot, Bingbot, etc.) ──
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /*?*search=*
+
+# Crawl-delay for polite indexers
+Crawl-delay: 2
+
+# ── AI Model Training Crawlers & Data Scrapers ──
+# Prevent automated AI bots from harvesting public member data & sensitive records
+User-agent: GPTBot
+User-agent: ChatGPT-User
+User-agent: CCBot
+User-agent: ClaudeBot
+User-agent: anthropic-ai
+User-agent: Bytespider
+User-agent: PerplexityBot
+User-agent: Diffbot
+User-agent: cohere-ai
+User-agent: Meta-ExternalAgent
+Disallow: /api/
+Disallow: /membership
+Disallow: /members-and-donors
+Disallow: /admin/
+
+# ── Official Canonical Sitemap ──
+Sitemap: https://islahwelfare.org/sitemap.xml

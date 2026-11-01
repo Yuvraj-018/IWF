@@ -8,6 +8,7 @@ import { Donation } from "../models/Donation.js";
 import { Member, MemberCategory } from "../models/Member.js";
 import { Patient } from "../models/Patient.js";
 import { Verification } from "../models/Verification.js";
+import { sendReceiptEmail, sendMembershipCardEmail } from "../services/emailService.js";
 import {
   generateReceiptNumber,
   generateMemberNumber,
@@ -143,57 +144,137 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
           orderId: razorpay_order_id,
         },
       });
+
+      // Dispatch 80G Donation Receipt email
+      if (donation.email) {
+        sendReceiptEmail(donation.email, {
+          donorName: donation.donorName,
+          receiptNo: createdReceiptNo,
+          amount: donation.amount,
+          cause: donation.financialType,
+          paymentMode: donation.paymentMode,
+          pan: donation.pan,
+          transactionId: donation.transactionId,
+        }).catch((e) => console.warn("Donation receipt email failed:", e));
+      }
     }
 
-    // Handle Member registration upon verified payment
+    // Handle Member registration or renewal upon verified payment
     if (memberData) {
-      const catKey = (memberData.category as MemberCategory) || "Community";
+      const catKey = (memberData.category as MemberCategory) || "Blue";
       const catCode = catKey.slice(0, 2).toUpperCase();
-
-      const memberCount = await Member.countDocuments({ category: catKey });
-      const memberNo = generateMemberNumber(catCode, memberCount + 1);
+      const periodMultiplier = Number(memberData.membershipPeriod) === 2 ? 2 : 1;
 
       const count = await Donation.countDocuments();
       createdReceiptNo = generateReceiptNumber(count + 1);
 
-      const validFrom = new Date();
-      const validTill = new Date();
-      validTill.setFullYear(validTill.getFullYear() + 1);
+      if (memberData.isRenewal && memberData.memberNo) {
+        // ── RENEWAL FLOW VIA RAZORPAY ──
+        const existing = await Member.findOne({
+          memberNo: { $regex: new RegExp(`^${memberData.memberNo.trim()}$`, "i") },
+        });
 
-      const member = new Member({
-        memberNo,
-        name: memberData.name,
-        category: catKey,
-        annualFee: Number(memberData.amount || memberData.annualFee || 2500),
-        email: memberData.email,
-        phone: memberData.phone,
-        state: memberData.state,
-        district: memberData.district,
-        address: memberData.address,
-        status: "Active",
-        validFrom,
-        validTill,
-        receiptNo: createdReceiptNo,
-      });
+        if (existing) {
+          const now = new Date();
+          const baseDate = existing.validTill > now ? existing.validTill : now;
+          const newValidTill = new Date(baseDate);
+          newValidTill.setFullYear(newValidTill.getFullYear() + periodMultiplier);
 
-      savedEntity = await member.save();
+          existing.validTill = newValidTill;
+          existing.status = "Active";
+          existing.receiptNo = createdReceiptNo;
+          existing.paymentMode = "Razorpay / Online";
+          existing.transactionId = razorpay_payment_id;
+          await existing.save();
+          savedEntity = existing;
 
-      // Add to Document Verification Centre
-      await Verification.create({
-        documentNo: memberNo,
-        documentType: "membership_certificate",
-        title: `Official Membership Certificate - ${catKey}`,
-        issuedTo: memberData.name,
-        issueDate: validFrom,
-        validTill,
-        status: "Verified",
-        details: {
+          // Update Verification Record
+          await Verification.findOneAndUpdate(
+            { documentNo: existing.memberNo },
+            {
+              validTill: newValidTill,
+              status: "Verified",
+              $set: { "details.receiptNo": createdReceiptNo },
+            },
+            { upsert: true }
+          );
+
+          if (existing.email) {
+            sendMembershipCardEmail(existing.email, {
+              name: existing.name,
+              memberNo: existing.memberNo,
+              category: existing.category,
+              validTill: newValidTill.toISOString().split("T")[0],
+              annualFee: existing.annualFee,
+              receiptNo: createdReceiptNo,
+            }).catch((e) => console.warn("Renewal email notification failed:", e));
+          }
+        }
+      } else {
+        // ── NEW MEMBER REGISTRATION VIA RAZORPAY ──
+        const memberCount = await Member.countDocuments({ category: catKey });
+        const memberNo = generateMemberNumber(catCode, memberCount + 1);
+
+        const validFrom = new Date();
+        const validTill = new Date();
+        validTill.setFullYear(validTill.getFullYear() + periodMultiplier);
+
+        const member = new Member({
           memberNo,
+          name: (memberData.fullName || memberData.name || "").trim(),
+          fatherName: memberData.fatherName,
           category: catKey,
+          annualFee: Number(memberData.amount || memberData.annualFee || 2500),
+          membershipPeriod: periodMultiplier,
+          email: (memberData.email || "").trim(),
+          phone: (memberData.mobile || memberData.phone || "").trim(),
+          countryCode: memberData.countryCode || "+91",
+          state: memberData.state || "Bihar",
+          district: memberData.district || "Darbhanga",
+          address: memberData.address,
+          pincode: memberData.pincode,
+          consentDisplay: memberData.consentDisplay,
+          status: "Active",
+          validFrom,
+          validTill,
+          receiptNo: createdReceiptNo,
+          paymentMode: "Razorpay / Online",
           transactionId: razorpay_payment_id,
-          orderId: razorpay_order_id,
-        },
-      });
+        });
+
+        savedEntity = await member.save();
+
+        // Add to Document Verification Centre
+        await Verification.create({
+          documentNo: memberNo,
+          documentType: "membership_certificate",
+          title: `Official Membership Certificate - ${catKey}`,
+          issuedTo: member.name,
+          issueDate: validFrom,
+          validTill,
+          status: "Verified",
+          details: {
+            memberNo,
+            category: catKey,
+            district: member.district,
+            state: member.state,
+            transactionId: razorpay_payment_id,
+            orderId: razorpay_order_id,
+          },
+        });
+
+        // Dispatch Membership card welcome email
+        if (member.email) {
+          sendMembershipCardEmail(member.email, {
+            name: member.name,
+            memberNo: member.memberNo,
+            category: member.category,
+            validTill: validTill.toISOString().split("T")[0],
+            annualFee: member.annualFee,
+            receiptNo: createdReceiptNo,
+          }).catch((e) => console.warn("Member card email failed:", e));
+        }
+      }
     }
 
     res.status(200).json({
@@ -292,4 +373,3 @@ export async function handleWebhookController(req: Request, res: Response): Prom
     res.status(500).json({ success: false, message: "Webhook processing error" });
   }
 }
-

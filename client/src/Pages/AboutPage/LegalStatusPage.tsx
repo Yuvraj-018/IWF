@@ -1,3 +1,4 @@
+import { toast } from "@/utils/toast";
 import { useState } from "react";
 import {
   Shield,
@@ -40,6 +41,7 @@ export default function LegalStatusPage() {
   const handleCopy = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
     setCopiedField(label);
+    toast.success(`${label} copied to clipboard!`);
     setTimeout(() => setCopiedField(null), 2000);
   };
 

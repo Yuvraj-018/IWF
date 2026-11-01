@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -224,10 +225,12 @@ export function VolunteerApplicationForm({ onSuccess, isModal = false }: Volunte
       const newAppId = json.applicationId || `ISLAH-VOL-${new Date().getFullYear()}-${Date.now().toString().slice(-4)}`;
       setAppId(newAppId);
       setSubmitted(true);
+      toast.success("Volunteer application submitted successfully!");
       onSuccess?.(newAppId);
     } catch (err: any) {
       console.error("Volunteer submission error:", err);
       setApiError(err.message || "Could not submit application. Please try again.");
+      toast.error(err, "Could not submit application. Please try again.");
     }
   };
 
