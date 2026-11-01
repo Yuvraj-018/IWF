@@ -1,6 +1,6 @@
 export default function FinalQuote({ onOpenModal }: { onOpenModal: (type: "volunteer" | "partner" | "sponsor" | "mentor" | "employee") => void }) {
   return (
-    <section className="bg-brand-green py-20 px-4 text-center">
+    <section className="bg-gradient-to-r from-[#071527] via-[#0b1f3b] to-[#0c2340] py-20 px-4 text-center border-t border-slate-800">
       <div className="max-w-4xl mx-auto flex flex-col items-center">
         <span className="text-brand-orange text-6xl md:text-8xl font-serif leading-none mb-4 block">"</span>
         

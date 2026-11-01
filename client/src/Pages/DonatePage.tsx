@@ -145,6 +145,19 @@ const donorSchema = z.object({
         path: ["pan"],
       });
     }
+
+    const hasPanFile =
+      data.panFile instanceof File ||
+      (typeof data.panFile === "string" && data.panFile.trim().length > 0) ||
+      (data.panFile && typeof data.panFile === "object" && "name" in data.panFile);
+
+    if (!hasPanFile) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Please upload an image or document of your PAN card",
+        path: ["panFile"],
+      });
+    }
   }
 });
 
@@ -208,8 +221,8 @@ export default function DonatePage() {
       state: "Bihar",
       city: "Darbhanga",
       pincode: "846004",
-      taxExemption: true,
-      pan: "AACTS7973G",
+      taxExemption: false,
+      pan: "",
       websiteConsent: "Yes",
       citizenDeclaration: true,
       termsAgreement: true,
@@ -410,19 +423,9 @@ export default function DonatePage() {
         {/* ─── Hero Header: Standard Deep Navy Hero ─────────────────────────── */}
         <StandardPageHero
           badge="SUPPORT OUR MISSION • DONATE"
-          title={
-            <>
-              Donate &amp; <span className="text-brand-orange">Make a Difference</span>
-            </>
-          }
+          title="Donate & Make a Difference"
           description="Your contribution empowers lives, provides emergency medical aid to impoverished patients, and educates vulnerable children. 100% Tax Exempted under Section 80G."
           breadcrumb={[{ label: "Donate & Support" }]}
-          cards={[
-            { icon: Shield, title: "100% 80G", subtitle: "Tax Exemption", href: "#donation-form" },
-            { icon: Heart, title: "Direct Aid", subtitle: "Transparent Action", href: "#donation-form" },
-            { icon: Award, title: "Instant Receipt", subtitle: "Instant PDF Download", href: "#donation-form" },
-            { icon: Building2, title: "Audited NGO", subtitle: "Registered Trust", href: "#donation-form" },
-          ]}
           taglineTop="Give Hope"
           taglineMid="Save A Life"
           taglineBot="Today"
@@ -924,36 +927,51 @@ export default function DonatePage() {
 
                               <div className="grid sm:grid-cols-2 gap-3 pt-1">
                                 <div>
-                                  <label className="block text-[11px] font-bold text-slate-600 mb-1">
-                                    PAN Card *
+                                  <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                                    PAN Card Document / Image <span className="text-red-500">*</span>
                                   </label>
-                                  <label className="flex items-center justify-center gap-2 h-9 px-3 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 cursor-pointer">
+                                  <label className="flex items-center justify-center gap-2 h-9 px-3 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 cursor-pointer transition">
                                     <Upload className="w-3.5 h-3.5 text-brand-green" />
-                                    <span>{panFileName || "Upload PAN Card"}</span>
+                                    <span className="truncate max-w-[180px]">{panFileName || "Upload PAN Card"}</span>
                                     <input
                                       type="file"
                                       accept="image/*,.pdf"
                                       className="hidden"
                                       onChange={(e) => {
-                                        if (e.target.files?.[0]) setPanFileName(e.target.files[0].name);
+                                        const file = e.target.files?.[0];
+                                        if (file) {
+                                          setPanFileName(file.name);
+                                          setValue("panFile", file, { shouldValidate: true });
+                                        } else {
+                                          setPanFileName(null);
+                                          setValue("panFile", undefined, { shouldValidate: true });
+                                        }
                                       }}
                                     />
                                   </label>
+                                  <FieldError msg={(errors.panFile as any)?.message} />
                                 </div>
 
                                 <div>
                                   <label className="block text-[11px] font-bold text-slate-600 mb-1">
-                                    Photo (Optional)
+                                    Photo <span className="text-slate-400 font-normal">(Optional)</span>
                                   </label>
-                                  <label className="flex items-center justify-center gap-2 h-9 px-3 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 cursor-pointer">
+                                  <label className="flex items-center justify-center gap-2 h-9 px-3 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 cursor-pointer transition">
                                     <Upload className="w-3.5 h-3.5 text-slate-500" />
-                                    <span>{photoFileName || "Upload Photo (Optional)"}</span>
+                                    <span className="truncate max-w-[180px]">{photoFileName || "Upload Photo (Optional)"}</span>
                                     <input
                                       type="file"
                                       accept="image/*"
                                       className="hidden"
                                       onChange={(e) => {
-                                        if (e.target.files?.[0]) setPhotoFileName(e.target.files[0].name);
+                                        const file = e.target.files?.[0];
+                                        if (file) {
+                                          setPhotoFileName(file.name);
+                                          setValue("photoFile", file, { shouldValidate: false });
+                                        } else {
+                                          setPhotoFileName(null);
+                                          setValue("photoFile", undefined, { shouldValidate: false });
+                                        }
                                       }}
                                     />
                                   </label>

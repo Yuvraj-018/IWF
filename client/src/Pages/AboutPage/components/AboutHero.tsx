@@ -19,8 +19,8 @@ export default function AboutHero() {
 
           {/* H1 */}
           <h1 className="mb-3">
-            <span className="block text-4xl md:text-5xl font-extrabold text-white leading-tight">ABOUT US</span>
-            <span className="block text-4xl md:text-5xl font-extrabold text-brand-orange leading-tight">ISLAH WELFARE FOUNDATION</span>
+            <span className="block text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight text-white leading-tight">ABOUT US</span>
+            <span className="block text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight text-brand-orange leading-tight">ISLAH WELFARE FOUNDATION</span>
           </h1>
 
           <p className="text-base md:text-lg text-slate-200 mb-3">

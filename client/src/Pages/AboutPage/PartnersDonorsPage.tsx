@@ -130,51 +130,27 @@ export default function PartnersDonorsPage() {
           { label: "About Us", href: "/about" },
           { label: "Partners & Sponsors" },
         ]}
-      />
-
-      {/* ─── Quick Actions & 4 Pillars Floating Bar ─────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-4 md:px-8 -mt-6 relative z-20 mb-8">
-        <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-md flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-3">
-            <button
-              onClick={() => setActiveModal("partner")}
-              className="inline-flex items-center gap-2 bg-[#15803d] hover:bg-[#166534] text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-md transition uppercase tracking-wider cursor-pointer"
-            >
-              <Handshake className="w-3.5 h-3.5" />
-              <span>PARTNER WITH ISLAH</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-            <button
-              onClick={() => setActiveModal("sponsor")}
-              className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-md transition uppercase tracking-wider cursor-pointer"
-            >
-              <Award className="w-3.5 h-3.5 text-amber-300" />
-              <span>SPONSOR A PROGRAMME</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full md:w-auto">
-            <div className="bg-slate-50 px-3 py-2 rounded-lg border border-slate-100 text-center">
-              <span className="text-[11px] font-bold text-slate-800 block truncate">Shared Purpose</span>
-              <span className="text-[10px] text-slate-500">Real Needs</span>
-            </div>
-            <div className="bg-slate-50 px-3 py-2 rounded-lg border border-slate-100 text-center">
-              <span className="text-[11px] font-bold text-slate-800 block truncate">Stronger Impact</span>
-              <span className="text-[10px] text-slate-500">Deep Reach</span>
-            </div>
-            <div className="bg-slate-50 px-3 py-2 rounded-lg border border-slate-100 text-center">
-              <span className="text-[11px] font-bold text-slate-800 block truncate">Sustainability</span>
-              <span className="text-[10px] text-slate-500">Long-term</span>
-            </div>
-            <div className="bg-slate-50 px-3 py-2 rounded-lg border border-slate-100 text-center">
-              <span className="text-[11px] font-bold text-slate-800 block truncate">Accountability</span>
-              <span className="text-[10px] text-slate-500">100% Verified</span>
-            </div>
-          </div>
+      >
+        <div className="flex flex-wrap items-center gap-3 pt-2">
+          <button
+            type="button"
+            onClick={() => setActiveModal("partner")}
+            className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold px-6 sm:px-7 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer"
+          >
+            <Handshake className="w-4 h-4" />
+            <span>PARTNER WITH ISLAH</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveModal("sponsor")}
+            className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer backdrop-blur-xs"
+          >
+            <Heart className="w-4 h-4 text-brand-orange" />
+            <span>SPONSOR A PROGRAMME</span>
+          </button>
         </div>
-      </div>
-
+      </SubpageHeroCarousel>
 
       {/* ─── Section: Our Partners & Supporters Logo Marquee ────────────────── */}
       <section className="py-8 px-4 bg-white border-b border-slate-200 overflow-hidden">
@@ -437,10 +413,10 @@ export default function PartnersDonorsPage() {
                       </div>
 
                       <div>
-                        <h4 className="font-extrabold text-slate-900 text-xs leading-snug">
+                        <h4 className="font-bold text-slate-900 text-xs leading-snug">
                           {model.title}
                         </h4>
-                        <p className="text-[10px] text-slate-600 leading-relaxed mt-1">
+                        <p className="text-xs text-black font-normal leading-relaxed mt-1">
                           {model.desc}
                         </p>
                       </div>
@@ -460,12 +436,12 @@ export default function PartnersDonorsPage() {
 
         {/* ─── Section: FROM COLLABORATION TO IMPACT (Full-width Banner) ──── */}
         <ScrollReveal>
-          <div className="bg-gradient-to-r from-slate-950 via-[#0b1f3b] to-slate-950 text-white rounded-2xl p-5 sm:p-6 shadow-xl border border-white/10 space-y-4">
+          <div className="bg-gradient-to-r from-[#071527] to-[#0c2340] text-white rounded-2xl p-5 sm:p-6 shadow-md border border-slate-800 space-y-4">
             <div className="text-center max-w-xl mx-auto space-y-1">
-              <span className="text-[11px] font-black uppercase tracking-widest text-emerald-400">
+              <span className="text-[11px] font-semibold uppercase tracking-widest text-brand-orange">
                 VALUE CREATION PATHWAY
               </span>
-              <h3 className="text-lg sm:text-xl font-black text-white tracking-tight">
+              <h3 className="text-base sm:text-lg font-semibold text-white tracking-tight">
                 FROM COLLABORATION TO IMPACT
               </h3>
               <p className="text-xs text-slate-300">
@@ -477,7 +453,7 @@ export default function PartnersDonorsPage() {
               <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 text-center border border-white/15 flex flex-col items-center justify-between">
                 <Users className="w-5 h-5 text-[#38bdf8] mb-1" />
                 <div>
-                  <h5 className="font-black text-xs text-white">PARTNERS & SPONSORS</h5>
+                  <h5 className="font-semibold text-xs text-white">PARTNERS & SPONSORS</h5>
                   <p className="text-[9px] text-slate-300 mt-0.5">Expertise • Resources • Technology</p>
                 </div>
               </div>
@@ -485,7 +461,7 @@ export default function PartnersDonorsPage() {
               <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 text-center border border-white/15 flex flex-col items-center justify-between">
                 <Lightbulb className="w-5 h-5 text-amber-400 mb-1" />
                 <div>
-                  <h5 className="font-black text-xs text-white">ISLAH</h5>
+                  <h5 className="font-semibold text-xs text-white">ISLAH</h5>
                   <p className="text-[9px] text-slate-300 mt-0.5">Planning • Implementation</p>
                 </div>
               </div>
@@ -493,7 +469,7 @@ export default function PartnersDonorsPage() {
               <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 text-center border border-white/15 flex flex-col items-center justify-between">
                 <Home className="w-5 h-5 text-emerald-400 mb-1" />
                 <div>
-                  <h5 className="font-black text-xs text-white">COMMUNITIES</h5>
+                  <h5 className="font-semibold text-xs text-white">COMMUNITIES</h5>
                   <p className="text-[9px] text-slate-300 mt-0.5">Participation • Ownership</p>
                 </div>
               </div>
@@ -501,7 +477,7 @@ export default function PartnersDonorsPage() {
               <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 text-center border border-white/15 flex flex-col items-center justify-between">
                 <BookOpen className="w-5 h-5 text-rose-400 mb-1" />
                 <div>
-                  <h5 className="font-black text-xs text-white">OPPORTUNITIES</h5>
+                  <h5 className="font-semibold text-xs text-white">OPPORTUNITIES</h5>
                   <p className="text-[9px] text-slate-300 mt-0.5">Education • Health • Skills</p>
                 </div>
               </div>
@@ -509,15 +485,15 @@ export default function PartnersDonorsPage() {
               <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 text-center border border-white/15 flex flex-col items-center justify-between">
                 <TrendingUp className="w-5 h-5 text-yellow-300 mb-1" />
                 <div>
-                  <h5 className="font-black text-xs text-white">OUTCOMES</h5>
+                  <h5 className="font-semibold text-xs text-white">OUTCOMES</h5>
                   <p className="text-[9px] text-slate-300 mt-0.5">Capability • Resilience</p>
                 </div>
               </div>
 
-              <div className="bg-emerald-600/30 backdrop-blur-md rounded-xl p-3 text-center border border-emerald-400/40 flex flex-col items-center justify-between">
+              <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 text-center border border-white/15 flex flex-col items-center justify-between">
                 <Award className="w-5 h-5 text-emerald-300 mb-1" />
                 <div>
-                  <h5 className="font-black text-xs text-emerald-300">LASTING IMPACT</h5>
+                  <h5 className="font-semibold text-xs text-emerald-300">LASTING IMPACT</h5>
                   <p className="text-[9px] text-slate-200 mt-0.5">Stronger Communities</p>
                 </div>
               </div>
@@ -629,7 +605,7 @@ export default function PartnersDonorsPage() {
             <div className="pt-1">
               <button
                 onClick={() => setActiveModal("partner")}
-                className="w-full bg-[#0b1f3b] hover:bg-[#163a69] text-white font-extrabold text-xs py-2.5 rounded-xl transition shadow-sm uppercase tracking-wider cursor-pointer"
+                className="w-full bg-[#0b1f3b] hover:bg-[#163a69] text-white font-semibold text-xs py-2.5 rounded-xl transition shadow-sm uppercase tracking-wider cursor-pointer"
               >
                 Initiate Collaboration →
               </button>
@@ -639,16 +615,16 @@ export default function PartnersDonorsPage() {
 
         {/* ─── Section: Bottom Banner CTA ──────────────────────────────────── */}
         <ScrollReveal>
-          <div className="bg-gradient-to-r from-emerald-800 via-[#15803d] to-teal-900 rounded-2xl p-5 sm:p-6 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+          <div className="bg-gradient-to-r from-[#071527] to-[#0c2340] border border-slate-800 rounded-2xl p-5 sm:p-6 text-white shadow-lg flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
             <div className="flex items-center gap-3.5">
-              <div className="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center shrink-0">
-                <Heart className="w-5 h-5 text-white" />
+              <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shrink-0">
+                <Heart className="w-5 h-5 text-brand-orange" />
               </div>
               <div>
-                <h4 className="text-base sm:text-lg font-black text-white">
+                <h4 className="text-sm sm:text-base font-semibold text-white">
                   Be a Partner. Be a Sponsor. Be a Changemaker.
                 </h4>
-                <p className="text-xs text-emerald-100 mt-0.5">
+                <p className="text-xs text-slate-300 mt-0.5">
                   Join ISLAH in building opportunities and transforming lives.
                 </p>
               </div>
@@ -657,13 +633,13 @@ export default function PartnersDonorsPage() {
             <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
               <button
                 onClick={() => setActiveModal("partner")}
-                className="bg-white hover:bg-slate-100 text-[#15803d] font-black text-xs px-4 py-2.5 rounded-xl shadow-md transition uppercase tracking-wider cursor-pointer"
+                className="bg-brand-orange hover:bg-orange-600 text-white font-semibold text-xs px-4 py-2.5 rounded-xl shadow-md transition-all duration-200 hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer"
               >
                 PARTNER WITH US →
               </button>
               <button
                 onClick={() => setActiveModal("sponsor")}
-                className="bg-black/20 hover:bg-black/30 border border-white/30 text-white font-black text-xs px-4 py-2.5 rounded-xl shadow-md transition uppercase tracking-wider cursor-pointer backdrop-blur-xs"
+                className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold text-xs px-4 py-2.5 rounded-xl shadow-md transition-all duration-200 hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer backdrop-blur-xs"
               >
                 SPONSOR NOW →
               </button>

@@ -2,7 +2,6 @@ import { useState, useMemo } from "react";
 import { Play, Eye, Image as ImageIcon, Video, Filter } from "lucide-react";
 import { MediaSubpageHero } from "@/components/media/MediaSubpageHero";
 import { ActionStrip } from "@/components/media/ActionStrip";
-import { NewsletterStrip } from "@/components/media/NewsletterStrip";
 import { ImageLightboxModal, VideoModal } from "@/components/media/MediaLightboxModals";
 import { MediaLayout } from "@/components/media/MediaLayout";
 import { GALLERY_DATA } from "@/content/mediaContent";
@@ -204,14 +203,7 @@ export function GalleryPage() {
           )}
         </section>
 
-        {/* 5. Newsletter Strip */}
-        <NewsletterStrip
-          title="Stay Connected with Our Visual Stories"
-          description="Get photo essays, project documentaries, and community impact highlights sent to your inbox."
-          buttonText="Subscribe Now"
-        />
-
-        {/* 6. Action Strip */}
+        {/* 5. Action Strip */}
         <ActionStrip />
       </div>
 

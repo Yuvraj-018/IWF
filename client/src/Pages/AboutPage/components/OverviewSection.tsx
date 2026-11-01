@@ -30,14 +30,14 @@ export default function OverviewSection() {
         {/* Right — Vision + Mission cards */}
         <div className="flex flex-col gap-5">
           {/* Vision Card */}
-          <div className="bg-brand-green text-white rounded-xl p-6">
+          <div className="bg-gradient-to-br from-[#071527] to-[#0c2340] text-white rounded-xl p-6 border border-slate-800 shadow-sm">
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">
-                <Eye className="w-5 h-5 text-white" />
+              <div className="w-9 h-9 rounded-full bg-brand-orange/20 flex items-center justify-center">
+                <Eye className="w-5 h-5 text-brand-orange" />
               </div>
-              <span className="font-bold text-xs uppercase tracking-widest text-white/80">OUR VISION</span>
+              <span className="font-bold text-xs uppercase tracking-widest text-brand-orange">OUR VISION</span>
             </div>
-            <p className="text-sm text-white/90 leading-relaxed">
+            <p className="text-sm text-slate-200 leading-relaxed">
               To create an equitable and empowered society where every individual has the opportunity, resources, and dignity to lead a meaningful life.
             </p>
           </div>

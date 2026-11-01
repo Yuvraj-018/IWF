@@ -72,7 +72,7 @@ export default function PatientProfilePage() {
         <Header />
         <main className="flex-1 flex items-center justify-center py-24">
           <div className="text-center">
-            <div className="w-12 h-12 border-4 border-[#0b1f3b] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+            <div className="w-12 h-12 border-4 border-slate-800 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
             <p className="text-slate-600 font-medium">Loading patient case details...</p>
           </div>
         </main>
@@ -96,7 +96,7 @@ export default function PatientProfilePage() {
             </p>
             <Link
               to="/programs/healthcare/critical-life-support"
-              className="bg-[#0b1f3b] text-white font-bold py-3 px-6 rounded-xl hover:bg-[#18325c] transition-colors"
+              className="bg-[#071527] text-white font-semibold py-3 px-6 rounded-xl hover:bg-[#0c2340] hover:scale-[1.02] active:scale-95 transition-all"
             >
               View All Patients
             </Link>
@@ -138,13 +138,13 @@ export default function PatientProfilePage() {
         {/* Breadcrumb */}
         <div className="bg-white border-b border-slate-100 py-3 px-4 lg:px-12">
           <div className="max-w-7xl mx-auto flex items-center gap-2 text-xs text-slate-500 font-medium">
-            <Link to="/" className="hover:text-[#0b1f3b] flex items-center gap-1">
+            <Link to="/" className="hover:text-slate-900 flex items-center gap-1">
               <Home className="w-3.5 h-3.5" /> Home
             </Link>
             <ChevronRight className="w-3 h-3 text-slate-400" />
             <Link
               to="/programs/healthcare/critical-life-support"
-              className="hover:text-[#0b1f3b]"
+              className="hover:text-slate-900"
             >
               Critical Life Support
             </Link>
@@ -204,7 +204,7 @@ export default function PatientProfilePage() {
 
                   <div>
                     <div className="flex items-baseline gap-3">
-                      <h1 className="text-2xl sm:text-3xl font-black text-[#0b1f3b]">
+                      <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">
                         {patient.name}
                       </h1>
                       <span className="text-sm font-bold text-slate-500">
@@ -260,7 +260,7 @@ export default function PatientProfilePage() {
                   <span className="text-xs font-black text-[#ea580c] uppercase tracking-widest block mb-2">
                     PATIENT STORY
                   </span>
-                  <h2 className="text-2xl font-black text-[#0b1f3b] mb-4">
+                  <h2 className="text-2xl font-bold text-slate-900 mb-4">
                     The Human Behind the Case
                   </h2>
 
@@ -296,7 +296,7 @@ export default function PatientProfilePage() {
                     <BadgeCheck className="w-4 h-4 text-emerald-600" />
                     TRANSPARENCY &amp; VERIFICATION
                   </div>
-                  <h2 className="text-2xl font-black text-[#0b1f3b] mb-2">
+                  <h2 className="text-2xl font-bold text-slate-900 mb-2">
                     100% Verified by Islah Field Team
                   </h2>
                   <p className="text-xs sm:text-sm text-slate-600 mb-6">
@@ -312,7 +312,7 @@ export default function PatientProfilePage() {
                         </div>
                         <div>
                           <p className="text-[10px] font-bold text-slate-400 uppercase">CASE REFERENCE</p>
-                          <p className="text-sm font-black text-[#0b1f3b]">{patient.verificationId}</p>
+                          <p className="text-sm font-bold text-slate-900">{patient.verificationId}</p>
                         </div>
                       </div>
 
@@ -338,8 +338,8 @@ export default function PatientProfilePage() {
                     {/* Documents Verified */}
                     <div className="bg-slate-50 rounded-2xl border border-slate-200 p-5">
                       <div className="flex items-center gap-2 mb-3">
-                        <FileText className="w-4 h-4 text-[#0b1f3b]" />
-                        <p className="text-xs font-black text-[#0b1f3b] uppercase tracking-wide">
+                        <FileText className="w-4 h-4 text-slate-700" />
+                        <p className="text-xs font-bold text-slate-900 uppercase tracking-wide">
                           DOCUMENTS VERIFIED
                         </p>
                       </div>
@@ -364,7 +364,7 @@ export default function PatientProfilePage() {
             <div className="space-y-6 lg:sticky lg:top-24">
               {/* Treatment Cost Estimate Box */}
               <div className="bg-white rounded-3xl border border-slate-200 shadow-md overflow-hidden">
-                <div className="bg-[#0b1f3b] text-white px-5 py-4 flex items-center justify-between">
+                <div className="bg-gradient-to-r from-[#071527] to-[#0c2340] text-white px-5 py-4 flex items-center justify-between">
                   <div>
                     <p className="text-xs font-black uppercase tracking-wider">
                       TREATMENT COST ESTIMATE
@@ -382,7 +382,7 @@ export default function PatientProfilePage() {
                       className="flex items-center justify-between text-xs py-1.5 border-b border-slate-100 last:border-b-0"
                     >
                       <span className="text-slate-600 font-medium">{item.label}</span>
-                      <span className="font-bold text-[#0b1f3b]">
+                      <span className="font-bold text-slate-900">
                         ₹{item.amount.toLocaleString("en-IN")}
                       </span>
                     </div>
@@ -390,7 +390,7 @@ export default function PatientProfilePage() {
 
                   {/* Total Required Row (Peach Background) */}
                   <div className="mt-4 bg-[#fff7ed] border border-[#ffedd5] rounded-2xl p-4 flex items-center justify-between">
-                    <span className="text-xs font-black text-[#0b1f3b] uppercase tracking-wider">
+                    <span className="text-xs font-bold text-slate-900 uppercase tracking-wider">
                       TOTAL REQUIRED
                     </span>
                     <span className="text-xl font-black text-[#ea580c]">
@@ -417,7 +417,7 @@ export default function PatientProfilePage() {
                         patientId: patient.slug,
                         amount: String(remaining),
                       }}
-                      className="w-full bg-[#ea580c] hover:bg-orange-600 text-white font-black text-sm py-4 px-6 rounded-2xl flex items-center justify-center gap-2 transition-all duration-200 active:scale-95 shadow-md shadow-orange-500/20 text-center"
+                      className="w-full bg-[#ea580c] hover:bg-orange-600 hover:scale-[1.02] text-white font-bold text-sm py-4 px-6 rounded-2xl flex items-center justify-center gap-2 transition-all duration-200 active:scale-95 shadow-md shadow-orange-500/20 text-center"
                     >
                       <Heart className="w-5 h-5 fill-white" />
                       DONATE FOR {firstName}
@@ -435,7 +435,7 @@ export default function PatientProfilePage() {
               </div>
 
               {/* Contact Islah Box */}
-              <div className="bg-[#0b1f3b] text-white rounded-3xl p-5 text-center shadow-sm">
+              <div className="bg-gradient-to-br from-[#071527] to-[#0c2340] text-white rounded-3xl p-5 text-center shadow-sm">
                 <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-2 text-[#ea580c]">
                   <Phone className="w-5 h-5" />
                 </div>
@@ -454,7 +454,7 @@ export default function PatientProfilePage() {
               </div>
 
               {/* Islah's Transparency Pledge */}
-              <div className="bg-[#0b1f3b] text-white rounded-3xl p-6 shadow-md space-y-4">
+              <div className="bg-gradient-to-br from-[#071527] to-[#0c2340] text-white rounded-3xl p-6 shadow-md space-y-4">
                 <div className="flex items-center gap-2.5 border-b border-white/15 pb-3">
                   <BadgeCheck className="w-6 h-6 text-[#ea580c]" />
                   <h3 className="text-sm font-black uppercase tracking-wider">
@@ -509,7 +509,7 @@ export default function PatientProfilePage() {
                 <span className="text-[11px] font-black text-[#ea580c] uppercase tracking-wider block mb-1">
                   Islah FIELD UPDATES
                 </span>
-                <h3 className="text-lg font-black text-[#0b1f3b] mb-4">
+                <h3 className="text-lg font-bold text-slate-900 mb-4">
                   Case Progress Timeline
                 </h3>
 
@@ -534,7 +534,7 @@ export default function PatientProfilePage() {
                         </div>
                         <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs">
                           <div className="flex items-center justify-between gap-2 mb-1">
-                            <span className="font-bold text-[#0b1f3b] text-xs">
+                            <span className="font-bold text-slate-900 text-xs">
                               {update.title}
                             </span>
                             <span className="text-[10px] text-slate-400 font-medium shrink-0">

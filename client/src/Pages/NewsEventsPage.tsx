@@ -137,10 +137,10 @@ function NewsModal({ item, onClose }: { item: NewsItem; onClose: () => void }) {
             <span className="text-xs text-slate-400 flex items-center gap-1"><Calendar className="w-3 h-3" /> {item.date}</span>
             <span className="text-xs text-slate-400">{item.readTime} read</span>
           </div>
-          <h2 className="text-xl font-extrabold text-slate-800 mb-4 leading-tight">{item.title}</h2>
-          <p className="text-sm text-slate-600 leading-relaxed">{item.excerpt}</p>
+          <h2 className="text-xl font-bold text-slate-900 mb-4 leading-tight">{item.title}</h2>
+          <p className="text-sm text-black leading-relaxed font-normal">{item.excerpt}</p>
           <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
-            <p className="text-xs text-slate-400">Published by Islah Welfare Foundation</p>
+            <p className="text-xs text-slate-500">Published by Islah Welfare Foundation</p>
             <a href="/contact" className="text-xs font-bold text-brand-green hover:underline flex items-center gap-1">
               Contact Islah <ArrowRight className="w-3 h-3" />
             </a>
@@ -160,10 +160,10 @@ function NewsCard({ item, onRead }: { item: NewsItem; onRead: (item: NewsItem) =
       <div className="p-4 flex flex-col flex-1">
         <div className="flex items-center justify-between mb-2">
           <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ backgroundColor: `${item.tagColor}15`, color: item.tagColor }}>{item.tag}</span>
-          <span className="text-[10px] text-slate-400">{item.date}</span>
+          <span className="text-[10px] text-slate-500">{item.date}</span>
         </div>
-        <h3 className="font-bold text-sm text-slate-800 leading-snug mb-2 group-hover:text-brand-green transition-colors line-clamp-2">{item.title}</h3>
-        <p className="text-xs text-slate-500 leading-relaxed flex-1 line-clamp-3">{item.excerpt}</p>
+        <h3 className="font-semibold text-sm text-slate-900 leading-snug mb-2 group-hover:text-brand-green transition-colors line-clamp-2">{item.title}</h3>
+        <p className="text-sm text-black leading-relaxed font-normal flex-1 line-clamp-3">{item.excerpt}</p>
         <div className="mt-3 flex items-center justify-between">
           <span className="text-xs font-bold inline-flex items-center gap-1" style={{ color: item.tagColor }}>
             <Eye className="w-3 h-3" /> Read More
@@ -259,8 +259,8 @@ export default function NewsEventsPage() {
                             <span className="text-[10px] font-bold px-2.5 py-1 rounded-full" style={{ backgroundColor: `${item.tagColor}15`, color: item.tagColor }}>{item.tag}</span>
                             <span className="text-xs text-slate-400">{item.date}</span>
                           </div>
-                          <h2 className="font-extrabold text-base text-slate-800 leading-tight mb-2 group-hover:text-brand-green transition-colors">{item.title}</h2>
-                          <p className="text-sm text-slate-500 leading-relaxed line-clamp-2">{item.excerpt}</p>
+                          <h2 className="font-bold text-base text-slate-900 leading-tight mb-2 group-hover:text-brand-green transition-colors">{item.title}</h2>
+                          <p className="text-sm text-black leading-relaxed font-normal line-clamp-2">{item.excerpt}</p>
                           <div className="mt-4 flex items-center justify-between">
                             <span className="text-xs font-bold inline-flex items-center gap-1" style={{ color: item.tagColor }}>
                               <Eye className="w-3 h-3" /> Read Full Story

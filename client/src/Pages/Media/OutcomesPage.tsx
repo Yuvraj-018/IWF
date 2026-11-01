@@ -235,32 +235,32 @@ export function OutcomesPage() {
           {/* 5. Geographic Reach & Demographic Beneficiaries */}
           <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
             {/* Geographic Footprint (5 cols) */}
-            <div className="lg:col-span-5 bg-gradient-to-br from-[#063319] to-[#0b4d26] text-white rounded-2xl p-7 shadow-sm border border-emerald-800 flex flex-col justify-between">
+            <div className="lg:col-span-5 bg-gradient-to-br from-[#071527] to-[#0c2340] text-white rounded-2xl p-7 shadow-sm border border-slate-800 flex flex-col justify-between">
               <div>
-                <div className="flex items-center gap-2 text-emerald-400 mb-2">
-                  <MapPin className="w-5 h-5" />
-                  <span className="text-xs font-bold uppercase tracking-wider">Geographic Footprint</span>
+                <div className="flex items-center gap-2 text-brand-orange mb-2">
+                  <MapPin className="w-5 h-5 text-brand-orange" />
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-300">Geographic Footprint</span>
                 </div>
-                <h3 className="text-2xl font-black text-white">Our Reach on the Ground</h3>
-                <p className="text-xs text-emerald-200 mt-2 leading-relaxed">
+                <h3 className="text-xl font-semibold text-white">Our Reach on the Ground</h3>
+                <p className="text-xs text-slate-300 mt-2 leading-relaxed">
                   Reaching the most marginalized communities across northern and eastern India with localized infrastructure.
                 </p>
 
                 <div className="grid grid-cols-3 gap-3 my-6">
                   <div className="p-3 rounded-xl bg-white/10 text-center border border-white/10">
-                    <div className="text-xl font-black text-emerald-300">
+                    <div className="text-xl font-bold text-white">
                       {OUTCOMES_DATA.reach.villages}
                     </div>
                     <div className="text-[10px] uppercase font-bold text-slate-300">Villages</div>
                   </div>
                   <div className="p-3 rounded-xl bg-white/10 text-center border border-white/10">
-                    <div className="text-xl font-black text-emerald-300">
+                    <div className="text-xl font-bold text-white">
                       {OUTCOMES_DATA.reach.districts}
                     </div>
                     <div className="text-[10px] uppercase font-bold text-slate-300">Districts</div>
                   </div>
                   <div className="p-3 rounded-xl bg-white/10 text-center border border-white/10">
-                    <div className="text-xl font-black text-emerald-300">
+                    <div className="text-xl font-bold text-white">
                       {OUTCOMES_DATA.reach.states}
                     </div>
                     <div className="text-[10px] uppercase font-bold text-slate-300">Focus States</div>

@@ -7,6 +7,7 @@ import {
   Footer,
   RoleFormModal,
 } from "@/components/layout/SiteLayout";
+import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import {
   Home,
   ChevronRight,
@@ -133,7 +134,7 @@ function SectionTitle({ label, title, subtitle }: { label: string; title: string
       <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">{label}</p>
       <div className="flex items-center justify-center gap-3 mb-4">
         <span className="h-px w-8 bg-brand-green" />
-        <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark tracking-wide">{title}</h2>
+        <h2 className="text-2xl md:text-3xl font-semibold text-[#0b1f3b] tracking-tight">{title}</h2>
         <span className="h-px w-8 bg-brand-green" />
       </div>
       {subtitle && <p className="text-slate-600 max-w-2xl mx-auto text-sm leading-relaxed">{subtitle}</p>}
@@ -151,61 +152,39 @@ export default function SustainableRuralDevelopment() {
       <Header />
 
       {/* Hero Banner */}
-      <section className="relative bg-[#07162c] text-white min-h-[300px] sm:min-h-[330px] md:min-h-[360px] lg:min-h-[390px] flex items-center py-6 sm:py-8 md:py-10 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#07162c] via-[#0b2246]/95 to-transparent z-10" />
-        <img
-          src={heroImg}
-          alt="Sustainable Rural Development Programme"
-          className="absolute inset-0 w-full h-full object-cover object-center opacity-25"
-        />
-        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          {/* Breadcrumb */}
-          <nav className="flex items-center gap-1.5 text-xs text-white/70 mb-4 flex-wrap" aria-label="Breadcrumb">
-            <Link to="/" className="hover:text-white transition-colors flex items-center gap-1">
-              <Home className="w-3.5 h-3.5 text-brand-orange" />
-              <span>Home</span>
-            </Link>
-            <ChevronRight className="w-3 h-3 text-white/40" />
-            <Link to="/programs/environment" className="hover:text-white transition-colors">
-              Environment &amp; Sustainable Development
-            </Link>
-            <ChevronRight className="w-3 h-3 text-white/40" />
-            <span className="text-brand-orange font-bold">Sustainable Rural Development</span>
-          </nav>
-
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-widest text-brand-orange mb-3">
-              <span className="w-1.5 h-1.5 rounded-full bg-brand-orange animate-pulse" />
-              Initiative 04 • SRD
-            </div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight mb-3">
-              Sustainable Rural Development
-            </h1>
-            <p className="text-sm md:text-base text-white/90 font-medium mb-2">
-              People. Resources. Livelihoods. Sustainability.
-            </p>
-            <p className="text-xs sm:text-sm text-white/75 leading-relaxed max-w-2xl mb-6">
-              Unifying natural resource stewardship, rural enterprise, climate resilience, and community well-being
-              under an integrated development framework where prosperity and ecology flourish together.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => setModalRole("partner")}
-                className="inline-flex items-center gap-2 bg-brand-green text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-lg hover:bg-brand-green-dark transition-colors shadow-sm cursor-pointer"
-              >
-                Partner as Model Village Adopter
-                <ArrowRight className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => setModalRole("sponsor")}
-                className="inline-flex items-center gap-2 border border-white/30 text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
-              >
-                Sponsor Eco-Projects
-              </button>
-            </div>
-          </div>
+      <SubpageHeroCarousel
+        tag="Initiative 04 • SRD"
+        title="Sustainable Rural Development"
+        subtitle="Unifying natural resource stewardship, rural enterprise, climate resilience, and community well-being under an integrated development framework where prosperity and ecology flourish together."
+        breadcrumbs={[
+          { label: "What We Do", href: "/programs" },
+          { label: "Environment & Sustainable Development", href: "/programs/environment" },
+          { label: "Sustainable Rural Development" },
+        ]}
+        images={[heroImg]}
+      >
+        <div className="flex flex-wrap items-center gap-3 pt-1">
+          <Link
+            to="/programs/environment"
+            className="inline-flex items-center gap-2 text-xs font-semibold text-white/90 hover:text-white border border-white/20 bg-white/10 hover:bg-white/20 px-3.5 py-2 rounded-xl transition-all"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" /> All Environment Programmes
+          </Link>
+          <button
+            onClick={() => setModalRole("partner")}
+            className="inline-flex items-center gap-2 bg-brand-green text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl hover:bg-brand-green-dark transition-colors shadow-sm cursor-pointer"
+          >
+            Partner as Model Village Adopter
+            <ArrowRight className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => setModalRole("sponsor")}
+            className="inline-flex items-center gap-2 border border-white/30 text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl hover:bg-white/10 transition-colors cursor-pointer"
+          >
+            Sponsor Eco-Projects
+          </button>
         </div>
-      </section>
+      </SubpageHeroCarousel>
 
       {/* Overview & Objective */}
       <section className="py-16 bg-white border-b border-slate-100">
@@ -302,17 +281,17 @@ export default function SustainableRuralDevelopment() {
       </section>
 
       {/* Sustainable Rural Development Model (5 Tiers) */}
-      <section className="py-20 bg-[#0b1f3b] text-white relative overflow-hidden">
+      <section className="py-20 bg-slate-50 border-t border-slate-200 overflow-hidden relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <ScrollReveal>
             <div className="text-center max-w-3xl mx-auto mb-14">
               <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">
                 Systemic Architecture
               </p>
-              <h2 className="text-2xl md:text-4xl font-extrabold text-white mb-4">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">
                 Our Sustainable Rural Development Model
               </h2>
-              <p className="text-white/70 text-sm leading-relaxed">
+              <p className="text-slate-600 text-sm leading-relaxed text-balance">
                 Rural development succeeds when people, resources, livelihoods, and ecosystems form an interconnected,
                 mutually reinforcing foundation of community strength.
               </p>
@@ -322,18 +301,18 @@ export default function SustainableRuralDevelopment() {
           <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {DEVELOPMENT_MODEL_TIERS.map((tier, idx) => (
               <ScrollReveal key={tier.tier} delay={idx * 0.05}>
-                <div className="bg-white/5 border border-white/10 rounded-xl p-5 hover:bg-white/10 transition-colors h-full flex flex-col justify-between">
+                <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs hover:shadow-md hover:border-slate-300 transition-all h-full flex flex-col justify-between">
                   <div>
                     <span className="text-[10px] font-mono font-bold text-brand-orange mb-2 block">
                       TIER {tier.tier}
                     </span>
-                    <h3 className="text-base font-bold text-white mb-1">{tier.name}</h3>
-                    <p className="text-[11px] font-medium text-brand-orange/90 mb-2">{tier.tag}</p>
-                    <p className="text-xs text-white/70 leading-relaxed">{tier.desc}</p>
+                    <h3 className="text-base font-bold text-slate-900 mb-1">{tier.name}</h3>
+                    <p className="text-[11px] font-semibold text-brand-orange mb-2">{tier.tag}</p>
+                    <p className="text-xs text-slate-600 leading-relaxed">{tier.desc}</p>
                   </div>
                   {idx < DEVELOPMENT_MODEL_TIERS.length - 1 && (
                     <div className="hidden lg:flex justify-end pt-4">
-                      <ArrowRight className="w-4 h-4 text-white/30" />
+                      <ArrowRight className="w-4 h-4 text-slate-400" />
                     </div>
                   )}
                 </div>
@@ -462,22 +441,22 @@ export default function SustainableRuralDevelopment() {
       </section>
 
       {/* Vision & Quote */}
-      <section className="py-20 bg-[#004724] text-white relative overflow-hidden">
+      <section className="py-14 bg-gradient-to-r from-[#071527] to-[#0c2340] text-white relative overflow-hidden">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <ScrollReveal>
-            <span className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-4 block">
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3 block">
               Development with Ecology
             </span>
-            <h2 className="text-2xl md:text-3xl font-extrabold mb-6 leading-snug">
+            <h2 className="text-xl md:text-2xl font-bold mb-4 leading-snug">
               Prosperity That Protects the Future
             </h2>
-            <p className="text-white/80 text-base leading-relaxed max-w-3xl mx-auto mb-10">
+            <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-3xl mx-auto mb-8 text-balance">
               ISLAH believes that rural development should not come at the cost of the environment. Our approach
               brings together people, nature, livelihoods and opportunity so that present development creates a stronger
               foundation for future generations.
             </p>
-            <div className="border-t border-white/20 pt-8 max-w-2xl mx-auto">
-              <blockquote className="text-xl md:text-2xl font-serif italic text-white/95 leading-relaxed mb-4">
+            <div className="border-t border-white/15 pt-6 max-w-2xl mx-auto">
+              <blockquote className="text-lg md:text-xl font-serif italic text-white/95 leading-relaxed mb-3 text-balance">
                 “Sustainable rural development means improving lives today while protecting the resources and opportunities that communities will depend upon tomorrow.”
               </blockquote>
               <p className="text-xs font-bold tracking-widest uppercase text-brand-orange">— ISLAH</p>
@@ -487,18 +466,18 @@ export default function SustainableRuralDevelopment() {
       </section>
 
       {/* Subpage Navigation */}
-      <section className="py-12 bg-slate-50 border-t border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <section className="py-8 bg-slate-50 border-t border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <Link
             to="/programs/environment/tree-plantation-greening"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-brand-green transition-colors"
+            className="inline-flex items-center gap-2 text-xs md:text-sm font-semibold text-slate-800 hover:text-brand-green border border-slate-300 bg-white hover:bg-slate-50 px-5 py-2.5 rounded-lg transition-all shadow-xs hover:scale-[1.02] active:scale-95"
           >
             <ArrowLeft className="w-4 h-4" />
             Previous: Tree Plantation &amp; Greening (TPCG)
           </Link>
           <Link
             to="/programs/environment"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-brand-green hover:text-brand-green-dark transition-colors"
+            className="inline-flex items-center gap-2 text-xs md:text-sm font-semibold text-white bg-brand-orange hover:bg-brand-orange-hover px-5 py-2.5 rounded-lg transition-all shadow-xs hover:scale-[1.02] active:scale-95"
           >
             Return to Environment Sector Overview
             <ArrowRight className="w-4 h-4" />
@@ -506,16 +485,12 @@ export default function SustainableRuralDevelopment() {
         </div>
       </section>
 
-      <Footer />
+      <Footer onOpenModal={(role) => setModalRole(role)} />
 
-      {modalRole && (
-        <RoleFormModal
-          isOpen={true}
-          role={modalRole}
-          onClose={() => setModalRole(null)}
-          title={`Support Sustainable Rural Development`}
-        />
-      )}
+      <RoleFormModal
+        type={modalRole}
+        onClose={() => setModalRole(null)}
+      />
     </div>
   );
 }

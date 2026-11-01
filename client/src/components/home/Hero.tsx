@@ -26,7 +26,7 @@ export function Hero() {
 
       {/* Stats bar */}
       <div className="max-w-7xl mx-auto px-4 -mt-10 relative z-10">
-        <div className="bg-brand-green text-white rounded-md shadow-xl grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-white/20">
+        <div className="bg-[#0b1f3b] text-white rounded-xl shadow-xl grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-white/20">
           {[
             { icon: Users, n: "5,000+", l: "Lives Impacted" },
             { icon: HeartPulse, n: "100+", l: "Health Camps" },

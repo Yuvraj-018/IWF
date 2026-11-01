@@ -10,6 +10,7 @@ import {
   Home,
   Sparkles,
   Users,
+  Heart,
 } from "lucide-react";
 import {
   Footer,
@@ -40,7 +41,7 @@ function SectionTitle({
       </p>
       <div className="flex items-center justify-center gap-3 mb-4">
         <span className="h-px w-8 bg-brand-green" />
-        <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark tracking-wide">
+        <h2 className="text-2xl md:text-3xl font-semibold text-[#0b1f3b] tracking-tight">
           {title}
         </h2>
         <span className="h-px w-8 bg-brand-green" />
@@ -87,12 +88,12 @@ function SignatureSection({ content }: { content: SectorContent }) {
                     ["03", "Aspiration", "Mentorship and career guidance connect learning to opportunity."],
                   ].map(([num, title, text]) => (
                     <div key={title} className="flex gap-5 bg-white rounded-md border border-green-100 p-5 shadow-sm">
-                      <div className="w-12 h-12 rounded-full bg-brand-green text-white flex items-center justify-center font-extrabold shrink-0">
+                      <div className="w-12 h-12 rounded-full bg-brand-green text-white flex items-center justify-center font-bold shrink-0">
                         {num}
                       </div>
                       <div>
                         <h3 className="font-bold text-brand-green-dark">{title}</h3>
-                        <p className="text-sm text-slate-600 leading-relaxed mt-1">{text}</p>
+                        <p className="text-sm text-black leading-relaxed font-normal mt-1">{text}</p>
                       </div>
                     </div>
                   ))}
@@ -144,7 +145,7 @@ function SignatureSection({ content }: { content: SectorContent }) {
                     <div className="grid grid-cols-3 gap-3 text-white">
                       {["Train", "Practice", "Earn"].map((label) => (
                         <div key={label} className="bg-white/12 border border-white/15 rounded-md p-3 text-center backdrop-blur-sm">
-                          <p className="text-lg font-extrabold">{label}</p>
+                          <p className="text-base font-bold">{label}</p>
                           <p className="text-[10px] text-white/65 uppercase tracking-widest mt-1">Pathway</p>
                         </div>
                       ))}
@@ -343,24 +344,16 @@ function SectorIdentity({ content }: { content: SectorContent }) {
           <div className="lg:col-span-6">
             <ScrollReveal stagger={0.08}>
               <div className="grid sm:grid-cols-2 gap-4">
-                {empowerment.map((item, index) => (
+                {empowerment.map((item) => (
                   <div
                     key={item}
-                    className={`rounded-md p-6 border shadow-sm ${
-                      index % 2 === 0
-                        ? "bg-white border-orange-100"
-                        : "bg-[#0b1f3b] border-[#0b1f3b] text-white"
-                    }`}
+                    className="rounded-2xl p-6 border border-slate-200 bg-white shadow-xs hover:border-slate-300 transition-all"
                   >
-                    {index % 2 === 0 ? (
-                      <Users className="w-6 h-6 text-brand-orange mb-5" />
-                    ) : (
-                      <Sparkles className="w-6 h-6 text-brand-orange mb-5" />
-                    )}
-                    <h3 className={index % 2 === 0 ? "font-bold text-brand-green-dark" : "font-bold text-white"}>
+                    <Users className="w-6 h-6 text-brand-orange mb-5" />
+                    <h3 className="font-bold text-brand-green-dark">
                       {item}
                     </h3>
-                    <p className={index % 2 === 0 ? "text-xs text-slate-600 leading-relaxed mt-2" : "text-xs text-white/70 leading-relaxed mt-2"}>
+                    <p className="text-xs text-slate-600 leading-relaxed mt-2">
                       A core pillar of Islah's women empowerment ecosystem.
                     </p>
                   </div>
@@ -384,7 +377,7 @@ export default function SectorLandingPage({ content }: { content: SectorContent 
       <UtilityBar />
       <Header />
       <main>
-        {/* Hero Section with Subpage Carousel (Matching About Us Page) */}
+        {/* Hero Section with Subpage Carousel with In-Hero Action Buttons */}
         <SubpageHeroCarousel
           tag={content.eyebrow}
           title={content.title}
@@ -394,31 +387,25 @@ export default function SectorLandingPage({ content }: { content: SectorContent 
             { label: content.title },
           ]}
           images={slides.map((s) => s.image)}
-        />
-
-        {/* Floating Quick Action Bar */}
-        <div className="max-w-7xl mx-auto px-4 md:px-8 -mt-6 relative z-20 mb-8">
-          <div className="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-md flex flex-wrap items-center justify-between gap-3">
-            <div className="flex flex-wrap items-center gap-3">
-              <a
-                href="#initiatives"
-                className="inline-flex items-center gap-2 bg-[#15803d] hover:bg-[#166534] text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-md transition uppercase tracking-wider"
-              >
-                <span>Explore Initiatives</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </a>
-              <button
-                onClick={() => setActiveModal("partner")}
-                className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-md transition uppercase tracking-wider cursor-pointer"
-              >
-                <span>Partner With Us</span>
-              </button>
-            </div>
-            <div className="text-xs font-semibold text-slate-500">
-              {content.eyebrow}
-            </div>
+        >
+          <div className="flex flex-wrap items-center gap-3 pt-2">
+            <a
+              href="#initiatives"
+              className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold px-6 sm:px-7 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer"
+            >
+              <span>Explore Initiatives</span>
+              <ArrowRight className="w-4 h-4" />
+            </a>
+            <button
+              type="button"
+              onClick={() => setActiveModal("partner")}
+              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer backdrop-blur-xs"
+            >
+              <Heart className="w-4 h-4 text-brand-orange" />
+              <span>Partner With Us</span>
+            </button>
           </div>
-        </div>
+        </SubpageHeroCarousel>
 
         <SignatureSection content={content} />
         <SectorIdentity content={content} />
@@ -437,12 +424,12 @@ export default function SectorLandingPage({ content }: { content: SectorContent 
                 {content.challenges.map((item, index) => (
                   <div
                     key={item}
-                    className="group rounded-md bg-[#0b1f3b] hover:bg-white border border-brand-green/10 hover:border-brand-green/30 p-5 shadow-sm hover:shadow-md transition-all duration-300"
+                    className="group rounded-2xl bg-white border border-slate-200 hover:border-slate-300 p-5 shadow-xs hover:shadow-md transition-all duration-300"
                   >
-                    <span className="inline-flex w-8 h-8 rounded-full bg-white/15 group-hover:bg-brand-green/10 text-white group-hover:text-brand-green items-center justify-center text-xs font-bold mb-4 transition-colors">
+                    <span className="inline-flex w-8 h-8 rounded-full bg-brand-green/10 text-brand-green items-center justify-center text-xs font-bold mb-4">
                       {index + 1}
                     </span>
-                    <p className="text-sm font-medium leading-relaxed text-white/90 group-hover:text-slate-700 transition-colors">
+                    <p className="text-sm font-medium leading-relaxed text-slate-700">
                       {item}
                     </p>
                   </div>
@@ -581,21 +568,21 @@ export default function SectorLandingPage({ content }: { content: SectorContent 
                     <a
                       key={item}
                       href={href || "#"}
-                      className="rounded-md bg-[#0b1f3b] border border-brand-green/10 p-5 shadow-sm hover:bg-white hover:border-brand-green/30 hover:shadow-md transition-all duration-300 group flex flex-col justify-between"
+                      className="rounded-2xl bg-white border border-slate-200 hover:border-brand-green/40 p-5 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group flex flex-col justify-between"
                     >
                       <div>
                         <div className="flex items-center justify-between mb-4">
-                          <Icon className="w-5 h-5 text-brand-orange" />
-                          <span className="text-xs font-bold text-white/55 group-hover:text-slate-400 transition-colors">
+                          <Sparkles className="w-5 h-5 text-brand-orange" />
+                          <span className="text-xs font-bold text-slate-400">
                             {String(index + 1).padStart(2, "0")}
                           </span>
                         </div>
-                        <h3 className="text-sm font-bold leading-snug text-white group-hover:text-brand-green-dark transition-colors">
+                        <h3 className="text-sm font-bold leading-snug text-slate-900 group-hover:text-brand-green-dark transition-colors">
                           {item}
                         </h3>
                       </div>
                       {href && (
-                        <div className="mt-4 pt-3 border-t border-white/10 group-hover:border-slate-100 flex items-center justify-between text-xs font-bold text-brand-orange group-hover:text-brand-green">
+                        <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-brand-orange group-hover:text-brand-green">
                           <span>View Initiative</span>
                           <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                         </div>
@@ -632,11 +619,11 @@ export default function SectorLandingPage({ content }: { content: SectorContent 
               </div>
             </ScrollReveal>
             <ScrollReveal delay={0.1}>
-              <div className="mt-12 bg-brand-green-darker rounded-md p-8 md:p-10 text-center">
-                <p className="text-white/75 text-sm leading-relaxed max-w-3xl mx-auto mb-5">
+              <div className="mt-12 bg-gradient-to-r from-[#071527] to-[#0c2340] rounded-2xl p-8 md:p-10 text-center text-white shadow-xl">
+                <p className="text-slate-300 text-sm leading-relaxed max-w-3xl mx-auto mb-5 font-normal">
                   {content.vision}
                 </p>
-                <p className="text-white text-lg md:text-2xl font-semibold italic max-w-3xl mx-auto leading-relaxed">
+                <p className="text-white text-lg md:text-2xl font-serif italic max-w-3xl mx-auto leading-relaxed font-normal">
                   "{content.quote}"
                 </p>
               </div>

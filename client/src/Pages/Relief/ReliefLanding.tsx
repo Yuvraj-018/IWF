@@ -27,6 +27,7 @@ import {
   Truck,
   Building,
   Activity,
+  Heart,
 } from "lucide-react";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
 import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
@@ -193,7 +194,7 @@ function SectionTitle({ label, title, subtitle }: { label: string; title: string
       <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">{label}</p>
       <div className="flex items-center justify-center gap-3 mb-4">
         <span className="h-px w-8 bg-brand-green" />
-        <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark tracking-wide">{title}</h2>
+        <h2 className="text-2xl md:text-3xl font-semibold text-[#0b1f3b] tracking-tight">{title}</h2>
         <span className="h-px w-8 bg-brand-green" />
       </div>
       {subtitle && <p className="text-slate-600 max-w-2xl mx-auto text-sm leading-relaxed">{subtitle}</p>}
@@ -220,31 +221,26 @@ export default function ReliefLanding() {
           { label: "Humanitarian Relief & Rehabilitation" },
         ]}
         images={[heroImg]}
-      />
-
-      {/* Floating Action Strip */}
-      <div className="max-w-7xl mx-auto px-4 md:px-8 -mt-6 relative z-20 mb-8">
-        <div className="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-md flex flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-3">
-            <button
-              onClick={() => setModalRole("sponsor")}
-              className="inline-flex items-center gap-2 bg-[#15803d] hover:bg-[#166534] text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-md transition uppercase tracking-wider cursor-pointer"
-            >
-              <span>Support Emergency Relief Kits</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-            <button
-              onClick={() => setModalRole("partner")}
-              className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-md transition uppercase tracking-wider cursor-pointer"
-            >
-              <span>Partner for Relief Action</span>
-            </button>
-          </div>
-          <div className="text-xs font-semibold text-slate-500">
-            Emergency Response • Dignity • Long-Term Resilience
-          </div>
+      >
+        <div className="flex flex-wrap items-center gap-3 pt-2">
+          <button
+            type="button"
+            onClick={() => setModalRole("sponsor")}
+            className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold px-6 sm:px-7 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer"
+          >
+            <span>Support Emergency Relief Kits</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => setModalRole("partner")}
+            className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer backdrop-blur-xs"
+          >
+            <Heart className="w-4 h-4 text-brand-orange" />
+            <span>Partner for Relief Action</span>
+          </button>
         </div>
-      </div>
+      </SubpageHeroCarousel>
 
       {/* Overview & Objective */}
       <section className="py-16 bg-white border-b border-slate-100">
@@ -405,21 +401,21 @@ export default function ReliefLanding() {
 
           {/* Continuity Ribbon */}
           <ScrollReveal delay={0.2}>
-            <div className="mt-12 bg-brand-green-dark text-white rounded-xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="mt-12 bg-slate-50 border border-slate-200 text-slate-800 rounded-xl p-6 sm:p-7 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xs">
               <div className="text-center md:text-left">
-                <span className="text-xs font-bold uppercase tracking-widest text-brand-orange block mb-1">
+                <span className="text-xs font-semibold uppercase tracking-widest text-brand-orange block mb-1">
                   Core Continuity
                 </span>
-                <h4 className="text-lg font-bold text-white">The Humanitarian Relief Sequence</h4>
+                <h4 className="text-base font-semibold text-slate-900">The Humanitarian Relief Sequence</h4>
               </div>
               <div className="flex flex-wrap items-center justify-center gap-2 text-xs font-semibold">
-                <span className="bg-white/10 px-3.5 py-1.5 rounded-md">Emergency Response</span>
+                <span className="bg-white border border-slate-200 text-slate-700 px-3.5 py-1.5 rounded-md shadow-xs">Emergency Response</span>
                 <ChevronRight className="w-4 h-4 text-brand-orange shrink-0" />
-                <span className="bg-white/10 px-3.5 py-1.5 rounded-md">Basic Needs</span>
+                <span className="bg-white border border-slate-200 text-slate-700 px-3.5 py-1.5 rounded-md shadow-xs">Basic Needs</span>
                 <ChevronRight className="w-4 h-4 text-brand-orange shrink-0" />
-                <span className="bg-white/10 px-3.5 py-1.5 rounded-md">Seasonal/Disaster Response</span>
+                <span className="bg-white border border-slate-200 text-slate-700 px-3.5 py-1.5 rounded-md shadow-xs">Seasonal/Disaster Response</span>
                 <ChevronRight className="w-4 h-4 text-brand-orange shrink-0" />
-                <span className="bg-brand-orange text-white px-3.5 py-1.5 rounded-md font-bold">
+                <span className="bg-brand-orange text-white px-3.5 py-1.5 rounded-md font-semibold shadow-xs">
                   Livelihood Recovery
                 </span>
               </div>
@@ -483,17 +479,17 @@ export default function ReliefLanding() {
       </section>
 
       {/* From Relief to Resilience (Flow Sequence) */}
-      <section className="py-20 bg-[#0b1f3b] text-white relative overflow-hidden">
+      <section className="py-16 bg-slate-50 border-t border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <ScrollReveal>
-            <div className="text-center max-w-3xl mx-auto mb-14">
-              <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">
+            <div className="text-center max-w-3xl mx-auto mb-10">
+              <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2">
                 Evolutionary Pathway
               </p>
-              <h2 className="text-2xl md:text-4xl font-extrabold text-white mb-4">
+              <h2 className="text-xl md:text-2xl font-semibold text-slate-900 mb-3">
                 From Relief to Resilience
               </h2>
-              <p className="text-white/70 text-sm leading-relaxed">
+              <p className="text-slate-600 text-sm leading-relaxed">
                 Humanitarian assistance is most meaningful when it moves beyond temporary handouts and creates
                 a durable pathway towards stability, livelihood restoration, and community preparedness.
               </p>
@@ -503,18 +499,18 @@ export default function ReliefLanding() {
           <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {RELIEF_TO_RESILIENCE_STEPS.map((stage, idx) => (
               <ScrollReveal key={stage.step} delay={idx * 0.05}>
-                <div className="bg-white/5 border border-white/10 rounded-xl p-5 hover:bg-white/10 transition-colors h-full flex flex-col justify-between">
+                <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs hover:shadow-sm hover:border-slate-300 transition-all duration-200 h-full flex flex-col justify-between">
                   <div>
                     <span className="text-[10px] font-mono font-bold text-brand-orange mb-2 block">
                       STAGE {stage.step}
                     </span>
-                    <h3 className="text-base font-bold text-white mb-1">{stage.title}</h3>
-                    <p className="text-[11px] font-medium text-brand-orange/90 mb-2">{stage.tag}</p>
-                    <p className="text-xs text-white/70 leading-relaxed">{stage.desc}</p>
+                    <h3 className="text-base font-semibold text-slate-900 mb-1">{stage.title}</h3>
+                    <p className="text-[11px] font-semibold text-emerald-600 mb-2">{stage.tag}</p>
+                    <p className="text-xs text-slate-600 leading-relaxed">{stage.desc}</p>
                   </div>
                   {idx < RELIEF_TO_RESILIENCE_STEPS.length - 1 && (
                     <div className="hidden lg:flex justify-end pt-4">
-                      <ArrowRight className="w-4 h-4 text-white/30" />
+                      <ArrowRight className="w-4 h-4 text-slate-300" />
                     </div>
                   )}
                 </div>
@@ -525,22 +521,22 @@ export default function ReliefLanding() {
       </section>
 
       {/* Target Beneficiaries & Impact */}
-      <section className="py-20 bg-white">
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-12 gap-12 items-start">
+          <div className="grid lg:grid-cols-12 gap-8 items-start">
             {/* Beneficiaries */}
             <div className="lg:col-span-6">
               <ScrollReveal>
                 <span className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2 block">
                   Affected Communities
                 </span>
-                <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark mb-6">
+                <h2 className="text-xl md:text-2xl font-semibold text-slate-900 mb-4">
                   Who We Seek to Support
                 </h2>
-                <div className="bg-[#f8faf8] border border-slate-200/80 rounded-xl p-6 sm:p-8">
-                  <ul className="space-y-3.5">
+                <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 sm:p-7 shadow-xs">
+                  <ul className="space-y-3">
                     {TARGET_PARTICIPANTS.map((item) => (
-                      <li key={item} className="flex items-start gap-3 text-sm text-slate-700 leading-snug">
+                      <li key={item} className="flex items-start gap-3 text-xs md:text-sm text-slate-700 leading-snug">
                         <CheckCircle2 className="w-4 h-4 text-brand-green shrink-0 mt-0.5" />
                         <span>{item}</span>
                       </li>
@@ -556,13 +552,13 @@ export default function ReliefLanding() {
                 <span className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2 block">
                   Measured Outcomes
                 </span>
-                <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark mb-6">
+                <h2 className="text-xl md:text-2xl font-semibold text-slate-900 mb-4">
                   Expected Impact
                 </h2>
-                <div className="bg-[#fbfcfb] border border-brand-green/20 rounded-xl p-6 sm:p-8">
-                  <ul className="space-y-3.5">
+                <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 sm:p-7 shadow-xs">
+                  <ul className="space-y-3">
                     {IMPACT_OUTCOMES.map((outcome) => (
-                      <li key={outcome} className="flex items-start gap-3 text-sm text-slate-700 leading-snug">
+                      <li key={outcome} className="flex items-start gap-3 text-xs md:text-sm text-slate-700 leading-snug">
                         <TrendingUp className="w-4 h-4 text-brand-orange shrink-0 mt-0.5" />
                         <span>{outcome}</span>
                       </li>
@@ -575,53 +571,30 @@ export default function ReliefLanding() {
         </div>
       </section>
 
-      {/* Vision & Commitment */}
-      <section className="py-20 bg-[#004724] text-white relative overflow-hidden">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <ScrollReveal>
-            <span className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-4 block">
-              Our Vision &amp; Commitment
-            </span>
-            <h2 className="text-2xl md:text-4xl font-extrabold mb-6 leading-snug">
-              Compassion in Crisis. Strength in Tomorrow.
-            </h2>
-            <p className="text-white/85 text-base leading-relaxed max-w-3xl mx-auto mb-8">
-              Humanitarian work is not only about providing relief during a crisis. It is also about restoring dignity,
-              protecting livelihoods, supporting recovery and strengthening the capacity of communities to face future challenges.
-              ISLAH seeks to build a responsible humanitarian approach that connects compassion with action, relief with recovery,
-              and recovery with resilience.
-            </p>
-            <div className="border-t border-white/20 pt-8 max-w-2xl mx-auto">
-              <blockquote className="text-xl md:text-2xl font-serif italic text-white/95 leading-relaxed mb-4">
-                “Relief responds to a crisis. Rehabilitation restores possibilities. Resilience prepares communities for tomorrow.”
-              </blockquote>
-              <p className="text-xs font-bold tracking-widest uppercase text-brand-orange">— ISLAH</p>
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
-
       {/* Support / Partner CTA */}
-      <section className="py-16 bg-[#07162c] text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="py-14 bg-gradient-to-br from-[#071527] to-[#0c2340] border-t border-slate-800 text-white">
+        <div className="max-w-4xl mx-auto px-4 text-center">
           <ScrollReveal>
-            <h2 className="text-2xl md:text-3xl font-extrabold mb-4">
+            <p className="text-xs font-semibold uppercase tracking-widest text-brand-orange mb-2">
+              Humanitarian Action
+            </p>
+            <h2 className="text-xl sm:text-2xl font-semibold text-white mb-3">
               Stand with Communities Facing Emergency Hardship
             </h2>
-            <p className="text-slate-300 max-w-2xl mx-auto text-sm leading-relaxed mb-8">
+            <p className="text-slate-300 max-w-2xl mx-auto text-sm leading-relaxed mb-6">
               Partner with ISLAH Welfare Foundation to deploy rapid relief, winter blankets, flood aid kits,
               and livelihood restoration tools to crisis-stricken families across rural India.
             </p>
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="flex flex-wrap justify-center gap-3">
               <button
                 onClick={() => setModalRole("sponsor")}
-                className="bg-brand-green hover:bg-brand-green-dark text-white font-semibold text-sm px-6 py-3 rounded-lg transition-colors shadow-sm"
+                className="bg-brand-orange hover:bg-orange-600 text-white font-semibold text-sm px-6 py-2.5 rounded-full transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-95"
               >
                 Sponsor Relief Operations
               </button>
               <button
                 onClick={() => setModalRole("partner")}
-                className="border border-white/30 hover:bg-white/10 text-white font-semibold text-sm px-6 py-3 rounded-lg transition-colors"
+                className="border border-white/20 hover:bg-white/10 text-white font-semibold text-sm px-6 py-2.5 rounded-full transition-all duration-200 hover:scale-[1.02] active:scale-95"
               >
                 Partner as Disaster Response Entity
               </button>
@@ -630,16 +603,12 @@ export default function ReliefLanding() {
         </div>
       </section>
 
-      <Footer />
+      <Footer onOpenModal={(role) => setModalRole(role)} />
 
-      {modalRole && (
-        <RoleFormModal
-          isOpen={true}
-          role={modalRole}
-          onClose={() => setModalRole(null)}
-          title={`Support Humanitarian Relief & Rehabilitation`}
-        />
-      )}
+      <RoleFormModal
+        type={modalRole}
+        onClose={() => setModalRole(null)}
+      />
     </div>
   );
 }

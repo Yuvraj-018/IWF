@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import { MediaSubpageHero } from "@/components/media/MediaSubpageHero";
 import { ActionStrip } from "@/components/media/ActionStrip";
-import { NewsletterStrip } from "@/components/media/NewsletterStrip";
 import { StoryModal } from "@/components/media/StoryModal";
 import { MediaLayout } from "@/components/media/MediaLayout";
 import { NEWS_EVENTS_DATA } from "@/content/mediaContent";
@@ -319,14 +318,7 @@ export function NewsEventsPage() {
             </div>
           </section>
 
-          {/* 4. Newsletter Strip */}
-          <NewsletterStrip
-            title="Never Miss an Update"
-            description="Subscribe to receive our latest news, event invitations, and press bulletins directly in your inbox."
-            buttonText="Subscribe Now"
-          />
-
-          {/* 5. Action Strip */}
+          {/* 4. Action Strip */}
           <ActionStrip />
         </div>
 

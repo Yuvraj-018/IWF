@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Home, ChevronRight as BreadcrumbArrow, Pause, Play } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { Home, ChevronRight as BreadcrumbArrow } from "lucide-react";
 import slide1 from "@/assets/hero-carousel/hero-slide-1.jpg";
 import slide2 from "@/assets/hero-carousel/hero-slide-2.jpg";
 import slide3 from "@/assets/hero-carousel/hero-slide-3.jpg";
@@ -18,6 +19,7 @@ export interface SubpageHeroCarouselProps {
   breadcrumbs?: BreadcrumbItem[];
   images?: string[];
   heightClass?: string;
+  children?: React.ReactNode;
 }
 
 const DEFAULT_SLIDES = [aboutHero, slide1, slide2, slide3, slide4];
@@ -29,71 +31,33 @@ export default function SubpageHeroCarousel({
   breadcrumbs = [{ label: "About Us", href: "/about" }],
   images = DEFAULT_SLIDES,
   heightClass = "min-h-[280px] sm:min-h-[300px] md:min-h-[320px] lg:min-h-[340px]",
+  children,
 }: SubpageHeroCarouselProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isManualPaused, setIsManualPaused] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
-  const isPaused = isManualPaused || isPressed;
-  const [progress, setProgress] = useState(0);
-  const SLIDE_DURATION = 4500;
+  const SLIDE_DURATION = 5000;
 
-  // Auto-play interval that properly resets when slide changes
+  // Subtle auto-advance for visual interest without button controls
   useEffect(() => {
-    if (isPaused || images.length <= 1) return;
+    if (images.length <= 1) return;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % images.length);
     }, SLIDE_DURATION);
     return () => clearInterval(timer);
-  }, [currentSlide, isPaused, images.length]);
-
-  // Smooth progress bar indicator
-  useEffect(() => {
-    setProgress(0);
-    if (isPaused || images.length <= 1) return;
-    const start = Date.now();
-    const tick = setInterval(() => {
-      const elapsed = Date.now() - start;
-      setProgress(Math.min((elapsed / SLIDE_DURATION) * 100, 100));
-    }, 40);
-    return () => clearInterval(tick);
-  }, [currentSlide, isPaused, images.length]);
-
-  const goToSlide = (idx: number) => {
-    setCurrentSlide(idx);
-    setProgress(0);
-  };
-
-  const nextSlide = () => goToSlide((currentSlide + 1) % images.length);
-  const prevSlide = () => goToSlide((currentSlide - 1 + images.length) % images.length);
-
-  // Touch swipe support
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.targetTouches[0].clientX);
-  };
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStart === null) return;
-    const touchEnd = e.changedTouches[0].clientX;
-    const diff = touchStart - touchEnd;
-    if (diff > 50) nextSlide();
-    else if (diff < -50) prevSlide();
-    setTouchStart(null);
-  };
+  }, [currentSlide, images.length]);
 
   return (
     <section
       className={`bg-[#071527] text-white flex flex-col justify-center py-5 sm:py-6 md:py-7 relative overflow-hidden select-none group ${heightClass}`}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         {/* Top Breadcrumb */}
         {breadcrumbs.length > 0 && (
           <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-white/70 mb-2 sm:mb-2.5 flex-wrap select-none">
-            <a href="/" className="hover:text-white transition-colors flex items-center gap-1">
+            <Link to="/" className="hover:text-white transition-colors flex items-center gap-1">
               <Home className="w-3.5 h-3.5 text-brand-orange" />
               <span>Home</span>
-            </a>
+            </Link>
             {breadcrumbs.map((crumb, idx) => {
               const isLast = idx === breadcrumbs.length - 1;
               return (
@@ -102,9 +66,9 @@ export default function SubpageHeroCarousel({
                   {isLast || !crumb.href ? (
                     <span className="text-brand-orange font-bold">{crumb.label}</span>
                   ) : (
-                    <a href={crumb.href} className="hover:text-white transition-colors">
+                    <Link to={crumb.href as any} className="hover:text-white transition-colors">
                       {crumb.label}
-                    </a>
+                    </Link>
                   )}
                 </div>
               );
@@ -114,7 +78,7 @@ export default function SubpageHeroCarousel({
 
         {/* Main Grid: Left Content + Right Organic Composition Slider */}
         <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-4 sm:gap-6 lg:gap-8 items-center">
-          {/* Left Column: Heading & Subtitle */}
+          {/* Left Column: Heading, Subtitle & Action Buttons */}
           <div className="space-y-2 sm:space-y-2.5 text-left">
             {tag && (
               <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-3 py-0.5 rounded-full text-[10px] sm:text-[11px] font-extrabold uppercase tracking-widest text-brand-orange mb-0.5">
@@ -123,7 +87,7 @@ export default function SubpageHeroCarousel({
               </div>
             )}
 
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight text-white leading-tight">
               {title}
             </h1>
 
@@ -133,63 +97,10 @@ export default function SubpageHeroCarousel({
               </p>
             )}
 
-            {/* Slide Navigation Controls */}
-            {images.length > 1 && (
-              <div className="flex items-center gap-3 pt-2">
-                <div className="flex items-center gap-1.5 bg-[#0b1f36] px-3 py-1.5 rounded-full border border-[#163559]">
-                  {/* Play/Pause Button */}
-                  <button
-                    onClick={() => setIsManualPaused((p) => !p)}
-                    aria-label={isPaused ? "Play slider" : "Pause slider"}
-                    title={isPaused ? "Play slider" : "Pause slider"}
-                    className="w-5 h-5 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer mr-0.5"
-                  >
-                    {isPaused ? <Play className="w-2.5 h-2.5 fill-white text-white ml-0.5" /> : <Pause className="w-2.5 h-2.5 fill-white text-white" />}
-                  </button>
-
-                  {images.map((_, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => goToSlide(idx)}
-                      aria-label={`Slide ${idx + 1}`}
-                      className="relative cursor-pointer py-1"
-                    >
-                      <div
-                        className={`rounded-full transition-all duration-300 ${
-                          currentSlide === idx ? "w-6 h-1.5 bg-white/30" : "w-1.5 h-1.5 bg-white/40 hover:bg-white/70"
-                        }`}
-                      />
-                      {currentSlide === idx && (
-                        <div
-                          className="absolute top-1 left-0 h-1.5 rounded-full bg-brand-orange"
-                          style={{ width: `${progress}%`, transition: "width 40ms linear" }}
-                        />
-                      )}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={prevSlide}
-                    aria-label="Previous slide"
-                    className="w-8 h-8 rounded-full bg-[#0b1f36] hover:bg-[#163559] text-white flex items-center justify-center border border-[#163559] transition cursor-pointer"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={nextSlide}
-                    aria-label="Next slide"
-                    className="w-8 h-8 rounded-full bg-[#0b1f36] hover:bg-[#163559] text-white flex items-center justify-center border border-[#163559] transition cursor-pointer"
-                  >
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            )}
+            {children && <div className="pt-2">{children}</div>}
           </div>
 
-          {/* Right Column: Native Organic Composition with Smooth Slider */}
+          {/* Right Column: Native Organic Composition */}
           <div className="relative flex items-center justify-center lg:justify-end lg:-translate-x-[100px]">
             <div className="relative w-full max-w-[280px] sm:max-w-[310px] md:max-w-[340px] aspect-[1.15/1]">
               {/* Background Soft Blue Organic Backdrop Layer */}

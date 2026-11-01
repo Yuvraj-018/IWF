@@ -29,8 +29,10 @@ import {
   ArrowDown,
   Layers,
   GraduationCap,
+  Heart,
 } from "lucide-react";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
+import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import heroImg from "@/assets/sector_education_1.png";
 
 export default function TechnicalVocationalPage() {
@@ -155,82 +157,38 @@ export default function TechnicalVocationalPage() {
       <Header />
 
       <main>
-        {/* HERO SECTION */}
-        <section className="relative min-h-[300px] sm:min-h-[330px] md:min-h-[360px] lg:min-h-[390px] flex items-center overflow-hidden bg-slate-900">
-          <img
-            src={heroImg}
-            alt="Technical and Vocational Training"
-            className="absolute inset-0 h-full w-full object-cover opacity-30 filter saturate-110"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#00381c]/95 via-[#004724]/85 to-slate-950/80" />
-
-          <div className="relative z-10 max-w-7xl mx-auto px-4 py-8 sm:py-10 w-full">
-            <nav className="flex items-center gap-2 text-xs text-emerald-200/80 mb-6 font-medium flex-wrap">
-              <Link to="/" className="hover:text-white flex items-center gap-1">
-                <Home className="w-3.5 h-3.5" /> Home
-              </Link>
-              <ChevronRight className="w-3.5 h-3.5" />
-              <Link to="/programs/education" className="hover:text-white">
-                Education & Learning
-              </Link>
-              <ChevronRight className="w-3.5 h-3.5" />
-              <span className="text-white font-semibold">
-                Technical & Vocational (TVET)
-              </span>
-            </nav>
-
-            <Link
-              to="/programs/education"
-              className="inline-flex items-center gap-2 text-xs font-semibold text-emerald-100 hover:text-white border border-emerald-400/30 bg-emerald-950/40 hover:bg-emerald-900/50 px-3.5 py-1.5 rounded-md transition-all mb-4 backdrop-blur-sm"
+        {/* Standardized Hero */}
+        <SubpageHeroCarousel
+          tag="EDUCATION • TVET"
+          title="Technical & Vocational Education and Training (TVET)"
+          subtitle="Building practical capabilities that help people work, earn, create, and grow through technical skills, vocational training, and livelihood pathways."
+          breadcrumbs={[
+            { label: "What We Do", href: "/programs" },
+            { label: "Education", href: "/programs/education" },
+            { label: "Technical & Vocational" },
+          ]}
+          images={[heroImg]}
+        >
+          <div className="flex flex-wrap items-center gap-3 pt-2">
+            <button
+              type="button"
+              onClick={() => setActiveModal("sponsor")}
+              className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold text-xs sm:text-sm px-6 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer"
             >
-              <ArrowLeft className="w-3.5 h-3.5" /> All Education Initiatives
-            </Link>
+              <Heart className="w-4 h-4 fill-white" />
+              <span>Support Technical Training</span>
+            </button>
 
-            <div className="inline-flex items-center gap-2 bg-[#ea580c]/20 border border-[#ea580c]/50 text-orange-200 px-3.5 py-1 rounded-full text-xs font-bold tracking-wider uppercase mb-4 backdrop-blur-sm">
-              <Wrench className="w-3.5 h-3.5 text-[#ea580c]" />
-              Work • Earn • Create • Grow
-            </div>
-
-            <div className="grid lg:grid-cols-12 gap-8 items-center">
-              <div className="lg:col-span-8">
-                <h1 className="text-3xl md:text-5xl lg:text-5xl font-black text-white leading-tight mb-3 tracking-tight">
-                  Technical & Vocational Education and Training{" "}
-                  <span className="text-amber-400">— TVET</span>
-                </h1>
-                <p className="text-base md:text-lg font-medium text-emerald-100/90 mb-4">
-                  Building practical capabilities that help people work, earn,
-                  create, and grow.
-                </p>
-                <p className="text-sm md:text-base text-slate-200/90 max-w-3xl leading-relaxed">
-                  Formal education can provide knowledge, but meaningful
-                  economic opportunity often requires practical skills, relevant
-                  training, confidence, and access to livelihood pathways.
-                  Through TVET, we bridge the gap between learning and
-                  livelihood.
-                </p>
-              </div>
-
-              {/* Hero Callout Card */}
-              <div className="lg:col-span-4">
-                <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 shadow-xl text-white">
-                  <div className="flex items-center gap-2.5 text-xs font-bold uppercase tracking-wider text-amber-300 mb-2">
-                    <Sparkles className="w-4 h-4" />
-                    Market-Driven Livelihood
-                  </div>
-                  <p className="text-xs md:text-sm text-emerald-50 leading-relaxed mb-4">
-                    Combining technical education, vocational workshops, soft
-                    skills, and direct employer placement to lift families into
-                    lasting self-reliance.
-                  </p>
-                  <div className="text-xs font-semibold text-emerald-200 pt-3 border-t border-white/15 flex items-center justify-between">
-                    <span>Technical + Vocational</span>
-                    <span className="text-amber-300 font-bold">100% Practical</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <button
+              type="button"
+              onClick={() => setActiveModal("partner")}
+              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs sm:text-sm px-5 py-2.5 sm:py-3 rounded-xl backdrop-blur-xs transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer"
+            >
+              <Briefcase className="w-4 h-4 text-brand-orange" />
+              <span>Partner With Us</span>
+            </button>
           </div>
-        </section>
+        </SubpageHeroCarousel>
 
         {/* 5-STEP CONTINUUM RIBBON */}
         <section className="bg-white border-b border-slate-200 py-6 shadow-sm">
@@ -241,7 +199,7 @@ export default function TechnicalVocationalPage() {
                   key={idx}
                   className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200 hover:border-emerald-300 transition-all"
                 >
-                  <span className="w-7 h-7 rounded-lg bg-emerald-100 text-[#004724] flex items-center justify-center font-black text-xs shrink-0">
+                  <span className="w-7 h-7 rounded-lg bg-emerald-100 text-[#004724] flex items-center justify-center font-bold text-xs shrink-0">
                     {idx + 1}
                   </span>
                   <div>
@@ -270,7 +228,7 @@ export default function TechnicalVocationalPage() {
                       <span className="text-xs font-bold uppercase tracking-widest text-[#ea580c] bg-orange-50 border border-orange-200 px-3 py-1 rounded-full mb-3 inline-block">
                         Why TVET?
                       </span>
-                      <h2 className="text-2xl font-black text-slate-900 mb-4">
+                      <h2 className="text-2xl font-bold text-slate-900 mb-4">
                         Education Should Create Capability as Well as Knowledge
                       </h2>
                       <p className="text-sm text-slate-600 leading-relaxed mb-6">
@@ -312,25 +270,25 @@ export default function TechnicalVocationalPage() {
               {/* Right 5 cols: TVET Creates Pathways */}
               <div className="lg:col-span-5">
                 <ScrollReveal delay={150}>
-                  <div className="h-full bg-gradient-to-br from-[#0b1f3b] to-[#004724] text-white rounded-2xl p-8 shadow-md flex flex-col justify-between border border-emerald-700/40">
+                  <div className="h-full bg-slate-50 text-slate-800 rounded-2xl p-8 shadow-xs flex flex-col justify-between border border-slate-200">
                     <div>
-                      <div className="flex items-center gap-2 text-xs font-bold text-amber-300 uppercase tracking-wider mb-2">
-                        <TrendingUp className="w-4 h-4 text-amber-400" />
+                      <div className="flex items-center gap-2 text-xs font-bold text-brand-orange uppercase tracking-wider mb-2">
+                        <TrendingUp className="w-4 h-4 text-brand-orange" />
                         Pathway To Self-Reliance
                       </div>
-                      <h3 className="text-xl font-bold text-white mb-6">
+                      <h3 className="text-xl font-bold text-slate-900 mb-6">
                         TVET Creates Pathways
                       </h3>
 
-                      <div className="relative pl-6 space-y-4 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-emerald-400/30">
+                      <div className="relative pl-6 space-y-4 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-emerald-300/40">
                         {PATHWAY_STEPS.map((step, idx) => (
                           <div key={idx} className="relative flex items-center gap-3">
-                            <span className="absolute -left-6 w-4 h-4 rounded-full bg-emerald-500 border-2 border-[#0b1f3b] flex items-center justify-center text-[9px] font-bold text-white" />
+                            <span className="absolute -left-6 w-4 h-4 rounded-full bg-emerald-600 border-2 border-white flex items-center justify-center text-[9px] font-bold text-white shadow-xs" />
                             <div>
-                              <div className="text-xs font-bold text-emerald-100">
+                              <div className="text-xs font-bold text-slate-900">
                                 {step.label}
                               </div>
-                              <div className="text-[11px] text-slate-300">
+                              <div className="text-[11px] text-slate-600">
                                 {step.sub}
                               </div>
                             </div>
@@ -339,7 +297,7 @@ export default function TechnicalVocationalPage() {
                       </div>
                     </div>
 
-                    <div className="pt-6 border-t border-white/10 text-xs text-amber-200 italic mt-6">
+                    <div className="pt-6 border-t border-slate-200 text-xs text-brand-orange font-medium italic mt-6">
                       From basic education to sustainable intergenerational wealth.
                     </div>
                   </div>
@@ -356,7 +314,7 @@ export default function TechnicalVocationalPage() {
               <span className="text-xs font-bold uppercase tracking-widest text-[#004724] bg-emerald-50 border border-emerald-200 px-3.5 py-1 rounded-full">
                 Integrated Learning Platform
               </span>
-              <h2 className="text-2xl md:text-4xl font-black text-slate-900 mt-3 mb-3">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mt-3 mb-3">
                 What is TVET?
               </h2>
               <p className="text-sm text-slate-600">
@@ -375,7 +333,7 @@ export default function TechnicalVocationalPage() {
                       <Cpu className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-black text-slate-900">
+                      <h3 className="text-lg font-bold text-slate-900">
                         Technical Skills
                       </h3>
                       <p className="text-xs text-slate-500">
@@ -410,7 +368,7 @@ export default function TechnicalVocationalPage() {
                       <Scissors className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-black text-slate-900">
+                      <h3 className="text-lg font-bold text-slate-900">
                         Vocational Skills
                       </h3>
                       <p className="text-xs text-slate-500">
@@ -455,7 +413,7 @@ export default function TechnicalVocationalPage() {
               <span className="text-xs font-bold uppercase tracking-widest text-[#ea580c] bg-orange-50 border border-orange-200 px-3.5 py-1 rounded-full">
                 Learn • Practise • Qualify • Connect • Earn • Grow
               </span>
-              <h2 className="text-2xl md:text-4xl font-black text-slate-900 mt-3 mb-3">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mt-3 mb-3">
                 Our TVET Approach
               </h2>
               <p className="text-sm text-slate-600">
@@ -470,7 +428,7 @@ export default function TechnicalVocationalPage() {
                   <div className="h-full bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md hover:border-emerald-400 transition-all flex flex-col justify-between">
                     <div>
                       <div className="flex items-center justify-between mb-3">
-                        <span className="w-9 h-9 rounded-xl bg-emerald-50 text-[#004724] border border-emerald-200 flex items-center justify-center font-black text-sm">
+                        <span className="w-9 h-9 rounded-xl bg-emerald-50 text-[#004724] border border-emerald-200 flex items-center justify-center font-bold text-sm">
                           {step.num}
                         </span>
                         <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
@@ -498,7 +456,7 @@ export default function TechnicalVocationalPage() {
               <span className="text-xs font-bold uppercase tracking-widest text-[#004724] bg-emerald-50 border border-emerald-200 px-3.5 py-1 rounded-full">
                 From Skill Development to Economic Resilience
               </span>
-              <h2 className="text-2xl md:text-3xl font-black text-slate-900 mt-3 mb-2">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mt-3 mb-2">
                 Expected Impact
               </h2>
               <p className="text-sm text-slate-600">
@@ -530,22 +488,17 @@ export default function TechnicalVocationalPage() {
         </section>
 
         {/* SECTION 5: STATEMENT BANNER */}
-        <section className="py-14 bg-[#004724] text-white text-center">
-          <div className="max-w-4xl mx-auto px-4 space-y-4">
-            <span className="text-4xl text-amber-400 font-serif leading-none block">
-              “
-            </span>
-            <p className="text-xl md:text-2xl font-bold leading-relaxed text-emerald-50 italic">
-              Education should not only prepare young people for
-              examinations—it should also prepare them for employment,
-              entrepreneurship, and independent livelihoods.
+        <section className="py-10 bg-slate-50/70 border-y border-slate-200 text-slate-800 text-center">
+          <div className="max-w-4xl mx-auto px-4 space-y-3">
+            <p className="text-lg md:text-xl font-serif italic leading-relaxed text-slate-800 text-balance">
+              “Education should not only prepare young people for examinations—it should also prepare them for employment, entrepreneurship, and independent livelihoods.”
             </p>
-            <div className="flex items-center justify-center gap-3 pt-2">
-              <span className="h-px w-8 bg-amber-400/60" />
-              <span className="text-amber-300 font-semibold text-xs uppercase tracking-widest">
+            <div className="flex items-center justify-center gap-3 pt-1">
+              <span className="h-px w-8 bg-brand-orange/40" />
+              <span className="text-brand-orange font-semibold text-xs uppercase tracking-widest">
                 Islah Welfare Foundation
               </span>
-              <span className="h-px w-8 bg-amber-400/60" />
+              <span className="h-px w-8 bg-brand-orange/40" />
             </div>
           </div>
         </section>
@@ -553,22 +506,22 @@ export default function TechnicalVocationalPage() {
         {/* SECTION 6: PARTNER CTA */}
         <section className="py-12 bg-white border-b border-slate-200">
           <div className="max-w-4xl mx-auto px-4">
-            <div className="p-8 rounded-3xl bg-gradient-to-br from-[#0b1f3b] via-[#004724] to-[#00381c] text-white shadow-xl flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div className="p-8 rounded-2xl bg-gradient-to-br from-[#071527] to-[#0c2340] text-white shadow-md flex flex-col sm:flex-row items-center justify-between gap-6">
               <div>
-                <div className="text-xs font-bold uppercase tracking-wider text-amber-300 mb-1">
+                <div className="text-xs font-bold uppercase tracking-wider text-brand-orange mb-1">
                   Skills Today • Opportunities Tomorrow
                 </div>
-                <h3 className="text-xl md:text-2xl font-black">
+                <h3 className="text-xl md:text-2xl font-bold">
                   Build a Self-Reliant & Empowered Community
                 </h3>
-                <p className="text-xs text-emerald-100/90 mt-1 max-w-lg">
+                <p className="text-xs text-slate-300 mt-1 max-w-lg leading-relaxed text-balance">
                   Partner with us to fund training kits, sponsor a vocational
                   batch, or provide apprenticeship opportunities.
                 </p>
               </div>
               <button
                 onClick={() => setActiveModal("partner")}
-                className="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold text-xs uppercase tracking-wider shrink-0 transition-all shadow-md hover:shadow-lg"
+                className="px-6 py-3 rounded-xl bg-brand-orange hover:bg-brand-orange/90 text-white font-semibold text-xs uppercase tracking-wider shrink-0 transition-all duration-200 hover:scale-[1.02] active:scale-95 shadow-md hover:shadow-lg cursor-pointer"
               >
                 Partner With Us
               </button>
@@ -581,14 +534,14 @@ export default function TechnicalVocationalPage() {
           <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <Link
               to="/programs/education/career-guidance"
-              className="inline-flex items-center gap-2 text-xs md:text-sm font-bold text-slate-800 hover:text-[#004724] border border-slate-300 bg-white hover:bg-slate-50 px-5 py-2.5 rounded-lg transition-all shadow-sm"
+              className="inline-flex items-center gap-2 text-xs md:text-sm font-semibold text-slate-800 hover:text-brand-green border border-slate-300 bg-white hover:bg-slate-50 px-5 py-2.5 rounded-lg transition-all duration-200 hover:scale-[1.02] active:scale-95 shadow-xs"
             >
               <ArrowLeft className="w-4 h-4" /> Prev: Career Guidance &
               Mentorship (CGM)
             </Link>
             <Link
               to="/programs/education/knowledge-research-publication"
-              className="inline-flex items-center gap-2 text-xs md:text-sm font-bold text-white bg-[#004724] hover:bg-[#00381c] px-5 py-2.5 rounded-lg transition-all shadow-sm"
+              className="inline-flex items-center gap-2 text-xs md:text-sm font-semibold text-white bg-brand-green hover:bg-brand-green-dark px-5 py-2.5 rounded-lg transition-all duration-200 hover:scale-[1.02] active:scale-95 shadow-xs"
             >
               Next: Knowledge, Research & Publication (KRP){" "}
               <ArrowRight className="w-4 h-4" />

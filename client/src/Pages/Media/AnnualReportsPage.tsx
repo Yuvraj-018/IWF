@@ -13,7 +13,6 @@ export function AnnualReportsPage() {
         badge={ANNUAL_REPORTS_DATA.hero.badge}
         title={ANNUAL_REPORTS_DATA.hero.title}
         description={ANNUAL_REPORTS_DATA.hero.description}
-        subtext={`📊 ${ANNUAL_REPORTS_DATA.hero.tagline}`}
         breadcrumb={[{ label: "Media & Updates", href: "/media" }, { label: "Annual Reports" }]}
         image={ANNUAL_REPORTS_DATA.hero.image}
         imageAlt="Islah Annual Reports"
@@ -119,17 +118,17 @@ export function AnnualReportsPage() {
             </div>
 
             {/* About Our Reports */}
-            <div className="bg-gradient-to-br from-[#063319] to-[#0b4d26] text-white rounded-2xl p-6 shadow-md border border-emerald-800">
-              <div className="flex items-center gap-2 text-emerald-400 mb-2">
-                <ShieldCheck className="w-5 h-5" />
-                <span className="text-[11px] font-bold uppercase tracking-wider">
+            <div className="bg-gradient-to-br from-[#071527] to-[#0c2340] text-white rounded-2xl p-6 shadow-md border border-slate-800">
+              <div className="flex items-center gap-2 text-brand-orange mb-2">
+                <ShieldCheck className="w-5 h-5 text-brand-orange" />
+                <span className="text-[11px] font-bold uppercase tracking-wider text-white">
                   {ANNUAL_REPORTS_DATA.sidebar.aboutTitle}
                 </span>
               </div>
-              <p className="text-xs text-emerald-100 leading-relaxed mt-2">
+              <p className="text-xs text-slate-300 leading-relaxed mt-2">
                 {ANNUAL_REPORTS_DATA.sidebar.aboutText}
               </p>
-              <div className="mt-4 pt-4 border-t border-emerald-700/60 text-[11px] text-emerald-300 font-semibold">
+              <div className="mt-4 pt-4 border-t border-slate-700/60 text-[11px] text-slate-400 font-semibold">
                 Section 8 Registered Non-Profit • 12A & 80G Certified
               </div>
             </div>

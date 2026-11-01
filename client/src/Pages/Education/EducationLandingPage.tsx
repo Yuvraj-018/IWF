@@ -220,7 +220,6 @@ export default function EducationLandingPage() {
       <Header />
 
       <main>
-        {/* ─── 1. HERO SECTION ─────────────────────────────────────────────────── */}
         {/* ─── 1. HERO SECTION (Matching About Us SubpageHeroCarousel) ─── */}
         <SubpageHeroCarousel
           tag="WHAT WE DO • SECTOR 01"
@@ -231,33 +230,25 @@ export default function EducationLandingPage() {
             { label: "Education & Learning" },
           ]}
           images={[causeEducationImg, sectorEducation1, sectorEducation2]}
-        />
-
-        {/* Floating Quick Action Bar */}
-        <div className="max-w-7xl mx-auto px-4 md:px-8 -mt-6 relative z-20 mb-8">
-          <div className="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-md flex flex-wrap items-center justify-between gap-3">
-            <div className="flex flex-wrap items-center gap-3">
-              <a
-                href="#initiatives"
-                className="inline-flex items-center gap-2 bg-[#15803d] hover:bg-[#166534] text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-md transition uppercase tracking-wider"
-              >
-                <span>Explore Our Programmes</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </a>
-              <button
-                type="button"
-                onClick={() => setActiveModal("sponsor")}
-                className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-md transition uppercase tracking-wider cursor-pointer"
-              >
-                <Heart className="w-3.5 h-3.5 text-brand-orange" />
-                <span>Support a Learner</span>
-              </button>
-            </div>
-            <div className="text-xs font-semibold text-slate-500">
-              Primary Education • Scholarships • Community Learning Centres
-            </div>
+        >
+          <div className="flex flex-wrap items-center gap-3 pt-2">
+            <a
+              href="#initiatives"
+              className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold px-6 sm:px-7 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer"
+            >
+              <span>Explore Programmes</span>
+              <ArrowRight className="w-4 h-4" />
+            </a>
+            <button
+              type="button"
+              onClick={() => setActiveModal("sponsor")}
+              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer backdrop-blur-xs"
+            >
+              <Heart className="w-4 h-4 text-brand-orange" />
+              <span>Support a Learner</span>
+            </button>
           </div>
-        </div>
+        </SubpageHeroCarousel>
 
         {/* ─── 2. STAT COUNTER BAR ─────────────────────────────────────────────── */}
         <section className="bg-slate-50 border-y border-slate-200 py-8">
@@ -277,7 +268,7 @@ export default function EducationLandingPage() {
                       <IconComponent className="w-6 h-6" />
                     </div>
                     <div>
-                      <div className="text-2xl sm:text-3xl font-black text-slate-900 leading-none">
+                      <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-none">
                         {st.num}
                       </div>
                       <div className="text-xs sm:text-sm font-bold text-slate-800 mt-1">
@@ -302,10 +293,10 @@ export default function EducationLandingPage() {
               <div className="lg:col-span-6 space-y-6">
                 <ScrollReveal>
                   <div className="space-y-4">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-[#15803d] text-xs font-black uppercase tracking-wider">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-[#15803d] text-xs font-bold uppercase tracking-wider">
                       <span>OVERVIEW</span>
                     </div>
-                    <h2 className="text-2xl sm:text-3xl font-black text-slate-900 leading-snug">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 leading-snug">
                       Education is more than entering a classroom.
                     </h2>
                     <p className="text-slate-600 text-sm leading-relaxed">
@@ -324,7 +315,7 @@ export default function EducationLandingPage() {
                       <span className="w-2 h-2 rounded-full bg-amber-600" />
                       <span>THE CHALLENGE • RURAL EDUCATION IN INDIA</span>
                     </div>
-                    <h3 className="text-lg font-black text-slate-900">
+                    <h3 className="text-lg font-bold text-slate-900">
                       Interconnected Barriers in Underserved Communities
                     </h3>
                     <p className="text-xs text-slate-600 leading-relaxed">
@@ -358,10 +349,10 @@ export default function EducationLandingPage() {
                   <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 space-y-6 shadow-xl relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl" />
                     <div className="relative z-10 space-y-4">
-                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-emerald-300 text-xs font-black uppercase tracking-wider">
+                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-emerald-300 text-xs font-bold uppercase tracking-wider">
                         <span>OUR VISION</span>
                       </div>
-                      <h3 className="text-xl sm:text-2xl font-black text-white leading-tight">
+                      <h3 className="text-xl sm:text-2xl font-bold text-white leading-tight">
                         Education as a Pathway to Opportunity
                       </h3>
                       <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
@@ -428,10 +419,10 @@ export default function EducationLandingPage() {
         <section className="py-16 bg-slate-50 border-t border-slate-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-12">
             <div className="max-w-2xl mx-auto space-y-3">
-              <span className="text-xs font-black uppercase tracking-widest text-[#15803d]">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#15803d]">
                 OUR METHODOLOGY
               </span>
-              <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
+              <h2 className="text-2xl sm:text-4xl font-bold text-slate-900 tracking-tight">
                 From Access to Agency
               </h2>
               <p className="text-xs sm:text-sm text-slate-600">
@@ -447,12 +438,12 @@ export default function EducationLandingPage() {
                 >
                   <div className="space-y-2">
                     <div
-                      className="text-xs font-black tracking-widest"
+                      className="text-xs font-bold tracking-widest"
                       style={{ color: st.color }}
                     >
                       {st.step}
                     </div>
-                    <h3 className="font-black text-sm text-slate-900 tracking-tight">
+                    <h3 className="font-bold text-sm text-slate-900 tracking-tight">
                       {st.title}
                     </h3>
                     <p className="text-[11px] text-slate-600 leading-relaxed">
@@ -472,10 +463,10 @@ export default function EducationLandingPage() {
         <section id="initiatives" className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <div className="text-center max-w-3xl mx-auto space-y-3">
-              <span className="text-xs font-black uppercase tracking-widest text-[#15803d]">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#15803d]">
                 OUR INITIATIVES &amp; PROGRAMMES
               </span>
-              <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">
                 Eight Pathways. One Purpose.
               </h2>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
@@ -494,7 +485,7 @@ export default function EducationLandingPage() {
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
                         <span
-                          className="text-xs font-black px-2.5 py-1 rounded-md text-white"
+                          className="text-xs font-bold px-2.5 py-1 rounded-md text-white"
                           style={{ backgroundColor: init.color }}
                         >
                           {init.num}
@@ -509,7 +500,7 @@ export default function EducationLandingPage() {
                       </div>
 
                       <div>
-                        <h3 className="text-base font-black text-slate-900 group-hover:text-[#15803d] transition leading-snug">
+                        <h3 className="text-base font-bold text-slate-900 group-hover:text-[#15803d] transition leading-snug">
                           {init.title}
                         </h3>
                         <p className="text-[11px] font-bold text-slate-500 mt-1">
@@ -542,10 +533,10 @@ export default function EducationLandingPage() {
         <section className="py-16 bg-slate-50 border-t border-slate-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <div className="text-center max-w-2xl mx-auto space-y-2">
-              <span className="text-xs font-black uppercase tracking-widest text-[#15803d]">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#15803d]">
                 OUR PHILOSOPHY
               </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
                 We Believe Education Should Build More Than Academic Achievement
               </h2>
               <p className="text-xs text-slate-600">
@@ -578,13 +569,13 @@ export default function EducationLandingPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-gradient-to-br from-emerald-900 via-[#004724] to-[#002e17] rounded-3xl p-8 sm:p-12 text-white shadow-2xl relative overflow-hidden">
               <div className="max-w-3xl space-y-4">
-                <span className="text-xs font-black uppercase tracking-widest text-emerald-400">
+                <span className="text-xs font-bold uppercase tracking-widest text-emerald-400">
                   LONG-TERM OUTCOMES
                 </span>
-                <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+                <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
                   Building Stronger Futures Through Education
                 </h2>
-                <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-200 leading-relaxed text-balance">
                   Through its Education &amp; Learning initiatives, ISLAH aims to create measurable, sustainable change across the lives of rural learners, families and entire communities.
                 </p>
               </div>
@@ -614,89 +605,70 @@ export default function EducationLandingPage() {
         {/* ─── 8. ROADMAP BANNER ───────────────────────────────────────────────── */}
         <section className="py-12 bg-slate-900 text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-            <p className="text-xs font-black uppercase tracking-widest text-emerald-400">
+            <p className="text-xs font-bold uppercase tracking-widest text-emerald-400">
               FROM FIRST LEARNING TO FUTURE POSSIBILITY
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 max-w-4xl mx-auto">
               <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
                 <p className="text-[10px] uppercase font-bold text-slate-400">Foundation</p>
-                <p className="text-xs font-black text-white mt-1">EPS + SKLS</p>
+                <p className="text-xs font-bold text-white mt-1">EPS + SKLS</p>
                 <p className="text-[10px] text-emerald-300">Every child starts right</p>
               </div>
               <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
                 <p className="text-[10px] uppercase font-bold text-slate-400">Discovery</p>
-                <p className="text-xs font-black text-white mt-1">CLC + APTD</p>
+                <p className="text-xs font-bold text-white mt-1">CLC + APTD</p>
                 <p className="text-[10px] text-emerald-300">Uncovering rural talent</p>
               </div>
               <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
                 <p className="text-[10px] uppercase font-bold text-slate-400">Advancement</p>
-                <p className="text-xs font-black text-white mt-1">SHE + CGM</p>
+                <p className="text-xs font-bold text-white mt-1">SHE + CGM</p>
                 <p className="text-[10px] text-emerald-300">Higher education &amp; paths</p>
               </div>
               <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
                 <p className="text-[10px] uppercase font-bold text-slate-400">Readiness</p>
-                <p className="text-xs font-black text-white mt-1">TVET</p>
+                <p className="text-xs font-bold text-white mt-1">TVET</p>
                 <p className="text-[10px] text-emerald-300">Skills for livelihood</p>
               </div>
               <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center col-span-2 sm:col-span-1">
                 <p className="text-[10px] uppercase font-bold text-slate-400">Knowledge</p>
-                <p className="text-xs font-black text-white mt-1">KRP</p>
+                <p className="text-xs font-bold text-white mt-1">KRP</p>
                 <p className="text-[10px] text-emerald-300">Research &amp; publication</p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ─── 9. OUR STATEMENT ────────────────────────────────────────────────── */}
-        <section className="py-16 bg-white border-b border-slate-200">
-          <div className="max-w-4xl mx-auto px-4 text-center space-y-4">
-            <span className="text-xs font-black uppercase tracking-widest text-[#15803d]">
-              OUR STATEMENT
+        {/* ─── 9. CALL TO ACTION BANNER ───────────────────────────────────────── */}
+        <section className="py-16 bg-gradient-to-br from-[#071527] to-[#0c2340] text-white">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-orange block">
+              BE A PART OF THEIR JOURNEY
             </span>
-            <blockquote className="text-2xl sm:text-3xl font-black text-slate-900 leading-snug">
+            <blockquote className="text-xl sm:text-2xl font-serif italic text-white/95 leading-relaxed max-w-2xl mx-auto text-balance">
               “Empowering rural learners today for a better India tomorrow.”
             </blockquote>
-            <p className="text-xs sm:text-sm text-slate-600">
-              Because inclusive development begins where opportunity is needed most.
+            <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto text-balance">
+              Whether through sponsoring a student, funding school kits, or mentoring youth, your partnership transforms lives.
             </p>
-          </div>
-        </section>
 
-        {/* ─── 10. CALL TO ACTION BANNER ───────────────────────────────────────── */}
-        <section className="py-16 bg-slate-50">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-3xl p-8 sm:p-10 border border-slate-200 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
-              <div className="space-y-1.5 max-w-xl">
-                <span className="text-xs font-black uppercase tracking-widest text-[#15803d]">
-                  BE A PART OF THEIR JOURNEY
-                </span>
-                <h3 className="text-xl sm:text-2xl font-black text-slate-900">
-                  Support Quality Education in Rural India
-                </h3>
-                <p className="text-xs text-slate-600">
-                  Whether through sponsoring a student, funding school kits, or mentoring youth, your partnership transforms lives.
-                </p>
-              </div>
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setActiveModal("sponsor")}
+                className="inline-flex items-center gap-2 bg-brand-orange hover:bg-brand-orange/90 text-white font-semibold text-xs sm:text-sm px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] active:scale-95 cursor-pointer"
+              >
+                <Heart className="w-4 h-4 fill-white text-white" />
+                <span>Support Education</span>
+              </button>
 
-              <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => setActiveModal("sponsor")}
-                  className="inline-flex items-center gap-2 bg-[#15803d] hover:bg-[#166534] text-white font-extrabold text-xs sm:text-sm px-5 py-3 rounded-xl shadow-md transition"
-                >
-                  <Heart className="w-4 h-4 fill-white text-white" />
-                  <span>Support Education</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setActiveModal("partner")}
-                  className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs sm:text-sm px-5 py-3 rounded-xl shadow-md transition"
-                >
-                  <Users className="w-4 h-4" />
-                  <span>Partner With Us</span>
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => setActiveModal("partner")}
+                className="inline-flex items-center gap-2 border border-white/30 hover:bg-white/10 text-white font-semibold text-xs sm:text-sm px-6 py-3 rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-95 cursor-pointer"
+              >
+                <Users className="w-4 h-4" />
+                <span>Partner With Us</span>
+              </button>
             </div>
           </div>
         </section>

@@ -49,12 +49,6 @@ export default function PartnerPage() {
           title="Partnership with Us"
           description="At ISLAH, we believe that meaningful and sustainable development is achieved through purposeful collaboration. We invite CSR foundations, NGOs, academic institutions, and corporate leaders to co-create sustainable solutions for rural and underserved India."
           breadcrumb={[{ label: "Partner with Us" }]}
-          cards={[
-            { title: "100%", subtitle: "CSR-1 & 80G Certified", icon: Shield },
-            { title: "Audited", subtitle: "Transparent Books", icon: FileText },
-            { title: "Institutions & CSR", subtitle: "Co-created Impact", icon: Building2 },
-            { title: "Pan-India Reach", subtitle: "Measurable Change", icon: Globe },
-          ]}
         >
           <div className="flex flex-wrap gap-3 pt-2">
             <button
@@ -79,7 +73,7 @@ export default function PartnerPage() {
               <span className="text-xs font-bold uppercase tracking-widest text-brand-orange">
                 Working Domains
               </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0b1f3b] mt-1">
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">
                 Areas We Work In
               </h2>
               <p className="text-slate-600 text-sm mt-2">
@@ -117,10 +111,10 @@ export default function PartnerPage() {
                   <div className="w-12 h-12 rounded-xl bg-sky-50 text-[#163a69] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
                     <item.icon className="w-6 h-6 text-brand-orange" />
                   </div>
-                  <h3 className="font-extrabold text-slate-900 text-base mb-2 group-hover:text-brand-green transition-colors">
+                  <h3 className="font-bold text-slate-900 text-base mb-2 group-hover:text-brand-green transition-colors">
                     {item.title}
                   </h3>
-                  <p className="text-xs text-slate-500 leading-relaxed">{item.desc}</p>
+                  <p className="text-sm text-black font-normal leading-relaxed">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -134,10 +128,10 @@ export default function PartnerPage() {
               <span className="text-xs font-bold uppercase tracking-widest text-brand-orange">
                 Structured Process
               </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0b1f3b] mt-1">
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">
                 The Partnership Journey (8 Steps)
               </h2>
-              <p className="text-slate-600 text-sm mt-2">
+              <p className="text-sm text-slate-600 leading-relaxed font-normal mt-2">
                 How we move from initial conversation to sustainable, measurable field outcomes.
               </p>
             </div>
@@ -157,8 +151,8 @@ export default function PartnerPage() {
                   <span className="text-lg font-black text-brand-orange font-mono block mb-1">
                     {step.num}
                   </span>
-                  <h4 className="font-extrabold text-sm text-slate-900 mb-1">{step.title}</h4>
-                  <p className="text-[11px] text-slate-500 leading-snug">{step.desc}</p>
+                  <h4 className="font-bold text-sm text-slate-900 mb-1">{step.title}</h4>
+                  <p className="text-xs text-slate-700 leading-relaxed">{step.desc}</p>
                 </div>
               ))}
             </div>
@@ -170,11 +164,11 @@ export default function PartnerPage() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <div className="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
               {/* Form Header */}
-              <div className="bg-gradient-to-r from-[#0b1f3b] via-[#163a69] to-brand-green px-6 sm:px-10 py-6 text-white">
+              <div className="bg-gradient-to-r from-[#071527] to-[#0c2340] px-6 sm:px-10 py-6 text-white">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-emerald-200 text-xs font-bold mb-2">
                   <Building2 className="w-3.5 h-3.5" /> Official Application
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-black">Partnership Application Form</h2>
+                <h2 className="text-2xl sm:text-3xl font-bold">Partnership Application Form</h2>
                 <p className="text-white/80 text-xs sm:text-sm mt-1">
                   Tell us about your organization and how we can collaborate to empower underserved communities.
                 </p>

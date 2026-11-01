@@ -47,12 +47,6 @@ export default function SponsorPage() {
           title="Sponsor a Program"
           description="At ISLAH, every program is designed to create sustainable and measurable change in the lives of rural and underserved communities. By sponsoring a program, project, or initiative, you help ensure that education, healthcare, livelihoods, and dignity reach those who need them the most."
           breadcrumb={[{ label: "Sponsor a Program" }]}
-          cards={[
-            { title: "80G Benefit", subtitle: "IT Act Exempt", icon: Shield },
-            { title: "Audited", subtitle: "Quarterly Reports", icon: Award },
-            { title: "Direct Funding", subtitle: "Transparent Utilization", icon: CreditCard },
-            { title: "Grassroots", subtitle: "Lasting Outcomes", icon: Users },
-          ]}
         >
           <div className="flex flex-wrap gap-3 pt-2">
             <button
@@ -80,10 +74,10 @@ export default function SponsorPage() {
                   <div className="inline-flex items-center gap-2 text-xs font-black text-brand-green uppercase tracking-wider mb-2">
                     <CreditCard className="w-4 h-4" /> Option 1: Online Donation / Sponsorship
                   </div>
-                  <h3 className="text-xl font-extrabold text-[#0b1f3b] mb-2">
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">
                     Instant Online Sponsorship
                   </h3>
-                  <p className="text-xs text-slate-500 leading-relaxed mb-4">
+                  <p className="text-sm text-slate-600 leading-relaxed font-normal mb-4">
                     Support a specific initiative online via UPI, Net Banking, or Debit/Credit card. Instant 80G receipt generated upon completion.
                   </p>
                 </div>
@@ -91,7 +85,7 @@ export default function SponsorPage() {
                   <span className="text-xs font-bold text-slate-600">Education • Health • SHGs • Relief</span>
                   <a
                     href="/donate"
-                    className="inline-flex items-center gap-1.5 bg-brand-orange hover:bg-orange-600 text-white font-bold px-5 py-2 rounded-xl text-xs uppercase tracking-wider transition"
+                    className="inline-flex items-center gap-1.5 bg-brand-orange hover:bg-orange-600 text-white font-bold px-5 py-2 rounded-xl text-xs uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-95 shadow-xs"
                   >
                     Donate Online <ArrowRight className="w-3.5 h-3.5" />
                   </a>
@@ -103,7 +97,7 @@ export default function SponsorPage() {
                 <div className="inline-flex items-center gap-2 text-xs font-black text-[#144272] uppercase tracking-wider mb-2">
                   <Landmark className="w-4 h-4" /> Option 2: Direct Bank Transfer (NEFT / RTGS)
                 </div>
-                <h3 className="text-xl font-extrabold text-[#0b1f3b] mb-3">
+                <h3 className="text-xl font-bold text-slate-900 mb-3">
                   Bank Account Details
                 </h3>
 
@@ -148,10 +142,10 @@ export default function SponsorPage() {
               <span className="text-xs font-bold uppercase tracking-widest text-brand-orange">
                 The Process
               </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0b1f3b] mt-1">
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">
                 The Sponsorship Journey (5 Steps)
               </h2>
-              <p className="text-slate-600 text-sm mt-2">
+              <p className="text-sm text-slate-600 leading-relaxed font-normal mt-2">
                 From initial alignment to celebrating life-changing transformation on the ground.
               </p>
             </div>
@@ -168,8 +162,8 @@ export default function SponsorPage() {
                   <span className="inline-block px-2.5 py-0.5 rounded-full bg-brand-orange/15 text-brand-orange font-bold text-xs uppercase mb-2">
                     {item.step}
                   </span>
-                  <h4 className="font-extrabold text-sm text-slate-900 mb-1">{item.title}</h4>
-                  <p className="text-[11px] text-slate-500 leading-relaxed">{item.desc}</p>
+                  <h4 className="font-bold text-sm text-slate-900 mb-1">{item.title}</h4>
+                  <p className="text-xs text-slate-700 leading-relaxed">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -181,11 +175,11 @@ export default function SponsorPage() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <div className="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
               {/* Form Header */}
-              <div className="bg-gradient-to-r from-[#0b1f3b] via-[#853012] to-brand-orange px-6 sm:px-10 py-6 text-white">
+              <div className="bg-gradient-to-r from-[#071527] to-[#0c2340] px-6 sm:px-10 py-6 text-white">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-amber-200 text-xs font-bold mb-2">
                   <Heart className="w-3.5 h-3.5 fill-amber-200" /> Official Application
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-black">Sponsorship Application Form</h2>
+                <h2 className="text-2xl sm:text-3xl font-bold">Sponsorship Application Form</h2>
                 <p className="text-white/80 text-xs sm:text-sm mt-1">
                   Empower a community by sponsoring a program with measurable social impact.
                 </p>

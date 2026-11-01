@@ -30,6 +30,7 @@ import {
 } from "@/components/layout/SiteLayout";
 import type { RoleType } from "@/components/forms/RoleFormModal";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
+import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import heroImg from "@/assets/sector_education_1.png";
 import causeEduImg from "@/assets/cause-education.jpg";
 
@@ -44,77 +45,36 @@ export default function PrimarySchoolPage() {
 
       <main>
         {/* ─── Hero Section ────────────────────────────────────────────────────── */}
-        <section className="relative overflow-hidden bg-gradient-to-r from-[#00381e] via-[#005a30] to-[#014725] text-white min-h-[300px] sm:min-h-[330px] md:min-h-[360px] lg:min-h-[390px] flex items-center py-6 sm:py-8 md:py-10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-            {/* Standardized Breadcrumb */}
-            <nav className="flex items-center gap-1.5 text-xs text-emerald-200/80 mb-4 font-medium flex-wrap">
-              <Link to="/" className="hover:text-white flex items-center gap-1">
-                <Home className="w-3.5 h-3.5 text-brand-orange" /> Home
-              </Link>
-              <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-              <Link to="/programs" className="hover:text-white">What We Do</Link>
-              <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-              <Link to="/programs/education" className="hover:text-white">Education &amp; Learning</Link>
-              <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-              <span className="text-emerald-300 font-semibold">Primary School (EPS)</span>
-            </nav>
+        <SubpageHeroCarousel
+          tag="EPS • ERAWIN PUBLIC SCHOOL"
+          title="Primary School Foundational Education"
+          subtitle="Every child deserves a beginning from which they can grow. EPS is an initiative of ISLAH focused on strengthening access to foundational and primary education for children in underserved communities."
+          breadcrumbs={[
+            { label: "What We Do", href: "/programs" },
+            { label: "Education & Learning", href: "/programs/education" },
+            { label: "Primary School (EPS)" },
+          ]}
+          images={[heroImg]}
+        >
+          <div className="flex flex-wrap items-center gap-3 pt-1">
+            <a
+              href="#details"
+              className="inline-flex items-center gap-2 bg-brand-orange hover:bg-[#c2410c] text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-md transition cursor-pointer"
+            >
+              <span>Explore Our Approach</span>
+              <ArrowRight className="w-4 h-4" />
+            </a>
 
-            <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 items-center">
-              <div className="lg:col-span-7 space-y-3">
-                <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-widest text-brand-orange mb-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-orange animate-pulse" />
-                  EPS • ERAWIN PUBLIC SCHOOL
-                </div>
-
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
-                  Primary School <br className="hidden sm:inline" />
-                  <span className="text-emerald-300">Foundational Education</span>
-                </h1>
-
-                <p className="text-slate-200 text-xs sm:text-sm max-w-xl leading-relaxed">
-                  Every child deserves a beginning from which they can grow. EPS is an initiative of ISLAH focused on strengthening access to foundational and primary education for children in underserved communities.
-                </p>
-
-                <div className="flex flex-wrap items-center gap-3 pt-1">
-                  <a
-                    href="#details"
-                    className="inline-flex items-center gap-2 bg-brand-orange hover:bg-[#c2410c] text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-md transition cursor-pointer"
-                  >
-                    <span>Explore Our Approach</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </a>
-
-                  <button
-                    type="button"
-                    onClick={() => setActiveModal("sponsor")}
-                    className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl backdrop-blur-md transition cursor-pointer"
-                  >
-                    <Heart className="w-4 h-4 fill-brand-orange text-brand-orange" />
-                    <span>Support a Learner</span>
-                  </button>
-                </div>
-              </div>
-
-              <div className="lg:col-span-5">
-                <div className="rounded-2xl overflow-hidden border-2 border-white/15 shadow-xl bg-white/5 max-w-md ml-auto">
-                  <img
-                    src={heroImg}
-                    alt="Erawin Public School Campus &amp; Students"
-                    className="w-full h-56 sm:h-64 object-cover"
-                  />
-                  <div className="p-3.5 bg-slate-900/90 text-white">
-                    <p className="text-[11px] font-bold uppercase tracking-widest text-emerald-400">
-                      ERAWIN PUBLIC SCHOOL
-                    </p>
-                    <p className="text-xs text-slate-300 mt-0.5">
-                      Nurturing young minds • Building better futures in rural Bihar.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <button
+              type="button"
+              onClick={() => setActiveModal("sponsor")}
+              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl backdrop-blur-md transition cursor-pointer"
+            >
+              <Heart className="w-4 h-4 fill-brand-orange text-brand-orange" />
+              <span>Support a Learner</span>
+            </button>
           </div>
-        </section>
+        </SubpageHeroCarousel>
 
         {/* ─── Need for Schools vs Our Initiative ──────────────────────────────── */}
         <section id="details" className="py-16 bg-white border-b border-slate-200">
@@ -127,7 +87,7 @@ export default function PrimarySchoolPage() {
                     <School className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-base sm:text-lg font-black text-slate-900 uppercase tracking-tight">
+                    <h3 className="text-base sm:text-lg font-bold text-slate-900 uppercase tracking-tight">
                       NEED FOR SCHOOLS IN RURAL AREAS
                     </h3>
                   </div>
@@ -184,7 +144,7 @@ export default function PrimarySchoolPage() {
                     <GraduationCap className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-base sm:text-lg font-black text-slate-900 uppercase tracking-tight">
+                    <h3 className="text-base sm:text-lg font-bold text-slate-900 uppercase tracking-tight">
                       OUR INITIATIVE: ERAWIN PUBLIC SCHOOL (EPS)
                     </h3>
                   </div>
@@ -230,7 +190,7 @@ export default function PrimarySchoolPage() {
                   <div className="w-10 h-10 rounded-xl bg-emerald-50 text-[#15803d] flex items-center justify-center font-bold shrink-0">
                     <BookOpen className="w-5 h-5" />
                   </div>
-                  <h3 className="text-base sm:text-lg font-black text-slate-900 uppercase tracking-tight">
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900 uppercase tracking-tight">
                     OVERVIEW OF ERAWIN PUBLIC SCHOOL (EPS)
                   </h3>
                 </div>
@@ -266,7 +226,7 @@ export default function PrimarySchoolPage() {
                   <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center font-bold shrink-0">
                     <TrendingUp className="w-5 h-5" />
                   </div>
-                  <h3 className="text-base sm:text-lg font-black text-slate-900 uppercase tracking-tight">
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900 uppercase tracking-tight">
                     EXPECTED IMPACT
                   </h3>
                 </div>
@@ -289,8 +249,8 @@ export default function PrimarySchoolPage() {
                   ))}
                 </div>
 
-                <div className="bg-slate-900 text-white rounded-2xl p-4 text-center">
-                  <p className="text-sm font-extrabold text-emerald-300">
+                <div className="bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-2xl p-4 text-center">
+                  <p className="text-sm font-bold text-emerald-800">
                     Education Empowers Dreams • Builds Futures
                   </p>
                 </div>
@@ -303,10 +263,10 @@ export default function PrimarySchoolPage() {
         <section className="py-16 bg-white border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             <div className="max-w-3xl space-y-2">
-              <span className="text-xs font-black uppercase tracking-widest text-[#15803d]">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#15803d]">
                 GROWTH STRATEGY
               </span>
-              <h3 className="text-2xl sm:text-3xl font-black text-slate-900">
+              <h3 className="text-2xl sm:text-3xl font-bold text-slate-900">
                 FUTURE VISION &amp; EXPANSION
               </h3>
               <p className="text-xs sm:text-sm text-slate-600">
@@ -322,8 +282,8 @@ export default function PrimarySchoolPage() {
                 { title: "Scale Impact", desc: "Reaching thousands of rural children with lifetime foundational learning.", step: "04" },
               ].map((vis) => (
                 <div key={vis.step} className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                  <span className="text-xs font-black text-brand-orange">{vis.step}</span>
-                  <h4 className="font-extrabold text-sm text-slate-900">{vis.title}</h4>
+                  <span className="text-xs font-bold text-brand-orange">{vis.step}</span>
+                  <h4 className="font-bold text-sm text-slate-900">{vis.title}</h4>
                   <p className="text-xs text-slate-600">{vis.desc}</p>
                 </div>
               ))}
@@ -332,14 +292,14 @@ export default function PrimarySchoolPage() {
         </section>
 
         {/* ─── Quote & Bottom CTAs ─────────────────────────────────────────────── */}
-        <section className="py-14 bg-emerald-950 text-white">
+        <section className="py-14 bg-gradient-to-r from-[#071527] to-[#0c2340] text-white">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-              <div className="space-y-2 max-w-xl text-center md:text-left">
-                <blockquote className="text-lg sm:text-xl font-black text-white leading-snug">
+              <div className="space-y-2 max-w-2xl text-center md:text-left">
+                <blockquote className="text-base sm:text-lg font-medium text-slate-200 leading-relaxed italic">
                   “Building strong foundations today — empowering rural children through quality primary education for a better tomorrow.”
                 </blockquote>
-                <p className="text-xs text-emerald-300">
+                <p className="text-xs text-slate-400">
                   Your support can change a child's educational trajectory forever.
                 </p>
               </div>
@@ -348,7 +308,7 @@ export default function PrimarySchoolPage() {
                 <button
                   type="button"
                   onClick={() => setActiveModal("sponsor")}
-                  className="inline-flex items-center gap-2 bg-brand-orange hover:bg-[#c2410c] text-white font-extrabold text-xs sm:text-sm px-5 py-3 rounded-xl shadow-lg transition"
+                  className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer"
                 >
                   <Heart className="w-4 h-4 fill-white" />
                   <span>Donate for School Development</span>
@@ -357,9 +317,9 @@ export default function PrimarySchoolPage() {
                 <button
                   type="button"
                   onClick={() => setActiveModal("partner")}
-                  className="inline-flex items-center gap-2 bg-white text-slate-900 hover:bg-slate-100 font-extrabold text-xs sm:text-sm px-5 py-3 rounded-xl shadow-lg transition"
+                  className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl backdrop-blur-xs transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer"
                 >
-                  <Users className="w-4 h-4" />
+                  <Users className="w-4 h-4 text-brand-orange" />
                   <span>Sponsor a Child's Education</span>
                 </button>
               </div>

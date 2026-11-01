@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { MouseEvent } from "react";
 import { useRouterState } from "@tanstack/react-router";
 import {
@@ -35,6 +35,7 @@ import { CONTACT_DETAILS } from "@/content/siteContent";
 import type { RoleType } from "@/components/forms/RoleFormModal";
 
 export { RoleFormModal } from "@/components/forms/RoleFormModal";
+export type { RoleType } from "@/components/forms/RoleFormModal";
 import { TranslateButton, useCurrentLanguage, getLocalizedAddress } from "@/components/TranslateButton";
 import newLogo from "@/assets/new logo.png";
 
@@ -62,7 +63,6 @@ export const MEGA_DATA: Record<string, MegaSection> = {
       "Governance & Transparency",
       "Leadership & Management",
       "ISLAH Community",
-      "Vision 2047",
     ],
   },
   "What We Do": {
@@ -236,8 +236,34 @@ export function Header() {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 80);
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.classList.add("mobile-nav-open");
+    } else {
+      document.body.classList.remove("mobile-nav-open");
+    }
+    return () => {
+      document.body.classList.remove("mobile-nav-open");
+    };
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    setMobileOpen(false);
+    document.body.classList.remove("mobile-nav-open");
+  }, [pathname]);
 
   const openMenu = useCallback((name: string) => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
@@ -349,10 +375,10 @@ export function Header() {
             })}
           </nav>
 
-          {/* Right Group: Translate on mobile, Donate Button & Mobile Hamburger */}
+          {/* Right Group: Translate on scroll/mobile (shrunk to logo), Donate Button & Mobile Hamburger */}
           <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3 shrink-0 py-1.5 ml-auto lg:ml-0">
-            <div className="md:hidden shrink-0">
-              <TranslateButton />
+            <div className={isScrolled ? "block shrink-0" : "block md:hidden shrink-0"}>
+              <TranslateButton isFloating={true} />
             </div>
             <a
               href="/donate"
@@ -423,7 +449,7 @@ export function Header() {
 
       {/* Mobile Drawer */}
       {mobileOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden flex flex-col bg-white animate-in slide-in-from-right duration-200">
+        <div className="fixed inset-0 z-[70] lg:hidden flex flex-col bg-white animate-in slide-in-from-right duration-200">
           <div className="flex items-center justify-between p-4 border-b border-slate-100 bg-[#0b1f3b] text-white">
             <div className="flex items-center gap-2.5">
               <Leaf className="w-6 h-6 text-brand-green fill-brand-green/20" />
@@ -519,7 +545,7 @@ export function Header() {
   );
 }
 
-export function Footer({ onOpenModal }: { onOpenModal?: (type: RoleType) => void }) {
+export function Footer({ onOpenModal }: { onOpenModal?: (type: any) => void }) {
   const currentLang = useCurrentLanguage();
   const localizedAddress = getLocalizedAddress(currentLang);
   const quickLinks = [

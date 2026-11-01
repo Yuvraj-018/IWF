@@ -230,7 +230,7 @@ export default function MasterPoliciesPage() {
             {/* Sidebar Categories */}
             <div className="lg:col-span-3 space-y-6">
               <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
-                <h3 className="font-extrabold text-[#0b1f3b] text-base uppercase tracking-wider flex items-center gap-2 border-b border-slate-100 pb-3">
+                <h3 className="font-bold text-slate-900 text-base uppercase tracking-wider flex items-center gap-2 border-b border-slate-100 pb-3">
                   <Filter className="w-4 h-4 text-brand-orange" /> Policy Categories
                 </h3>
                 <div className="flex flex-col gap-1.5">
@@ -254,7 +254,7 @@ export default function MasterPoliciesPage() {
               </div>
 
               {/* Statutory Info Box */}
-              <div className="bg-gradient-to-br from-[#0b1f3b] to-[#15803d] text-white rounded-2xl p-6 shadow-md space-y-3">
+              <div className="bg-gradient-to-br from-[#071527] to-[#0c2340] text-white rounded-2xl p-6 shadow-md space-y-3">
                 <h4 className="font-bold text-sm uppercase tracking-wider">Statutory Compliance</h4>
                 <p className="text-xs text-white/80 leading-relaxed">
                   All policies are regularly reviewed to comply with statutory norms under Indian laws including Trust Registration, 12A, 80G, and FCRA 2010.
@@ -302,7 +302,7 @@ export default function MasterPoliciesPage() {
                             </span>
                             <Icon className="w-5 h-5 text-brand-orange" />
                           </div>
-                          <h3 className="text-base font-bold text-[#0b1f3b] group-hover:text-brand-green transition-colors">
+                          <h3 className="text-base font-bold text-slate-900 group-hover:text-brand-green transition-colors">
                             {pol.title}
                           </h3>
                           <p className="text-xs text-slate-600 leading-relaxed">

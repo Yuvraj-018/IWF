@@ -7,6 +7,7 @@ import {
   Footer,
   RoleFormModal,
 } from "@/components/layout/SiteLayout";
+import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import {
   Home,
   ChevronRight,
@@ -130,7 +131,7 @@ function SectionTitle({ label, title, subtitle }: { label: string; title: string
       <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">{label}</p>
       <div className="flex items-center justify-center gap-3 mb-4">
         <span className="h-px w-8 bg-brand-green" />
-        <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark tracking-wide">{title}</h2>
+        <h2 className="text-2xl md:text-3xl font-semibold text-[#0b1f3b] tracking-tight">{title}</h2>
         <span className="h-px w-8 bg-brand-green" />
       </div>
       {subtitle && <p className="text-slate-600 max-w-2xl mx-auto text-sm leading-relaxed">{subtitle}</p>}
@@ -148,60 +149,39 @@ export default function SkillsEmployability() {
       <Header />
 
       {/* Hero Banner */}
-      <section className="relative bg-[#07162c] text-white min-h-[300px] sm:min-h-[330px] md:min-h-[360px] lg:min-h-[390px] flex items-center py-6 sm:py-8 md:py-10 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#07162c] via-[#0b2246]/95 to-transparent z-10" />
-        <img
-          src={heroImg}
-          alt="Skills & Employability Programme"
-          className="absolute inset-0 w-full h-full object-cover object-center opacity-25"
-        />
-        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-xs text-white/60 mb-4" aria-label="Breadcrumb">
-            <Link to="/" className="hover:text-white transition-colors flex items-center gap-1">
-              <Home className="w-3.5 h-3.5" />
-              <span>Home</span>
-            </Link>
-            <ChevronRight className="w-3 h-3 text-white/40" />
-            <Link to="/programs/skills-development" className="hover:text-white transition-colors">
-              Skills, Livelihoods &amp; Entrepreneurship
-            </Link>
-            <ChevronRight className="w-3 h-3 text-white/40" />
-            <span className="text-brand-orange font-medium">Skills &amp; Employability</span>
-          </nav>
-
-          <div className="max-w-3xl">
-            <span className="inline-block bg-brand-orange/20 border border-brand-orange/40 text-brand-orange text-xs font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-full mb-4">
-              Initiative 01 • SEP
-            </span>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4">
-              Skills &amp; Employability Programme
-            </h1>
-            <p className="text-lg md:text-xl text-white/80 font-medium mb-4">
-              Building Skills. Creating Opportunity. Enabling Sustainable Livelihoods.
-            </p>
-            <p className="text-sm md:text-base text-white/70 leading-relaxed max-w-2xl mb-8">
-              Equipping young people and economically vulnerable communities in rural and underserved areas
-              with practical, market-relevant and employment-oriented capabilities to bridge the gap between learning and earning.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <button
-                onClick={() => setModalRole("partner")}
-                className="inline-flex items-center gap-2 bg-brand-green text-white font-semibold text-sm px-6 py-3 rounded-lg hover:bg-brand-green-dark transition-colors shadow-sm"
-              >
-                Partner With This Initiative
-                <ArrowRight className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => setModalRole("sponsor")}
-                className="inline-flex items-center gap-2 border border-white/30 text-white font-semibold text-sm px-6 py-3 rounded-lg hover:bg-white/10 transition-colors"
-              >
-                Sponsor a Training Batch
-              </button>
-            </div>
-          </div>
+      <SubpageHeroCarousel
+        tag="Initiative 01 • SEP"
+        title="Skills & Employability Programme"
+        subtitle="Equipping young people and economically vulnerable communities in rural and underserved areas with practical, market-relevant and employment-oriented capabilities to bridge the gap between learning and earning."
+        breadcrumbs={[
+          { label: "What We Do", href: "/programs" },
+          { label: "Skills, Livelihoods & Entrepreneurship", href: "/programs/skills-development" },
+          { label: "Skills & Employability" },
+        ]}
+        images={[heroImg]}
+      >
+        <div className="flex flex-wrap items-center gap-3 pt-1">
+          <Link
+            to="/programs/skills-development"
+            className="inline-flex items-center gap-2 text-xs font-semibold text-white/90 hover:text-white border border-white/20 bg-white/10 hover:bg-white/20 px-3.5 py-2 rounded-xl transition-all"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" /> All Skills Initiatives
+          </Link>
+          <button
+            onClick={() => setModalRole("partner")}
+            className="inline-flex items-center gap-2 bg-brand-green text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl hover:bg-brand-green-dark transition-colors shadow-sm cursor-pointer"
+          >
+            Partner With This Initiative
+            <ArrowRight className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => setModalRole("sponsor")}
+            className="inline-flex items-center gap-2 border border-white/30 text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl hover:bg-white/10 transition-colors cursor-pointer"
+          >
+            Sponsor a Training Batch
+          </button>
         </div>
-      </section>
+      </SubpageHeroCarousel>
 
       {/* Overview & Objective */}
       <section className="py-16 bg-white border-b border-slate-100">
@@ -330,17 +310,17 @@ export default function SkillsEmployability() {
       </section>
 
       {/* Employability Pathway */}
-      <section className="py-20 bg-[#0b1f3b] text-white overflow-hidden relative">
+      <section className="py-16 bg-slate-50 border-t border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <ScrollReveal>
-            <div className="text-center max-w-3xl mx-auto mb-14">
-              <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">
+            <div className="text-center max-w-3xl mx-auto mb-10">
+              <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2">
                 Progression Architecture
               </p>
-              <h2 className="text-2xl md:text-4xl font-extrabold text-white mb-4">
+              <h2 className="text-xl md:text-2xl font-semibold text-slate-900 mb-3">
                 The ISLAH Employability Pathway
               </h2>
-              <p className="text-white/70 text-sm leading-relaxed">
+              <p className="text-slate-600 text-sm leading-relaxed">
                 Meaningful skill development should lead beyond the classroom. The goal is to help people
                 apply what they learn, access opportunity and build a sustainable livelihood.
               </p>
@@ -350,17 +330,17 @@ export default function SkillsEmployability() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-6 gap-4">
             {EMPLOYABILITY_PATHWAY.map((stage, idx) => (
               <ScrollReveal key={stage.step} delay={idx * 0.06}>
-                <div className="bg-white/5 border border-white/10 rounded-xl p-5 hover:bg-white/10 transition-colors h-full flex flex-col justify-between">
+                <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs hover:shadow-sm hover:border-slate-300 transition-all duration-200 h-full flex flex-col justify-between">
                   <div>
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center justify-between mb-3">
                       <span className="text-xs font-mono font-bold text-brand-orange">STAGE {stage.step}</span>
                     </div>
-                    <h3 className="text-lg font-bold text-white mb-2">{stage.label}</h3>
-                    <p className="text-xs text-white/70 leading-relaxed">{stage.desc}</p>
+                    <h3 className="text-base font-semibold text-slate-900 mb-2">{stage.label}</h3>
+                    <p className="text-xs text-slate-600 leading-relaxed">{stage.desc}</p>
                   </div>
                   {idx < EMPLOYABILITY_PATHWAY.length - 1 && (
                     <div className="hidden lg:flex justify-end pt-4">
-                      <ArrowRight className="w-4 h-4 text-white/30" />
+                      <ArrowRight className="w-4 h-4 text-slate-300" />
                     </div>
                   )}
                 </div>
@@ -371,22 +351,22 @@ export default function SkillsEmployability() {
       </section>
 
       {/* Target Beneficiaries & Impact */}
-      <section className="py-20 bg-white">
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-12 gap-12 items-start">
+          <div className="grid lg:grid-cols-12 gap-8 items-start">
             {/* Target Beneficiaries */}
             <div className="lg:col-span-6">
               <ScrollReveal>
                 <span className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2 block">
                   Focus Groups
                 </span>
-                <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark mb-6">
+                <h2 className="text-xl md:text-2xl font-semibold text-slate-900 mb-4">
                   Who We Aim to Support
                 </h2>
-                <div className="bg-[#f8faf8] border border-slate-200/80 rounded-xl p-6 sm:p-8">
-                  <ul className="space-y-3.5">
+                <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 sm:p-7 shadow-xs">
+                  <ul className="space-y-3">
                     {TARGET_AUDIENCE.map((item) => (
-                      <li key={item} className="flex items-start gap-3 text-sm text-slate-700 leading-snug">
+                      <li key={item} className="flex items-start gap-3 text-xs md:text-sm text-slate-700 leading-snug">
                         <CheckCircle2 className="w-4 h-4 text-brand-green shrink-0 mt-0.5" />
                         <span>{item}</span>
                       </li>
@@ -402,13 +382,13 @@ export default function SkillsEmployability() {
                 <span className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2 block">
                   Measurable Outcomes
                 </span>
-                <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark mb-6">
+                <h2 className="text-xl md:text-2xl font-semibold text-slate-900 mb-4">
                   Expected Impact
                 </h2>
-                <div className="bg-[#fbfcfb] border border-brand-green/20 rounded-xl p-6 sm:p-8">
-                  <ul className="space-y-3.5">
+                <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 sm:p-7 shadow-xs">
+                  <ul className="space-y-3">
                     {EXPECTED_IMPACTS.map((outcome) => (
-                      <li key={outcome} className="flex items-start gap-3 text-sm text-slate-700 leading-snug">
+                      <li key={outcome} className="flex items-start gap-3 text-xs md:text-sm text-slate-700 leading-snug">
                         <TrendingUp className="w-4 h-4 text-brand-orange shrink-0 mt-0.5" />
                         <span>{outcome}</span>
                       </li>
@@ -422,24 +402,24 @@ export default function SkillsEmployability() {
       </section>
 
       {/* Vision & Quote */}
-      <section className="py-20 bg-[#004724] text-white relative overflow-hidden">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      <section className="py-12 bg-slate-50/70 border-t border-slate-200 text-slate-800">
+        <div className="max-w-4xl mx-auto px-4 text-center">
           <ScrollReveal>
-            <span className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-4 block">
-              Our Vision
-            </span>
-            <h2 className="text-2xl md:text-3xl font-extrabold mb-6 leading-snug">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 text-brand-orange border border-orange-200/60 text-xs font-semibold tracking-wider mb-4">
+              <span>🚀</span> Our Vision
+            </div>
+            <h2 className="text-xl md:text-2xl font-semibold text-slate-900 mb-3 leading-snug">
               Creating Dignified Work &amp; Sustainable Futures
             </h2>
-            <p className="text-white/80 text-base leading-relaxed max-w-3xl mx-auto mb-10">
+            <p className="text-slate-600 text-sm leading-relaxed max-w-2xl mx-auto mb-6">
               To create pathways through which rural and underserved communities can acquire relevant skills,
               develop confidence and access opportunities for dignified work, entrepreneurship and sustainable livelihoods.
             </p>
-            <div className="border-t border-white/20 pt-8 max-w-2xl mx-auto">
-              <blockquote className="text-xl md:text-2xl font-serif italic text-white/95 leading-relaxed mb-4">
+            <div className="border-t border-slate-200 pt-6 max-w-2xl mx-auto">
+              <blockquote className="text-base md:text-lg font-semibold italic text-slate-800 leading-relaxed mb-3">
                 “Skills create capability. Employability creates opportunity. Opportunity creates a pathway to self-reliance.”
               </blockquote>
-              <p className="text-xs font-bold tracking-widest uppercase text-brand-orange">— ISLAH</p>
+              <p className="text-xs font-medium tracking-widest uppercase text-brand-orange">— ISLAH</p>
             </div>
           </ScrollReveal>
         </div>
@@ -465,16 +445,12 @@ export default function SkillsEmployability() {
         </div>
       </section>
 
-      <Footer />
+      <Footer onOpenModal={(role) => setModalRole(role)} />
 
-      {modalRole && (
-        <RoleFormModal
-          isOpen={true}
-          role={modalRole}
-          onClose={() => setModalRole(null)}
-          title={`Partner with Skills & Employability Programme`}
-        />
-      )}
+      <RoleFormModal
+        type={modalRole}
+        onClose={() => setModalRole(null)}
+      />
     </div>
   );
 }

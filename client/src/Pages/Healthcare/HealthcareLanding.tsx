@@ -268,19 +268,19 @@ function SectionTitle({
   subtitle?: string;
 }) {
   return (
-    <div className="text-center mb-12">
-      <p className="text-xs font-bold uppercase tracking-widest text-[#ea580c] mb-2">
+    <div className="text-center mb-10">
+      <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2">
         {label}
       </p>
       <div className="flex items-center justify-center gap-3 mb-3">
-        <span className="h-px w-8 bg-[#004724]" />
-        <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
+        <span className="h-px w-8 bg-brand-green" />
+        <h2 className="text-2xl sm:text-3xl font-semibold text-[#0b1f3b] tracking-tight">
           {title}
         </h2>
-        <span className="h-px w-8 bg-[#004724]" />
+        <span className="h-px w-8 bg-brand-green" />
       </div>
       {subtitle && (
-        <p className="text-slate-600 max-w-2xl mx-auto text-xs md:text-sm leading-relaxed">
+        <p className="text-slate-600 max-w-2xl mx-auto text-sm leading-relaxed font-normal">
           {subtitle}
         </p>
       )}
@@ -296,7 +296,7 @@ export default function HealthcareLanding() {
   >(null);
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 antialiased">
+    <div className="min-h-screen bg-white font-sans text-slate-900 antialiased">
       <NotificationTicker />
       <UtilityBar />
       <Header />
@@ -312,60 +312,25 @@ export default function HealthcareLanding() {
             { label: "Healthcare & Well-Being" },
           ]}
           images={[causeMedImg, overviewHero]}
-        />
-
-        {/* 4 Feature Cards Floating Bar */}
-        <div className="max-w-7xl mx-auto px-4 md:px-8 -mt-6 relative z-20 mb-6">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white p-3.5 rounded-2xl border border-slate-200 shadow-md">
-            {HERO_FEATURE_CARDS.map((card, idx) => {
-              const Icon = card.icon;
-              return (
-                <div
-                  key={idx}
-                  className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-3"
-                >
-                  <div className="w-9 h-9 rounded-lg bg-emerald-50 text-[#004724] flex items-center justify-center shrink-0">
-                    <Icon className="w-5 h-5 text-emerald-600" />
-                  </div>
-                  <div>
-                    <div className="text-xs font-bold text-slate-900 leading-tight">
-                      {card.title}
-                    </div>
-                    <div className="text-[10px] text-slate-500 leading-tight hidden sm:block">
-                      {card.desc}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+        >
+          <div className="flex flex-wrap items-center gap-3 pt-2">
+            <a
+              href="#programmes"
+              className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold px-6 sm:px-7 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer"
+            >
+              <span>Explore Initiatives</span>
+              <ArrowRight className="w-4 h-4" />
+            </a>
+            <button
+              type="button"
+              onClick={() => setActiveModal("partner")}
+              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer backdrop-blur-xs"
+            >
+              <Heart className="w-4 h-4 text-brand-orange" />
+              <span>Partner With Us</span>
+            </button>
           </div>
-        </div>
-
-        {/* 4 PILLARS RIBBON */}
-        <section className="bg-white border-b border-slate-200 py-4 shadow-sm">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-              {HERO_PILLARS_RIBBON.map((p, idx) => {
-                const Icon = p.icon;
-                return (
-                  <div key={idx} className="flex items-center justify-center gap-2.5">
-                    <div className="w-8 h-8 rounded-full bg-emerald-50 text-[#004724] flex items-center justify-center">
-                      <Icon className="w-4 h-4" />
-                    </div>
-                    <div className="text-left">
-                      <div className="text-xs font-bold text-slate-900 leading-tight">
-                        {p.label}
-                      </div>
-                      <div className="text-[11px] text-slate-500 leading-tight">
-                        {p.sub}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
+        </SubpageHeroCarousel>
 
         {/* 2. OVERVIEW & THE HEALTH-POVERTY CYCLE */}
         <section className="py-16 bg-slate-50 overflow-hidden">
@@ -521,20 +486,20 @@ export default function HealthcareLanding() {
             </ScrollReveal>
 
             {/* Continuum Pathway Ribbon */}
-            <div className="mb-12 p-4 rounded-2xl bg-gradient-to-r from-[#00381c] via-[#004724] to-[#0b1f3b] text-white shadow-md">
-              <div className="text-[11px] font-bold text-amber-300 uppercase tracking-widest text-center mb-3">
+            <div className="mb-12 p-6 rounded-2xl bg-[#0b1f3b] text-white shadow-sm border border-slate-800">
+              <div className="text-xs font-bold text-brand-orange uppercase tracking-widest text-center mb-4">
                 Healthcare Continuum of Care
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 text-center">
+              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5 text-center">
                 {CONTINUUM_STEPS.map((step, idx) => (
                   <div
                     key={idx}
-                    className="p-2 rounded-lg bg-white/10 backdrop-blur-xs border border-white/15"
+                    className="p-3 rounded-xl bg-white/10 hover:bg-white/15 backdrop-blur-xs border border-white/15 transition-all"
                   >
-                    <div className="text-[11px] font-bold text-white leading-tight">
+                    <div className="text-xs font-bold text-white leading-tight">
                       {step.name}
                     </div>
-                    <div className="text-[9px] text-amber-300 font-semibold">
+                    <div className="text-[10px] text-brand-orange font-bold mt-1">
                       {step.sub}
                     </div>
                   </div>
@@ -550,11 +515,11 @@ export default function HealthcareLanding() {
                   <ScrollReveal key={prog.num}>
                     <Link
                       to={prog.route}
-                      className="group h-full bg-slate-50 hover:bg-white rounded-2xl p-6 border border-slate-200 hover:border-emerald-400 transition-all duration-300 hover:shadow-lg flex flex-col justify-between"
+                      className="group h-full bg-slate-50 hover:bg-white rounded-2xl p-6 border border-slate-200 hover:border-slate-300 transition-all duration-200 hover:shadow-md hover:-translate-y-1 flex flex-col justify-between"
                     >
                       <div>
                         <div className="flex items-start justify-between mb-4">
-                          <div className="w-12 h-12 rounded-xl bg-emerald-100 text-[#004724] group-hover:bg-[#004724] group-hover:text-white flex items-center justify-center transition-colors">
+                          <div className="w-12 h-12 rounded-xl bg-emerald-50 text-brand-green group-hover:bg-[#0b1f3b] group-hover:text-white flex items-center justify-center transition-colors">
                             <Icon className="w-6 h-6" />
                           </div>
                           <span
@@ -564,18 +529,18 @@ export default function HealthcareLanding() {
                           </span>
                         </div>
 
-                        <div className="text-[11px] font-bold text-[#ea580c] uppercase tracking-wider mb-1">
+                        <div className="text-[11px] font-bold text-brand-orange uppercase tracking-wider mb-1">
                           {prog.tagline}
                         </div>
-                        <h3 className="font-black text-base text-slate-900 group-hover:text-[#004724] mb-2 leading-snug transition-colors">
+                        <h3 className="font-bold text-base text-slate-900 group-hover:text-brand-orange mb-2 leading-snug transition-colors">
                           {prog.title}
                         </h3>
-                        <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                        <p className="text-xs text-slate-600 leading-relaxed mb-4 font-normal">
                           {prog.desc}
                         </p>
                       </div>
 
-                      <div className="pt-3 border-t border-slate-200/80 flex items-center justify-between text-xs font-bold text-[#004724] group-hover:text-[#ea580c]">
+                      <div className="pt-3 border-t border-slate-200/80 flex items-center justify-between text-xs font-bold text-brand-green group-hover:text-brand-orange transition-colors">
                         <span>Explore Initiative</span>
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       </div>
@@ -603,15 +568,15 @@ export default function HealthcareLanding() {
                 const Icon = srv.icon;
                 return (
                   <ScrollReveal key={idx} delay={idx * 60}>
-                    <div className="h-full bg-white rounded-2xl p-6 border border-slate-200 shadow-xs hover:border-emerald-300 transition-all flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-emerald-50 text-[#004724] flex items-center justify-center shrink-0">
+                    <div className="h-full bg-white rounded-2xl p-6 border border-slate-200 shadow-xs hover:border-slate-300 hover:-translate-y-0.5 hover:shadow-sm transition-all flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-xl bg-emerald-50 text-brand-green flex items-center justify-center shrink-0">
                         <Icon className="w-6 h-6" />
                       </div>
                       <div>
-                        <h4 className="text-sm font-bold text-slate-900 mb-1">
+                        <h4 className="text-base font-semibold text-[#0b1f3b] mb-1">
                           {srv.title}
                         </h4>
-                        <p className="text-xs text-slate-600 leading-relaxed">
+                        <p className="text-xs text-slate-600 leading-relaxed font-normal">
                           {srv.desc}
                         </p>
                       </div>
@@ -668,58 +633,36 @@ export default function HealthcareLanding() {
           </div>
         </section>
 
-        {/* 8. STATEMENT BANNER */}
-        <section className="py-14 bg-[#004724] text-white text-center">
-          <div className="max-w-4xl mx-auto px-4 space-y-4">
-            <span className="text-4xl text-amber-400 font-serif leading-none block">
-              “
-            </span>
-            <p className="text-xl md:text-2xl font-bold leading-relaxed text-emerald-50 italic">
-              Ensuring healthcare reaches the last mile—because no life should be
-              lost due to lack of access to timely medical care.
-            </p>
-            <div className="flex items-center justify-center gap-3 pt-2">
-              <span className="h-px w-8 bg-amber-400/60" />
-              <span className="text-amber-300 font-semibold text-xs uppercase tracking-widest">
-                Islah Welfare Foundation
-              </span>
-              <span className="h-px w-8 bg-amber-400/60" />
-            </div>
-          </div>
-        </section>
-
-        {/* 9. HEALTHY TODAY, STRONGER TOMORROW CTA */}
-        <section className="py-12 bg-white border-b border-slate-200">
-          <div className="max-w-5xl mx-auto px-4">
-            <div className="p-8 md:p-10 rounded-3xl bg-gradient-to-br from-[#0b1f3b] via-[#004724] to-[#00381c] text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
-              <div className="text-center md:text-left">
-                <div className="text-xs font-bold uppercase tracking-wider text-amber-300 mb-1">
-                  Healthy Today • Stronger Tomorrow
-                </div>
-                <h3 className="text-xl md:text-3xl font-black">
-                  Bring Hope, Heal Lives & Build Healthier Communities
-                </h3>
-                <p className="text-xs md:text-sm text-emerald-100/90 mt-2 max-w-xl">
-                  Your support funds emergency surgeries, sponsors ambulance fuel,
-                  supplies sanitary kits, and stocks free village clinics.
-                </p>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-3 shrink-0">
+        {/* 8. SUPPORT & PARTNER CTA */}
+        <section className="py-14 bg-gradient-to-r from-[#071527] to-[#0c2340] text-white border-t border-slate-800">
+          <div className="max-w-4xl mx-auto px-4 text-center">
+            <ScrollReveal>
+              <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2">
+                Healthy Today • Stronger Tomorrow
+              </p>
+              <h2 className="text-xl sm:text-2xl font-semibold text-white tracking-tight mb-3">
+                Bring Hope, Heal Lives &amp; Build Healthier Communities
+              </h2>
+              <p className="text-slate-300 max-w-xl mx-auto text-xs sm:text-sm font-normal leading-relaxed mb-6">
+                Your support funds emergency surgeries, sponsors ambulance fuel, supplies sanitary kits, and stocks free village clinics.
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-3">
                 <button
+                  type="button"
                   onClick={() => setActiveModal("sponsor")}
-                  className="px-6 py-3.5 rounded-xl bg-[#ea580c] hover:bg-orange-600 text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all"
+                  className="px-6 py-3 rounded-xl bg-brand-orange hover:bg-orange-600 text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
                 >
                   Support Our Initiatives
                 </button>
                 <button
+                  type="button"
                   onClick={() => setActiveModal("volunteer")}
-                  className="px-6 py-3.5 rounded-xl bg-white hover:bg-slate-100 text-[#004724] font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all"
+                  className="px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-95 cursor-pointer backdrop-blur-xs"
                 >
                   Become a Volunteer
                 </button>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
       </main>

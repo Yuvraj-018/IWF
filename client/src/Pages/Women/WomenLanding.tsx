@@ -249,52 +249,25 @@ export default function WomenLanding() {
             { label: "Women & Youth Empowerment" },
           ]}
           images={[causeWomenImg, sectorWomenImg, thematicWomenImg]}
-        />
-
-        {/* 4 Feature Cards Floating Bar */}
-        <div className="max-w-7xl mx-auto px-4 md:px-8 -mt-6 relative z-20 mb-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 bg-white p-3.5 rounded-2xl border border-slate-200 shadow-md">
-            {HERO_FEATURE_CARDS.map((card, idx) => {
-              const Icon = card.icon;
-              return (
-                <div
-                  key={idx}
-                  className="bg-slate-50 border border-slate-100 rounded-xl p-3.5 flex items-center gap-3"
-                >
-                  <div className="w-8 h-8 rounded-lg bg-orange-50 text-brand-orange flex items-center justify-center shrink-0">
-                    <Icon className="w-4 h-4 text-brand-orange" />
-                  </div>
-                  <div>
-                    <span className="text-xs font-bold text-slate-900 leading-tight block">{card.title}</span>
-                    <p className="text-[10px] text-slate-500 leading-tight hidden sm:block">{card.desc}</p>
-                  </div>
-                </div>
-              );
-            })}
+        >
+          <div className="flex flex-wrap items-center gap-3 pt-2">
+            <a
+              href="#initiatives"
+              className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold px-6 sm:px-7 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer"
+            >
+              <span>Explore Initiatives</span>
+              <ArrowRight className="w-4 h-4" />
+            </a>
+            <button
+              type="button"
+              onClick={() => setActiveModal("partner")}
+              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer backdrop-blur-xs"
+            >
+              <Heart className="w-4 h-4 text-brand-orange" />
+              <span>Partner With Us</span>
+            </button>
           </div>
-        </div>
-
-        {/* ── 2. 4-PILLAR RIBBON ── */}
-        <section className="bg-brand-green-dark text-white py-4 border-y border-brand-green/30">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {PILLAR_RIBBON.map((p, idx) => {
-                const Icon = p.icon;
-                return (
-                  <div key={idx} className="flex items-center gap-3 py-1">
-                    <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center shrink-0">
-                      <Icon className="w-4 h-4 text-brand-orange" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-white tracking-wide">{p.label}</p>
-                      <p className="text-[11px] text-white/60 leading-tight">{p.sub}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
+        </SubpageHeroCarousel>
 
         {/* ── 3. OVERVIEW SECTION ── */}
         <section className="py-16 bg-white overflow-hidden">
@@ -306,7 +279,7 @@ export default function WomenLanding() {
                 </p>
                 <div className="flex items-center justify-center gap-3 mb-4">
                   <span className="h-px w-8 bg-brand-green" />
-                  <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark tracking-wide">
+                  <h2 className="text-2xl md:text-3xl font-semibold text-[#0b1f3b] tracking-tight">
                     Creating Pathways to Capability, Dignity &amp; Independence
                   </h2>
                   <span className="h-px w-8 bg-brand-green" />
@@ -321,21 +294,21 @@ export default function WomenLanding() {
               {/* Left Column: Context Cards */}
               <div className="lg:col-span-7 space-y-4">
                 <ScrollReveal>
-                  <div className="bg-brand-green p-6 md:p-8 rounded-2xl border border-brand-green/20 shadow-sm relative overflow-hidden text-white">
-                    <div className="absolute -top-4 -right-4 text-white/10 select-none pointer-events-none">
+                  <div className="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden text-slate-800">
+                    <div className="absolute -top-4 -right-4 text-slate-100 select-none pointer-events-none">
                       <Users className="w-36 h-36" />
                     </div>
-                    <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/20 border border-white/30 text-[10px] font-bold text-white uppercase tracking-wider mb-4">
+                    <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-4">
                       <span>🌿</span> Context &amp; Imperative
                     </div>
                     <div className="space-y-4 relative z-10">
-                      <p className="text-white text-sm font-semibold leading-relaxed border-l-3 border-white/60 pl-3">
+                      <p className="text-slate-800 text-sm font-semibold leading-relaxed border-l-3 border-[#004724] pl-3">
                         Women and young people are among the most important drivers of social and economic development. Yet, in many rural and underserved communities, they continue to face barriers that limit their access to education, skills, employment, healthcare, entrepreneurship, leadership and meaningful participation in society.
                       </p>
-                      <p className="text-white/80 text-sm leading-relaxed pl-3 border-l-3 border-brand-orange/60">
+                      <p className="text-slate-600 text-sm leading-relaxed pl-3 border-l-3 border-brand-orange">
                         Women often experience financial dependency, limited livelihood opportunities, social inequality and inadequate awareness of health and rights. At the same time, many young people face unemployment, limited career guidance, lack of market-relevant skills and restricted access to opportunities that can help them build sustainable futures.
                       </p>
-                      <p className="text-white/90 text-sm font-semibold leading-relaxed pl-3 border-l-3 border-white/40">
+                      <p className="text-slate-800 text-sm font-semibold leading-relaxed pl-3 border-l-3 border-slate-300">
                         ISLAH believes that empowering women and youth is not simply about helping—it is about creating pathways to capability, dignity, independence and participation.
                       </p>
                     </div>
@@ -380,7 +353,7 @@ export default function WomenLanding() {
                 </p>
                 <div className="flex items-center justify-center gap-3 mb-4">
                   <span className="h-px w-8 bg-brand-green" />
-                  <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark tracking-wide">
+                  <h2 className="text-2xl md:text-3xl font-semibold text-[#0b1f3b] tracking-tight">
                     Why Focused Empowerment is Needed
                   </h2>
                   <span className="h-px w-8 bg-brand-green" />
@@ -398,16 +371,16 @@ export default function WomenLanding() {
                   return (
                     <div
                       key={idx}
-                      className="group flex items-start gap-4 p-5 bg-[#0b1f3b] hover:bg-white rounded-md border border-brand-green/10 hover:border-brand-green/30 shadow-sm hover:shadow-md transition-all duration-300"
+                      className="group flex items-start gap-4 p-5 bg-white hover:bg-slate-50/80 rounded-xl border border-slate-200 hover:border-slate-300 shadow-xs hover:shadow-sm transition-all duration-200 hover:-translate-y-0.5"
                     >
-                      <div className="shrink-0 w-9 h-9 rounded-md bg-white/15 group-hover:bg-brand-green/10 flex items-center justify-center transition-colors">
-                        <Icon className="w-4.5 h-4.5 text-white group-hover:text-brand-green transition-colors" />
+                      <div className="shrink-0 w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center transition-colors">
+                        <Icon className="w-4.5 h-4.5" />
                       </div>
                       <div>
-                        <h4 className="text-sm font-bold text-white group-hover:text-brand-green-dark mb-1 transition-colors">
+                        <h4 className="text-sm font-semibold text-slate-900 group-hover:text-brand-green-dark mb-1 transition-colors">
                           {item.title}
                         </h4>
-                        <p className="text-xs text-slate-200 group-hover:text-slate-600 leading-relaxed transition-colors">
+                        <p className="text-xs text-slate-600 leading-relaxed">
                           {item.desc}
                         </p>
                       </div>
@@ -468,7 +441,7 @@ export default function WomenLanding() {
                 </p>
                 <div className="flex items-center justify-center gap-3 mb-4">
                   <span className="h-px w-8 bg-brand-green" />
-                  <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark tracking-wide">
+                  <h2 className="text-2xl md:text-3xl font-semibold text-[#0b1f3b] tracking-tight">
                     Our 6-Pillar Approach
                   </h2>
                   <span className="h-px w-8 bg-brand-green" />
@@ -486,19 +459,19 @@ export default function WomenLanding() {
                   return (
                     <div
                       key={idx}
-                      className="group bg-[#0b1f3b] hover:bg-white rounded-xl p-6 border border-brand-green/10 hover:border-brand-green/30 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between relative overflow-hidden"
+                      className="group bg-white hover:bg-slate-50/80 rounded-xl p-6 border border-slate-200 hover:border-slate-300 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between relative overflow-hidden hover:-translate-y-1"
                     >
-                      <span className="absolute top-2 right-4 text-5xl font-extrabold text-white/5 select-none group-hover:text-brand-green/5 transition-colors">
+                      <span className="absolute top-2 right-4 text-5xl font-extrabold text-slate-100 select-none group-hover:text-brand-green/10 transition-colors">
                         {pillar.num}
                       </span>
                       <div className="relative z-10">
-                        <div className="w-11 h-11 rounded-lg bg-white/10 group-hover:bg-brand-green/10 flex items-center justify-center mb-4 transition-colors">
-                          <Icon className="w-5 h-5 text-white group-hover:text-brand-green transition-colors" />
+                        <div className="w-11 h-11 rounded-lg bg-orange-50 text-brand-orange flex items-center justify-center mb-4 transition-colors">
+                          <Icon className="w-5 h-5" />
                         </div>
-                        <h4 className="text-base font-bold text-white group-hover:text-brand-green-dark mb-2.5 transition-colors">
+                        <h4 className="text-base font-semibold text-slate-900 group-hover:text-brand-green-dark mb-2.5 transition-colors">
                           {pillar.num}. {pillar.title}
                         </h4>
-                        <p className="text-xs text-slate-200 group-hover:text-slate-600 leading-relaxed transition-colors">
+                        <p className="text-xs text-slate-600 leading-relaxed">
                           {pillar.desc}
                         </p>
                       </div>
@@ -520,7 +493,7 @@ export default function WomenLanding() {
                 </p>
                 <div className="flex items-center justify-center gap-3 mb-4">
                   <span className="h-px w-8 bg-brand-green" />
-                  <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark tracking-wide">
+                  <h2 className="text-2xl md:text-3xl font-semibold text-[#0b1f3b] tracking-tight">
                     Our Key Initiatives
                   </h2>
                   <span className="h-px w-8 bg-brand-green" />
@@ -533,18 +506,18 @@ export default function WomenLanding() {
 
             {/* Continuum Ribbon */}
             <ScrollReveal>
-              <div className="mb-10 bg-slate-900 text-white rounded-2xl p-4 shadow-sm border border-brand-green/30 text-center">
-                <p className="text-xs font-semibold tracking-wider text-slate-300 uppercase mb-2">
+              <div className="mb-10 bg-slate-50 text-slate-800 rounded-2xl p-4 shadow-xs border border-slate-200 text-center">
+                <p className="text-xs font-semibold tracking-wider text-slate-500 uppercase mb-2">
                   Empowerment Continuum
                 </p>
-                <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4 text-xs md:text-sm font-bold text-brand-orange">
+                <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4 text-xs md:text-sm font-semibold text-brand-orange">
                   <span>Learn</span>
-                  <span className="text-white/40">→</span>
-                  <span className="text-white">Develop Skills</span>
-                  <span className="text-white/40">→</span>
+                  <span className="text-slate-300">→</span>
+                  <span className="text-slate-800">Develop Skills</span>
+                  <span className="text-slate-300">→</span>
                   <span>Build Confidence</span>
-                  <span className="text-white/40">→</span>
-                  <span className="text-emerald-400">Empower</span>
+                  <span className="text-slate-300">→</span>
+                  <span className="text-emerald-700">Empower</span>
                 </div>
               </div>
             </ScrollReveal>
@@ -557,39 +530,39 @@ export default function WomenLanding() {
                     <Link
                       key={init.num}
                       to={init.href}
-                      className="group bg-[#0b1f3b] hover:bg-white rounded-2xl p-7 border border-brand-green/10 hover:border-brand-green/40 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between relative overflow-hidden"
+                      className="group bg-white hover:bg-slate-50/80 rounded-2xl p-7 border border-slate-200 hover:border-slate-300 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between relative overflow-hidden hover:-translate-y-1"
                     >
-                      <span className="absolute top-3 right-4 text-6xl font-extrabold text-white/5 select-none group-hover:text-brand-green/5 transition-colors">
+                      <span className="absolute top-3 right-4 text-5xl font-extrabold text-slate-100 select-none group-hover:text-brand-green/10 transition-colors">
                         {init.num}
                       </span>
                       <div className="relative z-10">
                         <div className="flex items-center justify-between mb-4">
-                          <div className="w-12 h-12 rounded-xl bg-white/10 group-hover:bg-brand-orange/15 flex items-center justify-center transition-colors">
-                            <Icon className="w-6 h-6 text-brand-orange group-hover:text-brand-orange transition-colors" />
+                          <div className="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center transition-colors">
+                            <Icon className="w-6 h-6 text-brand-orange" />
                           </div>
-                          <span className="text-[10px] font-bold text-white/70 group-hover:text-brand-orange uppercase tracking-wider bg-white/10 group-hover:bg-brand-orange/10 px-3 py-1 rounded-full transition-colors border border-white/10 group-hover:border-brand-orange/20">
+                          <span className="text-[10px] font-semibold text-brand-orange uppercase tracking-wider bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
                             {init.tag}
                           </span>
                         </div>
 
-                        <div className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-orange mb-1">
+                        <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-orange mb-1">
                           <span>Initiative {init.num} • {init.abbr}</span>
                         </div>
 
-                        <h3 className="text-lg md:text-xl font-bold text-white group-hover:text-brand-green-dark mb-3 transition-colors">
+                        <h3 className="text-lg md:text-xl font-semibold text-slate-900 group-hover:text-brand-green-dark mb-3 transition-colors">
                           {init.title}
                         </h3>
 
-                        <p className="text-xs md:text-sm text-slate-200 group-hover:text-slate-600 leading-relaxed mb-6 transition-colors">
+                        <p className="text-xs md:text-sm text-slate-600 leading-relaxed mb-6">
                           {init.desc}
                         </p>
                       </div>
 
-                      <div className="relative z-10 pt-4 border-t border-white/10 group-hover:border-slate-100 flex items-center justify-between transition-colors">
-                        <span className="text-xs font-bold text-white group-hover:text-brand-green transition-colors">
+                      <div className="relative z-10 pt-4 border-t border-slate-100 flex items-center justify-between transition-colors">
+                        <span className="text-xs font-semibold text-slate-900 group-hover:text-brand-green transition-colors">
                           Explore Initiative Details
                         </span>
-                        <div className="w-8 h-8 rounded-full bg-white/10 group-hover:bg-brand-green flex items-center justify-center text-white transition-all group-hover:translate-x-1">
+                        <div className="w-8 h-8 rounded-full bg-slate-100 group-hover:bg-brand-orange flex items-center justify-center text-slate-600 group-hover:text-white transition-all group-hover:translate-x-1">
                           <ArrowRight className="w-4 h-4" />
                         </div>
                       </div>
@@ -611,7 +584,7 @@ export default function WomenLanding() {
                 </p>
                 <div className="flex items-center justify-center gap-3 mb-4">
                   <span className="h-px w-8 bg-brand-green" />
-                  <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark tracking-wide">
+                  <h2 className="text-2xl md:text-3xl font-semibold text-[#0b1f3b] tracking-tight">
                     Expected Impact
                   </h2>
                   <span className="h-px w-8 bg-brand-green" />
@@ -642,61 +615,35 @@ export default function WomenLanding() {
           </div>
         </section>
 
-        {/* ── 9. STATEMENT & VISION BANNER ── */}
-        <section className="py-16 bg-white">
-          <div className="max-w-4xl mx-auto px-4">
+        {/* ── 9. SUPPORT & PARTNER CTA (Single clean box with proportional text) ── */}
+        <section className="py-12 bg-gradient-to-r from-[#071527] to-[#0c2340] text-white border-t border-slate-800">
+          <div className="max-w-4xl mx-auto px-4 text-center">
             <ScrollReveal>
-              <div className="bg-brand-green-darker rounded-2xl p-8 md:p-12 text-center relative overflow-hidden shadow-xl text-white">
-                <div className="absolute -top-10 -right-10 text-white/5 select-none pointer-events-none">
-                  <Sparkles className="w-48 h-48" />
-                </div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-brand-orange text-xs font-bold uppercase tracking-wider mb-6">
-                  <span>✨</span> ISLAH Guiding Vision
-                </div>
-                <blockquote className="text-xl md:text-2xl font-semibold leading-relaxed mb-6 italic text-white/95">
-                  "Empowering women and youth with knowledge, skills, dignity and opportunity — building confident individuals, stronger families and resilient communities."
-                </blockquote>
-                <div className="flex items-center justify-center gap-3">
-                  <span className="h-px w-10 bg-brand-orange/60" />
-                  <span className="text-brand-orange font-bold text-sm tracking-wider uppercase">
-                    Islah Welfare Foundation
-                  </span>
-                  <span className="h-px w-10 bg-brand-orange/60" />
-                </div>
-              </div>
-            </ScrollReveal>
-          </div>
-        </section>
-
-        {/* ── 10. SUPPORT & PARTNER CTA ── */}
-        <section className="py-16 bg-slate-900 text-white relative overflow-hidden">
-          <div className="max-w-5xl mx-auto px-4 text-center relative z-10">
-            <ScrollReveal>
-              <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">
+              <p className="text-xs font-semibold uppercase tracking-widest text-brand-orange mb-2">
                 Partner With Us
               </p>
-              <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
+              <h2 className="text-xl sm:text-2xl font-semibold text-white mb-2 tracking-tight">
                 Be the Catalyst for Empowerment
               </h2>
-              <p className="text-slate-300 max-w-2xl mx-auto text-sm md:text-base leading-relaxed mb-8">
+              <p className="text-slate-300 max-w-xl mx-auto text-xs sm:text-sm leading-relaxed mb-6">
                 Join hands with Islah Welfare Foundation to sponsor skill toolkits, mentor young entrepreneurs, or expand rural self-help collectives. Every partnership directly uplifts a family.
               </p>
-              <div className="flex flex-wrap items-center justify-center gap-4">
+              <div className="flex flex-wrap items-center justify-center gap-3">
                 <Link
                   to="/donate"
-                  className="inline-flex items-center gap-2 text-sm font-bold text-white bg-brand-orange hover:bg-brand-orange-dark px-7 py-3 rounded-full transition-all shadow-lg hover:shadow-xl hover:scale-105"
+                  className="inline-flex items-center gap-2 text-xs font-semibold text-white bg-brand-orange hover:bg-orange-600 px-5 py-2.5 rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-95 uppercase tracking-wider"
                 >
-                  <Heart className="w-4 h-4" /> Sponsor Women &amp; Youth
+                  <Heart className="w-3.5 h-3.5" /> Sponsor Women &amp; Youth
                 </Link>
                 <button
                   onClick={() => setActiveModal("partner")}
-                  className="inline-flex items-center gap-2 text-sm font-bold text-white bg-white/10 hover:bg-white/20 border border-white/30 px-7 py-3 rounded-full transition-all"
+                  className="inline-flex items-center gap-2 text-xs font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 px-5 py-2.5 rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer"
                 >
-                  Corporate &amp; CSR Partnership <ArrowUpRight className="w-4 h-4" />
+                  Corporate &amp; CSR Partnership <ArrowUpRight className="w-3.5 h-3.5" />
                 </button>
                 <button
                   onClick={() => setActiveModal("volunteer")}
-                  className="inline-flex items-center gap-2 text-sm font-bold text-white/80 hover:text-white px-5 py-3 rounded-full transition-all"
+                  className="inline-flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-white px-4 py-2.5 rounded-xl transition-all duration-200 cursor-pointer"
                 >
                   Volunteer as a Mentor
                 </button>

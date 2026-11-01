@@ -81,24 +81,24 @@ input, textarea {
 :root {
   --radius: 0.5rem;
   --background: oklch(1 0 0);
-  --foreground: oklch(0.05 0.01 150);
-  --brand-green: oklch(0.28 0.08 245);
-  --brand-green-dark: oklch(0.20 0.06 245);
-  --brand-green-darker: oklch(0.14 0.04 245);
-  --brand-orange: oklch(0.6 0.17 245);
-  --brand-orange-dark: oklch(0.5 0.17 245);
+  --foreground: oklch(0 0 0);
+  --brand-green: #004724;
+  --brand-green-dark: #00381c;
+  --brand-green-darker: #002613;
+  --brand-orange: #f97316;
+  --brand-orange-dark: #ea580c;
   --brand-red: oklch(0.6 0.22 25);
   --brand-blue: oklch(0.5 0.15 250);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.05 0.01 150);
+  --card-foreground: oklch(0 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.05 0.01 150);
+  --popover-foreground: oklch(0 0 0);
   --primary: oklch(0.28 0.08 245);
   --primary-foreground: oklch(0.984 0.003 247.858);
   --secondary: oklch(0.968 0.007 247.896);
   --secondary-foreground: oklch(0.208 0.042 265.755);
   --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
+  --muted-foreground: oklch(0.45 0.03 257);
   --accent: oklch(0.968 0.007 247.896);
   --accent-foreground: oklch(0.208 0.042 265.755);
   --destructive: oklch(0.577 0.245 27.325);
@@ -175,7 +175,7 @@ input, textarea {
     color: var(--color-foreground);
     font-family: var(--font-sans);
     font-size: 1rem;
-    font-weight: 500;   /* Slightly medium-weight for higher visibility */
+    font-weight: 400;   /* Clean normal weight 400 for balanced legibility */
     line-height: 1.625;
     letter-spacing: -0.005em;
     -webkit-font-smoothing: antialiased;
@@ -184,9 +184,71 @@ input, textarea {
 
   p {
     line-height: 1.625;
-    font-size: 1rem; /* Ensure clean base size for all standard paragraphs */
+    font-size: 0.875rem; /* Clean text-sm standard for all body paragraphs */
+    font-weight: 400;
+    color: #000000;
   }
 }
+
+/* ── Hide Floating Elements When Mobile Navigation Drawer is Open ── */
+body.mobile-nav-open .floating-social-sidebar,
+body.mobile-nav-open .floating-msg-container {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+/* ── Standard Site Body Paragraph Utility ── */
+.site-body-text {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #000000;
+  line-height: 1.625;
+  margin-bottom: 0.75rem;
+}
+
+/* ── Typography Standardization & Font Consistency ── */
+
+/* Ensure all body paragraphs with muted slate/gray utility classes render in clean, readable deep black */
+p.text-slate-600,
+p.text-slate-500,
+p.text-slate-700,
+p.text-gray-600,
+p.text-gray-500,
+p.text-gray-700,
+p.text-zinc-600,
+p.text-zinc-500 {
+  color: #000000;
+  font-weight: 400;
+}
+
+/* Dark mode adjustment for muted paragraphs */
+.dark p.text-slate-600,
+.dark p.text-slate-500,
+.dark p.text-slate-700,
+.dark p.text-gray-600,
+.dark p.text-gray-500,
+.dark p.text-gray-700 {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Demote overly aggressive extrabold / black weights on small titles, notices, and non-h1/h2 elements */
+h4.font-extrabold,
+h5.font-extrabold,
+h6.font-extrabold,
+p.font-extrabold,
+span.font-extrabold,
+a.font-extrabold,
+button.font-extrabold,
+div.font-extrabold:not([class*="text-3xl"]):not([class*="text-4xl"]):not([class*="text-5xl"]):not([class*="text-6xl"]),
+h4.font-black,
+h5.font-black,
+h6.font-black,
+p.font-black,
+span.font-black,
+a.font-black {
+  font-weight: 600;
+}
+
 
 /* ── Mega Nav Animations ──────────────────────────────────────────────────── */
 
@@ -425,12 +487,17 @@ html {
 .is-scroll-hidden:nth-child(8) { transition-delay: 560ms; }
 
 /* ── Subpage layout padding/spacing overrides ─────────────────────────────── */
-.subpage-layout section,
+.subpage-layout > section,
 .subpage-layout .py-24,
 .subpage-layout .py-20,
 .subpage-layout .py-16 {
   padding-top: 2rem !important;
   padding-bottom: 2rem !important;
+}
+
+.subpage-layout main section {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }
 
 .subpage-layout .py-12,

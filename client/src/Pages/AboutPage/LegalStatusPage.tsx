@@ -7,7 +7,6 @@ import {
   FileText,
   Download,
   ExternalLink,
-  Search,
   Check,
   CreditCard,
   FileCheck,
@@ -15,7 +14,6 @@ import {
   Users,
   Briefcase,
   HelpCircle,
-  AlertCircle,
   Copy,
   Info,
   Scale,
@@ -37,77 +35,12 @@ import slide2 from "@/assets/hero-carousel/hero-slide-2.jpg";
 
 export default function LegalStatusPage() {
   const [activeModal, setActiveModal] = useState<RoleType | null>(null);
-  const [docQuery, setDocQuery] = useState("");
-  const [verificationResult, setVerificationResult] = useState<{
-    status: "verified" | "not_found" | "idle";
-    docType?: string;
-    docNumber?: string;
-    details?: string;
-  }>({ status: "idle" });
-
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
   const handleCopy = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
     setCopiedField(label);
     setTimeout(() => setCopiedField(null), 2000);
-  };
-
-  const handleVerify = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!docQuery.trim()) return;
-
-    const q = docQuery.trim().toUpperCase();
-
-    try {
-      const { verifyDocument } = await import("@/services/verificationService");
-      const json = await verifyDocument(q);
-
-      if (json && json.success && json.verified && json.data) {
-        setVerificationResult({
-          status: "verified",
-          docType: json.data.title || json.data.documentType,
-          docNumber: json.data.documentNo || q,
-          details: `Authenticity confirmed in official ISLAH Registry. Issued to: ${json.data.issuedTo} (Date: ${json.data.issueDate})`,
-        });
-        return;
-      }
-    } catch (apiErr) {
-      console.warn("Backend verification query failed, checking statutory registry:", apiErr);
-    }
-
-    // Known statutory and institutional records fallback
-    if (
-      q.includes("AABTI") ||
-      q.includes("26/2015") ||
-      q.includes("BR/2016") ||
-      q.includes("CSR") ||
-      q.includes("ISLAH") ||
-      q.includes("REC") ||
-      q.includes("MEM") ||
-      q.includes("VOL") ||
-      q.includes("DOC")
-    ) {
-      let type = "Institutional Document / Certificate";
-      if (q.includes("REC") || q.includes("DON")) type = "Official Donation Receipt";
-      else if (q.includes("MEM")) type = "Membership Certificate";
-      else if (q.includes("VOL")) type = "Volunteer Service Certificate";
-      else if (q.includes("CSR")) type = "CSR Project Compliance Certificate";
-      else if (q.includes("26/2015") || q.includes("AABTI")) type = "Statutory Registration Order";
-
-      setVerificationResult({
-        status: "verified",
-        docType: type,
-        docNumber: q,
-        details: "Authenticity confirmed in the official Islah Welfare Foundation Trust Registry.",
-      });
-    } else {
-      setVerificationResult({
-        status: "not_found",
-        docNumber: q,
-        details: "No document matching this reference number was found in our verification database.",
-      });
-    }
   };
 
   const statutoryRegistrations = [
@@ -179,11 +112,11 @@ export default function LegalStatusPage() {
     },
     {
       title: "FCRA Status",
-      code: "Not Registered",
+      code: "Not Applicable",
       subtitle: "ISLAH does not accept foreign contributions at this time.",
       status: "",
-      action: "Know More",
-      href: "/policies",
+      action: "",
+      href: "",
       icon: HelpCircle,
       color: "text-slate-600 bg-slate-50 border-slate-200",
     },
@@ -259,8 +192,8 @@ export default function LegalStatusPage() {
                 {/* Identity Attributes List */}
                 <div className="space-y-3 text-xs sm:text-sm">
                   {[
-                    { label: "Registered Name", value: "Islah Welfare Foundation" },
                     { label: "Public Identity", value: "ISLAH" },
+                    { label: "Registered Name", value: "Islah Welfare Foundation" },
                     { label: "Legal Constitution", value: "Registered Trust" },
                     { label: "Registration No.", value: "26/2015" },
                     { label: "Date of Registration", value: "01/04/2015" },
@@ -339,7 +272,7 @@ export default function LegalStatusPage() {
                       <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
                         <Icon className="w-4 h-4" />
                       </div>
-                      <span className="font-extrabold text-xs sm:text-sm text-[#0b1f3b]">{title}</span>
+                      <span className="font-semibold text-xs sm:text-sm text-black">{title}</span>
                       <CheckCircle2 className="w-4 h-4 text-brand-green ml-auto shrink-0" />
                     </div>
                   ))}
@@ -384,18 +317,18 @@ export default function LegalStatusPage() {
                         <Icon className="w-6 h-6" />
                       </div>
 
-                      <h3 className="font-black text-slate-900 text-base mb-1">{item.title}</h3>
-                      <div className="font-extrabold text-sm text-blue-900 tracking-wider font-mono mb-1">
+                      <h3 className="font-bold text-black text-base mb-1">{item.title}</h3>
+                      <div className="font-bold text-sm text-blue-900 tracking-wider font-mono mb-1">
                         {item.code}
                       </div>
                       {item.subtitle && (
-                        <p className="text-[11px] text-slate-500 font-medium leading-tight mb-2">
+                        <p className="text-xs text-black font-normal leading-tight mb-2">
                           {item.subtitle}
                         </p>
                       )}
 
                       {item.status && (
-                        <div className="inline-flex items-center gap-1 text-[10px] font-extrabold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200/80 mb-3">
+                        <div className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200/80 mb-3">
                           <CheckCircle2 className="w-3 h-3 text-blue-600" />
                           <span>{item.status}</span>
                         </div>
@@ -405,7 +338,7 @@ export default function LegalStatusPage() {
                     {item.action ? (
                       <a
                         href={item.href}
-                        className="mt-3 w-full bg-slate-50 hover:bg-blue-600 hover:text-white border border-slate-200 text-blue-900 font-extrabold text-xs py-2 rounded-xl flex items-center justify-center gap-1.5 transition-all duration-200"
+                        className="mt-3 w-full bg-slate-50 hover:bg-blue-600 hover:text-white border border-slate-200 text-blue-900 font-semibold text-xs py-2 rounded-xl flex items-center justify-center gap-1.5 transition-all duration-200"
                       >
                         <span>{item.action}</span>
                         <ExternalLink className="w-3 h-3" />
@@ -420,186 +353,72 @@ export default function LegalStatusPage() {
           </div>
         </ScrollReveal>
 
-        {/* Section 3: Bottom 2 Columns — Statutory Reports & Document Verification Centre */}
+        {/* Section 3: Statutory Reports & Documents */}
         <ScrollReveal>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-            {/* Column 1: Statutory Reports & Documents */}
-            <div className="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
-              <div>
-                <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
-                  <div className="flex items-center gap-2.5">
-                    <FileText className="w-5 h-5 text-blue-600" />
-                    <h3 className="text-lg sm:text-xl font-black text-[#0b1f3b]">
-                      Statutory Reports & Documents
-                    </h3>
-                  </div>
-                  <a
-                    href="/policies"
-                    className="text-xs font-bold text-blue-600 hover:text-brand-orange flex items-center gap-1"
-                  >
-                    View All →
-                  </a>
+          <div className="w-full bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col justify-between space-y-6">
+            <div>
+              <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+                <div className="flex items-center gap-2.5">
+                  <FileText className="w-5 h-5 text-blue-600" />
+                  <h3 className="text-lg sm:text-xl font-black text-[#0b1f3b]">
+                    Statutory Reports & Documents
+                  </h3>
                 </div>
-
-                {/* Table */}
-                <div className="overflow-x-auto">
-                  <table className="w-full text-xs text-left">
-                    <thead>
-                      <tr className="border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[10px]">
-                        <th className="py-2.5 pr-3">Document</th>
-                        <th className="py-2.5 px-2">Financial Year</th>
-                        <th className="py-2.5 px-2">Status</th>
-                        <th className="py-2.5 pl-2 text-right">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100">
-                      {statutoryReports.map((report) => (
-                        <tr key={report.name} className="hover:bg-slate-50/70 transition-colors">
-                          <td className="py-3 pr-3 font-extrabold text-slate-900">{report.name}</td>
-                          <td className="py-3 px-2 font-mono font-semibold text-slate-600">{report.year}</td>
-                          <td className="py-3 px-2">
-                            <span className="inline-flex items-center gap-1 font-bold text-[11px] text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-                              <Check className="w-3 h-3" />
-                              {report.status}
-                            </span>
-                          </td>
-                          <td className="py-3 pl-2 text-right">
-                            <a
-                              href="/policies"
-                              className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-600 hover:text-brand-orange transition-colors"
-                            >
-                              <span>View / Download</span>
-                              <Download className="w-3 h-3" />
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                <a
+                  href="/policies"
+                  className="text-xs font-bold text-blue-600 hover:text-brand-orange flex items-center gap-1"
+                >
+                  View All →
+                </a>
               </div>
 
-              {/* 80G Declaration Callout */}
-              <div className="p-4 rounded-xl bg-orange-50/60 border border-orange-200/80 text-xs text-slate-700 leading-relaxed space-y-1">
-                <span className="font-black text-brand-orange uppercase text-[11px] block">
-                  80G Tax Exemption Declaration
-                </span>
-                <p className="italic">
-                  “Eligible donations may qualify for deduction under Section 80G, subject to
-                  applicable provisions of the Income-tax Act and the organisation&apos;s eligibility.”
-                </p>
+              {/* Table */}
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs text-left">
+                  <thead>
+                    <tr className="border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[10px]">
+                      <th className="py-2.5 pr-3">Document</th>
+                      <th className="py-2.5 px-2">Financial Year</th>
+                      <th className="py-2.5 px-2">Status</th>
+                      <th className="py-2.5 pl-2 text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {statutoryReports.map((report) => (
+                      <tr key={report.name} className="hover:bg-slate-50/70 transition-colors">
+                        <td className="py-3 pr-3 font-semibold text-black">{report.name}</td>
+                        <td className="py-3 px-2 font-mono font-semibold text-slate-600">{report.year}</td>
+                        <td className="py-3 px-2">
+                          <span className="inline-flex items-center gap-1 font-bold text-[11px] text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+                            <Check className="w-3 h-3" />
+                            {report.status}
+                          </span>
+                        </td>
+                        <td className="py-3 pl-2 text-right">
+                          <a
+                            href="/policies"
+                            className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-600 hover:text-brand-orange transition-colors"
+                          >
+                            <span>View / Download</span>
+                            <Download className="w-3 h-3" />
+                          </a>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
 
-            {/* Column 2: Document Verification Centre */}
-            <div className="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col justify-between space-y-6">
-              <div className="space-y-4">
-                <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-                    <Shield className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg sm:text-xl font-black text-[#0b1f3b]">
-                      Document Verification Centre
-                    </h3>
-                    <p className="text-[11px] text-slate-500 font-medium">
-                      Real-time Authenticity Check
-                    </p>
-                  </div>
-                </div>
-
-                <p className="text-slate-600 text-xs leading-relaxed">
-                  Enter any document, receipt, or certificate reference number to instantly verify
-                  its authenticity with ISLAH.
-                </p>
-
-                {/* Verification Search Form */}
-                <form onSubmit={handleVerify} className="space-y-3">
-                  <div className="flex rounded-xl overflow-hidden border-2 border-slate-200 focus-within:border-blue-600 transition-colors shadow-xs">
-                    <input
-                      type="text"
-                      placeholder="e.g. 26/2015, AABTI2820H, ISLAH-DON-102"
-                      value={docQuery}
-                      onChange={(e) => setDocQuery(e.target.value)}
-                      className="flex-1 bg-white px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none min-w-0"
-                    />
-                    <button
-                      type="submit"
-                      className="bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs px-4 py-2.5 flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
-                    >
-                      <Search className="w-3.5 h-3.5" />
-                      <span>Verify Now</span>
-                    </button>
-                  </div>
-                </form>
-
-                {/* Verification Result Feedback Box */}
-                {verificationResult.status === "verified" && (
-                  <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 space-y-1.5 animate-fadeIn">
-                    <div className="flex items-center gap-2 font-black text-xs sm:text-sm text-emerald-800">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                      <span>Document Verified ✓</span>
-                    </div>
-                    <p className="text-xs font-bold text-emerald-950">
-                      Type: {verificationResult.docType}
-                    </p>
-                    <p className="text-[11px] text-emerald-800 leading-snug">
-                      {verificationResult.details}
-                    </p>
-                  </div>
-                )}
-
-                {verificationResult.status === "not_found" && (
-                  <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 space-y-1.5 animate-fadeIn">
-                    <div className="flex items-center gap-2 font-black text-xs sm:text-sm text-rose-800">
-                      <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
-                      <span>No Matching Document Found</span>
-                    </div>
-                    <p className="text-[11px] text-rose-700 leading-snug">
-                      {verificationResult.details} Please verify the number or contact{" "}
-                      <strong>info@iwfindia.org</strong>.
-                    </p>
-                  </div>
-                )}
-
-                {/* Supported Verification Types */}
-                <div className="pt-2">
-                  <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-1.5">
-                    We Provide Verification For:
-                  </span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {[
-                      "Donation receipts",
-                      "Membership certificates",
-                      "Volunteer certificates",
-                      "Sponsorship certificates",
-                      "Programme certificates",
-                      "Institutional documents",
-                      "Authorisation letters",
-                    ].map((type) => (
-                      <span
-                        key={type}
-                        className="text-[10px] font-semibold bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md"
-                      >
-                        ✓ {type}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Verify with Confidence Badge */}
-              <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-100 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-                  <Award className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="font-extrabold text-xs text-[#0b1f3b]">Verify with Confidence</h4>
-                  <p className="text-[11px] text-slate-600 leading-tight mt-0.5">
-                    All our documents are verifiable and maintained with institutional transparency.
-                  </p>
-                </div>
-              </div>
+            {/* 80G Declaration Callout */}
+            <div className="p-4 rounded-xl bg-orange-50/60 border border-orange-200/80 text-xs text-slate-700 leading-relaxed space-y-1">
+              <span className="font-black text-brand-orange uppercase text-[11px] block">
+                80G Tax Exemption Declaration
+              </span>
+              <p className="italic">
+                “Eligible donations may qualify for deduction under Section 80G, subject to
+                applicable provisions of the Income-tax Act and the organisation&apos;s eligibility.”
+              </p>
             </div>
           </div>
         </ScrollReveal>
@@ -607,17 +426,17 @@ export default function LegalStatusPage() {
         {/* Section 4: Legal Information Disclaimer Banner */}
         <ScrollReveal>
           <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-3">
-            <div className="flex items-center gap-2 text-slate-900 font-extrabold text-sm">
+            <div className="flex items-center gap-2 text-black font-bold text-sm">
               <Scale className="w-4 h-4 text-blue-600 shrink-0" />
               <span>Legal Information Disclaimer</span>
             </div>
-            <p className="text-xs text-slate-600 leading-relaxed">
+            <p className="text-sm text-black font-normal leading-relaxed">
               The information presented on this page is provided for institutional transparency and
               general information. Registration numbers, certificates, approvals and other statutory
               details should be interpreted in accordance with the applicable laws, rules, orders and
               conditions governing each registration or approval.
             </p>
-            <p className="text-xs text-slate-600 leading-relaxed">
+            <p className="text-sm text-black font-normal leading-relaxed">
               The inclusion of a registration, portal identification, approval or recognition on this
               website does not imply any endorsement, partnership or affiliation with a government
               authority unless expressly stated and supported by the relevant official documentation.

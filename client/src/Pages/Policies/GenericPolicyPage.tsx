@@ -5,6 +5,8 @@ import { EXTENDED_POLICY_CONTENT, type ExtendedPolicySlug } from "@/content/poli
 import { CONTACT_DETAILS } from "@/content/siteContent";
 import MedicalEmergencyWorkflow from "@/components/healthcare/MedicalEmergencyWorkflow";
 
+import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
+
 type RoleType = "volunteer" | "partner" | "sponsor" | "mentor" | "employee";
 
 export default function GenericPolicyPage({ slug }: { slug: ExtendedPolicySlug }) {
@@ -22,28 +24,23 @@ export default function GenericPolicyPage({ slug }: { slug: ExtendedPolicySlug }
       <Header />
 
       <main>
-        {/* Hero Banner */}
-        <section className="bg-gradient-to-r from-[#071527] via-[#0b1f3b] to-[#15803d] text-white py-16 px-4 border-b border-white/10">
-          <div className="max-w-5xl mx-auto">
-            <div className="flex items-center gap-2 text-brand-orange text-xs font-extrabold uppercase tracking-widest mb-3">
-              <ShieldCheck className="w-4 h-4" />
-              <span>Islah Welfare Foundation Policy & Governance</span>
+        {/* Standardized Subpage Hero Carousel */}
+        <SubpageHeroCarousel
+          tag="POLICY & GOVERNANCE"
+          title={content.title}
+          subtitle={content.subtitle}
+          breadcrumbs={[
+            { label: "Policies", href: "/policies" },
+            { label: content.title },
+          ]}
+        >
+          {content.effectiveDate && (
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-xs font-semibold px-3 py-1.5 rounded-md text-white/90">
+              <Calendar className="w-3.5 h-3.5 text-brand-orange" />
+              <span>Effective Date: {content.effectiveDate}</span>
             </div>
-            <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white mb-4">
-              {content.title}
-            </h1>
-            <p className="text-white/80 text-sm md:text-base max-w-3xl leading-relaxed">
-              {content.subtitle}
-            </p>
-
-            {content.effectiveDate && (
-              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-xs font-semibold px-3 py-1.5 rounded-md text-white/90 mt-5">
-                <Calendar className="w-3.5 h-3.5 text-brand-orange" />
-                <span>Effective Date: {content.effectiveDate}</span>
-              </div>
-            )}
-          </div>
-        </section>
+          )}
+        </SubpageHeroCarousel>
 
         {/* Policy Document Body */}
         <section className="py-12 px-4 md:px-6">
@@ -53,7 +50,7 @@ export default function GenericPolicyPage({ slug }: { slug: ExtendedPolicySlug }
               <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-8">
                 {content.sections.map((sec, idx) => (
                   <div key={idx} className="space-y-3 pb-6 border-b border-slate-100 last:border-0 last:pb-0">
-                    <h2 className="text-lg md:text-xl font-bold text-[#0b1f3b] flex items-center gap-2">
+                    <h2 className="text-lg md:text-xl font-bold text-slate-900 flex items-center gap-2">
                       <span className="w-2 h-2 rounded-full bg-brand-orange"></span>
                       {sec.heading}
                     </h2>
@@ -95,7 +92,7 @@ export default function GenericPolicyPage({ slug }: { slug: ExtendedPolicySlug }
             {/* Sidebar Overview */}
             <div className="lg:col-span-4 space-y-6">
               <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-5">
-                <h3 className="font-extrabold text-[#0b1f3b] text-base uppercase tracking-wider flex items-center gap-2 border-b border-slate-100 pb-3">
+                <h3 className="font-bold text-slate-900 text-base uppercase tracking-wider flex items-center gap-2 border-b border-slate-100 pb-3">
                   <FileText className="w-4 h-4 text-brand-orange" /> Policy Information
                 </h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
@@ -104,7 +101,7 @@ export default function GenericPolicyPage({ slug }: { slug: ExtendedPolicySlug }
                 <div className="space-y-3 pt-2 text-xs">
                   <div className="flex items-center justify-between p-2.5 rounded bg-slate-50 border border-slate-100">
                     <span className="font-semibold text-slate-600">Organization:</span>
-                    <span className="font-bold text-[#0b1f3b]">Islah India</span>
+                    <span className="font-bold text-slate-900">Islah India</span>
                   </div>
                   <div className="flex items-center justify-between p-2.5 rounded bg-slate-50 border border-slate-100">
                     <span className="font-semibold text-slate-600">Category:</span>
@@ -123,7 +120,7 @@ export default function GenericPolicyPage({ slug }: { slug: ExtendedPolicySlug }
                 <div className="pt-2">
                   <a
                     href="/policies"
-                    className="inline-flex items-center justify-center gap-1.5 w-full py-2.5 px-3 bg-slate-100 hover:bg-slate-200 text-[#0b1f3b] font-bold text-xs rounded-lg transition-colors border border-slate-200"
+                    className="inline-flex items-center justify-center gap-1.5 w-full py-2.5 px-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-lg transition-colors border border-slate-200"
                   >
                     <span>View All 19 Policies</span>
                     <ChevronRight className="w-3.5 h-3.5 text-brand-orange" />
@@ -131,7 +128,7 @@ export default function GenericPolicyPage({ slug }: { slug: ExtendedPolicySlug }
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-[#0b1f3b] to-[#15803d] text-white rounded-xl p-6 shadow-md space-y-4">
+              <div className="bg-gradient-to-br from-[#071527] to-[#0c2340] text-white rounded-xl p-6 shadow-md space-y-4">
                 <h3 className="font-bold text-lg">Have Questions?</h3>
                 <p className="text-xs text-white/80 leading-relaxed">
                   For official policy inquiries or legal clarifications, contact our administration team directly.

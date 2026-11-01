@@ -29,6 +29,7 @@ import {
   Car,
 } from "lucide-react";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
+import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import ruralAmbulanceImg from "@/assets/rural_ambulance.png";
 import ambulanceHero from "@/assets/ambulance.jpg";
 
@@ -147,7 +148,7 @@ function SectionTitle({ label, title, subtitle }: { label: string; title: string
       <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">{label}</p>
       <div className="flex items-center justify-center gap-3 mb-4">
         <span className="h-px w-8 bg-brand-green" />
-        <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark tracking-wide">{title}</h2>
+        <h2 className="text-2xl sm:text-3xl font-semibold text-[#0b1f3b] tracking-tight">{title}</h2>
         <span className="h-px w-8 bg-brand-green" />
       </div>
       {subtitle && (
@@ -161,62 +162,26 @@ function SectionTitle({ label, title, subtitle }: { label: string; title: string
 
 function HeroSection() {
   return (
-    <section className="relative min-h-[300px] sm:min-h-[330px] md:min-h-[360px] lg:min-h-[390px] flex items-center overflow-hidden">
-      {/* Background Image */}
-      <img
-        src={ambulanceHero}
-        alt="Rural Ambulance & Emergency Response Service"
-        className="absolute inset-0 h-full w-full object-cover"
-      />
-      {/* Modern dark/green gradient overlay for rich premium feel and high text contrast */}
-      <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/80 to-transparent" />
-
-      {/* Pulse ring — urgency indicator (brand-green, not red) */}
-      <div className="absolute right-12 top-1/2 -translate-y-1/2 hidden lg:block" aria-hidden="true">
-        <div className="relative w-32 h-32 flex items-center justify-center">
-          <span className="absolute inset-0 rounded-full border-2 border-brand-orange/30 animate-ping" style={{ animationDuration: "2s" }} />
-          <span className="absolute inset-3 rounded-full border-2 border-brand-orange/20 animate-ping" style={{ animationDuration: "2.5s", animationDelay: "0.4s" }} />
-          <div className="w-14 h-14 rounded-full bg-brand-orange/20 border border-brand-orange/40 flex items-center justify-center">
-            <Siren className="w-7 h-7 text-brand-orange" />
-          </div>
-        </div>
-      </div>
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 py-8 sm:py-10 w-full">
-        <nav className="flex items-center gap-2 text-xs text-white/60 mb-6 font-medium flex-wrap">
-          <Link to="/" className="hover:text-white transition-colors flex items-center gap-1">
-            <Home className="w-3 h-3" /> Home
-          </Link>
-          <ChevronRight className="w-3 h-3" />
-          <Link to="/programs/healthcare" className="hover:text-white transition-colors">Healthcare</Link>
-          <ChevronRight className="w-3 h-3" />
-          <span className="text-white/80">Rural Ambulance Service</span>
-        </nav>
-
+    <SubpageHeroCarousel
+      tag="HEALTHCARE • RAER"
+      title="Rural Ambulance & Emergency Response (RAER)"
+      subtitle="Reaching every life in time with fully equipped emergency transport, oxygen support, and basic life support for critical rural emergencies."
+      breadcrumbs={[
+        { label: "What We Do", href: "/programs" },
+        { label: "Healthcare", href: "/programs/healthcare" },
+        { label: "Rural Ambulance Service" },
+      ]}
+      images={[ambulanceHero, ruralAmbulanceImg]}
+    >
+      <div className="flex flex-wrap items-center gap-3 pt-1">
         <Link
           to="/programs/healthcare"
-          className="inline-flex items-center gap-2 text-xs font-semibold text-white/70 hover:text-white border border-white/20 hover:border-white/40 px-3 py-1.5 rounded transition-all mb-6 hover:-translate-x-0.5"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-white/90 hover:text-white border border-white/20 bg-white/10 hover:bg-white/20 px-3.5 py-2 rounded-xl transition-all"
         >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          All Healthcare Programmes
+          <ArrowLeft className="w-3.5 h-3.5" /> All Healthcare Programmes
         </Link>
-
-        <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-3.5 py-1.5 rounded-full mb-5">
-          <Ambulance className="w-3.5 h-3.5 text-brand-orange" />
-          <span className="text-xs font-bold tracking-widest uppercase text-white/90">Initiative 02 • RAER</span>
-        </div>
-
-        <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight mb-5">
-          Rural Ambulance &amp;<br />
-          <span className="text-brand-orange">Emergency Response (RAER)</span>
-        </h1>
-
-        <p className="text-sm md:text-base text-white/75 max-w-2xl leading-relaxed italic">
-          "Reaching every life in time —{" "}
-          <span className="text-white not-italic font-semibold">because emergency care should never be delayed by distance or poverty.</span>"
-        </p>
       </div>
-    </section>
+    </SubpageHeroCarousel>
   );
 }
 
@@ -232,21 +197,21 @@ function OverviewSection() {
           {/* Left Column: Text Content */}
           <div className="lg:col-span-7">
             <ScrollReveal>
-              <div className="bg-brand-green p-6 md:p-8 rounded-2xl border border-brand-green/20 shadow-sm relative overflow-hidden text-white">
-                <div className="absolute -top-4 -right-4 text-white/10 select-none pointer-events-none">
+              <div className="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden text-slate-800">
+                <div className="absolute -top-4 -right-4 text-slate-100 select-none pointer-events-none">
                   <Ambulance className="w-32 h-32" />
                 </div>
-                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/20 border border-white/30 text-[10px] font-bold text-white uppercase tracking-wider mb-4">
+                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-4">
                   <span>🌿</span> Context &amp; Challenge
                 </div>
                 <div className="space-y-4 relative z-10">
-                  <p className="text-white text-sm font-semibold leading-relaxed border-l-3 border-white/60 pl-3">
+                  <p className="text-slate-800 text-sm font-semibold leading-relaxed border-l-3 border-[#004724] pl-3">
                     In rural and remote areas, timely access to emergency medical transportation remains a major challenge. During medical emergencies, accidents, pregnancy complications, serious illnesses, or critical health conditions, many patients are unable to reach hospitals on time due to lack of ambulance services, poor transportation facilities, and financial constraints.
                   </p>
-                  <p className="text-white/80 text-sm leading-relaxed pl-3 border-l-3 border-brand-orange/60">
+                  <p className="text-slate-600 text-sm leading-relaxed pl-3 border-l-3 border-brand-orange">
                     For economically weaker families, arranging emergency transportation often becomes difficult, resulting in dangerous delays in medical treatment. In many villages, patients are transported using unsafe or unsuitable means, putting lives at even greater risk.
                   </p>
-                  <p className="text-white/90 text-sm font-semibold leading-relaxed pl-3 border-l-3 border-white/40">
+                  <p className="text-slate-800 text-sm font-semibold leading-relaxed pl-3 border-l-3 border-slate-300">
                     Rural communities commonly face:
                   </p>
                 </div>
@@ -281,12 +246,12 @@ function OverviewSection() {
             {CHALLENGES.map(({ icon: Icon, text }, i) => (
               <div
                 key={i}
-                className="flex-shrink-0 w-56 snap-start flex items-start gap-3 p-4 bg-[#0b1f3b] rounded-md border border-brand-green/10 shadow-sm"
+                className="flex-shrink-0 w-56 snap-start flex items-start gap-3 p-4 bg-white rounded-xl border border-slate-200 shadow-xs"
               >
-                <div className="shrink-0 w-8 h-8 rounded-md bg-white/15 flex items-center justify-center">
-                  <Icon className="w-4 h-4 text-white" />
+                <div className="shrink-0 w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                  <Icon className="w-4 h-4" />
                 </div>
-                <p className="text-xs text-slate-100 font-medium leading-relaxed">{text}</p>
+                <p className="text-xs text-slate-700 font-medium leading-relaxed">{text}</p>
               </div>
             ))}
           </div>
@@ -296,12 +261,12 @@ function OverviewSection() {
             {CHALLENGES.map(({ icon: Icon, text }, i) => (
               <div
                 key={i}
-                className="group flex items-start gap-4 p-5 bg-[#0b1f3b] hover:bg-white rounded-md border border-brand-green/10 hover:border-brand-green/30 shadow-sm hover:shadow-md transition-all duration-300"
+                className="group flex items-start gap-4 p-5 bg-white hover:bg-slate-50/80 rounded-xl border border-slate-200 hover:border-slate-300 shadow-xs hover:shadow-sm transition-all duration-200 hover:-translate-y-0.5"
               >
-                <div className="relative shrink-0 w-9 h-9 rounded-md bg-white/15 group-hover:bg-brand-green/10 flex items-center justify-center transition-colors">
-                  <Icon className="w-4.5 h-4.5 text-white group-hover:text-brand-green transition-colors" />
+                <div className="relative shrink-0 w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center transition-colors">
+                  <Icon className="w-4.5 h-4.5" />
                 </div>
-                <p className="text-sm text-slate-100 group-hover:text-slate-700 font-medium leading-relaxed transition-colors">{text}</p>
+                <p className="text-sm text-slate-700 font-medium leading-relaxed">{text}</p>
               </div>
             ))}
           </div>
@@ -364,25 +329,22 @@ function ApproachSection() {
               return (
                 <div
                   key={area.num}
-                  className="group relative bg-[#0b1f3b] hover:bg-white rounded-md p-6 border border-brand-green/10 hover:border-brand-green/30 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col overflow-hidden"
+                  className="group relative bg-white hover:bg-slate-50/80 rounded-xl p-6 border border-slate-200 hover:border-slate-300 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col overflow-hidden hover:-translate-y-1"
                 >
-                  {/* Pulse on icon for urgency */}
-                  <span className="absolute top-3 right-4 text-6xl font-extrabold text-white/10 select-none leading-none group-hover:text-brand-green/5 transition-colors">
+                  <span className="absolute top-3 right-4 text-5xl font-extrabold text-slate-100 select-none leading-none group-hover:text-brand-green/10 transition-colors">
                     {area.num}
                   </span>
-                  <div className="w-full h-1 rounded-full bg-white/30 group-hover:bg-brand-green transition-colors mb-5" />
+                  <div className="w-full h-1 rounded-full bg-slate-100 group-hover:bg-brand-green transition-colors mb-5" />
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="relative w-10 h-10 rounded-md bg-white/15 group-hover:bg-brand-orange/15 flex items-center justify-center transition-colors">
-                      <Icon className="w-5 h-5 text-white group-hover:text-brand-orange transition-colors" />
-                      {/* Subtle pulse ring on hover */}
-                      <span className="absolute inset-0 rounded-md border border-brand-orange/40 opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-opacity" style={{ animationDuration: "1.5s" }} />
+                    <div className="relative w-10 h-10 rounded-lg bg-orange-50 text-brand-orange flex items-center justify-center transition-colors">
+                      <Icon className="w-5 h-5" />
                     </div>
-                    <h3 className="font-bold text-sm text-white group-hover:text-brand-green-dark transition-colors">{area.title}</h3>
+                    <h3 className="font-semibold text-sm text-slate-900 group-hover:text-brand-green-dark transition-colors">{area.title}</h3>
                   </div>
                   <ul className="space-y-2.5 flex-1 relative z-10">
                     {area.bullets.map((b, j) => (
-                      <li key={j} className="flex items-start gap-2.5 text-slate-100 group-hover:text-slate-600 text-sm leading-relaxed transition-colors">
-                        <ArrowRight className="w-3.5 h-3.5 text-white/70 group-hover:text-brand-green shrink-0 mt-0.5 transition-colors" />
+                      <li key={j} className="flex items-start gap-2.5 text-slate-600 text-sm leading-relaxed">
+                        <ArrowRight className="w-3.5 h-3.5 text-brand-green shrink-0 mt-0.5" />
                         {b}
                       </li>
                     ))}
@@ -397,22 +359,22 @@ function ApproachSection() {
               return (
                 <div
                   key={area.num}
-                  className="group relative bg-[#0b1f3b] hover:bg-white rounded-md p-6 border border-brand-green/10 hover:border-brand-green/30 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col overflow-hidden"
+                  className="group relative bg-white hover:bg-slate-50/80 rounded-xl p-6 border border-slate-200 hover:border-slate-300 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col overflow-hidden hover:-translate-y-1"
                 >
-                  <span className="absolute top-3 right-4 text-6xl font-extrabold text-white/10 select-none leading-none group-hover:text-brand-green/5 transition-colors">
+                  <span className="absolute top-3 right-4 text-5xl font-extrabold text-slate-100 select-none leading-none group-hover:text-brand-green/10 transition-colors">
                     {area.num}
                   </span>
-                  <div className="w-full h-1 rounded-full bg-white/30 group-hover:bg-brand-green transition-colors mb-5" />
+                  <div className="w-full h-1 rounded-full bg-slate-100 group-hover:bg-brand-green transition-colors mb-5" />
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-md bg-white/15 group-hover:bg-brand-orange/15 flex items-center justify-center transition-colors">
-                      <Icon className="w-5 h-5 text-white group-hover:text-brand-orange transition-colors" />
+                    <div className="w-10 h-10 rounded-lg bg-orange-50 text-brand-orange flex items-center justify-center transition-colors">
+                      <Icon className="w-5 h-5" />
                     </div>
-                    <h3 className="font-bold text-sm text-white group-hover:text-brand-green-dark transition-colors">{area.title}</h3>
+                    <h3 className="font-semibold text-sm text-slate-900 group-hover:text-brand-green-dark transition-colors">{area.title}</h3>
                   </div>
                   <ul className="space-y-2.5 flex-1 relative z-10">
                     {area.bullets.map((b, j) => (
-                      <li key={j} className="flex items-start gap-2.5 text-slate-100 group-hover:text-slate-600 text-sm leading-relaxed transition-colors">
-                        <ArrowRight className="w-3.5 h-3.5 text-white/70 group-hover:text-brand-green shrink-0 mt-0.5 transition-colors" />
+                      <li key={j} className="flex items-start gap-2.5 text-slate-600 text-sm leading-relaxed">
+                        <ArrowRight className="w-3.5 h-3.5 text-brand-green shrink-0 mt-0.5" />
                         {b}
                       </li>
                     ))}
@@ -464,13 +426,13 @@ function ImplementationSection() {
                   </div>
 
                   {/* Content */}
-                  <div className="flex-1 bg-[#0b1f3b] hover:bg-white border border-brand-green/10 hover:border-brand-green/30 rounded-md p-4 shadow-sm group-hover:shadow-md transition-all duration-300">
+                  <div className="flex-1 bg-white hover:bg-slate-50/80 border border-slate-200 hover:border-slate-300 rounded-xl p-4 shadow-xs group-hover:shadow-sm transition-all duration-200">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[10px] font-bold text-white/80 group-hover:text-brand-orange uppercase tracking-widest transition-colors">Step {String(i + 1).padStart(2, "0")}</span>
-                      <span className="text-[10px] text-white/30 group-hover:text-slate-300 transition-colors">•</span>
-                      <span className="text-xs font-bold text-white group-hover:text-brand-green-dark transition-colors">{title}</span>
+                      <span className="text-[10px] font-semibold text-brand-orange uppercase tracking-widest">Step {String(i + 1).padStart(2, "0")}</span>
+                      <span className="text-[10px] text-slate-300">•</span>
+                      <span className="text-xs font-semibold text-slate-800">{title}</span>
                     </div>
-                    <p className="text-sm text-slate-100 group-hover:text-slate-600 leading-relaxed transition-colors">{text}</p>
+                    <p className="text-sm text-slate-600 leading-relaxed">{text}</p>
                   </div>
                 </div>
               ))}
@@ -495,14 +457,14 @@ function ImpactSection() {
             {IMPACT_OUTCOMES.map(({ icon: Icon, text }, i) => (
               <div
                 key={i}
-                className="group flex items-start gap-4 p-5 bg-[#0b1f3b] hover:bg-white rounded-md border border-brand-green/10 hover:border-brand-green/20 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+                className="group flex items-start gap-4 p-5 bg-white hover:bg-slate-50/80 rounded-xl border border-slate-200 hover:border-slate-300 shadow-xs hover:shadow-sm transition-all duration-200 hover:-translate-y-0.5"
               >
-                <div className="shrink-0 w-9 h-9 rounded-full bg-white/15 group-hover:bg-brand-green/10 flex items-center justify-center transition-colors">
-                  <Icon className="w-4.5 h-4.5 text-white group-hover:text-brand-green transition-colors" />
+                <div className="shrink-0 w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center transition-colors">
+                  <Icon className="w-4.5 h-4.5" />
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold text-white/70 group-hover:text-brand-green block mb-0.5 transition-colors">{String(i + 1).padStart(2, "0")}</span>
-                  <p className="text-sm text-slate-100 group-hover:text-slate-800 font-medium leading-relaxed transition-colors">{text}</p>
+                  <span className="text-[10px] font-bold text-brand-orange block mb-0.5">{String(i + 1).padStart(2, "0")}</span>
+                  <p className="text-sm text-slate-700 font-medium leading-relaxed">{text}</p>
                 </div>
               </div>
             ))}
@@ -510,17 +472,17 @@ function ImpactSection() {
         </ScrollReveal>
 
         <ScrollReveal delay={0.15}>
-          <div className="mt-12 bg-brand-green-darker rounded-md p-10 text-center">
-            <p className="text-lg md:text-xl font-semibold text-white max-w-3xl mx-auto leading-relaxed italic">
+          <div className="mt-12 bg-slate-50/80 border border-slate-200 rounded-2xl p-8 text-center shadow-xs">
+            <p className="text-base sm:text-lg font-semibold text-slate-800 max-w-3xl mx-auto leading-relaxed italic">
               "Islah believes that timely emergency response can save lives, and every individual deserves quick access to healthcare support during critical moments, regardless of location or financial condition."
             </p>
-            <p className="text-white/70 text-sm mt-4 max-w-xl mx-auto">
+            <p className="text-slate-600 text-sm mt-3 max-w-xl mx-auto">
               "Reaching every life in time — because emergency care should never be delayed by distance or poverty."
             </p>
-            <div className="mt-5 flex items-center justify-center gap-3">
-              <span className="h-px w-8 bg-brand-orange/60" />
-              <span className="text-brand-orange font-semibold text-sm tracking-wide">Islah Welfare Foundation</span>
-              <span className="h-px w-8 bg-brand-orange/60" />
+            <div className="mt-4 flex items-center justify-center gap-3">
+              <span className="h-px w-8 bg-brand-orange/40" />
+              <span className="text-brand-orange font-semibold text-xs uppercase tracking-widest">Islah Welfare Foundation</span>
+              <span className="h-px w-8 bg-brand-orange/40" />
             </div>
           </div>
         </ScrollReveal>

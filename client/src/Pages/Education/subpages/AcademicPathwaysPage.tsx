@@ -25,6 +25,7 @@ import {
 } from "@/components/layout/SiteLayout";
 import type { RoleType } from "@/components/forms/RoleFormModal";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
+import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import causeEduImg from "@/assets/cause-education.jpg";
 
 export default function AcademicPathwaysPage() {
@@ -38,87 +39,46 @@ export default function AcademicPathwaysPage() {
 
       <main>
         {/* ─── Hero Section ────────────────────────────────────────────────────── */}
-        <section className="relative overflow-hidden bg-gradient-to-r from-[#00381e] via-[#005a30] to-[#014725] text-white min-h-[300px] sm:min-h-[330px] md:min-h-[360px] lg:min-h-[390px] flex items-center py-6 sm:py-8 md:py-10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-            {/* Standardized Breadcrumb */}
-            <nav className="flex items-center gap-1.5 text-xs text-emerald-200/80 mb-4 font-medium flex-wrap">
-              <Link to="/" className="hover:text-white flex items-center gap-1">
-                <Home className="w-3.5 h-3.5 text-brand-orange" /> Home
-              </Link>
-              <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-              <Link to="/programs" className="hover:text-white">What We Do</Link>
-              <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-              <Link to="/programs/education" className="hover:text-white">Education &amp; Learning</Link>
-              <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-              <span className="text-emerald-300 font-semibold">APTD</span>
-            </nav>
+        <SubpageHeroCarousel
+          tag="EDUCATION • TALENT DEVELOPMENT"
+          title="Academic Pathways & Talent Development"
+          subtitle="In many rural communities, students have the ability and ambition to succeed, but lack access to quality academic support. APTD combines talent identification through RATS with structured Coaching & Examination Support (CES)."
+          breadcrumbs={[
+            { label: "What We Do", href: "/programs" },
+            { label: "Education & Learning", href: "/programs/education" },
+            { label: "Academic Pathways & Talent Development" },
+          ]}
+          images={[causeEduImg]}
+        >
+          <div className="flex flex-wrap items-center gap-3 pt-2">
+            <button
+              type="button"
+              onClick={() => setActiveModal("sponsor")}
+              className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold text-xs sm:text-sm px-6 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer"
+            >
+              <Heart className="w-4 h-4 fill-white" />
+              <span>Support APTD</span>
+            </button>
 
-            <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 items-center">
-              <div className="lg:col-span-7 space-y-3">
-                <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-widest text-brand-orange mb-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-orange animate-pulse" />
-                  APTD • TALENT DEVELOPMENT
-                </div>
-
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
-                  Academic Pathways &amp; <br className="hidden sm:inline" />
-                  <span className="text-emerald-300">Talent Development</span>
-                </h1>
-
-                <p className="text-slate-200 text-xs sm:text-sm max-w-xl leading-relaxed">
-                  In many rural communities, students have the ability and ambition to succeed, but lack access to quality academic support. APTD combines talent identification through RATS with structured Coaching &amp; Examination Support (CES).
-                </p>
-
-                <div className="flex flex-wrap items-center gap-3 pt-1">
-                  <button
-                    type="button"
-                    onClick={() => setActiveModal("sponsor")}
-                    className="inline-flex items-center gap-2 bg-brand-orange hover:bg-[#c2410c] text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-md transition cursor-pointer"
-                  >
-                    <Heart className="w-4 h-4 fill-white" />
-                    <span>Support APTD</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setActiveModal("partner")}
-                    className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl backdrop-blur-md transition cursor-pointer"
-                  >
-                    <Users className="w-4 h-4 text-emerald-300" />
-                    <span>Partner With Us</span>
-                  </button>
-                </div>
-              </div>
-
-              <div className="lg:col-span-5">
-                <div className="rounded-2xl overflow-hidden border-2 border-white/15 shadow-xl bg-white/5 max-w-md ml-auto">
-                  <img
-                    src={causeEduImg}
-                    alt="Academic coaching and examination support"
-                    className="w-full h-56 sm:h-64 object-cover"
-                  />
-                  <div className="p-3.5 bg-slate-900/90 text-white">
-                    <p className="text-[11px] font-bold uppercase tracking-widest text-emerald-400">
-                      RATS + COACHING CENTRE
-                    </p>
-                    <p className="text-xs text-slate-300 mt-0.5">
-                      Identifying talent • Nurturing excellence • Preparing for competitive futures.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <button
+              type="button"
+              onClick={() => setActiveModal("partner")}
+              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs sm:text-sm px-5 py-2.5 sm:py-3 rounded-xl backdrop-blur-xs transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer"
+            >
+              <Users className="w-4 h-4 text-brand-orange" />
+              <span>Partner With Us</span>
+            </button>
           </div>
-        </section>
+        </SubpageHeroCarousel>
 
         {/* ─── Two Integrated Components ───────────────────────────────────────── */}
         <section className="py-14 bg-slate-50 border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             <div className="text-center max-w-2xl mx-auto space-y-2">
-              <span className="text-xs font-black uppercase tracking-widest text-[#15803d]">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#15803d]">
                 FROM POTENTIAL TO POSSIBILITY
               </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-slate-900">
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">
                 Two Complementary Pillars of APTD
               </h2>
             </div>
@@ -127,13 +87,13 @@ export default function AcademicPathwaysPage() {
               {/* Component 1: RATS */}
               <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-black px-3 py-1 rounded-md bg-purple-100 text-purple-800">
+                  <span className="text-xs font-bold px-3 py-1 rounded-md bg-purple-100 text-purple-800">
                     COMPONENT 01
                   </span>
                   <Award className="w-6 h-6 text-purple-600" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-black text-slate-900">
+                  <h3 className="text-xl font-bold text-slate-900">
                     Rural Academic Talent Search (RATS)
                   </h3>
                   <p className="text-xs font-bold text-purple-700 mt-0.5">
@@ -162,13 +122,13 @@ export default function AcademicPathwaysPage() {
               {/* Component 2: CES */}
               <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-black px-3 py-1 rounded-md bg-emerald-100 text-[#15803d]">
+                  <span className="text-xs font-bold px-3 py-1 rounded-md bg-emerald-100 text-[#15803d]">
                     COMPONENT 02
                   </span>
                   <BookOpen className="w-6 h-6 text-[#15803d]" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-black text-slate-900">
+                  <h3 className="text-xl font-bold text-slate-900">
                     Coaching &amp; Examination Support (CES)
                   </h3>
                   <p className="text-xs font-bold text-[#15803d] mt-0.5">
@@ -203,10 +163,10 @@ export default function AcademicPathwaysPage() {
             <div className="grid lg:grid-cols-12 gap-8 items-start">
               {/* Need */}
               <div className="lg:col-span-6 bg-slate-50 border border-slate-200 rounded-3xl p-6 sm:p-8 space-y-4">
-                <span className="text-xs font-black uppercase tracking-widest text-amber-700">
+                <span className="text-xs font-bold uppercase tracking-widest text-amber-700">
                   THE NEED
                 </span>
-                <h3 className="text-xl font-black text-slate-900">
+                <h3 className="text-xl font-bold text-slate-900">
                   Overcoming the Competitive Disadvantage
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
@@ -234,10 +194,10 @@ export default function AcademicPathwaysPage() {
 
               {/* Vision */}
               <div className="lg:col-span-6 bg-slate-900 text-white rounded-3xl p-6 sm:p-8 space-y-5 shadow-xl">
-                <span className="text-xs font-black uppercase tracking-widest text-emerald-400">
+                <span className="text-xs font-bold uppercase tracking-widest text-emerald-400">
                   OUR VISION
                 </span>
-                <h3 className="text-2xl font-black text-white leading-snug">
+                <h3 className="text-2xl font-bold text-white leading-snug">
                   Creating Fairer Pathways to Academic Opportunity
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
@@ -260,10 +220,10 @@ export default function AcademicPathwaysPage() {
         <section className="py-16 bg-slate-50 border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 text-center">
             <div className="max-w-2xl mx-auto space-y-2">
-              <span className="text-xs font-black uppercase tracking-widest text-[#15803d]">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#15803d]">
                 LEARNER JOURNEY
               </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-slate-900">
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">
                 The Academic Pathway
               </h2>
               <p className="text-xs sm:text-sm text-slate-600">
@@ -281,8 +241,8 @@ export default function AcademicPathwaysPage() {
                 { step: "06", title: "Progress", desc: "Higher Education & Opportunity", color: "#0b1f3b" },
               ].map((st) => (
                 <div key={st.step} className="p-4 rounded-2xl bg-white border border-slate-200 text-left space-y-1.5 shadow-2xs">
-                  <span className="text-xs font-black" style={{ color: st.color }}>{st.step}</span>
-                  <h4 className="font-black text-sm text-slate-900">{st.title}</h4>
+                  <span className="text-xs font-bold" style={{ color: st.color }}>{st.step}</span>
+                  <h4 className="font-bold text-sm text-slate-900">{st.title}</h4>
                   <p className="text-[11px] text-slate-500 leading-snug">{st.desc}</p>
                 </div>
               ))}
@@ -294,10 +254,10 @@ export default function AcademicPathwaysPage() {
         <section className="py-16 bg-white border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             <div className="max-w-3xl space-y-2">
-              <span className="text-xs font-black uppercase tracking-widest text-[#15803d]">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#15803d]">
                 MEASURABLE OUTCOMES
               </span>
-              <h3 className="text-2xl sm:text-3xl font-black text-slate-900">
+              <h3 className="text-2xl sm:text-3xl font-bold text-slate-900">
                 EXPECTED IMPACT
               </h3>
               <p className="text-xs sm:text-sm text-slate-600">
@@ -326,14 +286,14 @@ export default function AcademicPathwaysPage() {
         </section>
 
         {/* ─── Bottom Quote & CTAs ─────────────────────────────────────────────── */}
-        <section className="py-14 bg-emerald-950 text-white">
+        <section className="py-14 bg-gradient-to-r from-[#071527] to-[#0c2340] text-white">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-              <div className="space-y-2 max-w-xl text-center md:text-left">
-                <blockquote className="text-lg sm:text-xl font-black text-white leading-snug">
+              <div className="space-y-2 max-w-2xl text-center md:text-left">
+                <blockquote className="text-base sm:text-lg font-medium text-slate-200 leading-relaxed italic">
                   “Empowering rural students with knowledge, mentorship, guidance, and opportunity to dream bigger, achieve higher, and shape a better future.”
                 </blockquote>
-                <p className="text-xs text-emerald-300">
+                <p className="text-xs text-slate-400">
                   Partner with us to nurture the next generation of scholars and leaders.
                 </p>
               </div>
@@ -342,7 +302,7 @@ export default function AcademicPathwaysPage() {
                 <button
                   type="button"
                   onClick={() => setActiveModal("sponsor")}
-                  className="inline-flex items-center gap-2 bg-brand-orange hover:bg-[#c2410c] text-white font-extrabold text-xs sm:text-sm px-5 py-3 rounded-xl shadow-lg transition"
+                  className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer"
                 >
                   <Heart className="w-4 h-4 fill-white" />
                   <span>Support APTD</span>
@@ -351,9 +311,9 @@ export default function AcademicPathwaysPage() {
                 <button
                   type="button"
                   onClick={() => setActiveModal("partner")}
-                  className="inline-flex items-center gap-2 bg-white text-slate-900 hover:bg-slate-100 font-extrabold text-xs sm:text-sm px-5 py-3 rounded-xl shadow-lg transition"
+                  className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl backdrop-blur-xs transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer"
                 >
-                  <Users className="w-4 h-4" />
+                  <Users className="w-4 h-4 text-brand-orange" />
                   <span>Partner With Us</span>
                 </button>
               </div>

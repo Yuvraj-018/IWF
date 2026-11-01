@@ -49,12 +49,6 @@ export default function GetInvolvedPage() {
           title="Get Involved"
           description="At ISLAH, we believe that meaningful social transformation is possible when individuals, organisations, and communities come together with a shared purpose. Whether you choose to volunteer, donate, partner with us, mentor aspiring youth, or become a member, your involvement makes a lasting difference."
           breadcrumb={[{ label: "Get Involved" }]}
-          cards={[
-            { title: "25,000+", subtitle: "Lives Impacted", icon: Users },
-            { title: "150+", subtitle: "Projects Done", icon: Briefcase },
-            { title: "5,800+", subtitle: "Volunteers", icon: HandHeart },
-            { title: "15 Cr+", subtitle: "Funds Utilized", icon: IndianRupee },
-          ]}
         >
           <div className="flex flex-wrap gap-3 pt-2">
             <button
@@ -152,7 +146,7 @@ export default function GetInvolvedPage() {
                   <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-green-dark mt-1">
                     Ways to Get Involved
                   </h2>
-                  <p className="text-slate-500 text-xs sm:text-sm mt-1">
+                  <p className="text-sm text-black leading-relaxed font-normal mt-1">
                     Explore different ways to connect your time, expertise, or resources with our grassroots mission.
                   </p>
                 </div>
@@ -164,10 +158,10 @@ export default function GetInvolvedPage() {
                       <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-brand-green flex items-center justify-center mb-4 shadow-2xs group-hover:scale-105 transition-transform">
                         <Users className="w-6 h-6" />
                       </div>
-                      <h3 className="text-base font-extrabold text-slate-900 group-hover:text-brand-green transition-colors">
+                      <h3 className="text-base font-bold text-slate-900 group-hover:text-brand-green transition-colors">
                         Volunteer with Us
                       </h3>
-                      <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+                      <p className="text-sm text-black leading-relaxed font-normal mt-2">
                         Share your time, skills, and passion by participating in community programs, awareness campaigns, educational initiatives, healthcare camps, environmental activities, and rural development projects.
                       </p>
                     </div>
@@ -191,10 +185,10 @@ export default function GetInvolvedPage() {
                       <div className="w-12 h-12 rounded-2xl bg-orange-100 text-brand-orange flex items-center justify-center mb-4 shadow-2xs group-hover:scale-105 transition-transform">
                         <Building2 className="w-6 h-6" />
                       </div>
-                      <h3 className="text-base font-extrabold text-slate-900 group-hover:text-brand-orange transition-colors">
+                      <h3 className="text-base font-bold text-slate-900 group-hover:text-brand-orange transition-colors">
                         Partner with Us
                       </h3>
-                      <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+                      <p className="text-sm text-black leading-relaxed font-normal mt-2">
                         Collaborate with ISLAH as a corporate, NGO, educational institution, government agency, or community organisation to implement impactful and sustainable development initiatives.
                       </p>
                     </div>
@@ -218,10 +212,10 @@ export default function GetInvolvedPage() {
                       <div className="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center mb-4 shadow-2xs group-hover:scale-105 transition-transform">
                         <Target className="w-6 h-6" />
                       </div>
-                      <h3 className="text-base font-extrabold text-slate-900 group-hover:text-purple-600 transition-colors">
+                      <h3 className="text-base font-bold text-slate-900 group-hover:text-purple-600 transition-colors">
                         Sponsor a Programme
                       </h3>
-                      <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+                      <p className="text-sm text-black leading-relaxed font-normal mt-2">
                         Sponsor a specific program or project that aligns with your personal, corporate, or CSR objectives and create measurable social impact.
                       </p>
                     </div>
@@ -245,10 +239,10 @@ export default function GetInvolvedPage() {
                       <div className="w-12 h-12 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center mb-4 shadow-2xs group-hover:scale-105 transition-transform">
                         <GraduationCap className="w-6 h-6" />
                       </div>
-                      <h3 className="text-base font-extrabold text-slate-900 group-hover:text-sky-600 transition-colors">
+                      <h3 className="text-base font-bold text-slate-900 group-hover:text-sky-600 transition-colors">
                         Become a Mentor
                       </h3>
-                      <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+                      <p className="text-sm text-black leading-relaxed font-normal mt-2">
                         Guide and inspire students, youth, women entrepreneurs, and community members by sharing your knowledge, professional experience, and leadership skills.
                       </p>
                     </div>
@@ -272,10 +266,10 @@ export default function GetInvolvedPage() {
                       <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-4 shadow-2xs group-hover:scale-105 transition-transform">
                         <UserCheck className="w-6 h-6" />
                       </div>
-                      <h3 className="text-base font-extrabold text-slate-900 group-hover:text-emerald-700 transition-colors">
+                      <h3 className="text-base font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">
                         Become a Member
                       </h3>
-                      <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+                      <p className="text-sm text-black leading-relaxed font-normal mt-2">
                         Join our network of members committed to supporting inclusive and sustainable rural development through active participation and advocacy.
                       </p>
                     </div>
@@ -299,10 +293,10 @@ export default function GetInvolvedPage() {
                       <div className="w-12 h-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mb-4 shadow-2xs group-hover:scale-105 transition-transform">
                         <Heart className="w-6 h-6" />
                       </div>
-                      <h3 className="text-base font-extrabold text-slate-900 group-hover:text-rose-600 transition-colors">
+                      <h3 className="text-base font-bold text-slate-900 group-hover:text-rose-600 transition-colors">
                         Donate Us
                       </h3>
-                      <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+                      <p className="text-sm text-black leading-relaxed font-normal mt-2">
                         Support our mission through one-time or recurring donations. Your contribution helps fund education, healthcare, women empowerment, livelihood, environmental, and humanitarian programs.
                       </p>
                     </div>
@@ -367,12 +361,12 @@ export default function GetInvolvedPage() {
               </div>
 
               {/* Right Card: Join Our Mission + Employee Subcard */}
-              <div className="bg-gradient-to-br from-[#0b1f3b] to-[#072417] text-white rounded-3xl p-7 sm:p-9 flex flex-col justify-between shadow-lg">
+              <div className="bg-gradient-to-br from-[#071527] to-[#0c2340] text-white rounded-3xl p-7 sm:p-9 flex flex-col justify-between shadow-lg">
                 <div>
                   <span className="text-xs font-bold uppercase tracking-widest text-brand-orange">
                     Join Our Mission
                   </span>
-                  <h3 className="text-2xl font-extrabold text-white mt-1 mb-2">
+                  <h3 className="text-2xl font-bold text-white mt-1 mb-2">
                     Catalyst for Positive Change
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-6">
@@ -434,11 +428,11 @@ export default function GetInvolvedPage() {
           </div>
         </section>
 
-        {/* ─── Green Quote Banner (Page 1 Bottom) ──────────────────────────────── */}
-        <section className="bg-brand-green text-white py-12">
+        {/* ─── Quote Banner (Page 1 Bottom) ──────────────────────────────── */}
+        <section className="bg-slate-50 border-t border-slate-200 text-slate-800 py-12">
           <div className="max-w-5xl mx-auto px-4 text-center space-y-4">
-            <Quote className="w-8 h-8 text-white/40 mx-auto" />
-            <p className="text-xl sm:text-2xl md:text-3xl font-serif italic leading-relaxed text-white font-light">
+            <Quote className="w-8 h-8 text-slate-300 mx-auto" />
+            <p className="text-xl sm:text-2xl md:text-3xl font-serif italic leading-relaxed text-slate-800 font-light text-balance">
               “Together, we can empower people, strengthen communities, and build a better tomorrow.”
             </p>
             <div className="pt-2">

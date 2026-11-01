@@ -257,12 +257,6 @@ export default function GalleryPage() {
             { label: "Programme Gallery" },
           ]}
           image={gallery1}
-          cards={[
-            { title: "8 Sectors", subtitle: "Holistic Outreach", icon: Layers },
-            { title: "25,000+", subtitle: "Lives Touched", icon: Users },
-            { title: "Field Photos", subtitle: "Verified Action", icon: Camera },
-            { title: "Grassroots", subtitle: "Rural Impact", icon: Sprout },
-          ]}
         />
 
         {/* Categories Bar */}

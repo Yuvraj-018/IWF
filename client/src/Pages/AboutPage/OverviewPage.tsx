@@ -220,23 +220,23 @@ export default function OverviewPage() {
                   <Sparkles className="w-3.5 h-3.5 text-[#f97316]" />
                   Integrated Community Development
                 </span>
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#0b1f3b] tracking-tight leading-tight">
+                <h2 className="text-2xl sm:text-3xl font-semibold text-[#0b1f3b] tracking-tight leading-tight">
                   ISLAH
                 </h2>
-                <p className="text-slate-700 text-xs sm:text-sm leading-relaxed font-normal">
+                <p className="text-sm text-black leading-relaxed font-normal mb-3">
                   <strong className="text-[#0b1f3b] font-bold">ISLAH</strong> is the public identity of{" "}
-                  <strong className="text-slate-900 font-semibold">Islah Welfare Foundation</strong>, a non-profit organisation committed to
+                  <strong className="text-black font-semibold">Islah Welfare Foundation</strong>, a non-profit organisation committed to
                   advancing the well-being, dignity, and resilience of rural and underserved
                   communities.
                 </p>
-                <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                <p className="text-sm text-black leading-relaxed font-normal mb-3">
                   We believe that meaningful development cannot be achieved by addressing problems in
                   isolation. Education without livelihood, healthcare without awareness, infrastructure
                   without participation, or economic support without dignity cannot create lasting
                   change.
                 </p>
-                <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                  ISLAH therefore follows an <strong className="text-slate-800 font-semibold">integrated and community-centred approach</strong>,
+                <p className="text-sm text-black leading-relaxed font-normal mb-3">
+                  ISLAH therefore follows an <strong className="text-black font-semibold">integrated and community-centred approach</strong>,
                   bringing together education, healthcare, livelihoods, agriculture, women and youth
                   empowerment, environmental sustainability, humanitarian assistance, and community
                   development.
@@ -305,10 +305,10 @@ export default function OverviewPage() {
               <p className="text-xs font-bold uppercase tracking-widest text-[#f97316]">
                 Institutional Definition
               </p>
-              <h2 className="text-2xl sm:text-3xl font-black text-[#0b1f3b] tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-semibold text-[#0b1f3b] tracking-tight">
                 ISLAH Stands For
               </h2>
-              <p className="text-slate-600 text-sm leading-relaxed">
+              <p className="text-sm text-black leading-relaxed font-normal">
                 Each letter in ISLAH represents a foundational pillar of our integrated community
                 transformation strategy.
               </p>
@@ -320,6 +320,8 @@ export default function OverviewPage() {
                 <button
                   key={item.letter}
                   onClick={() => setActiveTab(item.letter as "I" | "S" | "L" | "A" | "H")}
+                  onMouseEnter={() => setActiveTab(item.letter as "I" | "S" | "L" | "A" | "H")}
+                  onFocus={() => setActiveTab(item.letter as "I" | "S" | "L" | "A" | "H")}
                   className={`flex items-center gap-2.5 px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 cursor-pointer shadow-xs ${
                     activeTab === item.letter
                       ? "bg-[#0b1f3b] text-white scale-105 shadow-md"
@@ -348,14 +350,14 @@ export default function OverviewPage() {
                   </div>
                   <div className="space-y-2 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="text-xl sm:text-2xl font-black text-[#0b1f3b]">
+                      <h3 className="text-lg sm:text-xl font-semibold text-[#0b1f3b]">
                         {current.letter} — {current.word}
                       </h3>
                       <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full border ${current.badgeBg}`}>
                         {current.tagline}
                       </span>
                     </div>
-                    <p className="text-slate-700 text-sm sm:text-base leading-relaxed">
+                    <p className="text-sm text-black leading-relaxed font-normal">
                       {current.desc}
                     </p>
                   </div>
@@ -370,16 +372,15 @@ export default function OverviewPage() {
         {/* Section 3: Our Areas of Work */}
         <ScrollReveal>
           <div className="space-y-6">
-            <div className="text-center max-w-3xl mx-auto space-y-2">
+            <div className="text-center max-w-4xl mx-auto space-y-2">
               <p className="text-xs font-bold uppercase tracking-widest text-[#f97316]">
                 Core Programs
               </p>
-              <h2 className="text-2xl sm:text-3xl font-black text-[#0b1f3b] tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-semibold text-[#0b1f3b] tracking-tight">
                 Our Areas of Work
               </h2>
-              <p className="text-slate-600 text-sm leading-relaxed">
-                ISLAH works across interconnected areas of community development to create
-                self-reliance and long-term socio-economic progress:
+              <p className="text-slate-600 text-sm leading-relaxed max-w-4xl mx-auto">
+                ISLAH works across interconnected areas of community development to create self-reliance and long-term socio-economic progress:
               </p>
             </div>
 
@@ -388,7 +389,7 @@ export default function OverviewPage() {
                 <a
                   key={area.title}
                   href={area.link}
-                  className={`p-5 rounded-2xl border ${area.color} transition-all duration-200 hover:-translate-y-1 hover:shadow-md flex flex-col justify-between group`}
+                  className={`p-5 rounded-2xl border ${area.color} transition-all duration-200 hover:-translate-y-1 hover:shadow-md hover:border-slate-300 flex flex-col justify-between group`}
                 >
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
@@ -397,10 +398,10 @@ export default function OverviewPage() {
                       </div>
                       <span className="text-xl select-none">{area.emoji}</span>
                     </div>
-                    <h3 className="font-extrabold text-base text-[#0b1f3b] leading-snug group-hover:text-brand-orange transition-colors">
+                    <h3 className="font-bold text-base text-[#0b1f3b] leading-snug group-hover:text-brand-orange transition-colors">
                       {area.title}
                     </h3>
-                    <p className="text-xs text-slate-600 leading-relaxed">
+                    <p className="text-sm text-black font-normal leading-relaxed">
                       {area.desc}
                     </p>
                   </div>
@@ -416,16 +417,16 @@ export default function OverviewPage() {
 
         {/* Section 4: From Assistance to Empowerment (Visual Chain) */}
         <ScrollReveal>
-          <div className="bg-gradient-to-br from-[#07162c] to-[#0b1f3b] text-white rounded-3xl p-6 sm:p-10 shadow-xl space-y-8">
+          <div className="bg-slate-50 border border-slate-200/90 rounded-3xl p-6 sm:p-10 shadow-xs space-y-8">
             <div className="text-center max-w-3xl mx-auto space-y-2">
-              <span className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-brand-orange">
+              <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[#f97316]">
                 <Lightbulb className="w-3.5 h-3.5" />
                 Strategic Transformation
               </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-semibold text-[#0b1f3b] tracking-tight">
                 From Assistance to Empowerment
               </h2>
-              <p className="text-white/80 text-sm leading-relaxed">
+              <p className="text-sm text-black leading-relaxed font-normal">
                 A central principle of ISLAH is that development should move beyond short-term
                 assistance wherever possible. Our programmes connect immediate support with longer-term
                 empowerment.
@@ -437,26 +438,26 @@ export default function OverviewPage() {
               {progressionSteps.map((item, idx) => (
                 <div
                   key={item.num}
-                  className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col justify-between hover:bg-white/10 transition-colors relative"
+                  className="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between hover:border-slate-300 hover:shadow-xs transition-all relative"
                 >
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-[11px] font-black text-brand-orange bg-brand-orange/20 px-2 py-0.5 rounded-md">
+                      <span className="text-[11px] font-bold text-brand-orange bg-brand-orange/15 px-2 py-0.5 rounded-md">
                         {item.num}
                       </span>
                       {idx < progressionSteps.length - 1 && (
-                        <ArrowRight className="w-3.5 h-3.5 text-white/30 hidden lg:block" />
+                        <ArrowRight className="w-3.5 h-3.5 text-slate-400 hidden lg:block" />
                       )}
                     </div>
-                    <h4 className="text-base font-extrabold text-white mb-1">{item.step}</h4>
-                    <p className="text-xs text-white/70 leading-snug">{item.desc}</p>
+                    <h4 className="text-base font-bold text-[#0b1f3b] mb-1">{item.step}</h4>
+                    <p className="text-xs text-black font-normal leading-snug">{item.desc}</p>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="bg-white/10 rounded-2xl p-4 text-center border border-white/15">
-              <p className="text-sm font-bold text-white/90">
+            <div className="bg-white rounded-2xl p-4 text-center border border-slate-200 shadow-2xs">
+              <p className="text-sm font-semibold text-black italic">
                 “Relief responds. Education opens doors. Skills build livelihoods. Livelihoods ensure
                 resilience. Participation ensures ownership. And ownership creates sustainable
                 change.”
@@ -472,7 +473,7 @@ export default function OverviewPage() {
               <p className="text-xs font-bold uppercase tracking-widest text-[#f97316]">
                 Guiding Principles
               </p>
-              <h2 className="text-2xl sm:text-3xl font-black text-[#0b1f3b] tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-semibold text-[#0b1f3b] tracking-tight">
                 Our Vision, Mission & Philosophy
               </h2>
             </div>
@@ -484,8 +485,8 @@ export default function OverviewPage() {
                   <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
                     <Target className="w-6 h-6" />
                   </div>
-                  <h3 className="text-xl font-extrabold text-[#0b1f3b]">Our Vision</h3>
-                  <p className="text-slate-600 text-sm leading-relaxed">
+                  <h3 className="text-xl font-bold text-[#0b1f3b]">Our Vision</h3>
+                  <p className="text-sm text-black leading-relaxed font-normal">
                     A society where every individual can live with dignity, develop their potential,
                     sustain a secure livelihood, and contribute to a healthy, resilient and self-reliant
                     community.
@@ -502,8 +503,8 @@ export default function OverviewPage() {
                   <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
                     <Compass className="w-6 h-6" />
                   </div>
-                  <h3 className="text-xl font-extrabold text-[#0b1f3b]">Our Mission</h3>
-                  <p className="text-slate-600 text-sm leading-relaxed">
+                  <h3 className="text-xl font-bold text-[#0b1f3b]">Our Mission</h3>
+                  <p className="text-sm text-black leading-relaxed font-normal">
                     To create inclusive and sustainable opportunities for rural and underserved
                     communities through integrated interventions in education, healthcare, livelihoods,
                     agriculture, empowerment, environmental sustainability and humanitarian
@@ -522,8 +523,8 @@ export default function OverviewPage() {
                   <div className="w-12 h-12 rounded-xl bg-orange-50 text-brand-orange flex items-center justify-center font-bold">
                     <Lightbulb className="w-6 h-6" />
                   </div>
-                  <h3 className="text-xl font-extrabold text-[#0b1f3b]">Our Philosophy</h3>
-                  <p className="text-slate-600 text-sm leading-relaxed">
+                  <h3 className="text-xl font-bold text-[#0b1f3b]">Our Philosophy</h3>
+                  <p className="text-sm text-black leading-relaxed font-normal">
                     We believe that every community possesses potential. Development is not about
                     changing communities from the outside; it is about unlocking their potential from
                     within:
@@ -551,7 +552,7 @@ export default function OverviewPage() {
                 <ShieldCheck className="w-5 h-5 text-brand-orange" />
               </div>
               <div>
-                <h3 className="text-lg sm:text-xl font-black text-[#0b1f3b]">
+                <h3 className="text-base sm:text-lg font-semibold text-[#0b1f3b]">
                   Our Commitment to Responsible Action & Transparency
                 </h3>
                 <p className="text-xs text-slate-500 font-medium">
@@ -581,20 +582,20 @@ export default function OverviewPage() {
         <ScrollReveal>
           <div className="border border-slate-200 rounded-3xl p-6 sm:p-10 space-y-8 bg-white shadow-sm">
             <div className="space-y-3">
-              <div className="inline-flex items-center gap-2 bg-brand-orange/10 px-3 py-1 rounded-full text-xs font-black text-brand-orange uppercase tracking-wider">
+              <div className="inline-flex items-center gap-2 bg-brand-orange/10 px-3 py-1 rounded-full text-xs font-semibold text-brand-orange uppercase tracking-wider">
                 <Award className="w-3.5 h-3.5" />
                 Centenary of Independence
               </div>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#0b1f3b] tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-semibold text-[#0b1f3b] tracking-tight">
                 Vision 2047: Building Communities That Shape a Developed Rural India
               </h2>
-              <p className="text-slate-700 text-sm sm:text-base leading-relaxed">
+              <p className="text-sm text-black leading-relaxed font-normal mb-3">
                 As India moves towards 2047, the centenary of its independence, ISLAH envisions a future
                 where the progress of the nation is reflected not only in economic growth and
                 technological advancement, but also in the dignity, capabilities, resilience and
                 quality of life of every community.
               </p>
-              <p className="text-slate-600 text-sm leading-relaxed">
+              <p className="text-sm text-black leading-relaxed font-normal mb-3">
                 We believe that the journey towards a developed India must begin with strong, educated,
                 healthy, skilled and self-reliant communities—particularly in rural and underserved
                 regions.
@@ -603,7 +604,7 @@ export default function OverviewPage() {
 
             {/* 9 Aspirations by 2047 */}
             <div className="space-y-4">
-              <h3 className="text-lg font-black text-[#0b1f3b] flex items-center gap-2">
+              <h3 className="text-base font-semibold text-[#0b1f3b] flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-brand-orange" />
                 By 2047, ISLAH Aspires to See Communities Where:
               </h3>
@@ -623,7 +624,7 @@ export default function OverviewPage() {
             {/* From Beneficiaries to Change-Makers */}
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/80 rounded-2xl p-6 space-y-4">
               <div>
-                <h3 className="text-lg font-black text-[#0b1f3b]">
+                <h3 className="text-base font-semibold text-[#0b1f3b]">
                   Our Approach — From Beneficiaries to Change-Makers
                 </h3>
                 <p className="text-xs text-slate-600 mt-0.5">
@@ -633,11 +634,11 @@ export default function OverviewPage() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {changeMakers.map((item, idx) => (
-                  <div key={idx} className="bg-white p-3.5 rounded-xl border border-blue-100 shadow-xs">
+                  <div key={idx} className="bg-white p-3.5 rounded-xl border border-blue-100 shadow-xs hover:border-blue-200 transition-colors">
                     <span className="text-[11px] font-bold text-brand-orange uppercase block mb-1">
                       {item.from}
                     </span>
-                    <span className="text-xs font-black text-slate-900 leading-snug">
+                    <span className="text-xs font-semibold text-slate-900 leading-snug">
                       → {item.to}
                     </span>
                   </div>
@@ -648,8 +649,8 @@ export default function OverviewPage() {
             {/* Society Goals & Commitment */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200 space-y-3">
-                <h4 className="font-black text-[#0b1f3b] text-base">We Aspire to Build a Society Where:</h4>
-                <ul className="space-y-2 text-xs text-slate-700 font-semibold">
+                <h4 className="text-sm sm:text-base font-semibold text-[#0b1f3b]">We Aspire to Build a Society Where:</h4>
+                <ul className="space-y-2 text-xs text-slate-700 font-medium">
                   <li className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-brand-orange shrink-0" />
                     No child is deprived of education
@@ -673,24 +674,24 @@ export default function OverviewPage() {
                 </ul>
               </div>
 
-              <div className="bg-[#0b1f3b] text-white rounded-2xl p-6 flex flex-col justify-between space-y-4 shadow-md">
+              <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200 flex flex-col justify-between space-y-4 shadow-xs">
                 <div className="space-y-2">
-                  <h4 className="font-black text-brand-orange text-base uppercase tracking-wider">
+                  <h4 className="font-semibold text-brand-orange text-sm uppercase tracking-wider">
                     A Commitment to Change
                   </h4>
-                  <p className="text-xs text-white/80 leading-relaxed italic">
+                  <p className="text-xs text-black font-normal leading-relaxed italic">
                     “We may not measure this journey in years alone, but in the lives transformed along
                     the way. Our mission will continue until no child is seen begging or forced into
                     labour, every child is in school or playing freely, and every individual can live with
                     dignity.”
                   </p>
                 </div>
-                <div className="pt-3 border-t border-white/15 flex flex-wrap gap-2">
+                <div className="pt-3 border-t border-slate-200 flex flex-wrap gap-2">
                   {["Education", "Healthcare", "Women Empowerment", "Relief & Rehabilitation", "Rural Livelihoods"].map(
                     (area) => (
                       <span
                         key={area}
-                        className="text-[10px] font-bold bg-white/10 text-white px-2.5 py-1 rounded-md border border-white/15"
+                        className="text-[10px] font-semibold bg-white text-slate-800 px-2.5 py-1 rounded-md border border-slate-200 shadow-2xs"
                       >
                         {area}
                       </span>
@@ -701,11 +702,11 @@ export default function OverviewPage() {
             </div>
 
             {/* Closing National Alignment Callout */}
-            <div className="bg-gradient-to-r from-orange-500 to-amber-600 text-white rounded-2xl p-6 text-center shadow-lg">
-              <h3 className="text-lg sm:text-xl font-black tracking-wide">
+            <div className="bg-gradient-to-r from-orange-50 via-amber-50 to-orange-50 border border-amber-200/80 rounded-2xl p-6 text-center shadow-xs">
+              <h3 className="text-base sm:text-lg font-semibold text-[#0b1f3b] tracking-wide">
                 ISLAH 2047 — Empowering People. Strengthening Communities. Advancing a Developed India.
               </h3>
-              <p className="text-white/90 text-xs sm:text-sm mt-1.5 max-w-2xl mx-auto">
+              <p className="text-black font-normal text-xs sm:text-sm mt-1.5 max-w-3xl mx-auto text-balance">
                 Positioning ISLAH as a catalyst and community-level contributor within India&apos;s centenary
                 development journey.
               </p>

@@ -18,14 +18,14 @@ export function MediaLayout({ children }: MediaLayoutProps) {
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800">
       <NotificationTicker />
-      <UtilityBar onOpenModal={(role) => setActiveModal(role)} />
-      <Header onOpenModal={(role) => setActiveModal(role)} />
+      <UtilityBar />
+      <Header />
 
       <main className="flex-1">{children}</main>
 
       <Footer onOpenModal={(role) => setActiveModal(role)} />
       <RoleFormModal
-        activeModal={activeModal}
+        type={activeModal}
         onClose={() => setActiveModal(null)}
       />
     </div>

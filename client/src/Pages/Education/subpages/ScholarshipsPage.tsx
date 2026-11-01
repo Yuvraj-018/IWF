@@ -30,6 +30,7 @@ import {
   School,
 } from "lucide-react";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
+import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import heroImg from "@/assets/sector_education_1.png";
 
 export default function ScholarshipsPage() {
@@ -147,74 +148,27 @@ export default function ScholarshipsPage() {
       <Header />
 
       <main>
-        {/* HERO SECTION */}
-        <section className="relative min-h-[300px] sm:min-h-[330px] md:min-h-[360px] lg:min-h-[390px] flex items-center overflow-hidden bg-slate-900">
-          <img
-            src={heroImg}
-            alt="Scholarships for Higher Education"
-            className="absolute inset-0 h-full w-full object-cover opacity-35 filter saturate-110"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#00381c]/95 via-[#004724]/85 to-slate-950/80" />
-
-          <div className="relative z-10 max-w-7xl mx-auto px-4 py-8 sm:py-10 w-full">
-            <nav className="flex items-center gap-2 text-xs text-emerald-200/80 mb-6 font-medium flex-wrap">
-              <Link to="/" className="hover:text-white flex items-center gap-1">
-                <Home className="w-3.5 h-3.5" /> Home
-              </Link>
-              <ChevronRight className="w-3.5 h-3.5" />
-              <Link to="/programs/education" className="hover:text-white">
-                Education & Learning
-              </Link>
-              <ChevronRight className="w-3.5 h-3.5" />
-              <span className="text-white font-semibold">Scholarships (SHE)</span>
-            </nav>
-
+        {/* Standardized Hero */}
+        <SubpageHeroCarousel
+          tag="EDUCATION • SHE"
+          title="Scholarships for Higher Education (SHE)"
+          subtitle="Supporting meritorious and financially needy students in rural areas to pursue secondary, undergraduate, and higher education with dignity and confidence."
+          breadcrumbs={[
+            { label: "What We Do", href: "/programs" },
+            { label: "Education", href: "/programs/education" },
+            { label: "Scholarships" },
+          ]}
+          images={[heroImg]}
+        >
+          <div className="flex flex-wrap items-center gap-3 pt-1">
             <Link
               to="/programs/education"
-              className="inline-flex items-center gap-2 text-xs font-semibold text-emerald-100 hover:text-white border border-emerald-400/30 bg-emerald-950/40 hover:bg-emerald-900/50 px-3.5 py-1.5 rounded-md transition-all mb-4 backdrop-blur-sm"
+              className="inline-flex items-center gap-2 text-xs font-semibold text-white/90 hover:text-white border border-white/20 bg-white/10 hover:bg-white/20 px-3.5 py-2 rounded-xl transition-all"
             >
-              <ArrowLeft className="w-3.5 h-3.5" /> All Education Initiatives
+              <ArrowLeft className="w-3.5 h-3.5" /> All Education Programmes
             </Link>
-
-            <div className="inline-flex items-center gap-2 bg-[#ea580c]/20 border border-[#ea580c]/50 text-orange-200 px-3.5 py-1 rounded-full text-xs font-bold tracking-wider uppercase mb-4 backdrop-blur-sm">
-              <GraduationCap className="w-3.5 h-3.5 text-[#ea580c]" />
-              Invest in Education. Empower Futures. Transform Lives.
-            </div>
-
-            <div className="grid lg:grid-cols-12 gap-8 items-center">
-              <div className="lg:col-span-8">
-                <h1 className="text-3xl md:text-5xl lg:text-5xl font-black text-white leading-tight mb-3 tracking-tight">
-                  Scholarships for Higher Education{" "}
-                  <span className="text-amber-400">— SHE</span>
-                </h1>
-                <p className="text-base md:text-lg font-medium text-emerald-100/90 mb-4">
-                  (Enabling Equal Access to Education & Opportunities)
-                </p>
-                <p className="text-sm md:text-base text-slate-200/90 max-w-3xl leading-relaxed">
-                  Supporting meritorious and financially needy students in rural
-                  areas to pursue secondary, undergraduate, and higher education
-                  with dignity and confidence.
-                </p>
-              </div>
-
-              {/* Hero Quote Card */}
-              <div className="lg:col-span-4">
-                <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 shadow-xl text-white relative">
-                  <span className="text-4xl text-amber-400 font-serif leading-none absolute top-4 left-4 opacity-50">
-                    “
-                  </span>
-                  <p className="text-sm md:text-base font-semibold italic pl-6 text-emerald-50 leading-relaxed mb-3">
-                    Education is the most powerful tool to change lives and
-                    build a better tomorrow.
-                  </p>
-                  <div className="text-right text-xs font-bold text-amber-300 uppercase tracking-widest">
-                    — Islah Higher Education Mission
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
-        </section>
+        </SubpageHeroCarousel>
 
         {/* 5-PILLAR VALUE RIBBON */}
         <section className="bg-white border-b border-slate-200 py-6 shadow-sm">
@@ -242,10 +196,10 @@ export default function ScholarshipsPage() {
                 );
               })}
 
-              <div className="col-span-2 md:col-span-3 lg:col-span-1 p-3 rounded-xl bg-gradient-to-br from-[#004724] to-[#0b1f3b] text-white text-center shadow-md flex flex-col justify-center">
-                <p className="text-[11px] font-medium text-emerald-100 leading-snug">
+              <div className="col-span-2 md:col-span-3 lg:col-span-1 p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-center shadow-xs flex flex-col justify-center">
+                <p className="text-[11px] font-medium text-slate-700 leading-snug">
                   Your support today can{" "}
-                  <strong className="text-amber-300 font-bold">scholar a student</strong>{" "}
+                  <strong className="text-brand-orange font-bold">scholar a student</strong>{" "}
                   and change generations.
                 </p>
               </div>
@@ -266,7 +220,7 @@ export default function ScholarshipsPage() {
                       The Challenge
                     </div>
 
-                    <h2 className="text-xl md:text-2xl font-black text-slate-900 mb-3">
+                    <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-3">
                       Need of Scholarships for Higher Education
                     </h2>
 
@@ -321,7 +275,7 @@ export default function ScholarshipsPage() {
                       More Information
                     </div>
 
-                    <h2 className="text-xl md:text-2xl font-black text-slate-900 mb-3">
+                    <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-3">
                       Addressing the Critical Higher Education Gap
                     </h2>
 
@@ -373,18 +327,17 @@ export default function ScholarshipsPage() {
 
         {/* SECTION 2: PROGRAMME OBJECTIVE */}
         <section className="py-12 bg-white border-y border-slate-200">
-          <div className="max-w-5xl mx-auto px-4">
-            <div className="p-8 md:p-10 rounded-3xl bg-gradient-to-br from-[#004724] to-[#0b1f3b] text-white shadow-xl relative overflow-hidden">
-              <div className="absolute right-0 top-0 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="max-w-4xl mx-auto px-4">
+            <div className="p-8 md:p-10 rounded-2xl bg-slate-50 border border-slate-200 text-slate-800 shadow-xs relative overflow-hidden">
               <div className="relative z-10 flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
-                <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shrink-0">
-                  <Target className="w-8 h-8 text-amber-400" />
+                <div className="w-14 h-14 rounded-xl bg-orange-50 border border-orange-200 text-brand-orange flex items-center justify-center shrink-0">
+                  <Target className="w-7 h-7 text-brand-orange" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold uppercase tracking-widest text-amber-300 mb-1">
+                  <div className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-1">
                     Programme Objective
                   </div>
-                  <h3 className="text-lg md:text-xl font-bold leading-relaxed text-emerald-50">
+                  <h3 className="text-base md:text-lg font-serif italic leading-relaxed text-slate-800 text-balance">
                     “To ensure that no deserving student in rural areas is
                     deprived of education due to financial constraints, by
                     providing scholarships and holistic academic support for
@@ -403,7 +356,7 @@ export default function ScholarshipsPage() {
               <span className="text-xs font-bold uppercase tracking-widest text-[#ea580c] bg-orange-50 border border-orange-200 px-3.5 py-1 rounded-full">
                 Structured Support Model
               </span>
-              <h2 className="text-2xl md:text-4xl font-black text-slate-900 mt-3 mb-3">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mt-3 mb-3">
                 Programme Approach
               </h2>
               <p className="text-sm text-slate-600">
@@ -420,7 +373,7 @@ export default function ScholarshipsPage() {
                     <div className="h-full bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md hover:border-emerald-400 transition-all flex flex-col justify-between">
                       <div>
                         <div className="flex items-center justify-between mb-4">
-                          <span className="w-9 h-9 rounded-xl bg-emerald-50 text-[#004724] border border-emerald-200 flex items-center justify-center font-black text-base">
+                          <span className="w-9 h-9 rounded-xl bg-emerald-50 text-[#004724] border border-emerald-200 flex items-center justify-center font-bold text-base">
                             {pillar.num}
                           </span>
                           <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider bg-slate-100 px-2 py-0.5 rounded">
@@ -510,27 +463,27 @@ export default function ScholarshipsPage() {
 
               {/* 3. Why It Matters / CSR Opportunity */}
               <ScrollReveal delay={200}>
-                <div className="h-full bg-gradient-to-br from-[#0b1f3b] to-[#004724] text-white rounded-2xl p-7 shadow-lg flex flex-col justify-between border border-emerald-700/50">
+                <div className="h-full bg-slate-50 text-slate-800 rounded-2xl p-7 shadow-xs flex flex-col justify-between border border-slate-200">
                   <div>
-                    <div className="flex items-center gap-2 text-xs font-bold text-amber-300 uppercase tracking-wider mb-2">
-                      <Sparkles className="w-4 h-4 text-amber-400" />
+                    <div className="flex items-center gap-2 text-xs font-bold text-brand-orange uppercase tracking-wider mb-2">
+                      <Sparkles className="w-4 h-4 text-brand-orange" />
                       CSR & Social Investment
                     </div>
-                    <h3 className="text-lg md:text-xl font-bold text-white mb-4">
+                    <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-4">
                       Why It Matters
                     </h3>
-                    <p className="text-sm text-emerald-100/90 leading-relaxed mb-6">
+                    <p className="text-sm text-slate-600 leading-relaxed mb-6 text-balance">
                       The scholarship programme offers CSR partners an
                       exceptional opportunity to invest in human capital
                       development, creating a ripple effect of empowerment,
                       economic upliftment, and long-term community transformation.
                     </p>
 
-                    <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/15 space-y-2">
-                      <div className="text-xs font-bold text-amber-300">
+                    <div className="p-4 rounded-xl bg-white border border-slate-200 space-y-2">
+                      <div className="text-xs font-bold text-brand-orange">
                         High Social Return on Investment (SROI)
                       </div>
-                      <p className="text-xs text-slate-200 leading-snug">
+                      <p className="text-xs text-slate-600 leading-snug">
                         Every rupee invested in rural higher education prevents
                         intergenerational poverty, elevates household living
                         standards, and produces future doctors, engineers, and
@@ -539,9 +492,9 @@ export default function ScholarshipsPage() {
                     </div>
                   </div>
 
-                  <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-bold text-amber-300">
+                  <div className="pt-4 border-t border-slate-200 flex items-center justify-between text-xs font-bold text-slate-700 mt-6">
                     <span>Direct Donor Auditing</span>
-                    <span>100% Accountable</span>
+                    <span className="text-brand-green">100% Accountable</span>
                   </div>
                 </div>
               </ScrollReveal>
@@ -550,21 +503,18 @@ export default function ScholarshipsPage() {
         </section>
 
         {/* SECTION 5: STATEMENT BANNER */}
-        <section className="py-14 bg-[#004724] text-white text-center">
-          <div className="max-w-4xl mx-auto px-4 space-y-4">
-            <span className="text-4xl text-amber-400 font-serif leading-none block">
-              “
-            </span>
-            <p className="text-xl md:text-2xl font-bold leading-relaxed text-emerald-50 italic">
-              Supporting dreams, removing barriers—ensuring every rural child
-              gets a fair chance to learn, grow, and succeed.
+        <section className="py-10 bg-slate-50/70 border-y border-slate-200 text-slate-800 text-center">
+          <div className="max-w-4xl mx-auto px-4 space-y-3">
+            <p className="text-lg md:text-xl font-serif italic leading-relaxed text-slate-800 text-balance">
+              “Supporting dreams, removing barriers—ensuring every rural child
+              gets a fair chance to learn, grow, and succeed.”
             </p>
-            <div className="flex items-center justify-center gap-3 pt-2">
-              <span className="h-px w-8 bg-amber-400/60" />
-              <span className="text-amber-300 font-semibold text-xs uppercase tracking-widest">
+            <div className="flex items-center justify-center gap-3 pt-1">
+              <span className="h-px w-8 bg-brand-orange/40" />
+              <span className="text-brand-orange font-semibold text-xs uppercase tracking-widest">
                 Islah Welfare Foundation
               </span>
-              <span className="h-px w-8 bg-amber-400/60" />
+              <span className="h-px w-8 bg-brand-orange/40" />
             </div>
           </div>
         </section>
@@ -575,13 +525,13 @@ export default function ScholarshipsPage() {
             <div className="grid sm:grid-cols-2 gap-4">
               <button
                 onClick={() => setActiveModal("sponsor")}
-                className="p-6 rounded-2xl bg-gradient-to-br from-[#ea580c] to-amber-600 text-white text-left shadow-md hover:shadow-lg transition-all flex items-center justify-between group"
+                className="p-6 rounded-2xl bg-gradient-to-br from-[#ea580c] to-amber-600 text-white text-left shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] active:scale-95 flex items-center justify-between group cursor-pointer"
               >
                 <div>
                   <div className="text-xs font-bold uppercase tracking-wider text-orange-100 mb-1">
                     Direct Sponsorship
                   </div>
-                  <h4 className="text-lg font-black group-hover:underline">
+                  <h4 className="text-lg font-bold group-hover:underline">
                     Support a Student
                   </h4>
                   <p className="text-xs text-orange-100/90 mt-1">
@@ -593,16 +543,16 @@ export default function ScholarshipsPage() {
 
               <button
                 onClick={() => setActiveModal("partner")}
-                className="p-6 rounded-2xl bg-gradient-to-br from-[#004724] to-[#0b1f3b] text-white text-left shadow-md hover:shadow-lg transition-all flex items-center justify-between group"
+                className="p-6 rounded-2xl bg-gradient-to-br from-[#071527] to-[#0c2340] text-white text-left shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] active:scale-95 flex items-center justify-between group cursor-pointer"
               >
                 <div>
-                  <div className="text-xs font-bold uppercase tracking-wider text-emerald-200 mb-1">
+                  <div className="text-xs font-bold uppercase tracking-wider text-brand-orange mb-1">
                     Institutional Collaboration
                   </div>
-                  <h4 className="text-lg font-black group-hover:underline">
+                  <h4 className="text-lg font-bold group-hover:underline">
                     Become a Partner
                   </h4>
-                  <p className="text-xs text-emerald-100/90 mt-1">
+                  <p className="text-xs text-slate-300 mt-1">
                     Partner with us to build brighter futures.
                   </p>
                 </div>
@@ -617,14 +567,14 @@ export default function ScholarshipsPage() {
           <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <Link
               to="/programs/education/academic-pathways-talent-development"
-              className="inline-flex items-center gap-2 text-xs md:text-sm font-bold text-slate-800 hover:text-[#004724] border border-slate-300 bg-white hover:bg-slate-50 px-5 py-2.5 rounded-lg transition-all shadow-sm"
+              className="inline-flex items-center gap-2 text-xs md:text-sm font-semibold text-slate-800 hover:text-brand-green border border-slate-300 bg-white hover:bg-slate-50 px-5 py-2.5 rounded-lg transition-all duration-200 hover:scale-[1.02] active:scale-95 shadow-xs"
             >
               <ArrowLeft className="w-4 h-4" /> Prev: Academic Pathways & Talent
               Dev (APTD)
             </Link>
             <Link
               to="/programs/education/career-guidance"
-              className="inline-flex items-center gap-2 text-xs md:text-sm font-bold text-white bg-[#004724] hover:bg-[#00381c] px-5 py-2.5 rounded-lg transition-all shadow-sm"
+              className="inline-flex items-center gap-2 text-xs md:text-sm font-semibold text-white bg-brand-green hover:bg-brand-green-dark px-5 py-2.5 rounded-lg transition-all duration-200 hover:scale-[1.02] active:scale-95 shadow-xs"
             >
               Next: Career Guidance & Mentorship (CGM){" "}
               <ArrowRight className="w-4 h-4" />

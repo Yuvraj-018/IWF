@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -263,6 +263,20 @@ function ContactForm() {
   const selectedEnquiryType = watch("enquiryType");
   const selectedPreferredMethod = watch("preferredContactMethod");
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const typeParam = params.get("type") || params.get("enquiry");
+      if (typeParam && typeParam.toLowerCase().includes("document")) {
+        setValue("enquiryType", "General Enquiry");
+        setValue(
+          "message",
+          "I would like to request official annual reports / transparency documents from ISLAH Welfare Foundation."
+        );
+      }
+    }
+  }, [setValue]);
+
   const onSubmit = async (data: ContactFormData) => {
     try {
       setSubmitError(null);
@@ -315,7 +329,7 @@ function ContactForm() {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-200/90 overflow-hidden notranslate form-container" translate="no" dir="ltr">
+    <div id="contact-form" className="bg-white rounded-2xl shadow-sm border border-slate-200/90 overflow-hidden notranslate form-container scroll-mt-24" translate="no" dir="ltr">
       {/* Header bar styled with Deep Navy #071527 */}
       <div className="bg-[#071527] px-6 py-5 border-b border-slate-800">
         <h3 className="text-white font-black text-lg md:text-xl flex items-center gap-2.5 uppercase tracking-wide">
@@ -655,6 +669,29 @@ function ContactForm() {
 export default function ContactPage() {
   const [activeModal, setActiveModal] = useState<RoleType | null>(null);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const scrollToForm = () => {
+      const hash = window.location.hash;
+      const params = new URLSearchParams(window.location.search);
+      const isDocReq = (params.get("type") || "").toLowerCase().includes("document");
+
+      if (hash === "#contact-form" || hash === "#send-message" || isDocReq) {
+        const el = document.getElementById("contact-form") || document.getElementById("send-message");
+        if (el) {
+          setTimeout(() => {
+            el.scrollIntoView({ behavior: "smooth", block: "start" });
+          }, 200);
+        }
+      }
+    };
+
+    scrollToForm();
+    window.addEventListener("hashchange", scrollToForm);
+    return () => window.removeEventListener("hashchange", scrollToForm);
+  }, []);
+
   return (
     <div className="min-h-screen bg-slate-50 font-sans flex flex-col selection:bg-sky-100 selection:text-sky-900">
       {/* Universal Top Layout Elements */}
@@ -673,7 +710,7 @@ export default function ContactPage() {
         />
 
         {/* ─── 4 Quick Action Links Bar ──────────────────────────────────────── */}
-        <div className="max-w-7xl mx-auto px-4 md:px-8 -mt-6 relative z-20 mb-8">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 pt-6 relative z-20 mb-8">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white p-3.5 rounded-2xl border border-slate-200 shadow-md">
             {/* Card 1: Call Us */}
             <a

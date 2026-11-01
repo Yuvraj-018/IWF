@@ -65,14 +65,14 @@ export default function ObjectivesSection() {
 
           {/* CENTER: Vision */}
           <div className="bg-white p-8 lg:col-span-1">
-            <div className="bg-brand-green text-white rounded-lg px-4 py-3 mb-6 flex items-center gap-3">
+            <div className="bg-[#0b1f3b] text-white rounded-lg px-4 py-3 mb-6 flex items-center gap-3">
               <Eye className="w-5 h-5 shrink-0" />
               <span className="font-bold text-sm uppercase tracking-widest">Our Vision &amp; Mission</span>
             </div>
 
             <div className="flex items-center gap-2 mb-4">
               <Binoculars className="text-brand-orange w-5 h-5 shrink-0" />
-              <h3 className="text-brand-green-dark font-bold text-base">OUR VISION</h3>
+              <h3 className="text-[#0b1f3b] font-bold text-base">OUR VISION</h3>
             </div>
             <img
               src={objMissionImg}
@@ -88,7 +88,7 @@ export default function ObjectivesSection() {
               It serves the purpose of humanity and the Almighty as well. It is dedicated to going beyond charity by enabling people to reach their fullest extent. It calls for a society with equality for the maximum of the masses at large. It enables the have-nots to access the resources for a total change in their lives and hence promotes the country to step into a new world. It helps people meet their social and spiritual needs through their own efforts. It is all about a total upliftment of the Indian society with a view to vertical mobility of every individual and group of people.
             </p>
 
-            <div className="bg-brand-green/8 border-l-4 border-brand-green rounded-r-lg p-4 mt-4 text-xs text-slate-600 italic leading-relaxed">
+            <div className="bg-slate-100 border-l-4 border-brand-orange rounded-r-lg p-4 mt-4 text-xs text-slate-700 italic leading-relaxed">
               We don't know how many years it will take us to do it, but it will continue till the day we don't see any kid on the streets begging and picking up rags and instead study in schools or play in the playground, enjoying the innocence of their childhood.
             </div>
           </div>
@@ -97,7 +97,7 @@ export default function ObjectivesSection() {
           <div className="bg-slate-50 p-8 lg:col-span-1">
             <div className="flex items-center gap-2 mb-5">
               <Rocket className="text-brand-orange w-5 h-5 shrink-0" />
-              <h3 className="text-brand-green-dark font-bold text-base">OUR MISSION</h3>
+              <h3 className="text-[#0b1f3b] font-bold text-base">OUR MISSION</h3>
             </div>
 
             <p className="text-sm text-slate-700 leading-relaxed mb-4">

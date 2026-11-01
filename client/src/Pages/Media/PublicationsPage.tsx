@@ -2,7 +2,6 @@ import { useState, useMemo } from "react";
 import { Download, Search, BookOpen, CheckCircle2, FileText, Mail, ArrowRight } from "lucide-react";
 import { MediaSubpageHero } from "@/components/media/MediaSubpageHero";
 import { ActionStrip } from "@/components/media/ActionStrip";
-import { NewsletterStrip } from "@/components/media/NewsletterStrip";
 import { StoryModal } from "@/components/media/StoryModal";
 import { MediaLayout } from "@/components/media/MediaLayout";
 import { PUBLICATIONS_DATA } from "@/content/mediaContent";
@@ -257,52 +256,20 @@ export function PublicationsPage() {
                 </div>
               </div>
 
-              {/* Newsletter Subscription Card in Sidebar */}
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
-                <div className="flex items-center gap-2 text-emerald-700 text-xs font-bold uppercase tracking-wider mb-2">
-                  <Mail className="w-4 h-4" />
-                  <span>Quarterly Newsletters</span>
-                </div>
-                <h4 className="text-sm font-black text-slate-900">Get Our Quarterly Digest</h4>
-                <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
-                  Join 50,000+ donors and changemakers who receive our digital quarterly impact roundup.
-                </p>
-                <div className="mt-4 space-y-2">
-                  <input
-                    type="email"
-                    placeholder="Enter your email address"
-                    className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50"
-                  />
-                  <button
-                    onClick={() => alert("Thank you for subscribing to our newsletter!")}
-                    className="w-full py-2 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl text-xs font-bold transition uppercase tracking-wider"
-                  >
-                    Subscribe Free
-                  </button>
-                </div>
-              </div>
-
               {/* Open Access Card */}
-              <div className="bg-gradient-to-br from-[#063319] to-[#0b4d26] text-white rounded-2xl p-6 shadow-md border border-emerald-800">
-                <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-300 mb-2">
+              <div className="bg-gradient-to-br from-[#071527] to-[#0c2340] text-white rounded-2xl p-6 shadow-md border border-slate-800">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-brand-orange mb-2">
                   Open Access Mandate
                 </div>
-                <h4 className="text-sm font-black text-white">Knowledge Belongs to the Community</h4>
-                <p className="text-xs text-emerald-100 leading-relaxed mt-2">
+                <h4 className="text-sm font-semibold text-white">Knowledge Belongs to the Community</h4>
+                <p className="text-xs text-slate-300 leading-relaxed mt-2">
                   All Islah Welfare Foundation publications and datasets are open access under Creative Commons (CC-BY 4.0). We actively encourage civil society, scholars, and policymakers to reuse and scale these insights.
                 </p>
               </div>
             </div>
           </section>
 
-          {/* 5. Newsletter Strip */}
-          <NewsletterStrip
-            title="Subscribe to Policy & Research Digests"
-            description="Receive notices when new working papers, field evaluations, and policy briefs are released by our research desk."
-            buttonText="Subscribe to Research"
-          />
-
-          {/* 6. Action Strip */}
+          {/* 5. Action Strip */}
           <ActionStrip />
         </div>
 

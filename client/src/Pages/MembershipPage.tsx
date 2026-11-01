@@ -1406,7 +1406,7 @@ function CommunitySelectiveBar({
                     onClick={() => setActiveTab(p.id)}
                     className={`flex items-center gap-2 px-4 sm:px-5 py-2 rounded-xl sm:rounded-full text-xs sm:text-sm font-extrabold transition-all duration-200 whitespace-nowrap cursor-pointer ${
                       isSelected
-                        ? "bg-[#0b1f3b] text-white shadow-md scale-[1.02]"
+                        ? "bg-[#071527] text-white shadow-md scale-[1.02]"
                         : "text-slate-600 hover:text-slate-900 hover:bg-white/70"
                     }`}
                   >
@@ -1639,7 +1639,7 @@ function MembersTab({ onRenewClick }: { onRenewClick: () => void }) {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr style={{ background: "linear-gradient(90deg, #0b1f3b, #18325c)" }}>
+              <tr style={{ background: "linear-gradient(90deg, #071527, #0c2340)" }}>
                 {["S. No.", "Photo", "Name", "Member ID", "Category", "District", "Valid Till"].map(h => (
                   <th key={h} className="px-4 py-3.5 text-left text-xs font-bold text-white/90 uppercase tracking-wider whitespace-nowrap">
                     {h}
@@ -1897,7 +1897,7 @@ function DonorsTab({ isTopDonors = false }: { isTopDonors?: boolean }) {
 
       {/* ─ Sub-hero */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-3 p-4 rounded-2xl relative overflow-hidden"
-        style={{ background: "linear-gradient(135deg, #0b1f3b 0%, #18325c 60%, #0a1b33 100%)" }}>
+        style={{ background: "linear-gradient(135deg, #071527 0%, #0c2340 60%, #05101d 100%)" }}>
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 right-0 w-48 h-48 rounded-full bg-brand-orange/10 blur-2xl" />
           <div className="absolute bottom-0 left-1/4 w-32 h-32 rounded-full bg-green-400/10 blur-xl" />
@@ -2768,7 +2768,7 @@ function ReceiptCard({ data, memberId, joinDate, validTill, receiptNo, period }:
   return (
     <div className="border-2 border-slate-100 rounded-2xl overflow-hidden shadow-md">
       <div className="px-5 py-4 flex items-center justify-between text-white"
-        style={{ background: "linear-gradient(135deg, #0b1f3b, #18325c)" }}>
+        style={{ background: "linear-gradient(135deg, #071527, #0c2340)" }}>
         <div>
           <p className="font-extrabold text-sm">ISLAH</p>
           <p className="text-white/60 text-[10px]">"Knowledge, Opportunity, A Better Future."</p>
@@ -2800,7 +2800,7 @@ function ReceiptCard({ data, memberId, joinDate, validTill, receiptNo, period }:
             </div>
           ))}
         </div>
-        <div className="bg-brand-green/5 border border-brand-green/20 rounded-xl p-3.5">
+        <div className="bg-slate-50 border border-slate-200 rounded-xl p-3.5">
           <div className="flex justify-between text-xs text-slate-600 mb-1">
             <span>Membership Fee</span>
             <span className="font-bold text-slate-800">₹{amount.toLocaleString("en-IN")}</span>
@@ -2815,7 +2815,7 @@ function ReceiptCard({ data, memberId, joinDate, validTill, receiptNo, period }:
               <span className="font-mono font-bold text-slate-800">{data.transactionId}</span>
             </div>
           )}
-          <div className="border-t border-brand-green/20 pt-2 flex justify-between text-sm font-extrabold text-brand-green-dark">
+          <div className="border-t border-slate-200 pt-2 flex justify-between text-sm font-extrabold text-[#0b1f3b]">
             <span>Total Paid</span>
             <span>₹{amount.toLocaleString("en-IN")}</span>
           </div>
@@ -3122,7 +3122,7 @@ function ApplicationFormSection({ preSelectedCategory, onViewMembership }: { pre
           {/* Form Card */}
           <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
             <div className="px-6 py-5 relative overflow-hidden"
-              style={{ background: "linear-gradient(135deg, #0b1f3b 0%, #18325c 60%, #0a1b33 100%)" }}>
+              style={{ background: "linear-gradient(135deg, #071527 0%, #0c2340 60%, #05101d 100%)" }}>
               <div className="absolute top-0 right-0 w-24 h-24 rounded-full bg-white/5 -translate-y-1/2 translate-x-1/2" />
               <h3 className="text-white font-extrabold text-lg relative z-10">Member Registration</h3>
               <p className="text-white/60 text-xs mt-1 relative z-10">
@@ -3170,7 +3170,7 @@ function ApplicationFormSection({ preSelectedCategory, onViewMembership }: { pre
 
         {/* Thank you strip */}
         <div className="mt-12 rounded-2xl text-white p-6 flex flex-col md:flex-row items-center gap-6 relative overflow-hidden"
-          style={{ background: "linear-gradient(135deg, #0b1f3b, #18325c)" }}>
+          style={{ background: "linear-gradient(135deg, #071527, #0c2340)" }}>
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute right-0 top-0 w-40 h-40 rounded-full bg-brand-orange/10 blur-2xl" />
           </div>
@@ -3213,7 +3213,7 @@ function MemberCardPreviewSection() {
   };
   return (
     <section className="py-16 relative overflow-hidden"
-      style={{ background: "linear-gradient(135deg, #0b1f3b 0%, #162f54 50%, #0b1f3b 100%)" }}>
+      style={{ background: "linear-gradient(135deg, #071527 0%, #0c2340 50%, #071527 100%)" }}>
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-brand-orange/8 blur-3xl" />
         <div className="absolute bottom-0 left-0 w-60 h-60 rounded-full bg-blue-400/8 blur-3xl" />
@@ -3365,7 +3365,7 @@ function MemberStatusCheck({
         </div>
 
         <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
-          <div className="px-6 py-4" style={{ background: "linear-gradient(90deg, #0b1f3b, #18325c)" }}>
+          <div className="px-6 py-4" style={{ background: "linear-gradient(90deg, #071527, #0c2340)" }}>
             <h3 className="text-white font-bold flex items-center gap-2 text-sm"><Search className="w-4 h-4" /> Member Lookup</h3>
           </div>
           <div className="p-6">
@@ -3396,8 +3396,8 @@ function MemberStatusCheck({
 
               {otpSent && !verified && result && (
                 <motion.div key="otp" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
-                  <div className="flex items-center gap-2 text-sm text-brand-green bg-brand-green/5 border border-brand-green/20 rounded-lg p-3">
-                    <Phone className="w-4 h-4" /> OTP sent to ****{result.phone.slice(-4)}
+                  <div className="flex items-center gap-2 text-sm text-[#0b1f3b] bg-slate-50 border border-slate-200 rounded-lg p-3">
+                    <Phone className="w-4 h-4 text-brand-orange" /> OTP sent to ****{result.phone.slice(-4)}
                   </div>
                   <div>
                     <InputLabel required>Enter OTP</InputLabel>
@@ -3604,7 +3604,7 @@ function RenewalSection({
         </div>
 
         <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
-          <div className="px-6 py-4" style={{ background: "linear-gradient(90deg, #0b1f3b, #18325c)" }}>
+          <div className="px-6 py-4" style={{ background: "linear-gradient(90deg, #071527, #0c2340)" }}>
             <h3 className="text-white font-bold text-sm flex items-center gap-2">
               <RefreshCw className="w-4 h-4" /> Membership Renewal
             </h3>
@@ -3635,7 +3635,7 @@ function RenewalSection({
 
               {step === "otp" && result && (
                 <motion.div key="otp" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
-                  <div className="p-4 bg-brand-green/5 border border-brand-green/20 rounded-xl">
+                  <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl">
                     <div className="flex items-center gap-3">
                       <MemberAvatar name={result.name} category={result.category} />
                       <div>
@@ -3644,8 +3644,8 @@ function RenewalSection({
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-brand-green bg-brand-green/5 border border-brand-green/20 rounded-lg p-3">
-                    <Phone className="w-4 h-4" /> OTP sent to ****{result.phone.slice(-4)}
+                  <div className="flex items-center gap-2 text-sm text-[#0b1f3b] bg-slate-50 border border-slate-200 rounded-lg p-3">
+                    <Phone className="w-4 h-4 text-brand-orange" /> OTP sent to ****{result.phone.slice(-4)}
                   </div>
                   <div className="flex gap-2">
                     <input
@@ -3720,14 +3720,14 @@ function RenewalSection({
                       <span className="text-slate-600">Convenience Fee</span>
                       <span className="font-bold">₹50</span>
                     </div>
-                    <div className="border-t border-slate-200 pt-2 flex justify-between text-base font-extrabold text-brand-green-dark">
+                    <div className="border-t border-slate-200 pt-2 flex justify-between text-base font-extrabold text-[#0b1f3b]">
                       <span>Total Amount</span>
                       <span>₹{(CATEGORY_CONFIG[result.category].amount * Number(selectedPeriod) + 50).toLocaleString("en-IN")}</span>
                     </div>
                   </div>
 
-                  <div className="p-4 bg-brand-green/5 border border-brand-green/20 rounded-xl">
-                    <p className="text-xs font-bold text-brand-green-dark mb-3"><QrCode className="w-4 h-4 inline mr-1" />Pay via UPI</p>
+                  <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                    <p className="text-xs font-bold text-[#0b1f3b] mb-3"><QrCode className="w-4 h-4 inline mr-1 text-brand-orange" />Pay via UPI</p>
                     <p className="text-sm font-mono font-bold text-slate-800 bg-white border border-slate-200 rounded-lg px-3 py-2 flex items-center justify-between">
                       islah-foundation@upi
                       <button type="button" onClick={() => navigator.clipboard.writeText("islah-foundation@upi")}
@@ -4081,7 +4081,7 @@ function PartnerSponsorTab({ onOpenModal }: { onOpenModal: (type: RoleType) => v
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-green/10 text-brand-green-dark text-xs font-bold rounded-full uppercase tracking-wider">
             <Handshake className="w-3.5 h-3.5" /> Institutional Collaboration & Sponsorship
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black text-[#0b1f3b] tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
             Partner With Purpose. Sponsor Real Change.
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
@@ -4090,7 +4090,7 @@ function PartnerSponsorTab({ onOpenModal }: { onOpenModal: (type: RoleType) => v
           <div className="flex flex-wrap justify-center gap-3 pt-2">
             <button
               onClick={() => onOpenModal("partner")}
-              className="inline-flex items-center gap-2 bg-[#0b1f3b] hover:bg-[#163a69] text-white text-xs sm:text-sm font-bold px-6 py-2.5 rounded-xl shadow-md transition hover:scale-[1.02] cursor-pointer"
+              className="inline-flex items-center gap-2 bg-[#071527] hover:bg-[#0c2340] text-white text-xs sm:text-sm font-bold px-6 py-2.5 rounded-xl shadow-md transition hover:scale-[1.02] cursor-pointer"
             >
               <Handshake className="w-4 h-4 text-brand-orange" /> Apply as Partner
             </button>
@@ -4122,7 +4122,7 @@ function PartnerSponsorTab({ onOpenModal }: { onOpenModal: (type: RoleType) => v
                         <span className="text-[10px] font-bold tracking-widest uppercase text-slate-400">
                           Model {m.num}
                         </span>
-                        <h3 className="text-base sm:text-lg font-bold text-[#0b1f3b]">
+                        <h3 className="text-base sm:text-lg font-bold text-slate-900">
                           {m.title}
                         </h3>
                       </div>
@@ -4139,7 +4139,7 @@ function PartnerSponsorTab({ onOpenModal }: { onOpenModal: (type: RoleType) => v
                   <ul className="space-y-2 pt-2 border-t border-slate-100">
                     {m.points.map((pt, i) => (
                       <li key={i} className="flex items-start gap-2 text-xs text-slate-700">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                        <CheckCircle2 className="w-4 h-4 text-brand-green shrink-0 mt-0.5" />
                         <span>{pt}</span>
                       </li>
                     ))}
@@ -4163,12 +4163,12 @@ function PartnerSponsorTab({ onOpenModal }: { onOpenModal: (type: RoleType) => v
         </div>
 
         {/* Sponsorship Catalog Section */}
-        <div className="bg-gradient-to-br from-[#0b1f3b] via-[#112d53] to-[#0b1f3b] rounded-3xl p-6 sm:p-10 text-white shadow-xl space-y-8">
+        <div className="bg-gradient-to-br from-[#071527] to-[#0c2340] rounded-3xl p-6 sm:p-10 text-white shadow-xl space-y-8">
           <div className="max-w-2xl space-y-2">
             <span className="text-[10px] font-bold uppercase tracking-widest text-brand-orange">
               Immediate Grassroots Need
             </span>
-            <h3 className="text-xl sm:text-2xl font-black">
+            <h3 className="text-xl sm:text-2xl font-bold">
               High-Impact Cause Sponsorship Opportunities
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
@@ -4190,10 +4190,10 @@ function PartnerSponsorTab({ onOpenModal }: { onOpenModal: (type: RoleType) => v
                   <p className="text-xs text-slate-300 leading-relaxed">{pkg.desc}</p>
                 </div>
                 <div className="pt-4 border-t border-white/10 flex items-center justify-between">
-                  <span className="text-sm font-black text-amber-300">{pkg.cost}</span>
+                  <span className="text-sm font-bold text-amber-300">{pkg.cost}</span>
                   <button
                     onClick={() => onOpenModal(pkg.role)}
-                    className="text-xs font-bold bg-white text-[#0b1f3b] hover:bg-amber-300 px-3 py-1.5 rounded-lg transition cursor-pointer shadow"
+                    className="text-xs font-bold bg-white text-[#071527] hover:bg-amber-300 px-3 py-1.5 rounded-lg transition cursor-pointer shadow"
                   >
                     Sponsor
                   </button>
@@ -4260,7 +4260,7 @@ function VolunteerMentorTab({ onOpenModal }: { onOpenModal: (type: RoleType) => 
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full uppercase tracking-wider">
             <Users className="w-3.5 h-3.5 text-amber-700" /> Grassroots Heroes & Knowledge Mentors
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black text-[#0b1f3b] tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
             Serve On Ground. Mentor For Tomorrow.
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
@@ -4275,14 +4275,14 @@ function VolunteerMentorTab({ onOpenModal }: { onOpenModal: (type: RoleType) => 
             <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-50 rounded-bl-full -z-0 pointer-events-none" />
             <div className="relative z-10 space-y-5">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-black">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
                   <Users className="w-6 h-6 text-emerald-700" />
                 </div>
                 <div>
                   <span className="text-[10px] font-bold tracking-widest uppercase text-emerald-700">
                     On-Ground Action
                   </span>
-                  <h3 className="text-xl font-black text-[#0b1f3b]">Join as a Volunteer</h3>
+                  <h3 className="text-xl font-bold text-slate-900">Join as a Volunteer</h3>
                 </div>
               </div>
 
@@ -4328,14 +4328,14 @@ function VolunteerMentorTab({ onOpenModal }: { onOpenModal: (type: RoleType) => 
             <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-full -z-0 pointer-events-none" />
             <div className="relative z-10 space-y-5">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-800 flex items-center justify-center font-black">
+                <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-800 flex items-center justify-center font-bold">
                   <GraduationCap className="w-6 h-6 text-blue-700" />
                 </div>
                 <div>
                   <span className="text-[10px] font-bold tracking-widest uppercase text-blue-700">
                     Knowledge & Guidance
                   </span>
-                  <h3 className="text-xl font-black text-[#0b1f3b]">Become a Mentor</h3>
+                  <h3 className="text-xl font-bold text-slate-900">Become a Mentor</h3>
                 </div>
               </div>
 
@@ -4369,7 +4369,7 @@ function VolunteerMentorTab({ onOpenModal }: { onOpenModal: (type: RoleType) => 
               </span>
               <button
                 onClick={() => onOpenModal("mentor")}
-                className="inline-flex items-center gap-2 bg-[#0b1f3b] hover:bg-[#163a69] text-white text-xs sm:text-sm font-bold px-6 py-2.5 rounded-xl shadow-md transition hover:scale-[1.02] cursor-pointer"
+                className="inline-flex items-center gap-2 bg-[#071527] hover:bg-[#0c2340] text-white text-xs sm:text-sm font-bold px-6 py-2.5 rounded-xl shadow-md transition hover:scale-[1.02] cursor-pointer"
               >
                 Apply as Mentor <ArrowRight className="w-4 h-4" />
               </button>
@@ -4383,7 +4383,7 @@ function VolunteerMentorTab({ onOpenModal }: { onOpenModal: (type: RoleType) => 
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
               Simple 4-Step Onboarding
             </span>
-            <h3 className="text-lg sm:text-xl font-bold text-[#0b1f3b]">How You Get Started</h3>
+            <h3 className="text-lg sm:text-xl font-bold text-slate-900">How You Get Started</h3>
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">

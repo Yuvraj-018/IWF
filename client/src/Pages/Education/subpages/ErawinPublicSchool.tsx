@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { NotificationTicker, UtilityBar, Header, Footer, RoleFormModal } from "@/components/layout/SiteLayout";
 import { Home, ChevronRight, ArrowLeft, ArrowRight, GraduationCap, Users, School, Star, Building2, Award, CheckCircle2, ShieldCheck, Sparkles, BookOpen } from "lucide-react";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
+import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import heroImg from "@/assets/sector_education_1.png";
 import causeEduImg from "@/assets/cause-education.jpg";
 
@@ -33,34 +34,39 @@ export default function ErawinPublicSchool() {
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
       <NotificationTicker /><UtilityBar /><Header />
       <main>
-        {/* Clean Hero */}
-        <section className="relative min-h-[300px] sm:min-h-[330px] md:min-h-[360px] lg:min-h-[390px] flex items-center overflow-hidden">
-          <img src={heroImg} alt="Erawin Public School" className="absolute inset-0 h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-900/65 to-transparent" />
-          <div className="relative z-10 max-w-7xl mx-auto px-4 py-8 sm:py-10 w-full">
-            <nav className="flex items-center gap-2 text-xs text-white/70 mb-6 font-medium flex-wrap">
-              <Link to="/" className="hover:text-white flex items-center gap-1"><Home className="w-3 h-3" /> Home</Link>
-              <ChevronRight className="w-3 h-3" />
-              <Link to="/programs/education" className="hover:text-white">Education</Link>
-              <ChevronRight className="w-3 h-3" />
-              <span className="text-white/90 font-semibold">Erawin Public School</span>
-            </nav>
-            <Link to="/programs/education" className="inline-flex items-center gap-2 text-xs font-semibold text-white/80 hover:text-white border border-white/20 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded transition-all mb-5">
+        {/* Standardized Hero */}
+        <SubpageHeroCarousel
+          tag="EDUCATION • EPS"
+          title="Erawin Public School (EPS)"
+          subtitle="Providing world-class modern school education, smart classrooms, sports infrastructure, and 100% scholarship support to children from underprivileged rural households."
+          breadcrumbs={[
+            { label: "What We Do", href: "/programs" },
+            { label: "Education", href: "/programs/education" },
+            { label: "Erawin Public School" },
+          ]}
+          images={[heroImg, causeEduImg]}
+        >
+          <div className="flex flex-wrap items-center gap-3 pt-1">
+            <Link
+              to="/sponsor"
+              className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold text-xs sm:text-sm px-6 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider"
+            >
+              Sponsor a Student
+            </Link>
+            <Link
+              to="/partner"
+              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs sm:text-sm px-5 py-2.5 sm:py-3 rounded-xl backdrop-blur-xs transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider"
+            >
+              Partner With Us
+            </Link>
+            <Link
+              to="/programs/education"
+              className="inline-flex items-center gap-2 text-xs font-semibold text-white/90 hover:text-white border border-white/20 bg-white/10 hover:bg-white/20 px-3.5 py-2.5 rounded-xl transition-all"
+            >
               <ArrowLeft className="w-3.5 h-3.5" /> All Education Programmes
             </Link>
-            <div className="inline-flex items-center gap-2 bg-brand-orange/20 border border-brand-orange/40 text-brand-orange px-3.5 py-1 rounded-full mb-4">
-              <School className="w-3.5 h-3.5" />
-              <span className="text-xs font-bold tracking-wider uppercase text-white">Flagship School Institution</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4">
-              Erawin Public School (EPS)<br />
-              <span className="text-brand-orange">Excellence in Rural Schooling</span>
-            </h1>
-            <p className="text-sm md:text-base text-white/85 max-w-2xl leading-relaxed">
-              Providing world-class modern school education, smart classrooms, sports infrastructure, and 100% scholarship support to children from underprivileged rural households.
-            </p>
           </div>
-        </section>
+        </SubpageHeroCarousel>
 
         {/* 4 Stats */}
         <section className="bg-white border-b border-slate-200">
@@ -90,21 +96,20 @@ export default function ErawinPublicSchool() {
             </div>
 
             <div className="grid lg:grid-cols-12 gap-6 items-stretch">
-              <div className="lg:col-span-5 relative rounded-2xl overflow-hidden shadow-sm border border-slate-200 bg-[#0b1f3b] text-white p-8 flex flex-col justify-between">
-                <img src={causeEduImg} alt="EPS Classrooms" className="absolute inset-0 w-full h-full object-cover opacity-25" />
-                <div className="relative z-10 space-y-4">
+              <div className="lg:col-span-5 relative rounded-2xl overflow-hidden shadow-xs border border-slate-200 bg-slate-50 text-slate-800 p-8 flex flex-col justify-between">
+                <div className="space-y-4">
                   <span className="inline-block bg-brand-orange text-white text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full">
                     Model Institution
                   </span>
-                  <h3 className="text-2xl font-extrabold leading-snug">Closing the Urban-Rural Education Divide</h3>
-                  <p className="text-sm text-slate-200 leading-relaxed">
+                  <h3 className="text-xl sm:text-2xl font-bold text-slate-900 leading-snug">Closing the Urban-Rural Education Divide</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed text-balance">
                     EPS provides the exact same quality of English-medium instruction, smart board technology, and STEM science laboratories previously only accessible in elite metropolitan cities.
                   </p>
                 </div>
-                <div className="relative z-10 pt-6 border-t border-white/15 mt-6">
+                <div className="pt-6 border-t border-slate-200 mt-6">
                   <div className="flex items-center gap-3">
                     <ShieldCheck className="w-6 h-6 text-brand-orange shrink-0" />
-                    <p className="text-xs text-slate-200">Over 60% of all students attend on full charitable scholarship grants.</p>
+                    <p className="text-xs text-slate-600">Over 60% of all students attend on full charitable scholarship grants.</p>
                   </div>
                 </div>
               </div>
@@ -149,7 +154,7 @@ export default function ErawinPublicSchool() {
             <div className="grid md:grid-cols-3 gap-6">
               {GRADES.map((g, i) => (
                 <div key={i} className="bg-slate-50 rounded-2xl p-7 border border-slate-200 shadow-sm">
-                  <span className="text-xs font-black text-brand-orange uppercase tracking-widest block mb-2">Stage {g.num}</span>
+                  <span className="text-xs font-bold text-brand-orange uppercase tracking-widest block mb-2">Stage {g.num}</span>
                   <h4 className="text-lg font-bold text-slate-900 mb-2">{g.title}</h4>
                   <p className="text-xs text-slate-600 leading-relaxed">{g.desc}</p>
                 </div>
@@ -158,17 +163,17 @@ export default function ErawinPublicSchool() {
           </div>
         </section>
 
-        {/* Navy High-Contrast Banner */}
-        <section className="py-14 bg-[#0b1f3b] text-white">
-          <div className="max-w-4xl mx-auto px-4 text-center space-y-5">
-            <GraduationCap className="w-10 h-10 text-brand-orange mx-auto" />
-            <p className="text-xl md:text-2xl font-semibold leading-relaxed italic text-white/95">
+        {/* Quote Banner */}
+        <section className="py-10 bg-slate-50/70 border-y border-slate-200 text-slate-800">
+          <div className="max-w-4xl mx-auto px-4 text-center space-y-3">
+            <GraduationCap className="w-8 h-8 text-brand-orange mx-auto" />
+            <p className="text-lg md:text-xl font-serif italic leading-relaxed text-slate-800 text-balance">
               "Education is the most powerful weapon which you can use to change the world. EPS guarantees that no child is left behind."
             </p>
-            <div className="flex items-center justify-center gap-3 pt-2">
-              <span className="h-px w-8 bg-brand-orange/60" />
+            <div className="flex items-center justify-center gap-3 pt-1">
+              <span className="h-px w-8 bg-brand-orange/40" />
               <span className="text-brand-orange font-semibold text-xs uppercase tracking-widest">Islah Welfare Foundation</span>
-              <span className="h-px w-8 bg-brand-orange/60" />
+              <span className="h-px w-8 bg-brand-orange/40" />
             </div>
           </div>
         </section>
@@ -176,10 +181,10 @@ export default function ErawinPublicSchool() {
         {/* Navigation */}
         <section className="py-8 bg-slate-100 border-t border-slate-200">
           <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <Link to="/programs/education" className="inline-flex items-center gap-2 text-sm font-bold text-brand-green-dark hover:text-brand-green border border-slate-300 bg-white hover:bg-slate-50 px-5 py-2.5 rounded-lg transition-all shadow-sm">
+            <Link to="/programs/education" className="inline-flex items-center gap-2 text-sm font-semibold text-brand-green-dark hover:text-brand-green border border-slate-300 bg-white hover:bg-slate-50 px-5 py-2.5 rounded-lg transition-all duration-200 hover:scale-[1.02] active:scale-95 shadow-xs">
               <ArrowLeft className="w-4 h-4" /> Education Overview
             </Link>
-            <Link to="/programs/education/jisns-journal" className="inline-flex items-center gap-2 text-sm font-bold text-white bg-brand-orange hover:bg-orange-600 px-5 py-2.5 rounded-lg transition-all shadow-sm">
+            <Link to="/programs/education/jisns-journal" className="inline-flex items-center gap-2 text-sm font-semibold text-white bg-brand-orange hover:bg-orange-600 px-5 py-2.5 rounded-lg transition-all duration-200 hover:scale-[1.02] active:scale-95 shadow-xs">
               Next: JISNS Journal <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

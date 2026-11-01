@@ -459,7 +459,13 @@ export function FloatingTranslateButton() {
 }
 
 // ─── Inline Translate Button (Header Pill & Dropdown Matching Screenshot) ─────
-export function TranslateButton({ className = "" }: { className?: string }) {
+export function TranslateButton({
+  className = "",
+  isFloating = false,
+}: {
+  className?: string;
+  isFloating?: boolean;
+}) {
   const [currentLang, setCurrentLang] = useState("en");
   const [isOpen, setIsOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -563,25 +569,34 @@ export function TranslateButton({ className = "" }: { className?: string }) {
           if (!isOpen) updatePosition();
           setIsOpen((prev) => !prev);
         }}
-        className={`
-          notranslate inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-slate-300
-          bg-white hover:bg-slate-50 text-slate-800 text-[11px] sm:text-xs font-semibold shadow-xs
-          transition-all duration-200 cursor-pointer select-none max-w-full
-          ${className}
-        `}
+        className={
+          isFloating
+            ? `notranslate w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all duration-200 cursor-pointer select-none relative group ${className}`
+            : `notranslate inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 text-[11px] sm:text-xs font-semibold shadow-xs transition-all duration-200 cursor-pointer select-none max-w-full ${className}`
+        }
         translate="no"
         aria-label="Change language"
+        title="Change Website Language / भाषा बदलें"
         aria-expanded={isOpen}
       >
-        <TranslateIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-800 shrink-0" />
-        <span className="notranslate truncate max-w-[65px] sm:max-w-none" translate="no">
-          {activeLangObj.name}
-        </span>
-        <ChevronDown
-          className={`w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-500 transition-transform duration-200 shrink-0 ${
-            isOpen ? "rotate-180" : ""
-          }`}
-        />
+        <TranslateIcon className={isFloating ? "w-4 h-4 text-white" : "w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-800 shrink-0"} />
+        {!isFloating && (
+          <>
+            <span className="notranslate truncate max-w-[65px] sm:max-w-none" translate="no">
+              {activeLangObj.name}
+            </span>
+            <ChevronDown
+              className={`w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-500 transition-transform duration-200 shrink-0 ${
+                isOpen ? "rotate-180" : ""
+              }`}
+            />
+          </>
+        )}
+        {isFloating && (
+          <span className="absolute -bottom-1 -right-1 text-[8px] font-black uppercase tracking-tighter bg-brand-orange text-white px-1 rounded-sm leading-none py-0.5 shadow-xs">
+            {currentLang.toUpperCase()}
+          </span>
+        )}
       </button>
 
       {isOpen && typeof document !== "undefined" &&

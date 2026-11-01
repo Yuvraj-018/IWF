@@ -3,7 +3,6 @@ import { Link } from "@tanstack/react-router";
 import { Play, ArrowRight } from "lucide-react";
 import { MediaSubpageHero } from "@/components/media/MediaSubpageHero";
 import { ActionStrip } from "@/components/media/ActionStrip";
-import { NewsletterStrip } from "@/components/media/NewsletterStrip";
 import { StoryModal } from "@/components/media/StoryModal";
 import { VideoModal } from "@/components/media/MediaLightboxModals";
 import { MediaLayout } from "@/components/media/MediaLayout";
@@ -194,14 +193,7 @@ export function MediaHubPage() {
           </div>
         </section>
 
-        {/* 5. Newsletter Strip */}
-        <NewsletterStrip
-          title="Stay Updated with Our Journey"
-          description="Subscribe to our newsletter and never miss an update on our programs, success stories and impact."
-          buttonText="Subscribe Now"
-        />
-
-        {/* 6. Action Strip */}
+        {/* 5. Action Strip */}
         <ActionStrip />
       </div>
 

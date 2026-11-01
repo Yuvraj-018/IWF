@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
-import { Home, ChevronRight, ChevronLeft, Pause, Play } from "lucide-react";
+import { Home, ChevronRight } from "lucide-react";
 import aboutHero from "@/assets/about-hero.jpg";
 import slide1 from "@/assets/hero-carousel/hero-slide-1.jpg";
 import slide2 from "@/assets/hero-carousel/hero-slide-2.jpg";
@@ -47,65 +47,25 @@ export function MediaSubpageHero({
     images && images.length > 0
       ? images
       : image
-      ? [image, aboutHero, slide1, slide2]
-      : DEFAULT_SLIDES;
+        ? [image, aboutHero, slide1, slide2]
+        : DEFAULT_SLIDES;
 
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isManualPaused, setIsManualPaused] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
-  const isPaused = isManualPaused || isPressed;
-  const [progress, setProgress] = useState(0);
-  const SLIDE_DURATION = 4500;
+  const SLIDE_DURATION = 5000;
 
-  // Auto-play interval that properly resets when slide changes
+  // Subtle auto-advance without button controls
   useEffect(() => {
-    if (isPaused || resolvedImages.length <= 1) return;
+    if (resolvedImages.length <= 1) return;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % resolvedImages.length);
     }, SLIDE_DURATION);
     return () => clearInterval(timer);
-  }, [currentSlide, isPaused, resolvedImages.length]);
-
-  // Smooth progress bar indicator
-  useEffect(() => {
-    setProgress(0);
-    if (isPaused || resolvedImages.length <= 1) return;
-    const start = Date.now();
-    const tick = setInterval(() => {
-      const elapsed = Date.now() - start;
-      setProgress(Math.min((elapsed / SLIDE_DURATION) * 100, 100));
-    }, 40);
-    return () => clearInterval(tick);
-  }, [currentSlide, isPaused, resolvedImages.length]);
-
-  const goToSlide = (idx: number) => {
-    setCurrentSlide(idx);
-    setProgress(0);
-  };
-
-  const nextSlide = () => goToSlide((currentSlide + 1) % resolvedImages.length);
-  const prevSlide = () =>
-    goToSlide((currentSlide - 1 + resolvedImages.length) % resolvedImages.length);
-
-  // Touch swipe support
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.targetTouches[0].clientX);
-  };
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStart === null) return;
-    const touchEnd = e.changedTouches[0].clientX;
-    const diff = touchStart - touchEnd;
-    if (diff > 50) nextSlide();
-    else if (diff < -50) prevSlide();
-    setTouchStart(null);
-  };
+  }, [currentSlide, resolvedImages.length]);
 
   return (
     <section
       className={`bg-[#071527] text-white flex flex-col justify-center py-5 sm:py-6 md:py-7 relative overflow-hidden select-none group ${heightClass}`}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         {/* Top Breadcrumb */}
@@ -155,7 +115,7 @@ export function MediaSubpageHero({
               </div>
             )}
 
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight text-white leading-tight">
               {title}
             </h1>
 
@@ -168,76 +128,11 @@ export function MediaSubpageHero({
             )}
 
             {subtext && (
-              <p className="text-xs sm:text-sm text-sky-300 font-medium flex items-center gap-2 pt-0.5">
+              <p className="text-xs sm:text-sm text-slate-300 font-normal flex items-center gap-2 pt-0.5">
                 <span>{subtext}</span>
               </p>
             )}
 
-            {/* Slide Navigation Controls */}
-            {resolvedImages.length > 1 && (
-              <div className="flex items-center gap-3 pt-1">
-                <div className="flex items-center gap-1.5 bg-[#0b1f36] px-3 py-1.5 rounded-full border border-[#163559]">
-                  {/* Play/Pause Button */}
-                  <button
-                    onClick={() => setIsManualPaused((p) => !p)}
-                    aria-label={isPaused ? "Play slider" : "Pause slider"}
-                    title={isPaused ? "Play slider" : "Pause slider"}
-                    className="w-5 h-5 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer mr-0.5"
-                  >
-                    {isPaused ? (
-                      <Play className="w-2.5 h-2.5 fill-white text-white ml-0.5" />
-                    ) : (
-                      <Pause className="w-2.5 h-2.5 fill-white text-white" />
-                    )}
-                  </button>
-
-                  {resolvedImages.map((_, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => goToSlide(idx)}
-                      aria-label={`Slide ${idx + 1}`}
-                      className="relative cursor-pointer py-1"
-                    >
-                      <div
-                        className={`rounded-full transition-all duration-300 ${
-                          currentSlide === idx
-                            ? "w-6 h-1.5 bg-white/30"
-                            : "w-1.5 h-1.5 bg-white/40 hover:bg-white/70"
-                        }`}
-                      />
-                      {currentSlide === idx && (
-                        <div
-                          className="absolute top-1 left-0 h-1.5 rounded-full bg-brand-orange"
-                          style={{
-                            width: `${progress}%`,
-                            transition: "width 40ms linear",
-                          }}
-                        />
-                      )}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={prevSlide}
-                    aria-label="Previous slide"
-                    className="w-8 h-8 rounded-full bg-[#0b1f36] hover:bg-[#163559] text-white flex items-center justify-center border border-[#163559] transition cursor-pointer"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={nextSlide}
-                    aria-label="Next slide"
-                    className="w-8 h-8 rounded-full bg-[#0b1f36] hover:bg-[#163559] text-white flex items-center justify-center border border-[#163559] transition cursor-pointer"
-                  >
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Actions Row */}
             {actions && <div className="pt-2 flex flex-wrap gap-2.5">{actions}</div>}
           </div>
 
@@ -254,9 +149,8 @@ export function MediaSubpageHero({
 
               {/* Organic Frame with Razor-Sharp Photograph Slider */}
               <div
-                className={`relative w-full h-full overflow-hidden border-[4px] sm:border-[5px] border-white shadow-2xl z-10 ${
-                  isPressed ? "cursor-grabbing" : "cursor-default"
-                }`}
+                className={`relative w-full h-full overflow-hidden border-[4px] sm:border-[5px] border-white shadow-2xl z-10 ${isPressed ? "cursor-grabbing" : "cursor-default"
+                  }`}
                 style={{
                   borderRadius: "44% 56% 68% 32% / 42% 44% 56% 58%",
                 }}
@@ -287,12 +181,6 @@ export function MediaSubpageHero({
                   </div>
                 ))}
 
-                {/* Optional Right Overlay (e.g. Video Play Button) */}
-                {rightOverlay && (
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex items-end justify-center pb-4 px-3 z-10 pointer-events-auto">
-                    {rightOverlay}
-                  </div>
-                )}
               </div>
 
               {/* Left Botanical Leaves SVG */}

@@ -26,6 +26,7 @@ import {
 } from "@/components/layout/SiteLayout";
 import type { RoleType } from "@/components/forms/RoleFormModal";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
+import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import causeEduImg from "@/assets/cause-education.jpg";
 import heroImg from "@/assets/sector_education_1.png";
 
@@ -39,79 +40,38 @@ export default function CommunityLearningCentrePage() {
       <Header />
 
       <main>
-        {/* ─── Hero Section ────────────────────────────────────────────────────── */}
-        <section className="relative overflow-hidden bg-gradient-to-r from-[#00381e] via-[#005a30] to-[#014725] text-white min-h-[300px] sm:min-h-[330px] md:min-h-[360px] lg:min-h-[390px] flex items-center py-6 sm:py-8 md:py-10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-            {/* Standardized Breadcrumb */}
-            <nav className="flex items-center gap-1.5 text-xs text-emerald-200/80 mb-4 font-medium flex-wrap">
-              <Link to="/" className="hover:text-white flex items-center gap-1">
-                <Home className="w-3.5 h-3.5 text-brand-orange" /> Home
-              </Link>
-              <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-              <Link to="/programs" className="hover:text-white">What We Do</Link>
-              <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-              <Link to="/programs/education" className="hover:text-white">Education &amp; Learning</Link>
-              <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-              <span className="text-emerald-300 font-semibold">Community Learning Centre (CLC)</span>
-            </nav>
+        {/* Standardized Hero */}
+        <SubpageHeroCarousel
+          tag="EDUCATION • CLC"
+          title="Community Learning Centre (CLC)"
+          subtitle="A dedicated space for moral development, community learning, and inclusive value-based education for rural youth. Nurturing minds, values, and social cohesion beyond the traditional classroom."
+          breadcrumbs={[
+            { label: "What We Do", href: "/programs" },
+            { label: "Education", href: "/programs/education" },
+            { label: "Community Learning Centre" },
+          ]}
+          images={[heroImg, causeEduImg]}
+        >
+          <div className="flex flex-wrap items-center gap-3 pt-1">
+            <button
+              type="button"
+              onClick={() => setActiveModal("sponsor")}
+              className="inline-flex items-center gap-2 bg-brand-orange hover:bg-[#c2410c] text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-md transition cursor-pointer"
+            >
+              <Heart className="w-4 h-4 fill-white" />
+              <span>Support This Initiative</span>
+            </button>
 
-            <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 items-center">
-              <div className="lg:col-span-7 space-y-3">
-                <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-widest text-brand-orange mb-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-orange animate-pulse" />
-                  CLC • COMMUNITY LEARNING
-                </div>
-
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
-                  Community Learning <br className="hidden sm:inline" />
-                  <span className="text-emerald-300">Centre (CLC)</span>
-                </h1>
-
-                <p className="text-slate-200 text-xs sm:text-sm max-w-xl leading-relaxed">
-                  A dedicated space for moral development, community learning, and inclusive value-based education for rural youth. Nurturing minds, values, and social cohesion beyond the traditional classroom.
-                </p>
-
-                <div className="flex flex-wrap items-center gap-3 pt-1">
-                  <button
-                    type="button"
-                    onClick={() => setActiveModal("sponsor")}
-                    className="inline-flex items-center gap-2 bg-brand-orange hover:bg-[#c2410c] text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-md transition cursor-pointer"
-                  >
-                    <Heart className="w-4 h-4 fill-white" />
-                    <span>Support This Initiative</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setActiveModal("partner")}
-                    className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl backdrop-blur-md transition cursor-pointer"
-                  >
-                    <Building className="w-4 h-4 text-emerald-300" />
-                    <span>Donate for CLC Centre</span>
-                  </button>
-                </div>
-              </div>
-
-              <div className="lg:col-span-5">
-                <div className="rounded-2xl overflow-hidden border-2 border-white/15 shadow-xl bg-white/5 max-w-md ml-auto">
-                  <img
-                    src={heroImg}
-                    alt="Community &amp; Islamic Learning Centre"
-                    className="w-full h-56 sm:h-64 object-cover"
-                  />
-                  <div className="p-3.5 bg-slate-900/90 text-white">
-                    <p className="text-[11px] font-bold uppercase tracking-widest text-emerald-400">
-                      COMMUNITY LEARNING CENTRE
-                    </p>
-                    <p className="text-xs text-slate-300 mt-0.5">
-                      Knowledge • Values • Community Development
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <button
+              type="button"
+              onClick={() => setActiveModal("partner")}
+              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl backdrop-blur-md transition cursor-pointer"
+            >
+              <Building className="w-4 h-4 text-emerald-300" />
+              <span>Donate for CLC Centre</span>
+            </button>
           </div>
-        </section>
+        </SubpageHeroCarousel>
 
         {/* ─── Highlights Bar ──────────────────────────────────────────────────── */}
         <section className="bg-slate-50 border-b border-slate-200 py-6">
@@ -151,7 +111,7 @@ export default function CommunityLearningCentrePage() {
                     <Building className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-base sm:text-lg font-black text-slate-900 uppercase tracking-tight">
+                    <h3 className="text-base sm:text-lg font-bold text-slate-900 uppercase tracking-tight">
                       NEED FOR A COMMUNITY LEARNING CENTRE
                     </h3>
                   </div>
@@ -186,22 +146,22 @@ export default function CommunityLearningCentrePage() {
 
               {/* Project Objective & Commitment */}
               <div className="lg:col-span-6 space-y-6">
-                <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 space-y-4 shadow-xl">
-                  <span className="text-xs font-black uppercase tracking-widest text-emerald-400">
+                <div className="bg-slate-50 border border-slate-200 text-slate-800 rounded-3xl p-6 sm:p-8 space-y-4 shadow-xs">
+                  <span className="text-xs font-bold uppercase tracking-widest text-brand-orange">
                     PROJECT OBJECTIVE
                   </span>
-                  <h3 className="text-lg sm:text-xl font-black text-white leading-snug">
-                    To create a community-based learning space that promotes moral values, ethical development, basic Islamic education, and social awareness, especially among children and youth in rural areas.
-                  </h3>
-                  <div className="pt-2 border-t border-white/10">
-                    <p className="text-xs text-slate-300 leading-relaxed">
+                  <p className="text-base sm:text-lg font-medium text-slate-800 leading-relaxed italic">
+                    “To create a community-based learning space that promotes moral values, ethical development, basic Islamic education, and social awareness, especially among children and youth in rural areas.”
+                  </p>
+                  <div className="pt-2 border-t border-slate-200">
+                    <p className="text-xs text-slate-600 italic leading-relaxed">
                       “To nurture minds, strengthen values and empower communities through knowledge, character and collective growth.”
                     </p>
                   </div>
                 </div>
 
-                <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 space-y-3">
-                  <h4 className="text-xs font-black uppercase tracking-wider text-[#15803d]">
+                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 space-y-3">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-800">
                     OUR COMMITMENT
                   </h4>
                   <p className="text-xs text-slate-600 leading-relaxed">
@@ -217,10 +177,10 @@ export default function CommunityLearningCentrePage() {
         <section className="py-16 bg-slate-50 border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
             <div className="text-center max-w-2xl mx-auto space-y-2">
-              <span className="text-xs font-black uppercase tracking-widest text-[#15803d]">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#15803d]">
                 PROJECT APPROACH
               </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-slate-900">
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">
                 Four Pillars of Community Transformation
               </h2>
             </div>
@@ -270,12 +230,12 @@ export default function CommunityLearningCentrePage() {
               ].map((pil) => (
                 <div key={pil.num} className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs space-y-3">
                   <div
-                    className="w-8 h-8 rounded-full text-white font-black text-xs flex items-center justify-center"
+                    className="w-8 h-8 rounded-full text-white font-bold text-xs flex items-center justify-center"
                     style={{ backgroundColor: pil.color }}
                   >
                     {pil.num}
                   </div>
-                  <h4 className="font-extrabold text-sm text-slate-900">{pil.title}</h4>
+                  <h4 className="font-bold text-sm text-slate-900">{pil.title}</h4>
                   <ul className="space-y-1.5 text-xs text-slate-600">
                     {pil.items.map((it) => (
                       <li key={it} className="flex items-start gap-2">
@@ -295,9 +255,9 @@ export default function CommunityLearningCentrePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-3 gap-6">
               {/* Plan */}
-              <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200 space-y-4">
-                <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#15803d]">
-                  <CheckCircle2 className="w-4 h-4" />
+              <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-4">
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-800">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                   <span>IMPLEMENTATION PLAN</span>
                 </div>
                 <div className="space-y-2 text-xs text-slate-700">
@@ -317,9 +277,9 @@ export default function CommunityLearningCentrePage() {
               </div>
 
               {/* Impact */}
-              <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200 space-y-4">
-                <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-purple-700">
-                  <TrendingUp className="w-4 h-4" />
+              <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-4">
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-purple-700">
+                  <TrendingUp className="w-4 h-4 text-purple-600" />
                   <span>EXPECTED IMPACT</span>
                 </div>
                 <div className="space-y-2 text-xs text-slate-700">
@@ -339,9 +299,9 @@ export default function CommunityLearningCentrePage() {
               </div>
 
               {/* Vision */}
-              <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200 space-y-4">
-                <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-blue-700">
-                  <Globe className="w-4 h-4" />
+              <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-4">
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-700">
+                  <Globe className="w-4 h-4 text-blue-600" />
                   <span>FUTURE VISION</span>
                 </div>
                 <p className="text-xs text-slate-600 leading-relaxed">
@@ -367,14 +327,14 @@ export default function CommunityLearningCentrePage() {
         </section>
 
         {/* ─── Bottom Quote & CTAs ─────────────────────────────────────────────── */}
-        <section className="py-14 bg-emerald-950 text-white">
+        <section className="py-14 bg-gradient-to-r from-[#071527] to-[#0c2340] text-white">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-              <div className="space-y-2 max-w-xl text-center md:text-left">
-                <blockquote className="text-lg sm:text-xl font-black text-white leading-snug">
+              <div className="space-y-2 max-w-2xl text-center md:text-left">
+                <blockquote className="text-base sm:text-lg font-medium text-slate-200 leading-relaxed italic">
                   “Nurturing minds and building character — empowering rural communities through education, values, and collective growth.”
                 </blockquote>
-                <p className="text-xs text-emerald-300">
+                <p className="text-xs text-slate-400">
                   Help us build community learning centres that shape better tomorrows.
                 </p>
               </div>
@@ -383,7 +343,7 @@ export default function CommunityLearningCentrePage() {
                 <button
                   type="button"
                   onClick={() => setActiveModal("sponsor")}
-                  className="inline-flex items-center gap-2 bg-brand-orange hover:bg-[#c2410c] text-white font-extrabold text-xs sm:text-sm px-5 py-3 rounded-xl shadow-lg transition"
+                  className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer"
                 >
                   <Heart className="w-4 h-4 fill-white" />
                   <span>Support This Initiative</span>
@@ -392,9 +352,9 @@ export default function CommunityLearningCentrePage() {
                 <button
                   type="button"
                   onClick={() => setActiveModal("partner")}
-                  className="inline-flex items-center gap-2 bg-white text-slate-900 hover:bg-slate-100 font-extrabold text-xs sm:text-sm px-5 py-3 rounded-xl shadow-lg transition"
+                  className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl backdrop-blur-xs transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer"
                 >
-                  <Building className="w-4 h-4" />
+                  <Building className="w-4 h-4 text-brand-orange" />
                   <span>Donate for CLC Centre</span>
                 </button>
               </div>

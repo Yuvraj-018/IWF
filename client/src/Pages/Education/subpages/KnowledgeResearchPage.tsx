@@ -28,8 +28,10 @@ import {
   Database,
   Search,
   Globe2,
+  Heart,
 } from "lucide-react";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
+import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import heroImg from "@/assets/sector_education_2.png";
 
 export default function KnowledgeResearchPage() {
@@ -199,82 +201,38 @@ export default function KnowledgeResearchPage() {
       <Header />
 
       <main>
-        {/* HERO SECTION */}
-        <section className="relative min-h-[300px] sm:min-h-[330px] md:min-h-[360px] lg:min-h-[390px] flex items-center overflow-hidden bg-slate-900">
-          <img
-            src={heroImg}
-            alt="Knowledge, Research & Publication"
-            className="absolute inset-0 h-full w-full object-cover opacity-30 filter saturate-110"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#00381c]/95 via-[#004724]/85 to-slate-950/80" />
-
-          <div className="relative z-10 max-w-7xl mx-auto px-4 py-8 sm:py-10 w-full">
-            <nav className="flex items-center gap-2 text-xs text-emerald-200/80 mb-6 font-medium flex-wrap">
-              <Link to="/" className="hover:text-white flex items-center gap-1">
-                <Home className="w-3.5 h-3.5" /> Home
-              </Link>
-              <ChevronRight className="w-3.5 h-3.5" />
-              <Link to="/programs/education" className="hover:text-white">
-                Education & Learning
-              </Link>
-              <ChevronRight className="w-3.5 h-3.5" />
-              <span className="text-white font-semibold">
-                Knowledge & Research (KRP)
-              </span>
-            </nav>
-
-            <Link
-              to="/programs/education"
-              className="inline-flex items-center gap-2 text-xs font-semibold text-emerald-100 hover:text-white border border-emerald-400/30 bg-emerald-950/40 hover:bg-emerald-900/50 px-3.5 py-1.5 rounded-md transition-all mb-4 backdrop-blur-sm"
+        {/* Standardized Hero */}
+        <SubpageHeroCarousel
+          tag="EDUCATION • KRP"
+          title="Knowledge, Research & Publication (KRP)"
+          subtitle="Making knowledge accessible, encouraging learning, and supporting better understanding through rural public libraries, reading programmes, digital hubs, and research publications."
+          breadcrumbs={[
+            { label: "What We Do", href: "/programs" },
+            { label: "Education", href: "/programs/education" },
+            { label: "Knowledge & Research" },
+          ]}
+          images={[heroImg]}
+        >
+          <div className="flex flex-wrap items-center gap-3 pt-2">
+            <button
+              type="button"
+              onClick={() => setActiveModal("sponsor")}
+              className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold text-xs sm:text-sm px-6 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer"
             >
-              <ArrowLeft className="w-3.5 h-3.5" /> All Education Initiatives
-            </Link>
+              <Heart className="w-4 h-4 fill-white" />
+              <span>Support Knowledge Hubs</span>
+            </button>
 
-            <div className="inline-flex items-center gap-2 bg-[#ea580c]/20 border border-[#ea580c]/50 text-orange-200 px-3.5 py-1 rounded-full text-xs font-bold tracking-wider uppercase mb-4 backdrop-blur-sm">
-              <BookOpen className="w-3.5 h-3.5 text-[#ea580c]" />
-              Intellectual Depth • Academic Rigour • Rational Inquiry
-            </div>
-
-            <div className="grid lg:grid-cols-12 gap-8 items-center">
-              <div className="lg:col-span-8">
-                <h1 className="text-3xl md:text-5xl lg:text-5xl font-black text-white leading-tight mb-3 tracking-tight">
-                  Knowledge, Research & Publication{" "}
-                  <span className="text-amber-400">— KRP</span>
-                </h1>
-                <p className="text-base md:text-lg font-medium text-emerald-100/90 mb-4">
-                  Making Knowledge Accessible. Encouraging Learning. Supporting
-                  Better Understanding.
-                </p>
-                <p className="text-sm md:text-base text-slate-200/90 max-w-3xl leading-relaxed">
-                  At ISLAH, we believe that knowledge has the power to transform
-                  lives and communities. Through rural public libraries, reading
-                  programmes, digital hubs, community research, and
-                  publications, we create opportunities for people to read,
-                  learn, question, explore, and share knowledge.
-                </p>
-              </div>
-
-              {/* Hero Callout Card */}
-              <div className="lg:col-span-4">
-                <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 shadow-xl text-white">
-                  <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-300 mb-2">
-                    <Sparkles className="w-4 h-4" />
-                    Democratic Knowledge
-                  </div>
-                  <p className="text-xs md:text-sm text-emerald-50 leading-relaxed mb-4">
-                    Knowledge should not remain confined to urban universities.
-                    Every rural village deserves a quiet study space, books, and
-                    scientific research tools.
-                  </p>
-                  <div className="text-xs font-semibold text-emerald-200 pt-3 border-t border-white/15 flex items-center justify-between">
-                    <span>Library • Digital • Research</span>
-                    <span className="text-amber-300 font-bold">100% Open Access</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <button
+              type="button"
+              onClick={() => setActiveModal("partner")}
+              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs sm:text-sm px-5 py-2.5 sm:py-3 rounded-xl backdrop-blur-xs transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer"
+            >
+              <Library className="w-4 h-4 text-brand-orange" />
+              <span>Partner With Us</span>
+            </button>
           </div>
-        </section>
+        </SubpageHeroCarousel>
 
         {/* 5-STEP CONTINUUM RIBBON */}
         <section className="bg-white border-b border-slate-200 py-6 shadow-sm">
@@ -285,7 +243,7 @@ export default function KnowledgeResearchPage() {
                   key={idx}
                   className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200 hover:border-emerald-300 transition-all"
                 >
-                  <span className="w-7 h-7 rounded-lg bg-emerald-100 text-[#004724] flex items-center justify-center font-black text-xs shrink-0">
+                  <span className="w-7 h-7 rounded-lg bg-emerald-100 text-[#004724] flex items-center justify-center font-bold text-xs shrink-0">
                     {idx + 1}
                   </span>
                   <div>
@@ -314,7 +272,7 @@ export default function KnowledgeResearchPage() {
                       <span className="text-xs font-bold uppercase tracking-widest text-[#ea580c] bg-orange-50 border border-orange-200 px-3 py-1 rounded-full mb-3 inline-block">
                         Why Knowledge & Research?
                       </span>
-                      <h2 className="text-2xl font-black text-slate-900 mb-4">
+                      <h2 className="text-2xl font-bold text-slate-900 mb-4">
                         Education Should Create a Culture of Learning
                       </h2>
                       <div className="space-y-3.5 mb-6">
@@ -348,21 +306,21 @@ export default function KnowledgeResearchPage() {
               {/* Right 5 cols: Connecting the Gaps */}
               <div className="lg:col-span-5">
                 <ScrollReveal delay={150}>
-                  <div className="h-full bg-gradient-to-br from-[#0b1f3b] to-[#004724] text-white rounded-2xl p-8 shadow-md flex flex-col justify-between border border-emerald-700/40">
+                  <div className="h-full bg-slate-50 border border-slate-200 rounded-2xl p-8 shadow-xs flex flex-col justify-between">
                     <div>
-                      <div className="flex items-center gap-2 text-xs font-bold text-amber-300 uppercase tracking-wider mb-2">
-                        <TrendingUp className="w-4 h-4 text-amber-400" />
+                      <div className="inline-flex items-center gap-2 text-xs font-bold text-brand-orange uppercase tracking-wider mb-2 bg-orange-50 px-2.5 py-1 rounded-md border border-orange-200">
+                        <TrendingUp className="w-4 h-4 text-brand-orange" />
                         Systemic Connection
                       </div>
-                      <h3 className="text-xl font-bold text-white mb-6">
+                      <h3 className="text-xl font-bold text-slate-900 mb-6">
                         Connecting Gaps to Action
                       </h3>
 
-                      <div className="relative pl-6 space-y-4 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-emerald-400/30">
+                      <div className="relative pl-6 space-y-4 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-300">
                         {PATHWAY_FLOW.map((step, idx) => (
                           <div key={idx} className="relative flex items-center gap-3">
-                            <span className="absolute -left-6 w-4 h-4 rounded-full bg-amber-400 border-2 border-[#0b1f3b] flex items-center justify-center text-[9px] font-bold text-slate-900" />
-                            <span className="text-xs font-bold text-emerald-100">
+                            <span className="absolute -left-6 w-4 h-4 rounded-full bg-brand-orange border-2 border-white flex items-center justify-center text-[9px] font-bold text-white shadow-xs" />
+                            <span className="text-xs font-semibold text-slate-700">
                               {step}
                             </span>
                           </div>
@@ -370,7 +328,7 @@ export default function KnowledgeResearchPage() {
                       </div>
                     </div>
 
-                    <div className="pt-6 border-t border-white/10 text-xs text-amber-200 italic mt-6">
+                    <div className="pt-6 border-t border-slate-200 text-xs text-slate-500 italic mt-6">
                       Democratizing inquiry and analytical thinking in rural India.
                     </div>
                   </div>
@@ -387,7 +345,7 @@ export default function KnowledgeResearchPage() {
               <span className="text-xs font-bold uppercase tracking-widest text-[#004724] bg-emerald-50 border border-emerald-200 px-3.5 py-1 rounded-full">
                 Community-Based Platform
               </span>
-              <h2 className="text-2xl md:text-4xl font-black text-slate-900 mt-3 mb-3">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mt-3 mb-3">
                 What is Knowledge & Research?
               </h2>
               <p className="text-sm text-slate-600">
@@ -407,7 +365,7 @@ export default function KnowledgeResearchPage() {
                         <div className="w-12 h-12 rounded-xl bg-emerald-100 text-[#004724] flex items-center justify-center mb-4">
                           <Icon className="w-6 h-6" />
                         </div>
-                        <h3 className="text-base font-black text-slate-900 mb-2">
+                        <h3 className="text-base font-bold text-slate-900 mb-2">
                           {track.title}
                         </h3>
                         <p className="text-xs text-slate-600 leading-relaxed mb-4">
@@ -489,7 +447,7 @@ export default function KnowledgeResearchPage() {
                           className="p-3 rounded-xl bg-slate-50 border border-slate-200"
                         >
                           <div className="flex items-center gap-2 text-xs font-bold text-slate-900 mb-1">
-                            <span className="w-5 h-5 rounded-md bg-emerald-100 text-[#004724] flex items-center justify-center font-black text-[10px]">
+                            <span className="w-5 h-5 rounded-md bg-emerald-100 text-[#004724] flex items-center justify-center font-bold text-[10px]">
                               {step.num}
                             </span>
                             <span>{step.title}</span>
@@ -547,7 +505,7 @@ export default function KnowledgeResearchPage() {
             <span className="text-xs font-bold uppercase tracking-widest text-[#004724] bg-emerald-50 border border-emerald-200 px-3.5 py-1 rounded-full mb-3 inline-block">
               Long-Term Direction
             </span>
-            <h3 className="text-2xl font-black text-slate-900 mb-3">
+            <h3 className="text-2xl font-bold text-slate-900 mb-3">
               Network of Rural Knowledge & Learning Centres
             </h3>
             <p className="text-sm text-slate-600 max-w-2xl mx-auto mb-8">
@@ -559,9 +517,9 @@ export default function KnowledgeResearchPage() {
               {LONG_TERM_PILLARS.map((pillar, idx) => (
                 <div
                   key={idx}
-                  className="p-4 rounded-xl bg-gradient-to-br from-[#004724] to-[#0b1f3b] text-white shadow-sm flex flex-col items-center justify-center font-bold text-xs"
+                  className="p-4 rounded-xl bg-white border border-slate-200 text-slate-800 shadow-xs hover:border-emerald-300 hover:shadow-sm transition-all flex flex-col items-center justify-center font-bold text-xs text-center"
                 >
-                  <Database className="w-5 h-5 text-amber-300 mb-2" />
+                  <Database className="w-5 h-5 text-emerald-600 mb-2" />
                   <span>{pillar}</span>
                 </div>
               ))}
@@ -570,22 +528,22 @@ export default function KnowledgeResearchPage() {
         </section>
 
         {/* SECTION 5: STATEMENT BANNER */}
-        <section className="py-14 bg-[#004724] text-white text-center">
-          <div className="max-w-4xl mx-auto px-4 space-y-4">
-            <span className="text-4xl text-amber-400 font-serif leading-none block">
+        <section className="py-10 bg-slate-50/70 border-y border-slate-200 text-slate-800 text-center">
+          <div className="max-w-4xl mx-auto px-4 space-y-3">
+            <span className="text-3xl text-brand-orange font-serif leading-none block">
               “
             </span>
-            <p className="text-xl md:text-2xl font-bold leading-relaxed text-emerald-50 italic">
+            <p className="text-lg md:text-xl font-semibold leading-relaxed text-slate-800 italic text-balance">
               Knowledge is a powerful foundation for understanding society,
               addressing complex challenges and creating meaningful
               possibilities for the future.
             </p>
             <div className="flex items-center justify-center gap-3 pt-2">
-              <span className="h-px w-8 bg-amber-400/60" />
-              <span className="text-amber-300 font-semibold text-xs uppercase tracking-widest">
+              <span className="h-px w-8 bg-slate-300" />
+              <span className="text-slate-500 font-bold text-xs uppercase tracking-widest">
                 Islah Welfare Foundation
               </span>
-              <span className="h-px w-8 bg-amber-400/60" />
+              <span className="h-px w-8 bg-slate-300" />
             </div>
           </div>
         </section>
@@ -593,10 +551,10 @@ export default function KnowledgeResearchPage() {
         {/* SECTION 6: SUPPORT CTAS */}
         <section className="py-12 bg-white border-b border-slate-200">
           <div className="max-w-4xl mx-auto px-4 text-center">
-            <h3 className="text-2xl font-black text-slate-900 mb-2">
+            <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2">
               Be a Part of Their Journey
             </h3>
-            <p className="text-sm text-slate-600 mb-6">
+            <p className="text-sm text-slate-600 mb-6 max-w-xl mx-auto">
               Your support today can open doors to learning, confidence, and a
               better tomorrow.
             </p>
@@ -604,19 +562,19 @@ export default function KnowledgeResearchPage() {
             <div className="flex flex-wrap items-center justify-center gap-4">
               <button
                 onClick={() => setActiveModal("sponsor")}
-                className="px-6 py-3 rounded-xl bg-[#004724] hover:bg-[#00381c] text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all"
+                className="px-6 py-3 rounded-xl bg-brand-orange hover:bg-brand-orange-hover text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95"
               >
                 Support Education
               </button>
               <button
                 onClick={() => setActiveModal("partner")}
-                className="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all"
+                className="px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95"
               >
                 Partner With Us
               </button>
               <button
                 onClick={() => setActiveModal("volunteer")}
-                className="px-6 py-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs uppercase tracking-wider shadow-xs hover:shadow-sm transition-all"
+                className="px-6 py-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs uppercase tracking-wider shadow-xs hover:shadow-sm transition-all hover:scale-[1.02] active:scale-95"
               >
                 Volunteer / Mentor
               </button>
@@ -625,18 +583,18 @@ export default function KnowledgeResearchPage() {
         </section>
 
         {/* BOTTOM NAVIGATION */}
-        <section className="py-8 bg-slate-100 border-t border-slate-200">
+        <section className="py-8 bg-slate-50 border-t border-slate-200">
           <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <Link
               to="/programs/education/technical-vocational-training"
-              className="inline-flex items-center gap-2 text-xs md:text-sm font-bold text-slate-800 hover:text-[#004724] border border-slate-300 bg-white hover:bg-slate-50 px-5 py-2.5 rounded-lg transition-all shadow-sm"
+              className="inline-flex items-center gap-2 text-xs md:text-sm font-semibold text-slate-800 hover:text-emerald-700 border border-slate-300 bg-white hover:bg-slate-50 px-5 py-2.5 rounded-lg transition-all shadow-xs hover:scale-[1.02] active:scale-95"
             >
               <ArrowLeft className="w-4 h-4" /> Prev: Technical & Vocational
               (TVET)
             </Link>
             <Link
               to="/programs/education"
-              className="inline-flex items-center gap-2 text-xs md:text-sm font-bold text-white bg-[#004724] hover:bg-[#00381c] px-5 py-2.5 rounded-lg transition-all shadow-sm"
+              className="inline-flex items-center gap-2 text-xs md:text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 px-5 py-2.5 rounded-lg transition-all shadow-xs hover:scale-[1.02] active:scale-95"
             >
               Back to Education Initiatives <ArrowRight className="w-4 h-4" />
             </Link>

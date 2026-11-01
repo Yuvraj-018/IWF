@@ -2,7 +2,7 @@ import { Phone, Mail, Facebook, Twitter, Instagram, Youtube, Linkedin } from "lu
 
 export function TopBar() {
   return (
-    <div className="bg-brand-green text-white text-xs">
+    <div className="bg-[#0b1f3b] text-white text-xs">
       <div className="max-w-7xl mx-auto px-4 py-2 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-5 notranslate" translate="no" dir="ltr">
           <a href="tel:+919811861633" className="flex items-center gap-1.5 hover:opacity-80 notranslate" translate="no" dir="ltr"><Phone className="w-3.5 h-3.5" /> +91-9811861633</a>

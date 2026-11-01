@@ -82,7 +82,7 @@ export default function ReliefRehabilitationPage() {
       <Header />
 
       <main>
-        {/* Hero Section with Subpage Carousel (Matching About Us Page) */}
+        {/* Hero Section with Subpage Carousel with In-Hero Action Buttons */}
         <SubpageHeroCarousel
           tag="WHAT WE DO • HUMANITARIAN CARE"
           title="Relief & Rehabilitation"
@@ -92,31 +92,25 @@ export default function ReliefRehabilitationPage() {
             { label: "Relief & Rehabilitation" },
           ]}
           images={slides.map((s) => s.image)}
-        />
-
-        {/* Floating Action Strip */}
-        <div className="max-w-7xl mx-auto px-4 md:px-8 -mt-6 relative z-20 mb-8">
-          <div className="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-md flex flex-wrap items-center justify-between gap-3">
-            <div className="flex flex-wrap items-center gap-3">
-              <button
-                onClick={() => setActiveModal("volunteer")}
-                className="inline-flex items-center gap-2 bg-[#15803d] hover:bg-[#166534] text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-md transition uppercase tracking-wider cursor-pointer"
-              >
-                <span>Volunteer for Relief</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-              <a
-                href="/donate"
-                className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-md transition uppercase tracking-wider cursor-pointer"
-              >
-                <span>Donate for Relief Kits</span>
-              </a>
-            </div>
-            <div className="text-xs font-semibold text-slate-500">
-              Emergency Response • Ration Kits • Rebuilding Hope
-            </div>
+        >
+          <div className="flex flex-wrap items-center gap-3 pt-2">
+            <button
+              type="button"
+              onClick={() => setActiveModal("volunteer")}
+              className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold px-6 sm:px-7 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer"
+            >
+              <span>Volunteer for Relief</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+            <a
+              href="/donate"
+              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer backdrop-blur-xs"
+            >
+              <Heart className="w-4 h-4 text-brand-orange" />
+              <span>Donate for Relief Kits</span>
+            </a>
           </div>
-        </div>
+        </SubpageHeroCarousel>
 
 
         {/* Overview */}
@@ -124,13 +118,13 @@ export default function ReliefRehabilitationPage() {
           <div className="max-w-7xl mx-auto">
             <ScrollReveal>
               <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-200">
-                <p className="text-xs font-extrabold uppercase tracking-widest text-brand-orange mb-2">
+                <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2">
                   Humanitarian Overview
                 </p>
-                <h2 className="text-2xl md:text-3xl font-extrabold text-[#0b1f3b] mb-4">
+                <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">
                   Standing With Families in Hardship & Disaster
                 </h2>
-                <p className="text-slate-600 text-sm md:text-base leading-relaxed mb-6">
+                <p className="text-sm text-slate-600 font-normal leading-relaxed mb-6">
                   Relief and rehabilitation play a vital role in supporting vulnerable individuals affected by floods, harsh winters, fire incidents, poverty, and sudden emergencies. In rural Bihar and across India, economically weaker households often lack reserves to withstand natural or economic shocks.
                 </p>
                 <div className="grid md:grid-cols-3 gap-4 pt-4 border-t border-slate-100">
@@ -143,7 +137,7 @@ export default function ReliefRehabilitationPage() {
                     <span className="text-xs text-slate-600">Respectful distribution of shelter kits, clothes, and essential marriage support.</span>
                   </div>
                   <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                    <span className="font-bold text-[#0b1f3b] text-sm block mb-1">Long-term Recovery</span>
+                    <span className="font-bold text-slate-900 text-sm block mb-1">Long-term Recovery</span>
                     <span className="text-xs text-slate-600">Rehabilitation, child welfare, and community support networks.</span>
                   </div>
                 </div>
@@ -156,10 +150,10 @@ export default function ReliefRehabilitationPage() {
         <section className="py-12 px-4 bg-slate-100/70">
           <div className="max-w-7xl mx-auto">
             <div className="text-center max-w-2xl mx-auto mb-12">
-              <p className="text-xs font-extrabold uppercase tracking-widest text-brand-orange mb-2">
+              <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2">
                 Program Components
               </p>
-              <h2 className="text-2xl md:text-3xl font-extrabold text-[#0b1f3b]">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900">
                 Key Relief & Rehabilitation Initiatives
               </h2>
             </div>
@@ -178,10 +172,10 @@ export default function ReliefRehabilitationPage() {
                           <div className="w-12 h-12 rounded-xl bg-orange-50 text-brand-orange flex items-center justify-center font-bold">
                             <Icon className="w-6 h-6" />
                           </div>
-                          <span className="text-xs font-extrabold text-slate-400">{item.num}</span>
+                          <span className="text-xs font-bold text-slate-400">{item.num}</span>
                         </div>
-                        <h3 className="text-lg font-bold text-[#0b1f3b] group-hover:text-brand-orange transition-colors">{item.title}</h3>
-                        <p className="text-sm text-slate-600 leading-relaxed">{item.desc}</p>
+                        <h3 className="text-lg font-bold text-slate-900 group-hover:text-brand-orange transition-colors">{item.title}</h3>
+                        <p className="text-sm text-slate-600 font-normal leading-relaxed">{item.desc}</p>
                       </div>
                       <div className="pt-4 border-t border-slate-100 mt-6 flex items-center justify-between text-xs font-bold text-brand-green">
                         <div className="flex items-center gap-2">
@@ -202,9 +196,9 @@ export default function ReliefRehabilitationPage() {
         </section>
 
         {/* Bottom Action */}
-        <section className="py-14 px-4 bg-[#0b1f3b] text-white">
+        <section className="py-14 px-4 bg-gradient-to-r from-[#071527] to-[#0c2340] text-white">
           <div className="max-w-4xl mx-auto text-center space-y-6">
-            <h2 className="text-2xl md:text-4xl font-extrabold">
+            <h2 className="text-2xl md:text-4xl font-bold">
               Support Emergency Relief Drives Today
             </h2>
             <p className="text-white/80 text-sm md:text-base leading-relaxed">
@@ -213,7 +207,7 @@ export default function ReliefRehabilitationPage() {
             <div className="pt-2 flex justify-center gap-4">
               <a
                 href="/donate"
-                className="bg-brand-orange hover:bg-orange-600 text-white font-bold text-sm px-8 py-3.5 rounded-md shadow-md transition"
+                className="bg-brand-orange hover:bg-orange-600 text-white font-bold text-sm px-8 py-3.5 rounded-xl shadow-lg transition-all hover:scale-[1.02] active:scale-95"
               >
                 Donate for Emergency Relief
               </a>

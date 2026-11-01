@@ -27,6 +27,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
+import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import menstrualHygieneImg from "@/assets/menstrual_hygiene.png";
 import menstrualHygiene from "@/assets/menstrual-hygiene.jpg";
 
@@ -108,7 +109,7 @@ function SectionTitle({ label, title, subtitle }: { label: string; title: string
       <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">{label}</p>
       <div className="flex items-center justify-center gap-3 mb-4">
         <span className="h-px w-8 bg-brand-green" />
-        <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark tracking-wide">{title}</h2>
+        <h2 className="text-2xl sm:text-3xl font-semibold text-[#0b1f3b] tracking-tight">{title}</h2>
         <span className="h-px w-8 bg-brand-green" />
       </div>
       {subtitle && (
@@ -122,52 +123,26 @@ function SectionTitle({ label, title, subtitle }: { label: string; title: string
 
 function HeroSection() {
   return (
-    <section className="relative min-h-[300px] sm:min-h-[330px] md:min-h-[360px] lg:min-h-[390px] flex items-center overflow-hidden">
-      {/* Background Image */}
-      <img
-        src={menstrualHygiene}
-        alt="Menstrual Hygiene Support Programme"
-        className="absolute inset-0 h-full w-full object-cover"
-      />
-      {/* Modern dark/green gradient overlay for rich premium feel and high text contrast */}
-      <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/80 to-transparent" />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 py-8 sm:py-10 w-full">
-        <nav className="flex items-center gap-2 text-xs text-white/60 mb-6 font-medium flex-wrap">
-          <Link to="/" className="hover:text-white transition-colors flex items-center gap-1">
-            <Home className="w-3 h-3" /> Home
-          </Link>
-          <ChevronRight className="w-3 h-3" />
-          <Link to="/programs/healthcare" className="hover:text-white transition-colors">Healthcare</Link>
-          <ChevronRight className="w-3 h-3" />
-          <span className="text-white/80">Menstrual Health &amp; Hygiene (MHHS)</span>
-        </nav>
-
+    <SubpageHeroCarousel
+      tag="HEALTHCARE • MHHS"
+      title="Menstrual Health & Hygiene Support (MHHS)"
+      subtitle="Breaking social stigmas, distributing sanitary hygiene essentials, and educating adolescent girls and rural women on reproductive health and dignity."
+      breadcrumbs={[
+        { label: "What We Do", href: "/programs" },
+        { label: "Healthcare", href: "/programs/healthcare" },
+        { label: "Menstrual Health & Hygiene" },
+      ]}
+      images={[menstrualHygiene, menstrualHygieneImg]}
+    >
+      <div className="flex flex-wrap items-center gap-3 pt-1">
         <Link
           to="/programs/healthcare"
-          className="inline-flex items-center gap-2 text-xs font-semibold text-white/70 hover:text-white border border-white/20 hover:border-white/40 px-3 py-1.5 rounded transition-all mb-6 hover:-translate-x-0.5"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-white/90 hover:text-white border border-white/20 bg-white/10 hover:bg-white/20 px-3.5 py-2 rounded-xl transition-all"
         >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          All Healthcare Initiatives
+          <ArrowLeft className="w-3.5 h-3.5" /> All Healthcare Initiatives
         </Link>
-
-        <div className="flex items-center gap-2 mb-5">
-          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-3.5 py-1.5 rounded-full">
-            <span className="text-xs font-bold tracking-widest uppercase text-white/90">Initiative 06 • MHHS</span>
-          </div>
-        </div>
-
-        <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight mb-5">
-          Menstrual Health &amp;<br />
-          <span className="text-brand-orange">Hygiene Support (MHHS)</span>
-        </h1>
-
-        <p className="text-sm md:text-base text-white/75 max-w-2xl leading-relaxed italic">
-          "Supporting dignity, health, and confidence —{" "}
-          <span className="text-white not-italic font-semibold">because no girl should be held back by menstruation.</span>"
-        </p>
       </div>
-    </section>
+    </SubpageHeroCarousel>
   );
 }
 
@@ -183,21 +158,21 @@ function OverviewSection() {
           {/* Left Column: Text Content */}
           <div className="lg:col-span-7">
             <ScrollReveal>
-              <div className="bg-brand-green p-6 md:p-8 rounded-2xl border border-brand-green/20 shadow-sm relative overflow-hidden text-white">
-                <div className="absolute -top-4 -right-4 text-white/10 select-none pointer-events-none">
+              <div className="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden text-slate-800">
+                <div className="absolute -top-4 -right-4 text-slate-100 select-none pointer-events-none">
                   <Droplets className="w-32 h-32" />
                 </div>
-                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/20 border border-white/30 text-[10px] font-bold text-white uppercase tracking-wider mb-4">
+                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-4">
                   <span>🌿</span> Context &amp; Challenge
                 </div>
                 <div className="space-y-4 relative z-10">
-                  <p className="text-white text-sm font-semibold leading-relaxed border-l-3 border-white/60 pl-3">
+                  <p className="text-slate-800 text-sm font-semibold leading-relaxed border-l-3 border-[#004724] pl-3">
                     Menstrual hygiene remains one of the most neglected yet critical health and social issues affecting adolescent girls and women, particularly in rural and underserved communities. Due to poverty, lack of awareness, social stigma, and limited access to sanitary products, many girls and women are unable to manage menstruation safely and hygienically.
                   </p>
-                  <p className="text-white/80 text-sm leading-relaxed pl-3 border-l-3 border-brand-orange/60">
+                  <p className="text-slate-600 text-sm leading-relaxed pl-3 border-l-3 border-brand-orange">
                     In rural areas, menstrual health is often surrounded by silence, misinformation, and social taboos, leading to poor hygiene practices and serious health risks. Many girls are forced to miss school during menstruation, while women suffer in silence without access to basic menstrual hygiene support.
                   </p>
-                  <p className="text-white/90 text-sm font-semibold leading-relaxed pl-3 border-l-3 border-white/40">
+                  <p className="text-slate-800 text-sm font-semibold leading-relaxed pl-3 border-l-3 border-slate-300">
                     Economically weaker families often struggle with:
                   </p>
                 </div>
@@ -230,12 +205,12 @@ function OverviewSection() {
             {STRUGGLE_POINTS.map(({ icon: Icon, text }, i) => (
               <div
                 key={i}
-                className="group flex items-start gap-4 p-5 rounded-md bg-[#0b1f3b] hover:bg-white border border-brand-green/10 hover:border-brand-green/30 shadow-sm hover:shadow-md transition-all duration-300"
+                className="group flex items-start gap-4 p-5 rounded-xl bg-white hover:bg-slate-50/80 border border-slate-200 hover:border-slate-300 shadow-xs hover:shadow-sm transition-all duration-200 hover:-translate-y-0.5"
               >
-                <div className="shrink-0 w-9 h-9 rounded-md bg-white/15 group-hover:bg-brand-green/10 flex items-center justify-center transition-colors">
-                  <Icon className="w-4.5 h-4.5 text-white group-hover:text-brand-green transition-colors" />
+                <div className="shrink-0 w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center transition-colors">
+                  <Icon className="w-4.5 h-4.5" />
                 </div>
-                <p className="text-sm text-white/90 group-hover:text-slate-700 font-medium leading-relaxed transition-colors">{text}</p>
+                <p className="text-sm text-slate-700 font-medium leading-relaxed">{text}</p>
               </div>
             ))}
           </div>
@@ -301,15 +276,15 @@ function ApproachSection() {
               return (
                 <div
                   key={area.num}
-                  className="group bg-[#0b1f3b] hover:bg-white rounded-md p-6 border border-brand-green/10 hover:border-brand-green/30 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col"
+                  className="group bg-white hover:bg-slate-50/80 rounded-xl p-6 border border-slate-200 hover:border-slate-300 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col hover:-translate-y-1"
                 >
                   <div className="flex items-center gap-3 mb-5">
-                    <div className="w-10 h-10 rounded-md bg-white/15 group-hover:bg-brand-orange/15 flex items-center justify-center transition-colors">
-                      <Icon className="w-5 h-5 text-white group-hover:text-brand-orange transition-colors" />
+                    <div className="w-10 h-10 rounded-lg bg-orange-50 text-brand-orange flex items-center justify-center transition-colors">
+                      <Icon className="w-5 h-5" />
                     </div>
                     <div>
-                      <span className="text-[10px] font-bold text-white/60 group-hover:text-slate-400 uppercase tracking-widest block transition-colors">{area.num}</span>
-                      <h3 className="font-bold text-sm text-white group-hover:text-brand-green-dark transition-colors">
+                      <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest block">{area.num}</span>
+                      <h3 className="font-semibold text-sm text-slate-900 group-hover:text-brand-green-dark transition-colors">
                         {area.title}
                       </h3>
                     </div>
@@ -317,8 +292,8 @@ function ApproachSection() {
 
                   <ul className="space-y-2.5 flex-1">
                     {area.bullets.map((b, j) => (
-                      <li key={j} className="flex items-start gap-2.5 text-slate-100 group-hover:text-slate-600 text-sm leading-relaxed transition-colors">
-                        <ArrowRight className="w-3.5 h-3.5 text-white/70 group-hover:text-brand-green shrink-0 mt-0.5 transition-colors" />
+                      <li key={j} className="flex items-start gap-2.5 text-slate-600 text-sm leading-relaxed">
+                        <ArrowRight className="w-3.5 h-3.5 text-brand-green shrink-0 mt-0.5" />
                         {b}
                       </li>
                     ))}
@@ -375,30 +350,30 @@ function ImpactSection() {
             {IMPACT_OUTCOMES.map(({ icon: Icon, text }, i) => (
               <div
                 key={i}
-                className="group bg-[#0b1f3b] hover:bg-white rounded-md p-5 border border-brand-green/10 hover:border-brand-green/20 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 flex flex-col items-center text-center"
+                className="group bg-white hover:bg-slate-50/80 rounded-xl p-5 border border-slate-200 hover:border-slate-300 shadow-xs hover:shadow-sm transition-all duration-200 hover:-translate-y-0.5 flex flex-col items-center text-center"
               >
-                <div className="w-10 h-10 rounded-full bg-white/15 group-hover:bg-brand-green/10 flex items-center justify-center mb-3 transition-colors">
-                  <Icon className="w-4.5 h-4.5 text-white group-hover:text-brand-green transition-colors" />
+                <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3 transition-colors">
+                  <Icon className="w-4.5 h-4.5" />
                 </div>
-                <span className="text-[10px] font-bold text-white/70 group-hover:text-brand-green mb-2 transition-colors">{String(i + 1).padStart(2, "0")}</span>
-                <p className="text-xs text-slate-100 group-hover:text-slate-600 font-medium leading-relaxed transition-colors">{text}</p>
+                <span className="text-[10px] font-bold text-brand-orange mb-2">{String(i + 1).padStart(2, "0")}</span>
+                <p className="text-xs text-slate-700 font-medium leading-relaxed">{text}</p>
               </div>
             ))}
           </div>
         </ScrollReveal>
 
         <ScrollReveal delay={0.15}>
-          <div className="mt-12 bg-brand-green-darker rounded-md p-10 text-center">
-            <p className="text-lg md:text-xl font-semibold text-white max-w-3xl mx-auto leading-relaxed italic">
+          <div className="mt-12 bg-slate-50/80 border border-slate-200 rounded-2xl p-8 text-center shadow-xs">
+            <p className="text-base sm:text-lg font-semibold text-slate-800 max-w-3xl mx-auto leading-relaxed italic">
               "Islah believes that menstrual hygiene is a basic health and dignity issue, and every girl and woman deserves access to safe hygiene support, awareness, and care."
             </p>
-            <p className="text-white/70 text-sm mt-4 max-w-xl mx-auto">
+            <p className="text-slate-600 text-sm mt-3 max-w-xl mx-auto">
               "Supporting dignity, health, and confidence — because no girl should be held back by menstruation."
             </p>
-            <div className="mt-5 flex items-center justify-center gap-3">
-              <span className="h-px w-8 bg-brand-orange/60" />
-              <span className="text-brand-orange font-semibold text-sm tracking-wide">Islah Welfare Foundation</span>
-              <span className="h-px w-8 bg-brand-orange/60" />
+            <div className="mt-4 flex items-center justify-center gap-3">
+              <span className="h-px w-8 bg-brand-orange/40" />
+              <span className="text-brand-orange font-semibold text-xs uppercase tracking-widest">Islah Welfare Foundation</span>
+              <span className="h-px w-8 bg-brand-orange/40" />
             </div>
           </div>
         </ScrollReveal>

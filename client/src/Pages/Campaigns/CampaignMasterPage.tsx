@@ -64,7 +64,7 @@ export default function CampaignMasterPage() {
       <UtilityBar />
       <Header />
 
-      {/* ─── Hero Section ─────────────────────────────────────────────────── */}
+      {/* ─── Hero Section with In-Hero Action Buttons ─────────────────── */}
       <SubpageHeroCarousel
         tag="OUR FLAGSHIP INITIATIVES"
         title="Five Pillars of Change"
@@ -72,30 +72,25 @@ export default function CampaignMasterPage() {
         breadcrumbs={[
           { label: "Our Campaigns" },
         ]}
-      />
-
-      {/* Floating Action Bar */}
-      <div className="max-w-7xl mx-auto px-4 md:px-8 -mt-6 relative z-20 mb-4 w-full">
-        <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200/80 p-4 flex flex-wrap items-center justify-between gap-4">
-          <p className="text-xs sm:text-sm text-slate-600 max-w-2xl font-medium leading-relaxed">
-            ISLAH’s five flagship campaigns translate our broader development vision into focused, actionable commitments for community dignity.
-          </p>
-          <div className="flex items-center gap-3 shrink-0">
-            <a
-              href="/donate"
-              className="bg-[#15803d] hover:bg-[#166534] text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-md transition uppercase tracking-wider cursor-pointer flex items-center gap-1.5"
-            >
-              Donate to a Campaign →
-            </a>
-            <button
-              onClick={() => setActiveModal("partner")}
-              className="bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-xs transition uppercase tracking-wider cursor-pointer"
-            >
-              Partner With Us →
-            </button>
-          </div>
+      >
+        <div className="flex flex-wrap items-center gap-3 pt-2">
+          <a
+            href="/donate"
+            className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold px-6 sm:px-7 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer"
+          >
+            <span>Donate to a Campaign</span>
+            <ArrowRight className="w-4 h-4" />
+          </a>
+          <button
+            type="button"
+            onClick={() => setActiveModal("partner")}
+            className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer backdrop-blur-xs"
+          >
+            <Heart className="w-4 h-4 text-brand-orange" />
+            <span>Partner With Us</span>
+          </button>
         </div>
-      </div>
+      </SubpageHeroCarousel>
 
       {/* ─── Search & Filter Toolbar ────────────────────────────────────────── */}
       <section className="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-2xs">
@@ -108,7 +103,7 @@ export default function CampaignMasterPage() {
                 onClick={() => setActiveCategory(cat)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition cursor-pointer ${
                   activeCategory === cat
-                    ? "bg-[#0b1f3b] text-white shadow-xs"
+                    ? "bg-[#071527] text-white shadow-xs"
                     : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                 }`}
               >
@@ -136,7 +131,7 @@ export default function CampaignMasterPage() {
         {/* Campaign Grid */}
         <section className="space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg sm:text-xl font-black text-[#0b1f3b] flex items-center gap-2">
+            <h2 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
               <span className="w-2 h-5 bg-[#15803d] rounded-full" />
               <span>EXPLORE ALL CAMPAIGNS ({filteredCampaigns.length})</span>
             </h2>
@@ -161,13 +156,13 @@ export default function CampaignMasterPage() {
                       
                       {/* Top Badges */}
                       <div className="absolute top-3 left-3 flex items-center gap-2">
-                        <span className="px-2.5 py-1 rounded-md bg-[#0b1f3b]/90 text-emerald-300 border border-white/20 text-[10px] font-black uppercase tracking-wider backdrop-blur-xs">
+                        <span className="px-2.5 py-1 rounded-md bg-slate-900/90 text-emerald-300 border border-white/20 text-[10px] font-bold uppercase tracking-wider backdrop-blur-xs">
                           {c.badge}
                         </span>
                       </div>
 
                       <div className="absolute top-3 right-3">
-                        <span className="w-8 h-8 rounded-full bg-white/20 text-white border border-white/30 flex items-center justify-center text-xs font-black backdrop-blur-xs">
+                        <span className="w-8 h-8 rounded-full bg-white/20 text-white border border-white/30 flex items-center justify-center text-xs font-bold backdrop-blur-xs">
                           {c.num}
                         </span>
                       </div>
@@ -175,7 +170,7 @@ export default function CampaignMasterPage() {
                       {/* Title over image bottom */}
                       <div className="absolute bottom-3 left-3 right-3 text-white">
                         <div className="flex items-baseline justify-between gap-2">
-                          <h3 className="text-lg font-black tracking-tight text-white group-hover:text-emerald-300 transition-colors">
+                          <h3 className="text-lg font-bold tracking-tight text-white group-hover:text-emerald-300 transition-colors">
                             {c.name}
                           </h3>
                           {c.hindiName && (
@@ -198,7 +193,7 @@ export default function CampaignMasterPage() {
 
                       {/* Continuum Pathway Pills */}
                       <div className="pt-2 border-t border-slate-100">
-                        <span className="text-[9px] font-black uppercase tracking-wider text-slate-400 block mb-1.5">
+                        <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400 block mb-1.5">
                           PATHWAY TO CHANGE
                         </span>
                         <div className="flex flex-wrap items-center gap-1.5">
@@ -225,14 +220,14 @@ export default function CampaignMasterPage() {
                   <div className="p-5 pt-4 border-t border-slate-100 flex items-center justify-between gap-2 mt-4 bg-slate-50/50">
                     <a
                       href={`/campaign/${c.slug}`}
-                      className="inline-flex items-center gap-1.5 text-xs font-black text-[#0b1f3b] hover:text-[#15803d] transition group-hover:translate-x-0.5"
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-900 hover:text-[#15803d] transition group-hover:translate-x-0.5"
                     >
                       <span>Explore Campaign</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </a>
                     <a
                       href="/donate"
-                      className="bg-[#15803d] hover:bg-[#166534] text-white font-extrabold text-[11px] px-3.5 py-1.5 rounded-lg shadow-xs transition uppercase tracking-wider"
+                      className="bg-[#15803d] hover:bg-[#166534] text-white font-bold text-[11px] px-3.5 py-1.5 rounded-lg shadow-xs transition uppercase tracking-wider"
                     >
                       Support Now
                     </a>
@@ -245,100 +240,100 @@ export default function CampaignMasterPage() {
 
         {/* ─── Interconnected Ecosystem Diagram ────────────────────────────── */}
         <ScrollReveal>
-          <div className="bg-gradient-to-r from-slate-950 via-[#0b1f3b] to-slate-950 text-white rounded-2xl p-6 sm:p-8 shadow-xl border border-white/10 space-y-6">
+          <div className="bg-slate-50 border border-slate-200/90 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs">
             <div className="text-center max-w-2xl mx-auto space-y-1.5">
-              <span className="text-xs font-black uppercase tracking-widest text-emerald-400">
+              <span className="text-xs font-bold uppercase tracking-widest text-brand-orange">
                 HOLISTIC ECOSYSTEM
               </span>
-              <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-                HOW THE FIVE CAMPAIGNS WORK TOGETHER
+              <h3 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+                How the Five Campaigns Work Together
               </h3>
-              <p className="text-xs text-slate-300">
+              <p className="text-xs text-slate-600">
                 The real strength of ISLAH is that these campaigns are not isolated silos. They form an interconnected continuum where progress in one multiplies impact in others.
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 pt-2">
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-3.5 border border-white/15 text-center flex flex-col justify-between">
+              <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-2xs text-center flex flex-col justify-between hover:shadow-xs transition">
                 <div>
-                  <span className="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-300 inline-flex items-center justify-center text-[10px] font-black mb-1.5">
+                  <span className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 inline-flex items-center justify-center text-[10px] font-bold mb-1.5">
                     01
                   </span>
-                  <h5 className="font-extrabold text-xs text-white">SHIKSHA NA RUKE</h5>
-                  <p className="text-[10px] text-slate-300 mt-1 leading-snug">
+                  <h5 className="font-bold text-xs text-slate-900">SHIKSHA NA RUKE</h5>
+                  <p className="text-[10px] text-slate-600 mt-1 leading-snug">
                     Create lifelong opportunity through uninterrupted education.
                   </p>
                 </div>
-                <div className="pt-2 text-emerald-400 text-xs font-black">↓ Inspires</div>
+                <div className="pt-2 text-emerald-700 text-xs font-semibold">↓ Inspires</div>
               </div>
 
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-3.5 border border-white/15 text-center flex flex-col justify-between">
+              <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-2xs text-center flex flex-col justify-between hover:shadow-xs transition">
                 <div>
-                  <span className="w-6 h-6 rounded-full bg-pink-500/20 text-pink-300 inline-flex items-center justify-center text-[10px] font-black mb-1.5">
+                  <span className="w-6 h-6 rounded-full bg-pink-100 text-pink-800 inline-flex items-center justify-center text-[10px] font-bold mb-1.5">
                     02
                   </span>
-                  <h5 className="font-extrabold text-xs text-white">PARI KI UDAAN</h5>
-                  <p className="text-[10px] text-slate-300 mt-1 leading-snug">
+                  <h5 className="font-bold text-xs text-slate-900">PARI KI UDAAN</h5>
+                  <p className="text-[10px] text-slate-600 mt-1 leading-snug">
                     Expand choices, confidence and leadership for girls and young women.
                   </p>
                 </div>
-                <div className="pt-2 text-pink-400 text-xs font-black">↓ Protects</div>
+                <div className="pt-2 text-pink-700 text-xs font-semibold">↓ Protects</div>
               </div>
 
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-3.5 border border-white/15 text-center flex flex-col justify-between">
+              <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-2xs text-center flex flex-col justify-between hover:shadow-xs transition">
                 <div>
-                  <span className="w-6 h-6 rounded-full bg-rose-500/20 text-rose-300 inline-flex items-center justify-center text-[10px] font-black mb-1.5">
+                  <span className="w-6 h-6 rounded-full bg-rose-100 text-rose-800 inline-flex items-center justify-center text-[10px] font-bold mb-1.5">
                     03
                   </span>
-                  <h5 className="font-extrabold text-xs text-white">HAR PAL ANMOL HAI</h5>
-                  <p className="text-[10px] text-slate-300 mt-1 leading-snug">
+                  <h5 className="font-bold text-xs text-slate-900">HAR PAL ANMOL HAI</h5>
+                  <p className="text-[10px] text-slate-600 mt-1 leading-snug">
                     Protect health and human well-being when every second counts.
                   </p>
                 </div>
-                <div className="pt-2 text-rose-400 text-xs font-black">↓ Upholds</div>
+                <div className="pt-2 text-rose-700 text-xs font-semibold">↓ Upholds</div>
               </div>
 
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-3.5 border border-white/15 text-center flex flex-col justify-between">
+              <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-2xs text-center flex flex-col justify-between hover:shadow-xs transition">
                 <div>
-                  <span className="w-6 h-6 rounded-full bg-amber-500/20 text-amber-300 inline-flex items-center justify-center text-[10px] font-black mb-1.5">
+                  <span className="w-6 h-6 rounded-full bg-amber-100 text-amber-800 inline-flex items-center justify-center text-[10px] font-bold mb-1.5">
                     04
                   </span>
-                  <h5 className="font-extrabold text-xs text-white">SWABHIMAAN</h5>
-                  <p className="text-[10px] text-slate-300 mt-1 leading-snug">
+                  <h5 className="font-bold text-xs text-slate-900">SWABHIMAAN</h5>
+                  <p className="text-[10px] text-slate-600 mt-1 leading-snug">
                     Advance dignity, rights awareness and economic self-reliance.
                   </p>
                 </div>
-                <div className="pt-2 text-amber-400 text-xs font-black">↓ Sustains</div>
+                <div className="pt-2 text-amber-700 text-xs font-semibold">↓ Sustains</div>
               </div>
 
-              <div className="bg-teal-600/30 backdrop-blur-md rounded-xl p-3.5 border border-teal-400/40 text-center flex flex-col justify-between">
+              <div className="bg-white rounded-xl p-4 border border-teal-200 shadow-2xs text-center flex flex-col justify-between hover:shadow-xs transition">
                 <div>
-                  <span className="w-6 h-6 rounded-full bg-teal-500/20 text-teal-300 inline-flex items-center justify-center text-[10px] font-black mb-1.5">
+                  <span className="w-6 h-6 rounded-full bg-teal-100 text-teal-800 inline-flex items-center justify-center text-[10px] font-bold mb-1.5">
                     05
                   </span>
-                  <h5 className="font-extrabold text-xs text-teal-300">TAIYYARI KAL KI</h5>
-                  <p className="text-[10px] text-slate-200 mt-1 leading-snug">
+                  <h5 className="font-bold text-xs text-slate-900">TAIYYARI KAL KI</h5>
+                  <p className="text-[10px] text-slate-600 mt-1 leading-snug">
                     Equip people and rural communities for future resilience and growth.
                   </p>
                 </div>
-                <div className="pt-2 text-teal-300 text-xs font-black">🌿 Ecosystem</div>
+                <div className="pt-2 text-teal-700 text-xs font-semibold">🌿 Ecosystem</div>
               </div>
             </div>
           </div>
         </ScrollReveal>
 
-        {/* ─── Bottom CTA Banner ───────────────────────────────────────────── */}
+        {/* ─── Bottom CTA Banner (Warm Light Callout matching About Us Overview) ─── */}
         <ScrollReveal>
-          <div className="bg-gradient-to-r from-emerald-800 via-[#15803d] to-teal-900 rounded-2xl p-5 sm:p-6 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
-            <div className="flex items-center gap-3.5">
-              <div className="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center shrink-0">
-                <Heart className="w-5 h-5 text-white" />
+          <div className="bg-gradient-to-r from-orange-50 via-amber-50 to-orange-50 border border-amber-200/80 rounded-2xl p-6 sm:p-8 shadow-xs flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-orange-100 text-brand-orange flex items-center justify-center shrink-0">
+                <Heart className="w-6 h-6 fill-brand-orange text-brand-orange" />
               </div>
               <div>
-                <h4 className="text-base sm:text-lg font-black text-white">
+                <h4 className="text-base sm:text-lg font-bold text-[#0b1f3b]">
                   Join a Campaign. Champion a Life.
                 </h4>
-                <p className="text-xs text-emerald-100 mt-0.5">
+                <p className="text-xs text-slate-600 mt-0.5">
                   Partner with ISLAH or sponsor a specific campaign initiative.
                 </p>
               </div>
@@ -347,13 +342,13 @@ export default function CampaignMasterPage() {
             <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
               <a
                 href="/donate"
-                className="bg-white hover:bg-slate-100 text-[#15803d] font-black text-xs px-4 py-2.5 rounded-xl shadow-md transition uppercase tracking-wider"
+                className="bg-brand-orange hover:bg-orange-600 text-white font-bold text-xs px-5 py-3 rounded-xl shadow-md transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider"
               >
                 DONATE TO CAMPAIGN →
               </a>
               <button
                 onClick={() => setActiveModal("partner")}
-                className="bg-black/20 hover:bg-black/30 border border-white/30 text-white font-black text-xs px-4 py-2.5 rounded-xl shadow-md transition uppercase tracking-wider cursor-pointer backdrop-blur-xs"
+                className="bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 font-bold text-xs px-5 py-3 rounded-xl shadow-xs transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer"
               >
                 PARTNER WITH US →
               </button>

@@ -46,12 +46,6 @@ export default function CareersPage() {
           title="Work With Us"
           description="At ISLAH, we believe that real social change is built by passionate, dedicated, and purpose-driven individuals. Build a fulfilling career with direct on-ground impact in rural and underserved communities."
           breadcrumb={[{ label: "Careers" }]}
-          cards={[
-            { title: "Full-time", subtitle: "Core Operations", icon: Briefcase },
-            { title: "Grassroots", subtitle: "Field Projects", icon: Users },
-            { title: "Inclusive", subtitle: "Equal Opportunity", icon: Shield },
-            { title: "Growth", subtitle: "Purpose-Driven", icon: TrendingUp },
-          ]}
         >
           <div className="flex flex-wrap gap-3 pt-2">
             <button
@@ -76,10 +70,10 @@ export default function CareersPage() {
               <span className="text-xs font-bold uppercase tracking-widest text-brand-orange">
                 Hiring Journey
               </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0b1f3b] mt-1">
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">
                 Our Recruitment Process
               </h2>
-              <p className="text-slate-600 text-sm mt-2">
+              <p className="text-sm text-slate-600 leading-relaxed font-normal mt-2">
                 A fair, transparent, and values-aligned selection process.
               </p>
             </div>
@@ -111,8 +105,8 @@ export default function CareersPage() {
                   <span className="text-xl font-black text-brand-orange font-mono block mb-1">
                     {step.num}
                   </span>
-                  <h4 className="font-extrabold text-sm text-slate-900 mb-1">{step.title}</h4>
-                  <p className="text-xs text-slate-500 leading-relaxed">{step.desc}</p>
+                  <h4 className="font-bold text-sm text-slate-900 mb-1">{step.title}</h4>
+                  <p className="text-xs text-slate-700 leading-relaxed">{step.desc}</p>
                 </div>
               ))}
             </div>
@@ -124,11 +118,11 @@ export default function CareersPage() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <div className="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
               {/* Form Header */}
-              <div className="bg-gradient-to-r from-[#0b1f3b] via-[#144272] to-brand-green px-6 sm:px-10 py-6 text-white">
+              <div className="bg-gradient-to-r from-[#071527] to-[#0c2340] px-6 sm:px-10 py-6 text-white">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-sky-200 text-xs font-bold mb-2">
                   <Briefcase className="w-3.5 h-3.5" /> Official Application
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-black">CV Submission Form</h2>
+                <h2 className="text-2xl sm:text-3xl font-bold">CV Submission Form</h2>
                 <p className="text-white/80 text-xs sm:text-sm mt-1">
                   Please fill in your details and upload your CV. Our team will review your profile and contact you for suitable opportunities.
                 </p>

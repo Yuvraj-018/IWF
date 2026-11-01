@@ -49,19 +49,9 @@ export default function VolunteerPage() {
         {/* ─── Hero Section: Standard Deep Navy Hero ────────────────────────────────────────── */}
         <StandardPageHero
           badge="GET INVOLVED • VOLUNTEER"
-          title={
-            <>
-              Volunteer <span className="text-brand-orange">With Us</span>
-            </>
-          }
+          title="Volunteer With Us"
           description="Be the change you wish to see in the world. At ISLAH, your time, skills, and compassion can directly transform lives and build self-reliant rural communities."
           breadcrumb={[{ label: "Volunteer With Us" }]}
-          cards={[
-            { icon: Users, title: "5,800+", subtitle: "Volunteers Network", href: "#volunteer-form" },
-            { icon: Award, title: "8 Sectors", subtitle: "Focus Areas", href: "#opportunities" },
-            { icon: Shield, title: "120+ Villages", subtitle: "Rural Reach", href: "#volunteer-form" },
-            { icon: Heart, title: "Grassroots", subtitle: "Real Change", href: "#volunteer-form" },
-          ]}
           taglineTop="Your Time"
           taglineMid="Their Future"
           taglineBot="Change"
@@ -199,11 +189,11 @@ export default function VolunteerPage() {
                         </span>
                       </div>
 
-                      <h3 className="text-base font-extrabold text-slate-900 group-hover:text-brand-green transition-colors leading-snug">
+                      <h3 className="text-base font-bold text-slate-900 group-hover:text-brand-green transition-colors leading-snug">
                         {sector.name}
                       </h3>
 
-                      <p className="text-xs text-slate-600 mt-2 line-clamp-2 leading-relaxed">
+                      <p className="text-sm text-black font-normal mt-2 line-clamp-2 leading-relaxed">
                         {sector.shortDescription}
                       </p>
 
@@ -280,8 +270,8 @@ export default function VolunteerPage() {
               </div>
 
               <div className="lg:col-span-4">
-                <div className="bg-[#0b1f3b] text-white p-6 rounded-2xl shadow-md border-l-4 border-brand-orange">
-                  <p className="text-sm sm:text-base font-serif italic text-white/90 leading-relaxed">
+                <div className="bg-slate-50 text-slate-800 p-6 rounded-2xl border border-slate-200 border-l-4 border-l-brand-orange shadow-xs">
+                  <p className="text-sm sm:text-base font-serif italic text-slate-700 leading-relaxed">
                     “Alone we can do so little; together we can do so much.”
                   </p>
                   <p className="text-xs font-bold uppercase tracking-wider text-brand-orange mt-3">
@@ -329,7 +319,7 @@ export default function VolunteerPage() {
                     {item.step}
                   </div>
                   <h4 className="font-bold text-slate-800 text-sm mb-1">{item.title}</h4>
-                  <p className="text-xs text-slate-500 leading-relaxed">{item.desc}</p>
+                  <p className="text-sm text-black leading-relaxed font-normal">{item.desc}</p>
                 </div>
               ))}
             </div>

@@ -45,12 +45,6 @@ export default function MentorPage() {
           title="Become a Mentor"
           description="Share your knowledge, inspire lives, and create lasting impact. At ISLAH, we connect passionate professionals, educators, and domain experts with aspiring youth, students, and community workers in rural and underserved areas."
           breadcrumb={[{ label: "Become a Mentor" }]}
-          cards={[
-            { title: "Flexible", subtitle: "Online & Offline", icon: GraduationCap },
-            { title: "1-to-1", subtitle: "Personalized", icon: Users },
-            { title: "Career Guidance", subtitle: "Skill Mentoring", icon: Lightbulb },
-            { title: "Youth Impact", subtitle: "Rural Development", icon: BookOpen },
-          ]}
         >
           <div className="flex flex-wrap gap-3 pt-2">
             <button
@@ -75,10 +69,10 @@ export default function MentorPage() {
               <span className="text-xs font-bold uppercase tracking-widest text-brand-orange">
                 Impact Beneficiaries
               </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0b1f3b] mt-1">
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">
                 Who Can Benefit from Your Mentorship?
               </h2>
-              <p className="text-slate-600 text-sm mt-2">
+              <p className="text-sm text-slate-600 leading-relaxed font-normal mt-2">
                 Our mentorship initiatives bridge the gap between grassroots potential and professional opportunity.
               </p>
             </div>
@@ -113,10 +107,10 @@ export default function MentorPage() {
                   <div className="w-12 h-12 rounded-xl bg-emerald-50 text-brand-green flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
                     <item.icon className="w-6 h-6" />
                   </div>
-                  <h3 className="font-extrabold text-slate-900 text-base mb-2 group-hover:text-brand-green transition-colors">
+                  <h3 className="font-bold text-slate-900 text-base mb-2 group-hover:text-brand-green transition-colors">
                     {item.title}
                   </h3>
-                  <p className="text-xs text-slate-500 leading-relaxed">{item.desc}</p>
+                  <p className="text-sm text-slate-600 font-normal leading-relaxed">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -128,11 +122,11 @@ export default function MentorPage() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <div className="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
               {/* Form Header */}
-              <div className="bg-gradient-to-r from-[#072417] via-[#0d3f27] to-[#0b1f3b] px-6 sm:px-10 py-6 text-white">
+              <div className="bg-gradient-to-r from-[#071527] to-[#0c2340] px-6 sm:px-10 py-6 text-white">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-emerald-200 text-xs font-bold mb-2">
                   <GraduationCap className="w-4 h-4" /> Official Application
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-black">Mentor Application Form</h2>
+                <h2 className="text-2xl sm:text-3xl font-bold">Mentor Application Form</h2>
                 <p className="text-white/80 text-xs sm:text-sm mt-1">
                   Join hands with ISLAH and help us shape the next generation of rural leaders.
                 </p>

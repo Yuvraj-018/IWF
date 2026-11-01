@@ -25,6 +25,7 @@ import {
   Layers,
   Store,
   Compass,
+  Heart,
 } from "lucide-react";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
 import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
@@ -187,7 +188,7 @@ function SectionTitle({ label, title, subtitle }: { label: string; title: string
       <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">{label}</p>
       <div className="flex items-center justify-center gap-3 mb-4">
         <span className="h-px w-8 bg-brand-green" />
-        <h2 className="text-2xl md:text-3xl font-bold text-brand-green-dark tracking-wide">{title}</h2>
+        <h2 className="text-2xl md:text-3xl font-semibold text-[#0b1f3b] tracking-tight">{title}</h2>
         <span className="h-px w-8 bg-brand-green" />
       </div>
       {subtitle && <p className="text-slate-600 max-w-2xl mx-auto text-sm leading-relaxed">{subtitle}</p>}
@@ -214,31 +215,26 @@ export default function AgricultureLanding() {
           { label: "Agriculture & Rural Livelihoods" },
         ]}
         images={[heroImg]}
-      />
-
-      {/* Floating Action Strip */}
-      <div className="max-w-7xl mx-auto px-4 md:px-8 -mt-6 relative z-20 mb-8">
-        <div className="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-md flex flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-3">
-            <button
-              onClick={() => setModalRole("partner")}
-              className="inline-flex items-center gap-2 bg-[#15803d] hover:bg-[#166534] text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-md transition uppercase tracking-wider cursor-pointer"
-            >
-              <span>Partner With Our Rural Mission</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-            <button
-              onClick={() => setModalRole("sponsor")}
-              className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-md transition uppercase tracking-wider cursor-pointer"
-            >
-              <span>Sponsor Farmer Kits</span>
-            </button>
-          </div>
-          <div className="text-xs font-semibold text-slate-500">
-            Soil Health • Organic Farming • Farmer Capacity Building
-          </div>
+      >
+        <div className="flex flex-wrap items-center gap-3 pt-2">
+          <button
+            type="button"
+            onClick={() => setModalRole("partner")}
+            className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold px-6 sm:px-7 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer"
+          >
+            <span>Partner With Our Rural Mission</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => setModalRole("sponsor")}
+            className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer backdrop-blur-xs"
+          >
+            <Heart className="w-4 h-4 text-brand-orange" />
+            <span>Sponsor Farmer Kits</span>
+          </button>
         </div>
-      </div>
+      </SubpageHeroCarousel>
 
       {/* Overview & Objective */}
       <section className="py-16 bg-white border-b border-slate-100">
@@ -334,22 +330,22 @@ export default function AgricultureLanding() {
       </section>
 
       {/* Our Vision & Commitment */}
-      <section className="py-16 bg-[#07162c] text-white">
+      <section className="py-16 bg-slate-50/70 border-y border-slate-200">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <ScrollReveal>
             <span className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3 block">
               Our Vision
             </span>
-            <h2 className="text-2xl md:text-3xl font-extrabold mb-6 leading-snug">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6 leading-snug">
               Resilient, Economically Empowered Rural Communities
             </h2>
-            <p className="text-white/80 text-sm md:text-base leading-relaxed max-w-3xl mx-auto mb-8">
+            <p className="text-slate-600 text-sm md:text-base leading-relaxed max-w-3xl mx-auto mb-8 text-balance">
               ISLAH envisions stronger, more resilient and economically empowered rural communities where farmers,
               women, youth and rural households have access to knowledge, skills, opportunities and supportive networks
               that enable them to build sustainable livelihoods. Rural transformation becomes possible when local resources,
               knowledge, skills, enterprise and opportunity come together.
             </p>
-            <div className="inline-block bg-white/10 backdrop-blur border border-white/15 px-6 py-3 rounded-full text-brand-orange text-xs font-bold tracking-wider uppercase">
+            <div className="inline-block bg-white border border-slate-200 shadow-xs px-6 py-3 rounded-full text-slate-700 text-xs font-semibold tracking-wide">
               “Strong rural communities grow when knowledge, resources and opportunity come together.” — ISLAH
             </div>
           </ScrollReveal>
@@ -439,11 +435,11 @@ export default function AgricultureLanding() {
           </div>
 
           {/* Continuum Banner */}
-          <div className="mt-12 bg-[#0b1f3b] text-white p-6 rounded-xl text-center border border-white/10">
+          <div className="mt-12 bg-slate-50 border border-slate-200 text-slate-800 p-6 rounded-xl text-center shadow-xs">
             <p className="text-xs uppercase font-bold tracking-widest text-brand-orange mb-2">
               Action Continuum
             </p>
-            <p className="text-sm md:text-base font-semibold">
+            <p className="text-sm md:text-base font-semibold text-slate-800">
               Sustainability &nbsp;→&nbsp; Knowledge &nbsp;→&nbsp; Better Practices &nbsp;→&nbsp; Income &amp; Livelihoods
             </p>
           </div>
@@ -451,17 +447,17 @@ export default function AgricultureLanding() {
       </section>
 
       {/* Rural Livelihood Pathway (7 Stages) */}
-      <section className="py-20 bg-[#07162c] text-white overflow-hidden relative">
+      <section className="py-20 bg-slate-50 border-t border-slate-200 overflow-hidden relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <ScrollReveal>
             <div className="text-center max-w-3xl mx-auto mb-14">
               <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-3">
                 Agrarian Lifecycle
               </p>
-              <h2 className="text-2xl md:text-4xl font-extrabold text-white mb-4">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">
                 Our Rural Livelihood Pathway
               </h2>
-              <p className="text-white/70 text-sm leading-relaxed">
+              <p className="text-slate-600 text-sm leading-relaxed text-balance">
                 A progressive pathway through which rural communities move from knowledge to productive practices,
                 value addition, and sustainable income generation.
               </p>
@@ -471,18 +467,18 @@ export default function AgricultureLanding() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-7 gap-3">
             {RURAL_LIVELIHOOD_PATHWAY.map((stage, idx) => (
               <ScrollReveal key={stage.step} delay={idx * 0.05}>
-                <div className="bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-colors h-full flex flex-col justify-between">
+                <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs hover:shadow-md hover:border-slate-300 transition-all h-full flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-[10px] font-mono font-bold text-brand-orange">STAGE {stage.step}</span>
                     </div>
-                    <h3 className="text-base font-bold text-white mb-1">{stage.title}</h3>
-                    <p className="text-[11px] font-medium text-brand-orange/90 mb-2">{stage.tag}</p>
-                    <p className="text-[11px] text-white/70 leading-relaxed">{stage.desc}</p>
+                    <h3 className="text-sm font-bold text-slate-900 mb-1">{stage.title}</h3>
+                    <p className="text-[11px] font-semibold text-brand-orange mb-2">{stage.tag}</p>
+                    <p className="text-[11px] text-slate-600 leading-relaxed">{stage.desc}</p>
                   </div>
                   {idx < RURAL_LIVELIHOOD_PATHWAY.length - 1 && (
                     <div className="hidden lg:flex justify-end pt-3">
-                      <ArrowRight className="w-3.5 h-3.5 text-white/30" />
+                      <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
                     </div>
                   )}
                 </div>
@@ -571,29 +567,29 @@ export default function AgricultureLanding() {
       </section>
 
       {/* Statement & CTA */}
-      <section className="py-20 bg-[#004724] text-white relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-r from-[#071527] to-[#0c2340] text-white relative overflow-hidden">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <ScrollReveal>
             <span className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-4 block">
               Core Conviction
             </span>
-            <blockquote className="text-xl md:text-3xl font-serif italic text-white/95 leading-relaxed max-w-3xl mx-auto mb-6">
+            <blockquote className="text-xl md:text-2xl font-serif italic text-white/95 leading-relaxed max-w-3xl mx-auto mb-6 text-balance">
               “Agriculture is more than cultivation. It can sustain families, create livelihoods, strengthen local economies and help build a more resilient rural future.”
             </blockquote>
-            <p className="text-sm font-bold tracking-widest uppercase text-brand-orange mb-8">— ISLAH</p>
-            <p className="text-white/80 text-sm md:text-base leading-relaxed max-w-2xl mx-auto mb-10">
+            <p className="text-xs font-bold tracking-widest uppercase text-brand-orange mb-8">— ISLAH</p>
+            <p className="text-white/80 text-sm md:text-base leading-relaxed max-w-2xl mx-auto mb-10 text-balance">
               Join us in empowering smallholder farmers, regenerating living soil, and building thriving rural economies.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <button
                 onClick={() => setModalRole("partner")}
-                className="bg-brand-orange hover:bg-brand-orange/90 text-white font-bold text-sm px-8 py-3.5 rounded-lg transition-colors shadow-sm"
+                className="bg-brand-orange hover:bg-brand-orange-hover text-white font-bold text-xs uppercase tracking-wider px-8 py-3.5 rounded-xl transition-all shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95"
               >
                 Partner With Our Mission
               </button>
               <button
                 onClick={() => setModalRole("sponsor")}
-                className="border border-white/30 text-white font-semibold text-sm px-8 py-3.5 rounded-lg hover:bg-white/10 transition-colors"
+                className="border border-white/30 text-white font-bold text-xs uppercase tracking-wider px-8 py-3.5 rounded-xl hover:bg-white/10 transition-all hover:scale-[1.02] active:scale-95"
               >
                 Support Farmer Training
               </button>
@@ -604,14 +600,10 @@ export default function AgricultureLanding() {
 
       <Footer />
 
-      {modalRole && (
-        <RoleFormModal
-          isOpen={true}
-          role={modalRole}
-          onClose={() => setModalRole(null)}
-          title={`Support Agriculture & Rural Livelihoods`}
-        />
-      )}
+      <RoleFormModal
+        type={modalRole}
+        onClose={() => setModalRole(null)}
+      />
     </div>
   );
 }

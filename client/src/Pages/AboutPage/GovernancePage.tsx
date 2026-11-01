@@ -106,7 +106,7 @@ function CollapsibleCard({ title, children, badge, badgeColor = "#15803d" }: {
       <button onClick={() => setOpen((v) => !v)} className="w-full flex items-center justify-between px-6 py-4 hover:bg-slate-50 transition">
         <div className="flex items-center gap-3">
           <span className="text-xs font-bold px-2.5 py-1 rounded-full text-white" style={{ backgroundColor: badgeColor }}>{badge}</span>
-          <h3 className="font-extrabold text-brand-green-dark text-base text-left">{title}</h3>
+          <h3 className="font-bold text-brand-green-dark text-base text-left">{title}</h3>
         </div>
         {open ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
       </button>
@@ -139,8 +139,8 @@ export default function GovernancePage() {
             <ScrollReveal>
               <div className="mb-10">
                 <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2">Structure</p>
-                <h2 className="text-2xl font-extrabold text-brand-green-dark mb-2">4-Tier Decision System</h2>
-                <p className="text-slate-500 text-sm max-w-2xl">Islah's governance follows a clear hierarchy ensuring accountability at every level — from strategy to last-mile delivery.</p>
+                <h2 className="text-2xl font-bold text-brand-green-dark mb-2">4-Tier Decision System</h2>
+                <p className="text-sm text-black font-normal leading-relaxed max-w-2xl">Islah's governance follows a clear hierarchy ensuring accountability at every level — from strategy to last-mile delivery.</p>
               </div>
             </ScrollReveal>
 
@@ -151,15 +151,15 @@ export default function GovernancePage() {
                     <div className="flex items-center gap-3 mb-3">
                       <span className="text-xs font-bold px-2.5 py-1 rounded-full text-white" style={{ backgroundColor: tier.color }}>{tier.tier}</span>
                       <div>
-                        <h3 className="font-extrabold text-slate-800 text-sm">{tier.title}</h3>
+                        <h3 className="font-bold text-black text-sm">{tier.title}</h3>
                         <p className="text-xs font-semibold" style={{ color: tier.color }}>{tier.role}</p>
                       </div>
                     </div>
                     <div className="w-full h-0.5 rounded-full mb-3" style={{ backgroundColor: tier.color, opacity: 0.2 }} />
-                    <p className="text-xs text-slate-600 leading-relaxed mb-3">{tier.desc}</p>
+                    <p className="text-sm text-black font-normal leading-relaxed mb-3">{tier.desc}</p>
                     <ul className="space-y-1">
                       {tier.responsibilities.map((r) => (
-                        <li key={r} className="flex items-start gap-2 text-xs text-slate-600">
+                        <li key={r} className="flex items-start gap-2 text-xs text-black font-normal">
                           <CheckCircle2 className="w-3 h-3 shrink-0 mt-0.5" style={{ color: tier.color }} /> {r}
                         </li>
                       ))}
@@ -248,10 +248,10 @@ export default function GovernancePage() {
         {/* CTA */}
         <section className="py-12 bg-white border-t border-slate-100">
           <div className="max-w-4xl mx-auto px-4 text-center">
-            <h2 className="text-xl font-extrabold text-brand-green-dark mb-2">Annual Reports & Transparency Documents</h2>
-            <p className="text-slate-500 text-sm mb-6">All financial reports, audit statements, and annual reports are publicly available.</p>
+            <h2 className="text-xl font-bold text-brand-green-dark mb-2">Annual Reports & Transparency Documents</h2>
+            <p className="text-sm text-black font-normal leading-relaxed mb-6">All financial reports, audit statements, and annual reports are publicly available.</p>
             <div className="flex flex-wrap justify-center gap-4">
-              <a href="/contact" className="inline-flex items-center gap-2 bg-brand-green text-white font-bold px-6 py-3 rounded-xl hover:bg-brand-green-dark transition shadow-md">
+              <a href="/contact?type=Document%20Request#contact-form" className="inline-flex items-center gap-2 bg-brand-green text-white font-bold px-6 py-3 rounded-xl hover:bg-brand-green-dark transition shadow-md">
                 <FileText className="w-4 h-4" /> Request Documents
               </a>
               <a href="/donate" className="inline-flex items-center gap-2 bg-brand-orange text-white font-bold px-6 py-3 rounded-xl hover:bg-brand-orange-dark transition shadow-md">

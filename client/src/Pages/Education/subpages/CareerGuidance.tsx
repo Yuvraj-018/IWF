@@ -30,6 +30,7 @@ import {
   Check,
 } from "lucide-react";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
+import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import heroImg from "@/assets/sector_education_2.png";
 
 export default function CareerGuidance() {
@@ -175,94 +176,27 @@ export default function CareerGuidance() {
       <Header />
 
       <main>
-        {/* HERO SECTION */}
-        <section className="relative min-h-[300px] sm:min-h-[330px] md:min-h-[360px] lg:min-h-[390px] flex items-center overflow-hidden bg-slate-900">
-          <img
-            src={heroImg}
-            alt="Career Guidance & Mentorship"
-            className="absolute inset-0 h-full w-full object-cover opacity-30 filter saturate-110"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#00381c]/95 via-[#004724]/85 to-slate-950/80" />
-
-          <div className="relative z-10 max-w-7xl mx-auto px-4 py-8 sm:py-10 w-full">
-            <nav className="flex items-center gap-2 text-xs text-emerald-200/80 mb-6 font-medium flex-wrap">
-              <Link to="/" className="hover:text-white flex items-center gap-1">
-                <Home className="w-3.5 h-3.5" /> Home
-              </Link>
-              <ChevronRight className="w-3.5 h-3.5" />
-              <Link to="/programs/education" className="hover:text-white">
-                Education & Learning
-              </Link>
-              <ChevronRight className="w-3.5 h-3.5" />
-              <span className="text-white font-semibold">
-                Career Guidance (CGM)
-              </span>
-            </nav>
-
+        {/* Standardized Hero */}
+        <SubpageHeroCarousel
+          tag="EDUCATION • CGM"
+          title="Career Guidance & Mentorship (CGM)"
+          subtitle="Providing accurate career information, academic direction, and mentorship support to help rural students make informed decisions and build a successful future."
+          breadcrumbs={[
+            { label: "What We Do", href: "/programs" },
+            { label: "Education", href: "/programs/education" },
+            { label: "Career Guidance" },
+          ]}
+          images={[heroImg]}
+        >
+          <div className="flex flex-wrap items-center gap-3 pt-1">
             <Link
               to="/programs/education"
-              className="inline-flex items-center gap-2 text-xs font-semibold text-emerald-100 hover:text-white border border-emerald-400/30 bg-emerald-950/40 hover:bg-emerald-900/50 px-3.5 py-1.5 rounded-md transition-all mb-4 backdrop-blur-sm"
+              className="inline-flex items-center gap-2 text-xs font-semibold text-white/90 hover:text-white border border-white/20 bg-white/10 hover:bg-white/20 px-3.5 py-2 rounded-xl transition-all"
             >
-              <ArrowLeft className="w-3.5 h-3.5" /> All Education Initiatives
+              <ArrowLeft className="w-3.5 h-3.5" /> All Education Programmes
             </Link>
-
-            {/* Stepper badge */}
-            <div className="flex flex-wrap items-center gap-2 mb-4">
-              <span className="bg-[#ea580c] text-white px-3 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider">
-                Right Guidance • Brighter Future
-              </span>
-              <div className="hidden sm:flex items-center gap-1.5 text-xs font-bold text-amber-300">
-                <span>Explore</span>
-                <ChevronRight className="w-3 h-3 text-white/50" />
-                <span>Plan</span>
-                <ChevronRight className="w-3 h-3 text-white/50" />
-                <span>Prepare</span>
-                <ChevronRight className="w-3 h-3 text-white/50" />
-                <span className="text-emerald-300">Succeed</span>
-              </div>
-            </div>
-
-            <div className="grid lg:grid-cols-12 gap-8 items-center">
-              <div className="lg:col-span-8">
-                <h1 className="text-3xl md:text-5xl lg:text-5xl font-black text-white leading-tight mb-3 tracking-tight">
-                  Career Guidance & Mentorship{" "}
-                  <span className="text-amber-400">(CGM)</span>
-                </h1>
-                <p className="text-base md:text-lg font-medium text-emerald-100/90 mb-4">
-                  (Guiding rural students towards better educational & career
-                  opportunities)
-                </p>
-                <div className="p-3.5 rounded-xl bg-white/10 backdrop-blur-sm border border-white/15 max-w-3xl mb-4">
-                  <p className="text-xs md:text-sm font-semibold text-amber-200 uppercase tracking-wider mb-1">
-                    Guiding Rural Students Towards Better Educational & Career
-                    Opportunities
-                  </p>
-                  <p className="text-xs md:text-sm text-slate-200 leading-relaxed">
-                    Providing accurate career information, academic direction,
-                    and mentorship support to help rural students make informed
-                    decisions and build a successful future.
-                  </p>
-                </div>
-              </div>
-
-              {/* Hero Quote Card */}
-              <div className="lg:col-span-4">
-                <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 shadow-xl text-white relative">
-                  <span className="text-4xl text-amber-400 font-serif leading-none absolute top-4 left-4 opacity-50">
-                    “
-                  </span>
-                  <p className="text-sm md:text-base font-semibold italic pl-6 text-emerald-50 leading-relaxed mb-3">
-                    Right guidance at the right time can transform a student’s
-                    future.
-                  </p>
-                  <div className="text-right text-xs font-bold text-amber-300 uppercase tracking-widest">
-                    — Islah CGM Philosophy
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
-        </section>
+        </SubpageHeroCarousel>
 
         {/* 6-PILLAR HIGHLIGHT RIBBON */}
         <section className="bg-white border-b border-slate-200 py-6 shadow-sm">
@@ -304,7 +238,7 @@ export default function CareerGuidance() {
                       The Challenge
                     </div>
 
-                    <h2 className="text-xl md:text-2xl font-black text-slate-900 mb-3">
+                    <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-3">
                       Need of Career Guidance & Mentorship
                     </h2>
 
@@ -361,7 +295,7 @@ export default function CareerGuidance() {
                       More Information
                     </div>
 
-                    <h2 className="text-xl md:text-2xl font-black text-slate-900 mb-3">
+                    <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-3">
                       Bridging the Career Information Chasm
                     </h2>
 
@@ -449,7 +383,7 @@ export default function CareerGuidance() {
               <span className="text-xs font-bold uppercase tracking-widest text-[#ea580c] bg-orange-50 border border-orange-200 px-3.5 py-1 rounded-full">
                 5 Pillars of Support
               </span>
-              <h2 className="text-2xl md:text-4xl font-black text-slate-900 mt-3 mb-3">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mt-3 mb-3">
                 Programme Approach
               </h2>
               <p className="text-sm text-slate-600">
@@ -467,7 +401,7 @@ export default function CareerGuidance() {
                     <div className="h-full bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md hover:border-emerald-400 transition-all flex flex-col justify-between">
                       <div>
                         <div className="flex items-center justify-between mb-3">
-                          <span className="w-8 h-8 rounded-lg bg-emerald-50 text-[#004724] border border-emerald-200 flex items-center justify-center font-black text-sm">
+                          <span className="w-8 h-8 rounded-lg bg-emerald-50 text-[#004724] border border-emerald-200 flex items-center justify-center font-bold text-sm">
                             {pillar.num}
                           </span>
                           <Icon className="w-5 h-5 text-[#004724]" />
@@ -501,7 +435,7 @@ export default function CareerGuidance() {
               <span className="text-xs font-bold uppercase tracking-widest text-[#004724] bg-emerald-50 border border-emerald-200 px-3.5 py-1 rounded-full">
                 Tangible Outcomes
               </span>
-              <h2 className="text-2xl md:text-3xl font-black text-slate-900 mt-3 mb-2">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mt-3 mb-2">
                 Expected Impact
               </h2>
               <p className="text-sm text-slate-600">
@@ -536,21 +470,21 @@ export default function CareerGuidance() {
         </section>
 
         {/* SECTION 5: STATEMENT BANNER */}
-        <section className="py-14 bg-[#004724] text-white text-center">
-          <div className="max-w-4xl mx-auto px-4 space-y-4">
-            <span className="text-4xl text-amber-400 font-serif leading-none block">
+        <section className="py-10 bg-slate-50/70 border-y border-slate-200 text-slate-800 text-center">
+          <div className="max-w-4xl mx-auto px-4 space-y-3">
+            <span className="text-3xl text-brand-orange font-serif leading-none block">
               “
             </span>
-            <p className="text-xl md:text-2xl font-bold leading-relaxed text-emerald-50 italic">
+            <p className="text-lg md:text-xl font-semibold leading-relaxed text-slate-800 italic text-balance">
               Enabling rural students to make the right choices—turning
               aspirations into clear, achievable career pathways.
             </p>
             <div className="flex items-center justify-center gap-3 pt-2">
-              <span className="h-px w-8 bg-amber-400/60" />
-              <span className="text-amber-300 font-semibold text-xs uppercase tracking-widest">
+              <span className="h-px w-8 bg-slate-300" />
+              <span className="text-slate-500 font-bold text-xs uppercase tracking-widest">
                 Islah Welfare Foundation
               </span>
-              <span className="h-px w-8 bg-amber-400/60" />
+              <span className="h-px w-8 bg-slate-300" />
             </div>
           </div>
         </section>
@@ -558,59 +492,63 @@ export default function CareerGuidance() {
         {/* SECTION 6: SUPPORT & MENTOR CTAS */}
         <section className="py-12 bg-white border-b border-slate-200">
           <div className="max-w-4xl mx-auto px-4">
-            <div className="grid sm:grid-cols-2 gap-4">
+            <div className="grid sm:grid-cols-2 gap-5">
               <button
                 onClick={() => setActiveModal("sponsor")}
-                className="p-6 rounded-2xl bg-gradient-to-br from-[#ea580c] to-amber-600 text-white text-left shadow-md hover:shadow-lg transition-all flex items-center justify-between group"
+                className="p-6 rounded-2xl bg-white border border-slate-200 hover:border-orange-300 hover:bg-orange-50/20 text-slate-900 text-left shadow-xs hover:shadow-md transition-all flex items-center justify-between group hover:scale-[1.01] active:scale-95"
               >
                 <div>
-                  <div className="text-xs font-bold uppercase tracking-wider text-orange-100 mb-1">
+                  <div className="inline-flex items-center text-[11px] font-bold uppercase tracking-wider text-brand-orange bg-orange-50 px-2.5 py-0.5 rounded border border-orange-200 mb-2">
                     Direct Sponsorship
                   </div>
-                  <h4 className="text-lg font-black group-hover:underline">
+                  <h4 className="text-lg font-bold text-slate-900 group-hover:text-brand-orange transition-colors">
                     Support This Initiative
                   </h4>
-                  <p className="text-xs text-orange-100/90 mt-1">
+                  <p className="text-xs text-slate-600 mt-1">
                     Your contribution can guide and transform young lives.
                   </p>
                 </div>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform shrink-0 ml-4" />
+                <div className="w-10 h-10 rounded-xl bg-orange-100/70 text-brand-orange flex items-center justify-center shrink-0 ml-4 group-hover:bg-brand-orange group-hover:text-white transition-all">
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
+                </div>
               </button>
 
               <button
                 onClick={() => setActiveModal("mentor")}
-                className="p-6 rounded-2xl bg-gradient-to-br from-[#004724] to-[#0b1f3b] text-white text-left shadow-md hover:shadow-lg transition-all flex items-center justify-between group"
+                className="p-6 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white text-left shadow-md hover:shadow-lg transition-all flex items-center justify-between group hover:scale-[1.01] active:scale-95"
               >
                 <div>
-                  <div className="text-xs font-bold uppercase tracking-wider text-emerald-200 mb-1">
+                  <div className="inline-flex items-center text-[11px] font-bold uppercase tracking-wider text-emerald-300 bg-emerald-950/60 px-2.5 py-0.5 rounded border border-emerald-700/50 mb-2">
                     Share Your Expertise
                   </div>
-                  <h4 className="text-lg font-black group-hover:underline">
+                  <h4 className="text-lg font-bold text-white group-hover:text-amber-200 transition-colors">
                     Become a Mentor
                   </h4>
-                  <p className="text-xs text-emerald-100/90 mt-1">
+                  <p className="text-xs text-slate-300 mt-1">
                     Share your knowledge. Shape a brighter future.
                   </p>
                 </div>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform shrink-0 ml-4" />
+                <div className="w-10 h-10 rounded-xl bg-white/10 text-white flex items-center justify-center shrink-0 ml-4 group-hover:bg-white group-hover:text-slate-900 transition-all">
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
+                </div>
               </button>
             </div>
           </div>
         </section>
 
         {/* BOTTOM NAVIGATION */}
-        <section className="py-8 bg-slate-100 border-t border-slate-200">
+        <section className="py-8 bg-slate-50 border-t border-slate-200">
           <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <Link
               to="/programs/education/scholarships"
-              className="inline-flex items-center gap-2 text-xs md:text-sm font-bold text-slate-800 hover:text-[#004724] border border-slate-300 bg-white hover:bg-slate-50 px-5 py-2.5 rounded-lg transition-all shadow-sm"
+              className="inline-flex items-center gap-2 text-xs md:text-sm font-semibold text-slate-800 hover:text-emerald-700 border border-slate-300 bg-white hover:bg-slate-50 px-5 py-2.5 rounded-lg transition-all shadow-xs hover:scale-[1.02] active:scale-95"
             >
               <ArrowLeft className="w-4 h-4" /> Prev: Scholarships for Higher
               Education (SHE)
             </Link>
             <Link
               to="/programs/education/technical-vocational-training"
-              className="inline-flex items-center gap-2 text-xs md:text-sm font-bold text-white bg-[#004724] hover:bg-[#00381c] px-5 py-2.5 rounded-lg transition-all shadow-sm"
+              className="inline-flex items-center gap-2 text-xs md:text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 px-5 py-2.5 rounded-lg transition-all shadow-xs hover:scale-[1.02] active:scale-95"
             >
               Next: Technical & Vocational Education (TVET){" "}
               <ArrowRight className="w-4 h-4" />

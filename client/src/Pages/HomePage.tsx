@@ -28,6 +28,7 @@ import g4 from "@/assets/gallery-4.jpg";
 import g5 from "@/assets/gallery-5.jpg";
 import g6 from "@/assets/gallery-6.jpg";
 import footerBg from "@/assets/footer-bg.jpg";
+import overviewHero from "@/assets/overview-hero.jpg";
 import { CardContainer, CardBody, CardItem } from "@/components/ui/3d-card";
 import { RoleFormModal, type RoleType } from "@/components/forms/RoleFormModal";
 import { PatientCard } from "@/components/healthcare/PatientCard";
@@ -118,7 +119,7 @@ function SectionHeader({ tag, title, subtitle, center = true }: SectionHeaderPro
       <p className="text-xs font-bold uppercase tracking-widest text-[#f97316] mb-1.5">
         {tag}
       </p>
-      <h2 className="text-2xl md:text-3xl font-black text-[#0b1f3b] uppercase tracking-wide">
+      <h2 className="text-2xl md:text-3xl font-bold text-slate-900 uppercase tracking-wide">
         {title}
       </h2>
       {subtitle && (
@@ -148,6 +149,7 @@ function HeroSection({ lang }: LanguageProp) {
   const loopNotices = [...notices, ...notices.slice(0, 4)];
   const [noticeIndex, setNoticeIndex] = useState(0);
   const [noticeTransition, setNoticeTransition] = useState(true);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const noticeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -273,7 +275,7 @@ function HeroSection({ lang }: LanguageProp) {
                         <div className="text-base font-black text-white leading-none mt-0.5">{e.d}</div>
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-extrabold text-xs sm:text-sm text-slate-900 truncate group-hover:text-brand-orange transition-colors">{e.title}</h4>
+                        <h4 className="font-semibold text-xs sm:text-sm text-black truncate group-hover:text-brand-orange transition-colors">{e.title}</h4>
                       </div>
                       <a href="/news-and-events" className="text-xs font-bold text-brand-orange hover:underline shrink-0">
                         {t.readMore} →
@@ -284,24 +286,38 @@ function HeroSection({ lang }: LanguageProp) {
               </div>
             </div>
 
-            {/* Big 2 x 2 Stats Grid (Square-like, filling width & space) */}
-            <div className="bg-[#f0f7ff] border border-sky-200/80 rounded-2xl p-3.5 sm:p-4 grid grid-cols-2 gap-3.5 shadow-sm">
-              {[
-                { icon: Users, n: "5,000+", l: "Lives Impacted" },
-                { icon: HeartPulse, n: "100+", l: "Health Camps" },
-                { icon: GraduationCap, n: "2,000+", l: "Students Supported" },
-                { icon: Leaf, n: "10,000+", l: "Beneficiaries" },
-              ].map(({ icon: Icon, n, l }) => (
-                <div key={l} className="bg-white/95 border border-sky-100/90 rounded-2xl p-4 sm:p-5 flex flex-col justify-between shadow-2xs hover:shadow-md transition group min-h-[115px]">
-                  <div className="w-11 h-11 rounded-xl bg-sky-50 text-[#0284c7] flex items-center justify-center mb-1 group-hover:scale-105 transition-transform">
-                    <Icon className="w-6 h-6" />
+            {/* Video (Temporarily replacing stats grid under events/notices) */}
+            <div className="relative w-full aspect-video min-h-[190px] sm:min-h-[210px] rounded-2xl overflow-hidden border border-slate-200 shadow-sm bg-black">
+              {isVideoPlaying ? (
+                <iframe
+                  className="w-full h-full border-0"
+                  src="https://www.youtube-nocookie.com/embed/ScMzIvxBSi4?autoplay=1&rel=0&modestbranding=1&controls=1"
+                  title="Video"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setIsVideoPlaying(true)}
+                  className="relative w-full h-full block cursor-pointer group focus:outline-none"
+                  aria-label="Play Video"
+                >
+                  <img
+                    src={overviewHero}
+                    alt="Video thumbnail"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-black/25 group-hover:bg-black/15 transition-colors" />
+
+                  {/* Centered Play Button */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-full bg-red-600 text-white flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:bg-red-500 transition-all duration-300">
+                      <Play className="w-5 h-5 fill-white ml-0.5" />
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-2xl sm:text-3xl font-black text-[#0b1f3b] tracking-tight leading-none">{n}</div>
-                    <div className="text-xs sm:text-sm font-bold text-slate-600 leading-tight mt-1">{l}</div>
-                  </div>
-                </div>
-              ))}
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -318,25 +334,32 @@ function UrgentPatientsSection({ lang }: LanguageProp) {
     <section className="py-4 bg-white">
       <div className="max-w-7xl mx-auto px-4">
         <ScrollReveal>
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-3 border-b border-slate-100 pb-2">
-            <div className="flex-1">
-              <SectionHeader
-                tag={lang === "en" ? "MEDICAL EMERGENCY" : "चिकित्सा आपातकाल"}
-                title={lang === "en" ? "CRITICAL MEDICAL & EMERGENCY SUPPORT" : "क्रिटिकल मेडिकल और आपातकालीन सहायता"}
-                subtitle="Har Pal Anmol Hai"
-                center={false}
-              />
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-widest text-[#f97316] mb-1">
+                {lang === "en" ? "MEDICAL EMERGENCY" : "चिकित्सा आपातकाल"}
+              </p>
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 uppercase tracking-wide">
+                {lang === "en" ? "CRITICAL MEDICAL & EMERGENCY SUPPORT" : "क्रिटिकल मेडिकल और आपातकालीन सहायता"}
+              </h2>
             </div>
             <a
               href="/programs/healthcare/critical-life-support"
-              className="inline-flex items-center gap-1 text-sm font-bold text-brand-green hover:text-slate-950 transition-colors shrink-0 mb-3"
+              className="inline-flex items-center gap-1.5 text-sm font-bold text-brand-green hover:text-slate-950 transition-colors shrink-0 sm:self-center"
             >
-              {t.viewAllPatients} <ArrowRight className="w-4 h-4" />
+              <span>{t.viewAllPatients}</span>
+              <ArrowRight className="w-4 h-4" />
             </a>
           </div>
-          <p className="text-slate-600 text-sm max-w-4xl mb-4 leading-relaxed">
-            {t.urgentSub}
-          </p>
+
+          <div className="mb-4 space-y-0.5">
+            <p className="text-sm font-semibold text-black leading-snug">
+              {lang === "en" ? "Har Pal Anmol Hai" : "हर पल अनमोल है"}
+            </p>
+            <p className="text-sm font-normal text-black leading-relaxed max-w-4xl">
+              {t.urgentSub}
+            </p>
+          </div>
         </ScrollReveal>
         <ScrollReveal stagger={0.08}>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -383,8 +406,8 @@ function FeaturedCauses({ lang }: LanguageProp) {
                   </div>
                 </div>
                 <div className="p-4 flex flex-col flex-1">
-                  <h3 className="font-extrabold text-base text-slate-950 mb-1.5">{c.title}</h3>
-                  <p className="text-sm text-slate-700 font-medium leading-relaxed flex-1">{c.desc}</p>
+                  <h3 className="font-bold text-base text-black mb-1.5">{c.title}</h3>
+                  <p className="text-sm text-black font-normal leading-relaxed flex-1">{c.desc}</p>
                   <div className="flex items-center justify-between mt-4 pt-3 border-t border-slate-100">
                     <a href={c.route} className="text-sm font-bold text-brand-green hover:text-brand-green-dark">{t.readMore}</a>
                     <a href="/donate" className="text-xs font-extrabold bg-[#f97316] hover:bg-orange-600 text-white px-3.5 py-1.5 rounded-lg transition-all">{t.donateNow}</a>
@@ -439,8 +462,8 @@ function WhatWeDo({ lang }: LanguageProp) {
                   <div className={`w-11 h-11 mx-auto rounded-xl ${col.bg} flex items-center justify-center mb-2 group-hover:scale-110 transition-transform shadow-xs`}>
                     <Icon className={`w-5 h-5 ${col.text}`} />
                   </div>
-                  <div className="text-base font-extrabold text-slate-900 leading-tight mb-1">{l}</div>
-                  <div className="text-xs font-semibold text-slate-500 leading-snug w-full">{s}</div>
+                  <div className="text-base font-bold text-black leading-tight mb-1">{l}</div>
+                  <div className="text-xs font-normal text-slate-700 leading-snug w-full">{s}</div>
                 </a>
               );
             })}
@@ -623,7 +646,7 @@ function CampaignsSection({ lang }: LanguageProp) {
               <p className="text-xs font-bold uppercase tracking-widest text-[#f97316] mb-1.5">
                 {lang === "en" ? "OUR CAMPAIGNS" : "हमारे अभियान"}
               </p>
-              <h2 className="text-2xl md:text-3xl font-black text-[#0b1f3b] uppercase tracking-wide">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 uppercase tracking-wide">
                 {lang === "en" ? "FIVE PILLARS OF CHANGE" : "परिवर्तन के पांच स्तंभ"}
               </h2>
               <p className="text-slate-700 font-medium text-xs sm:text-sm mt-1">
@@ -634,7 +657,7 @@ function CampaignsSection({ lang }: LanguageProp) {
             </div>
             <a
               href="/campaign"
-              className="inline-flex items-center gap-1.5 text-xs font-black text-[#0b1f3b] hover:text-[#15803d] transition shrink-0 self-start sm:self-end"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-900 hover:text-brand-green transition shrink-0 self-start sm:self-end"
             >
               <span>Explore All Campaigns</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -662,7 +685,7 @@ function CampaignsSection({ lang }: LanguageProp) {
                   </div>
 
                   <div>
-                    <h3 className="font-black text-slate-900 text-base group-hover:text-[#0b1f3b]">
+                    <h3 className="font-bold text-slate-900 text-base group-hover:text-brand-green-dark transition-colors">
                       <a href={`/campaign/${c.slug}`}>{c.name}</a>
                     </h3>
                     <p className="text-xs font-bold mt-0.5" style={{ color: c.color }}>
@@ -671,13 +694,13 @@ function CampaignsSection({ lang }: LanguageProp) {
                   </div>
 
                   <div className="w-full h-1 rounded-full my-3" style={{ backgroundColor: c.color, opacity: 0.2 }} />
-                  <p className="text-xs text-slate-600 leading-relaxed mb-4">{c.desc}</p>
+                  <p className="text-sm text-black font-normal leading-relaxed mb-4">{c.desc}</p>
                 </div>
 
                 <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
                   <a
                     href={`/campaign/${c.slug}`}
-                    className="text-xs font-extrabold text-[#0b1f3b] hover:text-[#15803d] transition inline-flex items-center gap-1"
+                    className="text-xs font-bold text-[#0b1f3b] hover:text-[#15803d] transition inline-flex items-center gap-1"
                   >
                     <span>Know More</span>
                     <ArrowRight className="w-3 h-3" />
@@ -807,7 +830,7 @@ function OurPartnersSection({ lang }: LanguageProp) {
                 {partner.short}
               </div>
               <div className="min-w-0 flex-1">
-                <h4 className="font-extrabold text-slate-900 text-xs leading-tight truncate group-hover:text-brand-orange transition-colors">
+                <h4 className="font-semibold text-black text-xs leading-tight truncate group-hover:text-brand-orange transition-colors">
                   {partner.name}
                 </h4>
                 <p className="text-[10px] text-slate-500 font-medium truncate mt-0.5">
@@ -956,7 +979,7 @@ function GallerySection({ lang }: LanguageProp) {
 
                 {/* Title Overlay with gradient shadow */}
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 pt-10">
-                  <h4 className="text-white font-extrabold text-xs tracking-wider uppercase group-hover:text-brand-orange transition-colors">
+                  <h4 className="text-white font-semibold text-xs tracking-wider uppercase group-hover:text-brand-orange transition-colors">
                     {item.title}
                   </h4>
                 </div>
@@ -969,7 +992,7 @@ function GallerySection({ lang }: LanguageProp) {
         <div className="text-center mt-5">
           <a
             href="/news-and-events"
-            className="inline-flex items-center gap-1.5 text-xs font-extrabold text-brand-green hover:text-brand-green-dark hover:underline transition-colors uppercase tracking-wider"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-green hover:text-brand-green-dark hover:underline transition-colors uppercase tracking-wider"
           >
             {lang === "en" ? "View All Media" : "सभी मीडिया देखें"} <ArrowRight className="w-3.5 h-3.5" />
           </a>

@@ -10,6 +10,7 @@ import {
   ArrowRight,
   ShieldCheck,
   Award,
+  Heart,
 } from "lucide-react";
 import { Footer, Header, NotificationTicker, RoleFormModal, UtilityBar } from "@/components/layout/SiteLayout";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
@@ -64,7 +65,7 @@ export default function EntrepreneurDevelopmentPage() {
       <Header />
 
       <main>
-        {/* Hero Section with Subpage Carousel (Matching About Us Page) */}
+        {/* Hero Section with Subpage Carousel with In-Hero Action Buttons */}
         <SubpageHeroCarousel
           tag="WHAT WE DO • LIVELIHOOD & ENTERPRISE"
           title="Entrepreneur Development"
@@ -74,31 +75,26 @@ export default function EntrepreneurDevelopmentPage() {
             { label: "Entrepreneur Development" },
           ]}
           images={slides.map((s) => s.image)}
-        />
-
-        {/* Floating Action Strip */}
-        <div className="max-w-7xl mx-auto px-4 md:px-8 -mt-6 relative z-20 mb-8">
-          <div className="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-md flex flex-wrap items-center justify-between gap-3">
-            <div className="flex flex-wrap items-center gap-3">
-              <button
-                onClick={() => setActiveModal("partner")}
-                className="inline-flex items-center gap-2 bg-[#15803d] hover:bg-[#166534] text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-md transition uppercase tracking-wider cursor-pointer"
-              >
-                <span>Partner With Us</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-              <button
-                onClick={() => setActiveModal("sponsor")}
-                className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-md transition uppercase tracking-wider cursor-pointer"
-              >
-                <span>Sponsor an Enterprise</span>
-              </button>
-            </div>
-            <div className="text-xs font-semibold text-slate-500">
-              Micro-Enterprise Support • Incubation • Market Linkages
-            </div>
+        >
+          <div className="flex flex-wrap items-center gap-3 pt-2">
+            <button
+              type="button"
+              onClick={() => setActiveModal("partner")}
+              className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold px-6 sm:px-7 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer"
+            >
+              <span>Partner With Us</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveModal("sponsor")}
+              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer backdrop-blur-xs"
+            >
+              <Heart className="w-4 h-4 text-brand-orange" />
+              <span>Sponsor an Enterprise</span>
+            </button>
           </div>
-        </div>
+        </SubpageHeroCarousel>
 
         {/* Vision & Rationale */}
         <section className="py-14 px-4">
@@ -106,13 +102,13 @@ export default function EntrepreneurDevelopmentPage() {
             <ScrollReveal>
               <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-200">
                 <div className="max-w-3xl">
-                  <p className="text-xs font-extrabold uppercase tracking-widest text-brand-orange mb-2">
+                  <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2">
                     Vision & Rationale
                   </p>
-                  <h2 className="text-2xl md:text-3xl font-extrabold text-[#0b1f3b] mb-4">
+                  <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">
                     Building Economic Resilience in Rural Communities
                   </h2>
-                  <p className="text-slate-600 text-sm md:text-base leading-relaxed mb-6">
+                  <p className="text-sm text-slate-600 font-normal leading-relaxed mb-6">
                     Entrepreneurship plays a vital role in creating sustainable livelihoods, generating employment, reducing poverty, and strengthening rural economies. Many youth and women possess the determination to grow but lack access to financial resources, market guidance, and technical support.
                   </p>
                 </div>
@@ -134,10 +130,10 @@ export default function EntrepreneurDevelopmentPage() {
         <section className="py-12 px-4 bg-slate-100/70">
           <div className="max-w-7xl mx-auto">
             <div className="text-center max-w-2xl mx-auto mb-12">
-              <p className="text-xs font-extrabold uppercase tracking-widest text-brand-orange mb-2">
+              <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2">
                 Core Interventions
               </p>
-              <h2 className="text-2xl md:text-3xl font-extrabold text-[#0b1f3b]">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900">
                 Key Work Areas in Entrepreneurship
               </h2>
             </div>
@@ -152,11 +148,11 @@ export default function EntrepreneurDevelopmentPage() {
                         <div className="w-12 h-12 rounded-xl bg-brand-green/10 text-brand-green flex items-center justify-center font-bold">
                           <Icon className="w-6 h-6" />
                         </div>
-                        <h3 className="text-lg font-bold text-[#0b1f3b]">{area.title}</h3>
-                        <p className="text-sm text-slate-600 leading-relaxed">{area.desc}</p>
+                        <h3 className="text-lg font-bold text-slate-900">{area.title}</h3>
+                        <p className="text-sm text-slate-600 font-normal leading-relaxed">{area.desc}</p>
                       </div>
                       <div className="pt-6 border-t border-slate-100 mt-6">
-                        <span className="text-xs font-extrabold text-brand-orange uppercase tracking-wider">Sustainable Impact</span>
+                        <span className="text-xs font-bold text-brand-orange uppercase tracking-wider">Sustainable Impact</span>
                       </div>
                     </div>
                   </ScrollReveal>
@@ -167,9 +163,9 @@ export default function EntrepreneurDevelopmentPage() {
         </section>
 
         {/* Call to Action Banner */}
-        <section className="py-14 px-4 bg-[#0b1f3b] text-white">
+        <section className="py-14 px-4 bg-gradient-to-r from-[#071527] to-[#0c2340] text-white">
           <div className="max-w-5xl mx-auto text-center space-y-6">
-            <h2 className="text-2xl md:text-4xl font-extrabold">
+            <h2 className="text-2xl md:text-4xl font-bold">
               Empowering Rural Youth & Women Towards Self-Reliance
             </h2>
             <p className="text-white/80 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
@@ -178,13 +174,13 @@ export default function EntrepreneurDevelopmentPage() {
             <div className="flex flex-wrap justify-center gap-4 pt-2">
               <button
                 onClick={() => setActiveModal("mentor")}
-                className="bg-brand-orange hover:bg-orange-600 text-white font-bold text-sm px-6 py-3 rounded-md shadow transition"
+                className="bg-brand-orange hover:bg-orange-600 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-lg transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
               >
                 Become a Mentor
               </button>
               <a
                 href="/donate"
-                className="bg-brand-green hover:bg-green-700 text-white font-bold text-sm px-6 py-3 rounded-md shadow transition"
+                className="bg-brand-green hover:bg-green-700 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-lg transition-all hover:scale-[1.02] active:scale-95"
               >
                 Donate for Microfinance
               </a>

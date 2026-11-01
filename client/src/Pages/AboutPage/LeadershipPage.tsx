@@ -339,42 +339,42 @@ export default function LeadershipPage() {
       />
 
       {/* ─── 4 Key Tiers Counter Bar ────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-4 md:px-8 -mt-6 relative z-20">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 bg-white p-3.5 rounded-2xl border border-slate-200 shadow-md">
-          <div className="bg-slate-50 rounded-xl p-3 border border-slate-100 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 pt-6 relative z-20">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 bg-white p-2.5 rounded-2xl border border-slate-200 shadow-md">
+          <div className="bg-slate-50 rounded-xl p-2.5 border border-slate-100 flex items-center justify-between">
             <div>
-              <h4 className="font-extrabold text-xs text-slate-900">Board of Trustees</h4>
-              <p className="text-[10px] text-slate-500">Fiduciary & Governance</p>
+              <h4 className="font-bold text-xs text-slate-900">Board of Trustees</h4>
+              <p className="text-xs text-slate-500">Fiduciary & Governance</p>
             </div>
-            <div className="text-2xl font-black text-emerald-600">07</div>
+            <div className="text-xl sm:text-2xl font-bold text-emerald-600">07</div>
           </div>
-          <div className="bg-slate-50 rounded-xl p-3 border border-slate-100 flex items-center justify-between">
+          <div className="bg-slate-50 rounded-xl p-2.5 border border-slate-100 flex items-center justify-between">
             <div>
-              <h4 className="font-extrabold text-xs text-slate-900">Executive Body</h4>
-              <p className="text-[10px] text-slate-500">Operations & Programs</p>
+              <h4 className="font-bold text-xs text-slate-900">Executive Body</h4>
+              <p className="text-xs text-slate-500">Operations & Programs</p>
             </div>
-            <div className="text-2xl font-black text-blue-600">06</div>
+            <div className="text-xl sm:text-2xl font-bold text-blue-600">06</div>
           </div>
-          <div className="bg-slate-50 rounded-xl p-3 border border-slate-100 flex items-center justify-between">
+          <div className="bg-slate-50 rounded-xl p-2.5 border border-slate-100 flex items-center justify-between">
             <div>
-              <h4 className="font-extrabold text-xs text-slate-900">Advisory Panel</h4>
-              <p className="text-[10px] text-slate-500">Domain Specialists</p>
+              <h4 className="font-bold text-xs text-slate-900">Advisory Panel</h4>
+              <p className="text-xs text-slate-500">Domain Specialists</p>
             </div>
-            <div className="text-2xl font-black text-amber-600">06</div>
+            <div className="text-xl sm:text-2xl font-bold text-amber-600">06</div>
           </div>
-          <div className="bg-slate-50 rounded-xl p-3 border border-slate-100 flex items-center justify-between">
+          <div className="bg-slate-50 rounded-xl p-2.5 border border-slate-100 flex items-center justify-between">
             <div>
-              <h4 className="font-extrabold text-xs text-slate-900">Field Operations</h4>
-              <p className="text-[10px] text-slate-500">Community Mobilizers</p>
+              <h4 className="font-bold text-xs text-slate-900">Field Operations</h4>
+              <p className="text-xs text-slate-500">Community Mobilizers</p>
             </div>
-            <div className="text-2xl font-black text-brand-orange">06</div>
+            <div className="text-xl sm:text-2xl font-bold text-brand-orange">06</div>
           </div>
         </div>
       </div>
 
       {/* ─── Global View Mode Bar ────────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-4 md:px-8 pt-6">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white p-3 sm:px-5 sm:py-3 rounded-2xl border border-slate-200 shadow-2xs">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 pt-3">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-2.5 bg-white p-2.5 sm:px-4 sm:py-2.5 rounded-2xl border border-slate-200 shadow-2xs">
           <div className="flex items-center gap-2 text-xs text-slate-600 font-semibold">
             <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
             <span>Display Layout:</span>
@@ -385,7 +385,7 @@ export default function LeadershipPage() {
           <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl">
             <button
               onClick={() => setViewMode("cards")}
-              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${
                 viewMode === "cards"
                   ? "bg-[#0b1f3b] text-white shadow-2xs"
                   : "text-slate-600 hover:text-slate-900"
@@ -396,7 +396,7 @@ export default function LeadershipPage() {
             </button>
             <button
               onClick={() => setViewMode("table")}
-              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${
                 viewMode === "table"
                   ? "bg-[#0b1f3b] text-white shadow-2xs"
                   : "text-slate-600 hover:text-slate-900"
@@ -409,554 +409,546 @@ export default function LeadershipPage() {
         </div>
       </div>
 
-      <main className="space-y-10 py-6 px-4 md:px-8 max-w-7xl mx-auto">
+      <main className="space-y-3 py-1.5 px-4 md:px-8 max-w-7xl mx-auto">
         {/* ─── Tier 1: Board of Trustees ───────────────────────────────────── */}
-        <section className="space-y-4">
-          <ScrollReveal>
-            <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-xs space-y-4">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center font-bold shrink-0 shadow-2xs">
-                    <Shield className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="text-[11px] font-black uppercase tracking-widest text-[#15803d]">
-                      TIER 1 • APEX GOVERNING BODY
-                    </span>
-                    <h2 className="text-xl sm:text-2xl font-black text-[#0b1f3b] tracking-tight leading-tight">
-                      Board of Trustees
-                    </h2>
-                  </div>
+        <ScrollReveal>
+          <div className="bg-white rounded-2xl p-3.5 sm:p-4 border border-slate-200 shadow-xs space-y-2.5">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2.5 border-b border-slate-100 pb-2">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center font-bold shrink-0 shadow-2xs">
+                  <Shield className="w-4 h-4" />
                 </div>
-
-                <span className="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full self-start md:self-auto">
-                  07 Members Total
-                </span>
-              </div>
-
-              {/* Exact Governance & Role & Responsibility Box from ISLAH.docx */}
-              <div className="bg-emerald-50/80 border-l-4 border-[#15803d] p-4 rounded-r-xl space-y-2">
-                <p className="text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
-                  The <strong className="text-[#0b1f3b] font-bold">Board of Trustees</strong> provides strategic direction, oversight and responsible governance to Islah Welfare Foundation (ISLAH). It safeguards the organisation’s mission, values and long-term objectives while promoting transparency, accountability and ethical stewardship.
-                </p>
-                <div className="pt-2 border-t border-emerald-200/70 flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
-                  <span className="text-[11px] font-bold text-[#15803d] uppercase tracking-wider shrink-0">
-                    Roles & Responsibility:
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#15803d]">
+                    TIER 1 • APEX GOVERNING BODY
                   </span>
-                  <p className="text-xs text-slate-700 leading-relaxed font-normal">
-                    The Board supports sound decision-making, ensures responsible utilisation of resources, and provides guidance for sustainable growth and meaningful community impact. Together, the Board provides the foundation for responsible governance and the long-term vision of ISLAH.
-                  </p>
+                  <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-tight">
+                    Board of Trustees
+                  </h2>
                 </div>
               </div>
 
-              {viewMode === "cards" ? (
-                <div className="space-y-5 pt-1">
-                  {/* Row 1: 4 Principal Officers (Acting Chairman, Secretary, Joint Secretary, Treasurer) */}
-                  <div>
-                    <div className="flex items-center justify-between mb-2.5">
-                      <span className="text-[11px] font-black uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-                        <Building2 className="w-3.5 h-3.5 text-[#15803d]" />
-                        Governing Officers (04)
-                      </span>
-                      <span className="text-[10px] text-slate-400 font-medium">Executive Leadership of the Board</span>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-                      {BOARD_PRINCIPAL_OFFICERS.map((trustee) => (
-                        <div
-                          key={trustee.sno}
-                          className="bg-slate-50/90 rounded-xl p-3.5 border border-slate-200 shadow-2xs hover:shadow-md hover:bg-white transition-all flex flex-col justify-between group"
-                        >
-                          <div className="flex items-center gap-3">
-                            <PhotoAvatar name={trustee.name} gender={trustee.gender} size="md" />
-                            <div className="min-w-0 flex-1">
-                              <span className="inline-block text-[10px] font-black text-[#15803d] bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded uppercase">
-                                {trustee.designation}
-                              </span>
-                              <h4 className="font-extrabold text-[#0b1f3b] text-sm mt-0.5 truncate group-hover:text-[#15803d] transition-colors" title={trustee.name}>
-                                {trustee.name}
-                              </h4>
-                              <p className="text-[11px] text-slate-500 font-medium leading-snug mt-0.5" title={trustee.portfolio}>
-                                {trustee.portfolio}
-                              </p>
-                            </div>
-                          </div>
-
-                          <div className="pt-2 mt-2.5 border-t border-slate-200/60 flex items-center justify-between text-[10px] text-slate-400">
-                            <span className="font-mono">#{trustee.sno}</span>
-                            <span className="text-slate-500 font-medium">Board of Trustees</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Row 2: 3 Trustee Members (CA Sanjeet, Md. Atiqure Rahman, Saleh Hedayatullah) */}
-                  <div>
-                    <div className="flex items-center justify-between mb-2.5">
-                      <span className="text-[11px] font-black uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-                        <Users className="w-3.5 h-3.5 text-slate-600" />
-                        Trustee Members (03)
-                      </span>
-                      <span className="text-[10px] text-slate-400 font-medium">Strategic Review & Fiduciary Counsel</span>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
-                      {BOARD_TRUSTEE_MEMBERS.map((trustee) => (
-                        <div
-                          key={trustee.sno}
-                          className="bg-slate-50/90 rounded-xl p-3.5 border border-slate-200 shadow-2xs hover:shadow-md hover:bg-white transition-all flex flex-col justify-between group"
-                        >
-                          <div className="flex items-center gap-3">
-                            <PhotoAvatar name={trustee.name} gender={trustee.gender} size="md" />
-                            <div className="min-w-0 flex-1">
-                              <span className="inline-block text-[10px] font-bold text-slate-700 bg-slate-200/70 border border-slate-300 px-2 py-0.5 rounded uppercase">
-                                {trustee.designation}
-                              </span>
-                              <h4 className="font-extrabold text-[#0b1f3b] text-sm mt-0.5 truncate group-hover:text-[#15803d] transition-colors" title={trustee.name}>
-                                {trustee.name}
-                              </h4>
-                              <p className="text-[11px] text-slate-500 font-medium leading-snug mt-0.5" title={trustee.portfolio}>
-                                {trustee.portfolio}
-                              </p>
-                            </div>
-                          </div>
-
-                          <div className="pt-2 mt-2.5 border-t border-slate-200/60 flex items-center justify-between text-[10px] text-slate-400">
-                            <span className="font-mono">#{trustee.sno}</span>
-                            <span className="text-slate-500 font-medium">Board of Trustees</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                /* Table View matching ISLAH.docx Table 2 */
-                <div className="rounded-xl border border-slate-200 overflow-hidden pt-1">
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse text-xs">
-                      <thead>
-                        <tr className="bg-slate-100 border-b border-slate-200 font-black text-slate-700 uppercase tracking-wider text-[10px]">
-                          <th className="p-3 w-12">Sl. No</th>
-                          <th className="p-3 w-16">Photo</th>
-                          <th className="p-3 w-48">Name</th>
-                          <th className="p-3 w-36">Designation</th>
-                          <th className="p-3">Key Focus & Portfolio</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
-                        {ALL_TRUSTEES.map((t) => (
-                          <tr key={t.sno} className="hover:bg-slate-50 transition">
-                            <td className="p-3 font-mono font-bold text-slate-400">{t.sno}</td>
-                            <td className="p-3">
-                              <PhotoAvatar name={t.name} gender={t.gender} size="sm" />
-                            </td>
-                            <td className="p-3 font-bold text-[#0b1f3b]">{t.name}</td>
-                            <td className="p-3">
-                              <span className="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded font-bold text-[11px] inline-block">
-                                {t.designation}
-                              </span>
-                            </td>
-                            <td className="p-3 text-slate-600 leading-relaxed font-medium">{t.portfolio}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
+              <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full self-start md:self-auto">
+                07 Members Total
+              </span>
             </div>
-          </ScrollReveal>
-        </section>
+
+            {/* Exact Governance & Role & Responsibility Box from ISLAH.docx */}
+            <div className="bg-emerald-50/80 border-l-4 border-[#15803d] p-3 rounded-r-xl space-y-1.5">
+              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-normal">
+                The <strong className="text-slate-900 font-bold">Board of Trustees</strong> provides strategic direction, oversight and responsible governance to Islah Welfare Foundation (ISLAH). It safeguards the organisation’s mission, values and long-term objectives while promoting transparency, accountability and ethical stewardship.
+              </p>
+              <div className="pt-1.5 border-t border-emerald-200/70 flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
+                <span className="text-xs font-semibold text-[#15803d] uppercase tracking-wider shrink-0">
+                  Roles & Responsibility:
+                </span>
+                <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                  The Board supports sound decision-making, ensures responsible utilisation of resources, and provides guidance for sustainable growth and meaningful community impact. Together, the Board provides the foundation for responsible governance and the long-term vision of ISLAH.
+                </p>
+              </div>
+            </div>
+
+            {viewMode === "cards" ? (
+              <div className="space-y-3 pt-0.5">
+                {/* Row 1: 4 Principal Officers (Acting Chairman, Secretary, Joint Secretary, Treasurer) */}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
+                      <Building2 className="w-3.5 h-3.5 text-[#15803d]" />
+                      Governing Officers (04)
+                    </span>
+                    <span className="text-xs text-slate-400 font-normal">Executive Leadership of the Board</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    {BOARD_PRINCIPAL_OFFICERS.map((trustee) => (
+                      <div
+                        key={trustee.sno}
+                        className="bg-slate-50/90 rounded-xl p-3 border border-slate-200 shadow-2xs hover:shadow-md hover:bg-white transition-all flex flex-col justify-between group"
+                      >
+                        <div className="flex items-center gap-3">
+                          <PhotoAvatar name={trustee.name} gender={trustee.gender} size="md" />
+                          <div className="min-w-0 flex-1">
+                            <span className="inline-block text-[11px] font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded uppercase tracking-wide">
+                              {trustee.designation}
+                            </span>
+                            <h4 className="font-bold text-slate-900 text-sm mt-1 truncate group-hover:text-[#15803d] transition-colors" title={trustee.name}>
+                              {trustee.name}
+                            </h4>
+                            <p className="text-xs text-slate-600 font-normal leading-snug mt-1" title={trustee.portfolio}>
+                              {trustee.portfolio}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="pt-2 mt-2 border-t border-slate-200/60 flex items-center justify-between text-xs text-slate-400 font-medium">
+                          <span>#{trustee.sno}</span>
+                          <span className="text-slate-500">Board of Trustees</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Row 2: 3 Trustee Members (CA Sanjeet, Md. Atiqure Rahman, Saleh Hedayatullah) */}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
+                      <Users className="w-3.5 h-3.5 text-slate-600" />
+                      Trustee Members (03)
+                    </span>
+                    <span className="text-xs text-slate-400 font-normal">Strategic Review & Fiduciary Counsel</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {BOARD_TRUSTEE_MEMBERS.map((trustee) => (
+                      <div
+                        key={trustee.sno}
+                        className="bg-slate-50/90 rounded-xl p-3 border border-slate-200 shadow-2xs hover:shadow-md hover:bg-white transition-all flex flex-col justify-between group"
+                      >
+                        <div className="flex items-center gap-3">
+                          <PhotoAvatar name={trustee.name} gender={trustee.gender} size="md" />
+                          <div className="min-w-0 flex-1">
+                            <span className="inline-block text-[11px] font-semibold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded uppercase tracking-wide">
+                              {trustee.designation}
+                            </span>
+                            <h4 className="font-bold text-slate-900 text-sm mt-1 truncate group-hover:text-[#15803d] transition-colors" title={trustee.name}>
+                              {trustee.name}
+                            </h4>
+                            <p className="text-xs text-slate-600 font-normal leading-snug mt-1" title={trustee.portfolio}>
+                              {trustee.portfolio}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="pt-2 mt-2 border-t border-slate-200/60 flex items-center justify-between text-xs text-slate-400 font-medium">
+                          <span>#{trustee.sno}</span>
+                          <span className="text-slate-500">Board of Trustees</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              /* Table View matching ISLAH.docx Table 2 */
+              <div className="rounded-xl border border-slate-200 overflow-hidden pt-1">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse text-xs">
+                    <thead>
+                      <tr className="bg-slate-100 border-b border-slate-200 font-bold text-slate-700 uppercase tracking-wider text-[11px]">
+                        <th className="p-3 w-12">Sl. No</th>
+                        <th className="p-3 w-16">Photo</th>
+                        <th className="p-3 w-48">Name</th>
+                        <th className="p-3 w-36">Designation</th>
+                        <th className="p-3">Key Focus & Portfolio</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 text-slate-700 font-normal">
+                      {ALL_TRUSTEES.map((t) => (
+                        <tr key={t.sno} className="hover:bg-slate-50 transition">
+                          <td className="p-3 font-semibold text-slate-400">{t.sno}</td>
+                          <td className="p-3">
+                            <PhotoAvatar name={t.name} gender={t.gender} size="sm" />
+                          </td>
+                          <td className="p-3 font-bold text-slate-900">{t.name}</td>
+                          <td className="p-3">
+                            <span className="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded font-semibold text-[11px] inline-block">
+                              {t.designation}
+                            </span>
+                          </td>
+                          <td className="p-3 text-slate-600 leading-relaxed font-normal">{t.portfolio}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </div>
+        </ScrollReveal>
 
         {/* ─── Tier 2: Executive Body ──────────────────────────────────────── */}
-        <section className="space-y-4">
-          <ScrollReveal>
-            <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-xs space-y-4">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 flex items-center justify-center font-bold shrink-0 shadow-2xs">
-                    <Compass className="w-5 h-5 text-brand-orange" />
-                  </div>
-                  <div>
-                    <span className="text-[11px] font-black uppercase tracking-widest text-[#f97316]">
-                      TIER 2 • OPERATIONAL MANAGEMENT
-                    </span>
-                    <h2 className="text-xl sm:text-2xl font-black text-[#0b1f3b] tracking-tight leading-tight">
-                      Executive Body
-                    </h2>
-                  </div>
+        <ScrollReveal>
+          <div className="bg-white rounded-2xl p-3.5 sm:p-4 border border-slate-200 shadow-xs space-y-2.5">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2.5 border-b border-slate-100 pb-2">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 flex items-center justify-center font-bold shrink-0 shadow-2xs">
+                  <Compass className="w-4 h-4 text-brand-orange" />
                 </div>
-
-                <span className="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full self-start md:self-auto">
-                  06 Members Total
-                </span>
-              </div>
-
-              {/* Exact Operations & Role & Responsibility Box from ISLAH.docx */}
-              <div className="bg-amber-50/80 border-l-4 border-brand-orange p-4 rounded-r-xl space-y-2">
-                <p className="text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
-                  The <strong className="text-[#0b1f3b] font-bold">Executive Body</strong> is responsible for translating ISLAH’s vision and strategic priorities into effective programmes and day-to-day organisational action.
-                </p>
-                <div className="pt-2 border-t border-amber-200/70 flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
-                  <span className="text-[11px] font-bold text-brand-orange uppercase tracking-wider shrink-0">
-                    Roles & Responsibility:
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-brand-orange">
+                    TIER 2 • OPERATIONAL MANAGEMENT
                   </span>
-                  <p className="text-xs text-slate-700 leading-relaxed font-normal">
-                    It oversees implementation, coordination, resource management and operational performance while ensuring alignment with the organisation’s policies, values and objectives.
-                  </p>
+                  <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-tight">
+                    Executive Body
+                  </h2>
                 </div>
               </div>
 
-              {viewMode === "cards" ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 pt-1">
-                  {EXECUTIVE_BODY.map((exec) => {
-                    const Icon = exec.icon;
-                    return (
-                      <div
-                        key={exec.sno}
-                        className="rounded-xl p-3.5 border border-slate-200 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between group bg-slate-50/80 hover:bg-white"
-                      >
-                        <div className="flex items-center gap-3">
-                          <PhotoAvatar name={exec.name} gender={exec.gender} size="md" />
-                          <div className="min-w-0 flex-1">
-                            <div className="flex items-center justify-between">
-                              <span className="inline-block text-[10px] font-black text-[#f97316] bg-amber-50 border border-amber-200 px-2 py-0.5 rounded uppercase">
-                                {exec.designation}
-                              </span>
-                              <div className="w-5 h-5 rounded bg-white border border-slate-200 flex items-center justify-center text-[#0b1f3b]">
-                                <Icon className="w-3 h-3 text-brand-orange" />
-                              </div>
-                            </div>
-                            <h4 className="font-extrabold text-[#0b1f3b] text-sm mt-0.5 truncate group-hover:text-brand-orange transition-colors" title={exec.name}>
-                              {exec.name}
-                            </h4>
-                            <p className="text-[11px] text-slate-500 font-medium leading-snug mt-0.5" title={exec.portfolio}>
-                              {exec.portfolio}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="pt-2 mt-2.5 border-t border-slate-200/70 flex items-center justify-between text-[10px] text-slate-500">
-                          <a
-                            href={`mailto:${exec.email}`}
-                            className="font-mono text-[10px] text-blue-600 hover:underline flex items-center gap-1"
-                          >
-                            <Mail className="w-3 h-3" />
-                            {exec.email}
-                          </a>
-                          <span className="font-mono text-slate-400">#{exec.sno}</span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                /* Table View matching ISLAH.docx Table 3 */
-                <div className="rounded-xl border border-slate-200 overflow-hidden pt-1">
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse text-xs">
-                      <thead>
-                        <tr className="bg-slate-100 border-b border-slate-200 font-black text-slate-700 uppercase tracking-wider text-[10px]">
-                          <th className="p-3 w-12">Sl. No</th>
-                          <th className="p-3 w-16">Photo</th>
-                          <th className="p-3 w-48">Name</th>
-                          <th className="p-3 w-48">Designation</th>
-                          <th className="p-3">Key Focus & Portfolio</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
-                        {EXECUTIVE_BODY.map((exec) => (
-                          <tr key={exec.sno} className="hover:bg-slate-50 transition">
-                            <td className="p-3 font-mono font-bold text-slate-400">{exec.sno}</td>
-                            <td className="p-3">
-                              <PhotoAvatar name={exec.name} gender={exec.gender} size="sm" />
-                            </td>
-                            <td className="p-3 font-bold text-[#0b1f3b]">{exec.name}</td>
-                            <td className="p-3">
-                              <span className="bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded font-bold text-[11px] inline-block">
-                                {exec.designation}
-                              </span>
-                            </td>
-                            <td className="p-3 text-slate-600 leading-relaxed font-medium">{exec.portfolio}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
+              <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full self-start md:self-auto">
+                06 Members Total
+              </span>
             </div>
-          </ScrollReveal>
-        </section>
 
-        {/* ─── Tier 3: Advisory Body ───────────────────────────────────────── */}
-        <section className="space-y-4">
-          <ScrollReveal>
-            <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-xs space-y-4">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 flex items-center justify-center font-bold shrink-0 shadow-2xs">
-                    <Award className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="text-[11px] font-black uppercase tracking-widest text-[#0284c7]">
-                      TIER 3 • STRATEGIC COUNSEL
-                    </span>
-                    <h2 className="text-xl sm:text-2xl font-black text-[#0b1f3b] tracking-tight leading-tight">
-                      Advisory Body
-                    </h2>
-                  </div>
-                </div>
-
-                <span className="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full self-start md:self-auto">
-                  06 Advisors Total
+            {/* Exact Operations & Role & Responsibility Box from ISLAH.docx */}
+            <div className="bg-amber-50/80 border-l-4 border-brand-orange p-3 rounded-r-xl space-y-1.5">
+              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-normal">
+                The <strong className="text-slate-900 font-bold">Executive Body</strong> is responsible for translating ISLAH’s vision and strategic priorities into effective programmes and day-to-day organisational action.
+              </p>
+              <div className="pt-1.5 border-t border-amber-200/70 flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
+                <span className="text-xs font-semibold text-brand-orange uppercase tracking-wider shrink-0">
+                  Roles & Responsibility:
                 </span>
-              </div>
-
-              {/* Exact Advisory Role & Strategic Guidance from ISLAH.docx */}
-              <div className="bg-blue-50/80 border-l-4 border-blue-500 p-4 rounded-r-xl space-y-2">
-                <p className="text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
-                  The <strong className="text-[#0b1f3b] font-bold">Advisory Body</strong> of ISLAH brings together experienced professionals, subject experts and distinguished individuals who provide strategic guidance and specialised advice across areas relevant to our mission.
+                <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                  It oversees implementation, coordination, resource management and operational performance while ensuring alignment with the organisation’s policies, values and objectives.
                 </p>
-                <div className="pt-2 border-t border-blue-200/70 flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
-                  <span className="text-[11px] font-bold text-blue-600 uppercase tracking-wider shrink-0">
-                    Roles & Responsibility:
-                  </span>
-                  <p className="text-xs text-slate-700 leading-relaxed font-normal">
-                    The Advisory Body supports ISLAH in strengthening its programmes, institutional systems, partnerships and long-term vision by contributing diverse perspectives, professional expertise and evidence-based insights.
-                  </p>
-                </div>
               </div>
-
-              {viewMode === "cards" ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 pt-1">
-                  {ADVISORY_BODY.map((advisor) => {
-                    const Icon = advisor.icon;
-                    return (
-                      <div
-                        key={advisor.sno}
-                        className="bg-slate-50/80 rounded-xl p-3.5 border border-slate-200 shadow-2xs hover:shadow-md hover:bg-white transition-all flex flex-col justify-between group"
-                      >
-                        <div className="flex items-center gap-3">
-                          <PhotoAvatar name={advisor.name} gender={advisor.gender} size="md" />
-                          <div className="min-w-0 flex-1">
-                            <div className="flex items-center justify-between">
-                              <span className="inline-block text-[10px] font-bold text-blue-800 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded uppercase">
-                                {advisor.expertise}
-                              </span>
-                              <div className="w-5 h-5 rounded bg-white border border-slate-200 flex items-center justify-center text-[#0b1f3b]">
-                                <Icon className="w-3 h-3 text-blue-600" />
-                              </div>
-                            </div>
-                            <h4 className="font-extrabold text-[#0b1f3b] text-sm mt-0.5 truncate group-hover:text-blue-700 transition-colors" title={advisor.name}>
-                              {advisor.name}
-                            </h4>
-                            <p className="text-[11px] text-slate-500 font-medium leading-snug mt-0.5" title={advisor.focus}>
-                              {advisor.focus}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="pt-2 mt-2.5 border-t border-slate-200 text-[10px] text-slate-400 flex items-center justify-between">
-                          <span className="font-mono">#{advisor.sno}</span>
-                          <span className="text-slate-500 font-medium">Strategic Advisory</span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                /* Table View matching ISLAH.docx Table 4 */
-                <div className="rounded-xl border border-slate-200 overflow-hidden pt-1">
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse text-xs">
-                      <thead>
-                        <tr className="bg-slate-100 border-b border-slate-200 font-black text-slate-700 uppercase tracking-wider text-[10px]">
-                          <th className="p-3 w-12">Sl. No</th>
-                          <th className="p-3 w-16">Photo</th>
-                          <th className="p-3 w-48">Name</th>
-                          <th className="p-3 w-44">Expertise</th>
-                          <th className="p-3">Advisory Domain</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
-                        {ADVISORY_BODY.map((advisor) => (
-                          <tr key={advisor.sno} className="hover:bg-slate-50 transition">
-                            <td className="p-3 font-mono font-bold text-slate-400">{advisor.sno}</td>
-                            <td className="p-3">
-                              <PhotoAvatar name={advisor.name} gender={advisor.gender} size="sm" />
-                            </td>
-                            <td className="p-3 font-bold text-[#0b1f3b]">{advisor.name}</td>
-                            <td className="p-3">
-                              <span className="bg-blue-50 text-blue-800 border border-blue-200 px-2 py-0.5 rounded font-bold text-[11px] inline-block">
-                                {advisor.expertise}
-                              </span>
-                            </td>
-                            <td className="p-3 text-slate-600 leading-relaxed font-medium">{advisor.focus}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
             </div>
-          </ScrollReveal>
-        </section>
 
-        {/* ─── Tier 4: Field Team & Grassroots Force ───────────────────────── */}
-        <section className="space-y-4">
-          <ScrollReveal>
-            <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-xs space-y-4">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-purple-50 border border-purple-200 text-purple-700 flex items-center justify-center font-bold shrink-0 shadow-2xs">
-                    <MapPin className="w-5 h-5 text-purple-600" />
-                  </div>
-                  <div>
-                    <span className="text-[11px] font-black uppercase tracking-widest text-[#7c3aed]">
-                      TIER 4 • GRASSROOTS MOBILIZATION
-                    </span>
-                    <h2 className="text-xl sm:text-2xl font-black text-[#0b1f3b] tracking-tight leading-tight">
-                      Field Team & Community Mobilizers
-                    </h2>
-                  </div>
-                </div>
-
-                <span className="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full self-start md:self-auto">
-                  06 Members Total
-                </span>
-              </div>
-
-              {/* Exact Field Team Role & Mission Box from ISLAH.docx */}
-              <div className="bg-purple-50/80 border-l-4 border-purple-500 p-4 rounded-r-xl space-y-2">
-                <p className="text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
-                  The <strong className="text-[#0b1f3b] font-bold">Field Team</strong> is the frontline of ISLAH’s work. It connects the organisation with communities, understands local needs, facilitates programme delivery and ensures that initiatives reach the people they are intended to serve.
-                </p>
-                <div className="pt-2 border-t border-purple-200/70 flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
-                  <span className="text-[11px] font-bold text-purple-600 uppercase tracking-wider shrink-0">
-                    Roles & Responsibility:
-                  </span>
-                  <p className="text-xs text-slate-700 leading-relaxed font-normal">
-                    Working closely with communities, volunteers, local institutions and programme teams, the Field Team helps translate ISLAH’s plans into practical, community-level action.
-                  </p>
-                </div>
-              </div>
-
-              {viewMode === "cards" ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 pt-1">
-                  {FIELD_TEAM.map((member) => (
+            {viewMode === "cards" ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-0.5">
+                {EXECUTIVE_BODY.map((exec) => {
+                  const Icon = exec.icon;
+                  return (
                     <div
-                      key={member.sno}
-                      className="p-3.5 rounded-xl bg-slate-50/80 border border-slate-200 flex flex-col justify-between hover:bg-white hover:shadow-md transition group"
+                      key={exec.sno}
+                      className="rounded-xl p-3 border border-slate-200 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between group bg-slate-50/80 hover:bg-white"
                     >
                       <div className="flex items-center gap-3">
-                        <PhotoAvatar name={member.name} gender={member.gender} size="md" />
+                        <PhotoAvatar name={exec.name} gender={exec.gender} size="md" />
                         <div className="min-w-0 flex-1">
-                          <span className="inline-block text-[10px] font-bold text-purple-800 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded uppercase">
-                            {member.designation}
-                          </span>
-                          <h5 className="font-extrabold text-[#0b1f3b] text-sm mt-0.5 truncate group-hover:text-purple-700 transition-colors" title={member.name}>
-                            {member.name}
-                          </h5>
-                          <p className="text-[11px] text-slate-500 font-medium leading-snug mt-0.5" title={member.focus}>
-                            {member.focus}
+                          <div className="flex items-center justify-between">
+                            <span className="inline-block text-[11px] font-semibold text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded uppercase tracking-wide">
+                              {exec.designation}
+                            </span>
+                            <div className="w-5 h-5 rounded bg-white border border-slate-200 flex items-center justify-center text-[#0b1f3b]">
+                              <Icon className="w-3 h-3 text-brand-orange" />
+                            </div>
+                          </div>
+                          <h4 className="font-bold text-slate-900 text-sm mt-1 truncate group-hover:text-brand-orange transition-colors" title={exec.name}>
+                            {exec.name}
+                          </h4>
+                          <p className="text-xs text-slate-600 font-normal leading-snug mt-1" title={exec.portfolio}>
+                            {exec.portfolio}
                           </p>
                         </div>
                       </div>
 
-                      <div className="pt-2 mt-2.5 border-t border-slate-200 text-[10px] text-slate-400 flex items-center justify-between">
-                        <span className="font-mono">#{member.sno}</span>
-                        <span className="text-slate-500 font-medium">Frontline Operations</span>
+                      <div className="pt-2 mt-2 border-t border-slate-200/70 flex items-center justify-between text-xs text-slate-500 font-medium">
+                        <a
+                          href={`mailto:${exec.email}`}
+                          className="text-xs text-blue-600 hover:underline flex items-center gap-1"
+                        >
+                          <Mail className="w-3 h-3" />
+                          {exec.email}
+                        </a>
+                        <span className="text-slate-400">#{exec.sno}</span>
                       </div>
                     </div>
-                  ))}
-                </div>
-              ) : (
-                /* Table View matching ISLAH.docx Table 5 */
-                <div className="rounded-xl border border-slate-200 overflow-hidden pt-1">
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse text-xs">
-                      <thead>
-                        <tr className="bg-slate-100 border-b border-slate-200 font-black text-slate-700 uppercase tracking-wider text-[10px]">
-                          <th className="p-3 w-12">Sl. No</th>
-                          <th className="p-3 w-16">Photo</th>
-                          <th className="p-3 w-48">Name</th>
-                          <th className="p-3 w-44">Designation</th>
-                          <th className="p-3">Frontline Responsibility</th>
+                  );
+                })}
+              </div>
+            ) : (
+              /* Table View matching ISLAH.docx Table 3 */
+              <div className="rounded-xl border border-slate-200 overflow-hidden pt-1">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse text-xs">
+                    <thead>
+                      <tr className="bg-slate-100 border-b border-slate-200 font-bold text-slate-700 uppercase tracking-wider text-[11px]">
+                        <th className="p-3 w-12">Sl. No</th>
+                        <th className="p-3 w-16">Photo</th>
+                        <th className="p-3 w-48">Name</th>
+                        <th className="p-3 w-48">Designation</th>
+                        <th className="p-3">Key Focus & Portfolio</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 text-slate-700 font-normal">
+                      {EXECUTIVE_BODY.map((exec) => (
+                        <tr key={exec.sno} className="hover:bg-slate-50 transition">
+                          <td className="p-3 font-semibold text-slate-400">{exec.sno}</td>
+                          <td className="p-3">
+                            <PhotoAvatar name={exec.name} gender={exec.gender} size="sm" />
+                          </td>
+                          <td className="p-3 font-bold text-slate-900">{exec.name}</td>
+                          <td className="p-3">
+                            <span className="bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded font-semibold text-[11px] inline-block">
+                              {exec.designation}
+                            </span>
+                          </td>
+                          <td className="p-3 text-slate-600 leading-relaxed font-normal">{exec.portfolio}</td>
                         </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
-                        {FIELD_TEAM.map((member) => (
-                          <tr key={member.sno} className="hover:bg-slate-50 transition">
-                            <td className="p-3 font-mono font-bold text-slate-400">{member.sno}</td>
-                            <td className="p-3">
-                              <PhotoAvatar name={member.name} gender={member.gender} size="sm" />
-                            </td>
-                            <td className="p-3 font-bold text-[#0b1f3b]">{member.name}</td>
-                            <td className="p-3">
-                              <span className="bg-purple-50 text-purple-800 border border-purple-200 px-2 py-0.5 rounded font-bold text-[11px] inline-block">
-                                {member.designation}
-                              </span>
-                            </td>
-                            <td className="p-3 text-slate-600 leading-relaxed font-medium">{member.focus}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-              )}
+              </div>
+            )}
+          </div>
+        </ScrollReveal>
+
+        {/* ─── Tier 3: Advisory Body ───────────────────────────────────────── */}
+        <ScrollReveal>
+          <div className="bg-white rounded-2xl p-3.5 sm:p-4 border border-slate-200 shadow-xs space-y-2.5">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2.5 border-b border-slate-100 pb-2">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 flex items-center justify-center font-bold shrink-0 shadow-2xs">
+                  <Award className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-sky-600">
+                    TIER 3 • STRATEGIC COUNSEL
+                  </span>
+                  <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-tight">
+                    Advisory Body
+                  </h2>
+                </div>
+              </div>
+
+              <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full self-start md:self-auto">
+                06 Advisors Total
+              </span>
             </div>
-          </ScrollReveal>
-        </section>
+
+            {/* Exact Advisory Role & Strategic Guidance from ISLAH.docx */}
+            <div className="bg-blue-50/80 border-l-4 border-sky-500 p-3 rounded-r-xl space-y-1.5">
+              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-normal">
+                The <strong className="text-slate-900 font-bold">Advisory Body</strong> of ISLAH brings together experienced professionals, subject experts and distinguished individuals who provide strategic guidance and specialised advice across areas relevant to our mission.
+              </p>
+              <div className="pt-1.5 border-t border-blue-200/70 flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
+                <span className="text-xs font-semibold text-sky-600 uppercase tracking-wider shrink-0">
+                  Roles & Responsibility:
+                </span>
+                <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                  The Advisory Body supports ISLAH in strengthening its programmes, institutional systems, partnerships and long-term vision by contributing diverse perspectives, professional expertise and evidence-based insights.
+                </p>
+              </div>
+            </div>
+
+            {viewMode === "cards" ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-0.5">
+                {ADVISORY_BODY.map((advisor) => {
+                  const Icon = advisor.icon;
+                  return (
+                    <div
+                      key={advisor.sno}
+                      className="bg-slate-50/80 rounded-xl p-3 border border-slate-200 shadow-2xs hover:shadow-md hover:bg-white transition-all flex flex-col justify-between group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <PhotoAvatar name={advisor.name} gender={advisor.gender} size="md" />
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center justify-between">
+                            <span className="inline-block text-[11px] font-semibold text-sky-800 bg-sky-50 border border-sky-200 px-2 py-0.5 rounded uppercase tracking-wide">
+                              {advisor.expertise}
+                            </span>
+                            <div className="w-5 h-5 rounded bg-white border border-slate-200 flex items-center justify-center text-[#0b1f3b]">
+                              <Icon className="w-3 h-3 text-sky-600" />
+                            </div>
+                          </div>
+                          <h4 className="font-bold text-slate-900 text-sm mt-1 truncate group-hover:text-sky-700 transition-colors" title={advisor.name}>
+                            {advisor.name}
+                          </h4>
+                          <p className="text-xs text-slate-600 font-normal leading-snug mt-1" title={advisor.focus}>
+                            {advisor.focus}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="pt-2 mt-2 border-t border-slate-200 text-xs text-slate-400 font-medium flex items-center justify-between">
+                        <span>#{advisor.sno}</span>
+                        <span className="text-slate-500">Strategic Advisory</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              /* Table View matching ISLAH.docx Table 4 */
+              <div className="rounded-xl border border-slate-200 overflow-hidden pt-1">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse text-xs">
+                    <thead>
+                      <tr className="bg-slate-100 border-b border-slate-200 font-bold text-slate-700 uppercase tracking-wider text-[11px]">
+                        <th className="p-3 w-12">Sl. No</th>
+                        <th className="p-3 w-16">Photo</th>
+                        <th className="p-3 w-48">Name</th>
+                        <th className="p-3 w-44">Expertise</th>
+                        <th className="p-3">Advisory Domain</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 text-slate-700 font-normal">
+                      {ADVISORY_BODY.map((advisor) => (
+                        <tr key={advisor.sno} className="hover:bg-slate-50 transition">
+                          <td className="p-3 font-semibold text-slate-400">{advisor.sno}</td>
+                          <td className="p-3">
+                            <PhotoAvatar name={advisor.name} gender={advisor.gender} size="sm" />
+                          </td>
+                          <td className="p-3 font-bold text-slate-900">{advisor.name}</td>
+                          <td className="p-3">
+                            <span className="bg-blue-50 text-blue-800 border border-blue-200 px-2 py-0.5 rounded font-semibold text-[11px] inline-block">
+                              {advisor.expertise}
+                            </span>
+                          </td>
+                          <td className="p-3 text-slate-600 leading-relaxed font-normal">{advisor.focus}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </div>
+        </ScrollReveal>
+
+        {/* ─── Tier 4: Field Team & Grassroots Force ───────────────────────── */}
+        <ScrollReveal>
+          <div className="bg-white rounded-2xl p-3.5 sm:p-4 border border-slate-200 shadow-xs space-y-2.5">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2.5 border-b border-slate-100 pb-2">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-purple-50 border border-purple-200 text-purple-700 flex items-center justify-center font-bold shrink-0 shadow-2xs">
+                  <MapPin className="w-4 h-4 text-purple-600" />
+                </div>
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-purple-600">
+                    TIER 4 • GRASSROOTS MOBILIZATION
+                  </span>
+                  <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-tight">
+                    Field Team & Community Mobilizers
+                  </h2>
+                </div>
+              </div>
+
+              <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full self-start md:self-auto">
+                06 Members Total
+              </span>
+            </div>
+
+            {/* Exact Field Team Role & Mission Box from ISLAH.docx */}
+            <div className="bg-purple-50/80 border-l-4 border-purple-500 p-3 rounded-r-xl space-y-1.5">
+              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-normal">
+                The <strong className="text-slate-900 font-bold">Field Team</strong> is the frontline of ISLAH’s work. It connects the organisation with communities, understands local needs, facilitates programme delivery and ensures that initiatives reach the people they are intended to serve.
+              </p>
+              <div className="pt-1.5 border-t border-purple-200/70 flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
+                <span className="text-xs font-semibold text-purple-600 uppercase tracking-wider shrink-0">
+                  Roles & Responsibility:
+                </span>
+                <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                  Working closely with communities, volunteers, local institutions and programme teams, the Field Team helps translate ISLAH’s plans into practical, community-level action.
+                </p>
+              </div>
+            </div>
+
+            {viewMode === "cards" ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-0.5">
+                {FIELD_TEAM.map((member) => (
+                  <div
+                    key={member.sno}
+                    className="p-3 rounded-xl bg-slate-50/80 border border-slate-200 flex flex-col justify-between hover:bg-white hover:shadow-md transition group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <PhotoAvatar name={member.name} gender={member.gender} size="md" />
+                      <div className="min-w-0 flex-1">
+                        <span className="inline-block text-[11px] font-semibold text-purple-800 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded uppercase tracking-wide">
+                          {member.designation}
+                        </span>
+                        <h5 className="font-bold text-slate-900 text-sm mt-1 truncate group-hover:text-purple-700 transition-colors" title={member.name}>
+                          {member.name}
+                        </h5>
+                        <p className="text-xs text-slate-600 font-normal leading-snug mt-1" title={member.focus}>
+                          {member.focus}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="pt-2 mt-2 border-t border-slate-200 text-xs text-slate-400 font-medium flex items-center justify-between">
+                      <span>#{member.sno}</span>
+                      <span className="text-slate-500">Frontline Operations</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              /* Table View matching ISLAH.docx Table 5 */
+              <div className="rounded-xl border border-slate-200 overflow-hidden pt-1">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse text-xs">
+                    <thead>
+                      <tr className="bg-slate-100 border-b border-slate-200 font-bold text-slate-700 uppercase tracking-wider text-[11px]">
+                        <th className="p-3 w-12">Sl. No</th>
+                        <th className="p-3 w-16">Photo</th>
+                        <th className="p-3 w-48">Name</th>
+                        <th className="p-3 w-44">Designation</th>
+                        <th className="p-3">Frontline Responsibility</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 text-slate-700 font-normal">
+                      {FIELD_TEAM.map((member) => (
+                        <tr key={member.sno} className="hover:bg-slate-50 transition">
+                          <td className="p-3 font-semibold text-slate-400">{member.sno}</td>
+                          <td className="p-3">
+                            <PhotoAvatar name={member.name} gender={member.gender} size="sm" />
+                          </td>
+                          <td className="p-3 font-bold text-slate-900">{member.name}</td>
+                          <td className="p-3">
+                            <span className="bg-purple-50 text-purple-800 border border-purple-200 px-2 py-0.5 rounded font-semibold text-[11px] inline-block">
+                              {member.designation}
+                            </span>
+                          </td>
+                          <td className="p-3 text-slate-600 leading-relaxed font-normal">{member.focus}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </div>
+        </ScrollReveal>
 
         {/* ─── Section: Governance & Ethical Accountability Norms ──────────── */}
         <ScrollReveal>
-          <div className="bg-gradient-to-r from-slate-950 via-[#0b1f3b] to-slate-950 text-white rounded-2xl p-5 sm:p-6 shadow-xl border border-white/10 space-y-4">
-            <div className="text-center max-w-xl mx-auto space-y-1">
-              <span className="text-[11px] font-black uppercase tracking-widest text-emerald-400">
+          <div className="bg-gradient-to-r from-slate-950 via-[#0b1f3b] to-slate-950 text-white rounded-2xl p-3.5 sm:p-4 shadow-xl border border-white/10 space-y-2.5">
+            <div className="text-center max-w-xl mx-auto space-y-0.5">
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
                 GOVERNANCE PRINCIPLES
               </span>
-              <h3 className="text-lg sm:text-xl font-black text-white tracking-tight">
+              <h3 className="text-base sm:text-lg font-bold text-white tracking-tight">
                 Accountability & Responsible Stewardship
               </h3>
-              <p className="text-xs text-slate-300">
+              <p className="text-xs text-slate-300 font-normal">
                 ISLAH adheres to the highest statutory, ethical and fiduciary standards across all operations.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-3.5 border border-white/15 space-y-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                <h5 className="font-extrabold text-xs text-white">Trustee Oversight</h5>
-                <p className="text-[10px] text-slate-300 leading-snug">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 pt-0.5">
+              <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/15 space-y-1">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                <h5 className="font-bold text-xs text-white">Trustee Oversight</h5>
+                <p className="text-xs text-slate-300 leading-snug font-normal">
                   Regular board meetings, review of audited accounts, and statutory policy formulation.
                 </p>
               </div>
 
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-3.5 border border-white/15 space-y-1.5">
-                <FileText className="w-4 h-4 text-[#38bdf8]" />
-                <h5 className="font-extrabold text-xs text-white">Financial Transparency</h5>
-                <p className="text-[10px] text-slate-300 leading-snug">
+              <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/15 space-y-1">
+                <FileText className="w-3.5 h-3.5 text-sky-400" />
+                <h5 className="font-bold text-xs text-white">Financial Transparency</h5>
+                <p className="text-xs text-slate-300 leading-snug font-normal">
                   Annual external audits, quarterly reviews, and public reporting of fund utilisation.
                 </p>
               </div>
 
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-3.5 border border-white/15 space-y-1.5">
-                <Scale className="w-4 h-4 text-amber-400" />
-                <h5 className="font-extrabold text-xs text-white">Statutory Compliance</h5>
-                <p className="text-[10px] text-slate-300 leading-snug">
+              <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/15 space-y-1">
+                <Scale className="w-3.5 h-3.5 text-amber-400" />
+                <h5 className="font-bold text-xs text-white">Statutory Compliance</h5>
+                <p className="text-xs text-slate-300 leading-snug font-normal">
                   Full adherence to Trust Deed provisions, 12A/80G norms, and applicable NGO guidelines.
                 </p>
               </div>
 
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-3.5 border border-white/15 space-y-1.5">
-                <Target className="w-4 h-4 text-rose-400" />
-                <h5 className="font-extrabold text-xs text-white">Impact Verification</h5>
-                <p className="text-[10px] text-slate-300 leading-snug">
+              <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/15 space-y-1">
+                <Target className="w-3.5 h-3.5 text-rose-400" />
+                <h5 className="font-bold text-xs text-white">Impact Verification</h5>
+                <p className="text-xs text-slate-300 leading-snug font-normal">
                   Outcome tracking, beneficiary verification, and transparent feedback mechanisms.
                 </p>
               </div>
@@ -966,15 +958,15 @@ export default function LeadershipPage() {
 
         {/* ─── Section: Connect with Leadership CTA ────────────────────────── */}
         <ScrollReveal>
-          <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-xs flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+          <div className="bg-white rounded-2xl p-3.5 sm:p-4 border border-slate-200 shadow-xs flex flex-col md:flex-row items-center justify-between gap-3 text-center md:text-left">
             <div className="space-y-0.5 max-w-xl">
-              <span className="text-[11px] font-black uppercase tracking-widest text-[#15803d]">
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-700">
                 INSTITUTIONAL DIALOGUE
               </span>
-              <h3 className="text-lg sm:text-xl font-black text-[#0b1f3b] tracking-tight">
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
                 Connect with Our Leadership
               </h3>
-              <p className="text-xs text-slate-600">
+              <p className="text-xs text-slate-600 font-normal">
                 For institutional partnerships, governance inquiries, or media queries, please reach out to our team.
               </p>
             </div>
@@ -982,14 +974,14 @@ export default function LeadershipPage() {
             <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
               <a
                 href="/contact"
-                className="inline-flex items-center gap-2 bg-[#15803d] hover:bg-[#166534] text-white font-extrabold text-xs px-4 py-2.5 rounded-xl shadow-sm transition uppercase tracking-wider"
+                className="inline-flex items-center gap-2 bg-[#15803d] hover:bg-[#166534] text-white font-semibold text-xs px-4 py-2.5 rounded-xl shadow-sm transition uppercase tracking-wider"
               >
                 <Phone className="w-3.5 h-3.5" />
                 <span>Contact Us</span>
               </a>
               <a
                 href="mailto:info@iwfindia.org"
-                className="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs px-4 py-2.5 rounded-xl shadow-sm transition"
+                className="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-xs px-4 py-2.5 rounded-xl shadow-sm transition"
               >
                 <Mail className="w-3.5 h-3.5" />
                 <span>info@iwfindia.org</span>
