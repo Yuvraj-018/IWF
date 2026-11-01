@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { api } from "../services/api";
-import { Plus, Trash2, Image as ImageIcon, Loader2, X, ExternalLink } from "lucide-react";
+import { Plus, Trash2, Image as ImageIcon, Loader2, X, ExternalLink, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 
 export default function MediaManager() {
@@ -18,9 +18,9 @@ export default function MediaManager() {
     altText: "",
   });
 
-  const loadMedia = () => {
+  const loadMedia = (force = false) => {
     setLoading(true);
-    api.listMedia(selectedCategory === "all" ? undefined : selectedCategory).then((res) => {
+    api.listMedia(selectedCategory === "all" ? undefined : selectedCategory, { force }).then((res) => {
       if (res.success && res.data) {
         setMediaList(res.data);
       }
@@ -29,7 +29,7 @@ export default function MediaManager() {
   };
 
   useEffect(() => {
-    loadMedia();
+    loadMedia(false);
   }, [selectedCategory]);
 
   const handleDelete = async (key: string) => {
@@ -99,13 +99,24 @@ export default function MediaManager() {
           <h2 className="text-xl font-black text-white">Dynamic Media &amp; Banners</h2>
           <p className="text-xs text-slate-400 mt-1">Live image replacement for homepage carousel, thematic pillars, and gallery</p>
         </div>
-        <button
-          onClick={() => setModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition shadow-lg shadow-emerald-900/30 cursor-pointer"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Add / Replace Asset</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => loadMedia(true)}
+            disabled={loading}
+            className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition cursor-pointer disabled:opacity-50"
+            title="Bypass cache and sync live with MongoDB"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-emerald-400" : ""}`} />
+            <span className="hidden sm:inline">Refresh</span>
+          </button>
+          <button
+            onClick={() => setModalOpen(true)}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition shadow-lg shadow-emerald-900/30 cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Add / Replace Asset</span>
+          </button>
+        </div>
       </div>
 
       {/* Category filters */}

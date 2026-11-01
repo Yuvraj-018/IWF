@@ -22,16 +22,16 @@ export default function DashboardOverview({ onNavigate }: { onNavigate: (tab: Na
   });
   const [loading, setLoading] = useState(true);
 
-  const fetchStats = () => {
+  const fetchStats = (force = false) => {
     setLoading(true);
-    api.getDashboardStats().then((res) => {
+    api.getDashboardStats({ force }).then((res) => {
       setStats(res);
       setLoading(false);
     });
   };
 
   useEffect(() => {
-    fetchStats();
+    fetchStats(false);
   }, []);
 
   const kpis = [
@@ -85,7 +85,7 @@ export default function DashboardOverview({ onNavigate }: { onNavigate: (tab: Na
           <p className="text-xs text-slate-400 mt-1">Real-time statistics across MongoDB database collections</p>
         </div>
         <button
-          onClick={fetchStats}
+          onClick={() => fetchStats(true)}
           disabled={loading}
           className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition cursor-pointer disabled:opacity-50"
         >

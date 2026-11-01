@@ -8,6 +8,7 @@ import {
   Loader2,
   X,
   FileCheck,
+  RefreshCw,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -33,9 +34,9 @@ export default function NewsManager() {
     isUpcoming: false,
   });
 
-  const loadData = () => {
+  const loadData = (force = false) => {
     setLoading(true);
-    api.listNews({ category: selectedCategory, search }).then((res) => {
+    api.listNews({ category: selectedCategory, search }, { force }).then((res) => {
       if (res.success && res.data) {
         setItems(res.data);
       }
@@ -44,7 +45,7 @@ export default function NewsManager() {
   };
 
   useEffect(() => {
-    loadData();
+    loadData(false);
   }, [selectedCategory, search]);
 
   const handleDelete = async (id: string, title: string) => {
@@ -107,13 +108,24 @@ export default function NewsManager() {
           <h2 className="text-xl font-black text-white">News, Dispatches &amp; Events</h2>
           <p className="text-xs text-slate-400 mt-1">Manage public articles, press releases, and upcoming calendar items</p>
         </div>
-        <button
-          onClick={() => setModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition shadow-lg shadow-emerald-900/30 cursor-pointer"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Publish New Story</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => loadData(true)}
+            disabled={loading}
+            className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition cursor-pointer disabled:opacity-50"
+            title="Bypass cache and sync live with MongoDB"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-emerald-400" : ""}`} />
+            <span className="hidden sm:inline">Refresh</span>
+          </button>
+          <button
+            onClick={() => setModalOpen(true)}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition shadow-lg shadow-emerald-900/30 cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Publish New Story</span>
+          </button>
+        </div>
       </div>
 
       {/* Filter and Search Bar */}
@@ -123,11 +135,10 @@ export default function NewsManager() {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer whitespace-nowrap ${
-                selectedCategory === cat
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer whitespace-nowrap ${selectedCategory === cat
                   ? "bg-emerald-600 text-white"
                   : "bg-slate-800 text-slate-400 hover:text-white"
-              }`}
+                }`}
             >
               {cat}
             </button>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { api } from "../services/api";
-import { Search, Download, Loader2 } from "lucide-react";
+import { Search, Download, Loader2, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 
 export default function MembersManager() {
@@ -10,9 +10,9 @@ export default function MembersManager() {
   const [status, setStatus] = useState("");
   const [search, setSearch] = useState("");
 
-  const loadMembers = () => {
+  const loadMembers = (force = false) => {
     setLoading(true);
-    api.listMembers({ category: category || undefined, status: status || undefined, search }).then((res) => {
+    api.listMembers({ category: category || undefined, status: status || undefined, search }, { force }).then((res) => {
       if (res.success && res.data) {
         setMembers(res.data);
       }
@@ -21,7 +21,7 @@ export default function MembersManager() {
   };
 
   useEffect(() => {
-    loadMembers();
+    loadMembers(false);
   }, [category, status, search]);
 
   const exportCSV = () => {
@@ -67,13 +67,24 @@ export default function MembersManager() {
           <h2 className="text-xl font-black text-white">Members Directory &amp; Ledger</h2>
           <p className="text-xs text-slate-400 mt-1">Audit active foundation cardholders, renewal deadlines, and public profiles</p>
         </div>
-        <button
-          onClick={exportCSV}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold border border-slate-700 transition cursor-pointer"
-        >
-          <Download className="w-4 h-4 text-emerald-400" />
-          <span>Export CSV</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => loadMembers(true)}
+            disabled={loading}
+            className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition cursor-pointer disabled:opacity-50"
+            title="Bypass cache and sync live with MongoDB"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-emerald-400" : ""}`} />
+            <span className="hidden sm:inline">Refresh</span>
+          </button>
+          <button
+            onClick={exportCSV}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold border border-slate-700 transition cursor-pointer"
+          >
+            <Download className="w-4 h-4 text-emerald-400" />
+            <span>Export CSV</span>
+          </button>
+        </div>
       </div>
 
       {/* Filter and Search Bar */}

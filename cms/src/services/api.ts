@@ -1,3 +1,5 @@
+import { apiCache, CacheOptions } from "./cache";
+
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 function getHeaders(isFormData = false): HeadersInit {
@@ -16,6 +18,15 @@ function getHeaders(isFormData = false): HeadersInit {
 }
 
 export const api = {
+  // ── Cache Controls ──
+  invalidateCache(tag?: string) {
+    if (tag) {
+      apiCache.invalidateTag(tag);
+    } else {
+      apiCache.clear();
+    }
+  },
+
   // ── Authentication ──
   async login(email: string, password: string) {
     const res = await fetch(`${API_BASE_URL}/auth/admin/login`, {
@@ -33,8 +44,26 @@ export const api = {
     return res.json();
   },
 
-  // ── Dashboard Overview Metrics ──
-  async getDashboardStats() {
+  // ── Dashboard Overview Metrics (Cached: 60s) ──
+  async getDashboardStats(options?: CacheOptions): Promise<{
+    totalMembers: number;
+    totalDonations: number;
+    totalApplications: number;
+    totalPatients: number;
+    totalNews: number;
+  }> {
+    const cacheKey = "dashboard_stats";
+    if (!options?.force) {
+      const cached = apiCache.get<{
+        totalMembers: number;
+        totalDonations: number;
+        totalApplications: number;
+        totalPatients: number;
+        totalNews: number;
+      }>(cacheKey);
+      if (cached) return cached;
+    }
+
     try {
       const [members, donations, applications, patients, news] = await Promise.all([
         fetch(`${API_BASE_URL}/members`, { headers: getHeaders() }).then((r) => r.json()).catch(() => ({ total: 0 })),
@@ -44,13 +73,16 @@ export const api = {
         fetch(`${API_BASE_URL}/news`, { headers: getHeaders() }).then((r) => r.json()).catch(() => ({ count: 0 })),
       ]);
 
-      return {
+      const result = {
         totalMembers: members.total || members.count || 0,
         totalDonations: donations.count || 0,
         totalApplications: applications.count || 0,
         totalPatients: patients.count || 0,
         totalNews: news.count || 0,
       };
+
+      apiCache.set(cacheKey, result, 60 * 1000, "dashboard");
+      return result;
     } catch {
       return {
         totalMembers: 0,
@@ -62,11 +94,22 @@ export const api = {
     }
   },
 
-  // ── Media CMS ──
-  async listMedia(category?: string) {
+  // ── Media CMS (Cached: 5 mins) ──
+  async listMedia(category?: string, options?: CacheOptions) {
+    const cacheKey = `media_list_${category || "all"}`;
+    if (!options?.force) {
+      const cached = apiCache.get(cacheKey);
+      if (cached) return cached;
+    }
+
     const url = `${API_BASE_URL}/media${category ? `?category=${category}` : ""}`;
     const res = await fetch(url, { headers: getHeaders() });
-    return res.json();
+    const data = await res.json();
+
+    if (res.ok) {
+      apiCache.set(cacheKey, data, 5 * 60 * 1000, "media");
+    }
+    return data;
   },
 
   async uploadMedia(formData: FormData) {
@@ -75,7 +118,11 @@ export const api = {
       headers: getHeaders(true),
       body: formData,
     });
-    return res.json();
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.invalidateTag("media");
+    }
+    return data;
   },
 
   async deleteMedia(key: string) {
@@ -83,34 +130,60 @@ export const api = {
       method: "DELETE",
       headers: getHeaders(),
     });
-    return res.json();
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.invalidateTag("media");
+    }
+    return data;
   },
 
-  // ── News & Events CMS ──
-  async listNews(params?: { category?: string; search?: string }) {
+  // ── News & Events CMS (Cached: 5 mins) ──
+  async listNews(params?: { category?: string; search?: string }, options?: CacheOptions) {
     const q = new URLSearchParams();
     if (params?.category && params.category !== "All") q.set("category", params.category);
     if (params?.search) q.set("search", params.search);
+
+    const cacheKey = `news_list_${q.toString()}`;
+    if (!options?.force) {
+      const cached = apiCache.get(cacheKey);
+      if (cached) return cached;
+    }
+
     const res = await fetch(`${API_BASE_URL}/news?${q.toString()}`, { headers: getHeaders() });
-    return res.json();
+    const data = await res.json();
+
+    if (res.ok) {
+      apiCache.set(cacheKey, data, 5 * 60 * 1000, "news");
+    }
+    return data;
   },
 
-  async createNews(data: any) {
+  async createNews(payload: any) {
     const res = await fetch(`${API_BASE_URL}/news`, {
       method: "POST",
       headers: getHeaders(),
-      body: JSON.stringify(data),
+      body: JSON.stringify(payload),
     });
-    return res.json();
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.invalidateTag("news");
+      apiCache.invalidateTag("dashboard");
+    }
+    return data;
   },
 
-  async updateNews(id: string, data: any) {
+  async updateNews(id: string, payload: any) {
     const res = await fetch(`${API_BASE_URL}/news/${id}`, {
       method: "PUT",
       headers: getHeaders(),
-      body: JSON.stringify(data),
+      body: JSON.stringify(payload),
     });
-    return res.json();
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.invalidateTag("news");
+      apiCache.invalidateTag("dashboard");
+    }
+    return data;
   },
 
   async deleteNews(id: string) {
@@ -118,48 +191,98 @@ export const api = {
       method: "DELETE",
       headers: getHeaders(),
     });
-    return res.json();
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.invalidateTag("news");
+      apiCache.invalidateTag("dashboard");
+    }
+    return data;
   },
 
-  // ── Patients CMS ──
-  async listPatients() {
+  // ── Patients CMS (Cached: 5 mins) ──
+  async listPatients(options?: CacheOptions) {
+    const cacheKey = "patients_list";
+    if (!options?.force) {
+      const cached = apiCache.get(cacheKey);
+      if (cached) return cached;
+    }
+
     const res = await fetch(`${API_BASE_URL}/patients`, { headers: getHeaders() });
-    return res.json();
+    const data = await res.json();
+
+    if (res.ok) {
+      apiCache.set(cacheKey, data, 5 * 60 * 1000, "patients");
+    }
+    return data;
   },
 
-  async createPatient(data: any) {
+  async createPatient(payload: any) {
     const res = await fetch(`${API_BASE_URL}/patients`, {
       method: "POST",
       headers: getHeaders(),
-      body: JSON.stringify(data),
+      body: JSON.stringify(payload),
     });
-    return res.json();
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.invalidateTag("patients");
+      apiCache.invalidateTag("dashboard");
+    }
+    return data;
   },
 
-  async updatePatient(slug: string, data: any) {
+  async updatePatient(slug: string, payload: any) {
     const res = await fetch(`${API_BASE_URL}/patients/${slug}`, {
       method: "PUT",
       headers: getHeaders(),
-      body: JSON.stringify(data),
+      body: JSON.stringify(payload),
     });
-    return res.json();
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.invalidateTag("patients");
+      apiCache.invalidateTag("dashboard");
+    }
+    return data;
   },
 
-  // ── Members Directory ──
-  async listMembers(params?: { category?: string; status?: string; search?: string }) {
+  // ── Members Directory (Cached: 5 mins) ──
+  async listMembers(params?: { category?: string; status?: string; search?: string }, options?: CacheOptions) {
     const q = new URLSearchParams();
     if (params?.category) q.set("category", params.category);
     if (params?.status) q.set("status", params.status);
     if (params?.search) q.set("search", params.search);
+
+    const cacheKey = `members_list_${q.toString()}`;
+    if (!options?.force) {
+      const cached = apiCache.get(cacheKey);
+      if (cached) return cached;
+    }
+
     const res = await fetch(`${API_BASE_URL}/members?${q.toString()}`, { headers: getHeaders() });
-    return res.json();
+    const data = await res.json();
+
+    if (res.ok) {
+      apiCache.set(cacheKey, data, 5 * 60 * 1000, "members");
+    }
+    return data;
   },
 
-  // ── Inbound Applications ──
-  async listApplications(type?: string) {
+  // ── Inbound Applications (Cached: 3 mins) ──
+  async listApplications(type?: string, options?: CacheOptions) {
     const q = type ? `?type=${type}` : "";
+    const cacheKey = `applications_list_${type || "all"}`;
+
+    if (!options?.force) {
+      const cached = apiCache.get(cacheKey);
+      if (cached) return cached;
+    }
+
     const res = await fetch(`${API_BASE_URL}/applications${q}`, { headers: getHeaders() });
-    return res.json();
+    const data = await res.json();
+
+    if (res.ok) {
+      apiCache.set(cacheKey, data, 3 * 60 * 1000, "applications");
+    }
+    return data;
   },
 
   async updateApplicationStatus(id: string, status: string) {
@@ -168,7 +291,11 @@ export const api = {
       headers: getHeaders(),
       body: JSON.stringify({ status }),
     });
-    return res.json();
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.invalidateTag("applications");
+      apiCache.invalidateTag("dashboard");
+    }
+    return data;
   },
 };
-

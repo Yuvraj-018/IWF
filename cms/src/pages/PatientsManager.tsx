@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { api } from "../services/api";
-import { Plus, HeartPulse, Loader2, X, Building2, AlertTriangle } from "lucide-react";
+import { Plus, HeartPulse, Loader2, X, Building2, AlertTriangle, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 
 export default function PatientsManager() {
@@ -25,9 +25,9 @@ export default function PatientsManager() {
     familyBackground: "Father is an agricultural laborer with no steady income.",
   });
 
-  const loadPatients = () => {
+  const loadPatients = (force = false) => {
     setLoading(true);
-    api.listPatients().then((res) => {
+    api.listPatients({ force }).then((res) => {
       if (res.success && res.data) {
         setPatients(res.data);
       }
@@ -36,7 +36,7 @@ export default function PatientsManager() {
   };
 
   useEffect(() => {
-    loadPatients();
+    loadPatients(false);
   }, []);
 
   const handleCreate = async (e: React.FormEvent) => {
@@ -78,13 +78,24 @@ export default function PatientsManager() {
           <h2 className="text-xl font-black text-white">Critical Healthcare Appeals</h2>
           <p className="text-xs text-slate-400 mt-1">Manage emergency medical fundraising cases and live progress bars</p>
         </div>
-        <button
-          onClick={() => setModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition shadow-lg shadow-rose-900/30 cursor-pointer"
-        >
-          <Plus className="w-4 h-4" />
-          <span>New Patient Appeal</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => loadPatients(true)}
+            disabled={loading}
+            className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition cursor-pointer disabled:opacity-50"
+            title="Bypass cache and sync live with MongoDB"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-rose-400" : ""}`} />
+            <span className="hidden sm:inline">Refresh</span>
+          </button>
+          <button
+            onClick={() => setModalOpen(true)}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition shadow-lg shadow-rose-900/30 cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            <span>New Patient Appeal</span>
+          </button>
+        </div>
       </div>
 
       {loading ? (

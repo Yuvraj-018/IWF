@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { api } from "../services/api";
-import { Download, Loader2, Mail, Phone, Calendar, UserCheck } from "lucide-react";
+import { Download, Loader2, Mail, Phone, Calendar, UserCheck, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 
 export default function ApplicationsManager() {
@@ -8,9 +8,9 @@ export default function ApplicationsManager() {
   const [loading, setLoading] = useState(true);
   const [selectedType, setSelectedType] = useState("");
 
-  const loadApps = () => {
+  const loadApps = (force = false) => {
     setLoading(true);
-    api.listApplications(selectedType || undefined).then((res) => {
+    api.listApplications(selectedType || undefined, { force }).then((res) => {
       if (res.success && res.data) {
         setApps(res.data);
       }
@@ -19,7 +19,7 @@ export default function ApplicationsManager() {
   };
 
   useEffect(() => {
-    loadApps();
+    loadApps(false);
   }, [selectedType]);
 
   const handleStatusChange = async (id: string, newStatus: string) => {
@@ -43,6 +43,15 @@ export default function ApplicationsManager() {
           <h2 className="text-xl font-black text-white">Inbound Applications &amp; Resumes</h2>
           <p className="text-xs text-slate-400 mt-1">Review candidates for Volunteer, Career, Partner, Sponsor, and Mentor roles</p>
         </div>
+        <button
+          onClick={() => loadApps(true)}
+          disabled={loading}
+          className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition cursor-pointer disabled:opacity-50"
+          title="Bypass cache and sync live with MongoDB"
+        >
+          <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-emerald-400" : ""}`} />
+          <span className="hidden sm:inline">Refresh</span>
+        </button>
       </div>
 
       {/* Tabs */}
@@ -58,11 +67,10 @@ export default function ApplicationsManager() {
           <button
             key={t.id}
             onClick={() => setSelectedType(t.id)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer whitespace-nowrap ${
-              selectedType === t.id
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer whitespace-nowrap ${selectedType === t.id
                 ? "bg-emerald-600 text-white"
                 : "bg-slate-900 text-slate-400 hover:text-white border border-slate-800"
-            }`}
+              }`}
           >
             {t.label}
           </button>
