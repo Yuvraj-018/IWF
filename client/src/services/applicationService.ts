@@ -19,6 +19,7 @@ export interface ApplicationPayload {
   selectedSectors?: string[];
   subclassifications?: string[];
   message?: string;
+  turnstileToken?: string;
   formData?: Record<string, any>;
 }
 

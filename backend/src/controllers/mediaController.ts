@@ -1,19 +1,22 @@
 import { Request, Response } from "express";
-import { Media, MediaCategory } from "../models/Media.js";
+import { Media, MediaCategory, MediaType } from "../models/Media.js";
 import { uploadToCloudinary, deleteFromCloudinary } from "../services/cloudinaryService.js";
 
 export async function listMedia(req: Request, res: Response): Promise<void> {
   try {
-    const { category, tag, search } = req.query;
+    const { category, mediaType, tag, search } = req.query;
     const query: Record<string, any> = {};
 
-    if (category) query.category = category;
-    if (tag) query.tags = tag;
+    if (category && category !== "all") query.category = category;
+    if (mediaType && mediaType !== "all") query.mediaType = mediaType;
+    if (tag && tag !== "all") query.tags = tag;
     if (search) {
       query.$or = [
         { key: { $regex: search as string, $options: "i" } },
         { title: { $regex: search as string, $options: "i" } },
         { altText: { $regex: search as string, $options: "i" } },
+        { tags: { $regex: search as string, $options: "i" } },
+        { location: { $regex: search as string, $options: "i" } },
       ];
     }
 
@@ -57,11 +60,24 @@ export async function getMediaByKey(req: Request, res: Response): Promise<void> 
 
 export async function upsertMedia(req: Request, res: Response): Promise<void> {
   try {
-    const { key, title, category, altText, caption, tags, url } = req.body;
+    const {
+      key,
+      title,
+      category,
+      mediaType,
+      altText,
+      caption,
+      videoUrl,
+      thumbnailUrl,
+      location,
+      date,
+      tags,
+      url,
+    } = req.body;
     const file = req.file;
 
     if (!key) {
-      res.status(400).json({ success: false, message: "Media key is required (e.g. hero_slide_1)" });
+      res.status(400).json({ success: false, message: "Media key is required (e.g. hero-slide-1)" });
       return;
     }
 
@@ -80,10 +96,10 @@ export async function upsertMedia(req: Request, res: Response): Promise<void> {
       bytes = uploadResult.bytes;
     }
 
-    if (!finalUrl) {
+    if (!finalUrl && !videoUrl) {
       res.status(400).json({
         success: false,
-        message: "Either upload a file or provide a Cloudinary 'url'",
+        message: "Either upload a file, provide an image 'url', or provide a 'videoUrl'",
       });
       return;
     }
@@ -91,7 +107,7 @@ export async function upsertMedia(req: Request, res: Response): Promise<void> {
     const parsedTags = Array.isArray(tags)
       ? tags
       : typeof tags === "string"
-      ? tags.split(",").map((t: string) => t.trim())
+      ? tags.split(",").map((t: string) => t.trim()).filter(Boolean)
       : [];
 
     const item = await Media.findOneAndUpdate(
@@ -99,12 +115,17 @@ export async function upsertMedia(req: Request, res: Response): Promise<void> {
       {
         title: title || key,
         category: (category as MediaCategory) || "general",
-        url: finalUrl,
+        mediaType: (mediaType as MediaType) || "photo",
+        url: finalUrl || videoUrl,
+        videoUrl: videoUrl || undefined,
+        thumbnailUrl: thumbnailUrl || undefined,
         publicId,
         format,
         bytes,
         altText,
         caption,
+        location: location || undefined,
+        date: date || undefined,
         tags: parsedTags,
       },
       { upsert: true, new: true, setDefaultsOnInsert: true }

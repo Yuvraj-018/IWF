@@ -8,6 +8,7 @@ import MediaManager from "./pages/MediaManager";
 import PatientsManager from "./pages/PatientsManager";
 import MembersManager from "./pages/MembersManager";
 import ApplicationsManager from "./pages/ApplicationsManager";
+import SiteSettingsManager from "./pages/SiteSettingsManager";
 import { Toaster } from "sonner";
 import { Loader2 } from "lucide-react";
 
@@ -36,6 +37,7 @@ function ControlCenter() {
       {activeTab === "patients" && <PatientsManager />}
       {activeTab === "members" && <MembersManager />}
       {activeTab === "applications" && <ApplicationsManager />}
+      {activeTab === "settings" && <SiteSettingsManager />}
     </AdminLayout>
   );
 }

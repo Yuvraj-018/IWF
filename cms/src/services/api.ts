@@ -125,6 +125,17 @@ export const api = {
     return data;
   },
 
+  async uploadSingleFile(file: File): Promise<{ success: boolean; file?: { url: string }; message?: string }> {
+    const fd = new FormData();
+    fd.append("file", file);
+    const res = await fetch(`${API_BASE_URL}/upload/single`, {
+      method: "POST",
+      headers: getHeaders(true),
+      body: fd,
+    });
+    return res.json();
+  },
+
   async deleteMedia(key: string) {
     const res = await fetch(`${API_BASE_URL}/media/${key}`, {
       method: "DELETE",
@@ -297,5 +308,33 @@ export const api = {
       apiCache.invalidateTag("dashboard");
     }
     return data;
+  },
+
+  // ── Site Settings, Impact Stats & Helplines (Cached: 5 mins) ──
+  async getSettings(options?: CacheOptions) {
+    const cacheKey = "site_settings";
+    if (!options?.force) {
+      const cached = apiCache.get(cacheKey);
+      if (cached) return cached;
+    }
+    const res = await fetch(`${API_BASE_URL}/settings`, { headers: getHeaders() });
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.set(cacheKey, data, 5 * 60 * 1000, "settings");
+    }
+    return data;
+  },
+
+  async updateSetting(key: string, data: Record<string, any>) {
+    const res = await fetch(`${API_BASE_URL}/settings/${key}`, {
+      method: "PUT",
+      headers: getHeaders(),
+      body: JSON.stringify({ data }),
+    });
+    const resData = await res.json();
+    if (res.ok) {
+      apiCache.invalidateTag("settings");
+    }
+    return resData;
   },
 };

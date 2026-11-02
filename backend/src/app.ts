@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import path from "path";
+import fs from "fs";
 import { apiRouter } from "./routes/index.js";
 import { notFoundHandler, globalErrorHandler } from "./middlewares/errorHandler.js";
 import { securitySanitizer } from "./middlewares/securitySanitizer.js";
@@ -63,6 +65,13 @@ export function createApp() {
 
   // Logging
   app.use(morgan("dev"));
+
+  // Static files for local uploads fallback
+  const uploadsDir = path.resolve(process.cwd(), "uploads");
+  if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+  }
+  app.use("/uploads", express.static(uploadsDir));
 
   // API Routes - strictly mounted at /api
   app.use("/api", apiRouter);

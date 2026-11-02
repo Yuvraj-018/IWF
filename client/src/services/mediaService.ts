@@ -5,11 +5,16 @@ export interface MediaItem {
   _id: string;
   key: string;
   title: string;
-  category: "hero" | "causes" | "thematic" | "gallery" | "patients" | "general" | "partners";
+  category: "hero" | "causes" | "thematic" | "gallery" | "patients" | "people" | "reports" | "general" | "partners";
+  mediaType?: "photo" | "video" | "document";
   url: string;
+  videoUrl?: string;
+  thumbnailUrl?: string;
   publicId?: string;
   altText?: string;
   caption?: string;
+  location?: string;
+  date?: string;
   tags?: string[];
 }
 

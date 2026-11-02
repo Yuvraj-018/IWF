@@ -15,6 +15,7 @@ export interface ContactPayload {
   regionalOfficeTarget?: string;
   referenceNumber?: string;
   source?: string;
+  turnstileToken?: string;
   metadata?: Record<string, any>;
 }
 

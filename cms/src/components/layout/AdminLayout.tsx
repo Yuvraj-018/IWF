@@ -10,9 +10,10 @@ import {
   LogOut,
   ShieldCheck,
   ExternalLink,
+  Activity,
 } from "lucide-react";
 
-export type NavTab = "overview" | "news" | "media" | "patients" | "members" | "applications";
+export type NavTab = "overview" | "news" | "media" | "patients" | "members" | "applications" | "settings";
 
 interface AdminLayoutProps {
   activeTab: NavTab;
@@ -30,6 +31,7 @@ export default function AdminLayout({ activeTab, onTabChange, children }: AdminL
     { id: "patients" as NavTab, label: "Critical Patients", icon: HeartPulse },
     { id: "members" as NavTab, label: "Members Directory", icon: Users },
     { id: "applications" as NavTab, label: "Applications & Resumes", icon: FileText },
+    { id: "settings" as NavTab, label: "Site Stats & Helplines", icon: Activity },
   ];
 
   return (
