@@ -19,6 +19,7 @@ import {
   sanitizeDigits,
 } from "@/utils/formValidation";
 import { SectorSubclassificationPicker } from "@/components/forms/SectorSubclassificationPicker";
+import Turnstile from "@/components/common/Turnstile";
 import { INDIAN_STATES, BIHAR_DISTRICTS } from "@/content/locations";
 
 const volunteerSchema = z.object({
@@ -124,6 +125,7 @@ interface VolunteerApplicationFormProps {
 export function VolunteerApplicationForm({ onSuccess, isModal = false }: VolunteerApplicationFormProps) {
   const [submitted, setSubmitted] = useState(false);
   const [appId, setAppId] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
 
   // Sector subclassification state
   const [selectedSectors, setSelectedSectors] = useState<string[]>([]);
@@ -208,6 +210,7 @@ export function VolunteerApplicationForm({ onSuccess, isModal = false }: Volunte
         selectedSectors: combinedSectors,
         subclassifications: subclassFlat,
         message: data.motivation || data.skills || "",
+        turnstileToken,
         formData: {
           dob: data.dob,
           gender: data.gender,
@@ -667,6 +670,14 @@ export function VolunteerApplicationForm({ onSuccess, isModal = false }: Volunte
           <span>{apiError}</span>
         </div>
       )}
+
+      {/* Cloudflare Turnstile Bot Protection Widget */}
+      <Turnstile
+        action="application"
+        onSuccess={(tok) => setTurnstileToken(tok)}
+        onExpire={() => setTurnstileToken("")}
+        onError={() => setTurnstileToken("")}
+      />
 
       {/* ── Action Buttons ── */}
       <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-3 pt-4 border-t border-slate-200">

@@ -2,8 +2,14 @@ import { Router } from "express";
 import { submitContact } from "../controllers/contactController.js";
 import { formSubmissionLimiter } from "../middlewares/rateLimiter.js";
 import { honeypotCheck } from "../middlewares/honeypot.js";
-import { verifyTurnstile } from "../middlewares/turnstile.js";
+import { createTurnstileMiddleware } from "../middlewares/turnstile.js";
 
 export const contactRouter = Router();
 
-contactRouter.post("/", formSubmissionLimiter, honeypotCheck, verifyTurnstile, submitContact);
+contactRouter.post(
+  "/",
+  formSubmissionLimiter,
+  honeypotCheck,
+  createTurnstileMiddleware({ action: "contact" }),
+  submitContact
+);

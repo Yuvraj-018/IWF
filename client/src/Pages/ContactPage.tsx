@@ -15,6 +15,7 @@ import { Footer, Header, NotificationTicker, RoleFormModal, UtilityBar } from "@
 import type { RoleType } from "@/components/forms/RoleFormModal";
 import contactHandsImg from "@/assets/contact-hands-hero.jpg";
 import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
+import Turnstile from "@/components/common/Turnstile";
 import aboutHero from "@/assets/about-hero.jpg";
 import slide1 from "@/assets/hero-carousel/hero-slide-1.jpg";
 import slide2 from "@/assets/hero-carousel/hero-slide-2.jpg";
@@ -236,6 +237,7 @@ function ContactForm() {
   const [submissionReference, setSubmissionReference] = useState("");
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [countryCode, setCountryCode] = useState("+91");
+  const [turnstileToken, setTurnstileToken] = useState("");
 
   const {
     register,
@@ -310,6 +312,7 @@ function ContactForm() {
         regionalOfficeTarget: data.regionalOfficeTarget,
         referenceNumber: generatedRef,
         source: "Contact Page",
+        turnstileToken,
       });
 
       setSubmissionReference(generatedRef);
@@ -630,6 +633,15 @@ function ContactForm() {
                   <span>{submitError}</span>
                 </div>
               )}
+
+              {/* Cloudflare Turnstile Bot Protection Widget */}
+              <Turnstile
+                action="contact"
+                onSuccess={(tok) => setTurnstileToken(tok)}
+                onExpire={() => setTurnstileToken("")}
+                onError={() => setTurnstileToken("")}
+                className="flex justify-center"
+              />
 
               {/* Submit Button */}
               <button

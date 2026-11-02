@@ -21,6 +21,7 @@ import {
   blockNonDigitsOnKeyDown,
   sanitizeDigits,
 } from "@/utils/formValidation";
+import Turnstile from "@/components/common/Turnstile";
 
 const partnerSchema = z.object({
   organizationName: z.string().trim().min(2, "Organization / Full Name is required"),
@@ -136,6 +137,7 @@ interface PartnerApplicationFormProps {
 export function PartnerApplicationForm({ onSuccess, isModal = false }: PartnerApplicationFormProps) {
   const [submitted, setSubmitted] = useState(false);
   const [appId, setAppId] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
 
   const {
     register,
@@ -179,6 +181,7 @@ export function PartnerApplicationForm({ onSuccess, isModal = false }: PartnerAp
         organization: data.organizationName,
         selectedSectors: selectedAreas,
         message: data.envisionWorking || data.organizationBackground || "",
+        turnstileToken,
         formData: {
           organizationType: data.organizationType,
           designation: data.designation,
@@ -583,6 +586,14 @@ export function PartnerApplicationForm({ onSuccess, isModal = false }: PartnerAp
           </div>
         </div>
       </div>
+
+      {/* Cloudflare Turnstile Bot Protection Widget */}
+      <Turnstile
+        action="application"
+        onSuccess={(tok) => setTurnstileToken(tok)}
+        onExpire={() => setTurnstileToken("")}
+        onError={() => setTurnstileToken("")}
+      />
 
       {/* ── ACTION BUTTONS ── */}
       <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-3 pt-4 border-t border-slate-200">

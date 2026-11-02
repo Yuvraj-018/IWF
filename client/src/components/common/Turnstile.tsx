@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 declare global {
   interface Window {
@@ -7,6 +7,8 @@ declare global {
         container: string | HTMLElement,
         options: {
           sitekey: string;
+          action?: string;
+          cdata?: string;
           callback?: (token: string) => void;
           "error-callback"?: (error: any) => void;
           "expired-callback"?: () => void;
@@ -17,26 +19,41 @@ declare global {
       reset: (widgetId: string) => void;
       remove: (widgetId: string) => void;
     };
+    onloadTurnstileCallback?: () => void;
   }
 }
 
-interface TurnstileProps {
+export interface TurnstileProps {
   onSuccess: (token: string) => void;
   onError?: (err?: any) => void;
   onExpire?: () => void;
+  action?: string;
+  cdata?: string;
   theme?: "light" | "dark" | "auto";
+  size?: "normal" | "flexible" | "compact";
   className?: string;
 }
 
+/**
+ * Canonical Cloudflare Turnstile Client Widget Component
+ * - Dynamically loads the Cloudflare Turnstile API script if not already present.
+ * - Renders explicit widget instance with action, sitekey, and lifecycle callbacks.
+ * - Cleanly removes widget on unmount to avoid DOM / memory leaks.
+ * - Injects a hidden input for standard form submission fallback.
+ */
 export function Turnstile({
   onSuccess,
   onError,
   onExpire,
+  action,
+  cdata,
   theme = "auto",
+  size = "normal",
   className = "",
 }: TurnstileProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
+  const [token, setToken] = useState<string>("");
 
   const siteKey =
     import.meta.env.VITE_TURNSTILE_SITE_KEY || "1x00000000000000000000AA";
@@ -47,7 +64,7 @@ export function Turnstile({
     const renderWidget = () => {
       if (!isMounted || !containerRef.current || !window.turnstile) return;
 
-      // Clean up existing widget if any
+      // Clean up previous widget instance if re-rendering
       if (widgetIdRef.current) {
         try {
           window.turnstile.remove(widgetIdRef.current);
@@ -58,23 +75,34 @@ export function Turnstile({
       try {
         widgetIdRef.current = window.turnstile.render(containerRef.current, {
           sitekey: siteKey,
+          action,
+          cdata,
           theme,
-          callback: (token: string) => {
-            if (isMounted) onSuccess(token);
+          size,
+          callback: (receivedToken: string) => {
+            if (isMounted) {
+              setToken(receivedToken);
+              onSuccess(receivedToken);
+            }
           },
           "error-callback": (err: any) => {
-            if (isMounted && onError) onError(err);
+            if (isMounted) {
+              setToken("");
+              onError?.(err);
+            }
           },
           "expired-callback": () => {
-            if (isMounted && onExpire) onExpire();
+            if (isMounted) {
+              setToken("");
+              onExpire?.();
+            }
           },
         });
       } catch (err) {
-        console.warn("[Turnstile] Render error:", err);
+        console.warn("[Turnstile] Render exception:", err);
       }
     };
 
-    // Check if script is already present
     const existingScript = document.querySelector(
       'script[src*="challenges.cloudflare.com/turnstile"]'
     );
@@ -100,10 +128,18 @@ export function Turnstile({
         try {
           window.turnstile.remove(widgetIdRef.current);
         } catch {}
+        widgetIdRef.current = null;
       }
     };
-  }, [siteKey, theme]);
+  }, [siteKey, action, cdata, theme, size]);
 
-  return <div ref={containerRef} className={`cf-turnstile-container ${className}`} />;
+  return (
+    <div className={`turnstile-wrapper my-2.5 ${className}`}>
+      <div ref={containerRef} className="flex justify-center sm:justify-start" />
+      {/* Standard hidden input for compatibility with native HTML form POSTs */}
+      <input type="hidden" name="cf-turnstile-response" value={token} />
+    </div>
+  );
 }
 
+export default Turnstile;
