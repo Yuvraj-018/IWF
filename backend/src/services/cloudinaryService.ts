@@ -24,11 +24,16 @@ export async function uploadToCloudinary(
       process.env.CLOUDINARY_API_SECRET
   );
 
-  // If Cloudinary keys are not set, automatically save to local uploads directory
+  // If Cloudinary keys are not set, automatically save to local uploads directory or /tmp
   if (!hasCloudinary) {
-    const uploadsDir = path.resolve(process.cwd(), "uploads");
-    if (!fs.existsSync(uploadsDir)) {
-      fs.mkdirSync(uploadsDir, { recursive: true });
+    const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+    const uploadsDir = isServerless ? path.join("/tmp", "uploads") : path.resolve(process.cwd(), "uploads");
+    try {
+      if (!fs.existsSync(uploadsDir)) {
+        fs.mkdirSync(uploadsDir, { recursive: true });
+      }
+    } catch (e) {
+      console.warn("[STORAGE] Bypassed uploads directory creation in read-only environment:", e);
     }
 
     const ext = originalName ? path.extname(originalName) : ".jpg";
@@ -38,13 +43,17 @@ export async function uploadToCloudinary(
     const filename = `${cleanBase}_${Date.now()}${ext}`;
     const filePath = path.join(uploadsDir, filename);
 
-    fs.writeFileSync(filePath, fileBuffer);
+    try {
+      fs.writeFileSync(filePath, fileBuffer);
+    } catch (e) {
+      console.warn("[STORAGE] Could not write file to local disk (serverless runtime):", e);
+    }
 
     const port = process.env.PORT || 5000;
     const baseUrl = process.env.API_BASE_URL || `http://localhost:${port}`;
     const fileUrl = `${baseUrl}/uploads/${filename}`;
 
-    console.log(`[STORAGE] Saved locally to ${fileUrl} (Cloudinary not configured yet)`);
+    console.log(`[STORAGE] Saved to ${fileUrl} (Cloudinary not configured yet)`);
 
     return {
       url: fileUrl,

@@ -66,12 +66,17 @@ export function createApp() {
   // Logging
   app.use(morgan("dev"));
 
-  // Static files for local uploads fallback
-  const uploadsDir = path.resolve(process.cwd(), "uploads");
-  if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir, { recursive: true });
+  // Static files for local uploads fallback (safe for serverless environments like Vercel)
+  try {
+    const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+    const uploadsDir = isServerless ? path.join("/tmp", "uploads") : path.resolve(process.cwd(), "uploads");
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir, { recursive: true });
+    }
+    app.use("/uploads", express.static(uploadsDir));
+  } catch (err) {
+    console.warn("[APP] Bypassed local uploads directory creation (read-only serverless environment):", err);
   }
-  app.use("/uploads", express.static(uploadsDir));
 
   // API Routes - strictly mounted at /api
   app.use("/api", apiRouter);
