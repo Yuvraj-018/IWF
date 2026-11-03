@@ -21,6 +21,7 @@ import {
   blockNonDigitsOnKeyDown,
   sanitizeDigits,
 } from "@/utils/formValidation";
+import Turnstile from "@/components/common/Turnstile";
 
 const careerSchema = z.object({
   fullName: z
@@ -132,6 +133,7 @@ export function CareerApplicationForm({ onSuccess, isModal = false }: CareerAppl
   const [cvName, setCvName] = useState<string | null>(null);
   const [selectedCvFile, setSelectedCvFile] = useState<File | null>(null);
   const [uploadingCv, setUploadingCv] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
 
   const {
     register,
@@ -192,6 +194,7 @@ export function CareerApplicationForm({ onSuccess, isModal = false }: CareerAppl
         phone: data.phone,
         countryCode: data.countryCode || "+91",
         city: data.currentLocation,
+        turnstileToken,
         message: data.aboutYourself || data.skillHighlights || "",
         formData: {
           linkedInProfile: data.linkedInProfile,
@@ -573,6 +576,14 @@ export function CareerApplicationForm({ onSuccess, isModal = false }: CareerAppl
           </div>
         </div>
       </div>
+
+      {/* Cloudflare Turnstile Bot Protection Widget */}
+      <Turnstile
+        action="application"
+        onSuccess={(tok) => setTurnstileToken(tok)}
+        onExpire={() => setTurnstileToken("")}
+        onError={() => setTurnstileToken("")}
+      />
 
       {/* ── ACTION BUTTONS ── */}
       <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-3 pt-4 border-t border-slate-200">

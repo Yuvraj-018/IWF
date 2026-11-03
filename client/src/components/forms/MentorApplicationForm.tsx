@@ -1,4 +1,4 @@
-import { toast } from "sonner";
+import { toast } from "@/utils/toast";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,6 +23,7 @@ import {
   sanitizeDigits,
 } from "@/utils/formValidation";
 import { INDIAN_STATES, BIHAR_DISTRICTS } from "@/content/locations";
+import Turnstile from "@/components/common/Turnstile";
 
 const mentorSchema = z.object({
   fullName: z
@@ -138,6 +139,7 @@ interface MentorApplicationFormProps {
 export function MentorApplicationForm({ onSuccess, isModal = false }: MentorApplicationFormProps) {
   const [submitted, setSubmitted] = useState(false);
   const [appId, setAppId] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
   const [photoName, setPhotoName] = useState<string | null>(null);
   const [resumeName, setResumeName] = useState<string | null>(null);
   const [idProofName, setIdProofName] = useState<string | null>(null);
@@ -197,6 +199,7 @@ export function MentorApplicationForm({ onSuccess, isModal = false }: MentorAppl
         organization: data.organizationName,
         selectedSectors: selectedAreas,
         message: data.motivation || data.contribution || "",
+        turnstileToken,
         formData: {
           dob: data.dob,
           gender: data.gender,
@@ -549,11 +552,10 @@ export function MentorApplicationForm({ onSuccess, isModal = false }: MentorAppl
                     key={area}
                     type="button"
                     onClick={() => toggleArea(area)}
-                    className={`px-3 py-2 rounded-xl text-xs font-bold text-left border transition cursor-pointer flex items-center justify-between ${
-                      isSelected
+                    className={`px-3 py-2 rounded-xl text-xs font-bold text-left border transition cursor-pointer flex items-center justify-between ${isSelected
                         ? "bg-brand-green text-white border-brand-green shadow-xs"
                         : "bg-slate-50 text-slate-700 border-slate-200 hover:border-slate-300"
-                    }`}
+                      }`}
                   >
                     <span>{area}</span>
                     {isSelected && <span className="text-white text-xs">✓</span>}
@@ -580,11 +582,10 @@ export function MentorApplicationForm({ onSuccess, isModal = false }: MentorAppl
                 {(["Online", "Offline", "Both"] as const).map((mode) => (
                   <label
                     key={mode}
-                    className={`flex-1 p-2.5 rounded-xl border-2 text-center cursor-pointer transition ${
-                      currentMode === mode
+                    className={`flex-1 p-2.5 rounded-xl border-2 text-center cursor-pointer transition ${currentMode === mode
                         ? "border-brand-green bg-brand-green/5"
                         : "border-slate-200 hover:border-slate-300"
-                    }`}
+                      }`}
                   >
                     <input
                       type="radio"
@@ -607,11 +608,10 @@ export function MentorApplicationForm({ onSuccess, isModal = false }: MentorAppl
                 {(["Weekly", "Monthly", "Flexible"] as const).map((avail) => (
                   <label
                     key={avail}
-                    className={`flex-1 p-2.5 rounded-xl border-2 text-center cursor-pointer transition ${
-                      currentAvailability === avail
+                    className={`flex-1 p-2.5 rounded-xl border-2 text-center cursor-pointer transition ${currentAvailability === avail
                         ? "border-brand-green bg-brand-green/5"
                         : "border-slate-200 hover:border-slate-300"
-                    }`}
+                      }`}
                   >
                     <input
                       type="radio"
@@ -635,11 +635,10 @@ export function MentorApplicationForm({ onSuccess, isModal = false }: MentorAppl
               {(["One-to-One", "Group Mentoring", "Workshops / Seminars"] as const).map((type) => (
                 <label
                   key={type}
-                  className={`p-2.5 rounded-xl border-2 text-center cursor-pointer transition ${
-                    currentType === type
+                  className={`p-2.5 rounded-xl border-2 text-center cursor-pointer transition ${currentType === type
                       ? "border-brand-green bg-brand-green/5"
                       : "border-slate-200 hover:border-slate-300"
-                  }`}
+                    }`}
                 >
                   <input
                     type="radio"
@@ -872,6 +871,14 @@ export function MentorApplicationForm({ onSuccess, isModal = false }: MentorAppl
           <FieldError msg={errors.agreePolicy?.message} />
         </div>
       </div>
+
+      {/* Cloudflare Turnstile Bot Protection Widget */}
+      <Turnstile
+        action="application"
+        onSuccess={(tok) => setTurnstileToken(tok)}
+        onExpire={() => setTurnstileToken("")}
+        onError={() => setTurnstileToken("")}
+      />
 
       {/* ── ACTION BUTTONS ── */}
       <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-3 pt-4 border-t border-slate-200">

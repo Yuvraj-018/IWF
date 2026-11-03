@@ -47,7 +47,7 @@ export function Turnstile({
   onExpire,
   action,
   cdata,
-  theme = "auto",
+  theme = "light",
   size = "normal",
   className = "",
 }: TurnstileProps) {

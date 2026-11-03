@@ -1,4 +1,4 @@
-import { toast } from "sonner";
+import { toast } from "@/utils/toast";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,6 +20,7 @@ import {
   blockNonDigitsOnKeyDown,
   sanitizeDigits,
 } from "@/utils/formValidation";
+import Turnstile from "@/components/common/Turnstile";
 
 const sponsorSchema = z.object({
   sponsorName: z.string().trim().min(2, "Full Name / Organization Name is required"),
@@ -129,6 +130,7 @@ interface SponsorApplicationFormProps {
 export function SponsorApplicationForm({ onSuccess, isModal = false }: SponsorApplicationFormProps) {
   const [submitted, setSubmitted] = useState(false);
   const [appId, setAppId] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
 
   const {
     register,
@@ -174,6 +176,7 @@ export function SponsorApplicationForm({ onSuccess, isModal = false }: SponsorAp
         organization: data.sponsorName,
         selectedSectors: selectedAreas,
         message: data.contributionDetails || data.motivation || "",
+        turnstileToken,
         formData: {
           sponsorType: data.sponsorType,
           designation: data.designation,
@@ -592,6 +595,14 @@ export function SponsorApplicationForm({ onSuccess, isModal = false }: SponsorAp
           <FieldError msg={errors.agreePolicy?.message} />
         </div>
       </div>
+
+      {/* Cloudflare Turnstile Bot Protection Widget */}
+      <Turnstile
+        action="application"
+        onSuccess={(tok) => setTurnstileToken(tok)}
+        onExpire={() => setTurnstileToken("")}
+        onError={() => setTurnstileToken("")}
+      />
 
       {/* ── ACTION BUTTONS ── */}
       <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-3 pt-4 border-t border-slate-200">

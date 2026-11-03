@@ -35,6 +35,7 @@ import {
 } from "@/utils/formValidation";
 
 import { Toaster } from "@/components/ui/sonner";
+import Turnstile from "@/components/common/Turnstile";
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
@@ -199,6 +200,7 @@ function RootComponent() {
   });
   const [formErrors, setFormErrors] = useState<{ [k: string]: string }>({});
   const [formStatus, setFormStatus] = useState<"idle" | "loading" | "success">("idle");
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
 
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isHomepage = pathname === "/";
@@ -235,6 +237,7 @@ function RootComponent() {
         subject: "Quick Float Message",
         message: formData.message.trim(),
         source: "Quick Float Modal",
+        turnstileToken,
       });
 
       setFormStatus("success");
@@ -293,14 +296,14 @@ function RootComponent() {
       <div className="floating-msg-container fixed bottom-6 right-6 z-50 flex flex-col items-end select-none">
         {/* Floating Message Card */}
         {msgOpen && (
-          <div className="mb-4 w-84 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden transition-all duration-300 animate-in slide-in-from-bottom-5 fade-in notranslate form-container" translate="no" dir="ltr">
+          <div className="mb-4 w-[360px] sm:w-[390px] max-w-[calc(100vw-2rem)] max-h-[82vh] flex flex-col bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden transition-all duration-300 animate-in slide-in-from-bottom-5 fade-in notranslate form-container" translate="no" dir="ltr">
             {/* Header */}
-            <div className="bg-gradient-to-r from-[#071527] to-[#0c2340] text-white p-4 flex items-center justify-between">
+            <div className="bg-gradient-to-r from-[#071527] to-[#0c2340] text-white p-4 flex items-center justify-between shrink-0">
               <div>
                 <h4 className="font-bold text-sm">Quick Message</h4>
                 <p className="text-[10px] text-white/70">Let us know how we can help you</p>
               </div>
-              <button 
+              <button
                 onClick={() => { setMsgOpen(false); setFormStatus("idle"); setFormErrors({}); }}
                 className="p-1 hover:bg-white/10 rounded-full transition-colors cursor-pointer"
                 aria-label="Close message form"
@@ -310,7 +313,7 @@ function RootComponent() {
             </div>
 
             {/* Content Body */}
-            <div className="p-4 bg-white text-slate-800">
+            <div className="p-4 bg-white text-slate-800 overflow-y-auto flex-1">
               {/* Direct Contact Details */}
               <div className="mb-4 pb-3 border-b border-gray-100 flex flex-col gap-1.5 text-xs text-slate-600">
                 <a href="tel:+919811861633" className="flex items-center gap-2 hover:text-brand-orange transition-colors font-medium">
@@ -364,9 +367,8 @@ function RootComponent() {
                         setFormData({ ...formData, name: sanitizeName(e.target.value) });
                         if (formErrors.name) setFormErrors({ ...formErrors, name: "" });
                       }}
-                      className={`w-full bg-slate-50 border rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand-orange/30 text-slate-800 ${
-                        formErrors.name ? "border-red-500 bg-red-50/20" : "border-gray-200"
-                      }`}
+                      className={`w-full bg-slate-50 border rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand-orange/30 text-slate-800 ${formErrors.name ? "border-red-500 bg-red-50/20" : "border-gray-200"
+                        }`}
                     />
                     {formErrors.name && (
                       <p className="text-[10px] text-red-600 font-medium mt-0.5">{formErrors.name}</p>
@@ -387,9 +389,8 @@ function RootComponent() {
                         setFormData({ ...formData, email: e.target.value });
                         if (formErrors.email) setFormErrors({ ...formErrors, email: "" });
                       }}
-                      className={`w-full bg-slate-50 border rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand-orange/30 text-slate-800 ${
-                        formErrors.email ? "border-red-500 bg-red-50/20" : "border-gray-200"
-                      }`}
+                      className={`w-full bg-slate-50 border rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand-orange/30 text-slate-800 ${formErrors.email ? "border-red-500 bg-red-50/20" : "border-gray-200"
+                        }`}
                     />
                     {formErrors.email && (
                       <p className="text-[10px] text-red-600 font-medium mt-0.5">{formErrors.email}</p>
@@ -412,9 +413,8 @@ function RootComponent() {
                         setFormData({ ...formData, mobile: sanitizeDigits(e.target.value, 10) });
                         if (formErrors.mobile) setFormErrors({ ...formErrors, mobile: "" });
                       }}
-                      className={`w-full bg-slate-50 border rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand-orange/30 text-slate-800 ${
-                        formErrors.mobile ? "border-red-500 bg-red-50/20" : "border-gray-200"
-                      }`}
+                      className={`w-full bg-slate-50 border rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand-orange/30 text-slate-800 ${formErrors.mobile ? "border-red-500 bg-red-50/20" : "border-gray-200"
+                        }`}
                     />
                     {formErrors.mobile && (
                       <p className="text-[10px] text-red-600 font-medium mt-0.5">{formErrors.mobile}</p>
@@ -435,14 +435,23 @@ function RootComponent() {
                         setFormData({ ...formData, message: e.target.value });
                         if (formErrors.message) setFormErrors({ ...formErrors, message: "" });
                       }}
-                      className={`w-full bg-slate-50 border rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand-orange/30 text-slate-800 resize-none ${
-                        formErrors.message ? "border-red-500 bg-red-50/20" : "border-gray-200"
-                      }`}
+                      className={`w-full bg-slate-50 border rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand-orange/30 text-slate-800 resize-none ${formErrors.message ? "border-red-500 bg-red-50/20" : "border-gray-200"
+                        }`}
                     />
                     {formErrors.message && (
                       <p className="text-[10px] text-red-600 font-medium mt-0.5">{formErrors.message}</p>
                     )}
                   </div>
+
+                  <Turnstile
+                    size="flexible"
+                    theme="light"
+                    action="contact"
+                    onSuccess={(tok) => setTurnstileToken(tok)}
+                    onExpire={() => setTurnstileToken("")}
+                    onError={() => setTurnstileToken("")}
+                    className="flex justify-center my-1"
+                  />
 
                   <button
                     type="submit"
@@ -461,9 +470,8 @@ function RootComponent() {
           {/* Float Toggle Button */}
           <button
             onClick={() => setMsgOpen(!msgOpen)}
-            className={`w-12 h-12 rounded-full flex items-center justify-center text-white shadow-2xl transition-all duration-300 hover:scale-110 cursor-pointer ${
-              msgOpen ? "bg-[#071527] hover:bg-[#0c2340] rotate-90" : "bg-brand-orange hover:bg-brand-orange-dark hover:shadow-brand-orange/30"
-            }`}
+            className={`w-12 h-12 rounded-full flex items-center justify-center text-white shadow-2xl transition-all duration-300 hover:scale-110 cursor-pointer ${msgOpen ? "bg-[#071527] hover:bg-[#0c2340] rotate-90" : "bg-brand-orange hover:bg-brand-orange-dark hover:shadow-brand-orange/30"
+              }`}
             aria-label="Toggle contact message popup"
             title="Send a message"
           >
