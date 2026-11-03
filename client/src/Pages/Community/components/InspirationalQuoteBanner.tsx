@@ -67,7 +67,7 @@ export function InspirationalQuoteBanner({
             <p className="font-['Caveat',cursive] text-2xl font-bold text-white tracking-wide">
               Together We Can Do More
             </p>
-            <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest mt-0.5">
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mt-0.5">
               ISLAH Welfare Foundation
             </p>
           </div>

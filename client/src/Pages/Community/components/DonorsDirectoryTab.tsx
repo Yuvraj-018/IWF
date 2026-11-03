@@ -235,7 +235,7 @@ export function DonorsDirectoryTab({
                       {/* Top Tier Badge */}
                       <div className="mb-3">
                         <span
-                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border ${tierStyle}`}
+                          className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold border ${tierStyle}`}
                         >
                           <Heart className="w-3 h-3 fill-current" />
                           <span>{donor.tier} Donor</span>
@@ -296,19 +296,19 @@ export function DonorsDirectoryTab({
                       <h4 className="text-sm font-bold text-[#0B2238] group-hover:text-[#1c558c] transition-colors leading-tight line-clamp-1">
                         {donor.name}
                       </h4>
-                      <p className="text-[11px] text-slate-500 font-medium mt-0.5 flex items-center gap-1">
-                        <Building2 className="w-3 h-3 text-slate-400 shrink-0" />
+                      <p className="text-xs text-slate-500 font-medium mt-0.5 flex items-center gap-1">
+                        <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                         <span className="truncate">{donor.type}</span>
                       </p>
 
                       {/* Cause & Since */}
                       <div className="space-y-1 mt-2.5 text-xs text-slate-600">
                         <div className="flex items-center gap-1.5">
-                          <Award className="w-3 h-3 text-[#1c558c] shrink-0" />
+                          <Award className="w-3.5 h-3.5 text-[#1c558c] shrink-0" />
                           <span className="truncate">{donor.causes.join(" | ")}</span>
                         </div>
-                        <div className="flex items-center gap-1.5 text-[11px] text-slate-400">
-                          <Calendar className="w-3 h-3 text-slate-400 shrink-0" />
+                        <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                          <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                           <span>Since {donor.sinceYear}</span>
                         </div>
                       </div>
@@ -406,7 +406,7 @@ export function DonorsDirectoryTab({
                   </div>
                   <div>
                     <span className="font-extrabold text-[#0B2238] block text-xs">Platinum Donor</span>
-                    <span className="text-[11px] text-slate-600">₹50,000 &amp; Above &bull; Substantial support</span>
+                    <span className="text-xs text-slate-600">₹50,000 &amp; Above &bull; Substantial support</span>
                   </div>
                 </div>
 
@@ -416,7 +416,7 @@ export function DonorsDirectoryTab({
                   </div>
                   <div>
                     <span className="font-extrabold text-[#0B2238] block text-xs">Gold Donor</span>
-                    <span className="text-[11px] text-slate-600">₹20,000 &ndash; ₹49,999 &bull; Significant support</span>
+                    <span className="text-xs text-slate-600">₹20,000 &ndash; ₹49,999 &bull; Significant support</span>
                   </div>
                 </div>
 
@@ -426,7 +426,7 @@ export function DonorsDirectoryTab({
                   </div>
                   <div>
                     <span className="font-extrabold text-[#0B2238] block text-xs">Silver Donor</span>
-                    <span className="text-[11px] text-slate-600">₹5,000 &ndash; ₹19,999 &bull; Valuable support</span>
+                    <span className="text-xs text-slate-600">₹5,000 &ndash; ₹19,999 &bull; Valuable support</span>
                   </div>
                 </div>
               </div>
@@ -487,7 +487,7 @@ export function DonorsDirectoryTab({
             {/* Dark Navy Banner with Curve */}
             <div className="lg:col-span-7 xl:col-span-8 bg-[#071527] p-8 sm:p-10 flex flex-col justify-between text-white relative">
               <div>
-                <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#f59e0b]">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#f59e0b]">
                   BE A PART OF SOMETHING BIGGER
                 </span>
                 <h3 className="text-2xl sm:text-3xl font-black mt-1 leading-snug">

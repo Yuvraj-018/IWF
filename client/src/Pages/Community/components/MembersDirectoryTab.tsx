@@ -187,7 +187,7 @@ export function MembersDirectoryTab({
                   <span className="w-2 h-2 rounded-full bg-[#1c558c]" />
                   <span>Filter Members</span>
                 </h3>
-                <span className="text-[11px] font-bold text-[#1c558c] bg-white px-2 py-0.5 rounded-full border border-[#cfe1f3]">
+                <span className="text-xs font-bold text-[#1c558c] bg-white px-2.5 py-0.5 rounded-full border border-[#cfe1f3]">
                   {filteredMembers.length} Found
                 </span>
               </div>
@@ -209,7 +209,7 @@ export function MembersDirectoryTab({
 
               {/* Membership Category */}
               <div>
-                <label className="block text-[11px] font-extrabold text-[#0B2238] uppercase tracking-wider mb-2.5">
+                <label className="block text-xs font-bold text-[#0B2238] uppercase tracking-wider mb-2.5">
                   Membership Category
                 </label>
                 <div className="space-y-2 text-xs">
@@ -263,7 +263,7 @@ export function MembersDirectoryTab({
 
               {/* Member Type Dropdown */}
               <div>
-                <label className="block text-[11px] font-extrabold text-[#0B2238] uppercase tracking-wider mb-1.5">
+                <label className="block text-xs font-bold text-[#0B2238] uppercase tracking-wider mb-1.5">
                   Member Type
                 </label>
                 <select
@@ -284,7 +284,7 @@ export function MembersDirectoryTab({
 
               {/* Status */}
               <div>
-                <label className="block text-[11px] font-extrabold text-[#0B2238] uppercase tracking-wider mb-2.5">
+                <label className="block text-xs font-bold text-[#0B2238] uppercase tracking-wider mb-2.5">
                   Status
                 </label>
                 <div className="space-y-2 text-xs">
@@ -329,7 +329,7 @@ export function MembersDirectoryTab({
 
               {/* Location Dropdown */}
               <div>
-                <label className="block text-[11px] font-extrabold text-[#0B2238] uppercase tracking-wider mb-1.5">
+                <label className="block text-xs font-bold text-[#0B2238] uppercase tracking-wider mb-1.5">
                   Location
                 </label>
                 <select
@@ -482,7 +482,7 @@ export function MembersDirectoryTab({
                         {/* Category Badge Pill (Top Right) */}
                         <div className="absolute top-2.5 right-2.5 flex flex-col items-end gap-1.5">
                           <span
-                            className={`${categoryColor} text-white font-extrabold text-[9px] uppercase tracking-wider px-2 py-0.5 rounded shadow-xs`}
+                            className={`${categoryColor} text-white font-extrabold text-[10px] sm:text-xs uppercase tracking-wider px-2 py-0.5 rounded shadow-xs`}
                           >
                             {member.category} Card
                           </span>
@@ -513,8 +513,8 @@ export function MembersDirectoryTab({
                       <h4 className="text-base font-bold text-[#0B2238] group-hover:text-[#1c558c] transition-colors leading-tight">
                         {member.name}
                       </h4>
-                      <p className="text-[11px] text-slate-400 font-medium mt-0.5">
-                        Member ID: <span className="text-slate-600 font-semibold">{member.id}</span>
+                      <p className="text-xs text-slate-500 font-medium mt-0.5">
+                        Member ID: <span className="text-slate-700 font-semibold">{member.id}</span>
                       </p>
 
                       {/* Role & Location */}
@@ -619,7 +619,7 @@ export function MembersDirectoryTab({
           {/* Center: Navy Dark Banner */}
           <div className="lg:col-span-5 bg-[#071527] p-6 sm:p-8 flex flex-col justify-between text-white relative">
             <div>
-              <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#f59e0b]">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#f59e0b]">
                 JOIN ISLAH COMMUNITY
               </span>
               <h3 className="text-xl sm:text-2xl font-black mt-1 leading-snug">
