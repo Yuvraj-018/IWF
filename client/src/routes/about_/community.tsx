@@ -1,5 +1,5 @@
-﻿import { createFileRoute } from "@tanstack/react-router";
-import MembershipPage from "@/Pages/MembershipPage";
+import { createFileRoute } from "@tanstack/react-router";
+import CommunityPage from "@/Pages/Community/CommunityPage";
 
 export const Route = createFileRoute("/about_/community")({
   head: () => ({
@@ -12,5 +12,5 @@ export const Route = createFileRoute("/about_/community")({
       },
     ],
   }),
-  component: MembershipPage,
+  component: () => <CommunityPage />,
 });
