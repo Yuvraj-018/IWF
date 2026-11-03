@@ -285,7 +285,7 @@ export function PartnersDirectoryTab({
 
                       {/* Tier Pill */}
                       <div className="mt-1.5">
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#fef3c7] text-[#b45309] border border-[#fde68a]">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold bg-[#fef3c7] text-[#b45309] border border-[#fde68a]">
                           <Heart className="w-3 h-3 fill-current" />
                           <span>{partner.category}</span>
                         </span>
@@ -385,7 +385,7 @@ export function PartnersDirectoryTab({
                   </div>
                   <div>
                     <span className="font-extrabold text-[#0B2238] block text-xs">Meaningful Impact</span>
-                    <span className="text-slate-600 leading-relaxed text-[11px]">
+                    <span className="text-slate-600 leading-relaxed text-xs">
                       Support initiatives that create real and lasting change.
                     </span>
                   </div>
@@ -398,7 +398,7 @@ export function PartnersDirectoryTab({
                   </div>
                   <div>
                     <span className="font-extrabold text-[#0B2238] block text-xs">Shared Expertise</span>
-                    <span className="text-slate-600 leading-relaxed text-[11px]">
+                    <span className="text-slate-600 leading-relaxed text-xs">
                       Combine knowledge, resources and local engagement.
                     </span>
                   </div>
@@ -411,7 +411,7 @@ export function PartnersDirectoryTab({
                   </div>
                   <div>
                     <span className="font-extrabold text-[#0B2238] block text-xs">CSR Opportunities</span>
-                    <span className="text-slate-600 leading-relaxed text-[11px]">
+                    <span className="text-slate-600 leading-relaxed text-xs">
                       Explore eligible corporate social responsibility projects.
                     </span>
                   </div>
@@ -424,7 +424,7 @@ export function PartnersDirectoryTab({
                   </div>
                   <div>
                     <span className="font-extrabold text-[#0B2238] block text-xs">Sustainable Development</span>
-                    <span className="text-slate-600 leading-relaxed text-[11px]">
+                    <span className="text-slate-600 leading-relaxed text-xs">
                       Build long-term solutions for rural and underserved communities.
                     </span>
                   </div>
@@ -491,7 +491,7 @@ export function PartnersDirectoryTab({
             {/* Center: Dark Navy Banner */}
             <div className="lg:col-span-5 bg-[#071527] p-6 sm:p-8 flex flex-col justify-between text-white">
               <div>
-                <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#f59e0b]">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#f59e0b]">
                   JOIN ISLAH COMMUNITY
                 </span>
                 <h3 className="text-xl sm:text-2xl font-black mt-1 leading-snug">

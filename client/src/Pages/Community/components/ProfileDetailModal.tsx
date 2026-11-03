@@ -39,7 +39,7 @@ export function ProfileDetailModal({ profile, onClose }: ProfileDetailModalProps
               {profile.type === "volunteer" && <Briefcase className="w-6 h-6 text-brand-orange" />}
             </div>
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-wider text-brand-orange">
+              <p className="text-xs font-bold uppercase tracking-wider text-brand-orange">
                 ISLAH Community Profile
               </p>
               <h3 className="text-xl font-bold text-white tracking-tight leading-snug">

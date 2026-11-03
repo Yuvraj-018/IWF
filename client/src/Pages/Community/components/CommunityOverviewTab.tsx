@@ -543,13 +543,13 @@ export function CommunityOverviewTab({
                 </p>
 
                 {/* Stat Pill */}
-                <div className="inline-flex items-center gap-2 mt-3 bg-white/95 px-2.5 py-1 rounded-full border border-[#d5e3f0] shadow-2xs">
+                <div className="inline-flex items-center gap-2 mt-3 bg-white/95 px-3 py-1.5 rounded-full border border-[#d5e3f0] shadow-2xs">
                   <div className="w-5 h-5 rounded-full bg-[#e2eef9] text-[#0f3b68] flex items-center justify-center shrink-0">
-                    <Users className="w-3 h-3 text-[#0f3b68]" />
+                    <Users className="w-3.5 h-3.5 text-[#0f3b68]" />
                   </div>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-xs font-extrabold text-[#0B2238]">120+</span>
-                    <span className="text-[10px] text-slate-500 font-medium">Active Members</span>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-sm font-extrabold text-[#0B2238]">120+</span>
+                    <span className="text-xs text-slate-500 font-medium">Active Members</span>
                   </div>
                 </div>
               </div>
@@ -587,13 +587,13 @@ export function CommunityOverviewTab({
                 </p>
 
                 {/* Stat Pill */}
-                <div className="inline-flex items-center gap-2 mt-3 bg-white/95 px-2.5 py-1 rounded-full border border-[#f5e4c3] shadow-2xs">
+                <div className="inline-flex items-center gap-2 mt-3 bg-white/95 px-3 py-1.5 rounded-full border border-[#f5e4c3] shadow-2xs">
                   <div className="w-5 h-5 rounded-full bg-[#fef3d6] text-[#d97706] flex items-center justify-center shrink-0">
-                    <Heart className="w-3 h-3 text-[#d97706]" />
+                    <Heart className="w-3.5 h-3.5 text-[#d97706]" />
                   </div>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-xs font-extrabold text-[#0B2238]">80+</span>
-                    <span className="text-[10px] text-slate-500 font-medium">Supporters</span>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-sm font-extrabold text-[#0B2238]">80+</span>
+                    <span className="text-xs text-slate-500 font-medium">Supporters</span>
                   </div>
                 </div>
               </div>
@@ -631,13 +631,13 @@ export function CommunityOverviewTab({
                 </p>
 
                 {/* Stat Pill */}
-                <div className="inline-flex items-center gap-2 mt-3 bg-white/95 px-2.5 py-1 rounded-full border border-[#d0e4f7] shadow-2xs">
+                <div className="inline-flex items-center gap-2 mt-3 bg-white/95 px-3 py-1.5 rounded-full border border-[#d0e4f7] shadow-2xs">
                   <div className="w-5 h-5 rounded-full bg-[#e0f0fe] text-[#2563eb] flex items-center justify-center shrink-0">
-                    <Building2 className="w-3 h-3 text-[#2563eb]" />
+                    <Building2 className="w-3.5 h-3.5 text-[#2563eb]" />
                   </div>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-xs font-extrabold text-[#0B2238]">40+</span>
-                    <span className="text-[10px] text-slate-500 font-medium">Partners</span>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-sm font-extrabold text-[#0B2238]">40+</span>
+                    <span className="text-xs text-slate-500 font-medium">Partners</span>
                   </div>
                 </div>
               </div>
@@ -675,13 +675,13 @@ export function CommunityOverviewTab({
                 </p>
 
                 {/* Stat Pill */}
-                <div className="inline-flex items-center gap-2 mt-3 bg-white/95 px-2.5 py-1 rounded-full border border-[#e2d5f5] shadow-2xs">
+                <div className="inline-flex items-center gap-2 mt-3 bg-white/95 px-3 py-1.5 rounded-full border border-[#e2d5f5] shadow-2xs">
                   <div className="w-5 h-5 rounded-full bg-[#f3e8ff] text-[#7c3aed] flex items-center justify-center shrink-0">
-                    <GraduationCap className="w-3 h-3 text-[#7c3aed]" />
+                    <GraduationCap className="w-3.5 h-3.5 text-[#7c3aed]" />
                   </div>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-xs font-extrabold text-[#0B2238]">15+</span>
-                    <span className="text-[10px] text-slate-500 font-medium">Active Contributors</span>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-sm font-extrabold text-[#0B2238]">15+</span>
+                    <span className="text-xs text-slate-500 font-medium">Active Contributors</span>
                   </div>
                 </div>
               </div>
@@ -902,25 +902,25 @@ export function CommunityOverviewTab({
                         </div>
 
                         <span
-                          className={`text-[9px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${card.badgeBg}`}
+                          className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${card.badgeBg}`}
                         >
-                          <BadgeIcon className="w-2.5 h-2.5" />
+                          <BadgeIcon className="w-3 h-3" />
                           <span>{card.badgeText}</span>
                         </span>
                       </div>
 
-                      <h4 className="text-[13px] font-bold text-[#0B2238] leading-tight line-clamp-1 group-hover:text-[#1c558c] transition-colors">
+                      <h4 className="text-sm font-bold text-[#0B2238] leading-tight line-clamp-1 group-hover:text-[#1c558c] transition-colors">
                         {card.name}
                       </h4>
-                      <p className="text-[10.5px] text-slate-500 font-medium mt-0.5 line-clamp-1">{card.title}</p>
+                      <p className="text-xs text-slate-500 font-medium mt-0.5 line-clamp-1">{card.title}</p>
                       
-                      <div className="flex items-center gap-1 text-[9.5px] text-slate-400 mt-0.5">
-                        <MapPin className="w-2.5 h-2.5 text-[#f97316] shrink-0" />
+                      <div className="flex items-center gap-1 text-xs text-slate-500 mt-1">
+                        <MapPin className="w-3 h-3 text-[#f97316] shrink-0" />
                         <span className="line-clamp-1">{card.location}</span>
                       </div>
 
                       {subtitle && (
-                        <div className="mt-1.5 pt-1.5 border-t border-slate-100 flex items-center gap-1 text-[9.5px] text-slate-600 font-medium">
+                        <div className="mt-2 pt-1.5 border-t border-slate-100 flex items-center gap-1 text-xs text-slate-600 font-medium">
                           <span className="w-1.5 h-1.5 rounded-full bg-[#1c558c]/60 shrink-0" />
                           <span className="truncate">{subtitle}</span>
                         </div>
@@ -930,10 +930,10 @@ export function CommunityOverviewTab({
                     <div className="pt-2 mt-2 border-t border-slate-100">
                       <button
                         onClick={() => setSelectedProfile(card.profileData)}
-                        className="w-full py-1 px-2.5 rounded-md border border-slate-200 bg-slate-50/70 hover:border-[#071527] hover:bg-[#071527] hover:text-white text-[10.5px] font-semibold text-[#0B2238] transition flex items-center justify-center gap-1 cursor-pointer"
+                        className="w-full py-1.5 px-3 rounded-md border border-slate-200 bg-slate-50/70 hover:border-[#071527] hover:bg-[#071527] hover:text-white text-xs font-semibold text-[#0B2238] transition flex items-center justify-center gap-1 cursor-pointer"
                       >
                         <span>View Profile</span>
-                        <ArrowRight className="w-2.5 h-2.5" />
+                        <ArrowRight className="w-3 h-3" />
                       </button>
                     </div>
                   </div>
@@ -975,7 +975,7 @@ export function CommunityOverviewTab({
                   <ShieldCheck className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#1c558c]">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#1c558c]">
                     Already a Member?
                   </span>
                   <h3 className="text-xl sm:text-2xl font-black text-[#0B2238]">
@@ -1080,7 +1080,7 @@ export function CommunityOverviewTab({
 
           {/* Right Column: Shared Commitment Content Area */}
           <div className="lg:col-span-7 px-6 sm:px-10 lg:px-12 py-8 lg:py-10 flex flex-col justify-center bg-white z-10">
-            <span className="text-slate-500 font-extrabold uppercase text-[10px] sm:text-[11px] tracking-widest block mb-1">
+            <span className="text-[#1c558c] font-bold uppercase text-xs tracking-wider block mb-1">
               OUR SHARED COMMITMENT
             </span>
             <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0B2238] font-serif tracking-tight">
@@ -1104,7 +1104,7 @@ export function CommunityOverviewTab({
                   <div className="w-10 h-10 rounded-full border border-slate-300 flex items-center justify-center text-[#0B2238] mb-1.5 hover:border-[#1c558c] hover:bg-slate-50 transition shadow-2xs">
                     <Shield className="w-4 h-4 text-[#0B2238]" />
                   </div>
-                  <span className="text-[11px] font-bold text-[#0B2238]">Integrity</span>
+                  <span className="text-xs font-bold text-[#0B2238]">Integrity</span>
                 </div>
 
                 {/* Inclusion */}
@@ -1112,7 +1112,7 @@ export function CommunityOverviewTab({
                   <div className="w-10 h-10 rounded-full border border-slate-300 flex items-center justify-center text-[#0B2238] mb-1.5 hover:border-[#1c558c] hover:bg-slate-50 transition shadow-2xs">
                     <Users className="w-4 h-4 text-[#0B2238]" />
                   </div>
-                  <span className="text-[11px] font-bold text-[#0B2238]">Inclusion</span>
+                  <span className="text-xs font-bold text-[#0B2238]">Inclusion</span>
                 </div>
 
                 {/* Accountability */}
@@ -1120,7 +1120,7 @@ export function CommunityOverviewTab({
                   <div className="w-10 h-10 rounded-full border border-slate-300 flex items-center justify-center text-[#0B2238] mb-1.5 hover:border-[#1c558c] hover:bg-slate-50 transition shadow-2xs">
                     <CheckCircle2 className="w-4 h-4 text-[#0B2238]" />
                   </div>
-                  <span className="text-[11px] font-bold text-[#0B2238]">Accountability</span>
+                  <span className="text-xs font-bold text-[#0B2238]">Accountability</span>
                 </div>
 
                 {/* Collaboration */}
@@ -1128,7 +1128,7 @@ export function CommunityOverviewTab({
                   <div className="w-10 h-10 rounded-full border border-slate-300 flex items-center justify-center text-[#0B2238] mb-1.5 hover:border-[#1c558c] hover:bg-slate-50 transition shadow-2xs">
                     <Handshake className="w-4 h-4 text-[#0B2238]" />
                   </div>
-                  <span className="text-[11px] font-bold text-[#0B2238]">Collaboration</span>
+                  <span className="text-xs font-bold text-[#0B2238]">Collaboration</span>
                 </div>
 
                 {/* Sustainability */}
@@ -1136,7 +1136,7 @@ export function CommunityOverviewTab({
                   <div className="w-10 h-10 rounded-full border border-slate-300 flex items-center justify-center text-[#0B2238] mb-1.5 hover:border-[#1c558c] hover:bg-slate-50 transition shadow-2xs">
                     <Sprout className="w-4 h-4 text-[#0B2238]" />
                   </div>
-                  <span className="text-[11px] font-bold text-[#0B2238]">Sustainability</span>
+                  <span className="text-xs font-bold text-[#0B2238]">Sustainability</span>
                 </div>
               </div>
 

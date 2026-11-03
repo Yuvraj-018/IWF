@@ -134,7 +134,7 @@ export function VolunteersDirectoryTab({
               <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B2238] tracking-tight">
                 Meet Our Volunteers &amp; Mentors
               </h2>
-              <span className="text-[11px] font-bold text-[#1c558c] bg-[#f0f6fc] border border-[#cfe1f3] px-2 py-0.5 rounded-full hidden sm:inline">
+              <span className="text-xs font-bold text-[#1c558c] bg-[#f0f6fc] border border-[#cfe1f3] px-2.5 py-0.5 rounded-full hidden sm:inline">
                 Illustrative profiles
               </span>
             </div>
@@ -271,7 +271,7 @@ export function VolunteersDirectoryTab({
 
                         {/* Role Badge */}
                         <span
-                          className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                          className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold ${
                             isMentor
                               ? "bg-[#071527] text-white"
                               : "bg-[#0d9488] text-white"
@@ -384,7 +384,7 @@ export function VolunteersDirectoryTab({
                   </div>
                   <div>
                     <span className="font-extrabold text-[#0B2238] block text-xs">Purposeful Contribution</span>
-                    <span className="text-slate-600 leading-relaxed text-[11px]">
+                    <span className="text-slate-600 leading-relaxed text-xs">
                       Make a real difference in the lives of individuals and communities.
                     </span>
                   </div>
@@ -397,7 +397,7 @@ export function VolunteersDirectoryTab({
                   </div>
                   <div>
                     <span className="font-extrabold text-[#0B2238] block text-xs">Share Your Expertise</span>
-                    <span className="text-slate-600 leading-relaxed text-[11px]">
+                    <span className="text-slate-600 leading-relaxed text-xs">
                       Use your skills and experience to create meaningful change.
                     </span>
                   </div>
@@ -410,7 +410,7 @@ export function VolunteersDirectoryTab({
                   </div>
                   <div>
                     <span className="font-extrabold text-[#0B2238] block text-xs">Learn &amp; Collaborate</span>
-                    <span className="text-slate-600 leading-relaxed text-[11px]">
+                    <span className="text-slate-600 leading-relaxed text-xs">
                       Gain new perspectives and work with a diverse team.
                     </span>
                   </div>
@@ -423,7 +423,7 @@ export function VolunteersDirectoryTab({
                   </div>
                   <div>
                     <span className="font-extrabold text-[#0B2238] block text-xs">Community Impact</span>
-                    <span className="text-slate-600 leading-relaxed text-[11px]">
+                    <span className="text-slate-600 leading-relaxed text-xs">
                       Be part of sustainable solutions for stronger communities.
                     </span>
                   </div>

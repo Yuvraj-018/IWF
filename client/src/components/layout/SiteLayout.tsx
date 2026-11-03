@@ -416,117 +416,44 @@ export function Header() {
             onMouseLeave={scheduleClose}
           >
             <div className="max-w-7xl mx-auto">
-              {activeMenu === "Our Programs" ? (
-                <div className="max-w-4xl mx-auto py-1">
-                  <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
-                    <div className="flex items-center gap-2">
-                      <span className="w-2.5 h-2.5 rounded-full bg-brand-orange"></span>
-                      <span className="text-xs font-extrabold uppercase tracking-widest text-[#0b1f3b]">
-                        Our Programs & Initiatives
-                      </span>
-                    </div>
-                    <span className="text-xs text-gray-400 font-medium">Choose an area to explore</span>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    {/* Option 1: What We Do */}
-                    <a
-                      href="/programs"
-                      onClick={() => setActiveMenu(null)}
-                      className="group relative flex items-start gap-4 p-5 rounded-2xl border border-[#cfe1f3] bg-[#f0f6fc]/80 hover:bg-[#e2edf8] hover:border-[#1c558c]/40 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
-                    >
-                      <div className="w-12 h-12 rounded-xl bg-[#0b1f3b] text-white flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:bg-[#1c558c] transition-all shadow-sm">
-                        <Layers className="w-6 h-6 text-white" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-bold text-slate-900 group-hover:text-[#1c558c] text-lg transition-colors">
-                            What We Do
-                          </h4>
-                          <span className="w-7 h-7 rounded-full bg-white flex items-center justify-center text-slate-400 group-hover:text-[#f97316] group-hover:bg-orange-50 shadow-xs transition-all">
-                            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                          </span>
-                        </div>
-                        <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
-                          Explore our 8 thematic sectors spanning education, health, livelihoods, women & youth empowerment, and relief.
-                        </p>
-                        <div className="flex items-center gap-1.5 mt-3 text-xs font-semibold text-[#1c558c] group-hover:text-brand-orange transition-colors">
-                          <span>Explore all 8 sectors</span>
-                          <span>→</span>
-                        </div>
-                      </div>
-                    </a>
-
-                    {/* Option 2: Our Campaigns */}
-                    <a
-                      href="/campaign"
-                      onClick={() => setActiveMenu(null)}
-                      className="group relative flex items-start gap-4 p-5 rounded-2xl border border-orange-200/90 bg-orange-50/60 hover:bg-orange-100/60 hover:border-orange-300 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
-                    >
-                      <div className="w-12 h-12 rounded-xl bg-[#0b1f3b] text-white flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:bg-[#f97316] transition-all shadow-sm">
-                        <Target className="w-6 h-6 text-white" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-bold text-slate-900 group-hover:text-orange-950 text-lg transition-colors">
-                            Our Campaigns
-                          </h4>
-                          <span className="w-7 h-7 rounded-full bg-white flex items-center justify-center text-slate-400 group-hover:text-[#f97316] group-hover:bg-orange-50 shadow-xs transition-all">
-                            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                          </span>
-                        </div>
-                        <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
-                          Discover our high-impact flagship missions creating on-ground transformation across communities.
-                        </p>
-                        <div className="flex items-center gap-1.5 mt-3 text-xs font-semibold text-brand-orange group-hover:text-orange-700 transition-colors">
-                          <span>Discover flagship campaigns</span>
-                          <span>→</span>
-                        </div>
-                      </div>
-                    </a>
-                  </div>
+              <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-brand-orange"></span>
+                  <span className="text-xs font-extrabold uppercase tracking-widest text-[#0b1f3b]">
+                    {activeMenu}
+                  </span>
                 </div>
-              ) : (
-                <>
-                  <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
-                    <div className="flex items-center gap-2">
-                      <span className="w-2.5 h-2.5 rounded-full bg-brand-orange"></span>
-                      <span className="text-xs font-extrabold uppercase tracking-widest text-[#0b1f3b]">
-                        {activeMenu}
-                      </span>
+                <span className="text-xs text-gray-400 font-medium">Quick Links</span>
+              </div>
+              <div
+                className={`grid gap-6 md:gap-8 ${activeMenu === "Our Programs" ? "max-w-md" : ""}`}
+                style={{ gridTemplateColumns: `repeat(${MEGA_DATA[activeMenu].cols}, minmax(0, 1fr))` }}
+              >
+                {Array.from({ length: MEGA_DATA[activeMenu].cols }).map((_, colIndex) => {
+                  const subItems = MEGA_DATA[activeMenu].items;
+                  const colsCount = MEGA_DATA[activeMenu].cols;
+                  const itemsPerCol = Math.ceil(subItems.length / colsCount);
+                  const colItems = subItems.slice(colIndex * itemsPerCol, (colIndex + 1) * itemsPerCol);
+                  return (
+                    <div key={colIndex} className="flex flex-col gap-3">
+                      {colItems.map((subItem, subIdx) => (
+                        <a
+                          key={subItem}
+                          href={getMegaHref(activeMenu, subItem)}
+                          className="flex items-center gap-2 text-slate-900 font-bold hover:text-brand-orange text-sm md:text-base hover:translate-x-1.5 transition-all duration-200 group"
+                          style={{
+                            transitionDelay: `${(colIndex * 3 + subIdx) * 15}ms`,
+                          }}
+                          onClick={() => setActiveMenu(null)}
+                        >
+                          <span className="text-brand-orange text-sm font-semibold group-hover:translate-x-0.5 transition-transform">→</span>
+                          {subItem}
+                        </a>
+                      ))}
                     </div>
-                    <span className="text-xs text-gray-400 font-medium">Quick Links</span>
-                  </div>
-                  <div
-                    className="grid gap-6 md:gap-8"
-                    style={{ gridTemplateColumns: `repeat(${MEGA_DATA[activeMenu].cols}, minmax(0, 1fr))` }}
-                  >
-                    {Array.from({ length: MEGA_DATA[activeMenu].cols }).map((_, colIndex) => {
-                      const subItems = MEGA_DATA[activeMenu].items;
-                      const colsCount = MEGA_DATA[activeMenu].cols;
-                      const itemsPerCol = Math.ceil(subItems.length / colsCount);
-                      const colItems = subItems.slice(colIndex * itemsPerCol, (colIndex + 1) * itemsPerCol);
-                      return (
-                        <div key={colIndex} className="flex flex-col gap-3">
-                          {colItems.map((subItem, subIdx) => (
-                            <a
-                              key={subItem}
-                              href={getMegaHref(activeMenu, subItem)}
-                              className="flex items-center gap-2 text-slate-900 font-bold hover:text-brand-orange text-sm md:text-base hover:translate-x-1.5 transition-all duration-200 group"
-                              style={{
-                                transitionDelay: `${(colIndex * 3 + subIdx) * 15}ms`,
-                              }}
-                              onClick={() => setActiveMenu(null)}
-                            >
-                              <span className="text-brand-orange text-sm font-semibold group-hover:translate-x-0.5 transition-transform">→</span>
-                              {subItem}
-                            </a>
-                          ))}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </>
-              )}
+                  );
+                })}
+              </div>
             </div>
           </div>
         )}
