@@ -138,8 +138,8 @@ function getMegaHref(menu: string, item: string) {
   if (menu === "About Us" && item === "Leadership & Management") return "/about/leadership";
   if (menu === "About Us" && (item === "ISLAH Community" || item === "Community" || item === "Become a Member")) return "/about/community";
   if (menu === "About Us" && item === "Vision 2047") return "/about/vision-2047";
-  if (menu === "About Us" && (item === "Member & Donor" || item === "Members & Donors" || item === "Members & Supporters")) return "/about/community";
-  if (menu === "About Us" && (item === "Partner & Sponsor" || item === "Our Partners & Donors" || item === "Partners & Donors" || item === "Our Partners & Sponsors")) return "/about/community";
+  if (menu === "About Us" && (item === "Member & Donor" || item === "Members & Donors" || item === "Members & Supporters")) return "/about/community?tab=members";
+  if (menu === "About Us" && (item === "Partner & Sponsor" || item === "Our Partners & Donors" || item === "Partners & Donors" || item === "Our Partners & Sponsors")) return "/about/community?tab=partners";
   if (menu === "About Us" && item === "Our Objective & Vision") return "/about/objective-and-vision";
   if (menu === "About Us" && item === "Membership Policy") return "/about/community#status";
   // What We Do (Canonical 8 Focus Sectors + View All)
