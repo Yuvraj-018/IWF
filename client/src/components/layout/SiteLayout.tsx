@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { MouseEvent } from "react";
 import { useRouterState } from "@tanstack/react-router";
 import {
+  ArrowRight,
   Award,
   BarChart2,
   Briefcase,
@@ -16,6 +17,7 @@ import {
   IndianRupee,
   Instagram,
   Landmark,
+  Layers,
   Leaf,
   Linkedin,
   Lock,
@@ -25,6 +27,7 @@ import {
   Phone,
   Scale,
   ShieldCheck,
+  Target,
   Twitter,
   UserCheck,
   Users,
@@ -42,8 +45,7 @@ import newLogo from "@/assets/new logo.png";
 export const NAV_ITEMS = [
   "Home",
   "About Us",
-  "What We Do",
-  "Our Campaigns",
+  "Our Programs",
   "Media",
   "Get Involved",
   "Contact Us",
@@ -63,6 +65,13 @@ export const MEGA_DATA: Record<string, MegaSection> = {
       "Governance & Transparency",
       "Leadership & Management",
       "ISLAH Community",
+    ],
+  },
+  "Our Programs": {
+    cols: 2,
+    items: [
+      "What We Do",
+      "Our Campaigns",
     ],
   },
   "What We Do": {
@@ -119,9 +128,8 @@ export const MEGA_DATA: Record<string, MegaSection> = {
 function getTopNavHref(item: string) {
   if (item === "Home") return "/";
   if (item === "About Us") return "/about";
-  if (item === "What We Do") return "/programs";
+  if (item === "Our Programs" || item === "Our Program" || item === "What We Do" || item === "Programs") return "/programs";
   if (item === "Our Campaigns" || item === "Campaigns") return "/campaign";
-  if (item === "Programs") return "/programs";
   if (item === "Impact" || item === "Outcomes") return "/media/outcomes";
   if (item === "Become a Member" || item === "Membership" || item === "ISLAH Community") return "/about/community";
   if (item === "Media") return "/media";
@@ -131,6 +139,9 @@ function getTopNavHref(item: string) {
 }
 
 function getMegaHref(menu: string, item: string) {
+  // Our Programs
+  if ((menu === "Our Programs" || menu === "Our Program") && item === "What We Do") return "/programs";
+  if ((menu === "Our Programs" || menu === "Our Program") && item === "Our Campaigns") return "/campaign";
   // About Us (6 canonical sub-pages)
   if (menu === "About Us" && item === "Overview") return "/about";
   if (menu === "About Us" && item === "Legal Status & Registration") return "/about/legal-status";
@@ -283,6 +294,7 @@ export function Header() {
   const isRouteActive = (item: string) =>
     (item === "Home" && pathname === "/") ||
     (item === "About Us" && pathname.startsWith("/about")) ||
+    ((item === "Our Programs" || item === "Our Program") && (pathname.startsWith("/programs") || pathname.startsWith("/campaign"))) ||
     (item === "Our Campaigns" && pathname.startsWith("/campaign")) ||
     (item === "Become a Member" && pathname.startsWith("/membership")) ||
     (item === "Media" && (pathname.startsWith("/media") || pathname.startsWith("/news-and-events") || pathname.startsWith("/gallery"))) ||
@@ -404,44 +416,117 @@ export function Header() {
             onMouseLeave={scheduleClose}
           >
             <div className="max-w-7xl mx-auto">
-              <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-brand-orange"></span>
-                  <span className="text-xs font-extrabold uppercase tracking-widest text-[#0b1f3b]">
-                    {activeMenu}
-                  </span>
-                </div>
-                <span className="text-xs text-gray-400 font-medium">Quick Links</span>
-              </div>
-              <div
-                className="grid gap-6 md:gap-8"
-                style={{ gridTemplateColumns: `repeat(${MEGA_DATA[activeMenu].cols}, minmax(0, 1fr))` }}
-              >
-                {Array.from({ length: MEGA_DATA[activeMenu].cols }).map((_, colIndex) => {
-                  const subItems = MEGA_DATA[activeMenu].items;
-                  const colsCount = MEGA_DATA[activeMenu].cols;
-                  const itemsPerCol = Math.ceil(subItems.length / colsCount);
-                  const colItems = subItems.slice(colIndex * itemsPerCol, (colIndex + 1) * itemsPerCol);
-                  return (
-                    <div key={colIndex} className="flex flex-col gap-3">
-                      {colItems.map((subItem, subIdx) => (
-                        <a
-                          key={subItem}
-                          href={getMegaHref(activeMenu, subItem)}
-                          className="flex items-center gap-2 text-slate-900 font-bold hover:text-brand-orange text-sm md:text-base hover:translate-x-1.5 transition-all duration-200 group"
-                          style={{
-                            transitionDelay: `${(colIndex * 3 + subIdx) * 15}ms`,
-                          }}
-                          onClick={() => setActiveMenu(null)}
-                        >
-                          <span className="text-brand-orange text-sm font-semibold group-hover:translate-x-0.5 transition-transform">→</span>
-                          {subItem}
-                        </a>
-                      ))}
+              {activeMenu === "Our Programs" ? (
+                <div className="max-w-4xl mx-auto py-1">
+                  <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full bg-brand-orange"></span>
+                      <span className="text-xs font-extrabold uppercase tracking-widest text-[#0b1f3b]">
+                        Our Programs & Initiatives
+                      </span>
                     </div>
-                  );
-                })}
-              </div>
+                    <span className="text-xs text-gray-400 font-medium">Choose an area to explore</span>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    {/* Option 1: What We Do */}
+                    <a
+                      href="/programs"
+                      onClick={() => setActiveMenu(null)}
+                      className="group relative flex items-start gap-4 p-5 rounded-2xl border border-[#cfe1f3] bg-[#f0f6fc]/80 hover:bg-[#e2edf8] hover:border-[#1c558c]/40 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+                    >
+                      <div className="w-12 h-12 rounded-xl bg-[#0b1f3b] text-white flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:bg-[#1c558c] transition-all shadow-sm">
+                        <Layers className="w-6 h-6 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between">
+                          <h4 className="font-bold text-slate-900 group-hover:text-[#1c558c] text-lg transition-colors">
+                            What We Do
+                          </h4>
+                          <span className="w-7 h-7 rounded-full bg-white flex items-center justify-center text-slate-400 group-hover:text-[#f97316] group-hover:bg-orange-50 shadow-xs transition-all">
+                            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
+                          Explore our 8 thematic sectors spanning education, health, livelihoods, women & youth empowerment, and relief.
+                        </p>
+                        <div className="flex items-center gap-1.5 mt-3 text-xs font-semibold text-[#1c558c] group-hover:text-brand-orange transition-colors">
+                          <span>Explore all 8 sectors</span>
+                          <span>→</span>
+                        </div>
+                      </div>
+                    </a>
+
+                    {/* Option 2: Our Campaigns */}
+                    <a
+                      href="/campaign"
+                      onClick={() => setActiveMenu(null)}
+                      className="group relative flex items-start gap-4 p-5 rounded-2xl border border-orange-200/90 bg-orange-50/60 hover:bg-orange-100/60 hover:border-orange-300 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+                    >
+                      <div className="w-12 h-12 rounded-xl bg-[#0b1f3b] text-white flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:bg-[#f97316] transition-all shadow-sm">
+                        <Target className="w-6 h-6 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between">
+                          <h4 className="font-bold text-slate-900 group-hover:text-orange-950 text-lg transition-colors">
+                            Our Campaigns
+                          </h4>
+                          <span className="w-7 h-7 rounded-full bg-white flex items-center justify-center text-slate-400 group-hover:text-[#f97316] group-hover:bg-orange-50 shadow-xs transition-all">
+                            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
+                          Discover our high-impact flagship missions creating on-ground transformation across communities.
+                        </p>
+                        <div className="flex items-center gap-1.5 mt-3 text-xs font-semibold text-brand-orange group-hover:text-orange-700 transition-colors">
+                          <span>Discover flagship campaigns</span>
+                          <span>→</span>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full bg-brand-orange"></span>
+                      <span className="text-xs font-extrabold uppercase tracking-widest text-[#0b1f3b]">
+                        {activeMenu}
+                      </span>
+                    </div>
+                    <span className="text-xs text-gray-400 font-medium">Quick Links</span>
+                  </div>
+                  <div
+                    className="grid gap-6 md:gap-8"
+                    style={{ gridTemplateColumns: `repeat(${MEGA_DATA[activeMenu].cols}, minmax(0, 1fr))` }}
+                  >
+                    {Array.from({ length: MEGA_DATA[activeMenu].cols }).map((_, colIndex) => {
+                      const subItems = MEGA_DATA[activeMenu].items;
+                      const colsCount = MEGA_DATA[activeMenu].cols;
+                      const itemsPerCol = Math.ceil(subItems.length / colsCount);
+                      const colItems = subItems.slice(colIndex * itemsPerCol, (colIndex + 1) * itemsPerCol);
+                      return (
+                        <div key={colIndex} className="flex flex-col gap-3">
+                          {colItems.map((subItem, subIdx) => (
+                            <a
+                              key={subItem}
+                              href={getMegaHref(activeMenu, subItem)}
+                              className="flex items-center gap-2 text-slate-900 font-bold hover:text-brand-orange text-sm md:text-base hover:translate-x-1.5 transition-all duration-200 group"
+                              style={{
+                                transitionDelay: `${(colIndex * 3 + subIdx) * 15}ms`,
+                              }}
+                              onClick={() => setActiveMenu(null)}
+                            >
+                              <span className="text-brand-orange text-sm font-semibold group-hover:translate-x-0.5 transition-transform">→</span>
+                              {subItem}
+                            </a>
+                          ))}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         )}
@@ -551,7 +636,7 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: any) => void }) {
   const quickLinks = [
     ["Home", "/"],
     ["About Us", "/about"],
-    ["What We Do", "/programs"],
+    ["Our Programs", "/programs"],
     ["Outcomes & Impact", "/media/outcomes"],
     ["Media & News", "/media"],
     ["Contact Us", "/contact"],

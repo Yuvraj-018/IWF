@@ -463,6 +463,20 @@ export function CommunityOverviewTab({
     (currentPage + 1) * PAGE_SIZE
   );
 
+  const getCardSubtitle = (card: (typeof cards)[0]) => {
+    const d = card.profileData?.data;
+    if (!d) return null;
+    if (card.type === "member") return (d as any).profession || `ID: ${(d as any).id || ""}`;
+    if (card.type === "donor") {
+      const causes = (d as any).causes;
+      if (Array.isArray(causes) && causes.length > 0) return causes.slice(0, 2).join(" • ");
+      return (d as any).amountLabel || ((d as any).sinceYear ? `Supporter since ${(d as any).sinceYear}` : null);
+    }
+    if (card.type === "partner") return (d as any).focusArea || ((d as any).sinceYear ? `Partner since ${(d as any).sinceYear}` : null);
+    if (card.type === "volunteer") return (d as any).domain || (d as any).bio || null;
+    return null;
+  };
+
   // Automatically reset to page 0 if filters or search changes
   useEffect(() => {
     setCurrentPage(0);
@@ -504,169 +518,183 @@ export function CommunityOverviewTab({
           </div>
         </div>
 
-        {/* 4 Pastel Cards (Blue themed primary card) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-8">
-          {/* Card 1: Members (Ice Blue Theme) */}
-          <div className="bg-[#f0f5fa] border border-[#d5e3f0] rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden shadow-xs hover:shadow-md transition-all">
-            {/* Faint watermark in top right */}
-            <div className="absolute top-0 right-0 w-24 h-24 text-[#0f3b68]/5 pointer-events-none">
-              <svg viewBox="0 0 100 100" fill="currentColor">
-                <path d="M90,10 C60,25 30,55 20,95 C40,85 65,70 90,10 Z" />
-              </svg>
-            </div>
-
-            <div>
-              <div className="w-12 h-12 rounded-full bg-[#0f3b68] text-white flex items-center justify-center text-xl shadow-sm mb-4">
-                <Users className="w-6 h-6 text-white" />
+        {/* 4 Pastel Cards (Blue themed primary card - Compressed width-wise with inline icons) */}
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+            {/* Card 1: Members (Ice Blue Theme) */}
+            <div className="bg-[#f0f5fa] border border-[#d5e3f0] rounded-2xl p-4 sm:p-4.5 flex flex-col justify-between relative overflow-hidden shadow-xs hover:shadow-md transition-all">
+              {/* Faint watermark in top right */}
+              <div className="absolute top-0 right-0 w-20 h-20 text-[#0f3b68]/5 pointer-events-none">
+                <svg viewBox="0 0 100 100" fill="currentColor">
+                  <path d="M90,10 C60,25 30,55 20,95 C40,85 65,70 90,10 Z" />
+                </svg>
               </div>
-              <h3 className="text-xl font-bold text-[#0B2238]">Members</h3>
-              <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                Our members form an important part of the ISLAH community.
-              </p>
 
-              {/* Stat Pill */}
-              <div className="inline-flex items-center gap-2.5 mt-4 bg-white/95 px-3 py-1.5 rounded-full border border-[#d5e3f0] shadow-2xs">
-                <div className="w-6 h-6 rounded-full bg-[#e2eef9] text-[#0f3b68] flex items-center justify-center shrink-0">
-                  <Users className="w-3.5 h-3.5 text-[#0f3b68]" />
+              <div>
+                {/* Logo / Icon Inline with Heading */}
+                <div className="flex items-center gap-2.5 mb-2.5">
+                  <div className="w-10 h-10 rounded-full bg-[#0f3b68] text-white flex items-center justify-center shrink-0 shadow-xs">
+                    <Users className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="text-base sm:text-lg font-bold text-[#0B2238] leading-tight">Members</h3>
                 </div>
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-sm font-extrabold text-[#0B2238]">120+</span>
-                  <span className="text-[11px] text-slate-500 font-medium">Active Members</span>
+                <p className="text-xs text-slate-600 leading-relaxed min-h-[36px]">
+                  Our members form an important part of the ISLAH community.
+                </p>
+
+                {/* Stat Pill */}
+                <div className="inline-flex items-center gap-2 mt-3 bg-white/95 px-2.5 py-1 rounded-full border border-[#d5e3f0] shadow-2xs">
+                  <div className="w-5 h-5 rounded-full bg-[#e2eef9] text-[#0f3b68] flex items-center justify-center shrink-0">
+                    <Users className="w-3 h-3 text-[#0f3b68]" />
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-xs font-extrabold text-[#0B2238]">120+</span>
+                    <span className="text-[10px] text-slate-500 font-medium">Active Members</span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="pt-5">
-              <button
-                onClick={() => onSwitchTab("members")}
-                className="text-xs font-bold text-[#0f3b68] hover:text-[#071d33] inline-flex items-center gap-1.5 transition cursor-pointer"
-              >
-                <span>Explore Members</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
-
-          {/* Card 2: Donors */}
-          <div className="bg-[#fdf6e9] border border-[#f5e4c3] rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden shadow-xs hover:shadow-md transition-all">
-            {/* Leaf watermark */}
-            <div className="absolute top-0 right-0 w-24 h-24 text-[#d97706]/10 pointer-events-none">
-              <svg viewBox="0 0 100 100" fill="currentColor">
-                <path d="M90,10 C60,25 30,55 20,95 C40,85 65,70 90,10 Z" />
-              </svg>
-            </div>
-
-            <div>
-              <div className="w-12 h-12 rounded-full bg-[#d97706] text-white flex items-center justify-center text-xl shadow-sm mb-4">
-                <Heart className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="text-xl font-bold text-[#0B2238]">Donors</h3>
-              <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                Acknowledge our supporters who help advance our mission.
-              </p>
-
-              {/* Stat Pill */}
-              <div className="inline-flex items-center gap-2.5 mt-4 bg-white/95 px-3 py-1.5 rounded-full border border-[#f5e4c3] shadow-2xs">
-                <div className="w-6 h-6 rounded-full bg-[#fef3d6] text-[#d97706] flex items-center justify-center shrink-0">
-                  <Heart className="w-3.5 h-3.5 text-[#d97706]" />
-                </div>
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-sm font-extrabold text-[#0B2238]">80+</span>
-                  <span className="text-[11px] text-slate-500 font-medium">Supporters</span>
-                </div>
+              <div className="pt-3.5 mt-2 border-t border-[#d5e3f0]/60">
+                <button
+                  onClick={() => onSwitchTab("members")}
+                  className="text-xs font-bold text-[#0f3b68] hover:text-[#071d33] inline-flex items-center gap-1.5 transition cursor-pointer"
+                >
+                  <span>Explore Members</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
               </div>
             </div>
 
-            <div className="pt-5">
-              <button
-                onClick={() => onSwitchTab("donors")}
-                className="text-xs font-bold text-[#d97706] hover:text-[#b45309] inline-flex items-center gap-1.5 transition cursor-pointer"
-              >
-                <span>Explore Donors</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
-
-          {/* Card 3: Partners & Sponsors */}
-          <div className="bg-[#edf5fc] border border-[#d0e4f7] rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden shadow-xs hover:shadow-md transition-all">
-            {/* Leaf watermark */}
-            <div className="absolute top-0 right-0 w-24 h-24 text-[#2563eb]/10 pointer-events-none">
-              <svg viewBox="0 0 100 100" fill="currentColor">
-                <path d="M90,10 C60,25 30,55 20,95 C40,85 65,70 90,10 Z" />
-              </svg>
-            </div>
-
-            <div>
-              <div className="w-12 h-12 rounded-full bg-[#2563eb] text-white flex items-center justify-center text-xl shadow-sm mb-4">
-                <Handshake className="w-6 h-6 text-white" />
+            {/* Card 2: Donors */}
+            <div className="bg-[#fdf6e9] border border-[#f5e4c3] rounded-2xl p-4 sm:p-4.5 flex flex-col justify-between relative overflow-hidden shadow-xs hover:shadow-md transition-all">
+              {/* Leaf watermark */}
+              <div className="absolute top-0 right-0 w-20 h-20 text-[#d97706]/10 pointer-events-none">
+                <svg viewBox="0 0 100 100" fill="currentColor">
+                  <path d="M90,10 C60,25 30,55 20,95 C40,85 65,70 90,10 Z" />
+                </svg>
               </div>
-              <h3 className="text-xl font-bold text-[#0B2238]">Partners &amp; Sponsors</h3>
-              <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                Collaborating organisations and programme supporters.
-              </p>
 
-              {/* Stat Pill */}
-              <div className="inline-flex items-center gap-2.5 mt-4 bg-white/95 px-3 py-1.5 rounded-full border border-[#d0e4f7] shadow-2xs">
-                <div className="w-6 h-6 rounded-full bg-[#e0f0fe] text-[#2563eb] flex items-center justify-center shrink-0">
-                  <Building2 className="w-3.5 h-3.5 text-[#2563eb]" />
+              <div>
+                {/* Logo / Icon Inline with Heading */}
+                <div className="flex items-center gap-2.5 mb-2.5">
+                  <div className="w-10 h-10 rounded-full bg-[#d97706] text-white flex items-center justify-center shrink-0 shadow-xs">
+                    <Heart className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="text-base sm:text-lg font-bold text-[#0B2238] leading-tight">Donors</h3>
                 </div>
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-sm font-extrabold text-[#0B2238]">40+</span>
-                  <span className="text-[11px] text-slate-500 font-medium">Partners</span>
+                <p className="text-xs text-slate-600 leading-relaxed min-h-[36px]">
+                  Acknowledge our supporters who help advance our mission.
+                </p>
+
+                {/* Stat Pill */}
+                <div className="inline-flex items-center gap-2 mt-3 bg-white/95 px-2.5 py-1 rounded-full border border-[#f5e4c3] shadow-2xs">
+                  <div className="w-5 h-5 rounded-full bg-[#fef3d6] text-[#d97706] flex items-center justify-center shrink-0">
+                    <Heart className="w-3 h-3 text-[#d97706]" />
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-xs font-extrabold text-[#0B2238]">80+</span>
+                    <span className="text-[10px] text-slate-500 font-medium">Supporters</span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="pt-5">
-              <button
-                onClick={() => onSwitchTab("partners")}
-                className="text-xs font-bold text-[#2563eb] hover:text-[#1d4ed8] inline-flex items-center gap-1.5 transition cursor-pointer"
-              >
-                <span>Explore Partners</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
-
-          {/* Card 4: Volunteers & Mentors */}
-          <div className="bg-[#f4effa] border border-[#e2d5f5] rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden shadow-xs hover:shadow-md transition-all">
-            {/* Leaf watermark */}
-            <div className="absolute top-0 right-0 w-24 h-24 text-[#7c3aed]/10 pointer-events-none">
-              <svg viewBox="0 0 100 100" fill="currentColor">
-                <path d="M90,10 C60,25 30,55 20,95 C40,85 65,70 90,10 Z" />
-              </svg>
-            </div>
-
-            <div>
-              <div className="w-12 h-12 rounded-full bg-[#7c3aed] text-white flex items-center justify-center text-xl shadow-sm mb-4">
-                <GraduationCap className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="text-xl font-bold text-[#0B2238]">Volunteers &amp; Mentors</h3>
-              <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                People who contribute their time, skills and expertise.
-              </p>
-
-              {/* Stat Pill */}
-              <div className="inline-flex items-center gap-2.5 mt-4 bg-white/95 px-3 py-1.5 rounded-full border border-[#e2d5f5] shadow-2xs">
-                <div className="w-6 h-6 rounded-full bg-[#f3e8ff] text-[#7c3aed] flex items-center justify-center shrink-0">
-                  <GraduationCap className="w-3.5 h-3.5 text-[#7c3aed]" />
-                </div>
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-sm font-extrabold text-[#0B2238]">15+</span>
-                  <span className="text-[11px] text-slate-500 font-medium">Active Contributors</span>
-                </div>
+              <div className="pt-3.5 mt-2 border-t border-[#f5e4c3]/60">
+                <button
+                  onClick={() => onSwitchTab("donors")}
+                  className="text-xs font-bold text-[#d97706] hover:text-[#b45309] inline-flex items-center gap-1.5 transition cursor-pointer"
+                >
+                  <span>Explore Donors</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
               </div>
             </div>
 
-            <div className="pt-5">
-              <button
-                onClick={() => onSwitchTab("volunteers")}
-                className="text-xs font-bold text-[#7c3aed] hover:text-[#5b21b6] inline-flex items-center gap-1.5 transition cursor-pointer"
-              >
-                <span>Explore Volunteers &amp; Mentors</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
+            {/* Card 3: Partners & Sponsors */}
+            <div className="bg-[#edf5fc] border border-[#d0e4f7] rounded-2xl p-4 sm:p-4.5 flex flex-col justify-between relative overflow-hidden shadow-xs hover:shadow-md transition-all">
+              {/* Leaf watermark */}
+              <div className="absolute top-0 right-0 w-20 h-20 text-[#2563eb]/10 pointer-events-none">
+                <svg viewBox="0 0 100 100" fill="currentColor">
+                  <path d="M90,10 C60,25 30,55 20,95 C40,85 65,70 90,10 Z" />
+                </svg>
+              </div>
+
+              <div>
+                {/* Logo / Icon Inline with Heading */}
+                <div className="flex items-center gap-2.5 mb-2.5">
+                  <div className="w-10 h-10 rounded-full bg-[#2563eb] text-white flex items-center justify-center shrink-0 shadow-xs">
+                    <Handshake className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="text-base sm:text-lg font-bold text-[#0B2238] leading-tight">Partners &amp; Sponsors</h3>
+                </div>
+                <p className="text-xs text-slate-600 leading-relaxed min-h-[36px]">
+                  Collaborating organisations and programme supporters.
+                </p>
+
+                {/* Stat Pill */}
+                <div className="inline-flex items-center gap-2 mt-3 bg-white/95 px-2.5 py-1 rounded-full border border-[#d0e4f7] shadow-2xs">
+                  <div className="w-5 h-5 rounded-full bg-[#e0f0fe] text-[#2563eb] flex items-center justify-center shrink-0">
+                    <Building2 className="w-3 h-3 text-[#2563eb]" />
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-xs font-extrabold text-[#0B2238]">40+</span>
+                    <span className="text-[10px] text-slate-500 font-medium">Partners</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-3.5 mt-2 border-t border-[#d0e4f7]/60">
+                <button
+                  onClick={() => onSwitchTab("partners")}
+                  className="text-xs font-bold text-[#2563eb] hover:text-[#1d4ed8] inline-flex items-center gap-1.5 transition cursor-pointer"
+                >
+                  <span>Explore Partners</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Card 4: Volunteers & Mentors */}
+            <div className="bg-[#f4effa] border border-[#e2d5f5] rounded-2xl p-4 sm:p-4.5 flex flex-col justify-between relative overflow-hidden shadow-xs hover:shadow-md transition-all">
+              {/* Leaf watermark */}
+              <div className="absolute top-0 right-0 w-20 h-20 text-[#7c3aed]/10 pointer-events-none">
+                <svg viewBox="0 0 100 100" fill="currentColor">
+                  <path d="M90,10 C60,25 30,55 20,95 C40,85 65,70 90,10 Z" />
+                </svg>
+              </div>
+
+              <div>
+                {/* Logo / Icon Inline with Heading */}
+                <div className="flex items-center gap-2.5 mb-2.5">
+                  <div className="w-10 h-10 rounded-full bg-[#7c3aed] text-white flex items-center justify-center shrink-0 shadow-xs">
+                    <GraduationCap className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="text-base sm:text-lg font-bold text-[#0B2238] leading-tight">Volunteers &amp; Mentors</h3>
+                </div>
+                <p className="text-xs text-slate-600 leading-relaxed min-h-[36px]">
+                  People who contribute their time, skills and expertise.
+                </p>
+
+                {/* Stat Pill */}
+                <div className="inline-flex items-center gap-2 mt-3 bg-white/95 px-2.5 py-1 rounded-full border border-[#e2d5f5] shadow-2xs">
+                  <div className="w-5 h-5 rounded-full bg-[#f3e8ff] text-[#7c3aed] flex items-center justify-center shrink-0">
+                    <GraduationCap className="w-3 h-3 text-[#7c3aed]" />
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-xs font-extrabold text-[#0B2238]">15+</span>
+                    <span className="text-[10px] text-slate-500 font-medium">Active Contributors</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-3.5 mt-2 border-t border-[#e2d5f5]/60">
+                <button
+                  onClick={() => onSwitchTab("volunteers")}
+                  className="text-xs font-bold text-[#7c3aed] hover:text-[#5b21b6] inline-flex items-center gap-1.5 transition cursor-pointer"
+                >
+                  <span>Explore Volunteers &amp; Mentors</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -762,16 +790,16 @@ export function CommunityOverviewTab({
             </button>
           </div>
 
-          {/* Cards Grid with Floating Navigation Buttons (Total 8 Cards on Desktop, Fully Responsive) */}
-          <div className="relative mt-2">
+          {/* Cards Grid with Floating Navigation Buttons (Total 8 Cards on Desktop, keeping 4 in a row, shrunk horizontally) */}
+          <div className="max-w-5xl mx-auto relative mt-2">
             {/* Arrow Controls */}
             {totalPages > 1 && (
-              <div className="hidden md:flex justify-between items-center absolute inset-y-1/2 -left-5 -right-5 -translate-y-1/2 pointer-events-none z-20">
+              <div className="hidden md:flex justify-between items-center absolute inset-y-1/2 -left-5 lg:-left-7 -right-5 lg:-right-7 -translate-y-1/2 pointer-events-none z-20">
                 <button
                   onClick={() => setCurrentPage((prev) => Math.max(0, prev - 1))}
                   disabled={currentPage === 0}
                   aria-label="Previous page"
-                  className={`w-10 h-10 rounded-full bg-white shadow-md border border-slate-200 flex items-center justify-center text-slate-700 pointer-events-auto transition ${
+                  className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white shadow-md border border-slate-200 flex items-center justify-center text-slate-700 pointer-events-auto transition ${
                     currentPage === 0
                       ? "opacity-30 cursor-not-allowed"
                       : "hover:bg-[#071527] hover:text-white hover:border-[#071527] cursor-pointer"
@@ -783,7 +811,7 @@ export function CommunityOverviewTab({
                   onClick={() => setCurrentPage((prev) => Math.min(totalPages - 1, prev + 1))}
                   disabled={currentPage >= totalPages - 1}
                   aria-label="Next page"
-                  className={`w-10 h-10 rounded-full bg-white shadow-md border border-slate-200 flex items-center justify-center text-slate-700 pointer-events-auto transition ${
+                  className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white shadow-md border border-slate-200 flex items-center justify-center text-slate-700 pointer-events-auto transition ${
                     currentPage >= totalPages - 1
                       ? "opacity-30 cursor-not-allowed"
                       : "hover:bg-[#071527] hover:text-white hover:border-[#071527] cursor-pointer"
@@ -794,68 +822,69 @@ export function CommunityOverviewTab({
               </div>
             )}
 
-            {/* Responsive Grid: 8 Cards on Desktop (4 cols x 2 rows), 3 cols on medium, 2 cols on tablet, 1 col on mobile */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-4.5">
+            {/* Responsive Grid: 8 Cards on Desktop (4 cols x 2 rows), keeping 4 in a row */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 sm:gap-3.5">
               {paginatedCards.map((card) => {
                 const BadgeIcon = card.BadgeIcon;
+                const subtitle = getCardSubtitle(card);
                 return (
                   <div
                     key={card.id}
-                    className="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-xs flex flex-col justify-between hover:shadow-md hover:border-slate-300 transition group"
+                    className="bg-white rounded-xl p-3 sm:p-3.5 border border-slate-200/90 shadow-2xs flex flex-col justify-between hover:shadow-md hover:border-slate-300 transition group"
                   >
                     <div>
                       {/* Avatar / Logo and Badge */}
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0 flex items-center justify-center">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 shrink-0 flex items-center justify-center">
                           {card.isLogo ? (
-                            <div className="w-full h-full bg-white flex flex-col items-center justify-center p-1.5">
+                            <div className="w-full h-full bg-white flex flex-col items-center justify-center p-1">
                               {card.logoType === "tata" && (
                                 <>
-                                  <svg viewBox="0 0 48 28" className="w-8 h-4 text-[#005696]" fill="none">
+                                  <svg viewBox="0 0 48 28" className="w-6 h-3 text-[#005696]" fill="none">
                                     <path d="M4,4 L44,4 C40,15 30,24 24,26 C18,24 8,15 4,4 Z" stroke="#005696" strokeWidth="2.5" />
                                     <path d="M14,4 L34,4 M24,4 L24,20" stroke="#005696" strokeWidth="2.5" strokeLinecap="round" />
                                   </svg>
-                                  <span className="text-[9px] font-black tracking-widest text-[#005696] leading-none mt-0.5">TATA</span>
+                                  <span className="text-[7.5px] font-black tracking-widest text-[#005696] leading-none mt-0.5">TATA</span>
                                 </>
                               )}
                               {card.logoType === "rf" && (
                                 <div className="flex flex-col items-center justify-center text-center">
-                                  <span className="text-[10px] font-black tracking-tight text-[#c22026]">RELIANCE</span>
-                                  <span className="text-[7px] font-bold tracking-wider text-slate-500">FOUNDATION</span>
+                                  <span className="text-[8.5px] font-black tracking-tight text-[#c22026]">RELIANCE</span>
+                                  <span className="text-[5.5px] font-bold tracking-wider text-slate-500">FOUNDATION</span>
                                 </div>
                               )}
                               {card.logoType === "hdfc" && (
                                 <div className="flex flex-col items-center justify-center text-center">
-                                  <div className="w-5 h-5 rounded bg-[#004b87] flex items-center justify-center text-white text-[9px] font-black">
+                                  <div className="w-3.5 h-3.5 rounded bg-[#004b87] flex items-center justify-center text-white text-[7.5px] font-black">
                                     H
                                   </div>
-                                  <span className="text-[8px] font-bold text-[#004b87] mt-0.5">HDFC BANK</span>
+                                  <span className="text-[6.5px] font-bold text-[#004b87] mt-0.5">HDFC BANK</span>
                                 </div>
                               )}
                               {card.logoType === "sbi" && (
                                 <div className="flex flex-col items-center justify-center text-center">
-                                  <div className="w-5 h-5 rounded-full bg-[#280071] flex items-center justify-center text-white text-[9px] font-black">
+                                  <div className="w-3.5 h-3.5 rounded-full bg-[#280071] flex items-center justify-center text-white text-[7.5px] font-black">
                                     SBI
                                   </div>
-                                  <span className="text-[8px] font-bold text-[#280071] mt-0.5">FOUNDATION</span>
+                                  <span className="text-[6.5px] font-bold text-[#280071] mt-0.5">FOUNDATION</span>
                                 </div>
                               )}
                               {card.logoType === "cipla" && (
                                 <div className="flex flex-col items-center justify-center text-center">
-                                  <span className="text-[11px] font-black tracking-wider text-[#d0202f]">Cipla</span>
-                                  <span className="text-[6px] font-bold text-slate-500">FOUNDATION</span>
+                                  <span className="text-[9px] font-black tracking-wider text-[#d0202f]">Cipla</span>
+                                  <span className="text-[5px] font-bold text-slate-500">FOUNDATION</span>
                                 </div>
                               )}
                               {card.logoType === "appi" && (
                                 <div className="flex flex-col items-center justify-center text-center">
-                                  <span className="text-[9px] font-black tracking-wider text-[#0B2238]">APPI</span>
-                                  <span className="text-[6px] font-bold text-slate-500">PHILANTHROPY</span>
+                                  <span className="text-[8px] font-black tracking-wider text-[#0B2238]">APPI</span>
+                                  <span className="text-[5px] font-bold text-slate-500">PHILANTHROPY</span>
                                 </div>
                               )}
                               {card.logoType === "itc" && (
                                 <div className="flex flex-col items-center justify-center text-center">
-                                  <span className="text-[11px] font-black tracking-wider text-[#1c558c]">ITC</span>
-                                  <span className="text-[7px] font-bold text-slate-500">LIMITED</span>
+                                  <span className="text-[9px] font-black tracking-wider text-[#1c558c]">ITC</span>
+                                  <span className="text-[5.5px] font-bold text-slate-500">LIMITED</span>
                                 </div>
                               )}
                             </div>
@@ -866,37 +895,45 @@ export function CommunityOverviewTab({
                               className="w-full h-full object-cover"
                             />
                           ) : (
-                            <div className="w-full h-full bg-gradient-to-br from-[#0B2238] to-[#1c558c] text-white flex items-center justify-center font-bold text-xs sm:text-sm">
+                            <div className="w-full h-full bg-gradient-to-br from-[#0B2238] to-[#1c558c] text-white flex items-center justify-center font-bold text-xs">
                               {card.initials || card.name.slice(0, 2).toUpperCase()}
                             </div>
                           )}
                         </div>
 
                         <span
-                          className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${card.badgeBg}`}
+                          className={`text-[9px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${card.badgeBg}`}
                         >
-                          <BadgeIcon className="w-3 h-3" />
+                          <BadgeIcon className="w-2.5 h-2.5" />
                           <span>{card.badgeText}</span>
                         </span>
                       </div>
 
-                      <h4 className="text-sm font-bold text-[#0B2238] leading-tight line-clamp-1 group-hover:text-[#1c558c] transition-colors">
+                      <h4 className="text-[13px] font-bold text-[#0B2238] leading-tight line-clamp-1 group-hover:text-[#1c558c] transition-colors">
                         {card.name}
                       </h4>
-                      <p className="text-[11px] text-slate-500 font-medium mt-0.5 line-clamp-1">{card.title}</p>
-                      <div className="flex items-center gap-1 text-[10px] text-slate-400 mt-1">
-                        <MapPin className="w-3 h-3 text-[#f97316] shrink-0" />
+                      <p className="text-[10.5px] text-slate-500 font-medium mt-0.5 line-clamp-1">{card.title}</p>
+                      
+                      <div className="flex items-center gap-1 text-[9.5px] text-slate-400 mt-0.5">
+                        <MapPin className="w-2.5 h-2.5 text-[#f97316] shrink-0" />
                         <span className="line-clamp-1">{card.location}</span>
                       </div>
+
+                      {subtitle && (
+                        <div className="mt-1.5 pt-1.5 border-t border-slate-100 flex items-center gap-1 text-[9.5px] text-slate-600 font-medium">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#1c558c]/60 shrink-0" />
+                          <span className="truncate">{subtitle}</span>
+                        </div>
+                      )}
                     </div>
 
-                    <div className="pt-4 border-t border-slate-100 mt-4">
+                    <div className="pt-2 mt-2 border-t border-slate-100">
                       <button
                         onClick={() => setSelectedProfile(card.profileData)}
-                        className="w-full py-1.5 px-3 rounded-lg border border-slate-200 hover:border-[#071527] hover:bg-[#071527] hover:text-white text-xs font-semibold text-[#0B2238] transition flex items-center justify-center gap-1 cursor-pointer"
+                        className="w-full py-1 px-2.5 rounded-md border border-slate-200 bg-slate-50/70 hover:border-[#071527] hover:bg-[#071527] hover:text-white text-[10.5px] font-semibold text-[#0B2238] transition flex items-center justify-center gap-1 cursor-pointer"
                       >
                         <span>View Profile</span>
-                        <ArrowRight className="w-3 h-3" />
+                        <ArrowRight className="w-2.5 h-2.5" />
                       </button>
                     </div>
                   </div>
