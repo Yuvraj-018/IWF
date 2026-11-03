@@ -1,16 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
-import MembershipPage from "@/Pages/MembershipPage";
+import CommunityPage from "@/Pages/Community/CommunityPage";
 
 export const Route = createFileRoute("/membership")({
   head: () => ({
     meta: [
-      { title: "Membership — Islah | Islah Welfare Foundation" },
+      { title: "Membership & Community — ISLAH | Islah Welfare Foundation" },
       {
         name: "description",
         content:
-          "Join Islah Welfare Foundation as a member. Choose from Blue (₹2,500), Yellow (₹4,000), or Green (₹6,000) membership tiers. Get a digital ID card, fee receipt, and exclusive member benefits.",
+          "Discover ISLAH membership tiers, active members directory, and community initiatives.",
       },
     ],
   }),
-  component: MembershipPage,
+  component: () => <CommunityPage initialTab="members" />,
 });

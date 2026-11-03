@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import PartnersDonorsPage from "@/Pages/AboutPage/PartnersDonorsPage";
+import CommunityPage from "@/Pages/Community/CommunityPage";
 
 export const Route = createFileRoute("/about_/partners")({
   head: () => ({
@@ -12,6 +12,5 @@ export const Route = createFileRoute("/about_/partners")({
       },
     ],
   }),
-  component: () => <PartnersDonorsPage />,
+  component: () => <CommunityPage initialTab="partners" />,
 });
-
