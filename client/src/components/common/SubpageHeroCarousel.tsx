@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { HERO_MIN_H, HERO_PADDING, HeroWave } from "@/components/common/HeroWave";
 import { Link } from "@tanstack/react-router";
 import { Home, ChevronRight as BreadcrumbArrow } from "lucide-react";
 import slide1 from "@/assets/hero-carousel/hero-slide-1.jpg";
@@ -30,7 +31,7 @@ export default function SubpageHeroCarousel({
   subtitle,
   breadcrumbs = [{ label: "About Us", href: "/about" }],
   images = DEFAULT_SLIDES,
-  heightClass = "min-h-[280px] sm:min-h-[300px] md:min-h-[320px] lg:min-h-[340px]",
+  heightClass = HERO_MIN_H,
   children,
 }: SubpageHeroCarouselProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -48,7 +49,7 @@ export default function SubpageHeroCarousel({
 
   return (
     <section
-      className={`bg-[#071527] text-white flex flex-col justify-center py-5 sm:py-6 md:py-7 relative overflow-hidden select-none group ${heightClass}`}
+      className={`bg-[#071527] text-white flex flex-col justify-center ${HERO_PADDING} relative overflow-hidden select-none group ${heightClass}`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         {/* Top Breadcrumb */}
@@ -77,7 +78,7 @@ export default function SubpageHeroCarousel({
         )}
 
         {/* Main Grid: Left Content + Right Organic Composition Slider */}
-        <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-4 sm:gap-6 lg:gap-8 items-center">
+        <div className="grid md:grid-cols-[1.15fr_0.85fr] gap-4 sm:gap-6 lg:gap-8 items-center">
           {/* Left Column: Heading, Subtitle & Action Buttons */}
           <div className="space-y-2 sm:space-y-2.5 text-left">
             {tag && (
@@ -101,8 +102,8 @@ export default function SubpageHeroCarousel({
           </div>
 
           {/* Right Column: Native Organic Composition */}
-          <div className="relative flex items-center justify-center lg:justify-end lg:-translate-x-[100px]">
-            <div className="relative w-full max-w-[280px] sm:max-w-[310px] md:max-w-[340px] aspect-[1.15/1]">
+          <div className="relative hidden md:flex items-center justify-center lg:justify-end lg:-translate-x-[100px]">
+            <div className="relative w-full max-w-[280px] md:max-w-[280px] lg:max-w-[340px] aspect-[1.15/1]">
               {/* Background Soft Blue Organic Backdrop Layer */}
               <div
                 className="absolute inset-2 bg-[#122e54] -rotate-3 scale-105 opacity-90 transition-transform pointer-events-none"
@@ -209,21 +210,8 @@ export default function SubpageHeroCarousel({
         </div>
       </div>
 
-      {/* Curved Bottom Wave Divider */}
-      <div className="relative w-full overflow-hidden leading-none z-10 mt-1 md:mt-2">
-        <svg
-          viewBox="0 0 1440 90"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-full h-8 sm:h-10 md:h-12 block"
-          preserveAspectRatio="none"
-        >
-          <path
-            d="M0,0 C320,80 720,90 1080,45 C1240,25 1360,55 1440,75 L1440,90 L0,90 Z"
-            fill="#ffffff"
-          />
-        </svg>
-      </div>
+      {/* Shared bottom curve */}
+      <HeroWave fill="#ffffff" />
     </section>
   );
 }

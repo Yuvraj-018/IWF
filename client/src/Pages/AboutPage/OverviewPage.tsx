@@ -328,7 +328,10 @@ export default function OverviewPage() {
                       : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
                   }`}
                 >
-                  <span className="w-7 h-7 rounded-lg bg-brand-orange/20 text-brand-orange font-black flex items-center justify-center text-sm">
+                  <span
+                    translate="no"
+                    className="notranslate w-7 h-7 rounded-lg bg-brand-orange/20 text-brand-orange font-black flex items-center justify-center text-sm"
+                  >
                     {item.letter}
                   </span>
                   <span>{item.word}</span>
@@ -341,17 +344,25 @@ export default function OverviewPage() {
               const current = standsFor.find((s) => s.letter === activeTab) || standsFor[0];
               const Icon = current.icon;
               return (
-                <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm flex flex-col md:flex-row items-start md:items-center gap-6 mt-4">
+                <div
+                  key={current.letter}
+                  className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm flex flex-col md:flex-row items-start md:items-center gap-6 mt-4"
+                >
                   <div
                     className={`w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br ${current.color} text-white flex flex-col items-center justify-center shrink-0 shadow-lg`}
                   >
                     <Icon className="w-8 h-8 sm:w-10 sm:h-10 mb-1" />
-                    <span className="font-black text-base">{current.letter}</span>
+                    <span translate="no" className="notranslate font-black text-base">
+                      {current.letter}
+                    </span>
                   </div>
                   <div className="space-y-2 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <h3 className="text-lg sm:text-xl font-semibold text-[#0b1f3b]">
-                        {current.letter} — {current.word}
+                        <span translate="no" className="notranslate">
+                          {current.letter}
+                        </span>{" "}
+                        — <span>{current.word}</span>
                       </h3>
                       <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full border ${current.badgeBg}`}>
                         {current.tagline}

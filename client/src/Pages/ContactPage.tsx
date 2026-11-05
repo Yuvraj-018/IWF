@@ -21,12 +21,15 @@ import slide1 from "@/assets/hero-carousel/hero-slide-1.jpg";
 import slide2 from "@/assets/hero-carousel/hero-slide-2.jpg";
 
 import {
-  COUNTRY_CODES,
   blockNumbersOnKeyDown,
   sanitizeName,
   blockNonDigitsOnKeyDown,
   sanitizeDigits,
 } from "@/utils/formValidation";
+import { PhoneCodeSelect } from "@/components/forms/PhoneCodeSelect";
+import { CityField } from "@/components/forms/formFields";
+import { isValidPhone, maxDigits, phoneError, phonePlaceholder } from "@/components/forms/phone";
+import { INDIAN_STATES } from "@/content/locations";
 
 // ─── Data from Contact Page Structure Specification ───────────────────────────
 
@@ -182,10 +185,7 @@ const contactSchema = z
       .regex(/^[^0-9]+$/, "Full name cannot contain numbers"),
     email: z.string().trim().email("Valid email required"),
     countryCode: z.string().default("+91"),
-    phone: z
-      .string()
-      .trim()
-      .regex(/^\d{10}$/, "Enter a valid 10-digit phone number"),
+    phone: z.string().trim().min(1, "Enter your mobile number"),
     cityDistrict: z.string().trim().optional(),
     state: z.string().trim().optional(),
     pinCode: z
@@ -202,6 +202,15 @@ const contactSchema = z
     privacy: z.literal(true, {
       errorMap: () => ({ message: "You must agree to the Privacy Policy to proceed" }),
     }),
+  })
+  .superRefine((data, ctx) => {
+    if (data.phone && !isValidPhone(data.countryCode || "+91", data.phone)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["phone"],
+        message: phoneError(data.countryCode || "+91", data.phone) ?? "Enter a valid mobile number",
+      });
+    }
   })
   .refine(
     (data) => {
@@ -265,6 +274,8 @@ function ContactForm() {
 
   const selectedEnquiryType = watch("enquiryType");
   const selectedPreferredMethod = watch("preferredContactMethod");
+  const watchState = watch("state");
+  const watchCity = watch("cityDistrict");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -453,33 +464,26 @@ function ContactForm() {
                   <label className="block text-xs font-semibold text-slate-700 mb-1">
                     Phone / WhatsApp Number <span className="text-red-500">*</span>
                   </label>
-                  <div className="flex rounded-lg border border-slate-200 bg-white overflow-hidden focus-within:border-sky-500 focus-within:ring-2 focus-within:ring-sky-500/20">
-                    <select
+                  <div className="flex gap-2 h-10">
+                    <PhoneCodeSelect
                       value={countryCode}
-                      onChange={(e) => {
-                        setCountryCode(e.target.value);
-                        setValue("countryCode", e.target.value);
+                      onChange={(dial) => {
+                        setCountryCode(dial);
+                        setValue("countryCode", dial);
                       }}
-                      className="bg-slate-50 border-r border-slate-200 px-2 text-xs font-bold text-slate-700 outline-none cursor-pointer"
-                      aria-label="Country Code"
-                    >
-                      {COUNTRY_CODES.map((c) => (
-                        <option key={c.code} value={c.code}>
-                          {c.flag} {c.code}
-                        </option>
-                      ))}
-                    </select>
+                      buttonClassName="border-slate-200"
+                    />
                     <input
                       {...register("phone", {
                         onChange: (e) => {
-                          e.target.value = sanitizeDigits(e.target.value, 10);
+                          e.target.value = sanitizeDigits(e.target.value, maxDigits(countryCode));
                         },
                       })}
                       type="tel"
-                      placeholder="+91 XXXXX XXXXX"
-                      maxLength={10}
+                      inputMode="numeric"
+                      placeholder={phonePlaceholder(countryCode)}
                       onKeyDown={blockNonDigitsOnKeyDown}
-                      className="h-10 w-full px-3 text-sm text-slate-800 outline-none placeholder:text-slate-400"
+                      className={inputCls}
                     />
                   </div>
                   <FieldError msg={errors.phone?.message} />
@@ -493,16 +497,28 @@ function ContactForm() {
                 </label>
                 <div className="grid sm:grid-cols-3 gap-3">
                   <div>
-                    <input
-                      {...register("cityDistrict")}
-                      placeholder="Enter your city or district"
-                      className={inputCls}
-                    />
+                    <select
+                      value={watchState || ""}
+                      onChange={(e) => {
+                        setValue("state", e.target.value);
+                        setValue("cityDistrict", "");
+                      }}
+                      className={inputCls + " cursor-pointer"}
+                      aria-label="State"
+                    >
+                      <option value="">Select state</option>
+                      {INDIAN_STATES.map((st) => (
+                        <option key={st} value={st}>
+                          {st}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                   <div>
-                    <input
-                      {...register("state")}
-                      placeholder="State"
+                    <CityField
+                      state={watchState || ""}
+                      value={watchCity || ""}
+                      onChange={(val) => setValue("cityDistrict", val)}
                       className={inputCls}
                     />
                   </div>

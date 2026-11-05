@@ -130,7 +130,7 @@ export default function PatientProfilePage() {
       <UtilityBar />
       <Header />
 
-      <main className="pb-16">
+      <main className="pb-12">
         {/* Breadcrumb */}
         <div className="bg-white border-b border-slate-100 py-3 px-4 lg:px-12">
           <div className="max-w-7xl mx-auto flex items-center gap-2 text-xs text-slate-500 font-medium">
@@ -150,7 +150,7 @@ export default function PatientProfilePage() {
         </div>
 
         {/* TOP SECTION: Patient Overview + Sidebar (Treatment Cost & Pledge) */}
-        <section className="pt-8 px-4 lg:px-12 max-w-7xl mx-auto">
+        <section className="pt-6 sm:pt-8 px-4 lg:px-12 max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_390px] xl:grid-cols-[1fr_420px] gap-8 items-start">
             {/* Left: Patient Primary Info */}
             <div className="space-y-6">
@@ -250,13 +250,13 @@ export default function PatientProfilePage() {
               </div>
 
               {/* Main Content: Story + Verification */}
-              <div className="space-y-8">
+              <div className="space-y-6">
                 {/* PATIENT STORY */}
-                <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
-                  <span className="text-xs font-black text-[#ea580c] uppercase tracking-widest block mb-2">
+                <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm">
+                  <span className="text-xs font-bold text-[#ea580c] uppercase tracking-widest block mb-2">
                     PATIENT STORY
                   </span>
-                  <h2 className="text-2xl font-bold text-slate-900 mb-4">
+                  <h2 className="text-xl sm:text-2xl font-semibold text-slate-900 mb-3">
                     The Human Behind the Case
                   </h2>
 
@@ -286,13 +286,60 @@ export default function PatientProfilePage() {
                   )}
                 </div>
 
+                {/* Case Progress Timeline (Right Column in Design) */}
+                <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm">
+                  <span className="text-xs font-bold text-[#ea580c] uppercase tracking-wider block mb-1">
+                    Islah FIELD UPDATES
+                  </span>
+                  <h3 className="text-xl font-semibold text-slate-900 mb-4">
+                    Case Progress Timeline
+                  </h3>
+
+                  <div className="relative pl-6 space-y-5">
+                    <div className="absolute left-2.5 top-2 bottom-2 w-0.5 bg-slate-200" />
+                    {patient.updates.map((update, idx) => {
+                      const iconColor =
+                        idx === 0
+                          ? "bg-red-100 text-red-600 border-red-200"
+                          : idx === 1
+                            ? "bg-blue-100 text-blue-600 border-blue-200"
+                            : idx === 2
+                              ? "bg-emerald-100 text-emerald-600 border-emerald-200"
+                              : "bg-orange-100 text-[#ea580c] border-orange-200";
+
+                      return (
+                        <div key={idx} className="relative">
+                          <div
+                            className={`absolute -left-6 top-0.5 w-5 h-5 rounded-full border flex items-center justify-center text-[10px] ${iconColor}`}
+                          >
+                            ●
+                          </div>
+                          <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs">
+                            <div className="flex items-center justify-between gap-2 mb-1">
+                              <span className="font-bold text-slate-900 text-xs">
+                                {update.title}
+                              </span>
+                              <span className="text-[10px] text-slate-400 font-medium shrink-0">
+                                {formatDate(update.date)}
+                              </span>
+                            </div>
+                            <p className="text-slate-600 leading-relaxed text-xs">
+                              {update.text}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
                 {/* TRANSPARENCY & VERIFICATION */}
-                <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+                <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-black uppercase tracking-wide mb-3">
                     <BadgeCheck className="w-4 h-4 text-emerald-600" />
                     TRANSPARENCY &amp; VERIFICATION
                   </div>
-                  <h2 className="text-2xl font-bold text-slate-900 mb-2">
+                  <h2 className="text-xl sm:text-2xl font-semibold text-slate-900 mb-2">
                     100% Verified by Islah Field Team
                   </h2>
                   <p className="text-xs sm:text-sm text-slate-600 mb-6">
@@ -357,7 +404,7 @@ export default function PatientProfilePage() {
             </div>
 
             {/* Right Column: Sticky Treatment Cost Estimate, Donation Action, Contact & Pledge */}
-            <div className="space-y-6 lg:sticky lg:top-24">
+            <div className="space-y-4 lg:sticky lg:top-24">
               {/* Treatment Cost Estimate Box */}
               <div className="bg-white rounded-3xl border border-slate-200 shadow-md overflow-hidden">
                 <div className="bg-gradient-to-r from-[#071527] to-[#0c2340] text-white px-5 py-4 flex items-center justify-between">
@@ -394,17 +441,6 @@ export default function PatientProfilePage() {
                     </span>
                   </div>
 
-                  {/* Progress info */}
-                  <div className="pt-2 text-center text-xs text-slate-500 font-medium">
-                    <span className="text-emerald-700 font-bold">
-                      ₹{patient.raisedAmount.toLocaleString("en-IN")}
-                    </span>{" "}
-                    raised of ₹{patient.neededAmount.toLocaleString("en-IN")} •{" "}
-                    <span className="text-[#ea580c] font-bold">
-                      ₹{remaining.toLocaleString("en-IN")} needed
-                    </span>
-                  </div>
-
                   {/* Action CTAs */}
                   <div className="pt-2 space-y-2.5">
                     <Link
@@ -430,120 +466,47 @@ export default function PatientProfilePage() {
                 </div>
               </div>
 
-              {/* Contact Islah Box */}
-              <div className="bg-gradient-to-br from-[#071527] to-[#0c2340] text-white rounded-3xl p-5 text-center shadow-sm">
-                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-2 text-[#ea580c]">
-                  <Phone className="w-5 h-5" />
+              {/* Contact + transparency pledge */}
+              <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-semibold text-slate-900">Questions about this case?</p>
+                    <p className="text-xs text-slate-500">Our team is here to help.</p>
+                  </div>
+                  <a
+                    href="tel:+919811861633"
+                    className="inline-flex items-center gap-1.5 shrink-0 rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold text-[#0b1f3b] hover:border-[#ea580c] hover:text-[#ea580c] transition"
+                  >
+                    <Phone className="w-3.5 h-3.5" /> +91 9811861633
+                  </a>
                 </div>
-                <p className="text-xs font-black uppercase tracking-wider mb-1">
-                  CONTACT Islah
-                </p>
-                <p className="text-xs text-slate-300 mb-3">
-                  Questions about this case? Our team is here.
-                </p>
-                <a
-                  href="tel:+919811861633"
-                  className="inline-block bg-red-600/90 hover:bg-red-600 text-white font-black text-sm px-4 py-2 rounded-full tracking-wider transition-colors"
-                >
-                  +91 9811861633
-                </a>
-              </div>
-
-              {/* Islah's Transparency Pledge */}
-              <div className="bg-gradient-to-br from-[#071527] to-[#0c2340] text-white rounded-3xl p-6 shadow-md space-y-4">
-                <div className="flex items-center gap-2.5 border-b border-white/15 pb-3">
-                  <BadgeCheck className="w-6 h-6 text-[#ea580c]" />
-                  <h3 className="text-sm font-black uppercase tracking-wider">
-                    Islah's Transparency Pledge
-                  </h3>
-                </div>
-
-                <ul className="space-y-2.5 text-xs text-slate-200">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#ea580c] shrink-0 mt-0.5" />
-                    <span>All cases personally verified by field staff</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#ea580c] shrink-0 mt-0.5" />
-                    <span>Donations disbursed directly to hospital/pharmacy</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#ea580c] shrink-0 mt-0.5" />
-                    <span>Every rupee tracked and accounted for</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#ea580c] shrink-0 mt-0.5" />
-                    <span>Donor reports published after case closure</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#ea580c] shrink-0 mt-0.5" />
-                    <span>
-                      Administration cost deduction as per{" "}
-                      <Link
-                        to="/medical-treatment-policy"
-                        className="underline text-orange-300 hover:text-white"
-                      >
-                        applicable policy*
-                      </Link>
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#ea580c] shrink-0 mt-0.5" />
-                    <span>Donor may verify from patient family/hospital</span>
-                  </li>
-                </ul>
-
-                <div className="pt-3 border-t border-white/10 text-center">
-                  <span className="inline-block bg-white/10 text-[10px] font-bold text-slate-300 px-3 py-1 rounded-full uppercase tracking-wider">
-                    Registered Charity, Income Tax exemption eligible
-                  </span>
-                </div>
-              </div>
-
-              {/* Case Progress Timeline (Right Column in Design) */}
-              <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm">
-                <span className="text-[11px] font-black text-[#ea580c] uppercase tracking-wider block mb-1">
-                  Islah FIELD UPDATES
-                </span>
-                <h3 className="text-lg font-bold text-slate-900 mb-4">
-                  Case Progress Timeline
-                </h3>
-
-                <div className="relative pl-6 space-y-5">
-                  <div className="absolute left-2.5 top-2 bottom-2 w-0.5 bg-slate-200" />
-                  {patient.updates.map((update, idx) => {
-                    const iconColor =
-                      idx === 0
-                        ? "bg-red-100 text-red-600 border-red-200"
-                        : idx === 1
-                          ? "bg-blue-100 text-blue-600 border-blue-200"
-                          : idx === 2
-                            ? "bg-emerald-100 text-emerald-600 border-emerald-200"
-                            : "bg-orange-100 text-[#ea580c] border-orange-200";
-
-                    return (
-                      <div key={idx} className="relative">
-                        <div
-                          className={`absolute -left-6 top-0.5 w-5 h-5 rounded-full border flex items-center justify-center text-[10px] ${iconColor}`}
-                        >
-                          ●
-                        </div>
-                        <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs">
-                          <div className="flex items-center justify-between gap-2 mb-1">
-                            <span className="font-bold text-slate-900 text-xs">
-                              {update.title}
-                            </span>
-                            <span className="text-[10px] text-slate-400 font-medium shrink-0">
-                              {formatDate(update.date)}
-                            </span>
-                          </div>
-                          <p className="text-slate-600 leading-relaxed text-[11px]">
-                            {update.text}
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  })}
+                <div className="border-t border-slate-100 pt-4">
+                  <p className="flex items-center gap-2 text-sm font-semibold text-slate-900 mb-2.5">
+                    <BadgeCheck className="w-4 h-4 text-[#ea580c]" /> Islah&apos;s transparency pledge
+                  </p>
+                  <ul className="space-y-1.5 text-xs text-slate-600">
+                    {[
+                      "Every case personally verified by field staff",
+                      "Funds paid directly to the hospital or pharmacy",
+                      "Every rupee tracked and accounted for",
+                      "Donor report published after the case closes",
+                      "You may verify with the family or hospital",
+                    ].map((item) => (
+                      <li key={item} className="flex items-start gap-2">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                      <span>
+                        Administration cost as per the{" "}
+                        <Link to="/medical-treatment-policy" className="underline text-[#ea580c] hover:text-orange-700">
+                          medical treatment policy
+                        </Link>
+                      </span>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -551,17 +514,17 @@ export default function PatientProfilePage() {
         </section>
 
         {/* 8-STEP OPERATIONAL WORKFLOW: "HOW WE WORK" */}
-        <div className="mt-16">
+        <div className="mt-10">
           <MedicalEmergencyWorkflow showImageToggle={true} />
         </div>
 
         {/* MORE PATIENTS NEED YOUR SUPPORT */}
-        <section className="pt-16 px-4 lg:px-12 max-w-7xl mx-auto">
-          <div className="text-center max-w-2xl mx-auto mb-10">
+        <section className="pt-10 px-4 lg:px-12 max-w-7xl mx-auto">
+          <div className="text-center max-w-2xl mx-auto mb-6">
             <span className="text-xs font-black text-[#ea580c] uppercase tracking-widest block mb-2">
               OTHERS NEEDING HELP
             </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-[#0b1f3b]">
+            <h2 className="text-2xl sm:text-3xl font-semibold text-[#0b1f3b]">
               More Patients Need Your Support
             </h2>
           </div>
@@ -572,7 +535,7 @@ export default function PatientProfilePage() {
             ))}
           </div>
 
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
               to="/programs/healthcare/critical-life-support"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#0b1f3b] hover:bg-[#16345d] text-white font-bold text-xs sm:text-sm py-3.5 px-6 rounded-xl transition-colors shadow-sm"

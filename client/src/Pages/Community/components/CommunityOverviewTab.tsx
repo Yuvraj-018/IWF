@@ -980,7 +980,7 @@ export function CommunityOverviewTab({
                     Access Your Member Portal
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-600 mt-1">
-                    Verify with a one-time code to check your membership status, renew and download your card.
+                    Verify with an OTP to check your membership status, renew and download your card.
                   </p>
                 </div>
               </div>

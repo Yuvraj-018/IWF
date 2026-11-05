@@ -687,12 +687,12 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: any) => void }) {
             <h4 className="flex items-center gap-2 text-white font-semibold text-sm uppercase border-l-2 border-brand-orange pl-2 tracking-wide">
               <Leaf className="w-4 h-4 text-brand-orange" /> Quick Links
             </h4>
-            <ul className="space-y-2.5">
+            <ul className="space-y-3">
               {quickLinks.map(([label, href]) => (
                 <li key={label}>
-                  <a href={href} className="inline-flex items-center text-white text-sm hover:text-brand-orange hover:translate-x-1 transition-all duration-200">
-                    <span className="text-brand-orange text-xs mr-2 shrink-0 select-none">→</span>
-                    {label}
+                  <a href={href} className="flex items-start text-white text-sm leading-snug hover:text-brand-orange hover:translate-x-1 transition-all duration-200">
+                    <span className="text-brand-orange text-xs mr-2 mt-0.5 shrink-0 select-none">→</span>
+                    <span>{label}</span>
                   </a>
                 </li>
               ))}
@@ -704,7 +704,7 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: any) => void }) {
             <h4 className="flex items-center gap-2 text-white font-semibold text-sm uppercase border-l-2 border-brand-orange pl-2 tracking-wide">
               <Building2 className="w-4 h-4 text-brand-orange" /> Get Involved
             </h4>
-            <ul className="space-y-2.5">
+            <ul className="space-y-3">
               {[
                 { label: "Volunteer With Us", href: "/volunteer" },
                 { label: "Partner With Us", href: "/partner" },
@@ -717,18 +717,18 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: any) => void }) {
                   {item.href ? (
                     <a
                       href={item.href}
-                      className="inline-flex items-center text-left text-white text-sm hover:text-brand-orange hover:translate-x-1 transition-all duration-200"
+                      className="flex items-start text-left text-white text-sm leading-snug hover:text-brand-orange hover:translate-x-1 transition-all duration-200"
                     >
-                      <span className="text-brand-orange text-xs mr-2 shrink-0 select-none">→</span>
-                      {item.label}
+                      <span className="text-brand-orange text-xs mr-2 mt-0.5 shrink-0 select-none">→</span>
+                      <span>{item.label}</span>
                     </a>
                   ) : (
                     <button
                       onClick={() => onOpenModal?.(item.type as RoleType)}
-                      className="inline-flex items-center text-left text-white text-sm hover:text-brand-orange hover:translate-x-1 transition-all duration-200 cursor-pointer"
+                      className="flex items-start text-left text-white text-sm leading-snug hover:text-brand-orange hover:translate-x-1 transition-all duration-200 cursor-pointer"
                     >
-                      <span className="text-brand-orange text-xs mr-2 shrink-0 select-none">→</span>
-                      {item.label}
+                      <span className="text-brand-orange text-xs mr-2 mt-0.5 shrink-0 select-none">→</span>
+                      <span>{item.label}</span>
                     </button>
                   )}
                 </li>
@@ -741,11 +741,11 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: any) => void }) {
             <h4 className="flex items-center gap-2 text-white font-semibold text-sm uppercase border-l-2 border-brand-orange pl-2 tracking-wide">
               <Briefcase className="w-4 h-4 text-brand-orange" /> Our Work
             </h4>
-            <ul className="space-y-2.5">
+            <ul className="space-y-3">
               {ourWorkLinks.map(([label, href]) => (
                 <li key={label}>
-                  <a href={href} className="flex items-start text-white text-sm hover:text-brand-orange hover:translate-x-1 transition-all duration-200">
-                    <span className="text-brand-orange text-xs mr-2 mt-1 shrink-0 select-none">→</span>
+                  <a href={href} className="flex items-start text-white text-sm leading-snug hover:text-brand-orange hover:translate-x-1 transition-all duration-200">
+                    <span className="text-brand-orange text-xs mr-2 mt-0.5 shrink-0 select-none">→</span>
                     <span>{label}</span>
                   </a>
                 </li>
@@ -792,11 +792,9 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: any) => void }) {
           <div className="notranslate" translate="no" dir="ltr">© 2026 Islah Welfare Foundation. All Rights Reserved.</div>
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-[11px] sm:text-xs">
             <span className="text-brand-orange font-bold">Legal &amp; Policies:</span>
+            <a href="/disclaimer" className="hover:text-brand-orange transition-colors">Disclaimer</a>
+            <span>|</span>
             <a href="/policies" className="hover:text-brand-orange transition-colors">All Policies</a>
-            <span>|</span>
-            <a href="/privacy-policy" className="hover:text-brand-orange transition-colors">Privacy Policy</a>
-            <span>|</span>
-            <a href="/refund-policy" className="hover:text-brand-orange transition-colors">Refund Policy</a>
             <span>|</span>
             <a href="/terms-and-conditions" className="hover:text-brand-orange transition-colors">Terms &amp; Conditions</a>
             <span>|</span>

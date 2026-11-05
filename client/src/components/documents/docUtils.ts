@@ -71,6 +71,14 @@ export function formatDocDate(d: Date): string {
   return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
 }
 
+/**
+ * "November 2026". Donations and memberships are recorded by month — a payment on
+ * 2 November and on 28 November both count as November.
+ */
+export function formatDocMonth(d: Date): string {
+  return d.toLocaleDateString("en-GB", { month: "long", year: "numeric" });
+}
+
 /** "2,500" — Indian digit grouping without currency symbol. */
 export function formatINR(amount: number): string {
   return Math.round(amount).toLocaleString("en-IN");

@@ -225,104 +225,95 @@ export default function MasterPoliciesPage() {
         />
 
         {/* Master Policy Catalog */}
-        <section className="py-14 px-4">
-          <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-8">
-            {/* Sidebar Categories */}
-            <div className="lg:col-span-3 space-y-6">
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
-                <h3 className="font-bold text-slate-900 text-base uppercase tracking-wider flex items-center gap-2 border-b border-slate-100 pb-3">
-                  <Filter className="w-4 h-4 text-brand-orange" /> Policy Categories
-                </h3>
-                <div className="flex flex-col gap-1.5">
-                  {CATEGORIES.map((cat) => {
-                    const isActive = activeCategory === cat;
-                    return (
-                      <button
-                        key={cat}
-                        onClick={() => setActiveCategory(cat)}
-                        className={`text-left text-xs font-bold px-3.5 py-2.5 rounded-lg transition-all flex items-center justify-between ${
-                          isActive
-                            ? "bg-brand-green text-white shadow-sm"
-                            : "text-slate-700 hover:bg-slate-100"
-                        }`}
-                      >
-                        <span>{cat}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Statutory Info Box */}
-              <div className="bg-gradient-to-br from-[#071527] to-[#0c2340] text-white rounded-2xl p-6 shadow-md space-y-3">
-                <h4 className="font-bold text-sm uppercase tracking-wider">Statutory Compliance</h4>
-                <p className="text-xs text-white/80 leading-relaxed">
-                  All policies are regularly reviewed to comply with statutory norms under Indian laws including Trust Registration, 12A, 80G, and FCRA 2010.
-                </p>
-                <a
-                  href="/about/legal-status"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-orange hover:underline pt-1"
-                >
-                  <span>View Registration & Certificates</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </div>
-
-            {/* Policy List Grid */}
-            <div className="lg:col-span-9 space-y-6">
-              {/* Search & Filter Header */}
-              <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-4">
-                <div className="relative w-full md:w-80">
-                  <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search policy name or topic..."
-                    className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-10 pr-4 py-2 text-sm text-slate-800 focus:outline-none focus:border-brand-green"
-                  />
-                </div>
-                <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  Showing {filteredPolicies.length} Policies
-                </div>
-              </div>
-
-              {/* Policies Grid */}
-              <div className="grid md:grid-cols-2 gap-6">
-                {filteredPolicies.map((pol) => {
-                  const Icon = pol.icon;
+        <section className="py-10 sm:py-12 bg-white">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+              <div className="flex flex-wrap gap-2">
+                {CATEGORIES.map((cat) => {
+                  const isActive = activeCategory === cat;
                   return (
-                    <ScrollReveal key={pol.id}>
-                      <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between h-full group">
-                        <div className="space-y-3">
-                          <div className="flex items-center justify-between">
-                            <span className="text-[11px] font-extrabold uppercase px-2.5 py-1 rounded bg-slate-100 text-slate-600">
-                              {pol.category}
-                            </span>
-                            <Icon className="w-5 h-5 text-brand-orange" />
-                          </div>
-                          <h3 className="text-base font-bold text-slate-900 group-hover:text-brand-green transition-colors">
-                            {pol.title}
-                          </h3>
-                          <p className="text-xs text-slate-600 leading-relaxed">
-                            {pol.desc}
-                          </p>
-                        </div>
-                        <div className="pt-4 border-t border-slate-100 mt-5">
-                          <a
-                            href={pol.href}
-                            className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-green hover:text-brand-green-dark uppercase tracking-wider group-hover:translate-x-1 transition-transform"
-                          >
-                            <span>Read Full Policy Document</span>
-                            <ArrowRight className="w-3.5 h-3.5" />
-                          </a>
-                        </div>
-                      </div>
-                    </ScrollReveal>
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setActiveCategory(cat)}
+                      className={`text-xs font-semibold px-3.5 py-2 rounded-full border transition ${
+                        isActive
+                          ? "bg-orange-50 border-brand-orange text-[#0b1f3b]"
+                          : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                      }`}
+                    >
+                      {cat}
+                    </button>
                   );
                 })}
               </div>
+              <div className="relative w-full lg:w-72 shrink-0">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search policies"
+                  className="w-full bg-white border border-slate-200 rounded-lg pl-9 pr-3 py-2 text-sm text-slate-800 focus:outline-none focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/15"
+                />
+              </div>
+            </div>
+
+            <p className="text-xs text-slate-500">
+              Showing {filteredPolicies.length} of {ALL_POLICIES.length} policies
+            </p>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredPolicies.map((pol) => {
+                const Icon = pol.icon;
+                return (
+                  <a
+                    key={pol.id}
+                    href={pol.href}
+                    className="group rounded-xl border border-slate-200 bg-white p-5 hover:border-slate-300 hover:shadow-md transition flex flex-col"
+                  >
+                    <div className="flex items-start gap-3">
+                      <span className="w-9 h-9 rounded-lg bg-orange-50 text-brand-orange flex items-center justify-center shrink-0">
+                        <Icon className="w-4.5 h-4.5" />
+                      </span>
+                      <div className="min-w-0">
+                        <h3 className="text-sm sm:text-base font-semibold text-[#0b1f3b] leading-snug">
+                          {pol.title}
+                        </h3>
+                        <p className="text-[11px] font-medium uppercase tracking-wide text-slate-500 mt-0.5">
+                          {pol.category}
+                        </p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-slate-600 leading-relaxed mt-3 flex-1">{pol.desc}</p>
+                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-orange mt-4">
+                      Read policy
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition" />
+                    </span>
+                  </a>
+                );
+              })}
+              {filteredPolicies.length === 0 && (
+                <p className="text-sm text-slate-500 sm:col-span-2 lg:col-span-3">
+                  No policy matches “{searchQuery}”.
+                </p>
+              )}
+            </div>
+
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <p className="text-sm font-semibold text-[#0b1f3b]">Statutory compliance</p>
+                <p className="text-sm text-slate-600">
+                  Policies are reviewed regularly to comply with Indian law, including trust registration, 12A, 80G and FCRA 2010.
+                </p>
+              </div>
+              <a
+                href="/about/legal-status"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-orange hover:underline shrink-0"
+              >
+                Registration &amp; certificates
+                <ArrowRight className="w-3.5 h-3.5" />
+              </a>
             </div>
           </div>
         </section>

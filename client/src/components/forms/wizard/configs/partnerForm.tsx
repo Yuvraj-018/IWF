@@ -457,6 +457,17 @@ export const partnerFormConfig: WizardConfig = {
               text: "I am authorised to permit ISLAH to display our organisation logo.",
               span: 2,
             },
+            {
+              key: "logoFile",
+              type: "file",
+              accept: "image/png,image/jpeg,image/webp,image/svg+xml",
+              imageOnly: true,
+              label: "Organisation Logo",
+              hint: "PNG, JPG, WEBP or SVG, up to 5 MB. A transparent or white background works best.",
+              required: true,
+              span: 2,
+              visibleIf: (v) => Boolean(v.logoConsent),
+            },
           ],
         },
         {

@@ -700,7 +700,7 @@ export default function MembershipPage() {
                 Check Membership Status & Renew
               </h2>
               <p className="text-xs sm:text-sm text-slate-600 mt-1.5">
-                No passwords needed — verify with a one-time code to view your card, renew your plan
+                No passwords needed — verify with an OTP to view your card, renew your plan
                 or switch to a different one.
               </p>
             </div>

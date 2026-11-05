@@ -26,9 +26,13 @@ import {
   MAX_SPECIFIED_YEARS,
   MEMBERSHIP_TIERS,
   computeValidTill,
-  formatDisplayDate,
+  formatDisplayMonth,
+  formatLongMonth,
+  parseValidTill,
+  startOfMonth,
   generateReceiptNo,
   isValidPhone,
+  phoneError,
   normaliseTier,
   type TierType,
 } from "./membershipConfig";
@@ -37,6 +41,7 @@ import {
   Field,
   OtpVerifier,
   PhoneInput,
+  CityField,
   RadioPills,
   SelectInput,
   SubHeading,
@@ -81,10 +86,6 @@ const CODE_TO_TIER: Record<string, TierType> = {
   MOR: "Orange",
 };
 
-function parseDate(s: string): Date | null {
-  const d = new Date(s);
-  return Number.isNaN(d.getTime()) ? null : d;
-}
 
 /** Demo record used when the members API is not reachable. */
 function demoProfile(query: string): MemberProfile {
@@ -100,7 +101,7 @@ function demoProfile(query: string): MemberProfile {
     status: "Active",
     joined: "15 Apr 2025",
     validFrom: "15 Apr 2025",
-    validTill: "14 Apr 2026",
+    validTill: "Apr 2026",
     countryCode: "+91",
     phone: /^\d{10}$/.test(query.trim()) ? query.trim() : "9876543210",
     email: isOrganisation ? "contact@sunrisetrust.org" : "aftab.alam@example.com",
@@ -176,7 +177,7 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
       }
       const found = profile || demoProfile(query);
       // A lapsed validity date always means the membership has expired
-      const till = parseDate(found.validTill);
+      const till = parseValidTill(found.validTill);
       if (till && till.getTime() < new Date().setHours(0, 0, 0, 0)) found.status = "Expired";
       setMember(found);
       setStage("overview");
@@ -206,12 +207,11 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
     if (!member) return null;
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const currentTill = parseDate(member.validTill);
-    // Renewal continues from the day after the current expiry, or today if already expired
-    let from = today;
+    const currentTill = parseValidTill(member.validTill);
+    // Renewal continues from the month after the current one ends, or this month if expired
+    let from = startOfMonth(today);
     if (currentTill && currentTill >= today) {
-      from = new Date(currentTill);
-      from.setDate(from.getDate() + 1);
+      from = new Date(currentTill.getFullYear(), currentTill.getMonth() + 1, 1);
     }
     return { from, till: computeValidTill(from, Math.max(years, 1)) };
   }, [member, years]);
@@ -267,7 +267,7 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
     if (editingContact) {
       if (contact.name.trim().length < 3) e.name = "Enter the full name.";
       if (!isValidPhone(contact.countryCode, contact.phone))
-        e.phone = "Enter a valid mobile number.";
+        e.phone = phoneError(contact.countryCode, contact.phone) ?? "Enter a valid mobile number.";
       if (!EMAIL_RE.test(contact.email.trim())) e.email = "Enter a valid email address.";
       if (!contact.state.trim()) e.state = "Select the state.";
       if (!contact.district.trim()) e.district = "Enter the city or district.";
@@ -307,8 +307,8 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
         /* Backend unreachable — continue with client-side confirmation */
       }
 
-      const validFrom = formatDisplayDate(renewalDates.from);
-      const validTill = formatDisplayDate(renewalDates.till);
+      const validFrom = formatDisplayMonth(renewalDates.from);
+      const validTill = formatDisplayMonth(renewalDates.till);
       const tierCfg = MEMBERSHIP_TIERS[targetTier];
       setMember({
         ...member,
@@ -326,7 +326,7 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
         category: `${tierCfg.cardName} (${tierCfg.roleTitle})`,
         period: years,
         amount: fee,
-        date: formatDisplayDate(new Date()),
+        date: formatLongMonth(new Date()),
         validFrom,
         validTill,
         type: "Renewal",
@@ -744,7 +744,10 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
                       <Field name="state" label="State / UT" required error={errors.state}>
                         <SelectInput
                           value={contact.state}
-                          onChange={(val) => setC("state", val)}
+                          onChange={(val) => {
+                            setC("state", val);
+                            if (val !== contact.state) setC("district", "");
+                          }}
                           options={INDIAN_STATES}
                           placeholder="Select state"
                           hasError={Boolean(errors.state)}
@@ -756,11 +759,11 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
                         required
                         error={errors.district}
                       >
-                        <input
-                          type="text"
+                        <CityField
+                          state={contact.state}
                           value={contact.district}
-                          onChange={(e) => setC("district", e.target.value)}
-                          className={inputClass(Boolean(errors.district))}
+                          onChange={(val) => setC("district", val)}
+                          hasError={Boolean(errors.district)}
                         />
                       </Field>
                       <Field name="pincode" label="PIN" optional error={errors.pincode}>
@@ -807,7 +810,7 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
                   ["Period", `${years || "–"} year${years === 1 ? "" : "s"}`],
                   [
                     "New validity",
-                    `${formatDisplayDate(renewalDates.from)} – ${formatDisplayDate(renewalDates.till)}`,
+                    `${formatDisplayMonth(renewalDates.from)} – ${formatDisplayMonth(renewalDates.till)}`,
                   ],
                 ].map(([k, val]) => (
                   <div key={k} className="flex justify-between gap-2">

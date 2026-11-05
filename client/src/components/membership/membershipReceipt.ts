@@ -93,13 +93,13 @@ export function renderMembershipReceiptPdf(
     top + 49,
     [
       ["Receipt No.", r.receiptNo],
-      ["Date", r.date],
+      ["Payment Month", r.date],
     ],
     [
       ["Payment Status", r.paymentStatus ?? (paid ? "Successful" : "Pending confirmation")],
-      ["Membership Year", `${r.validFrom} to ${r.validTill}`],
+      ["Membership Period", `${r.validFrom} to ${r.validTill}`],
     ],
-    { fill: C.grey, border: false, labelW: 27 },
+    { fill: C.grey, border: false, labelW: 32 },
   );
 
   // Details table

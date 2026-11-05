@@ -170,12 +170,12 @@ export default function GetInvolvedPage() {
                       <a href="/volunteer" className="text-slate-700 hover:text-brand-green flex items-center gap-1 transition">
                         Learn More <ArrowRight className="w-3.5 h-3.5" />
                       </a>
-                      <button
-                        onClick={() => setActiveModal("volunteer")}
-                        className="bg-brand-green hover:bg-brand-green-dark text-white px-3 py-1.5 rounded-lg shadow-2xs transition cursor-pointer"
+                      <a
+                        href="/volunteer#volunteer-form"
+                        className="bg-brand-green hover:bg-brand-green-dark text-white px-3 py-1.5 rounded-lg shadow-2xs transition"
                       >
-                        Online Form &rarr;
-                      </button>
+                        Apply Now &rarr;
+                      </a>
                     </div>
                   </div>
 
@@ -197,12 +197,12 @@ export default function GetInvolvedPage() {
                       <a href="/partner" className="text-slate-700 hover:text-brand-orange flex items-center gap-1 transition">
                         Learn More <ArrowRight className="w-3.5 h-3.5" />
                       </a>
-                      <button
-                        onClick={() => setActiveModal("partner")}
-                        className="bg-brand-orange hover:bg-orange-600 text-white px-3 py-1.5 rounded-lg shadow-2xs transition cursor-pointer"
+                      <a
+                        href="/partner#partner-form"
+                        className="bg-brand-orange hover:bg-orange-600 text-white px-3 py-1.5 rounded-lg shadow-2xs transition"
                       >
-                        Online Form &rarr;
-                      </button>
+                        Apply Now &rarr;
+                      </a>
                     </div>
                   </div>
 
@@ -224,12 +224,12 @@ export default function GetInvolvedPage() {
                       <a href="/sponsor" className="text-slate-700 hover:text-purple-600 flex items-center gap-1 transition">
                         Learn More <ArrowRight className="w-3.5 h-3.5" />
                       </a>
-                      <button
-                        onClick={() => setActiveModal("sponsor")}
-                        className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-lg shadow-2xs transition cursor-pointer"
+                      <a
+                        href="/sponsor#sponsor-form"
+                        className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-lg shadow-2xs transition"
                       >
-                        Online Form &rarr;
-                      </button>
+                        Apply Now &rarr;
+                      </a>
                     </div>
                   </div>
 
@@ -251,12 +251,12 @@ export default function GetInvolvedPage() {
                       <a href="/mentor" className="text-slate-700 hover:text-sky-600 flex items-center gap-1 transition">
                         Learn More <ArrowRight className="w-3.5 h-3.5" />
                       </a>
-                      <button
-                        onClick={() => setActiveModal("mentor")}
-                        className="bg-sky-600 hover:bg-sky-700 text-white px-3 py-1.5 rounded-lg shadow-2xs transition cursor-pointer"
+                      <a
+                        href="/mentor#mentor-form"
+                        className="bg-sky-600 hover:bg-sky-700 text-white px-3 py-1.5 rounded-lg shadow-2xs transition"
                       >
-                        Online Form &rarr;
-                      </button>
+                        Apply Now &rarr;
+                      </a>
                     </div>
                   </div>
 
@@ -279,10 +279,10 @@ export default function GetInvolvedPage() {
                         Learn More <ArrowRight className="w-3.5 h-3.5" />
                       </a>
                       <a
-                        href="/membership#apply"
+                        href="/membership#membership-form"
                         className="bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-1.5 rounded-lg shadow-2xs transition"
                       >
-                        Join Now &rarr;
+                        Apply Now &rarr;
                       </a>
                     </div>
                   </div>
@@ -309,7 +309,7 @@ export default function GetInvolvedPage() {
                         href="/donate"
                         className="bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-lg shadow-2xs transition"
                       >
-                        Online Form &rarr;
+                        Donate Now &rarr;
                       </a>
                     </div>
                   </div>
@@ -394,12 +394,12 @@ export default function GetInvolvedPage() {
                       >
                         Learn More
                       </a>
-                      <button
-                        onClick={() => setActiveModal("employee")}
-                        className="bg-brand-orange hover:bg-orange-600 text-white font-bold px-3.5 py-1.5 rounded-lg text-xs transition cursor-pointer shrink-0"
+                      <a
+                        href="/careers#career-form"
+                        className="bg-brand-orange hover:bg-orange-600 text-white font-bold px-3.5 py-1.5 rounded-lg text-xs transition shrink-0"
                       >
-                        Online Form &rarr;
-                      </button>
+                        Apply Now &rarr;
+                      </a>
                     </div>
                   </div>
                 </div>

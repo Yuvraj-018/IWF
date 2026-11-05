@@ -39,6 +39,7 @@ import {
   type OpeningIcon,
 } from "@/content/careerOpenings";
 import { CONTACT_DETAILS } from "@/content/siteContent";
+import { useScrollToHash } from "@/hooks/useScrollToHash";
 
 const OPENING_ICONS: Record<OpeningIcon, LucideIcon> = {
   programme: Users,
@@ -127,6 +128,7 @@ function FilterSelect({
 }
 
 export default function CareersPage() {
+  useScrollToHash("career-form");
   const openings = useMemo(() => activeOpenings(), []);
   const [location, setLocation] = useState(ALL);
   const [department, setDepartment] = useState(ALL);

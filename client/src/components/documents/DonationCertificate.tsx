@@ -20,7 +20,7 @@ export interface DonationCertificateData {
   donorName: string;
   amount: number;
   cause: string;
-  /** Display date, e.g. "05 Nov 2026". */
+  /** Display month, e.g. "November 2026". */
   date: string;
   year: number;
   certificateNo: string;
@@ -320,7 +320,7 @@ export const DonationCertificateSvg = forwardRef<
         letterSpacing="2.5"
         fill={MUTED}
       >
-        DATE OF DONATION
+        MONTH OF DONATION
       </text>
 
       {/* Signatory */}

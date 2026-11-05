@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Check, FileText, type LucideIcon } from "lucide-react";
+import { useScrollToHash } from "@/hooks/useScrollToHash";
 
 /**
  * Shared building blocks for the Get Involved pages (Volunteer, Mentor, Partner,
@@ -294,6 +295,7 @@ export function FormSection({
   desc: string;
   children: React.ReactNode;
 }) {
+  useScrollToHash(id);
   return (
     <section
       id={id}

@@ -53,17 +53,19 @@ import {
   DonationCertificateViewer,
   type DonationCertificateData,
 } from "@/components/documents/DonationCertificate";
-import { donorTierFor } from "@/components/documents/donorTier";
-import { formatDocDate } from "@/components/documents/docUtils";
-import { DonationSummaryCard } from "@/components/donation/DonationSummaryCard";
+import { DONOR_TIERS, donorTierFor, tierRangeText } from "@/components/documents/donorTier";
+import { formatDocMonth } from "@/components/documents/docUtils";
+import { DonationSummaryCard, type ReminderChoice } from "@/components/donation/DonationSummaryCard";
 import {
-  COUNTRY_CODES,
   blockNumbersOnKeyDown,
   sanitizeName,
   blockNonDigitsOnKeyDown,
   sanitizeDigits,
 } from "@/utils/formValidation";
-import { INDIAN_STATES, BIHAR_DISTRICTS } from "@/content/locations";
+import { INDIAN_STATES } from "@/content/locations";
+import { PhoneCodeSelect } from "@/components/forms/PhoneCodeSelect";
+import { CityField } from "@/components/forms/formFields";
+import { isValidPhone, maxDigits, phoneError, phonePlaceholder } from "@/components/forms/phone";
 import { openRazorpayModal } from "@/utils/razorpay";
 
 // ─── Financial Types from Page 70 & 71 of PDF ────────────────────────────────
@@ -136,7 +138,7 @@ const PRESET_AMOUNTS = [500, 1000, 2000, 5000];
 const OFFLINE_BANK_DETAILS = {
   accountNo: "1004451030069725",
   accountType: "Saving Account",
-  accountName: "ISLAH",
+  accountName: "Islah Welfare Foundation",
   ifsc: "PUNBOMBGB06",
   micr: "800811002",
   bankName: "Bihar Gramin Bank",
@@ -147,79 +149,71 @@ const OFFLINE_BANK_DETAILS = {
   contactEmail: "info@iwfindia.org",
 };
 
-// ─── Donor Tier Logic ─────────────────────────────────────────────────────────
-
-function getDonorTier(amount: number) {
-  if (amount >= 50000) return { label: "Platinum", color: "#8B5CF6", bg: "#EDE9FE", icon: Sparkles };
-  if (amount >= 20000) return { label: "Gold", color: "#D97706", bg: "#FEF3C7", icon: Award };
-  if (amount >= 5000) return { label: "Silver", color: "#2563EB", bg: "#EFF6FF", icon: Star };
-  return { label: "General", color: "#15803D", bg: "#F0FDF4", icon: Heart };
-}
-
 // ─── Schema Matching Page 70 ──────────────────────────────────────────────────
-const donorSchema = z.object({
-  financialType: z.string().min(1, "Please select a financial type"),
-  frequency: z.enum(["One Time", "Monthly", "Quarterly", "Yearly"]),
-  amount: z.number({ invalid_type_error: "Enter a valid amount" }).min(100, "Minimum donation amount is ₹100"),
-  recurringPledge: z.boolean(),
-  pledgeMonths: z.string(),
+const PAN_PATTERN = /^[A-Z]{5}[0-9]{4}[A-Z]$/;
 
-  donorType: z.enum(["Individual", "Corporate"]),
-  fullName: z
-    .string()
-    .trim()
-    .min(2, "Full Name is required")
-    .regex(/^[^0-9]+$/, "Name cannot contain numbers"),
-  countryCode: z.string(),
-  phone: z
-    .string()
-    .trim()
-    .regex(/^\d{10}$/, "Enter a valid 10-digit phone number"),
-  email: z.string().trim().email("Enter a valid email address"),
-  address: z.string().trim().min(5, "Full address is required"),
-  state: z.string().min(1, "Please select state"),
-  city: z.string().trim().min(2, "City is required"),
-  pincode: z
-    .string()
-    .trim()
-    .regex(/^\d{6}$/, "Enter a valid 6-digit PIN code"),
+/**
+ * All checks run in one pass (superRefine), so every problem is shown at once —
+ * zod skips refinements while any base field fails, which would hide the tax fields.
+ */
+const donorSchema = z
+  .object({
+    financialType: z.string(),
+    patientSlug: z.string().optional(),
+    amount: z.any(),
+    reminder: z.enum(["None", "Monthly", "Yearly"]),
+    donorType: z.enum(["Individual", "Corporate"]),
+    fullName: z.string(),
+    countryCode: z.string(),
+    phone: z.string(),
+    email: z.string(),
+    state: z.string(),
+    city: z.string(),
+    taxExemption: z.boolean(),
+    pan: z.string().optional(),
+    panFile: z.any().optional(),
+    address: z.string().optional(),
+    pincode: z.string().optional(),
+    photoFile: z.any().optional(),
+    websiteConsent: z.enum(["Yes", "No"]),
+    citizenDeclaration: z.boolean(),
+    termsAgreement: z.boolean(),
+  })
+  .superRefine((data, ctx) => {
+    const issue = (path: string, message: string) =>
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: [path] });
 
-  taxExemption: z.boolean(),
-  pan: z.string().trim().optional(),
-  panFile: z.any().optional(),
-  photoFile: z.any().optional(),
+    if (!data.financialType) issue("financialType", "Please choose a cause");
+    const amount = Number(data.amount);
+    if (!Number.isFinite(amount) || amount <= 0) issue("amount", "Enter an amount");
+    else if (amount < 100) issue("amount", "The minimum donation is ₹100");
 
-  websiteConsent: z.enum(["Yes", "No"]),
-  citizenDeclaration: z.literal(true, {
-    errorMap: () => ({ message: "Please confirm that you are a citizen of India donating your own funds" }),
-  }),
-  termsAgreement: z.literal(true, {
-    errorMap: () => ({ message: "Please agree to the Terms of Use and Donor Privacy" }),
-  }),
-}).superRefine((data, ctx) => {
-  if (data.taxExemption) {
-    if (!data.pan || !/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/i.test(data.pan)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "A valid 10-character PAN (e.g. ABCDE1234F) is required for 80G tax exemption",
-        path: ["pan"],
-      });
+    const name = data.fullName.trim();
+    if (name.length < 2) issue("fullName", "Enter your name");
+    else if (data.donorType === "Individual" && /[0-9]/.test(name))
+      issue("fullName", "Name cannot contain numbers");
+
+    if (!data.phone) issue("phone", "Enter your mobile number");
+    else if (!isValidPhone(data.countryCode, data.phone))
+      issue("phone", phoneError(data.countryCode, data.phone) ?? "Enter a valid mobile number");
+    if (!z.string().email().safeParse(data.email.trim()).success)
+      issue("email", "Enter a valid email address");
+    if (!data.state) issue("state", "Select your state");
+    if (data.city.trim().length < 2) issue("city", "Select or type your city / district");
+
+    if (data.taxExemption) {
+      const pan = (data.pan ?? "").toUpperCase();
+      if (!pan) issue("pan", "PAN is required for a tax-deduction receipt");
+      else if (!PAN_PATTERN.test(pan)) issue("pan", "Enter a valid PAN, e.g. ABCDE1234F");
+      if (!(data.panFile instanceof File)) issue("panFile", "Upload a photo or PDF of your PAN card");
+      if (!data.address || data.address.trim().length < 5) issue("address", "Enter your postal address");
+      if (!/^\d{6}$/.test(data.pincode ?? "")) issue("pincode", "Enter a valid 6-digit PIN code");
     }
 
-    const hasPanFile =
-      data.panFile instanceof File ||
-      (typeof data.panFile === "string" && data.panFile.trim().length > 0) ||
-      (data.panFile && typeof data.panFile === "object" && "name" in data.panFile);
-
-    if (!hasPanFile) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Please upload an image or document of your PAN card",
-        path: ["panFile"],
-      });
-    }
-  }
-});
+    if (!data.citizenDeclaration) issue("citizenDeclaration", "Please confirm this declaration");
+    if (!data.termsAgreement)
+      issue("termsAgreement", "Please accept the Terms of Use and Donor Privacy Policy");
+  });
 
 type DonorFormData = z.infer<typeof donorSchema>;
 
@@ -232,6 +226,55 @@ function FieldError({ msg }: { msg?: string }) {
     <p className="flex items-center gap-1 mt-1 text-[11px] font-medium text-red-600">
       <AlertCircle className="w-3 h-3 shrink-0" /> {msg}
     </p>
+  );
+}
+
+const labelCls = "block text-xs font-semibold text-slate-700 mb-1.5";
+const chipCls = "py-2.5 px-2 rounded-lg text-xs sm:text-sm font-semibold border transition cursor-pointer";
+const chipOn = "bg-orange-50 text-[#071527] border-brand-orange ring-1 ring-brand-orange/25";
+const chipOff = "bg-white text-slate-700 border-slate-200 hover:bg-slate-50";
+
+function StepTitle({ n, title }: { n: number; title: string }) {
+  return (
+    <div className="flex items-center gap-2.5 pb-2 mb-4 border-b border-slate-100">
+      <span className="w-6 h-6 rounded-full bg-[#071527] text-white text-xs font-semibold flex items-center justify-center">
+        {n}
+      </span>
+      <h2 className="text-base sm:text-lg font-semibold text-slate-900">{title}</h2>
+    </div>
+  );
+}
+
+function FilePick({
+  name,
+  placeholder,
+  accept,
+  onPick,
+}: {
+  name: string | null;
+  placeholder: string;
+  accept: string;
+  onPick: (file: File | null) => void;
+}) {
+  return (
+    <label className="flex items-center gap-2 h-10 px-3 rounded-lg border border-dashed border-slate-300 bg-white hover:bg-slate-50 text-xs font-medium text-slate-700 cursor-pointer transition">
+      <Upload className="w-3.5 h-3.5 text-brand-orange shrink-0" />
+      <span className="truncate">{name || placeholder}</span>
+      <input
+        type="file"
+        accept={accept}
+        className="hidden"
+        onChange={(e) => {
+          const file = e.target.files?.[0] ?? null;
+          if (file && file.size > 5 * 1024 * 1024) {
+            toast.error("Please choose a file under 5 MB.");
+            e.target.value = "";
+            return;
+          }
+          onPick(file);
+        }}
+      />
+    </label>
   );
 }
 
@@ -282,32 +325,34 @@ export default function DonatePage() {
     resolver: zodResolver(donorSchema),
     defaultValues: {
       financialType: initialFinancialType,
-      frequency: "One Time",
-      amount: contextAmount || 2500,
-      recurringPledge: true,
-      pledgeMonths: "12 Months",
+      patientSlug: contextPatient?.slug ?? "",
+      amount: contextAmount || 2000,
+      reminder: "None",
       donorType: "Individual",
-      fullName: "Md. Aftab Alam",
+      fullName: "",
       countryCode: "+91",
-      phone: "9123456780",
-      email: "aftabalam@email.com",
-      address: "Darbhanga, Bihar - 846004, India",
-      state: "Bihar",
-      city: "Darbhanga",
-      pincode: "846004",
+      phone: "",
+      email: "",
+      state: "",
+      city: "",
       taxExemption: false,
       pan: "",
+      address: "",
+      pincode: "",
       websiteConsent: "Yes",
-      citizenDeclaration: true,
-      termsAgreement: true,
+      citizenDeclaration: false,
+      termsAgreement: false,
     },
   });
 
   const watchFinancialType = watch("financialType");
-  const watchFrequency = watch("frequency");
   const watchAmount = watch("amount") || 0;
-  const watchRecurringPledge = watch("recurringPledge");
-  const watchPledgeMonths = watch("pledgeMonths");
+  const watchReminder = watch("reminder") as ReminderChoice;
+  const watchPatientSlug = watch("patientSlug");
+  const selectedPatient =
+    watchFinancialType === "Medical Emergency" && watchPatientSlug
+      ? URGENT_PATIENTS.find((p) => p.slug === watchPatientSlug)
+      : undefined;
   const watchDonorType = watch("donorType");
   const watchFullName = watch("fullName");
   const watchCountryCode = watch("countryCode");
@@ -331,12 +376,11 @@ export default function DonatePage() {
 
   const [docBusy, setDocBusy] = useState<null | "download" | "print">(null);
 
-  // Formatted composite address if standard address field is sparse
-  const fullFormattedAddress = watchAddress
-    ? watchAddress
-    : [watchCity, watchState ? `${watchState}${watchPincode ? ` - ${watchPincode}` : ""}` : "", "India"]
-        .filter(Boolean)
-        .join(", ");
+  // Full postal address only when a tax receipt was requested; otherwise city and state.
+  const fullFormattedAddress =
+    watchTaxExemption && watchAddress
+      ? `${watchAddress}, ${[watchCity, watchState].filter(Boolean).join(", ")}${watchPincode ? ` - ${watchPincode}` : ""}`
+      : [watchCity, watchState, "India"].filter(Boolean).join(", ");
 
   const receiptInfo: DonationReceiptInfo = {
     receiptNo: receiptNumber,
@@ -350,18 +394,16 @@ export default function DonatePage() {
     taxRequested: Boolean(watchTaxExemption),
     amount: Number(watchAmount) || 0,
     transactionId,
-    frequency: watchFrequency || "One Time",
-    pledgeMonths:
-      watchFrequency !== "One Time" && watchRecurringPledge ? watchPledgeMonths : undefined,
+    frequency: "One Time",
     purpose: watchFinancialType || "General Donation",
-    beneficiary: contextPatient?.name,
+    beneficiary: selectedPatient?.name,
   };
 
   const certificateData: DonationCertificateData = {
     donorName: receiptInfo.donorName,
     amount: receiptInfo.amount,
     cause: receiptInfo.purpose,
-    date: formatDocDate(paidAt),
+    date: formatDocMonth(paidAt),
     year: paidAt.getFullYear(),
     certificateNo: /RCPT/i.test(receiptNumber)
       ? receiptNumber.replace(/RCPT/i, "CERT")
@@ -419,7 +461,7 @@ export default function DonatePage() {
           email: data.email,
           phone: data.phone,
           cause: data.financialType,
-          patientSlug: contextPatient?.slug || "",
+          patientSlug: data.patientSlug || "",
         },
       });
 
@@ -456,19 +498,18 @@ export default function DonatePage() {
           email: data.email,
           phone: data.phone,
           countryCode: data.countryCode,
-          address: data.address,
+          address: data.taxExemption ? data.address : `${data.city}, ${data.state}`,
           city: data.city,
           state: data.state,
-          pincode: data.pincode,
+          pincode: data.taxExemption ? data.pincode : "",
           financialType: data.financialType,
-          frequency: data.frequency,
+          frequency: "One Time",
+          reminder: data.reminder,
           amount: data.amount,
           taxExemption: data.taxExemption,
-          pan: data.pan,
-          patientSlug: contextPatient?.slug,
+          pan: data.taxExemption ? data.pan?.toUpperCase() : undefined,
+          patientSlug: data.financialType === "Medical Emergency" ? data.patientSlug || undefined : undefined,
           websiteConsent: data.websiteConsent,
-          recurringPledge: data.recurringPledge,
-          pledgeMonths: data.pledgeMonths,
         },
       });
 
@@ -698,26 +739,24 @@ export default function DonatePage() {
               <div className="grid lg:grid-cols-12 gap-8 items-start">
               {/* ── LEFT COLUMN: Donation Form ── */}
               <div className="lg:col-span-7">
-                <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-xs space-y-8 notranslate form-container" translate="no" dir="ltr">
-                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 text-left notranslate" translate="no" dir="ltr">
-                    {/* Part 1: Choose Donation Type */}
+                <div className="bg-white rounded-2xl p-5 sm:p-7 border border-slate-200 shadow-xs notranslate form-container" translate="no" dir="ltr">
+                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-7 text-left notranslate" translate="no" dir="ltr" noValidate>
+                    {/* Part 1: What you are giving */}
                     <div>
-                      <div className="flex items-center gap-2.5 pb-2 mb-4 border-b border-slate-100">
-                        <span className="w-6 h-6 rounded-full bg-[#071527] text-white text-xs font-semibold flex items-center justify-center">
-                          1
-                        </span>
-                        <h2 className="text-base sm:text-lg font-semibold text-slate-900 tracking-wide">
-                          Choose Donation Type
-                        </h2>
-                      </div>
-
+                      <StepTitle n={1} title="Your Donation" />
                       <div className="space-y-4">
-                        {/* Financial Type */}
                         <div>
-                          <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                            Financial Type <span className="text-red-500">*</span>
+                          <label className={labelCls}>
+                            Cause you want to support <span className="text-red-500">*</span>
                           </label>
-                          <select {...register("financialType")} className={inputCls}>
+                          <select
+                            {...register("financialType", {
+                              onChange: (e) => {
+                                if (e.target.value !== "Medical Emergency") setValue("patientSlug", "");
+                              },
+                            })}
+                            className={inputCls}
+                          >
                             {FINANCIAL_TYPES.map((type) => (
                               <option key={type} value={type}>
                                 {type}
@@ -727,38 +766,27 @@ export default function DonatePage() {
                           <FieldError msg={errors.financialType?.message} />
                         </div>
 
-                        {/* Frequency */}
-                        <div>
-                          <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                            Frequency <span className="text-red-500">*</span>
-                          </label>
-                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                            {(["One Time", "Monthly", "Quarterly", "Yearly"] as const).map((freq) => {
-                              const isSelected = watchFrequency === freq;
-                              return (
-                                <button
-                                  key={freq}
-                                  type="button"
-                                  onClick={() => setValue("frequency", freq)}
-                                  className={`py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm border transition-all cursor-pointer ${
-                                    isSelected
-                                      ? "bg-orange-50 text-[#071527] border-brand-orange ring-1 ring-brand-orange/25 font-semibold"
-                                      : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
-                                  }`}
-                                >
-                                  {freq}
-                                </button>
-                              );
-                            })}
+                        {watchFinancialType === "Medical Emergency" && (
+                          <div>
+                            <label className={labelCls}>
+                              Support a specific patient <span className="text-slate-400 font-normal">(optional)</span>
+                            </label>
+                            <select {...register("patientSlug")} className={inputCls}>
+                              <option value="">Any patient — where the need is greatest</option>
+                              {URGENT_PATIENTS.map((p) => (
+                                <option key={p.slug} value={p.slug}>
+                                  {p.name} — {p.disease}
+                                </option>
+                              ))}
+                            </select>
                           </div>
-                        </div>
+                        )}
 
-                        {/* Amount Presets */}
                         <div>
-                          <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                            Amount (₹) <span className="text-red-500">*</span>
+                          <label className={labelCls}>
+                            Amount <span className="text-red-500">*</span>
                           </label>
-                          <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 mb-3">
+                          <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 mb-2.5">
                             {PRESET_AMOUNTS.map((amt) => {
                               const isSelected = selectedPreset === amt && watchAmount === amt;
                               return (
@@ -766,448 +794,385 @@ export default function DonatePage() {
                                   key={amt}
                                   type="button"
                                   onClick={() => handlePresetClick(amt)}
-                                  className={`py-2.5 px-2 rounded-xl font-bold text-xs sm:text-sm border transition-all cursor-pointer ${
-                                    isSelected
-                                      ? "bg-orange-50 text-[#071527] border-brand-orange ring-1 ring-brand-orange/25 font-semibold"
-                                      : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
-                                  }`}
+                                  className={`${chipCls} ${isSelected ? chipOn : chipOff}`}
                                 >
-                                  ₹ {amt.toLocaleString("en-IN")}
+                                  ₹{amt.toLocaleString("en-IN")}
                                 </button>
                               );
                             })}
                             <button
                               type="button"
                               onClick={handleOtherClick}
-                              className={`py-2.5 px-2 rounded-xl font-bold text-xs sm:text-sm border transition-all cursor-pointer ${
-                                selectedPreset === "Other"
-                                  ? "bg-orange-50 text-[#071527] border-brand-orange ring-1 ring-brand-orange/25 font-semibold"
-                                  : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
-                              }`}
+                              className={`${chipCls} ${selectedPreset === "Other" ? chipOn : chipOff}`}
                             >
                               Other
                             </button>
                           </div>
-
-                          {/* Enter Amount Input */}
-                          <div className="flex items-center rounded-xl border border-slate-200 bg-white px-3 focus-within:border-brand-green focus-within:ring-2 focus-within:ring-brand-green/20">
-                            <span className="text-sm font-bold text-slate-400 mr-2">₹</span>
+                          <div className="flex items-center rounded-lg border border-slate-200 bg-white px-3 focus-within:border-brand-orange focus-within:ring-2 focus-within:ring-brand-orange/15">
+                            <span className="text-sm font-semibold text-slate-400 mr-2">₹</span>
                             <input
                               type="number"
-                              {...register("amount", { valueAsNumber: true })}
-                              placeholder="Enter amount"
-                              className="h-10 w-full text-xs sm:text-sm font-bold text-slate-800 outline-none"
+                              inputMode="numeric"
+                              min={100}
+                              {...register("amount", {
+                                valueAsNumber: true,
+                                onChange: () => setSelectedPreset("Other"),
+                              })}
+                              placeholder="Enter any amount"
+                              className="h-10 w-full text-sm font-semibold text-slate-800 outline-none"
                             />
                           </div>
-                          <FieldError msg={errors.amount?.message} />
+                          <FieldError msg={errors.amount?.message as string | undefined} />
                         </div>
 
-                        {/* 12 Months Pledge Checkbox & Dropdown (Page 70) */}
-                        <div className="p-3.5 bg-emerald-50/70 border border-emerald-200 rounded-2xl space-y-2">
-                          <label className="flex items-center gap-2.5 cursor-pointer select-none">
-                            <input
-                              type="checkbox"
-                              {...register("recurringPledge")}
-                              className="w-4 h-4 rounded text-brand-green focus:ring-brand-green cursor-pointer"
-                            />
-                            <span className="text-xs sm:text-sm font-bold text-slate-800">
-                              Yes, I would like to contribute for 12 months (₹{(watchAmount * 12).toLocaleString("en-IN")})
-                            </span>
+                        <div>
+                          <label className={labelCls}>
+                            Would you like a reminder to give again? <span className="text-slate-400 font-normal">(optional)</span>
                           </label>
-
-                          {watchRecurringPledge && (
-                            <div className="flex items-center gap-3 pt-1 text-xs">
-                              <span className="text-slate-600 font-semibold">Select number of months:</span>
-                              <select
-                                {...register("pledgeMonths")}
-                                className="h-8 rounded-lg border border-slate-200 bg-white px-2 text-xs font-bold text-slate-800 outline-none"
+                          <div className="grid grid-cols-3 gap-2">
+                            {(
+                              [
+                                ["None", "No, just once"],
+                                ["Monthly", "Every month"],
+                                ["Yearly", "Every year"],
+                              ] as const
+                            ).map(([val, label]) => (
+                              <button
+                                key={val}
+                                type="button"
+                                onClick={() => setValue("reminder", val)}
+                                className={`${chipCls} ${watchReminder === val ? chipOn : chipOff}`}
                               >
-                                <option value="3 Months">3 Months</option>
-                                <option value="6 Months">6 Months</option>
-                                <option value="9 Months">9 Months</option>
-                                <option value="12 Months">12 Months</option>
-                              </select>
-                            </div>
-                          )}
+                                {label}
+                              </button>
+                            ))}
+                          </div>
+                          <p className="text-[11px] text-slate-500 mt-1.5">
+                            We only send a reminder. Each donation is your choice and nothing is charged automatically.
+                          </p>
                         </div>
                       </div>
                     </div>
 
-                    {/* Part 2: Donor Information */}
+                    {/* Part 2: Donor details */}
                     <div>
-                      <div className="flex items-center gap-2.5 pb-2 mb-4 border-b border-slate-100">
-                        <span className="w-6 h-6 rounded-full bg-[#071527] text-white text-xs font-semibold flex items-center justify-center">
-                          2
-                        </span>
-                        <h2 className="text-base sm:text-lg font-semibold text-slate-900 tracking-wide">
-                          Donor Information
-                        </h2>
-                      </div>
-
+                      <StepTitle n={2} title="Your Details" />
                       <div className="space-y-4">
-                        {/* Who is making this donation? */}
-                        <div>
-                          <label className="block text-xs font-semibold text-slate-700 mb-2">
-                            Who is making this donation? <span className="text-red-500">*</span>
-                          </label>
-                          <div className="flex items-center gap-6">
-                            <label className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-800 cursor-pointer">
+                        <div className="flex items-center gap-6">
+                          {(
+                            [
+                              ["Individual", "Individual"],
+                              ["Corporate", "Organisation / Company"],
+                            ] as const
+                          ).map(([val, label]) => (
+                            <label key={val} className="inline-flex items-center gap-2 text-sm text-slate-800 cursor-pointer">
                               <input
                                 type="radio"
-                                value="Individual"
+                                value={val}
                                 {...register("donorType")}
-                                className="text-brand-green focus:ring-brand-green cursor-pointer"
+                                className="accent-[#f97316] cursor-pointer"
                               />
-                              <span>Individual</span>
+                              <span>{label}</span>
                             </label>
-                            <label className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-800 cursor-pointer">
-                              <input
-                                type="radio"
-                                value="Corporate"
-                                {...register("donorType")}
-                                className="text-brand-green focus:ring-brand-green cursor-pointer"
-                              />
-                              <span>Corporate</span>
-                            </label>
-                          </div>
+                          ))}
                         </div>
 
-                        {/* Full Name */}
                         <div>
-                          <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                            {watchDonorType === "Individual" ? "Full Name" : "Company / Organisation Name"}{" "}
+                          <label className={labelCls}>
+                            {watchDonorType === "Individual" ? "Full Name" : "Organisation / Company Name"}{" "}
                             <span className="text-red-500">*</span>
                           </label>
                           <input
                             {...register("fullName", {
                               onChange: (e) => {
-                                e.target.value = sanitizeName(e.target.value);
+                                if (watchDonorType === "Individual") e.target.value = sanitizeName(e.target.value);
                               },
                             })}
-                            onKeyDown={blockNumbersOnKeyDown}
-                            placeholder="Enter your full name"
+                            onKeyDown={watchDonorType === "Individual" ? blockNumbersOnKeyDown : undefined}
+                            placeholder={watchDonorType === "Individual" ? "As you would like it on your receipt" : "Registered name"}
+                            autoComplete="name"
                             className={inputCls}
                           />
                           <FieldError msg={errors.fullName?.message} />
                         </div>
 
-                        {/* Phone Number & Email Address */}
                         <div className="grid sm:grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                            <label className={labelCls}>
                               Mobile Number <span className="text-red-500">*</span>
                             </label>
-                            <div className="flex gap-2">
-                              <select
-                                {...register("countryCode")}
-                                className="h-10 w-24 rounded-lg border border-slate-200 bg-white px-2 text-xs text-slate-800 outline-none"
-                              >
-                                {COUNTRY_CODES.map((c) => (
-                                  <option key={c.code} value={c.code}>
-                                    {c.code}
-                                  </option>
-                                ))}
-                              </select>
+                            <div className="flex gap-2 h-10">
+                              <PhoneCodeSelect
+                                value={watchCountryCode || "+91"}
+                                onChange={(dial) => {
+                                  setValue("countryCode", dial);
+                                  setValue("phone", sanitizeDigits(watchPhone || "", maxDigits(dial)));
+                                }}
+                                buttonClassName="border-slate-200"
+                              />
                               <input
                                 type="tel"
+                                inputMode="numeric"
+                                autoComplete="tel-national"
                                 {...register("phone", {
                                   onChange: (e) => {
-                                    e.target.value = sanitizeDigits(e.target.value, 10);
+                                    e.target.value = sanitizeDigits(e.target.value, maxDigits(watchCountryCode || "+91"));
                                   },
                                 })}
                                 onKeyDown={blockNonDigitsOnKeyDown}
-                                maxLength={10}
-                                placeholder="Enter mobile number"
+                                placeholder={phonePlaceholder(watchCountryCode || "+91")}
                                 className={inputCls}
                               />
                             </div>
                             <FieldError msg={errors.phone?.message} />
                           </div>
-
                           <div>
-                            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                            <label className={labelCls}>
                               Email Address <span className="text-red-500">*</span>
                             </label>
                             <input
                               type="email"
+                              autoComplete="email"
                               {...register("email")}
-                              placeholder="Enter email address"
+                              placeholder="name@example.com"
                               className={inputCls}
                             />
                             <FieldError msg={errors.email?.message} />
                           </div>
                         </div>
 
-                        {/* Address */}
-                        <div>
-                          <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                            Address <span className="text-red-500">*</span>
-                          </label>
-                          <input
-                            {...register("address")}
-                            placeholder="Enter complete address"
-                            className={inputCls}
-                          />
-                          <FieldError msg={errors.address?.message} />
-                        </div>
-
-                        {/* State, City, PIN Code */}
-                        <div className="grid sm:grid-cols-3 gap-4">
+                        <div className="grid sm:grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                            <label className={labelCls}>
                               State <span className="text-red-500">*</span>
                             </label>
-                            <select {...register("state")} className={inputCls}>
-                              <option value="" disabled>Select State</option>
+                            <select
+                              value={watchState || ""}
+                              onChange={(e) => {
+                                setValue("state", e.target.value, { shouldValidate: Boolean(errors.state) });
+                                setValue("city", "");
+                              }}
+                              className={inputCls}
+                            >
+                              <option value="" disabled>
+                                Select state
+                              </option>
                               {INDIAN_STATES.map((s) => (
-                                <option key={s} value={s}>{s}</option>
+                                <option key={s} value={s}>
+                                  {s}
+                                </option>
                               ))}
                             </select>
                             <FieldError msg={errors.state?.message} />
                           </div>
-
                           <div>
-                            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                              City <span className="text-red-500">*</span>
+                            <label className={labelCls}>
+                              City / District <span className="text-red-500">*</span>
                             </label>
-                            {watchState === "Bihar" ? (
-                              <select {...register("city")} className={inputCls}>
-                                <option value="" disabled>Select City / District</option>
-                                {BIHAR_DISTRICTS.map((d) => (
-                                  <option key={d} value={d}>{d}</option>
-                                ))}
-                              </select>
-                            ) : (
-                              <input
-                                {...register("city")}
-                                placeholder="Enter City"
-                                className={inputCls}
-                              />
-                            )}
-                            <FieldError msg={errors.city?.message} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                              PIN Code <span className="text-red-500">*</span>
-                            </label>
-                            <input
-                              {...register("pincode", {
-                                onChange: (e) => {
-                                  e.target.value = sanitizeDigits(e.target.value, 6);
-                                },
-                              })}
-                              onKeyDown={blockNonDigitsOnKeyDown}
-                              maxLength={6}
-                              placeholder="Enter PIN code"
+                            <CityField
+                              state={watchState || ""}
+                              value={watchCity || ""}
+                              onChange={(val) => setValue("city", val, { shouldValidate: Boolean(errors.city) })}
                               className={inputCls}
                             />
-                            <FieldError msg={errors.pincode?.message} />
+                            <FieldError msg={errors.city?.message} />
                           </div>
                         </div>
 
-                        {/* 80G Tax Deduction Certificate (Page 70) */}
-                        <div className="pt-2">
-                          <label className="flex items-center gap-2.5 cursor-pointer select-none">
+                        {/* Tax-deduction documentation */}
+                        <div className={`rounded-xl border p-4 ${watchTaxExemption ? "border-brand-orange/40 bg-orange-50/40" : "border-slate-200 bg-slate-50/60"}`}>
+                          <label className="flex items-start gap-2.5 cursor-pointer select-none">
                             <input
                               type="checkbox"
                               {...register("taxExemption")}
-                              className="w-4 h-4 rounded text-brand-green focus:ring-brand-green cursor-pointer"
+                              className="w-4 h-4 mt-0.5 accent-[#f97316] cursor-pointer"
                             />
-                            <span className="text-xs sm:text-sm font-bold text-slate-800">
-                              I want tax deduction certificate under income tax act 2025
+                            <span>
+                              <span className="block text-sm font-semibold text-slate-800">
+                                I want a tax-deduction receipt
+                              </span>
+                              <span className="block text-xs text-slate-500">
+                                Under the Income-tax Act, 2025. Needs your PAN, a copy of your PAN card and your postal address.
+                              </span>
                             </span>
                           </label>
 
-                          {watch("taxExemption") && (
-                            <div className="mt-3 p-4 bg-emerald-50/80 border border-emerald-200 rounded-2xl space-y-3">
-                              <div className="flex items-center gap-2 text-xs font-bold text-emerald-800">
-                                <CheckCircle2 className="w-4 h-4 text-brand-green shrink-0" />
-                                <span>Check this if you need tax deduction certificate under income tax act 2025</span>
-                              </div>
-
+                          {watchTaxExemption && (
+                            <div className="mt-4 grid sm:grid-cols-2 gap-4">
                               <div>
-                                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                                  PAN Card is mandatory for tax deduction certificates under income tax act 2025:
+                                <label className={labelCls}>
+                                  PAN Number <span className="text-red-500">*</span>
                                 </label>
                                 <input
-                                  {...register("pan")}
-                                  placeholder="Enter PAN (e.g. AACTS7973G)"
+                                  {...register("pan", {
+                                    onChange: (e) => {
+                                      e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 10);
+                                    },
+                                  })}
+                                  placeholder="ABCDE1234F"
                                   maxLength={10}
+                                  autoCapitalize="characters"
                                   className={`${inputCls} uppercase font-mono tracking-wider`}
                                 />
                                 <FieldError msg={errors.pan?.message} />
                               </div>
-
-                              <div className="grid sm:grid-cols-2 gap-3 pt-1">
-                                <div>
-                                  <label className="block text-[11px] font-bold text-slate-700 mb-1">
-                                    PAN Card Document / Image <span className="text-red-500">*</span>
-                                  </label>
-                                  <label className="flex items-center justify-center gap-2 h-9 px-3 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 cursor-pointer transition">
-                                    <Upload className="w-3.5 h-3.5 text-brand-green" />
-                                    <span className="truncate max-w-[180px]">{panFileName || "Upload PAN Card"}</span>
-                                    <input
-                                      type="file"
-                                      accept="image/*,.pdf"
-                                      className="hidden"
-                                      onChange={(e) => {
-                                        const file = e.target.files?.[0];
-                                        if (file) {
-                                          setPanFileName(file.name);
-                                          setValue("panFile", file, { shouldValidate: true });
-                                        } else {
-                                          setPanFileName(null);
-                                          setValue("panFile", undefined, { shouldValidate: true });
-                                        }
-                                      }}
-                                    />
-                                  </label>
-                                  <FieldError msg={(errors.panFile as any)?.message} />
-                                </div>
-
-                                <div>
-                                  <label className="block text-[11px] font-bold text-slate-600 mb-1">
-                                    Photo <span className="text-slate-400 font-normal">(Optional)</span>
-                                  </label>
-                                  <label className="flex items-center justify-center gap-2 h-9 px-3 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 cursor-pointer transition">
-                                    <Upload className="w-3.5 h-3.5 text-slate-500" />
-                                    <span className="truncate max-w-[180px]">{photoFileName || "Upload Photo (Optional)"}</span>
-                                    <input
-                                      type="file"
-                                      accept="image/*"
-                                      className="hidden"
-                                      onChange={(e) => {
-                                        const file = e.target.files?.[0];
-                                        if (file) {
-                                          setPhotoFileName(file.name);
-                                          setValue("photoFile", file, { shouldValidate: false });
-                                        } else {
-                                          setPhotoFileName(null);
-                                          setValue("photoFile", undefined, { shouldValidate: false });
-                                        }
-                                      }}
-                                    />
-                                  </label>
-                                </div>
+                              <div>
+                                <label className={labelCls}>
+                                  PAN Card (photo or PDF) <span className="text-red-500">*</span>
+                                </label>
+                                <FilePick
+                                  name={panFileName}
+                                  placeholder="Upload PAN card"
+                                  accept="image/*,.pdf"
+                                  onPick={(file) => {
+                                    setPanFileName(file?.name ?? null);
+                                    setValue("panFile", file ?? undefined, { shouldValidate: true });
+                                  }}
+                                />
+                                <FieldError msg={(errors.panFile as { message?: string } | undefined)?.message} />
+                              </div>
+                              <div className="sm:col-span-2">
+                                <label className={labelCls}>
+                                  Postal Address <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                  {...register("address")}
+                                  placeholder="House / street, locality, landmark"
+                                  autoComplete="street-address"
+                                  className={inputCls}
+                                />
+                                <FieldError msg={errors.address?.message} />
+                              </div>
+                              <div>
+                                <label className={labelCls}>
+                                  PIN Code <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                  {...register("pincode", {
+                                    onChange: (e) => {
+                                      e.target.value = sanitizeDigits(e.target.value, 6);
+                                    },
+                                  })}
+                                  onKeyDown={blockNonDigitsOnKeyDown}
+                                  inputMode="numeric"
+                                  maxLength={6}
+                                  placeholder="6-digit PIN"
+                                  autoComplete="postal-code"
+                                  className={inputCls}
+                                />
+                                <FieldError msg={errors.pincode?.message} />
                               </div>
                             </div>
                           )}
                         </div>
 
-                        {/* Consent for Display on Website (Page 70) */}
-                        <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
-                          <label className="block text-xs font-bold text-slate-800">
-                            Consent for Display on Website (Optional but Recommended)
-                          </label>
-                          <p className="text-[11px] text-slate-500 leading-relaxed">
-                            We value your privacy and respect your choice. I authorize for my / our name to be displayed on the official website of Islah Welfare Foundation (Islah) as a Supporting Member/Donor. This will help inspire others and promote transparency.
-                          </p>
-                          <div className="space-y-1.5 pt-1">
-                            <label className="flex items-center gap-2 text-xs text-slate-700 cursor-pointer">
-                              <input
-                                type="radio"
-                                value="Yes"
-                                {...register("websiteConsent")}
-                                className="text-brand-green focus:ring-brand-green cursor-pointer"
-                              />
-                              <span>Yes, you may display my name on the website.</span>
-                            </label>
-                            <label className="flex items-center gap-2 text-xs text-slate-700 cursor-pointer">
-                              <input
-                                type="radio"
-                                value="No"
-                                {...register("websiteConsent")}
-                                className="text-brand-green focus:ring-brand-green cursor-pointer"
-                              />
-                              <span>I do not want my name to be displayed on the website.</span>
-                            </label>
+                        {/* Recognition: name display + optional photo */}
+                        <div className="rounded-xl border border-slate-200 p-4 space-y-3">
+                          <div>
+                            <p className="text-sm font-semibold text-slate-800">Show my name on the donor wall</p>
+                            <p className="text-xs text-slate-500">
+                              With your permission we list supporters on our website to inspire others.
+                            </p>
                           </div>
+                          <div className="flex flex-wrap gap-x-6 gap-y-2">
+                            {(
+                              [
+                                ["Yes", "Yes, show my name"],
+                                ["No", "No, keep it private"],
+                              ] as const
+                            ).map(([val, label]) => (
+                              <label key={val} className="inline-flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
+                                <input
+                                  type="radio"
+                                  value={val}
+                                  {...register("websiteConsent")}
+                                  className="accent-[#f97316] cursor-pointer"
+                                />
+                                <span>{label}</span>
+                              </label>
+                            ))}
+                          </div>
+                          {watch("websiteConsent") === "Yes" && (
+                            <div className="sm:w-1/2">
+                              <label className={labelCls}>
+                                Your photo <span className="text-slate-400 font-normal">(optional)</span>
+                              </label>
+                              <FilePick
+                                name={photoFileName}
+                                placeholder="Upload photo"
+                                accept="image/*"
+                                onPick={(file) => {
+                                  setPhotoFileName(file?.name ?? null);
+                                  setValue("photoFile", file ?? undefined);
+                                }}
+                              />
+                            </div>
+                          )}
                         </div>
 
-                        {/* Declarations & Agreements */}
-                        <div className="space-y-2.5 pt-1">
+                        {/* Declarations */}
+                        <div className="space-y-2">
                           <label className="flex items-start gap-2.5 cursor-pointer select-none">
                             <input
                               type="checkbox"
                               {...register("citizenDeclaration")}
-                              className="w-4 h-4 rounded text-brand-green focus:ring-brand-green cursor-pointer mt-0.5"
+                              className="w-4 h-4 mt-0.5 accent-[#f97316] cursor-pointer"
                             />
                             <span className="text-xs text-slate-700 leading-snug">
-                              I hereby declare that I am a citizen of India, making this donation out of my own funds.
+                              I am a citizen of India and this donation is from my own funds.
                             </span>
                           </label>
                           <FieldError msg={errors.citizenDeclaration?.message} />
-
                           <label className="flex items-start gap-2.5 cursor-pointer select-none">
                             <input
                               type="checkbox"
                               {...register("termsAgreement")}
-                              className="w-4 h-4 rounded text-brand-green focus:ring-brand-green cursor-pointer mt-0.5"
+                              className="w-4 h-4 mt-0.5 accent-[#f97316] cursor-pointer"
                             />
                             <span className="text-xs text-slate-700 leading-snug">
-                              I acknowledge that I have read and understood the{" "}
-                              <a
-                                href="/terms-and-conditions"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-brand-green font-bold hover:underline"
-                                onClick={(e) => e.stopPropagation()}
-                              >
+                              I have read and agree to the{" "}
+                              <a href="/terms-and-conditions" target="_blank" rel="noopener noreferrer" className="text-brand-orange font-semibold hover:underline">
                                 Terms of Use
                               </a>{" "}
-                              and Website and{" "}
-                              <a
-                                href="/privacy-policy"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-brand-green font-bold hover:underline"
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                Donor Privacy
-                              </a>{" "}
-                              and I agree to abide by them.
+                              and{" "}
+                              <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-brand-orange font-semibold hover:underline">
+                                Donor Privacy Policy
+                              </a>
+                              .
                             </span>
                           </label>
                           <FieldError msg={errors.termsAgreement?.message} />
                         </div>
 
-                        {/* Payment Error Alert */}
                         {paymentError && (
-                          <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
+                          <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
                             <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
                             <span>{paymentError}</span>
                           </div>
                         )}
 
-                        {/* Donate Securely Button */}
-                        <div className="pt-2">
+                        <div className="pt-1">
                           <button
                             type="submit"
                             disabled={isSubmitting || isPaymentProcessing}
-                            className="w-full h-12 rounded-xl bg-brand-orange hover:bg-orange-600 text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.99] cursor-pointer disabled:opacity-50"
+                            className="w-full h-12 rounded-xl bg-brand-orange hover:bg-orange-600 text-white font-semibold text-sm flex items-center justify-center gap-2 transition active:scale-[0.99] cursor-pointer disabled:opacity-50"
                           >
                             <Lock className="w-4 h-4" />
                             {isSubmitting || isPaymentProcessing
-                              ? "Processing Payment with Razorpay..."
-                              : "Donate Securely Now"}
+                              ? "Opening secure payment…"
+                              : `Donate ₹${(Number(watchAmount) || 0).toLocaleString("en-IN")} Securely`}
                           </button>
-                          <p className="text-[11px] text-slate-400 text-center mt-2">
-                            Your donation is 100% secure and encrypted.
-                          </p>
-                        </div>
-
-                        {/* Security Trust Badges (Page 70) */}
-                        <div className="pt-3 border-t border-slate-100 flex items-center justify-center gap-6 text-[11px] text-slate-500 font-bold">
-                          <span className="flex items-center gap-1.5">
-                            <Shield className="w-4 h-4 text-emerald-600" /> SSL SECURED
-                          </span>
-                          <span className="flex items-center gap-1.5">
-                            <BadgeCheck className="w-4 h-4 text-blue-600" /> Verified by Razorpay
-                          </span>
-                          <span className="flex items-center gap-1.5">
-                            <CheckCircle2 className="w-4 h-4 text-brand-green" /> PCI DSS COMPLIANT
-                          </span>
+                          <div className="mt-3 flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-[11px] text-slate-500">
+                            <span className="flex items-center gap-1.5">
+                              <Shield className="w-3.5 h-3.5 text-emerald-600" /> SSL secured
+                            </span>
+                            <span className="flex items-center gap-1.5">
+                              <BadgeCheck className="w-3.5 h-3.5 text-blue-600" /> Payments by Razorpay
+                            </span>
+                            <span className="flex items-center gap-1.5">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> PCI DSS compliant
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -1215,45 +1180,29 @@ export default function DonatePage() {
                 </div>
               </div>
 
-              {/* ── RIGHT COLUMN: Symmetrical Live Donation Summary Card ── */}
+              {/* ── RIGHT COLUMN: Live summary ── */}
               <div className="lg:col-span-5">
                 <div className="lg:sticky lg:top-24 space-y-4">
                   <DonationSummaryCard
-                    financialType={watchFinancialType}
-                    frequency={watchFrequency}
+                    cause={watchFinancialType}
+                    patientName={selectedPatient?.name}
                     amount={Number(watchAmount) || 0}
-                    recurringPledge={watchRecurringPledge}
-                    pledgeMonths={watchPledgeMonths}
-                    donorType={watchDonorType}
-                    fullName={watchFullName}
-                    email={watchEmail}
-                    phone={watchPhone}
-                    countryCode={watchCountryCode}
-                    taxExemption={watchTaxExemption}
-                    pan={watchPan}
-                    contextPatient={contextPatient}
+                    reminder={watchReminder}
+                    taxRequested={Boolean(watchTaxExemption)}
                   />
-
-                  {/* Donor Care & Assistance Card */}
-                  <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-2 text-left">
+                  <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-2 text-left">
                     <p className="text-xs font-semibold text-slate-800 uppercase tracking-wide flex items-center gap-1.5">
-                      <HelpCircle className="w-3.5 h-3.5 text-brand-green" />
-                      Questions or Need Assistance?
+                      <HelpCircle className="w-3.5 h-3.5 text-brand-orange" />
+                      Questions?
                     </p>
                     <p className="text-xs text-slate-500 leading-relaxed">
-                      Our donor care team is here to assist with bank wire instructions, 80G tax exemptions, or custom CSR sponsorships.
+                      Our donor care team can help with bank transfers, tax receipts or CSR giving.
                     </p>
-                    <div className="pt-2 flex flex-col sm:flex-row gap-3">
-                      <a
-                        href="tel:+919811861633"
-                        className="flex items-center gap-2 text-xs text-brand-green font-bold hover:underline"
-                      >
+                    <div className="pt-1 flex flex-col sm:flex-row gap-3">
+                      <a href="tel:+919811861633" className="flex items-center gap-2 text-xs text-[#071527] font-semibold hover:text-brand-orange">
                         <Phone className="w-3.5 h-3.5" /> +91 9811861633
                       </a>
-                      <a
-                        href="mailto:info@iwfindia.org"
-                        className="flex items-center gap-2 text-xs text-brand-green font-bold hover:underline"
-                      >
+                      <a href="mailto:info@iwfindia.org" className="flex items-center gap-2 text-xs text-[#071527] font-semibold hover:text-brand-orange">
                         <Mail className="w-3.5 h-3.5" /> info@iwfindia.org
                       </a>
                     </div>
@@ -1296,7 +1245,7 @@ export default function DonatePage() {
                     </div>
                     <div className="flex justify-between py-1 border-b border-slate-100">
                       <span className="text-slate-500">Account Name:</span>
-                      <span className="font-bold text-brand-green">ISLAH</span>
+                      <span className="font-bold text-brand-green">{OFFLINE_BANK_DETAILS.accountName}</span>
                     </div>
                     <div className="flex justify-between py-1 border-b border-slate-100">
                       <span className="text-slate-500">IFS Code:</span>
@@ -1386,20 +1335,23 @@ export default function DonatePage() {
               <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
                 <h3 className="font-bold text-brand-green-dark text-sm mb-4 uppercase tracking-wide">Donor Recognition</h3>
                 <div className="space-y-2.5">
-                  {[
-                    { tier: "Platinum", icon: Sparkles, amount: "₹50,000+", color: "#7C3AED", bg: "#EDE9FE" },
-                    { tier: "Gold", icon: Award, amount: "₹20,000 – ₹49,999", color: "#B45309", bg: "#FEF3C7" },
-                    { tier: "Silver", icon: Star, amount: "₹5,000 – ₹19,999", color: "#2563EB", bg: "#EFF6FF" },
-                    { tier: "General", icon: Heart, amount: "Below ₹5,000", color: "#15803D", bg: "#F0FDF4" },
-                  ].map(({ tier, icon: Icon, amount, color, bg }) => (
-                    <div key={tier} className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: bg }}>
-                      <Icon className="w-4 h-4 shrink-0" style={{ color }} />
-                      <div>
-                        <p className="text-xs font-bold" style={{ color }}>{tier} Donor</p>
-                        <p className="text-xs text-slate-500">{amount} — Special recognition + Donor Card</p>
+                  {DONOR_TIERS.map((t) => {
+                    const look = {
+                      Platinum: { icon: Sparkles, color: "#334155", bg: "#F1F5F9" },
+                      Gold: { icon: Award, color: "#B45309", bg: "#FEF3C7" },
+                      Silver: { icon: Star, color: "#64748B", bg: "#F8FAFC" },
+                    }[t.tier];
+                    const Icon = look.icon;
+                    return (
+                      <div key={t.tier} className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: look.bg }}>
+                        <Icon className="w-4 h-4 shrink-0" style={{ color: look.color }} />
+                        <div>
+                          <p className="text-xs font-bold" style={{ color: look.color }}>{t.label}</p>
+                          <p className="text-xs text-slate-500">{tierRangeText(t)} — certificate of appreciation</p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 

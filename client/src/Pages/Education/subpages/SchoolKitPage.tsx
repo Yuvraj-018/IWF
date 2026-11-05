@@ -56,7 +56,7 @@ export default function SchoolKitPage() {
       </SubpageHeroCarousel>
 
       {/* ─── Highlights Ribbon (Symmetrical 4-Card Grid) ─────────────────── */}
-      <section className="bg-slate-50 border-b border-slate-200 py-6 sm:py-8">
+      <section className="bg-slate-50 border-b border-slate-200 py-8 sm:py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 items-center">
             {[

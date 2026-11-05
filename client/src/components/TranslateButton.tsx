@@ -268,6 +268,32 @@ function waitForCombo(cb: (select: HTMLSelectElement) => void, attempts = 0) {
 
 let translateInitPromise: Promise<void> | null = null;
 
+/**
+ * Google Translate wraps text nodes in <font> elements. When React later updates or
+ * removes one of those nodes it no longer finds it where it expects and throws
+ * ("Failed to execute 'removeChild' on 'Node'"), which blanks the page. These guards
+ * make those operations no-ops instead of crashes. Installed only once translation is used.
+ */
+function installTranslateDomGuards() {
+  const w = window as Window & { _iwfDomGuards?: boolean };
+  if (w._iwfDomGuards || typeof Node === "undefined") return;
+  w._iwfDomGuards = true;
+  const originalRemove = Node.prototype.removeChild;
+  Node.prototype.removeChild = function <T extends Node>(this: Node, child: T): T {
+    if (child.parentNode !== this) return child;
+    return originalRemove.call(this, child) as T;
+  };
+  const originalInsert = Node.prototype.insertBefore;
+  Node.prototype.insertBefore = function <T extends Node>(
+    this: Node,
+    node: T,
+    ref: Node | null,
+  ): T {
+    if (ref && ref.parentNode !== this) return node;
+    return originalInsert.call(this, node, ref) as T;
+  };
+}
+
 export function initGoogleTranslate(): Promise<void> {
   if (typeof window === "undefined" || typeof document === "undefined") {
     return Promise.resolve();
@@ -275,6 +301,7 @@ export function initGoogleTranslate(): Promise<void> {
 
   injectSuppressionStyle();
   initFormProtection();
+  installTranslateDomGuards();
 
   if (window._iwfTranslateReady && document.querySelector(".goog-te-combo")) {
     return Promise.resolve();

@@ -131,25 +131,24 @@ export default function MedicalEmergencyWorkflow({
 
   return (
     <section
-      className={`py-14 bg-gradient-to-b from-slate-50 via-white to-slate-50 border-y border-slate-200 ${className}`}
+      className={`py-10 sm:py-12 bg-slate-50 border-y border-slate-200 ${className}`}
       id="how-we-work-medical"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold uppercase tracking-widest mb-3">
-            <Sprout className="w-3.5 h-3.5 text-emerald-600" />
-            HOPE • SUPPORT • SUSTAINABLE CHANGE
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-black text-[#0b1f3b] tracking-tight mb-3">
-            HOW WE WORK
+        <div className="text-center max-w-3xl mx-auto mb-8">
+          <p className="text-xs font-bold uppercase tracking-widest text-brand-orange mb-2">
+            Hope • Support • Sustainable Change
+          </p>
+          <h2 className="text-2xl sm:text-3xl font-semibold text-[#0b1f3b] tracking-tight mb-2">
+            How We Work
           </h2>
-          <p className="text-sm sm:text-base text-slate-600 font-medium">
+          <p className="text-sm text-slate-600">
             From Need to Support — A Transparent, Compassionate &amp; Accountable Process
           </p>
 
           {showImageToggle && (
-            <div className="mt-4 flex items-center justify-center gap-2">
+            <div className="mt-3 flex items-center justify-center gap-2">
               <button
                 type="button"
                 onClick={() => setViewOriginal(!viewOriginal)}
@@ -173,17 +172,17 @@ export default function MedicalEmergencyWorkflow({
         ) : (
           <>
             {/* 8-Step Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 relative">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 relative">
               {WORKFLOW_STEPS.map((item, idx) => {
                 const Icon = item.icon;
                 return (
                   <div
                     key={item.step}
-                    className={`relative rounded-2xl bg-white p-6 border ${item.border} shadow-sm hover:shadow-md transition-all duration-300 flex flex-col group`}
+                    className={`relative rounded-xl bg-white p-5 border ${item.border} hover:shadow-md transition flex flex-col group`}
                   >
                     {/* Step Number Badge */}
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="w-9 h-9 rounded-full bg-[#0b1f3b] text-white flex items-center justify-center font-black text-sm shadow-sm">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="w-8 h-8 rounded-full bg-[#0b1f3b] text-white flex items-center justify-center font-semibold text-sm">
                         {item.step}
                       </div>
                       <div
@@ -193,10 +192,10 @@ export default function MedicalEmergencyWorkflow({
                       </div>
                     </div>
 
-                    <h3 className="text-xs font-black text-[#0b1f3b] uppercase tracking-wider mb-2">
+                    <h3 className="text-sm font-semibold text-[#0b1f3b] mb-1.5">
                       {item.title}
                     </h3>
-                    <p className="text-xs text-slate-600 leading-relaxed flex-1">
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed flex-1">
                       {item.description}
                     </p>
 
@@ -218,46 +217,28 @@ export default function MedicalEmergencyWorkflow({
             </div>
 
             {/* The Outcome Strip */}
-            <div className="mt-8 rounded-2xl bg-gradient-to-r from-emerald-50 via-teal-50/70 to-sky-50 border border-emerald-200 p-6 sm:p-8 flex flex-col lg:flex-row items-center justify-between gap-6 shadow-sm">
-              <div className="flex flex-col sm:flex-row items-center gap-6 w-full lg:w-auto">
-                <div className="flex items-center gap-2.5 shrink-0 bg-white/80 backdrop-blur px-3.5 py-1.5 rounded-full border border-emerald-200 shadow-xs">
-                  <Sprout className="w-4 h-4 text-emerald-700" />
-                  <span className="text-xs font-black text-emerald-900 uppercase tracking-widest">
-                    THE OUTCOME
-                  </span>
-                </div>
-                <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-4 sm:gap-6 w-full sm:w-auto">
-                  {OUTCOMES.map((o) => {
-                    const Icon = o.icon;
-                    return (
-                      <div key={o.label} className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-full bg-emerald-600/10 text-emerald-700 flex items-center justify-center shrink-0">
-                          <Icon className="w-3.5 h-3.5" />
-                        </div>
-                        <span className="text-xs font-bold text-slate-800 uppercase tracking-wide">
-                          {o.label}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
+            <div className="mt-6 rounded-xl bg-white border border-emerald-200 px-4 py-3.5 sm:px-5 flex flex-col lg:flex-row lg:items-center gap-3 lg:gap-6">
+              <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-800 shrink-0">
+                <Sprout className="w-4 h-4 text-emerald-700" /> The Outcome
+              </span>
+              <div className="flex flex-wrap gap-x-5 gap-y-2 flex-1">
+                {OUTCOMES.map((o) => {
+                  const Icon = o.icon;
+                  return (
+                    <span key={o.label} className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-800">
+                      <Icon className="w-3.5 h-3.5 text-emerald-700" />
+                      {o.label}
+                    </span>
+                  );
+                })}
               </div>
-
-              {/* Tagline Box */}
-              <div className="w-full lg:w-auto border-t lg:border-t-0 lg:border-l border-emerald-200/80 pt-4 lg:pt-0 lg:pl-8 text-center lg:text-left">
-                <div className="flex items-center justify-center lg:justify-start gap-3">
-                  <div className="w-9 h-9 rounded-full bg-emerald-700 text-white flex items-center justify-center shrink-0 shadow-sm">
-                    <HeartHandshake className="w-5 h-5" />
-                  </div>
-                  <div className="text-xs italic text-slate-700 font-medium">
-                    <p>Every case is verified.</p>
-                    <p>Every contribution is tracked.</p>
-                    <p className="font-bold text-emerald-900 not-italic">
-                      Every patient deserves dignity.
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <p className="text-xs text-slate-600 lg:border-l lg:border-emerald-200 lg:pl-5 shrink-0">
+                <span className="inline-flex items-center gap-1.5">
+                  <HeartHandshake className="w-4 h-4 text-emerald-700" />
+                  Every case verified · every rupee tracked ·{" "}
+                  <strong className="text-emerald-900">every patient treated with dignity.</strong>
+                </span>
+              </p>
             </div>
 
             {/* Policy Reference Note */}

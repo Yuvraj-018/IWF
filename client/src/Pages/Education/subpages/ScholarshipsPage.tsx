@@ -166,7 +166,7 @@ export default function ScholarshipsPage() {
         </SubpageHeroCarousel>
 
         {/* 5-PILLAR VALUE RIBBON */}
-        <section className="bg-white border-b border-slate-200 py-6 shadow-sm">
+        <section className="bg-white border-b border-slate-200 py-8">
           <div className="max-w-7xl mx-auto px-4">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 items-center">
               {HIGHLIGHT_RIBBON.map((item, idx) => {

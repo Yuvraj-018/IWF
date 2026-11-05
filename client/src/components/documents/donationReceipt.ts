@@ -3,7 +3,7 @@ import { ORG } from "./orgDetails";
 import {
   amountInWords,
   financialYear,
-  formatDocDate,
+  formatDocMonth,
   formatINR,
   loadPdfLogo,
   safeFileName,
@@ -79,7 +79,7 @@ export function buildDonationReceiptModel(
     requestLine: `Tax-documentation request: ${tax ? "YES" : "NO"}`,
     stripLeft: [
       ["Receipt No.", r.receiptNo],
-      ["Donation Date", formatDocDate(r.paidAt)],
+      ["Donation Month", formatDocMonth(r.paidAt)],
       ["Financial Year", financialYear(r.paidAt)],
     ],
     stripRight: [

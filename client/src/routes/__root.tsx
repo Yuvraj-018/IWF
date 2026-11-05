@@ -8,7 +8,7 @@ import {
   Scripts,
   useRouterState,
 } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { initGoogleTranslate, getCookieLang } from "@/components/TranslateButton";
 import {
   Facebook,
@@ -16,26 +16,11 @@ import {
   Instagram,
   Linkedin,
   Youtube,
-  MessageCircle,
-  X,
-  Send,
-  Loader2,
-  CheckCircle2,
-  Phone,
-  Mail,
 } from "lucide-react";
 import PageTransition, { ScrollProgressBar } from "@/components/PageTransition";
-import {
-  blockNumbersOnKeyDown,
-  sanitizeName,
-  blockNonDigitsOnKeyDown,
-  sanitizeDigits,
-  isValidEmail,
-  COUNTRY_CODES,
-} from "@/utils/formValidation";
 
 import { Toaster } from "@/components/ui/sonner";
-import Turnstile from "@/components/common/Turnstile";
+import { QuickMessageWidget } from "@/components/layout/QuickMessageWidget";
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
@@ -183,7 +168,6 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const [msgOpen, setMsgOpen] = useState(false);
 
   useEffect(() => {
     const initialLang = typeof document !== "undefined" ? getCookieLang() : "en";
@@ -191,63 +175,8 @@ function RootComponent() {
       initGoogleTranslate();
     }
   }, []);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    countryCode: "+91",
-    mobile: "",
-    message: "",
-  });
-  const [formErrors, setFormErrors] = useState<{ [k: string]: string }>({});
-  const [formStatus, setFormStatus] = useState<"idle" | "loading" | "success">("idle");
-  const [turnstileToken, setTurnstileToken] = useState<string>("");
-
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isHomepage = pathname === "/";
-
-  const handleMsgSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const errors: { [k: string]: string } = {};
-    if (!formData.name.trim() || /[0-9]/.test(formData.name)) {
-      errors.name = "Name cannot contain numbers";
-    }
-    if (!formData.email.trim() || !isValidEmail(formData.email)) {
-      errors.email = "Please enter a valid email address";
-    }
-    if (!formData.mobile.trim() || !/^\d{10}$/.test(formData.mobile)) {
-      errors.mobile = "Please enter a valid 10-digit mobile number";
-    }
-    if (!formData.message.trim() || formData.message.trim().length < 5) {
-      errors.message = "Message must be at least 5 characters";
-    }
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
-      return;
-    }
-    setFormErrors({});
-    setFormStatus("loading");
-
-    try {
-      const { submitContact } = await import("@/services/contactService");
-      const json = await submitContact({
-        name: formData.name.trim(),
-        email: formData.email.trim(),
-        phone: formData.mobile.trim(),
-        countryCode: formData.countryCode || "+91",
-        subject: "Quick Float Message",
-        message: formData.message.trim(),
-        source: "Quick Float Modal",
-        turnstileToken,
-      });
-
-      setFormStatus("success");
-      setFormData({ name: "", email: "", countryCode: "+91", mobile: "", message: "" });
-    } catch (err: any) {
-      console.error("Float message error:", err);
-      setFormStatus("idle");
-      setFormErrors({ form: err.message || "Network error. Please try again." });
-    }
-  };
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -259,7 +188,7 @@ function RootComponent() {
       </div>
 
       {/* Sticky Social Links Sidebar on Right Edge */}
-      <div className="floating-social-sidebar fixed right-0 top-[62%] -translate-y-1/2 z-50 flex flex-col shadow-2xl rounded-l-xl overflow-hidden select-none">
+      <div className="floating-social-sidebar fixed right-0 top-[62%] -translate-y-1/2 z-50 hidden sm:flex flex-col shadow-2xl rounded-l-xl overflow-hidden select-none">
         {[
           { Icon: Facebook, color: "bg-[#1877f2] hover:bg-[#166fe5]", href: "https://www.facebook.com/islahindia/", name: "Facebook" },
           { Icon: Twitter, color: "bg-[#1da1f2] hover:bg-[#0d95e8]", href: "https://x.com/islahindia/", name: "Twitter / X" },
@@ -292,193 +221,8 @@ function RootComponent() {
         </a>
       </div>
 
-      {/* Sticky Message Box Floating Button & Panel on Bottom Right */}
-      <div className="floating-msg-container fixed bottom-6 right-6 z-50 flex flex-col items-end select-none">
-        {/* Floating Message Card */}
-        {msgOpen && (
-          <div className="mb-4 w-[360px] sm:w-[390px] max-w-[calc(100vw-2rem)] max-h-[82vh] flex flex-col bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden transition-all duration-300 animate-in slide-in-from-bottom-5 fade-in notranslate form-container" translate="no" dir="ltr">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-[#071527] to-[#0c2340] text-white p-4 flex items-center justify-between shrink-0">
-              <div>
-                <h4 className="font-bold text-sm">Quick Message</h4>
-                <p className="text-[10px] text-white/70">Let us know how we can help you</p>
-              </div>
-              <button
-                onClick={() => { setMsgOpen(false); setFormStatus("idle"); setFormErrors({}); }}
-                className="p-1 hover:bg-white/10 rounded-full transition-colors cursor-pointer"
-                aria-label="Close message form"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* Content Body */}
-            <div className="p-4 bg-white text-slate-800 overflow-y-auto flex-1">
-              {/* Direct Contact Details */}
-              <div className="mb-4 pb-3 border-b border-gray-100 flex flex-col gap-1.5 text-xs text-slate-600">
-                <a href="tel:+919811861633" className="flex items-center gap-2 hover:text-brand-orange transition-colors font-medium">
-                  <Phone className="w-3.5 h-3.5 text-brand-orange shrink-0" />
-                  <span>+91-9811861633</span>
-                </a>
-                <a href="mailto:info@iwfindia.org" className="flex items-center gap-2 hover:text-brand-orange transition-colors font-medium">
-                  <Mail className="w-3.5 h-3.5 text-brand-orange shrink-0" />
-                  <span>info@iwfindia.org</span>
-                </a>
-              </div>
-
-              {formStatus === "success" ? (
-                <div className="py-6 flex flex-col items-center text-center gap-3">
-                  <CheckCircle2 className="w-12 h-12 text-[#22c55e] animate-bounce" />
-                  <div>
-                    <h5 className="font-bold text-sm text-slate-900">Thank you!</h5>
-                    <p className="text-xs text-gray-600 mt-1">Your message has been sent successfully. We will get back to you shortly.</p>
-                  </div>
-                  <button
-                    onClick={() => { setFormStatus("idle"); setFormErrors({}); }}
-                    className="mt-2 text-xs font-semibold text-brand-orange hover:underline cursor-pointer"
-                  >
-                    Send another message
-                  </button>
-                </div>
-              ) : formStatus === "loading" ? (
-                <div className="py-12 flex flex-col items-center justify-center gap-3">
-                  <Loader2 className="w-8 h-8 text-brand-orange animate-spin" />
-                  <span className="text-xs text-gray-500 font-medium">Sending your message...</span>
-                </div>
-              ) : (
-                <form onSubmit={handleMsgSubmit} className="flex flex-col gap-2.5 notranslate" translate="no">
-                  {formErrors.form && (
-                    <div className="p-2 text-[11px] bg-red-50 text-red-600 border border-red-200 rounded-lg">
-                      {formErrors.form}
-                    </div>
-                  )}
-                  <div>
-                    <label htmlFor="msg-name" className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">
-                      Your Name <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="msg-name"
-                      type="text"
-                      required
-                      placeholder="Enter name (letters only)"
-                      value={formData.name}
-                      onKeyDown={blockNumbersOnKeyDown}
-                      onChange={(e) => {
-                        setFormData({ ...formData, name: sanitizeName(e.target.value) });
-                        if (formErrors.name) setFormErrors({ ...formErrors, name: "" });
-                      }}
-                      className={`w-full bg-slate-50 border rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand-orange/30 text-slate-800 ${formErrors.name ? "border-red-500 bg-red-50/20" : "border-gray-200"
-                        }`}
-                    />
-                    {formErrors.name && (
-                      <p className="text-[10px] text-red-600 font-medium mt-0.5">{formErrors.name}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label htmlFor="msg-email" className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">
-                      Your Email <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="msg-email"
-                      type="email"
-                      required
-                      placeholder="Enter email address"
-                      value={formData.email}
-                      onChange={(e) => {
-                        setFormData({ ...formData, email: e.target.value });
-                        if (formErrors.email) setFormErrors({ ...formErrors, email: "" });
-                      }}
-                      className={`w-full bg-slate-50 border rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand-orange/30 text-slate-800 ${formErrors.email ? "border-red-500 bg-red-50/20" : "border-gray-200"
-                        }`}
-                    />
-                    {formErrors.email && (
-                      <p className="text-[10px] text-red-600 font-medium mt-0.5">{formErrors.email}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label htmlFor="msg-mobile" className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">
-                      Mobile Number <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="msg-mobile"
-                      type="tel"
-                      required
-                      maxLength={10}
-                      placeholder="Enter 10-digit mobile number"
-                      value={formData.mobile}
-                      onKeyDown={blockNonDigitsOnKeyDown}
-                      onChange={(e) => {
-                        setFormData({ ...formData, mobile: sanitizeDigits(e.target.value, 10) });
-                        if (formErrors.mobile) setFormErrors({ ...formErrors, mobile: "" });
-                      }}
-                      className={`w-full bg-slate-50 border rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand-orange/30 text-slate-800 ${formErrors.mobile ? "border-red-500 bg-red-50/20" : "border-gray-200"
-                        }`}
-                    />
-                    {formErrors.mobile && (
-                      <p className="text-[10px] text-red-600 font-medium mt-0.5">{formErrors.mobile}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label htmlFor="msg-text" className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">
-                      Message <span className="text-red-500">*</span>
-                    </label>
-                    <textarea
-                      id="msg-text"
-                      required
-                      rows={3}
-                      placeholder="How can we assist you?"
-                      value={formData.message}
-                      onChange={(e) => {
-                        setFormData({ ...formData, message: e.target.value });
-                        if (formErrors.message) setFormErrors({ ...formErrors, message: "" });
-                      }}
-                      className={`w-full bg-slate-50 border rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand-orange/30 text-slate-800 resize-none ${formErrors.message ? "border-red-500 bg-red-50/20" : "border-gray-200"
-                        }`}
-                    />
-                    {formErrors.message && (
-                      <p className="text-[10px] text-red-600 font-medium mt-0.5">{formErrors.message}</p>
-                    )}
-                  </div>
-
-                  <Turnstile
-                    size="flexible"
-                    theme="light"
-                    action="contact"
-                    onSuccess={(tok) => setTurnstileToken(tok)}
-                    onExpire={() => setTurnstileToken("")}
-                    onError={() => setTurnstileToken("")}
-                    className="flex justify-center my-1"
-                  />
-
-                  <button
-                    type="submit"
-                    className="w-full bg-brand-orange hover:bg-brand-orange-dark text-white font-bold py-2 rounded-lg text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md mt-1"
-                  >
-                    <Send className="w-3 h-3" /> Send Message
-                  </button>
-                </form>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Floating Action Buttons Row */}
-        <div className="flex items-center gap-3">
-          {/* Float Toggle Button */}
-          <button
-            onClick={() => setMsgOpen(!msgOpen)}
-            className={`w-12 h-12 rounded-full flex items-center justify-center text-white shadow-2xl transition-all duration-300 hover:scale-110 cursor-pointer ${msgOpen ? "bg-[#071527] hover:bg-[#0c2340] rotate-90" : "bg-brand-orange hover:bg-brand-orange-dark hover:shadow-brand-orange/30"
-              }`}
-            aria-label="Toggle contact message popup"
-            title="Send a message"
-          >
-            {msgOpen ? <X className="w-5 h-5" /> : <MessageCircle className="w-5 h-5 fill-white text-brand-orange" />}
-          </button>
-        </div>
-      </div>
+      {/* Quick message: the only pop-up form on the site */}
+      <QuickMessageWidget />
     </QueryClientProvider>
   );
 }

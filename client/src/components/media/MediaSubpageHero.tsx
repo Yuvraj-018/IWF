@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { HERO_MIN_H, HERO_PADDING, HeroWave } from "@/components/common/HeroWave";
 import { Link } from "@tanstack/react-router";
 import { Home, ChevronRight } from "lucide-react";
 import aboutHero from "@/assets/about-hero.jpg";
@@ -40,7 +41,7 @@ export function MediaSubpageHero({
   imageAlt = "Islah Welfare Foundation — Together We Can Do More",
   actions,
   rightOverlay,
-  heightClass = "min-h-[280px] sm:min-h-[300px] md:min-h-[320px] lg:min-h-[340px]",
+  heightClass = HERO_MIN_H,
   waveFill = "#f8fafc",
 }: MediaSubpageHeroProps) {
   const resolvedImages =
@@ -65,7 +66,7 @@ export function MediaSubpageHero({
 
   return (
     <section
-      className={`bg-[#071527] text-white flex flex-col justify-center py-5 sm:py-6 md:py-7 relative overflow-hidden select-none group ${heightClass}`}
+      className={`bg-[#071527] text-white flex flex-col justify-center ${HERO_PADDING} relative overflow-hidden select-none group ${heightClass}`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         {/* Top Breadcrumb */}
@@ -105,7 +106,7 @@ export function MediaSubpageHero({
         )}
 
         {/* Main Grid: Left Content + Right Organic Composition Slider */}
-        <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-4 sm:gap-6 lg:gap-8 items-center">
+        <div className="grid md:grid-cols-[1.15fr_0.85fr] gap-4 sm:gap-6 lg:gap-8 items-center">
           {/* Left Column: Heading, Copy & Action Buttons */}
           <div className="space-y-2 sm:space-y-2.5 text-left">
             {badge && (
@@ -137,8 +138,8 @@ export function MediaSubpageHero({
           </div>
 
           {/* Right Column: Native Organic Composition with Smooth Slider */}
-          <div className="relative flex items-center justify-center lg:justify-end lg:-translate-x-[60px] xl:-translate-x-[100px]">
-            <div className="relative w-full max-w-[280px] sm:max-w-[310px] md:max-w-[340px] aspect-[1.15/1]">
+          <div className="relative hidden md:flex items-center justify-center lg:justify-end lg:-translate-x-[60px] xl:-translate-x-[100px]">
+            <div className="relative w-full max-w-[280px] md:max-w-[280px] lg:max-w-[340px] aspect-[1.15/1]">
               {/* Background Soft Blue Organic Backdrop Layer */}
               <div
                 className="absolute inset-2 bg-[#122e54] -rotate-3 scale-105 opacity-90 transition-transform pointer-events-none"
@@ -255,31 +256,8 @@ export function MediaSubpageHero({
         </div>
       </div>
 
-      {/* Curved Bottom Wave Divider */}
-      <div className="relative w-full overflow-hidden leading-none z-10 mt-1 md:mt-2">
-        <svg
-          viewBox="0 0 1440 90"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-full h-8 sm:h-10 md:h-12 block"
-          preserveAspectRatio="none"
-        >
-          <path
-            d="M0,60 C380,85 760,25 1440,65 L1440,90 L0,90 Z"
-            fill="#122e54"
-            opacity="0.35"
-          />
-          <path
-            d="M0,68 C420,95 820,35 1440,75 L1440,90 L0,90 Z"
-            fill="#1e4675"
-            opacity="0.45"
-          />
-          <path
-            d="M0,76 C460,105 880,45 1440,85 L1440,90 L0,90 Z"
-            fill={waveFill}
-          />
-        </svg>
-      </div>
+      {/* Shared bottom curve */}
+      <HeroWave fill={waveFill} />
     </section>
   );
 }

@@ -31,6 +31,8 @@ export interface VerifyPaymentParams {
     pincode?: string;
     financialType: string;
     frequency?: string;
+    /** Donor asked to be reminded to give again (no automatic charge). */
+    reminder?: "None" | "Monthly" | "Yearly";
     amount: number;
     taxExemption?: boolean;
     pan?: string;

@@ -361,15 +361,79 @@ function UrgentPatientsSection({ lang }: LanguageProp) {
             </p>
           </div>
         </ScrollReveal>
-        <ScrollReveal stagger={0.08}>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            {URGENT_PATIENTS.map((patient) => (
-              <PatientCard key={patient.id} {...patient} />
-            ))}
-          </div>
-        </ScrollReveal>
+        <PatientCarousel />
       </div>
     </section>
+  );
+}
+
+/**
+ * Mobile/tablet: one swipeable row that advances automatically every few seconds.
+ * Desktop (lg+): a static four-column grid.
+ */
+function PatientCarousel() {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+  const pausedRef = useRef(false);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const desktop = window.matchMedia("(width >= 64rem)");
+    const onScroll = () => {
+      const card = track.firstElementChild as HTMLElement | null;
+      if (!card) return;
+      const step = card.offsetWidth + 12;
+      setActive(Math.round(track.scrollLeft / step));
+    };
+    track.addEventListener("scroll", onScroll, { passive: true });
+    const id = window.setInterval(() => {
+      if (desktop.matches || pausedRef.current || document.hidden) return;
+      const card = track.firstElementChild as HTMLElement | null;
+      if (!card) return;
+      const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 8;
+      track.scrollTo({ left: atEnd ? 0 : track.scrollLeft + card.offsetWidth + 12, behavior: "smooth" });
+    }, 4000);
+    return () => {
+      window.clearInterval(id);
+      track.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
+  const pause = () => {
+    pausedRef.current = true;
+  };
+  const resume = () => {
+    window.setTimeout(() => {
+      pausedRef.current = false;
+    }, 6000);
+  };
+
+  return (
+    <div>
+      <div
+        ref={trackRef}
+        onTouchStart={pause}
+        onTouchEnd={resume}
+        onMouseEnter={pause}
+        onMouseLeave={() => (pausedRef.current = false)}
+        className="flex lg:grid lg:grid-cols-4 gap-3 overflow-x-auto lg:overflow-visible snap-x snap-mandatory scroll-smooth scrollbar-hide -mx-4 px-4 lg:mx-0 lg:px-0 pb-1"
+      >
+        {URGENT_PATIENTS.map((patient) => (
+          <div key={patient.id} className="snap-start shrink-0 w-[78%] sm:w-[45%] md:w-[36%] lg:w-auto">
+            <PatientCard {...patient} />
+          </div>
+        ))}
+      </div>
+      <div className="flex justify-center gap-1.5 mt-3 lg:hidden" aria-hidden="true">
+        {URGENT_PATIENTS.map((p, i) => (
+          <span
+            key={p.id}
+            className={`h-1.5 rounded-full transition-all ${i === active ? "w-5 bg-brand-orange" : "w-1.5 bg-slate-300"}`}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -380,7 +444,7 @@ function FeaturedCauses({ lang }: LanguageProp) {
     { img: getMedia("cause-education", causeEdu), icon: BookOpen, title: "Education", desc: lang === "en" ? "Scholarships, school kits & learning centres keeping children in school." : "छात्रवृत्ति, स्कूल किट और लर्निंग सेंटर बच्चों को स्कूल से जोड़े रखने के लिए।", route: "/programs/education" },
     { img: getMedia("cause-medical", causeMed), icon: Stethoscope, title: "Health", desc: lang === "en" ? "Free health camps, essential medicines & emergency treatment." : "मुफ़्त स्वास्थ्य शिविर, आवश्यक दवाएं और आपातकालीन चिकित्सा सहायता।", route: "/programs/healthcare" },
     { img: getMedia("cause-women", causeWomen), icon: Users, title: "Women Empower", desc: lang === "en" ? "Self-Help Groups, vocational skills & financial literacy programs." : "स्वयं सहायता समूह, व्यावसायिक कौशल और वित्तीय साक्षरता कार्यक्रम।", route: "/programs/women-empowerment" },
-    { img: getMedia("cause-agriculture", thAgr), icon: Sprout, title: "Rural Livelihoods", desc: lang === "en" ? "Sanitation, clean water and agricultural empowerment for self-reliant villages." : "आत्मनिर्भर गांवों के लिए स्वच्छता, स्वच्छ पानी और कृषि सशक्तिकरण।", route: "/programs/agriculture" },
+    { img: getMedia("cause-agriculture", thAgr), icon: Sprout, title: "Rural Livelihoods", desc: lang === "en" ? "Sanitation, clean water and agricultural empowerment for self-reliant villages." : "आत्मनिर्भर गांवों के लिए स्वच्छता, स्वच्छ पानी और कृषि सशक्तिकरण।", route: "/programs/skills-development" },
     { img: getMedia("cause-relief", thEnt), icon: Megaphone, title: "Relief & Rehabilitation", desc: lang === "en" ? "Disaster response, emergency humanitarian aid, and rehabilitation assistance." : "आपदा प्रतिक्रिया, आपातकालीन मानवीय सहायता और पुनर्वास सहायता।", route: "/programs/relief-and-rehabilitation" },
   ];
 

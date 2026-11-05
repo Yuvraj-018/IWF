@@ -222,7 +222,7 @@ export default function KnowledgeResearchPage() {
         </SubpageHeroCarousel>
 
         {/* 5-STEP CONTINUUM RIBBON */}
-        <section className="bg-white border-b border-slate-200 py-6 shadow-sm">
+        <section className="bg-white border-b border-slate-200 py-8">
           <div className="max-w-7xl mx-auto px-4">
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
               {CONTINUUM_RIBBON.map((item, idx) => (

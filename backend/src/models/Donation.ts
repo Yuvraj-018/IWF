@@ -26,6 +26,7 @@ export interface IDonation extends Document {
   websiteConsent?: string;
   recurringPledge?: boolean;
   pledgeMonths?: string;
+  reminder?: "None" | "Monthly" | "Yearly";
   notes?: string;
   metadata?: Record<string, any>;
   createdAt: Date;
@@ -43,7 +44,7 @@ const DonationSchema = new Schema<IDonation>(
     address: { type: String, required: true },
     city: { type: String, required: true },
     state: { type: String, required: true },
-    pincode: { type: String, required: true },
+    pincode: { type: String, default: "" }, // only collected when a tax receipt is requested
     financialType: { type: String, required: true },
     frequency: { type: String, enum: ["One Time", "Monthly", "Quarterly", "Yearly"], default: "One Time" },
     amount: { type: Number, required: true, min: 10 },
@@ -59,6 +60,7 @@ const DonationSchema = new Schema<IDonation>(
     websiteConsent: { type: String },
     recurringPledge: { type: Boolean },
     pledgeMonths: { type: String },
+    reminder: { type: String, enum: ["None", "Monthly", "Yearly"], default: "None" },
     notes: { type: String },
     metadata: { type: Schema.Types.Mixed, default: {} },
   },

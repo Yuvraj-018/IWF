@@ -115,6 +115,7 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
         websiteConsent: donationData.websiteConsent,
         recurringPledge: donationData.recurringPledge,
         pledgeMonths: donationData.pledgeMonths,
+        reminder: donationData.reminder || "None",
         notes: `Razorpay Order: ${razorpay_order_id}`,
       });
 

@@ -7,6 +7,7 @@ export {
   PAN_RE,
   URL_RE,
   isValidPhone,
+  phoneError,
 } from "@/components/forms/formRules";
 
 // ============================================================================
@@ -287,12 +288,42 @@ export function formatDisplayDate(d: Date): string {
   return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
 }
 
-/** Valid-till date: one day before the same date N years later. */
+/**
+ * Membership runs by calendar month: paying any day in November 2026 for one year
+ * covers November 2026 – October 2027. Returns the last day of the final month.
+ */
 export function computeValidTill(from: Date, years: number): Date {
-  const till = new Date(from);
-  till.setFullYear(till.getFullYear() + years);
-  till.setDate(till.getDate() - 1);
-  return till;
+  return new Date(from.getFullYear(), from.getMonth() + 12 * years, 0);
+}
+
+/** First day of the month containing `d`. */
+export function startOfMonth(d: Date): Date {
+  return new Date(d.getFullYear(), d.getMonth(), 1);
+}
+
+/** "Nov 2026" — used on the card and in summaries. */
+export function formatDisplayMonth(d: Date): string {
+  return d.toLocaleDateString("en-GB", { month: "short", year: "numeric" });
+}
+
+/** "November 2026" — used on receipts. */
+export function formatLongMonth(d: Date): string {
+  return d.toLocaleDateString("en-GB", { month: "long", year: "numeric" });
+}
+
+/**
+ * Parses a stored validity value. Month values ("Oct 2027") mean the end of that
+ * month; older full dates ("14 Apr 2026") are still accepted.
+ */
+export function parseValidTill(s: string): Date | null {
+  const month = s.trim().match(/^([A-Za-z]{3,9})\s+(\d{4})$/);
+  if (month) {
+    const first = new Date(`1 ${month[1]} ${month[2]}`);
+    if (Number.isNaN(first.getTime())) return null;
+    return new Date(first.getFullYear(), first.getMonth() + 1, 0);
+  }
+  const d = new Date(s);
+  return Number.isNaN(d.getTime()) ? null : d;
 }
 
 export function generateMemberId(tier: TierType): string {

@@ -175,13 +175,13 @@ function RedesignHeroSection() {
             {stats.map(({ icon: Icon, value, label }) => (
               <div
                 key={label}
-                className="flex items-center gap-3 p-4 rounded-xl bg-orange-50/60 border border-orange-100"
+                className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 p-4 rounded-xl bg-orange-50/60 border border-orange-100"
               >
                 <div className="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center shrink-0">
                   <Icon className="w-5 h-5 text-[#f97316]" />
                 </div>
                 <div>
-                  <span className="text-xl font-bold text-slate-900 block leading-tight">{value}</span>
+                  <span className="text-xl font-bold text-slate-900 block leading-tight whitespace-nowrap">{value}</span>
                   <span className="text-xs text-gray-500 leading-tight">{label}</span>
                 </div>
               </div>

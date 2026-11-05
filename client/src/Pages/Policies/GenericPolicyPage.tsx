@@ -1,13 +1,42 @@
 import { useState } from "react";
-import { ShieldCheck, Calendar, Mail, Phone, FileText, CheckCircle2, ChevronRight } from "lucide-react";
-import { Footer, Header, NotificationTicker, RoleFormModal, UtilityBar } from "@/components/layout/SiteLayout";
+import { Calendar, ChevronRight, FileText, Mail, Phone } from "lucide-react";
+import {
+  Footer,
+  Header,
+  NotificationTicker,
+  RoleFormModal,
+  UtilityBar,
+} from "@/components/layout/SiteLayout";
+import type { RoleType } from "@/components/forms/RoleFormModal";
 import { EXTENDED_POLICY_CONTENT, type ExtendedPolicySlug } from "@/content/policyContent";
 import { CONTACT_DETAILS } from "@/content/siteContent";
 import MedicalEmergencyWorkflow from "@/components/healthcare/MedicalEmergencyWorkflow";
-
 import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 
-type RoleType = "volunteer" | "partner" | "sponsor" | "mentor" | "employee";
+/** Headings in the content often carry their own "3." prefix; we number them ourselves. */
+function cleanHeading(h: string) {
+  return h.replace(/^\s*\d+[.)]\s*/, "");
+}
+
+function anchorId(i: number) {
+  return `section-${i + 1}`;
+}
+
+/** Renders one body line: "Heading:" lines, "• bullets" and plain paragraphs. */
+function BodyLine({ text }: { text: string }) {
+  if (text.endsWith(":") && !text.startsWith("•")) {
+    return <p className="font-semibold text-[#0b1f3b] text-sm pt-1">{text}</p>;
+  }
+  if (text.startsWith("• ") || text.startsWith("•")) {
+    return (
+      <div className="flex items-start gap-2.5 text-sm text-slate-700 leading-relaxed">
+        <span className="w-1.5 h-1.5 rounded-full bg-brand-orange mt-2 shrink-0" />
+        <span>{text.replace(/^•\s?/, "")}</span>
+      </div>
+    );
+  }
+  return <p className="text-sm text-slate-700 leading-relaxed">{text}</p>;
+}
 
 export default function GenericPolicyPage({ slug }: { slug: ExtendedPolicySlug }) {
   const [activeModal, setActiveModal] = useState<RoleType | null>(null);
@@ -17,22 +46,20 @@ export default function GenericPolicyPage({ slug }: { slug: ExtendedPolicySlug }
     return null;
   }
 
+  const showToc = content.sections.length > 2;
+
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
+    <div className="min-h-screen bg-white font-sans text-slate-900">
       <NotificationTicker />
       <UtilityBar />
       <Header />
 
       <main>
-        {/* Standardized Subpage Hero Carousel */}
         <SubpageHeroCarousel
           tag="POLICY & GOVERNANCE"
           title={content.title}
           subtitle={content.subtitle}
-          breadcrumbs={[
-            { label: "Policies", href: "/policies" },
-            { label: content.title },
-          ]}
+          breadcrumbs={[{ label: "Policies", href: "/policies" }, { label: content.title }]}
         >
           {content.effectiveDate && (
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-xs font-semibold px-3 py-1.5 rounded-md text-white/90">
@@ -42,109 +69,105 @@ export default function GenericPolicyPage({ slug }: { slug: ExtendedPolicySlug }
           )}
         </SubpageHeroCarousel>
 
-        {/* Policy Document Body */}
-        <section className="py-12 px-4 md:px-6">
-          <div className="max-w-5xl mx-auto grid lg:grid-cols-12 gap-8">
-            {/* Main Document Content */}
-            <div className="lg:col-span-8 space-y-6">
-              <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-8">
-                {content.sections.map((sec, idx) => (
-                  <div key={idx} className="space-y-3 pb-6 border-b border-slate-100 last:border-0 last:pb-0">
-                    <h2 className="text-lg md:text-xl font-bold text-slate-900 flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-brand-orange"></span>
-                      {sec.heading}
-                    </h2>
+        <section className="py-10 sm:py-12">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-[1fr_17rem] gap-8 lg:gap-10 items-start">
+            {/* Document */}
+            <article className="min-w-0">
+              {content.sections.map((sec, idx) => (
+                <section
+                  key={idx}
+                  id={anchorId(idx)}
+                  className="scroll-mt-24 py-5 first:pt-0 border-b border-slate-100 last:border-0"
+                >
+                  <h2 className="text-lg sm:text-xl font-semibold text-[#0b1f3b] flex gap-2.5">
+                    {content.sections.length > 1 && (
+                      <span className="text-brand-orange tabular-nums shrink-0">{idx + 1}.</span>
+                    )}
+                    <span>{cleanHeading(sec.heading)}</span>
+                  </h2>
+                  <div className="mt-2 space-y-1.5">
                     {Array.isArray(sec.body) ? (
-                      <div className="space-y-3">
-                        {sec.body.map((item, itemIdx) => {
-                          if (item.endsWith(":") && !item.startsWith("•")) {
-                            return (
-                              <p key={itemIdx} className="font-semibold text-slate-800 text-sm md:text-base pt-1">
-                                {item}
-                              </p>
-                            );
-                          }
-                          if (item.startsWith("• ")) {
-                            return (
-                              <div key={itemIdx} className="flex items-start gap-2.5 pl-2 text-sm text-slate-600 leading-relaxed">
-                                <CheckCircle2 className="w-4 h-4 text-brand-green shrink-0 mt-0.5" />
-                                <span>{item.slice(2)}</span>
-                              </div>
-                            );
-                          }
-                          return (
-                            <p key={itemIdx} className="text-sm md:text-base text-slate-600 leading-relaxed">
-                              {item}
-                            </p>
-                          );
-                        })}
-                      </div>
+                      sec.body.map((line, i) => <BodyLine key={i} text={line} />)
                     ) : (
-                      <p className="text-sm md:text-base text-slate-600 leading-relaxed">
-                        {sec.body}
-                      </p>
+                      <BodyLine text={sec.body} />
                     )}
                   </div>
-                ))}
-              </div>
-            </div>
+                </section>
+              ))}
+            </article>
 
-            {/* Sidebar Overview */}
-            <div className="lg:col-span-4 space-y-6">
-              <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-5">
-                <h3 className="font-bold text-slate-900 text-base uppercase tracking-wider flex items-center gap-2 border-b border-slate-100 pb-3">
-                  <FileText className="w-4 h-4 text-brand-orange" /> Policy Information
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  This document forms an integral part of Islah Welfare Foundation's governance standards, legal compliance, and operational policies.
+            {/* Sidebar */}
+            <aside className="space-y-4 lg:sticky lg:top-24">
+              {showToc && (
+                <nav className="hidden lg:block rounded-xl border border-slate-200 p-4">
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
+                    On this page
+                  </p>
+                  <ol className="space-y-1.5 max-h-[50vh] overflow-y-auto pr-1">
+                    {content.sections.map((sec, idx) => (
+                      <li key={idx}>
+                        <a
+                          href={`#${anchorId(idx)}`}
+                          className="flex gap-2 text-xs text-slate-600 hover:text-brand-orange leading-snug"
+                        >
+                          <span className="tabular-nums text-slate-400">{idx + 1}.</span>
+                          <span>{cleanHeading(sec.heading)}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ol>
+                </nav>
+              )}
+
+              <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4 space-y-3">
+                <p className="flex items-center gap-2 text-sm font-semibold text-[#0b1f3b]">
+                  <FileText className="w-4 h-4 text-brand-orange" /> Policy details
                 </p>
-                <div className="space-y-3 pt-2 text-xs">
-                  <div className="flex items-center justify-between p-2.5 rounded bg-slate-50 border border-slate-100">
-                    <span className="font-semibold text-slate-600">Organization:</span>
-                    <span className="font-bold text-slate-900">Islah India</span>
+                <dl className="text-xs space-y-1.5">
+                  <div className="flex justify-between gap-3">
+                    <dt className="text-slate-500">Category</dt>
+                    <dd className="font-medium text-slate-800 text-right">{content.category}</dd>
                   </div>
-                  <div className="flex items-center justify-between p-2.5 rounded bg-slate-50 border border-slate-100">
-                    <span className="font-semibold text-slate-600">Category:</span>
-                    <span className="font-bold text-brand-orange">{content.category}</span>
+                  <div className="flex justify-between gap-3">
+                    <dt className="text-slate-500">Effective date</dt>
+                    <dd className="font-medium text-slate-800">
+                      {content.effectiveDate || "01/04/2026"}
+                    </dd>
                   </div>
-                  <div className="flex items-center justify-between p-2.5 rounded bg-slate-50 border border-slate-100">
-                    <span className="font-semibold text-slate-600">Effective Date:</span>
-                    <span className="font-bold text-slate-800">{content.effectiveDate || "01/04/2026"}</span>
+                  <div className="flex justify-between gap-3">
+                    <dt className="text-slate-500">Issued by</dt>
+                    <dd className="font-medium text-slate-800 text-right">
+                      Islah Welfare Foundation
+                    </dd>
                   </div>
-                  <div className="flex items-center justify-between p-2.5 rounded bg-slate-50 border border-slate-100">
-                    <span className="font-semibold text-slate-600">Compliance:</span>
-                    <span className="font-bold text-brand-green">Statutory Standard</span>
-                  </div>
-                </div>
-
-                <div className="pt-2">
-                  <a
-                    href="/policies"
-                    className="inline-flex items-center justify-center gap-1.5 w-full py-2.5 px-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-lg transition-colors border border-slate-200"
-                  >
-                    <span>View All 19 Policies</span>
-                    <ChevronRight className="w-3.5 h-3.5 text-brand-orange" />
-                  </a>
-                </div>
+                </dl>
+                <a
+                  href="/policies"
+                  className="flex items-center justify-between gap-2 pt-2 border-t border-slate-200 text-xs font-semibold text-[#0b1f3b] hover:text-brand-orange"
+                >
+                  All policies
+                  <ChevronRight className="w-3.5 h-3.5 text-brand-orange" />
+                </a>
               </div>
 
-              <div className="bg-gradient-to-br from-[#071527] to-[#0c2340] text-white rounded-xl p-6 shadow-md space-y-4">
-                <h3 className="font-bold text-lg">Have Questions?</h3>
-                <p className="text-xs text-white/80 leading-relaxed">
-                  For official policy inquiries or legal clarifications, contact our administration team directly.
-                </p>
-                <div className="space-y-2 text-xs pt-1">
-                  <div className="flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-brand-orange shrink-0" />
-                    <span>{CONTACT_DETAILS.email}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Phone className="w-4 h-4 text-brand-orange shrink-0" />
-                    <span>{CONTACT_DETAILS.phone}</span>
-                  </div>
-                </div>
+              <div className="rounded-xl border border-orange-100 bg-orange-50/50 p-4 space-y-2">
+                <p className="text-sm font-semibold text-[#0b1f3b]">Questions about this policy?</p>
+                <a
+                  href={`mailto:${CONTACT_DETAILS.email}`}
+                  className="flex items-center gap-2 text-xs text-slate-700 hover:text-brand-orange"
+                >
+                  <Mail className="w-3.5 h-3.5 text-brand-orange shrink-0" />
+                  {CONTACT_DETAILS.email}
+                </a>
+                <a
+                  href={`tel:${CONTACT_DETAILS.phone.replace(/\s/g, "")}`}
+                  className="flex items-center gap-2 text-xs text-slate-700 hover:text-brand-orange"
+                >
+                  <Phone className="w-3.5 h-3.5 text-brand-orange shrink-0" />
+                  {CONTACT_DETAILS.phone}
+                </a>
               </div>
-            </div>
+            </aside>
           </div>
         </section>
 

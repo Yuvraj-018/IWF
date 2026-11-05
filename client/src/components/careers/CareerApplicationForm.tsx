@@ -17,7 +17,7 @@ import {
   type FieldErrors,
   type UploadedFile,
 } from "@/components/forms/formFields";
-import { EMAIL_RE, QUALIFICATIONS, isValidPhone } from "@/components/forms/formRules";
+import { EMAIL_RE, QUALIFICATIONS, isValidPhone, phoneError } from "@/components/forms/formRules";
 import { GENERAL_APPLICATION } from "@/content/careerOpenings";
 
 const EXPERIENCE = [
@@ -74,7 +74,8 @@ export function CareerApplicationForm({
   const validate = (): FieldErrors => {
     const e: FieldErrors = {};
     if (v.fullName.trim().length < 3) e.fullName = "Please enter your full name.";
-    if (!isValidPhone(v.countryCode, v.phone)) e.phone = "Enter a valid mobile number.";
+    if (!isValidPhone(v.countryCode, v.phone))
+      e.phone = phoneError(v.countryCode, v.phone) ?? "Enter a valid mobile number.";
     if (!EMAIL_RE.test(v.email.trim())) e.email = "Enter a valid email address.";
     if (!v.qualification) e.qualification = "Select your qualification.";
     if (!v.experience) e.experience = "Select your experience.";

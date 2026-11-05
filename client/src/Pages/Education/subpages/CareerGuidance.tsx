@@ -194,7 +194,7 @@ export default function CareerGuidance() {
         </SubpageHeroCarousel>
 
         {/* 6-PILLAR HIGHLIGHT RIBBON */}
-        <section className="bg-white border-b border-slate-200 py-6 shadow-sm">
+        <section className="bg-white border-b border-slate-200 py-8">
           <div className="max-w-7xl mx-auto px-4">
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
               {HIGHLIGHT_RIBBON.map((item, idx) => {
@@ -202,7 +202,7 @@ export default function CareerGuidance() {
                 return (
                   <div
                     key={idx}
-                    className="flex flex-col justify-center p-3 rounded-xl bg-slate-50 border border-slate-200/80 hover:border-emerald-300 transition-all text-center"
+                    className="flex flex-col justify-center p-4 rounded-xl bg-slate-50 border border-slate-200/80 hover:border-emerald-300 transition-all text-center"
                   >
                     <div className="w-8 h-8 rounded-lg bg-emerald-100 text-[#004724] flex items-center justify-center mx-auto mb-2">
                       <Icon className="w-4 h-4" />

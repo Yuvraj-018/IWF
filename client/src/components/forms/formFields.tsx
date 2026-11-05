@@ -1,7 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { AlertCircle, Check, CheckCircle2, RefreshCw, Upload, X, FileText } from "lucide-react";
-import { COUNTRY_CODES, blockNonDigitsOnKeyDown, sanitizeDigits } from "@/utils/formValidation";
+import { blockNonDigitsOnKeyDown, sanitizeDigits } from "@/utils/formValidation";
+import { PhoneCodeSelect } from "./PhoneCodeSelect";
+import { maxDigits, phonePlaceholder } from "./phone";
+import { OTHER_CITY, districtsFor } from "@/content/indiaDistricts";
 import { sendMemberOtp, verifyMemberOtp } from "@/services/memberService";
 
 export type FieldErrors = Record<string, string>;
@@ -122,6 +125,89 @@ export function SelectInput({
   );
 }
 
+/**
+ * City / district for a chosen Indian state: a dropdown of that state's districts
+ * plus "Other" (which reveals a text box). Free text for other countries or before
+ * a state is chosen.
+ */
+export function CityField({
+  state,
+  isIndia = true,
+  value,
+  onChange,
+  hasError,
+  className,
+}: {
+  state: string;
+  isIndia?: boolean;
+  value: string;
+  onChange: (v: string) => void;
+  hasError?: boolean;
+  /** Override for the input/select classes (e.g. react-hook-form pages with their own style). */
+  className?: string;
+}) {
+  const districts = isIndia ? districtsFor(state) : [];
+  const listed = districts.includes(value);
+  const [custom, setCustom] = useState(Boolean(value) && !listed);
+  const cls = className ?? inputClass(hasError);
+
+  useEffect(() => {
+    // A new state was chosen and the old value no longer belongs to it.
+    if (!value) setCustom(false);
+  }, [state, value]);
+
+  if (!districts.length) {
+    return (
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={isIndia ? "Select a state first, or type your city" : "City / town"}
+        className={cls}
+      />
+    );
+  }
+
+  const showText = custom || (Boolean(value) && !listed);
+  return (
+    <div className="space-y-2">
+      <select
+        value={showText ? OTHER_CITY : value}
+        onChange={(e) => {
+          if (e.target.value === OTHER_CITY) {
+            setCustom(true);
+            onChange("");
+          } else {
+            setCustom(false);
+            onChange(e.target.value);
+          }
+        }}
+        className={cls}
+      >
+        <option value="" disabled>
+          Select city / district
+        </option>
+        {districts.map((d) => (
+          <option key={d} value={d}>
+            {d}
+          </option>
+        ))}
+        <option value={OTHER_CITY}>{OTHER_CITY}</option>
+      </select>
+      {showText && (
+        <input
+          type="text"
+          value={value}
+          autoFocus
+          onChange={(e) => onChange(e.target.value)}
+          placeholder="Type your city or town"
+          className={cls}
+        />
+      )}
+    </div>
+  );
+}
+
 export function PhoneInput({
   countryCode,
   onCountryCodeChange,
@@ -136,26 +222,22 @@ export function PhoneInput({
   hasError?: boolean;
 }) {
   return (
-    <div className="flex gap-2">
-      <select
+    <div className="flex gap-2 items-stretch">
+      <PhoneCodeSelect
         value={countryCode}
-        onChange={(e) => onCountryCodeChange(e.target.value)}
-        aria-label="Country code"
-        className={`${inputClass(false)} !w-[5.5rem] px-2 bg-slate-50`}
-      >
-        {COUNTRY_CODES.map((c) => (
-          <option key={c.code} value={c.code}>
-            {c.code}
-          </option>
-        ))}
-      </select>
+        onChange={(dial) => {
+          onCountryCodeChange(dial);
+          onChange(sanitizeDigits(value, maxDigits(dial)));
+        }}
+      />
       <input
         type="tel"
         inputMode="numeric"
+        autoComplete="tel-national"
         value={value}
         onKeyDown={blockNonDigitsOnKeyDown}
-        onChange={(e) => onChange(sanitizeDigits(e.target.value, countryCode === "+91" ? 10 : 14))}
-        placeholder={countryCode === "+91" ? "10-digit number" : "Phone number"}
+        onChange={(e) => onChange(sanitizeDigits(e.target.value, maxDigits(countryCode)))}
+        placeholder={phonePlaceholder(countryCode)}
         className={inputClass(hasError)}
       />
     </div>
@@ -498,13 +580,11 @@ export function OtpVerifier({
     try {
       const res = await sendMemberOtp(target);
       toast.success(
-        res?.devHint
-          ? `Code sent (dev code: ${res.devHint})`
-          : `Verification code sent to ${displayTarget}`,
+        res?.devHint ? `OTP sent (dev OTP: ${res.devHint})` : `OTP sent to ${displayTarget}`,
       );
     } catch {
       // Backend not reachable — temporary validation mode
-      toast.info("Verification code sent! (Use 123456 for temporary validation)", {
+      toast.info("OTP sent! (Use 123456 for temporary validation)", {
         duration: 8000,
       });
     } finally {
@@ -555,7 +635,7 @@ export function OtpVerifier({
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="text-xs text-slate-600">
-          We'll send a 6-digit code to{" "}
+          We'll send a 6-digit OTP to{" "}
           <span className="font-semibold text-[#071527]">{displayTarget}</span>
         </div>
         <button
@@ -569,9 +649,9 @@ export function OtpVerifier({
           ) : timer > 0 ? (
             `Resend in ${timer}s`
           ) : sent ? (
-            "Resend code"
+            "Resend OTP"
           ) : (
-            "Send code"
+            "Send OTP"
           )}
         </button>
       </div>

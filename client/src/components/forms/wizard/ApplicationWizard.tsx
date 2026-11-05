@@ -29,6 +29,7 @@ import {
   Field,
   FileUpload,
   PhoneInput,
+  CityField,
   RadioCards,
   RadioPills,
   SelectInput,
@@ -38,7 +39,7 @@ import {
   type FieldErrors,
   type UploadedFile,
 } from "@/components/forms/formFields";
-import { EMAIL_RE, URL_RE, isValidPhone } from "@/components/forms/formRules";
+import { EMAIL_RE, URL_RE, isValidPhone, phoneError } from "@/components/forms/formRules";
 import { SectorAreaPicker, flattenSectorAreas, type SectorPickerValue } from "./SectorAreaPicker";
 
 // ============================================================================
@@ -81,7 +82,8 @@ export type FieldDef = BaseField &
       }
     | { type: "textarea"; rows?: number; maxLength?: number }
     | { type: "select"; options: Options }
-    | { type: "state"; countryKey?: string }
+    | { type: "state"; countryKey?: string; cityKey?: string }
+    | { type: "city"; stateKey: string; countryKey?: string }
     | { type: "phone"; codeKey: string }
     | { type: "date"; futureOnly?: boolean; pastOnly?: boolean }
     | { type: "pills"; options: string[] }
@@ -191,6 +193,7 @@ function validateField(
     if (f.type === "select" || f.type === "pills" || f.type === "cards" || f.type === "state")
       return "Please select an option.";
     if (f.type === "file") return "Please upload this document.";
+    if (f.type === "city") return "Please select or type your city / district.";
     return "Please fill in this field.";
   }
 
@@ -220,9 +223,7 @@ function validateField(
     }
   }
   if (f.type === "phone" && !isValidPhone(v[f.codeKey] || "+91", String(val)))
-    return (v[f.codeKey] || "+91") === "+91"
-      ? "Enter a valid 10-digit Indian mobile number."
-      : "Enter a valid phone number.";
+    return phoneError(v[f.codeKey] || "+91", String(val)) ?? "Enter a valid mobile number.";
   if (f.type === "date") {
     const d = new Date(val);
     const today = new Date();
@@ -596,7 +597,10 @@ export function ApplicationWizard({ config }: { config: WizardConfig }) {
           (v[f.countryKey || "country"] || "India") === "India" ? (
             <SelectInput
               value={val}
-              onChange={(x) => set(f.key, x)}
+              onChange={(x) => {
+                set(f.key, x);
+                if (f.cityKey && x !== val) set(f.cityKey, "");
+              }}
               options={INDIAN_STATES}
               placeholder="Select state / UT"
               hasError={has}
@@ -610,6 +614,17 @@ export function ApplicationWizard({ config }: { config: WizardConfig }) {
               className={inputClass(has)}
             />
           );
+        break;
+      case "city":
+        control = (
+          <CityField
+            state={v[f.stateKey] || ""}
+            isIndia={(v[f.countryKey || "country"] || "India") === "India"}
+            value={val ?? ""}
+            onChange={(x) => set(f.key, x)}
+            hasError={has}
+          />
+        );
         break;
       case "phone":
         control = (

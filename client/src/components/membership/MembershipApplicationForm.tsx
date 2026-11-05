@@ -19,7 +19,7 @@ import {
   sanitizeDigits,
   sanitizeName,
 } from "@/utils/formValidation";
-import { INDIAN_STATES, BIHAR_DISTRICTS } from "@/content/locations";
+import { INDIAN_STATES } from "@/content/locations";
 import { registerMember, type RegisterMemberPayload } from "@/services/memberService";
 import {
   AGE_GROUPS,
@@ -43,9 +43,12 @@ import {
   URL_RE,
   computeValidTill,
   formatDisplayDate,
+  formatDisplayMonth,
+  formatLongMonth,
   generateMemberId,
   generateReceiptNo,
   isValidPhone,
+  phoneError,
   type FormMode,
   type Recognition,
   type TierType,
@@ -57,6 +60,7 @@ import {
   FileUpload,
   OtpVerifier,
   PhoneInput,
+  CityField,
   RadioCards,
   RadioPills,
   SelectInput,
@@ -76,7 +80,6 @@ import { downloadReceiptPdf, type ReceiptData } from "./membershipReceipt";
 const INITIAL = {
   // Individual — personal & location
   fullName: "",
-  dob: "",
   ageGroup: "",
   gender: "",
   countryCode: "+91",
@@ -346,18 +349,9 @@ export function MembershipApplicationForm({
 
     if (s === 1 && !isOrg) {
       if (v.fullName.trim().length < 3) e.fullName = "Enter your full name (at least 3 letters).";
-      if (v.dob) {
-        const d = new Date(v.dob);
-        const age = (Date.now() - d.getTime()) / (365.25 * 24 * 3600 * 1000);
-        if (d.getTime() > Date.now()) e.dob = "Date of birth cannot be in the future.";
-        else if (age < 18) e.dob = "Applicants must be at least 18 years old.";
-      }
       req("ageGroup", v.ageGroup, "Select your age group.");
       if (!isValidPhone(v.countryCode, v.phone))
-        e.phone =
-          v.countryCode === "+91"
-            ? "Enter a valid 10-digit Indian mobile number."
-            : "Enter a valid phone number.";
+        e.phone = phoneError(v.countryCode, v.phone) ?? "Enter a valid mobile number.";
       if (!EMAIL_RE.test(v.email.trim()))
         e.email = "Enter a valid email address, e.g. name@example.com.";
       req("country", v.country, "Select your country.");
@@ -387,7 +381,7 @@ export function MembershipApplicationForm({
       if (!EMAIL_RE.test(v.orgEmail.trim()))
         e.orgEmail = "Enter the organisation's official email address.";
       if (!isValidPhone(v.orgCountryCode, v.orgPhone))
-        e.orgPhone = "Enter a valid official contact number.";
+        e.orgPhone = phoneError(v.orgCountryCode, v.orgPhone) ?? "Enter a valid contact number.";
       if (v.orgPan && v.orgCountry === "India" && !PAN_RE.test(v.orgPan))
         e.orgPan = "PAN must be in the format ABCDE1234F.";
       req("orgAddress", v.orgAddress, "Enter the registered office address.");
@@ -406,7 +400,7 @@ export function MembershipApplicationForm({
       if (v.repName.trim().length < 3) e.repName = "Enter the representative's full name.";
       req("repDesignation", v.repDesignation, "Enter the representative's designation.");
       if (!isValidPhone(v.repCountryCode, v.repPhone))
-        e.repPhone = "Enter a valid mobile / WhatsApp number.";
+        e.repPhone = phoneError(v.repCountryCode, v.repPhone) ?? "Enter a valid mobile number.";
       if (!EMAIL_RE.test(v.repEmail.trim()))
         e.repEmail = "Enter the representative's official email.";
       req("repRelationship", v.repRelationship, "Select the relationship with the organisation.");
@@ -567,7 +561,6 @@ export function MembershipApplicationForm({
                 },
               }
             : {
-                dob: v.dob,
                 ageGroup: v.ageGroup,
                 gender: v.gender,
                 country: v.country,
@@ -604,8 +597,8 @@ export function MembershipApplicationForm({
           tier: effectiveTier,
           name,
           memberId,
-          validFrom: formatDisplayDate(from),
-          validTill: formatDisplayDate(till),
+          validFrom: formatDisplayMonth(from),
+          validTill: formatDisplayMonth(till),
           photoUrl: !isOrg ? files.photo?.dataUrl : undefined,
           isOrganisation: isOrg,
         },
@@ -617,9 +610,9 @@ export function MembershipApplicationForm({
           category: `${tierConfig.cardName} (${tierConfig.roleTitle})`,
           period: years,
           amount: fee,
-          date: formatDisplayDate(from),
-          validFrom: formatDisplayDate(from),
-          validTill: formatDisplayDate(till),
+          date: formatLongMonth(from),
+          validFrom: formatDisplayMonth(from),
+          validTill: formatDisplayMonth(till),
           type: "New Membership",
         },
       });
@@ -922,25 +915,14 @@ export function MembershipApplicationForm({
                         hasError={has("ageGroup")}
                       />
                     </Field>
-                    <div className="grid grid-cols-2 gap-3">
-                      <Field name="dob" label="Date of Birth" optional error={err("dob")}>
-                        <input
-                          type="date"
-                          value={v.dob}
-                          max={new Date().toISOString().slice(0, 10)}
-                          onChange={(e) => set("dob", e.target.value)}
-                          className={inputClass(has("dob"))}
-                        />
-                      </Field>
-                      <Field name="gender" label="Gender" optional>
-                        <SelectInput
-                          value={v.gender}
-                          onChange={(val) => set("gender", val)}
-                          options={GENDERS}
-                          placeholder="Select"
-                        />
-                      </Field>
-                    </div>
+                    <Field name="gender" label="Gender" optional>
+                      <SelectInput
+                        value={v.gender}
+                        onChange={(val) => set("gender", val)}
+                        options={GENDERS}
+                        placeholder="Select"
+                      />
+                    </Field>
                   </div>
                 </div>
 
@@ -971,17 +953,13 @@ export function MembershipApplicationForm({
                       })}
                     </Field>
                     <Field name="district" label="City / District" required error={err("district")}>
-                      {v.country === "India" && v.state === "Bihar" ? (
-                        <SelectInput
-                          value={v.district}
-                          onChange={(val) => set("district", val)}
-                          options={BIHAR_DISTRICTS}
-                          placeholder="Select district"
-                          hasError={has("district")}
-                        />
-                      ) : (
-                        textInput("district", { placeholder: "City or district" })
-                      )}
+                      <CityField
+                        state={v.state}
+                        isIndia={v.country === "India"}
+                        value={v.district}
+                        onChange={(val) => set("district", val)}
+                        hasError={has("district")}
+                      />
                     </Field>
                     <Field
                       name="fullAddress"
@@ -1140,15 +1118,25 @@ export function MembershipApplicationForm({
                         onChange={(val) => {
                           set("orgCountry", val);
                           set("orgState", "");
+                          set("orgCity", "");
                         }}
                         options={COUNTRIES}
                       />
                     </Field>
                     <Field name="orgState" label="State / UT" required error={err("orgState")}>
-                      {stateField("orgState", v.orgCountry, (val) => set("orgState", val))}
+                      {stateField("orgState", v.orgCountry, (val) => {
+                        set("orgState", val);
+                        set("orgCity", "");
+                      })}
                     </Field>
                     <Field name="orgCity" label="City / District" required error={err("orgCity")}>
-                      {textInput("orgCity", { placeholder: "City or district" })}
+                      <CityField
+                        state={v.orgState}
+                        isIndia={v.orgCountry === "India"}
+                        value={v.orgCity}
+                        onChange={(val) => set("orgCity", val)}
+                        hasError={has("orgCity")}
+                      />
                     </Field>
                     <Field name="orgPin" label="PIN / Postal Code" required error={err("orgPin")}>
                       {textInput("orgPin", {
@@ -1878,7 +1866,7 @@ export function MembershipApplicationForm({
             <div className={section}>
               <SubHeading
                 title="Verify your mobile number"
-                desc="ISLAH does not use passwords — a one-time code confirms your contact details."
+                desc="ISLAH does not use passwords — an OTP confirms your contact details."
               />
               <div id="field-otp" className="scroll-mt-28 max-w-lg">
                 <OtpVerifier
