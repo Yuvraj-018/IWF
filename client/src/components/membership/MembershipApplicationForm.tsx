@@ -613,6 +613,7 @@ export function MembershipApplicationForm({
           receiptNo,
           memberId,
           name,
+          tier: effectiveTier,
           category: `${tierConfig.cardName} (${tierConfig.roleTitle})`,
           period: years,
           amount: fee,

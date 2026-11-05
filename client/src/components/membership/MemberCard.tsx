@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useId, useRef, useState } from "react";
+import { forwardRef, useId, useRef, useState } from "react";
 import { toast } from "sonner";
 import {
   Users,
@@ -16,7 +16,12 @@ import {
   Share2,
   FileText,
 } from "lucide-react";
-import logoUrl from "@/assets/new logo.png";
+import {
+  canvasToPngBlob,
+  downloadBlob,
+  svgToCanvas as svgToCanvasAt,
+  useLogoDataUrl,
+} from "@/components/documents/docUtils";
 import { FOUNDATION, MEMBERSHIP_TIERS, type TierType } from "./membershipConfig";
 
 // ============================================================================
@@ -45,33 +50,6 @@ const W = 1000;
 const H = 630;
 const FONT = "'Open Sans', Arial, Helvetica, sans-serif";
 const SERIF = "Georgia, 'Times New Roman', serif";
-
-/** Load the logo once as a data URL so exported images are self-contained. */
-function useLogoDataUrl() {
-  const [src, setSrc] = useState<string>(logoUrl);
-  useEffect(() => {
-    let cancelled = false;
-    fetch(logoUrl)
-      .then((r) => r.blob())
-      .then(
-        (blob) =>
-          new Promise<string>((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(String(reader.result));
-            reader.onerror = reject;
-            reader.readAsDataURL(blob);
-          }),
-      )
-      .then((data) => !cancelled && setSrc(data))
-      .catch(() => {
-        /* keep URL fallback */
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-  return src;
-}
 
 function nameFontSize(name: string) {
   const len = Math.max(name.length, 1);
@@ -505,18 +483,7 @@ export const MemberCardBack = forwardRef<SVGSVGElement, { data: MemberCardData; 
 // Export helpers
 // ============================================================================
 
-async function svgToCanvas(svg: SVGSVGElement, scale = 2): Promise<HTMLCanvasElement> {
-  const xml = new XMLSerializer().serializeToString(svg);
-  const img = new Image();
-  img.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(xml)}`;
-  await img.decode();
-  const canvas = document.createElement("canvas");
-  canvas.width = W * scale;
-  canvas.height = H * scale;
-  const ctx = canvas.getContext("2d")!;
-  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-  return canvas;
-}
+const svgToCanvas = (svg: SVGSVGElement, scale = 2) => svgToCanvasAt(svg, W, H, scale);
 
 /** Both sides stacked into a single PNG. */
 async function renderCardPng(front: SVGSVGElement, back: SVGSVGElement): Promise<Blob> {
@@ -528,23 +495,7 @@ async function renderCardPng(front: SVGSVGElement, back: SVGSVGElement): Promise
   const ctx = out.getContext("2d")!;
   ctx.drawImage(f, 0, 0);
   ctx.drawImage(b, 0, f.height + gap);
-  return new Promise((resolve, reject) =>
-    out.toBlob(
-      (blob) => (blob ? resolve(blob) : reject(new Error("PNG export failed"))),
-      "image/png",
-    ),
-  );
-}
-
-function downloadBlob(blob: Blob, filename: string) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  return canvasToPngBlob(out);
 }
 
 // ============================================================================

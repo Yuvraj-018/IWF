@@ -43,7 +43,18 @@ import {
 } from "@/components/layout/SiteLayout";
 import { StandardPageHero } from "@/components/layout/StandardPageHero";
 import type { RoleType } from "@/components/forms/RoleFormModal";
-import { DonationReceipt, type DonationReceiptData } from "@/components/donation/DonationReceipt";
+import {
+  downloadDonationReceiptPdf,
+  printDonationReceipt,
+  type DonationReceiptInfo,
+} from "@/components/documents/donationReceipt";
+import { DonationReceiptView } from "@/components/documents/DonationReceiptView";
+import {
+  DonationCertificateViewer,
+  type DonationCertificateData,
+} from "@/components/documents/DonationCertificate";
+import { donorTierFor } from "@/components/documents/donorTier";
+import { formatDocDate } from "@/components/documents/docUtils";
 import { DonationSummaryCard } from "@/components/donation/DonationSummaryCard";
 import {
   COUNTRY_CODES,
@@ -233,7 +244,7 @@ export default function DonatePage() {
   const [isCopied, setIsCopied] = useState<string | null>(null);
 
   const [receiptNumber, setReceiptNumber] = useState("ISLAH/RCPT/2026-27/000001");
-  const [paymentDate, setPaymentDate] = useState("12 Oct 2026 | 12:30 PM");
+  const [paidAt, setPaidAt] = useState<Date>(() => new Date());
   const [transactionId, setTransactionId] = useState("pay_sample_123");
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
@@ -318,8 +329,7 @@ export default function DonatePage() {
     }
   }, [initialFinancialType, contextAmount, setValue]);
 
-  const [emailNotice, setEmailNotice] = useState<string | null>(null);
-  const receiptRef = useRef<HTMLDivElement>(null);
+  const [docBusy, setDocBusy] = useState<null | "download" | "print">(null);
 
   // Formatted composite address if standard address field is sparse
   const fullFormattedAddress = watchAddress
@@ -328,29 +338,47 @@ export default function DonatePage() {
         .filter(Boolean)
         .join(", ");
 
-  const receiptData: DonationReceiptData = {
+  const receiptInfo: DonationReceiptInfo = {
     receiptNo: receiptNumber,
-    receiptDate: paymentDate ? paymentDate.split(" | ")[0] : "12 Oct 2026",
-    donorName: watchFullName || "Md. Aftab Alam",
-    mobileNo: watchPhone ? `${watchCountryCode || "+91"} ${watchPhone}` : "+91 9123456780",
-    email: watchEmail || "aftabalam@email.com",
-    address: fullFormattedAddress || "Darbhanga, Bihar - 846004, India",
-    financialType: watchFinancialType || "Medical Emergency",
+    paidAt,
+    donorName: watchFullName || "Donor",
+    donorType: watchDonorType,
+    pan: watchTaxExemption ? watchPan : undefined,
+    address: fullFormattedAddress,
+    email: watchEmail || "-",
+    phone: watchPhone ? `${watchCountryCode || "+91"} ${watchPhone}` : "-",
+    taxRequested: Boolean(watchTaxExemption),
+    amount: Number(watchAmount) || 0,
+    transactionId,
     frequency: watchFrequency || "One Time",
-    amount: Number(watchAmount) || 2500,
-    contributionFor: contextPatient ? `Patient: ${contextPatient.name}` : "--",
-    paymentMode: "Razorpay / Online",
-    transactionId: transactionId,
-    paymentDate: paymentDate || "12 Oct 2026 | 12:30 PM",
+    pledgeMonths:
+      watchFrequency !== "One Time" && watchRecurringPledge ? watchPledgeMonths : undefined,
+    purpose: watchFinancialType || "General Donation",
+    beneficiary: contextPatient?.name,
   };
 
-  const handleDownloadNow = () => {
-    window.print();
+  const certificateData: DonationCertificateData = {
+    donorName: receiptInfo.donorName,
+    amount: receiptInfo.amount,
+    cause: receiptInfo.purpose,
+    date: formatDocDate(paidAt),
+    year: paidAt.getFullYear(),
+    certificateNo: /RCPT/i.test(receiptNumber)
+      ? receiptNumber.replace(/RCPT/i, "CERT")
+      : `CERT-${receiptNumber}`,
   };
+  const donorTier = donorTierFor(receiptInfo.amount);
 
-  const handleSendEmail = () => {
-    setEmailNotice(`Receipt successfully sent to ${watchEmail || "your email address"}!`);
-    setTimeout(() => setEmailNotice(null), 5000);
+  const runReceiptAction = async (kind: "download" | "print") => {
+    setDocBusy(kind);
+    try {
+      if (kind === "download") await downloadDonationReceiptPdf(receiptInfo);
+      else await printDonationReceipt(receiptInfo);
+    } catch {
+      toast.error("Could not generate the receipt. Please try again.");
+    } finally {
+      setDocBusy(null);
+    }
   };
 
   useEffect(() => {
@@ -453,23 +481,15 @@ export default function DonatePage() {
         verifyData.entity?.receiptNo ||
         `ISLAH/RCPT/${new Date().getFullYear()}/${Date.now()}`;
 
-      const now = new Date();
-      const formattedDate = now.toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      });
-      const formattedTime = now.toLocaleTimeString("en-IN", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      });
-
       setTransactionId(paymentResult.razorpay_payment_id);
       setReceiptNumber(assignedReceiptNo);
-      setPaymentDate(`${formattedDate} | ${formattedTime}`);
+      setPaidAt(new Date());
       setSubmitted(true);
-      toast.success("Donation payment verified successfully! 80G tax receipt issued.");
+      toast.success(
+        data.taxExemption
+          ? "Payment verified. Your receipt with the tax-documentation request is ready."
+          : "Payment verified. Your donation receipt is ready.",
+      );
 
       setTimeout(() => {
         formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -480,10 +500,6 @@ export default function DonatePage() {
     } finally {
       setIsPaymentProcessing(false);
     }
-  };
-
-  const printReceipt = () => {
-    window.print();
   };
 
   return (
@@ -497,7 +513,7 @@ export default function DonatePage() {
         <StandardPageHero
           badge="SUPPORT OUR MISSION • DONATE"
           title="Donate & Make a Difference"
-          description="Your contribution empowers lives, provides emergency medical aid to impoverished patients, and educates vulnerable children. 100% Tax Exempted under Section 80G."
+          description="Your contribution empowers lives, provides emergency medical aid to impoverished patients, and educates vulnerable children. Eligible donations may qualify for tax deduction, subject to applicable law."
           breadcrumb={[{ label: "Donate & Support" }]}
           taglineTop="Give Hope"
           taglineMid="Save A Life"
@@ -564,8 +580,8 @@ export default function DonatePage() {
                     {[
                       ["Receipt ID", receiptNumber],
                       ["Amount Paid", `₹${Number(watchAmount).toLocaleString("en-IN")}`],
-                      ["Tax Benefit", "80G eligible"],
-                      ["Sent To", watchEmail],
+                      ["Tax Documentation", watchTaxExemption ? "Requested" : "Not requested"],
+                      ["Recognition", donorTier.label],
                     ].map(([k, val]) => (
                       <div key={k} className="rounded-xl bg-slate-50 border border-slate-200 p-2.5">
                         <dt className="text-[11px] text-slate-500">{k}</dt>
@@ -575,56 +591,69 @@ export default function DonatePage() {
                   </dl>
                 </div>
 
-                {/* Center: Exact Donation Receipt matching uploaded design 1:1 */}
-                <div className="text-left">
-                  <DonationReceipt ref={receiptRef} data={receiptData} />
+                {/* Receipt */}
+                <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-4 sm:p-6 text-left space-y-4">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <h3 className="text-lg font-semibold text-[#071527]">Your Donation Receipt</h3>
+                      <p className="text-xs text-slate-500">
+                        {watchTaxExemption
+                          ? "Includes your tax-deduction documentation request."
+                          : "General donation receipt — no tax-deduction documentation requested."}
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        onClick={() => runReceiptAction("download")}
+                        disabled={docBusy !== null}
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-brand-orange hover:bg-orange-600 disabled:opacity-60 text-white text-xs font-semibold transition"
+                      >
+                        <Download className="w-3.5 h-3.5" />
+                        {docBusy === "download" ? "Preparing…" : "Download PDF"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => runReceiptAction("print")}
+                        disabled={docBusy !== null}
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 disabled:opacity-60 text-slate-700 text-xs font-semibold transition"
+                      >
+                        <Printer className="w-3.5 h-3.5" />
+                        {docBusy === "print" ? "Preparing…" : "Print"}
+                      </button>
+                    </div>
+                  </div>
+                  <DonationReceiptView info={receiptInfo} />
                 </div>
 
-                {/* Bottom: Action Buttons (Download Now, Send to Email, Print Receipt, Make Another Donation) */}
-                <div className="bg-white rounded-2xl p-6 sm:p-7 border border-slate-200 shadow-xs space-y-4 text-center">
-                  <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                    Receipt Actions &amp; Verification
-                  </p>
-                  <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
-                    <button
-                      type="button"
-                      onClick={handleDownloadNow}
-                      className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-brand-orange hover:bg-orange-600 text-white font-semibold text-sm transition cursor-pointer"
-                    >
-                      <Download className="w-4 h-4" /> Download Now
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleSendEmail}
-                      className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#071527] hover:bg-[#0c2340] text-white font-bold text-sm shadow-md transition hover:scale-[1.02] cursor-pointer"
-                    >
-                      <Mail className="w-4 h-4 text-sky-400" /> Send to Email
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => window.print()}
-                      className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-sm transition cursor-pointer"
-                    >
-                      <Printer className="w-4 h-4 text-slate-500" /> Print Receipt
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSubmitted(false);
-                        window.scrollTo({ top: formRef.current?.offsetTop || 300, behavior: "smooth" });
-                      }}
-                      className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-sm transition cursor-pointer"
-                    >
-                      <RotateCcw className="w-4 h-4 text-slate-500" /> Make Another Donation
-                    </button>
+                {/* Appreciation certificate */}
+                <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-4 sm:p-6 text-left space-y-4">
+                  <div>
+                    <span className="text-xs font-bold uppercase tracking-wider text-brand-orange">
+                      With Gratitude
+                    </span>
+                    <h3 className="text-lg font-semibold text-[#071527] mt-0.5">
+                      Your {donorTier.label} Certificate
+                    </h3>
+                    <p className="text-xs text-slate-500">
+                      A certificate of appreciation for your contribution. Download it or share it
+                      with friends and family.
+                    </p>
                   </div>
+                  <DonationCertificateViewer data={certificateData} />
+                </div>
 
-                  {emailNotice && (
-                    <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-semibold text-brand-green flex items-center justify-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 shrink-0" />
-                      <span>{emailNotice}</span>
-                    </div>
-                  )}
+                <div className="flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSubmitted(false);
+                      window.scrollTo({ top: formRef.current?.offsetTop || 300, behavior: "smooth" });
+                    }}
+                    className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 font-semibold text-sm transition cursor-pointer"
+                  >
+                    <RotateCcw className="w-4 h-4 text-slate-500" /> Make Another Donation
+                  </button>
                 </div>
 
                 {/* What Happens Next & Donor Helpline Card */}
@@ -635,7 +664,11 @@ export default function DonatePage() {
                     </h4>
                     <div className="flex items-start gap-2">
                       <CheckCircle2 className="w-4 h-4 text-brand-green shrink-0 mt-0.5" />
-                      <span>Official 80G tax-exempt receipt dispatched to {watchEmail}.</span>
+                      <span>
+                        {watchTaxExemption
+                          ? "Your tax-documentation request is recorded. The official Form 114 certificate is issued after statutory filing, where eligible."
+                          : `A confirmation of your donation has been sent to ${watchEmail || "your email"}.`}
+                      </span>
                     </div>
                     <div className="flex items-start gap-2">
                       <Mail className="w-4 h-4 text-brand-orange shrink-0 mt-0.5" />
@@ -648,7 +681,7 @@ export default function DonatePage() {
                       <Phone className="w-4 h-4 text-brand-green" /> Donor Care &amp; Support
                     </h4>
                     <p className="text-slate-500">
-                      Need a revised 80G certificate or have questions regarding your transaction?
+                      Need a corrected receipt or have questions about your transaction?
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3 pt-1">
                       <a href="tel:+919811861633" className="text-brand-green font-bold hover:underline flex items-center gap-1.5">

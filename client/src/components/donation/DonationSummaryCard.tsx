@@ -1,5 +1,6 @@
 import React from "react";
-import { Award, BadgeCheck, Heart, Lock, Receipt, ShieldCheck, Sparkles, Star } from "lucide-react";
+import { Award, BadgeCheck, Lock, Receipt, ShieldCheck, Sparkles, Star } from "lucide-react";
+import { donorTierFor, type DonorTier } from "@/components/documents/donorTier";
 
 interface DonationSummaryCardProps {
   financialType: string;
@@ -42,13 +43,11 @@ const CAUSE_IMPACTS: Record<string, string> = {
     "Contributes to permanent community infrastructure such as health centres and schools.",
 };
 
-function getDonorTier(amount: number) {
-  if (amount >= 50000)
-    return { label: "Platinum Benefactor", icon: Sparkles, color: "text-violet-700" };
-  if (amount >= 20000) return { label: "Gold Champion", icon: Award, color: "text-amber-700" };
-  if (amount >= 5000) return { label: "Silver Guardian", icon: Star, color: "text-blue-700" };
-  return { label: "Community Supporter", icon: Heart, color: "text-emerald-700" };
-}
+const TIER_STYLE: Record<DonorTier, { icon: typeof Award; color: string }> = {
+  Platinum: { icon: Sparkles, color: "text-slate-800" },
+  Gold: { icon: Award, color: "text-amber-700" },
+  Silver: { icon: Star, color: "text-slate-600" },
+};
 
 function Row({ label, value, mono }: { label: string; value: string; mono?: boolean }) {
   return (
@@ -75,9 +74,9 @@ export const DonationSummaryCard: React.FC<DonationSummaryCardProps> = ({
   contextPatient,
 }) => {
   const safeAmount = Number(amount) || 0;
-  const taxSaving = Math.round(safeAmount * 0.5);
-  const tier = getDonorTier(safeAmount);
-  const TierIcon = tier.icon;
+  const tier = donorTierFor(safeAmount);
+  const tierStyle = TIER_STYLE[tier.tier];
+  const TierIcon = tierStyle.icon;
   const recurring = frequency !== "One Time";
   const impactText =
     CAUSE_IMPACTS[financialType] ||
@@ -92,9 +91,6 @@ export const DonationSummaryCard: React.FC<DonationSummaryCardProps> = ({
           </span>
           <h3 className="text-lg font-semibold text-[#071527] mt-0.5">Your Contribution</h3>
         </div>
-        <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full shrink-0">
-          <ShieldCheck className="w-3.5 h-3.5" /> 80G eligible
-        </span>
       </div>
 
       <div className="p-5 space-y-4">
@@ -113,14 +109,14 @@ export const DonationSummaryCard: React.FC<DonationSummaryCardProps> = ({
           </p>
           <div className="grid grid-cols-2 gap-3 mt-3 pt-3 border-t border-slate-200 text-xs">
             <div>
-              <span className="text-slate-500 block">Tax benefit (80G)</span>
+              <span className="text-slate-500 block">Tax documentation</span>
               <span className="text-slate-800 font-medium">
-                {safeAmount > 0 ? `~₹${taxSaving.toLocaleString("en-IN")} deductible` : "—"}
+                {taxExemption ? "Requested" : "Not requested"}
               </span>
             </div>
             <div>
-              <span className="text-slate-500 block">Donor tier</span>
-              <span className={`font-medium inline-flex items-center gap-1 ${tier.color}`}>
+              <span className="text-slate-500 block">Recognition</span>
+              <span className={`font-medium inline-flex items-center gap-1 ${tierStyle.color}`}>
                 <TierIcon className="w-3.5 h-3.5" /> {tier.label}
               </span>
             </div>
@@ -150,21 +146,21 @@ export const DonationSummaryCard: React.FC<DonationSummaryCardProps> = ({
           <Row label="Email" value={email || "—"} />
           <Row label="Mobile" value={phone ? `${countryCode} ${phone}` : "—"} />
           <Row
-            label="80G certificate"
+            label="PAN"
             value={
               taxExemption
                 ? pan
-                  ? `Requested · ${pan.toUpperCase()}`
-                  : "Requested · PAN needed"
-                : "Not requested"
+                  ? pan.toUpperCase()
+                  : "Needed for tax documentation"
+                : "Not required"
             }
           />
         </dl>
 
         <p className="flex items-start gap-2 text-xs text-slate-600 leading-relaxed">
           <Receipt className="w-4 h-4 text-brand-orange shrink-0 mt-px" />
-          An official receipt with your 80G details is generated and emailed as soon as payment is
-          confirmed.
+          Your receipt and a {tier.label.toLowerCase()} certificate of appreciation are ready to
+          download as soon as payment is confirmed.
         </p>
 
         <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">

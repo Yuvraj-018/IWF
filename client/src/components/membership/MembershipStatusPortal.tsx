@@ -322,6 +322,7 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
         receiptNo: generateReceiptNo(),
         memberId: member.id,
         name: contact.name,
+        tier: targetTier,
         category: `${tierCfg.cardName} (${tierCfg.roleTitle})`,
         period: years,
         amount: fee,
