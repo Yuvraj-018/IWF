@@ -1,11 +1,14 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
-import { X, Handshake, Heart, GraduationCap, Briefcase, Users } from "lucide-react";
-import { VolunteerApplicationForm } from "@/components/forms/VolunteerApplicationForm";
-import { PartnerApplicationForm } from "@/components/forms/PartnerApplicationForm";
-import { SponsorApplicationForm } from "@/components/forms/SponsorApplicationForm";
-import { MentorApplicationForm } from "@/components/forms/MentorApplicationForm";
-import { CareerApplicationForm } from "@/components/forms/CareerApplicationForm";
+import { Link } from "@tanstack/react-router";
+import { X, Handshake, Heart, GraduationCap, Briefcase, Users, ExternalLink } from "lucide-react";
+import { ApplicationWizard, type WizardConfig } from "@/components/forms/wizard/ApplicationWizard";
+import { volunteerFormConfig } from "@/components/forms/wizard/configs/volunteerForm";
+import { partnerFormConfig } from "@/components/forms/wizard/configs/partnerForm";
+import { sponsorFormConfig } from "@/components/forms/wizard/configs/sponsorForm";
+import { mentorFormConfig } from "@/components/forms/wizard/configs/mentorForm";
+import { CareerApplicationForm } from "@/components/careers/CareerApplicationForm";
+import { activeOpenings } from "@/content/careerOpenings";
 
 export type RoleType = "volunteer" | "partner" | "sponsor" | "mentor" | "employee";
 
@@ -14,44 +17,59 @@ interface RoleFormModalProps {
   onClose: () => void;
 }
 
+/**
+ * Quick-apply modal used by buttons across the site. It renders the same forms
+ * as the dedicated Get Involved pages (and shares their saved drafts).
+ */
 const MODAL_CONFIG: Record<
   RoleType,
   {
     title: string;
     subtitle: string;
-    icon: any;
-    bgGradient: string;
+    icon: typeof Users;
+    page: string;
+    form?: WizardConfig;
+    tint: string;
   }
 > = {
   volunteer: {
     title: "Volunteer Application",
-    subtitle: "Join our grassroots community network across education, health, and rural development.",
+    subtitle: "Join our community across education, health and rural development.",
     icon: Users,
-    bgGradient: "from-brand-green to-[#0b1f3b]",
+    page: "/volunteer",
+    form: volunteerFormConfig,
+    tint: "bg-emerald-50 text-emerald-600",
   },
   partner: {
-    title: "Partnership Application Form",
-    subtitle: "Collaborate with ISLAH to create sustainable, high-impact rural transformation.",
+    title: "Partnership Application",
+    subtitle: "Collaborate with ISLAH for sustainable, measurable community impact.",
     icon: Handshake,
-    bgGradient: "from-[#0b1f3b] via-[#163a69] to-brand-green",
+    page: "/partner",
+    form: partnerFormConfig,
+    tint: "bg-blue-50 text-blue-600",
   },
   sponsor: {
-    title: "Sponsorship Application Form",
-    subtitle: "Empower a community, sponsor a program or cause with measurable impact.",
+    title: "Sponsorship Application",
+    subtitle: "Support a programme or community initiative with measurable impact.",
     icon: Heart,
-    bgGradient: "from-[#0b1f3b] via-[#853012] to-brand-orange",
+    page: "/sponsor",
+    form: sponsorFormConfig,
+    tint: "bg-orange-50 text-orange-600",
   },
   mentor: {
-    title: "Mentor Application Form",
-    subtitle: "Share your knowledge, inspire rural youth, and guide the next generation.",
+    title: "Mentor Application",
+    subtitle: "Share your knowledge and guide the next generation.",
     icon: GraduationCap,
-    bgGradient: "from-[#072417] via-[#0d3f27] to-[#0b1f3b]",
+    page: "/mentor",
+    form: mentorFormConfig,
+    tint: "bg-violet-50 text-violet-600",
   },
   employee: {
-    title: "CV Submission Form (Careers)",
+    title: "Careers Application",
     subtitle: "Build your career while creating positive social impact with ISLAH.",
     icon: Briefcase,
-    bgGradient: "from-[#0b1f3b] via-[#1a447a] to-emerald-800",
+    page: "/careers",
+    tint: "bg-amber-50 text-amber-600",
   },
 };
 
@@ -77,42 +95,57 @@ export function RoleFormModal({ type, onClose }: RoleFormModalProps) {
   const Icon = cfg.icon;
 
   return createPortal(
-    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/70 p-3 sm:p-4 backdrop-blur-xs animate-in fade-in duration-200 notranslate" translate="no" dir="ltr">
-      <div className="flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-white/20 bg-white shadow-2xl notranslate" translate="no" dir="ltr">
-        {/* Modal Header */}
-        <div className={`sticky top-0 z-10 flex items-start justify-between gap-4 bg-gradient-to-r ${cfg.bgGradient} px-6 py-5 text-white shadow-md`}>
+    <div
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-900/60 p-3 sm:p-4 backdrop-blur-xs notranslate"
+      translate="no"
+      dir="ltr"
+      onMouseDown={(e) => e.target === e.currentTarget && onClose()}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={cfg.title}
+        className="flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl bg-slate-50 shadow-2xl"
+      >
+        <div className="flex items-start justify-between gap-4 bg-white border-b border-slate-200 px-5 sm:px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-white/15 flex items-center justify-center shrink-0 border border-white/20">
-              <Icon className="w-5 h-5 text-white" />
-            </div>
+            <span
+              className={`w-10 h-10 rounded-lg ${cfg.tint} flex items-center justify-center shrink-0`}
+            >
+              <Icon className="w-5 h-5" />
+            </span>
             <div>
-              <h3 className="text-base sm:text-lg font-black tracking-wide uppercase text-white">
-                {cfg.title}
-              </h3>
-              <p className="mt-0.5 text-xs text-white/80 leading-relaxed max-w-xl">
-                {cfg.subtitle}
-              </p>
+              <h3 className="text-base sm:text-lg font-semibold text-[#071527]">{cfg.title}</h3>
+              <p className="text-xs text-slate-600">{cfg.subtitle}</p>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="rounded-xl p-1.5 text-white/80 transition hover:bg-white/15 hover:text-white cursor-pointer"
-            aria-label="Close modal"
-          >
-            <X className="h-5 w-5" />
-          </button>
+          <div className="flex items-center gap-1 shrink-0">
+            <Link
+              to={cfg.page}
+              onClick={onClose}
+              className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs text-slate-600 hover:bg-slate-100 transition"
+            >
+              Open full page <ExternalLink className="w-3.5 h-3.5" />
+            </Link>
+            <button
+              onClick={onClose}
+              className="rounded-lg p-1.5 text-slate-500 transition hover:bg-slate-100 hover:text-slate-800"
+              aria-label="Close"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
         </div>
 
-        {/* Modal Body: Render authentic form matching PDF */}
-        <div className="overflow-y-auto p-6 sm:p-8">
-          {type === "volunteer" && <VolunteerApplicationForm isModal />}
-          {type === "partner" && <PartnerApplicationForm isModal />}
-          {type === "sponsor" && <SponsorApplicationForm isModal />}
-          {type === "mentor" && <MentorApplicationForm isModal />}
-          {type === "employee" && <CareerApplicationForm isModal />}
+        <div className="overflow-y-auto p-4 sm:p-6">
+          {cfg.form ? (
+            <ApplicationWizard config={cfg.form} />
+          ) : (
+            <CareerApplicationForm positions={activeOpenings().map((o) => o.title)} />
+          )}
         </div>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }

@@ -1,16 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
-import CommunityPage from "@/Pages/Community/CommunityPage";
+import MembershipPage from "@/Pages/MembershipPage";
 
 export const Route = createFileRoute("/membership")({
   head: () => ({
     meta: [
-      { title: "Membership & Community — ISLAH | Islah Welfare Foundation" },
+      { title: "Become a Member — ISLAH | Islah Welfare Foundation" },
       {
         name: "description",
         content:
-          "Discover ISLAH membership tiers, active members directory, and community initiatives.",
+          "Join the ISLAH community. Explore membership tiers, benefits, and apply to become a supporting member working for meaningful social impact.",
       },
     ],
   }),
-  component: () => <CommunityPage initialTab="members" />,
+  component: MembershipPage,
 });

@@ -5,7 +5,6 @@ import {
   UtilityBar,
   Header,
   Footer,
-  RoleFormModal,
 } from "@/components/layout/SiteLayout";
 import {
   Home,
@@ -35,10 +34,6 @@ import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import heroImg from "@/assets/sector_education_2.png";
 
 export default function KnowledgeResearchPage() {
-  const [activeModal, setActiveModal] = useState<
-    "volunteer" | "partner" | "sponsor" | "mentor" | "employee" | null
-  >(null);
-
   const CONTINUUM_RIBBON = [
     { step: "Read", sub: "Access to Knowledge" },
     { step: "Learn", sub: "Build Skills & Understanding" },
@@ -214,23 +209,15 @@ export default function KnowledgeResearchPage() {
           images={[heroImg]}
         >
           <div className="flex flex-wrap items-center gap-3 pt-2">
-            <button
-              type="button"
-              onClick={() => setActiveModal("sponsor")}
-              className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold text-xs sm:text-sm px-6 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer"
-            >
+            <Link to="/donate" search={{ financialType: "Education & Learning", initiative: "Knowledge, Research & Publication (KRP)" }} className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold text-xs sm:text-sm px-6 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer">
               <Heart className="w-4 h-4 fill-white" />
               <span>Support Knowledge Hubs</span>
-            </button>
+            </Link>
 
-            <button
-              type="button"
-              onClick={() => setActiveModal("partner")}
-              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs sm:text-sm px-5 py-2.5 sm:py-3 rounded-xl backdrop-blur-xs transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer"
-            >
+            <Link to="/partner" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs sm:text-sm px-5 py-2.5 sm:py-3 rounded-xl backdrop-blur-xs transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer">
               <Library className="w-4 h-4 text-brand-orange" />
               <span>Partner With Us</span>
-            </button>
+            </Link>
           </div>
         </SubpageHeroCarousel>
 
@@ -560,24 +547,15 @@ export default function KnowledgeResearchPage() {
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-4">
-              <button
-                onClick={() => setActiveModal("sponsor")}
-                className="px-6 py-3 rounded-xl bg-brand-orange hover:bg-brand-orange-hover text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95"
-              >
+              <Link to="/donate" search={{ financialType: "Education & Learning", initiative: "Knowledge, Research & Publication (KRP)" }} className="px-6 py-3 rounded-xl bg-brand-orange hover:bg-brand-orange-hover text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95">
                 Support Education
-              </button>
-              <button
-                onClick={() => setActiveModal("partner")}
-                className="px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95"
-              >
+              </Link>
+              <Link to="/partner" className="px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95">
                 Partner With Us
-              </button>
-              <button
-                onClick={() => setActiveModal("volunteer")}
-                className="px-6 py-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs uppercase tracking-wider shadow-xs hover:shadow-sm transition-all hover:scale-[1.02] active:scale-95"
-              >
+              </Link>
+              <Link to="/volunteer" className="px-6 py-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs uppercase tracking-wider shadow-xs hover:shadow-sm transition-all hover:scale-[1.02] active:scale-95">
                 Volunteer / Mentor
-              </button>
+              </Link>
             </div>
           </div>
         </section>
@@ -602,11 +580,7 @@ export default function KnowledgeResearchPage() {
         </section>
       </main>
 
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal
-        type={activeModal}
-        onClose={() => setActiveModal(null)}
-      />
+      <Footer />
     </div>
   );
 }

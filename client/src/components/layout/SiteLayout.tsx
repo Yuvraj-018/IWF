@@ -48,6 +48,7 @@ export const NAV_ITEMS = [
   "Our Programs",
   "Media",
   "Get Involved",
+  "Careers",
   "Contact Us",
 ];
 
@@ -70,8 +71,8 @@ export const MEGA_DATA: Record<string, MegaSection> = {
   "Our Programs": {
     cols: 2,
     items: [
-      "What We Do",
-      "Our Campaigns",
+      "All Our Programs",
+      "All Our Campaigns",
     ],
   },
   "What We Do": {
@@ -119,7 +120,6 @@ export const MEGA_DATA: Record<string, MegaSection> = {
       "Become a Member",
       "Sponsor a Programme",
       "Become a Mentor",
-      "Careers & Opportunities",
       "Donate & Support",
     ],
   },
@@ -134,14 +134,15 @@ function getTopNavHref(item: string) {
   if (item === "Become a Member" || item === "Membership" || item === "ISLAH Community") return "/about/community";
   if (item === "Media") return "/media";
   if (item === "Get Involved") return "/get-involved";
+  if (item === "Careers") return "/careers";
   if (item === "Contact Us") return "/contact";
   return "#";
 }
 
 function getMegaHref(menu: string, item: string) {
   // Our Programs
-  if ((menu === "Our Programs" || menu === "Our Program") && item === "What We Do") return "/programs";
-  if ((menu === "Our Programs" || menu === "Our Program") && item === "Our Campaigns") return "/campaign";
+  if ((menu === "Our Programs" || menu === "Our Program") && (item === "All Our Programs" || item === "What We Do" || item === "All Programs")) return "/programs";
+  if ((menu === "Our Programs" || menu === "Our Program") && (item === "All Our Campaigns" || item === "Our Campaigns" || item === "Campaigns")) return "/campaign";
   // About Us (6 canonical sub-pages)
   if (menu === "About Us" && item === "Overview") return "/about";
   if (menu === "About Us" && item === "Legal Status & Registration") return "/about/legal-status";
@@ -295,12 +296,14 @@ export function Header() {
     (item === "Home" && pathname === "/") ||
     (item === "About Us" && pathname.startsWith("/about")) ||
     ((item === "Our Programs" || item === "Our Program") && (pathname.startsWith("/programs") || pathname.startsWith("/campaign"))) ||
-    (item === "Our Campaigns" && pathname.startsWith("/campaign")) ||
+    ((item === "Our Campaigns" || item === "All Our Campaigns") && pathname.startsWith("/campaign")) ||
     (item === "Become a Member" && pathname.startsWith("/membership")) ||
     (item === "Media" && (pathname.startsWith("/media") || pathname.startsWith("/news-and-events") || pathname.startsWith("/gallery"))) ||
-    (item === "Get Involved" && (pathname.startsWith("/get-involved") || pathname.startsWith("/volunteer"))) ||
+    (item === "Get Involved" &&
+      ["/get-involved", "/volunteer", "/partner", "/sponsor", "/mentor", "/membership", "/donate"].some((p) => pathname.startsWith(p))) ||
+    (item === "Careers" && pathname.startsWith("/careers")) ||
     (item === "Contact Us" && pathname.startsWith("/contact")) ||
-    (item === "What We Do" && pathname.startsWith("/programs"));
+    ((item === "What We Do" || item === "All Our Programs") && pathname.startsWith("/programs"));
 
   const getHeaderHref = (item: string) => {
     return getTopNavHref(item);
@@ -703,12 +706,12 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: any) => void }) {
             </h4>
             <ul className="space-y-2.5">
               {[
-                { label: "Volunteer With Us", type: "volunteer" },
-                { label: "Partner With Us", type: "partner" },
-                { label: "Sponsor a Programme", type: "sponsor" },
-                { label: "Become a Mentor", type: "mentor" },
+                { label: "Volunteer With Us", href: "/volunteer" },
+                { label: "Partner With Us", href: "/partner" },
+                { label: "Sponsor a Programme", href: "/sponsor" },
+                { label: "Become a Mentor", href: "/mentor" },
                 { label: "Become a Member", href: "/membership" },
-                { label: "Careers & Opportunities", type: "employee" },
+                { label: "Careers & Opportunities", href: "/careers" },
               ].map((item) => (
                 <li key={item.label}>
                   {item.href ? (

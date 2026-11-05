@@ -5,7 +5,6 @@ import {
   UtilityBar,
   Header,
   Footer,
-  RoleFormModal,
 } from "@/components/layout/SiteLayout";
 import {
   Home,
@@ -36,10 +35,6 @@ import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import heroImg from "@/assets/sector_education_1.png";
 
 export default function TechnicalVocationalPage() {
-  const [activeModal, setActiveModal] = useState<
-    "volunteer" | "partner" | "sponsor" | "mentor" | "employee" | null
-  >(null);
-
   const LEARNING_FLOW = [
     { step: "Learn", sub: "Build Knowledge" },
     { step: "Practise", sub: "Gain Practical Skills" },
@@ -170,23 +165,15 @@ export default function TechnicalVocationalPage() {
           images={[heroImg]}
         >
           <div className="flex flex-wrap items-center gap-3 pt-2">
-            <button
-              type="button"
-              onClick={() => setActiveModal("sponsor")}
-              className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold text-xs sm:text-sm px-6 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer"
-            >
+            <Link to="/donate" search={{ financialType: "Education & Learning", initiative: "Technical & Vocational Education (TVET)" }} className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold text-xs sm:text-sm px-6 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer">
               <Heart className="w-4 h-4 fill-white" />
               <span>Support Technical Training</span>
-            </button>
+            </Link>
 
-            <button
-              type="button"
-              onClick={() => setActiveModal("partner")}
-              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs sm:text-sm px-5 py-2.5 sm:py-3 rounded-xl backdrop-blur-xs transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer"
-            >
+            <Link to="/partner" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs sm:text-sm px-5 py-2.5 sm:py-3 rounded-xl backdrop-blur-xs transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer">
               <Briefcase className="w-4 h-4 text-brand-orange" />
               <span>Partner With Us</span>
-            </button>
+            </Link>
           </div>
         </SubpageHeroCarousel>
 
@@ -519,12 +506,9 @@ export default function TechnicalVocationalPage() {
                   batch, or provide apprenticeship opportunities.
                 </p>
               </div>
-              <button
-                onClick={() => setActiveModal("partner")}
-                className="px-6 py-3 rounded-xl bg-brand-orange hover:bg-brand-orange/90 text-white font-semibold text-xs uppercase tracking-wider shrink-0 transition-all duration-200 hover:scale-[1.02] active:scale-95 shadow-md hover:shadow-lg cursor-pointer"
-              >
+              <Link to="/partner" className="px-6 py-3 rounded-xl bg-brand-orange hover:bg-brand-orange/90 text-white font-semibold text-xs uppercase tracking-wider shrink-0 transition-all duration-200 hover:scale-[1.02] active:scale-95 shadow-md hover:shadow-lg cursor-pointer">
                 Partner With Us
-              </button>
+              </Link>
             </div>
           </div>
         </section>
@@ -550,11 +534,7 @@ export default function TechnicalVocationalPage() {
         </section>
       </main>
 
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal
-        type={activeModal}
-        onClose={() => setActiveModal(null)}
-      />
+      <Footer />
     </div>
   );
 }

@@ -1,14 +1,12 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { NotificationTicker, UtilityBar, Header, Footer, RoleFormModal } from "@/components/layout/SiteLayout";
+import { NotificationTicker, UtilityBar, Header, Footer } from "@/components/layout/SiteLayout";
 import { Home, ChevronRight, ArrowLeft, ArrowRight, Wrench, Users, Smartphone, Briefcase, CheckCircle2, ShieldCheck, Sparkles, Building2 } from "lucide-react";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
 import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import heroImg from "@/assets/sector_skills_1.png";
 
 export default function CommunitySkillCentre() {
-  const [activeModal, setActiveModal] = useState<"volunteer" | "partner" | "sponsor" | "mentor" | "employee" | null>(null);
-
   const HIGHLIGHTS = [
     { icon: Smartphone, tag: "Digital Hub", title: "Community Computer Lab & Internet", desc: "15-terminal computer lab offering daily basic IT literacy, internet browsing, email, and online form filling." },
     { icon: Wrench, tag: "Vocational", title: "Appliance & Mobile Repair Clinic", desc: "Equipped test benches for training youth in smartphone troubleshooting, screen replacement, and circuit soldering." },
@@ -155,8 +153,7 @@ export default function CommunitySkillCentre() {
           </div>
         </section>
       </main>
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal type={activeModal} onClose={() => setActiveModal(null)} />
+      <Footer />
     </div>
   );
 }

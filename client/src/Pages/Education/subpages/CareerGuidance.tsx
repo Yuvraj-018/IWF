@@ -5,7 +5,6 @@ import {
   UtilityBar,
   Header,
   Footer,
-  RoleFormModal,
 } from "@/components/layout/SiteLayout";
 import {
   Home,
@@ -34,10 +33,6 @@ import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import heroImg from "@/assets/sector_education_2.png";
 
 export default function CareerGuidance() {
-  const [activeModal, setActiveModal] = useState<
-    "volunteer" | "partner" | "sponsor" | "mentor" | "employee" | null
-  >(null);
-
   const HIGHLIGHT_RIBBON = [
     {
       icon: Users,
@@ -493,10 +488,7 @@ export default function CareerGuidance() {
         <section className="py-12 bg-white border-b border-slate-200">
           <div className="max-w-4xl mx-auto px-4">
             <div className="grid sm:grid-cols-2 gap-5">
-              <button
-                onClick={() => setActiveModal("sponsor")}
-                className="p-6 rounded-2xl bg-white border border-slate-200 hover:border-orange-300 hover:bg-orange-50/20 text-slate-900 text-left shadow-xs hover:shadow-md transition-all flex items-center justify-between group hover:scale-[1.01] active:scale-95"
-              >
+              <Link to="/donate" search={{ financialType: "Education & Learning", initiative: "Career Guidance & Mentorship (CGM)" }} className="p-6 rounded-2xl bg-white border border-slate-200 hover:border-orange-300 hover:bg-orange-50/20 text-slate-900 text-left shadow-xs hover:shadow-md transition-all flex items-center justify-between group hover:scale-[1.01] active:scale-95">
                 <div>
                   <div className="inline-flex items-center text-[11px] font-bold uppercase tracking-wider text-brand-orange bg-orange-50 px-2.5 py-0.5 rounded border border-orange-200 mb-2">
                     Direct Sponsorship
@@ -511,12 +503,9 @@ export default function CareerGuidance() {
                 <div className="w-10 h-10 rounded-xl bg-orange-100/70 text-brand-orange flex items-center justify-center shrink-0 ml-4 group-hover:bg-brand-orange group-hover:text-white transition-all">
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
                 </div>
-              </button>
+              </Link>
 
-              <button
-                onClick={() => setActiveModal("mentor")}
-                className="p-6 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white text-left shadow-md hover:shadow-lg transition-all flex items-center justify-between group hover:scale-[1.01] active:scale-95"
-              >
+              <Link to="/mentor" className="p-6 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white text-left shadow-md hover:shadow-lg transition-all flex items-center justify-between group hover:scale-[1.01] active:scale-95">
                 <div>
                   <div className="inline-flex items-center text-[11px] font-bold uppercase tracking-wider text-emerald-300 bg-emerald-950/60 px-2.5 py-0.5 rounded border border-emerald-700/50 mb-2">
                     Share Your Expertise
@@ -531,7 +520,7 @@ export default function CareerGuidance() {
                 <div className="w-10 h-10 rounded-xl bg-white/10 text-white flex items-center justify-center shrink-0 ml-4 group-hover:bg-white group-hover:text-slate-900 transition-all">
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
                 </div>
-              </button>
+              </Link>
             </div>
           </div>
         </section>
@@ -557,11 +546,7 @@ export default function CareerGuidance() {
         </section>
       </main>
 
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal
-        type={activeModal}
-        onClose={() => setActiveModal(null)}
-      />
+      <Footer />
     </div>
   );
 }

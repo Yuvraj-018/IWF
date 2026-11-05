@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { useState, useEffect, useCallback } from "react";
 import {
   Lightbulb,
@@ -12,7 +13,7 @@ import {
   Award,
   Heart,
 } from "lucide-react";
-import { Footer, Header, NotificationTicker, RoleFormModal, UtilityBar } from "@/components/layout/SiteLayout";
+import { Footer, Header, NotificationTicker, UtilityBar } from "@/components/layout/SiteLayout";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
 import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import entrepreneurImg from "@/assets/thematic-entrepreneur.jpg";
@@ -21,9 +22,7 @@ import { ChevronLeft, ChevronRight as ChevronRight2 } from "lucide-react";
 
 type RoleType = "volunteer" | "partner" | "sponsor" | "mentor" | "employee";
 
-export default function EntrepreneurDevelopmentPage() {
-  const [activeModal, setActiveModal] = useState<RoleType | null>(null);
-  const [slideIndex, setSlideIndex] = useState(0);
+export default function EntrepreneurDevelopmentPage() {  const [slideIndex, setSlideIndex] = useState(0);
   const slides = [
     { image: sectorEntrepreneur1, caption: "Entrepreneurship workshops" },
     { image: entrepreneurImg, caption: "Rural enterprise development" },
@@ -77,22 +76,14 @@ export default function EntrepreneurDevelopmentPage() {
           images={slides.map((s) => s.image)}
         >
           <div className="flex flex-wrap items-center gap-3 pt-2">
-            <button
-              type="button"
-              onClick={() => setActiveModal("partner")}
-              className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold px-6 sm:px-7 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer"
-            >
+            <Link to="/partner" className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold px-6 sm:px-7 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer">
               <span>Partner With Us</span>
               <ArrowRight className="w-4 h-4" />
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveModal("sponsor")}
-              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer backdrop-blur-xs"
-            >
+            </Link>
+            <Link to="/donate" search={{ financialType: "Skills, Livelihoods & Entrepreneurship", initiative: "Entrepreneurship Development" }} className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer backdrop-blur-xs">
               <Heart className="w-4 h-4 text-brand-orange" />
               <span>Sponsor an Enterprise</span>
-            </button>
+            </Link>
           </div>
         </SubpageHeroCarousel>
 
@@ -172,12 +163,9 @@ export default function EntrepreneurDevelopmentPage() {
               Join hands with Islah Welfare Foundation to mentor, sponsor, or support aspiring local entrepreneurs across Bihar and India.
             </p>
             <div className="flex flex-wrap justify-center gap-4 pt-2">
-              <button
-                onClick={() => setActiveModal("mentor")}
-                className="bg-brand-orange hover:bg-orange-600 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-lg transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
-              >
+              <Link to="/mentor" className="bg-brand-orange hover:bg-orange-600 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-lg transition-all hover:scale-[1.02] active:scale-95 cursor-pointer">
                 Become a Mentor
-              </button>
+              </Link>
               <a
                 href="/donate"
                 className="bg-brand-green hover:bg-green-700 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-lg transition-all hover:scale-[1.02] active:scale-95"
@@ -189,8 +177,7 @@ export default function EntrepreneurDevelopmentPage() {
         </section>
       </main>
 
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal type={activeModal} onClose={() => setActiveModal(null)} />
+      <Footer />
     </div>
   );
 }

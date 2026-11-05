@@ -45,7 +45,6 @@ import { StandardPageHero } from "@/components/layout/StandardPageHero";
 import type { RoleType } from "@/components/forms/RoleFormModal";
 import { DonationReceipt, type DonationReceiptData } from "@/components/donation/DonationReceipt";
 import { DonationSummaryCard } from "@/components/donation/DonationSummaryCard";
-import { DonorMembershipCard } from "@/components/donation/DonorMembershipCard";
 import {
   COUNTRY_CODES,
   blockNumbersOnKeyDown,
@@ -70,6 +69,55 @@ const FINANCIAL_TYPES = [
   "General Donation",
   "Capital Donation",
 ];
+
+export function normalizeFinancialType(param?: string): string {
+  if (!param) return "General Donation";
+  const decoded = decodeURIComponent(param).trim();
+  const exact = FINANCIAL_TYPES.find((f) => f.toLowerCase() === decoded.toLowerCase());
+  if (exact) return exact;
+
+  const clean = decoded.toLowerCase();
+  if (
+    clean.includes("medic") ||
+    clean.includes("patient") ||
+    clean.includes("emergency") ||
+    clean.includes("hospital") ||
+    clean.includes("ambulance") ||
+    clean.includes("cancer") ||
+    clean.includes("diabetes") ||
+    clean.includes("menstrual") ||
+    clean.includes("cles")
+  ) {
+    return clean.includes("emergency") || clean.includes("patient") || clean.includes("critical")
+      ? "Medical Emergency"
+      : "Health Care & Well-being";
+  }
+  if (clean.includes("edu") || clean.includes("school") || clean.includes("clc") || clean.includes("learn") || clean.includes("scholarship")) {
+    return "Education & Learning";
+  }
+  if (clean.includes("health")) {
+    return "Health Care & Well-being";
+  }
+  if (clean.includes("women") || clean.includes("shg") || clean.includes("gender") || clean.includes("girl")) {
+    return "Women & Youth Empowerment";
+  }
+  if (clean.includes("skill") || clean.includes("livelihood") || clean.includes("entrepreneur") || clean.includes("vocation")) {
+    return "Skills, Livelihoods & Entrepreneurship";
+  }
+  if (clean.includes("justice") || clean.includes("legal") || clean.includes("rights") || clean.includes("grievance")) {
+    return "Social Justice & Legal Empowerment";
+  }
+  if (clean.includes("agri") || clean.includes("farm") || clean.includes("crop")) {
+    return "Agriculture & Rural Livelihoods";
+  }
+  if (clean.includes("env") || clean.includes("green") || clean.includes("tree") || clean.includes("clean") || clean.includes("climate") || clean.includes("water") || clean.includes("plastic")) {
+    return "Environment & Sustainability";
+  }
+  if (clean.includes("relief") || clean.includes("disaster") || clean.includes("rehab") || clean.includes("shelter") || clean.includes("flood") || clean.includes("winter") || clean.includes("ration")) {
+    return "Humanitarian Relief & Rehabilitation";
+  }
+  return "General Donation";
+}
 
 const PRESET_AMOUNTS = [500, 1000, 2000, 5000];
 
@@ -190,12 +238,26 @@ export default function DonatePage() {
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
 
-  // Read URL search params (e.g. ?patientId=mohammed-salim&amount=64000)
-  const search = useSearch({ strict: false }) as { patientId?: string; amount?: string };
+  // Read URL search params (e.g. ?financialType=Education+%26+Learning&initiative=CLC&amount=5000)
+  const search = useSearch({ strict: false }) as {
+    patientId?: string;
+    amount?: string;
+    financialType?: string;
+    program?: string;
+    initiative?: string;
+    cause?: string;
+    type?: string;
+  };
   const contextPatient = search.patientId
     ? URGENT_PATIENTS.find((p) => p.slug === search.patientId)
     : null;
   const contextAmount = search.amount ? parseInt(search.amount, 10) : undefined;
+  const rawFinancialType = search.financialType || search.program || search.type || search.cause;
+  const initialFinancialType = contextPatient
+    ? "Medical Emergency"
+    : rawFinancialType
+    ? normalizeFinancialType(rawFinancialType)
+    : "General Donation";
 
   const formRef = useRef<HTMLDivElement>(null);
 
@@ -208,7 +270,7 @@ export default function DonatePage() {
   } = useForm<DonorFormData>({
     resolver: zodResolver(donorSchema),
     defaultValues: {
-      financialType: contextPatient ? "Medical Emergency" : "Medical Emergency",
+      financialType: initialFinancialType,
       frequency: "One Time",
       amount: contextAmount || 2500,
       recurringPledge: true,
@@ -246,6 +308,15 @@ export default function DonatePage() {
   const watchPincode = watch("pincode");
   const watchTaxExemption = watch("taxExemption");
   const watchPan = watch("pan");
+
+  useEffect(() => {
+    if (initialFinancialType) {
+      setValue("financialType", initialFinancialType);
+    }
+    if (contextAmount) {
+      setValue("amount", contextAmount);
+    }
+  }, [initialFinancialType, contextAmount, setValue]);
 
   const [emailNotice, setEmailNotice] = useState<string | null>(null);
   const receiptRef = useRef<HTMLDivElement>(null);
@@ -447,53 +518,61 @@ export default function DonatePage() {
               </div>
             </div>
           )}
+          {!contextPatient && (search.initiative || search.cause || (rawFinancialType && initialFinancialType !== "General Donation")) && (
+            <div className="mt-4 inline-flex items-center gap-3 bg-white/10 backdrop-blur-md rounded-2xl p-2.5 pr-5 border border-white/20">
+              <div className="w-10 h-10 rounded-xl bg-brand-orange text-white flex items-center justify-center font-bold shrink-0 shadow-sm">
+                <Heart className="w-5 h-5 fill-white" />
+              </div>
+              <div className="text-xs text-left">
+                <p className="font-bold text-white text-sm">
+                  {search.initiative || search.cause ? `Supporting: ${search.initiative || search.cause}` : `Supporting: ${initialFinancialType}`}
+                </p>
+                <p className="text-emerald-200">{initialFinancialType} • Islah Welfare Foundation</p>
+              </div>
+            </div>
+          )}
         </StandardPageHero>
 
         {/* ─── Two-Column Donation Section (Exact Reproduction of Page 70) ──── */}
-        <section ref={formRef} className="py-12 sm:py-16 bg-slate-50 border-b border-slate-200">
+        <section ref={formRef} className="py-10 sm:py-12 bg-slate-50/70 border-b border-slate-200/80">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {submitted ? (
               /* ── Dedicated Post-Payment Presentation (Upper Thank You + Receipt + Bottom Actions) ── */
               <div className="max-w-3xl mx-auto space-y-8 text-center">
                 {/* Upper side: Celebratory Thank You Message */}
-                <div className="bg-gradient-to-br from-[#00381e] via-[#005a30] to-[#014725] text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-white/20 text-center space-y-4">
-                  <div className="w-16 h-16 rounded-full bg-white/20 text-white flex items-center justify-center mx-auto shadow-inner">
-                    <CheckCircle2 className="w-9 h-9 text-emerald-300" />
+                <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-xs text-center space-y-4">
+                  <div className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
+                    <CheckCircle2 className="w-8 h-8" />
                   </div>
                   <div className="space-y-1.5">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-emerald-300 text-xs font-bold uppercase tracking-wider">
-                      <Sparkles className="w-3.5 h-3.5" /> Payment Successful &amp; Verified
-                    </div>
-                    <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold">
+                      <Sparkles className="w-3.5 h-3.5" /> Payment Successful
+                    </span>
+                    <h2 className="text-2xl sm:text-3xl font-semibold text-[#071527]">
                       Thank You for Your Generous Donation!
                     </h2>
-                    <p className="text-emerald-100 text-xs sm:text-sm max-w-xl mx-auto leading-relaxed">
+                    <p className="text-slate-600 text-sm max-w-xl mx-auto leading-relaxed">
                       Your contribution of{" "}
-                      <strong className="text-white font-black text-base sm:text-lg">
+                      <strong className="text-[#071527] font-semibold">
                         ₹{Number(watchAmount).toLocaleString("en-IN")}
                       </strong>{" "}
-                      empowers lives, educates underprivileged children, and strengthens communities.
+                      empowers lives, educates underprivileged children and strengthens communities.
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 text-left">
-                    <div className="bg-white/10 rounded-xl p-2.5 backdrop-blur-xs">
-                      <span className="text-[10px] text-emerald-200 block uppercase font-bold">Receipt ID</span>
-                      <span className="text-xs font-mono font-bold text-white truncate block">{receiptNumber}</span>
-                    </div>
-                    <div className="bg-white/10 rounded-xl p-2.5 backdrop-blur-xs">
-                      <span className="text-[10px] text-emerald-200 block uppercase font-bold">Amount Paid</span>
-                      <span className="text-xs font-bold text-white">₹{Number(watchAmount).toLocaleString("en-IN")}</span>
-                    </div>
-                    <div className="bg-white/10 rounded-xl p-2.5 backdrop-blur-xs">
-                      <span className="text-[10px] text-emerald-200 block uppercase font-bold">Tax Benefit</span>
-                      <span className="text-xs font-bold text-white">100% 80G Eligible</span>
-                    </div>
-                    <div className="bg-white/10 rounded-xl p-2.5 backdrop-blur-xs">
-                      <span className="text-[10px] text-emerald-200 block uppercase font-bold">Sent To</span>
-                      <span className="text-xs font-bold text-white truncate block">{watchEmail}</span>
-                    </div>
-                  </div>
+                  <dl className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 text-left">
+                    {[
+                      ["Receipt ID", receiptNumber],
+                      ["Amount Paid", `₹${Number(watchAmount).toLocaleString("en-IN")}`],
+                      ["Tax Benefit", "80G eligible"],
+                      ["Sent To", watchEmail],
+                    ].map(([k, val]) => (
+                      <div key={k} className="rounded-xl bg-slate-50 border border-slate-200 p-2.5">
+                        <dt className="text-[11px] text-slate-500">{k}</dt>
+                        <dd className="text-xs font-medium text-[#071527] truncate">{val}</dd>
+                      </div>
+                    ))}
+                  </dl>
                 </div>
 
                 {/* Center: Exact Donation Receipt matching uploaded design 1:1 */}
@@ -502,7 +581,7 @@ export default function DonatePage() {
                 </div>
 
                 {/* Bottom: Action Buttons (Download Now, Send to Email, Print Receipt, Make Another Donation) */}
-                <div className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-xl space-y-4 text-center">
+                <div className="bg-white rounded-2xl p-6 sm:p-7 border border-slate-200 shadow-xs space-y-4 text-center">
                   <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
                     Receipt Actions &amp; Verification
                   </p>
@@ -510,7 +589,7 @@ export default function DonatePage() {
                     <button
                       type="button"
                       onClick={handleDownloadNow}
-                      className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-brand-green hover:bg-brand-green-dark text-white font-bold text-sm shadow-md transition hover:scale-[1.02] cursor-pointer"
+                      className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-brand-orange hover:bg-orange-600 text-white font-semibold text-sm transition cursor-pointer"
                     >
                       <Download className="w-4 h-4" /> Download Now
                     </button>
@@ -551,7 +630,7 @@ export default function DonatePage() {
                 {/* What Happens Next & Donor Helpline Card */}
                 <div className="grid md:grid-cols-2 gap-4 text-left">
                   <div className="p-5 bg-white border border-slate-200 rounded-2xl space-y-2.5 text-xs text-slate-600 shadow-sm">
-                    <h4 className="font-black text-slate-800 text-xs uppercase tracking-wider flex items-center gap-2">
+                    <h4 className="font-semibold text-slate-800 text-xs uppercase tracking-wider flex items-center gap-2">
                       <Shield className="w-4 h-4 text-brand-green" /> What Happens Next?
                     </h4>
                     <div className="flex items-start gap-2">
@@ -565,7 +644,7 @@ export default function DonatePage() {
                   </div>
 
                   <div className="p-5 bg-white border border-slate-200 rounded-2xl space-y-2.5 text-xs text-slate-600 shadow-sm">
-                    <h4 className="font-black text-slate-800 text-xs uppercase tracking-wider flex items-center gap-2">
+                    <h4 className="font-semibold text-slate-800 text-xs uppercase tracking-wider flex items-center gap-2">
                       <Phone className="w-4 h-4 text-brand-green" /> Donor Care &amp; Support
                     </h4>
                     <p className="text-slate-500">
@@ -586,15 +665,15 @@ export default function DonatePage() {
               <div className="grid lg:grid-cols-12 gap-8 items-start">
               {/* ── LEFT COLUMN: Donation Form ── */}
               <div className="lg:col-span-7">
-                <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl space-y-8 notranslate form-container" translate="no" dir="ltr">
+                <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-xs space-y-8 notranslate form-container" translate="no" dir="ltr">
                   <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 text-left notranslate" translate="no" dir="ltr">
                     {/* Part 1: Choose Donation Type */}
                     <div>
                       <div className="flex items-center gap-2.5 pb-2 mb-4 border-b border-slate-100">
-                        <span className="w-6 h-6 rounded-full bg-slate-900 text-white text-xs font-black flex items-center justify-center">
+                        <span className="w-6 h-6 rounded-full bg-[#071527] text-white text-xs font-semibold flex items-center justify-center">
                           1
                         </span>
-                        <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-wide">
+                        <h2 className="text-base sm:text-lg font-semibold text-slate-900 tracking-wide">
                           Choose Donation Type
                         </h2>
                       </div>
@@ -630,7 +709,7 @@ export default function DonatePage() {
                                   onClick={() => setValue("frequency", freq)}
                                   className={`py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm border transition-all cursor-pointer ${
                                     isSelected
-                                      ? "bg-brand-green text-white border-brand-green shadow-xs"
+                                      ? "bg-orange-50 text-[#071527] border-brand-orange ring-1 ring-brand-orange/25 font-semibold"
                                       : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
                                   }`}
                                 >
@@ -656,7 +735,7 @@ export default function DonatePage() {
                                   onClick={() => handlePresetClick(amt)}
                                   className={`py-2.5 px-2 rounded-xl font-bold text-xs sm:text-sm border transition-all cursor-pointer ${
                                     isSelected
-                                      ? "bg-brand-green text-white border-brand-green shadow-xs"
+                                      ? "bg-orange-50 text-[#071527] border-brand-orange ring-1 ring-brand-orange/25 font-semibold"
                                       : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
                                   }`}
                                 >
@@ -669,7 +748,7 @@ export default function DonatePage() {
                               onClick={handleOtherClick}
                               className={`py-2.5 px-2 rounded-xl font-bold text-xs sm:text-sm border transition-all cursor-pointer ${
                                 selectedPreset === "Other"
-                                  ? "bg-brand-green text-white border-brand-green shadow-xs"
+                                  ? "bg-orange-50 text-[#071527] border-brand-orange ring-1 ring-brand-orange/25 font-semibold"
                                   : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
                               }`}
                             >
@@ -724,10 +803,10 @@ export default function DonatePage() {
                     {/* Part 2: Donor Information */}
                     <div>
                       <div className="flex items-center gap-2.5 pb-2 mb-4 border-b border-slate-100">
-                        <span className="w-6 h-6 rounded-full bg-slate-900 text-white text-xs font-black flex items-center justify-center">
+                        <span className="w-6 h-6 rounded-full bg-[#071527] text-white text-xs font-semibold flex items-center justify-center">
                           2
                         </span>
-                        <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-wide">
+                        <h2 className="text-base sm:text-lg font-semibold text-slate-900 tracking-wide">
                           Donor Information
                         </h2>
                       </div>
@@ -1073,7 +1152,7 @@ export default function DonatePage() {
                           <button
                             type="submit"
                             disabled={isSubmitting || isPaymentProcessing}
-                            className="w-full h-12 rounded-xl bg-brand-green hover:bg-brand-green-dark text-white font-extrabold text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-brand-green/30 transition-all hover:scale-[1.01] active:scale-98 cursor-pointer disabled:opacity-50"
+                            className="w-full h-12 rounded-xl bg-brand-orange hover:bg-orange-600 text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.99] cursor-pointer disabled:opacity-50"
                           >
                             <Lock className="w-4 h-4" />
                             {isSubmitting || isPaymentProcessing
@@ -1104,8 +1183,8 @@ export default function DonatePage() {
               </div>
 
               {/* ── RIGHT COLUMN: Symmetrical Live Donation Summary Card ── */}
-              <div className="lg:col-span-5 space-y-6">
-                <div className="lg:sticky lg:top-24 space-y-5">
+              <div className="lg:col-span-5">
+                <div className="lg:sticky lg:top-24 space-y-4">
                   <DonationSummaryCard
                     financialType={watchFinancialType}
                     frequency={watchFrequency}
@@ -1122,16 +1201,9 @@ export default function DonatePage() {
                     contextPatient={contextPatient}
                   />
 
-                  {/* Donor Recognition & Membership Status Card */}
-                  <DonorMembershipCard
-                    fullName={watchFullName}
-                    currentAmount={Number(watchAmount) || 0}
-                    donorType={watchDonorType}
-                  />
-
                   {/* Donor Care & Assistance Card */}
                   <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-2 text-left">
-                    <p className="text-xs font-black text-slate-800 uppercase tracking-wide flex items-center gap-1.5">
+                    <p className="text-xs font-semibold text-slate-800 uppercase tracking-wide flex items-center gap-1.5">
                       <HelpCircle className="w-3.5 h-3.5 text-brand-green" />
                       Questions or Need Assistance?
                     </p>
@@ -1161,11 +1233,11 @@ export default function DonatePage() {
         </section>
 
         {/* ─── Section 2: Offline Contribution (Exact Reproduction of Page 72) ─── */}
-        <section id="offline-contribution" className="py-14 bg-white border-b border-slate-200 text-left">
+        <section id="offline-contribution" className="py-12 sm:py-14 bg-white text-left">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             <div className="border-b border-slate-200 pb-4">
-              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-                Offline Contribute
+              <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight">
+                Contribute Offline
               </h2>
               <p className="text-xs sm:text-sm text-slate-500 mt-1">
                 Direct bank transfer, cheque, or draft options for generous donors wishing to contribute offline.
@@ -1177,7 +1249,7 @@ export default function DonatePage() {
               <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-200 text-xs text-slate-700">
                 {/* Column 1: For All Indian Nationals */}
                 <div className="p-6 bg-slate-50/50 space-y-3">
-                  <h3 className="font-black text-sm text-slate-900 border-b border-slate-200 pb-2">
+                  <h3 className="font-semibold text-sm text-slate-900 border-b border-slate-200 pb-2">
                     For All Indian Nationals
                   </h3>
                   <div className="space-y-2">
@@ -1222,7 +1294,7 @@ export default function DonatePage() {
 
                 {/* Column 2: By Cheque/Draft */}
                 <div className="p-6 bg-slate-50/50 space-y-3">
-                  <h3 className="font-black text-sm text-slate-900 border-b border-slate-200 pb-2">
+                  <h3 className="font-semibold text-sm text-slate-900 border-b border-slate-200 pb-2">
                     By Cheque / Draft
                   </h3>
                   <p className="leading-relaxed">
@@ -1247,7 +1319,7 @@ export default function DonatePage() {
 
                 {/* Column 3: For All Foreign Passport Holders */}
                 <div className="p-6 bg-red-50/30 space-y-3">
-                  <h3 className="font-black text-sm text-red-600 border-b border-red-100 pb-2">
+                  <h3 className="font-semibold text-sm text-red-600 border-b border-red-100 pb-2">
                     For All Foreign Passport Holders
                   </h3>
                   <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-center space-y-2 mt-4">
@@ -1264,7 +1336,7 @@ export default function DonatePage() {
 
             {/* Indian Contribution Notes & Tax Exemption (Page 72) */}
             <div className="p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-4 text-xs text-slate-700">
-              <h4 className="font-black text-sm text-slate-900 uppercase tracking-wide">
+              <h4 className="font-semibold text-sm text-slate-900 uppercase tracking-wide">
                 For Indian Contribution
               </h4>
               <p className="leading-relaxed">
@@ -1320,11 +1392,11 @@ export default function DonatePage() {
               {/* Green Highlighted Note (Page 72) */}
               <div className="p-4 bg-emerald-100 border border-emerald-300 rounded-xl text-emerald-950 font-bold text-xs leading-relaxed">
                 Note: You may deposit cash online to the account and E-mail us the transfer details to{" "}
-                <a href="mailto:info@iwfindia.org" className="underline font-black">
+                <a href="mailto:info@iwfindia.org" className="underline font-semibold">
                   info@iwfindia.org
                 </a>{" "}
                 along with your postal address or inform us at{" "}
-                <a href="tel:+919811861633" className="underline font-black">
+                <a href="tel:+919811861633" className="underline font-semibold">
                   9811861633
                 </a>
                 .

@@ -5,7 +5,6 @@ import {
   UtilityBar,
   Header,
   Footer,
-  RoleFormModal,
 } from "@/components/layout/SiteLayout";
 import {
   Wrench,
@@ -229,10 +228,6 @@ const EXPECTED_IMPACTS = [
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export default function SkillsLanding() {
-  const [activeModal, setActiveModal] = useState<
-    "volunteer" | "partner" | "sponsor" | "mentor" | "employee" | null
-  >(null);
-
   return (
     <div className="min-h-screen bg-white font-sans text-foreground">
       <NotificationTicker />
@@ -259,14 +254,10 @@ export default function SkillsLanding() {
               <span>Explore Initiatives</span>
               <ArrowRight className="w-4 h-4" />
             </a>
-            <button
-              type="button"
-              onClick={() => setActiveModal("partner")}
-              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer backdrop-blur-xs"
-            >
+            <Link to="/partner" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer backdrop-blur-xs">
               <Heart className="w-4 h-4 text-brand-orange" />
               <span>Partner With Us</span>
-            </button>
+            </Link>
           </div>
         </SubpageHeroCarousel>
 
@@ -717,26 +708,19 @@ export default function SkillsLanding() {
                 >
                   <TrendingUp className="w-4 h-4" /> Sponsor a Toolkit
                 </Link>
-                <button
-                  onClick={() => setActiveModal("partner")}
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 px-6 py-2.5 rounded-full transition-all duration-200 hover:scale-[1.02] active:scale-95"
-                >
+                <Link to="/partner" className="inline-flex items-center gap-2 text-sm font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 px-6 py-2.5 rounded-full transition-all duration-200 hover:scale-[1.02] active:scale-95">
                   CSR &amp; Skills Partnership <ArrowUpRight className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => setActiveModal("volunteer")}
-                  className="inline-flex items-center gap-2 text-sm font-medium text-slate-300 hover:text-white px-5 py-2.5 rounded-full transition-all duration-200 hover:scale-[1.02] active:scale-95"
-                >
+                </Link>
+                <Link to="/volunteer" className="inline-flex items-center gap-2 text-sm font-medium text-slate-300 hover:text-white px-5 py-2.5 rounded-full transition-all duration-200 hover:scale-[1.02] active:scale-95">
                   Volunteer as a Trainer
-                </button>
+                </Link>
               </div>
             </ScrollReveal>
           </div>
         </section>
       </main>
 
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal type={activeModal} onClose={() => setActiveModal(null)} />
+      <Footer />
     </div>
   );
 }

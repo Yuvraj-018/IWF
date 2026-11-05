@@ -5,7 +5,6 @@ import {
   UtilityBar,
   Header,
   Footer,
-  RoleFormModal,
 } from "@/components/layout/SiteLayout";
 import {
   Home,
@@ -34,10 +33,6 @@ import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import heroImg from "@/assets/sector_education_1.png";
 
 export default function ScholarshipsPage() {
-  const [activeModal, setActiveModal] = useState<
-    "volunteer" | "partner" | "sponsor" | "mentor" | "employee" | null
-  >(null);
-
   const HIGHLIGHT_RIBBON = [
     {
       icon: Award,
@@ -523,10 +518,7 @@ export default function ScholarshipsPage() {
         <section className="py-12 bg-white border-b border-slate-200">
           <div className="max-w-4xl mx-auto px-4">
             <div className="grid sm:grid-cols-2 gap-4">
-              <button
-                onClick={() => setActiveModal("sponsor")}
-                className="p-6 rounded-2xl bg-gradient-to-br from-[#ea580c] to-amber-600 text-white text-left shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] active:scale-95 flex items-center justify-between group cursor-pointer"
-              >
+              <Link to="/donate" search={{ financialType: "Education & Learning", initiative: "Scholarships for Higher Education (SHE)" }} className="p-6 rounded-2xl bg-gradient-to-br from-[#ea580c] to-amber-600 text-white text-left shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] active:scale-95 flex items-center justify-between group cursor-pointer">
                 <div>
                   <div className="text-xs font-bold uppercase tracking-wider text-orange-100 mb-1">
                     Direct Sponsorship
@@ -539,12 +531,9 @@ export default function ScholarshipsPage() {
                   </p>
                 </div>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform shrink-0 ml-4" />
-              </button>
+              </Link>
 
-              <button
-                onClick={() => setActiveModal("partner")}
-                className="p-6 rounded-2xl bg-gradient-to-br from-[#071527] to-[#0c2340] text-white text-left shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] active:scale-95 flex items-center justify-between group cursor-pointer"
-              >
+              <Link to="/partner" className="p-6 rounded-2xl bg-gradient-to-br from-[#071527] to-[#0c2340] text-white text-left shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] active:scale-95 flex items-center justify-between group cursor-pointer">
                 <div>
                   <div className="text-xs font-bold uppercase tracking-wider text-brand-orange mb-1">
                     Institutional Collaboration
@@ -557,7 +546,7 @@ export default function ScholarshipsPage() {
                   </p>
                 </div>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform shrink-0 ml-4" />
-              </button>
+              </Link>
             </div>
           </div>
         </section>
@@ -583,11 +572,7 @@ export default function ScholarshipsPage() {
         </section>
       </main>
 
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal
-        type={activeModal}
-        onClose={() => setActiveModal(null)}
-      />
+      <Footer />
     </div>
   );
 }

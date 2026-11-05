@@ -16,7 +16,7 @@ import {
   Home,
   ChevronRight,
 } from "lucide-react";
-import { Footer, Header, NotificationTicker, RoleFormModal, UtilityBar } from "@/components/layout/SiteLayout";
+import { Footer, Header, NotificationTicker, UtilityBar } from "@/components/layout/SiteLayout";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
 import { StandardPageHero } from "@/components/layout/StandardPageHero";
 
@@ -210,8 +210,6 @@ const CATEGORIES = [
 export default function ProgramsMasterPage() {
   const [activeCategory, setActiveCategory] = useState("All Programs");
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeModal, setActiveModal] = useState<RoleType | null>(null);
-
   const filteredPrograms = useMemo(() => {
     return PROGRAM_LIST.filter((p) => {
       const matchesCategory =
@@ -381,8 +379,7 @@ export default function ProgramsMasterPage() {
         </section>
       </main>
 
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal type={activeModal} onClose={() => setActiveModal(null)} />
+      <Footer />
     </div>
   );
 }

@@ -5,7 +5,6 @@ import {
   UtilityBar,
   Header,
   Footer,
-  RoleFormModal,
 } from "@/components/layout/SiteLayout";
 import {
   Home,
@@ -477,10 +476,6 @@ function BackNav() {
 }
 
 export default function CervicalCancerPrevention() {
-  const [activeModal, setActiveModal] = useState<
-    "volunteer" | "partner" | "sponsor" | "mentor" | "employee" | null
-  >(null);
-
   return (
     <div className="min-h-screen bg-white font-sans text-foreground">
       <NotificationTicker />
@@ -495,8 +490,7 @@ export default function CervicalCancerPrevention() {
         <ImpactSection />
         <BackNav />
       </main>
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal type={activeModal} onClose={() => setActiveModal(null)} />
+      <Footer />
     </div>
   );
 }

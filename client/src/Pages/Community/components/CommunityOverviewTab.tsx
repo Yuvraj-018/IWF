@@ -22,7 +22,6 @@ import rahulSharmaImg from "@/assets/community/rahul-sharma.jpg";
 import nehaVermaImg from "@/assets/community/neha-verma.jpg";
 import landscapeVillageImg from "@/assets/community/landscape-village.jpg";
 import { ProfileDetailModal } from "./ProfileDetailModal";
-import { MemberVerificationModal } from "./MemberVerificationModal";
 import { MEMBERS_DATA, DONORS_DATA, PARTNERS_DATA, VOLUNTEERS_DATA } from "../communityData";
 import type { CommunityTab } from "./CommunitySelectiveBar";
 import type { RoleType } from "@/components/forms/RoleFormModal";
@@ -37,7 +36,6 @@ export function CommunityOverviewTab({
   onOpenRoleModal,
 }: CommunityOverviewTabProps) {
   const [selectedProfile, setSelectedProfile] = useState<any>(null);
-  const [isVerificationOpen, setIsVerificationOpen] = useState(false);
   const [exploreFilter, setExploreFilter] = useState<"all" | "members" | "donors" | "partners" | "volunteers">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
@@ -982,7 +980,7 @@ export function CommunityOverviewTab({
                     Access Your Member Portal
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-600 mt-1">
-                    Log in to view your profile, check membership status, track renewals and more.
+                    Verify with a one-time code to check your membership status, renew and download your card.
                   </p>
                 </div>
               </div>
@@ -1010,20 +1008,22 @@ export function CommunityOverviewTab({
 
             {/* Buttons */}
             <div className="flex flex-wrap items-center gap-3">
-              <button
-                onClick={() => setIsVerificationOpen(true)}
-                className="bg-[#071527] hover:bg-[#0e2a4a] text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-xs transition flex items-center gap-2 cursor-pointer"
+              <Link
+                to="/membership"
+                hash="membership-status"
+                className="bg-[#071527] hover:bg-[#0e2a4a] text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-xs transition flex items-center gap-2"
               >
-                <span>Member Login</span>
+                <span>Check Membership Status</span>
                 <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-              <button
-                onClick={() => setIsVerificationOpen(true)}
-                className="bg-white border-2 border-brand-orange text-brand-orange hover:bg-orange-50 font-bold text-xs px-5 py-2 rounded-xl transition flex items-center gap-2 cursor-pointer"
+              </Link>
+              <Link
+                to="/membership"
+                hash="membership-status"
+                className="bg-white border-2 border-brand-orange text-brand-orange hover:bg-orange-50 font-bold text-xs px-5 py-2 rounded-xl transition flex items-center gap-2"
               >
                 <RotateCw className="w-3.5 h-3.5" />
                 <span>Renew Membership</span>
-              </button>
+              </Link>
             </div>
           </div>
 
@@ -1167,10 +1167,6 @@ export function CommunityOverviewTab({
 
       {/* Modals */}
       <ProfileDetailModal profile={selectedProfile} onClose={() => setSelectedProfile(null)} />
-      <MemberVerificationModal
-        isOpen={isVerificationOpen}
-        onClose={() => setIsVerificationOpen(false)}
-      />
     </div>
   );
 }

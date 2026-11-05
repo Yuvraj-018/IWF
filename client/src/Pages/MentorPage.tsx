@@ -1,147 +1,396 @@
-import { useState } from "react";
 import {
-  GraduationCap,
-  Sparkles,
-  ArrowRight,
-  CheckCircle2,
-  Users,
-  Compass,
-  Lightbulb,
-  Award,
   BookOpen,
+  Briefcase,
+  Building2,
+  GraduationCap,
+  HandHeart,
+  Laptop,
+  Lightbulb,
+  MapPin,
+  MonitorSmartphone,
+  Presentation,
+  Rocket,
+  Shield,
+  Sprout,
+  User,
+  UserCheck,
+  Users,
 } from "lucide-react";
+import { Footer, Header, NotificationTicker, UtilityBar } from "@/components/layout/SiteLayout";
+import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
+import { ApplicationWizard } from "@/components/forms/wizard/ApplicationWizard";
+import { mentorFormConfig } from "@/components/forms/wizard/configs/mentorForm";
 import {
-  Footer,
-  Header,
-  NotificationTicker,
-  RoleFormModal,
-  UtilityBar,
-} from "@/components/layout/SiteLayout";
-import { MentorApplicationForm } from "@/components/forms/MentorApplicationForm";
-import type { RoleType } from "@/components/forms/RoleFormModal";
+  CheckPills,
+  FinalCta,
+  FormSection,
+  HeroActions,
+  IconCards,
+  JourneySteps,
+  PolicyLinks,
+  Section,
+  SectionHeader,
+  pastel,
+} from "@/components/getInvolved/PageSections";
 
-import { StandardPageHero } from "@/components/layout/StandardPageHero";
+const MENTORSHIP_AREAS: { title: string; items: string[] }[] = [
+  {
+    title: "Academic & Education",
+    items: [
+      "Academic guidance",
+      "Higher education",
+      "Scholarship guidance",
+      "Competitive examinations",
+      "Study skills",
+    ],
+  },
+  {
+    title: "Career & Professional Development",
+    items: [
+      "Career planning",
+      "Interview preparation",
+      "Professional development",
+      "Workplace readiness",
+    ],
+  },
+  {
+    title: "Skills & Technology",
+    items: [
+      "Digital literacy",
+      "IT & technology",
+      "Communication",
+      "Data & research",
+      "Creative skills",
+    ],
+  },
+  {
+    title: "Entrepreneurship & Livelihoods",
+    items: [
+      "Entrepreneurship",
+      "Business planning",
+      "Financial literacy",
+      "Marketing",
+      "Enterprise development",
+    ],
+  },
+  {
+    title: "Leadership & Personal Development",
+    items: [
+      "Leadership",
+      "Communication",
+      "Confidence building",
+      "Goal setting",
+      "Decision-making",
+    ],
+  },
+  {
+    title: "Social & Community Development",
+    items: [
+      "Community development",
+      "NGO / project management",
+      "Research & documentation",
+      "Social innovation",
+      "Rural development",
+    ],
+  },
+];
 
 export default function MentorPage() {
-  const [activeModal, setActiveModal] = useState<RoleType | null>(null);
-
-  const scrollToForm = () => {
-    document.getElementById("mentor-form")?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  };
-
   return (
-    <div className="min-h-screen bg-white font-sans text-slate-800">
+    <div className="min-h-screen bg-white text-slate-800 flex flex-col font-sans">
       <NotificationTicker />
       <UtilityBar />
       <Header />
 
-      <main>
-        {/* Standardized Hero Section */}
-        <StandardPageHero
-          badge="BECOME A MENTOR"
-          title="Become a Mentor"
-          description="Share your knowledge, inspire lives, and create lasting impact. At ISLAH, we connect passionate professionals, educators, and domain experts with aspiring youth, students, and community workers in rural and underserved areas."
-          breadcrumb={[{ label: "Become a Mentor" }]}
+      <main className="flex-grow">
+        {/* 01. Hero */}
+        <SubpageHeroCarousel
+          tag="BECOME A MENTOR"
+          title="Share Knowledge. Guide Potential. Create Pathways."
+          subtitle="Mentorship connects knowledge, experience and opportunity with students, young people, women entrepreneurs and grassroots workers in rural and underserved communities."
+          breadcrumbs={[
+            { label: "Get Involved", href: "/get-involved" },
+            { label: "Become a Mentor" },
+          ]}
         >
-          <div className="flex flex-wrap gap-3 pt-2">
-            <button
-              onClick={scrollToForm}
-              className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold px-7 py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer"
-            >
-              Apply as a Mentor <ArrowRight className="w-4 h-4" />
-            </button>
-            <a
-              href="/mentorship-policy"
-              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-6 py-3 rounded-xl transition text-xs sm:text-sm uppercase tracking-wider"
-            >
-              Mentorship Policy
-            </a>
-          </div>
-        </StandardPageHero>
+          <HeroActions
+            primary={{ label: "Become a Mentor", target: "mentor-form" }}
+            secondary={{ label: "Explore Mentorship Options", target: "mentorship-areas" }}
+            community={{
+              label: "Meet our mentor community",
+              to: "/about/community",
+              search: { tab: "volunteers" },
+            }}
+          />
+        </SubpageHeroCarousel>
 
-        {/* ─── Who Can Benefit? (Page 46 of PDF) ──────────────────────────────── */}
-        <section className="py-16 bg-slate-50 border-b border-slate-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto mb-12">
-              <span className="text-xs font-bold uppercase tracking-widest text-brand-orange">
-                Impact Beneficiaries
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">
-                Who Can Benefit from Your Mentorship?
-              </h2>
-              <p className="text-sm text-slate-600 leading-relaxed font-normal mt-2">
-                Our mentorship initiatives bridge the gap between grassroots potential and professional opportunity.
+        {/* 02. Why mentorship matters */}
+        <Section>
+          <div className="grid lg:grid-cols-[1fr_1.1fr] gap-8 items-center">
+            <SectionHeader
+              eyebrow="02. Why Mentorship Matters"
+              title="Talent Exists Everywhere. Access to Guidance Does Not."
+            />
+            <div className="space-y-3 text-sm sm:text-base text-slate-700 leading-relaxed">
+              <p>
+                For many students, young people, aspiring entrepreneurs and grassroots workers in
+                rural and underserved communities, the right guidance at the right time can make a
+                meaningful difference.
+              </p>
+              <p>
+                ISLAH's mentorship programme connects them with experienced mentors who share
+                knowledge, provide practical guidance, encourage informed decision-making and help
+                them explore pathways for learning, livelihood and personal development.
               </p>
             </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                {
-                  title: "School & College Students",
-                  desc: "Academic counseling, exam preparation guidance, scholarship applications, and higher education direction.",
-                  icon: BookOpen,
-                },
-                {
-                  title: "Aspiring Rural Youth",
-                  desc: "Career roadmap building, resume building, interview preparation, digital skills, and competitive exam strategies.",
-                  icon: Compass,
-                },
-                {
-                  title: "Women & SHG Entrepreneurs",
-                  desc: "Business planning, financial literacy, product marketing, value addition, and small enterprise scaling.",
-                  icon: Lightbulb,
-                },
-                {
-                  title: "Grassroots Development Workers",
-                  desc: "Project execution advice, community mobilization strategies, documentation, and organizational best practices.",
-                  icon: Users,
-                },
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-brand-green hover:shadow-md transition-all group"
-                >
-                  <div className="w-12 h-12 rounded-xl bg-emerald-50 text-brand-green flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
-                    <item.icon className="w-6 h-6" />
-                  </div>
-                  <h3 className="font-bold text-slate-900 text-base mb-2 group-hover:text-brand-green transition-colors">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm text-slate-600 font-normal leading-relaxed">{item.desc}</p>
-                </div>
-              ))}
-            </div>
           </div>
-        </section>
+        </Section>
 
-        {/* ─── Mentorship Application Form (Page 42) ──────────────────────────── */}
-        <section id="mentor-form" className="py-16 bg-slate-100">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6">
-            <div className="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
-              {/* Form Header */}
-              <div className="bg-gradient-to-r from-[#071527] to-[#0c2340] px-6 sm:px-10 py-6 text-white">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-emerald-200 text-xs font-bold mb-2">
-                  <GraduationCap className="w-4 h-4" /> Official Application
+        {/* 03. Who can benefit */}
+        <Section tone="muted">
+          <SectionHeader eyebrow="03. Who Can Benefit" title="Who Your Mentorship Can Help" />
+          <IconCards
+            columns={4}
+            items={[
+              {
+                icon: GraduationCap,
+                title: "Students & Learners",
+                desc: "Academic guidance, higher education planning, scholarship awareness, exam preparation and learning support.",
+              },
+              {
+                icon: Rocket,
+                title: "Rural Youth",
+                desc: "Career exploration, professional skills, CV development, interview preparation and digital skills.",
+              },
+              {
+                icon: Sprout,
+                title: "Women & Community Entrepreneurs",
+                desc: "Business planning, financial literacy, marketing, product development and enterprise growth.",
+              },
+              {
+                icon: Users,
+                title: "Grassroots Development Workers",
+                desc: "Community mobilisation, project planning, documentation and professional capacity building.",
+              },
+            ]}
+          />
+        </Section>
+
+        {/* 04. Mentorship areas */}
+        <Section id="mentorship-areas">
+          <SectionHeader
+            eyebrow="04. What You Can Contribute"
+            title="Mentorship Areas"
+            desc="Mentor in the areas where your experience is strongest. In the application you can also choose your professional domain — from education and healthcare to law, engineering, finance and agriculture."
+          />
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {MENTORSHIP_AREAS.map((area, i) => {
+              const p = pastel(i);
+              return (
+                <div
+                  key={area.title}
+                  className={`rounded-xl border border-slate-200 bg-white p-5 transition ${p.hover}`}
+                >
+                  <h3 className={`text-sm sm:text-base font-semibold ${p.icon}`}>{area.title}</h3>
+                  <ul className="mt-2.5 flex flex-wrap gap-1.5">
+                    {area.items.map((it) => (
+                      <li
+                        key={it}
+                        className="text-xs text-slate-700 px-2.5 py-1 rounded-full bg-slate-50 border border-slate-200"
+                      >
+                        {it}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-bold">Mentor Application Form</h2>
-                <p className="text-white/80 text-xs sm:text-sm mt-1">
-                  Join hands with ISLAH and help us shape the next generation of rural leaders.
+              );
+            })}
+          </div>
+        </Section>
+
+        {/* 05. Who can become a mentor */}
+        <Section tone="muted">
+          <SectionHeader
+            eyebrow="05. Who Can Become a Mentor"
+            title="Experience Worth Sharing"
+            desc="Mentorship is open to anyone with relevant knowledge, experience or practical skills they're willing to share responsibly. Formal mentoring experience is not required."
+          />
+          <IconCards
+            columns={3}
+            items={[
+              {
+                icon: BookOpen,
+                title: "Educators & Academics",
+                desc: "Teachers, professors, researchers and education professionals.",
+              },
+              {
+                icon: Briefcase,
+                title: "Working Professionals",
+                desc: "From technology, finance, law, healthcare, engineering, management and other fields.",
+              },
+              {
+                icon: Building2,
+                title: "Entrepreneurs & Business Leaders",
+                desc: "Practical experience in entrepreneurship, business development and enterprise management.",
+              },
+              {
+                icon: Lightbulb,
+                title: "Researchers & Experts",
+                desc: "Specialised knowledge for research, knowledge sharing and technical guidance.",
+              },
+              {
+                icon: HandHeart,
+                title: "Community Professionals",
+                desc: "Meaningful grassroots, development or community-based experience.",
+              },
+              {
+                icon: UserCheck,
+                title: "Skilled Volunteers",
+                desc: "Practical expertise shared through structured mentoring or workshops.",
+              },
+            ]}
+          />
+        </Section>
+
+        {/* 06. Flexible formats */}
+        <Section>
+          <SectionHeader
+            eyebrow="06. Flexible Ways to Mentor"
+            title="Mentor in the Way That Suits You"
+          />
+          <IconCards
+            columns={3}
+            items={[
+              {
+                icon: User,
+                title: "One-to-One Mentoring",
+                desc: "Personalised guidance based on the mentee's goals and needs.",
+              },
+              {
+                icon: Users,
+                title: "Group Mentoring",
+                desc: "Share experience with small groups of learners or community participants.",
+              },
+              {
+                icon: Presentation,
+                title: "Workshops & Knowledge Sessions",
+                desc: "Structured sessions on professional, academic, technical or entrepreneurial topics.",
+              },
+              {
+                icon: Laptop,
+                title: "Online Mentoring",
+                desc: "Contribute remotely through scheduled digital sessions.",
+              },
+              {
+                icon: MapPin,
+                title: "On-Site Mentoring",
+                desc: "Field-based mentoring in community programmes where applicable.",
+              },
+              {
+                icon: MonitorSmartphone,
+                title: "Hybrid Mentoring",
+                desc: "Online guidance combined with periodic in-person interaction.",
+              },
+            ]}
+          />
+        </Section>
+
+        {/* 07. How it works */}
+        <Section tone="muted">
+          <SectionHeader eyebrow="07. How It Works" title="How ISLAH Mentorship Works" />
+          <JourneySteps
+            steps={[
+              { title: "Apply", desc: "Share your expertise, interests and availability." },
+              {
+                title: "Review",
+                desc: "We review your experience and preferred areas of contribution.",
+              },
+              {
+                title: "Orient",
+                desc: "Selected mentors receive programme information and orientation.",
+              },
+              {
+                title: "Match",
+                desc: "Where appropriate, you're matched with mentees, groups or activities.",
+              },
+              { title: "Mentor", desc: "Provide structured guidance through agreed sessions." },
+              {
+                title: "Reflect & Grow",
+                desc: "Feedback improves the experience for mentors and mentees.",
+              },
+            ]}
+          />
+        </Section>
+
+        {/* 08. Mentor commitment */}
+        <Section>
+          <div className="grid lg:grid-cols-[1fr_1.4fr] gap-6 items-center">
+            <SectionHeader
+              eyebrow="08. Mentor Commitment"
+              title="Mentoring With Care and Responsibility"
+              desc="Every ISLAH mentor commits to standards that protect mentees and build trust."
+            />
+            <div className="space-y-4">
+              <CheckPills
+                items={[
+                  "Professionalism",
+                  "Respect",
+                  "Confidentiality",
+                  "Safeguarding",
+                  "Code of Conduct",
+                ]}
+              />
+              <div className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50/60 p-4 text-sm text-slate-700">
+                <Shield className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                <p>
+                  Roles involving children or vulnerable people include additional screening, clear
+                  boundaries and safeguarding procedures appropriate to the role.
                 </p>
               </div>
-
-              <div className="p-6 sm:p-10">
-                <MentorApplicationForm />
-              </div>
             </div>
           </div>
-        </section>
+        </Section>
+
+        {/* 09. Application */}
+        <FormSection
+          id="mentor-form"
+          eyebrow="09. Become a Mentor"
+          title="Share Your Experience. Guide Potential. Shape Futures."
+          desc="Tell us about your expertise, mentoring interests and availability so we can explore a suitable mentorship opportunity with you. Your progress is saved on this device as you go."
+        >
+          <ApplicationWizard config={mentorFormConfig} />
+        </FormSection>
+
+        {/* 10. Policies */}
+        <Section>
+          <SectionHeader
+            eyebrow="10. Policies & Safeguarding"
+            title="Our Commitments to Mentees and Mentors"
+            desc="Please read these before applying. They explain how mentorship is conducted, how information is handled and how we keep everyone safe."
+          />
+          <PolicyLinks
+            links={[
+              { label: "Mentorship Policy", to: "/mentorship-policy" },
+              { label: "Code of Conduct", to: "/code-of-conduct" },
+              { label: "Privacy Policy", to: "/privacy-policy" },
+              { label: "Child Protection & Safeguarding", to: "/child-protection-policy" },
+            ]}
+          />
+        </Section>
+
+        <FinalCta
+          title="Your Experience Can Become Someone Else's Opportunity."
+          desc="Explore more ways to contribute through volunteering, partnerships and community engagement."
+          primary={{
+            label: "Become a Mentor",
+            onClick: () =>
+              document.getElementById("mentor-form")?.scrollIntoView({ behavior: "smooth" }),
+          }}
+          secondary={{ label: "Return to Get Involved", to: "/get-involved" }}
+        />
       </main>
 
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal type={activeModal} onClose={() => setActiveModal(null)} />
+      <Footer />
     </div>
   );
 }

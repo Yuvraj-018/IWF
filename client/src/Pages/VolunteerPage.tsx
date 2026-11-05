@@ -1,345 +1,264 @@
-import { useState, useRef } from "react";
 import {
-  Heart,
-  Users,
   Award,
-  Sparkles,
-  ArrowRight,
-  Shield,
-  FileText,
-  Check,
-  Briefcase,
-  GraduationCap,
-  Calendar,
   BookOpen,
-  Sprout,
+  Briefcase,
+  Calculator,
+  Code2,
+  GraduationCap,
+  Heart,
   HeartPulse,
+  Home,
   Scale,
-  TreePine,
-  ShieldAlert,
+  Sparkles,
+  Stethoscope,
+  UserRoundCheck,
+  Users,
 } from "lucide-react";
+import { Footer, Header, NotificationTicker, UtilityBar } from "@/components/layout/SiteLayout";
+import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
+import { ApplicationWizard } from "@/components/forms/wizard/ApplicationWizard";
+import { volunteerFormConfig } from "@/components/forms/wizard/configs/volunteerForm";
 import {
-  Footer,
-  Header,
-  NotificationTicker,
-  RoleFormModal,
-  UtilityBar,
-} from "@/components/layout/SiteLayout";
-import type { RoleType } from "@/components/forms/RoleFormModal";
-import { VOLUNTEER_SECTORS } from "@/content/volunteerSectors";
-import { VolunteerApplicationForm } from "@/components/forms/VolunteerApplicationForm";
+  FinalCta,
+  FormSection,
+  HeroActions,
+  IconCards,
+  JourneySteps,
+  Section,
+  SectionHeader,
+  pastel,
+} from "@/components/getInvolved/PageSections";
+import { SECTOR_CATALOGUE } from "@/content/sectorCatalogue";
 
-import { StandardPageHero } from "@/components/layout/StandardPageHero";
+const scrollTo = (id: string) => {
+  const el = document.getElementById(id);
+  if (el)
+    window.scrollTo({
+      top: el.getBoundingClientRect().top + window.scrollY - 80,
+      behavior: "smooth",
+    });
+};
 
 export default function VolunteerPage() {
-  const [activeModal, setActiveModal] = useState<RoleType | null>(null);
-  const formRef = useRef<HTMLElement>(null);
-
-  const scrollToSection = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
   return (
-    <div className="min-h-screen bg-white font-sans text-slate-800">
+    <div className="min-h-screen bg-white text-slate-800 flex flex-col font-sans">
       <NotificationTicker />
       <UtilityBar />
       <Header />
 
-      <main>
-        {/* ─── Hero Section: Standard Deep Navy Hero ────────────────────────────────────────── */}
-        <StandardPageHero
-          badge="GET INVOLVED • VOLUNTEER"
-          title="Volunteer With Us"
-          description="Be the change you wish to see in the world. At ISLAH, your time, skills, and compassion can directly transform lives and build self-reliant rural communities."
-          breadcrumb={[{ label: "Volunteer With Us" }]}
-          taglineTop="Your Time"
-          taglineMid="Their Future"
-          taglineBot="Change"
-          verticalWords={["EMPOWER", "SERVE", "UPLIFT", "TRANSFORM"]}
-          waveFill="#f8fafc"
+      <main className="flex-grow">
+        {/* 01. Hero */}
+        <SubpageHeroCarousel
+          tag="VOLUNTEER WITH ISLAH"
+          title="Together, We Can Make a Difference"
+          subtitle="Volunteers are the driving force behind meaningful social change. Whether you are a student, professional, homemaker, retiree or corporate employee, your time, skills and compassion can help transform lives and strengthen rural communities."
+          breadcrumbs={[
+            { label: "Get Involved", href: "/get-involved" },
+            { label: "Volunteer With Us" },
+          ]}
         >
-          <div className="flex flex-wrap gap-3 pt-2">
-            <button
-              onClick={() => scrollToSection("volunteer-form")}
-              className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold px-7 py-3 rounded-xl shadow-lg transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer"
-            >
-              Apply Now <ArrowRight className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => scrollToSection("opportunities")}
-              className="inline-flex items-center gap-2 bg-[#0b1f36] border border-[#163559] hover:border-sky-400/80 text-white font-bold px-6 py-3 rounded-xl transition text-xs sm:text-sm uppercase tracking-wider cursor-pointer"
-            >
-              Explore Opportunities
-            </button>
-          </div>
-        </StandardPageHero>
+          <HeroActions
+            primary={{ label: "Volunteer With Us", target: "volunteer-form" }}
+            secondary={{ label: "Explore Volunteer Options", target: "opportunities" }}
+            community={{
+              label: "Meet our volunteer community",
+              to: "/about/community",
+              search: { tab: "volunteers" },
+            }}
+          />
+        </SubpageHeroCarousel>
 
-        {/* ─── Why Volunteer with ISLAH? ────────────────────────────────────────── */}
-        <section className="py-14 bg-slate-50 border-b border-slate-200/80">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <div className="text-center max-w-2xl mx-auto mb-10">
-              <span className="text-xs font-bold uppercase tracking-widest text-brand-orange">
-                Purpose & Benefits
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-green-dark mt-1">
-                Why Volunteer with ISLAH?
-              </h2>
-              <p className="text-slate-500 text-xs sm:text-sm mt-2">
-                Volunteering with ISLAH is an opportunity to serve society, develop leadership skills,
-                and become part of a dedicated community working towards sustainable rural transformation.
-              </p>
-            </div>
+        {/* 02. Why volunteer */}
+        <Section>
+          <SectionHeader
+            eyebrow="02. Why Volunteer With Us"
+            title="Serve, Learn and Grow With a Purpose"
+            desc="Volunteering with ISLAH is an opportunity to serve society, develop leadership skills and become part of a dedicated community working towards sustainable rural transformation."
+          />
+          <IconCards
+            columns={3}
+            items={[
+              {
+                icon: Heart,
+                title: "Make a Meaningful Impact",
+                desc: "Help create positive, measurable and lasting change in the lives of rural families.",
+              },
+              {
+                icon: Sparkles,
+                title: "Share Your Skills & Knowledge",
+                desc: "Use your professional background, ideas and talent to strengthen grassroots communities.",
+              },
+              {
+                icon: GraduationCap,
+                title: "Gain Experience & Grow",
+                desc: "Build leadership, teamwork and project-execution skills through real field initiatives.",
+              },
+              {
+                icon: Users,
+                title: "Join a Passionate Team",
+                desc: "Work alongside changemakers, educators, doctors and community mobilisers.",
+              },
+              {
+                icon: Award,
+                title: "Recognition & Appreciation",
+                desc: "Receive a volunteer certificate, recommendation letters and recognition for your dedication.",
+              },
+              {
+                icon: UserRoundCheck,
+                title: "Flexible Commitment",
+                desc: "Contribute on-site, online or in a hybrid way — as regularly or occasionally as suits you.",
+              },
+            ]}
+          />
+        </Section>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-              {[
-                {
-                  icon: Heart,
-                  title: "Make a Meaningful Impact",
-                  desc: "Help create positive, measurable, and lasting change in the lives of rural families.",
-                  color: "#15803d",
-                },
-                {
-                  icon: Sparkles,
-                  title: "Share Your Skills & Knowledge",
-                  desc: "Use your professional background, ideas, and talent to strengthen grassroots communities.",
-                  color: "#0284c7",
-                },
-                {
-                  icon: GraduationCap,
-                  title: "Gain Experience & Grow",
-                  desc: "Enhance your leadership, teamwork, and project execution through real-world field initiatives.",
-                  color: "#ea580c",
-                },
-                {
-                  icon: Users,
-                  title: "Be Part of a Passionate Team",
-                  desc: "Work alongside passionate changemakers, educators, doctors, and community mobilizers.",
-                  color: "#7c3aed",
-                },
-                {
-                  icon: Award,
-                  title: "Recognition & Appreciation",
-                  desc: "Earn an official Volunteer Certificate, recommendation letters, and recognition for your dedication.",
-                  color: "#d97706",
-                },
-              ].map((item, idx) => (
+        {/* 03. Opportunities */}
+        <Section id="opportunities" tone="muted">
+          <SectionHeader
+            eyebrow="03. Volunteer Opportunities"
+            title="Opportunities Across Our 8 Working Sectors"
+            desc="Our work spans eight interconnected areas. Choose the one where your passion meets community purpose — you can pick specific activities in the application."
+          />
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {SECTOR_CATALOGUE.slice(0, 8).map((sector, i) => {
+              const p = pastel(i);
+              return (
                 <div
-                  key={idx}
-                  className="bg-white rounded-2xl border border-slate-200/90 p-5 text-center flex flex-col items-center hover:shadow-md hover:border-slate-300 transition-all group"
+                  key={sector.name}
+                  className={`rounded-xl border border-slate-200 bg-white p-5 transition hover:border-slate-300 ${p.hover} flex flex-col`}
                 >
-                  <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center mb-3 text-white shadow-sm group-hover:scale-105 transition-transform"
-                    style={{ backgroundColor: item.color }}
+                  <span
+                    className={`self-start text-[11px] font-semibold px-2 py-0.5 rounded-full ${p.bg} ${p.icon}`}
                   >
-                    <item.icon className="w-5 h-5" />
-                  </div>
-                  <h3 className="text-sm font-bold text-slate-800 leading-snug mb-1.5">
-                    {item.title}
+                    {sector.areas.length} activity areas
+                  </span>
+                  <h3 className="text-sm sm:text-base font-semibold text-[#071527] mt-2.5 leading-snug">
+                    {sector.name}
                   </h3>
-                  <p className="text-xs text-slate-500 leading-relaxed">
-                    {item.desc}
+                  <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                    {sector.short}
                   </p>
+                  <ul className="mt-3 pt-3 border-t border-slate-100 space-y-1 text-xs text-slate-600 flex-1">
+                    {sector.areas.slice(0, 3).map((a) => (
+                      <li key={a} className="flex gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-brand-orange mt-1.5 shrink-0" />
+                        {a}
+                      </li>
+                    ))}
+                  </ul>
+                  <button
+                    type="button"
+                    onClick={() => scrollTo("volunteer-form")}
+                    className="mt-4 text-xs font-semibold text-brand-orange hover:text-orange-700 text-left"
+                  >
+                    Volunteer in this sector →
+                  </button>
                 </div>
-              ))}
-            </div>
+              );
+            })}
           </div>
-        </section>
+        </Section>
 
-        {/* ─── Volunteer Opportunities (8 What We Do Sectors) ──────────────────── */}
-        <section id="opportunities" className="py-14 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 pb-4 border-b border-slate-200">
-              <div>
-                <span className="text-xs font-bold uppercase tracking-widest text-brand-orange">
-                  Explore What We Do
-                </span>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-green-dark mt-1">
-                  Volunteer Opportunities Across Our 8 Working Sectors
-                </h2>
-                <p className="text-slate-500 text-xs sm:text-sm mt-1 max-w-xl">
-                  Our work spans eight interconnected thematic areas. Choose the domain where your passion meets community purpose.
-                </p>
-              </div>
-
-              <button
-                onClick={() => scrollToSection("volunteer-form")}
-                className="inline-flex items-center gap-2 bg-brand-green text-white px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-brand-green-dark transition shrink-0"
-              >
-                Apply for Any Sector <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {VOLUNTEER_SECTORS.map((sector) => {
+        {/* 04. Who can join */}
+        <Section>
+          <SectionHeader
+            eyebrow="04. Who Can Join"
+            title="Open to Everyone Who Wants to Help"
+            desc="No prior volunteering experience is required — only dedication, compassion and a genuine willingness to help."
+          />
+          <div className="space-y-5">
+            <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
+              {[
+                { icon: GraduationCap, label: "Students & College Youth" },
+                { icon: BookOpen, label: "Teachers & Educators" },
+                { icon: Stethoscope, label: "Doctors & Healthcare Workers" },
+                { icon: Code2, label: "Engineers & IT Professionals" },
+                { icon: Scale, label: "Lawyers & Legal Experts" },
+                { icon: Calculator, label: "Chartered Accountants" },
+                { icon: Home, label: "Homemakers" },
+                { icon: Award, label: "Retired Professionals" },
+                { icon: Briefcase, label: "Corporate Employees" },
+                { icon: HeartPulse, label: "Social Workers & Changemakers" },
+              ].map((r, i) => {
+                const p = pastel(i);
                 return (
                   <div
-                    key={sector.id}
-                    className="rounded-2xl border border-slate-200 p-5 bg-white hover:border-brand-green hover:shadow-md transition-all flex flex-col justify-between group"
+                    key={r.label}
+                    className={`flex items-center gap-3 rounded-lg border border-slate-200 bg-white px-3.5 py-3 transition ${p.hover}`}
                   >
-                    <div>
-                      <div className="flex items-center justify-between gap-2 mb-3">
-                        <span
-                          className="text-[10px] font-bold px-2.5 py-0.5 rounded-full text-white uppercase tracking-wider"
-                          style={{ backgroundColor: sector.badgeColor }}
-                        >
-                          Sector #{sector.id}
-                        </span>
-                        <span className="text-[11px] text-slate-400 font-medium">
-                          {sector.subcategories.length} initiatives
-                        </span>
-                      </div>
-
-                      <h3 className="text-base font-bold text-slate-900 group-hover:text-brand-green transition-colors leading-snug">
-                        {sector.name}
-                      </h3>
-
-                      <p className="text-sm text-black font-normal mt-2 line-clamp-2 leading-relaxed">
-                        {sector.shortDescription}
-                      </p>
-
-                      <div className="mt-4 pt-3 border-t border-slate-100 space-y-1.5">
-                        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                          Key Activities:
-                        </p>
-                        {sector.subcategories.slice(0, 3).map((sub, i) => (
-                          <div key={i} className="flex items-center gap-2 text-xs text-slate-600">
-                            <span className="w-1.5 h-1.5 rounded-full bg-brand-orange shrink-0" />
-                            <span className="truncate">{sub}</span>
-                          </div>
-                        ))}
-                        {sector.subcategories.length > 3 && (
-                          <p className="text-[11px] text-brand-green font-semibold">
-                            +{sector.subcategories.length - 3} more sub-activities
-                          </p>
-                        )}
-                      </div>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() => scrollToSection("volunteer-form")}
-                      className="mt-5 w-full py-2 rounded-xl bg-slate-50 hover:bg-brand-green/10 text-brand-green font-bold text-xs transition border border-slate-200 hover:border-brand-green/30 flex items-center justify-center gap-1.5"
+                    <span
+                      className={`w-8 h-8 rounded-md ${p.bg} ${p.icon} flex items-center justify-center shrink-0`}
                     >
-                      Choose in Application <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
+                      <r.icon className="w-4 h-4" />
+                    </span>
+                    <span className="text-sm text-slate-800">{r.label}</span>
                   </div>
                 );
               })}
             </div>
+            <figure className="rounded-xl border border-slate-200 border-l-4 border-l-brand-orange bg-slate-50/70 px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-x-4 gap-y-1">
+              <blockquote className="text-base font-serif italic text-slate-700 leading-relaxed">
+                “Alone we can do so little; together we can do so much.”
+              </blockquote>
+              <figcaption className="text-xs font-semibold uppercase tracking-wider text-brand-orange shrink-0">
+                — Helen Keller
+              </figcaption>
+            </figure>
           </div>
-        </section>
+        </Section>
 
-        {/* ─── Who Can Join & Helen Keller Quote ───────────────────────────────── */}
-        <section className="py-12 bg-slate-50 border-y border-slate-200/80">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <div className="grid lg:grid-cols-12 gap-8 items-center">
-              <div className="lg:col-span-8 space-y-4">
-                <div>
-                  <span className="text-xs font-bold uppercase tracking-widest text-brand-orange">
-                    Open To Everyone
-                  </span>
-                  <h3 className="text-xl sm:text-2xl font-extrabold text-brand-green-dark">
-                    Who Can Join as an ISLAH Volunteer?
-                  </h3>
-                  <p className="text-xs sm:text-sm text-slate-600 mt-1">
-                    No prior volunteering experience is mandatory — only dedication, compassion, and a genuine willingness to help.
-                  </p>
-                </div>
+        {/* 05. How to get started */}
+        <Section tone="muted">
+          <SectionHeader
+            eyebrow="05. How to Get Started"
+            title="Your Volunteer Journey With ISLAH"
+            desc="A simple, transparent process — from your first application to your first day contributing."
+          />
+          <JourneySteps
+            steps={[
+              {
+                title: "Explore",
+                desc: "Browse our sectors and find the area where your skills and interests fit best.",
+              },
+              {
+                title: "Apply",
+                desc: "Complete the short three-step application with your interests, skills and availability.",
+              },
+              {
+                title: "Review & Connect",
+                desc: "Our coordinator reviews your profile and aims to contact you within 7 working days.",
+              },
+              {
+                title: "Orientation",
+                desc: "Selected volunteers receive a brief orientation, role details and guidance.",
+              },
+              {
+                title: "Start Contributing",
+                desc: "Begin online, hybrid or in the field — and grow with the community over time.",
+              },
+            ]}
+          />
+        </Section>
 
-                <div className="flex flex-wrap gap-2.5 pt-1">
-                  {[
-                    "Students & College Youth",
-                    "Teachers & Educators",
-                    "Doctors & Healthcare Workers",
-                    "Engineers & IT Professionals",
-                    "Lawyers & Legal Experts",
-                    "Chartered Accountants",
-                    "Homemakers",
-                    "Retired Professionals",
-                    "Corporate Employees",
-                    "Social Workers & Changemakers",
-                  ].map((role) => (
-                    <span
-                      key={role}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white border border-slate-200 text-slate-700 text-xs font-semibold shadow-2xs hover:border-brand-green hover:text-brand-green transition"
-                    >
-                      <Check className="w-3 h-3 text-brand-green" /> {role}
-                    </span>
-                  ))}
-                </div>
-              </div>
+        {/* 06. Application */}
+        <FormSection
+          id="volunteer-form"
+          eyebrow="06. Volunteer Application"
+          title="Your Time. Your Skills. Your Impact."
+          desc="Tell us about your interests, skills and availability so we can explore a suitable volunteering opportunity with you. Your progress is saved on this device as you go."
+        >
+          <ApplicationWizard config={volunteerFormConfig} />
+        </FormSection>
 
-              <div className="lg:col-span-4">
-                <div className="bg-slate-50 text-slate-800 p-6 rounded-2xl border border-slate-200 border-l-4 border-l-brand-orange shadow-xs">
-                  <p className="text-sm sm:text-base font-serif italic text-slate-700 leading-relaxed">
-                    “Alone we can do so little; together we can do so much.”
-                  </p>
-                  <p className="text-xs font-bold uppercase tracking-wider text-brand-orange mt-3">
-                    — Helen Keller
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ─── 3-Step Volunteer Journey ────────────────────────────────────────── */}
-        <section className="py-12 bg-white">
-          <div className="max-w-4xl mx-auto px-4 text-center">
-            <span className="text-xs font-bold uppercase tracking-widest text-brand-orange">
-              Simple 3 Steps
-            </span>
-            <h3 className="text-xl sm:text-2xl font-extrabold text-brand-green-dark mt-1 mb-8">
-              How to Get Started with ISLAH
-            </h3>
-
-            <div className="grid sm:grid-cols-3 gap-6">
-              {[
-                {
-                  step: "1",
-                  title: "Fill Application Form",
-                  desc: "Provide your basic details, qualification, and choose your working sectors of interest below.",
-                },
-                {
-                  step: "2",
-                  title: "We Review Your Application",
-                  desc: "Our volunteer coordinator team reviews your profile and connects with you within 7 working days.",
-                },
-                {
-                  step: "3",
-                  title: "Start Your Journey",
-                  desc: "Complete brief orientation and begin contributing online, hybrid, or directly on the field!",
-                },
-              ].map((item) => (
-                <div
-                  key={item.step}
-                  className="bg-slate-50 border border-slate-200 rounded-2xl p-5 text-center relative"
-                >
-                  <div className="w-9 h-9 rounded-full bg-brand-green text-white font-extrabold text-sm flex items-center justify-center mx-auto mb-3 shadow-xs">
-                    {item.step}
-                  </div>
-                  <h4 className="font-bold text-slate-800 text-sm mb-1">{item.title}</h4>
-                  <p className="text-sm text-black leading-relaxed font-normal">{item.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ─── Volunteer Application Form (Page 4) ────────────────────────────── */}
-        <section id="volunteer-form" ref={formRef} className="py-16 bg-slate-100">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6">
-            <div className="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
-              <div className="p-6 sm:p-10">
-                <VolunteerApplicationForm />
-              </div>
-            </div>
-          </div>
-        </section>
+        <FinalCta
+          title="Ready to Continue Exploring ISLAH?"
+          desc="Explore other ways to support our programmes through mentoring, partnerships, sponsorship and membership."
+          primary={{ label: "Return to Get Involved", to: "/get-involved" }}
+          secondary={{ label: "Become a Mentor", to: "/mentor" }}
+        />
       </main>
 
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal type={activeModal} onClose={() => setActiveModal(null)} />
+      <Footer />
     </div>
   );
 }

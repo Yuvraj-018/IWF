@@ -5,7 +5,6 @@ import {
   UtilityBar,
   Header,
   Footer,
-  RoleFormModal,
 } from "@/components/layout/SiteLayout";
 import {
   Home,
@@ -133,10 +132,6 @@ function SectionTitle({ label, title, subtitle }: { label: string; title: string
 // ─── Main Subpage ─────────────────────────────────────────────────────────────
 
 export default function WomenSkillLivelihood() {
-  const [activeModal, setActiveModal] = useState<
-    "volunteer" | "partner" | "sponsor" | "mentor" | "employee" | null
-  >(null);
-
   return (
     <div className="min-h-screen bg-white font-sans text-foreground">
       <NotificationTicker />
@@ -427,8 +422,7 @@ export default function WomenSkillLivelihood() {
         </section>
       </main>
 
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal type={activeModal} onClose={() => setActiveModal(null)} />
+      <Footer />
     </div>
   );
 }

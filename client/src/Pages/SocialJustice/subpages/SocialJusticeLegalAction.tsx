@@ -5,7 +5,6 @@ import {
   UtilityBar,
   Header,
   Footer,
-  RoleFormModal,
 } from "@/components/layout/SiteLayout";
 import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import {
@@ -159,8 +158,6 @@ function SectionTitle({ label, title, subtitle }: { label: string; title: string
 }
 
 export default function SocialJusticeLegalAction() {
-  const [modalRole, setModalRole] = useState<"partner" | "volunteer" | "sponsor" | "mentor" | null>(null);
-
   return (
     <div className="min-h-screen flex flex-col bg-white text-slate-800 antialiased">
       <NotificationTicker />
@@ -186,19 +183,13 @@ export default function SocialJusticeLegalAction() {
           >
             <ArrowLeft className="w-3.5 h-3.5" /> All Social Justice Initiatives
           </Link>
-          <button
-            onClick={() => setModalRole("partner")}
-            className="inline-flex items-center gap-2 bg-brand-green text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl hover:bg-brand-green-dark transition-all duration-200 hover:scale-[1.02] active:scale-95 shadow-xs hover:shadow-md cursor-pointer"
-          >
+          <Link to="/partner" className="inline-flex items-center gap-2 bg-brand-green text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl hover:bg-brand-green-dark transition-all duration-200 hover:scale-[1.02] active:scale-95 shadow-xs hover:shadow-md cursor-pointer">
             Collaborate as Pro-Bono Counsel
             <ArrowRight className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => setModalRole("sponsor")}
-            className="inline-flex items-center gap-2 border border-white/30 text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl hover:bg-white/10 transition-all duration-200 hover:scale-[1.02] active:scale-95 cursor-pointer"
-          >
+          </Link>
+          <Link to="/donate" search={{ financialType: "Social Justice & Legal Empowerment", initiative: "Social Justice & Community Action" }} className="inline-flex items-center gap-2 border border-white/30 text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl hover:bg-white/10 transition-all duration-200 hover:scale-[1.02] active:scale-95 cursor-pointer">
             Support Legal Aid Fund
-          </button>
+          </Link>
         </div>
       </SubpageHeroCarousel>
 
@@ -456,12 +447,7 @@ export default function SocialJusticeLegalAction() {
         </div>
       </section>
 
-      <Footer onOpenModal={(role) => setModalRole(role)} />
-
-      <RoleFormModal
-        type={modalRole}
-        onClose={() => setModalRole(null)}
-      />
+      <Footer />
     </div>
   );
 }

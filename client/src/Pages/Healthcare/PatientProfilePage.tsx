@@ -26,7 +26,6 @@ import {
   UtilityBar,
   Header,
   Footer,
-  RoleFormModal,
 } from "@/components/layout/SiteLayout";
 import { URGENT_PATIENTS } from "@/content/patients";
 import type { Patient, PatientCondition } from "@/content/patients";
@@ -58,10 +57,6 @@ import { usePatient, usePatients } from "@/services/patientService";
 
 export default function PatientProfilePage() {
   const { patientSlug } = useParams({ from: "/patients/$patientSlug" });
-  const [activeModal, setActiveModal] = useState<
-    "volunteer" | "partner" | "sponsor" | "mentor" | "employee" | null
-  >(null);
-
   const { patient, loading } = usePatient(patientSlug);
   const { patients: allPatients } = usePatients(true);
 
@@ -77,7 +72,7 @@ export default function PatientProfilePage() {
             <p className="text-slate-600 font-medium">Loading patient case details...</p>
           </div>
         </main>
-        <Footer onOpenModal={setActiveModal} />
+        <Footer />
       </div>
     );
   }
@@ -103,7 +98,7 @@ export default function PatientProfilePage() {
             </Link>
           </div>
         </main>
-        <Footer onOpenModal={setActiveModal} />
+        <Footer />
       </div>
     );
   }
@@ -596,8 +591,7 @@ export default function PatientProfilePage() {
         </section>
       </main>
 
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal type={activeModal} onClose={() => setActiveModal(null)} />
+      <Footer />
     </div>
   );
 }

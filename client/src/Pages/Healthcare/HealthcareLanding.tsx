@@ -5,7 +5,6 @@ import {
   UtilityBar,
   Header,
   Footer,
-  RoleFormModal,
 } from "@/components/layout/SiteLayout";
 import {
   HeartPulse,
@@ -291,10 +290,6 @@ function SectionTitle({
 // ─── Main Component ──────────────────────────────────────────────────────────
 
 export default function HealthcareLanding() {
-  const [activeModal, setActiveModal] = useState<
-    "volunteer" | "partner" | "sponsor" | "mentor" | "employee" | null
-  >(null);
-
   return (
     <div className="min-h-screen bg-white font-sans text-slate-900 antialiased">
       <NotificationTicker />
@@ -321,14 +316,10 @@ export default function HealthcareLanding() {
               <span>Explore Initiatives</span>
               <ArrowRight className="w-4 h-4" />
             </a>
-            <button
-              type="button"
-              onClick={() => setActiveModal("partner")}
-              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer backdrop-blur-xs"
-            >
+            <Link to="/partner" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer backdrop-blur-xs">
               <Heart className="w-4 h-4 text-brand-orange" />
               <span>Partner With Us</span>
-            </button>
+            </Link>
           </div>
         </SubpageHeroCarousel>
 
@@ -647,31 +638,19 @@ export default function HealthcareLanding() {
                 Your support funds emergency surgeries, sponsors ambulance fuel, supplies sanitary kits, and stocks free village clinics.
               </p>
               <div className="flex flex-wrap items-center justify-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => setActiveModal("sponsor")}
-                  className="px-6 py-3 rounded-xl bg-brand-orange hover:bg-orange-600 text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
-                >
+                <Link to="/donate" search={{ financialType: "Health Care & Well-being", initiative: "Healthcare & Well-being Initiatives" }} className="px-6 py-3 rounded-xl bg-brand-orange hover:bg-orange-600 text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95 cursor-pointer">
                   Support Our Initiatives
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveModal("volunteer")}
-                  className="px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-95 cursor-pointer backdrop-blur-xs"
-                >
+                </Link>
+                <Link to="/volunteer" className="px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-95 cursor-pointer backdrop-blur-xs">
                   Become a Volunteer
-                </button>
+                </Link>
               </div>
             </ScrollReveal>
           </div>
         </section>
       </main>
 
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal
-        type={activeModal}
-        onClose={() => setActiveModal(null)}
-      />
+      <Footer />
     </div>
   );
 }

@@ -26,17 +26,13 @@ import {
   UtilityBar,
   Header,
   Footer,
-  RoleFormModal,
 } from "@/components/layout/SiteLayout";
-import type { RoleType } from "@/components/forms/RoleFormModal";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
 import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import heroImg from "@/assets/sector_education_1.png";
 import causeEduImg from "@/assets/cause-education.jpg";
 
 export default function PrimarySchoolPage() {
-  const [activeModal, setActiveModal] = useState<RoleType | null>(null);
-
   return (
     <div className="min-h-screen bg-white font-sans text-slate-800">
       <NotificationTicker />
@@ -65,14 +61,10 @@ export default function PrimarySchoolPage() {
               <ArrowRight className="w-4 h-4" />
             </a>
 
-            <button
-              type="button"
-              onClick={() => setActiveModal("sponsor")}
-              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl backdrop-blur-md transition cursor-pointer"
-            >
+            <Link to="/donate" search={{ financialType: "Education & Learning", initiative: "Primary School (EPS)" }} className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl backdrop-blur-md transition cursor-pointer">
               <Heart className="w-4 h-4 fill-brand-orange text-brand-orange" />
               <span>Support a Learner</span>
-            </button>
+            </Link>
           </div>
         </SubpageHeroCarousel>
 
@@ -305,31 +297,22 @@ export default function PrimarySchoolPage() {
               </div>
 
               <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => setActiveModal("sponsor")}
-                  className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer"
-                >
+                <Link to="/donate" search={{ financialType: "Education & Learning", initiative: "Primary School (EPS)" }} className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer">
                   <Heart className="w-4 h-4 fill-white" />
                   <span>Donate for School Development</span>
-                </button>
+                </Link>
 
-                <button
-                  type="button"
-                  onClick={() => setActiveModal("partner")}
-                  className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl backdrop-blur-xs transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer"
-                >
+                <Link to="/partner" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl backdrop-blur-xs transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer">
                   <Users className="w-4 h-4 text-brand-orange" />
                   <span>Sponsor a Child's Education</span>
-                </button>
+                </Link>
               </div>
             </div>
           </div>
         </section>
       </main>
 
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal type={activeModal} onClose={() => setActiveModal(null)} />
+      <Footer />
     </div>
   );
 }

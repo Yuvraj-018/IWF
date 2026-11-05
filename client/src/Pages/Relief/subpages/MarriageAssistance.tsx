@@ -1,14 +1,12 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { NotificationTicker, UtilityBar, Header, Footer, RoleFormModal } from "@/components/layout/SiteLayout";
+import { NotificationTicker, UtilityBar, Header, Footer } from "@/components/layout/SiteLayout";
 import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import { Home, ChevronRight, ArrowLeft, ArrowRight, Heart, Gift, Users, Shield, Package, CheckCircle2, Sparkles, HandHeart } from "lucide-react";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
 import heroImg from "@/assets/sector_relief_1.png";
 
 export default function MarriageAssistance() {
-  const [activeModal, setActiveModal] = useState<"volunteer" | "partner" | "sponsor" | "mentor" | "employee" | null>(null);
-
   const KIT_ITEMS = [
     { icon: Gift, title: "Essential Home Appliances & Utensils", desc: "Complete 42-piece stainless steel kitchen set, pressure cooker, mixer grinder, and daily culinary ware." },
     { icon: Package, title: "Bedding & Furniture Essentials", desc: "Durable wooden bed frame, cotton mattress, pillows, bedsheets, blankets, and storage trunk." },
@@ -109,8 +107,7 @@ export default function MarriageAssistance() {
           </div>
         </section>
       </main>
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal type={activeModal} onClose={() => setActiveModal(null)} />
+      <Footer />
     </div>
   );
 }

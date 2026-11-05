@@ -5,7 +5,6 @@ import {
   UtilityBar,
   Header,
   Footer,
-  RoleFormModal,
 } from "@/components/layout/SiteLayout";
 import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import {
@@ -148,8 +147,6 @@ function SectionTitle({ label, title, subtitle }: { label: string; title: string
 }
 
 export default function RuralEntrepreneurship() {
-  const [modalRole, setModalRole] = useState<"partner" | "volunteer" | "sponsor" | "mentor" | null>(null);
-
   return (
     <div className="min-h-screen flex flex-col bg-white text-slate-800 antialiased">
       <NotificationTicker />
@@ -175,19 +172,13 @@ export default function RuralEntrepreneurship() {
           >
             <ArrowLeft className="w-3.5 h-3.5" /> All Skills Initiatives
           </Link>
-          <button
-            onClick={() => setModalRole("partner")}
-            className="inline-flex items-center gap-2 bg-brand-green text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl hover:bg-brand-green-dark transition-colors shadow-sm cursor-pointer"
-          >
+          <Link to="/partner" className="inline-flex items-center gap-2 bg-brand-green text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl hover:bg-brand-green-dark transition-colors shadow-sm cursor-pointer">
             Partner as an Enterprise Mentor
             <ArrowRight className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => setModalRole("sponsor")}
-            className="inline-flex items-center gap-2 border border-white/30 text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl hover:bg-white/10 transition-colors cursor-pointer"
-          >
+          </Link>
+          <Link to="/donate" search={{ financialType: "Skills, Livelihoods & Entrepreneurship", initiative: "Rural Entrepreneurship Development" }} className="inline-flex items-center gap-2 border border-white/30 text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl hover:bg-white/10 transition-colors cursor-pointer">
             Support Seed Incubation
-          </button>
+          </Link>
         </div>
       </SubpageHeroCarousel>
 
@@ -455,12 +446,7 @@ export default function RuralEntrepreneurship() {
         </div>
       </section>
 
-      <Footer onOpenModal={(role) => setModalRole(role)} />
-
-      <RoleFormModal
-        type={modalRole}
-        onClose={() => setModalRole(null)}
-      />
+      <Footer />
     </div>
   );
 }

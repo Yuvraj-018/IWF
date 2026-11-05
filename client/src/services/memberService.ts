@@ -78,6 +78,20 @@ export interface OtpResponse {
 export interface RenewMemberPayload {
   memberNo: string;
   membershipPeriod: number;
+  /** "same" keeps the current category; "change" switches to `category`. */
+  renewalType?: "same" | "change";
+  category?: string;
+  /** Contact details the member chose to update during renewal. */
+  contactUpdates?: Partial<{
+    name: string;
+    countryCode: string;
+    phone: string;
+    email: string;
+    address: string;
+    district: string;
+    state: string;
+    pincode: string;
+  }>;
   paymentMode?: string;
   transactionId?: string;
 }

@@ -5,7 +5,6 @@ import {
   UtilityBar,
   Header,
   Footer,
-  RoleFormModal,
 } from "@/components/layout/SiteLayout";
 import {
   Home,
@@ -201,8 +200,6 @@ function SectionTitle({ label, title, subtitle }: { label: string; title: string
 }
 
 export default function EnvironmentLanding() {
-  const [modalRole, setModalRole] = useState<"partner" | "volunteer" | "sponsor" | "mentor" | null>(null);
-
   return (
     <div className="min-h-screen flex flex-col bg-white text-slate-800 antialiased">
       <NotificationTicker />
@@ -221,22 +218,14 @@ export default function EnvironmentLanding() {
         images={[heroImg]}
       >
         <div className="flex flex-wrap items-center gap-3 pt-2">
-          <button
-            type="button"
-            onClick={() => setModalRole("partner")}
-            className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold px-6 sm:px-7 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer"
-          >
+          <Link to="/partner" className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold px-6 sm:px-7 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer">
             <span>Partner for Green Villages</span>
             <ArrowRight className="w-4 h-4" />
-          </button>
-          <button
-            type="button"
-            onClick={() => setModalRole("sponsor")}
-            className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer backdrop-blur-xs"
-          >
+          </Link>
+          <Link to="/donate" search={{ financialType: "Environment & Sustainability", initiative: "Environment & Sustainable Development" }} className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer backdrop-blur-xs">
             <Heart className="w-4 h-4 text-brand-orange" />
             <span>Sponsor Tree Plantation Drives</span>
-          </button>
+          </Link>
         </div>
       </SubpageHeroCarousel>
 
@@ -604,29 +593,18 @@ export default function EnvironmentLanding() {
               partner with ISLAH to plant trees, clean village surroundings, and foster sustainable rural development.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <button
-                onClick={() => setModalRole("partner")}
-                className="bg-brand-orange hover:bg-brand-orange-hover text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95"
-              >
+              <Link to="/partner" className="bg-brand-orange hover:bg-brand-orange-hover text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95">
                 Partner with Environmental Sector
-              </button>
-              <button
-                onClick={() => setModalRole("volunteer")}
-                className="border border-white/30 hover:bg-white/10 text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all hover:scale-[1.02] active:scale-95"
-              >
+              </Link>
+              <Link to="/volunteer" className="border border-white/30 hover:bg-white/10 text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all hover:scale-[1.02] active:scale-95">
                 Volunteer for Plantation &amp; Cleanups
-              </button>
+              </Link>
             </div>
           </ScrollReveal>
         </div>
       </section>
 
-      <Footer onOpenModal={(role) => setModalRole(role)} />
-
-      <RoleFormModal
-        type={modalRole}
-        onClose={() => setModalRole(null)}
-      />
+      <Footer />
     </div>
   );
 }

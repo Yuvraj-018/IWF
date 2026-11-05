@@ -1,14 +1,12 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { NotificationTicker, UtilityBar, Header, Footer, RoleFormModal } from "@/components/layout/SiteLayout";
+import { NotificationTicker, UtilityBar, Header, Footer } from "@/components/layout/SiteLayout";
 import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import { Home, ChevronRight, ArrowLeft, ArrowRight, Heart, GraduationCap, Banknote, Shield, Users, CheckCircle2, HandHeart, Sparkles } from "lucide-react";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
 import heroImg from "@/assets/sector_relief_1.png";
 
 export default function WidowsOrphans() {
-  const [activeModal, setActiveModal] = useState<"volunteer" | "partner" | "sponsor" | "mentor" | "employee" | null>(null);
-
   const STAGES = [
     {
       step: "01",
@@ -142,8 +140,7 @@ export default function WidowsOrphans() {
           </div>
         </section>
       </main>
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal type={activeModal} onClose={() => setActiveModal(null)} />
+      <Footer />
     </div>
   );
 }

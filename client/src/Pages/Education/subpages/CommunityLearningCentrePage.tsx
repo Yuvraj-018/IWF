@@ -22,17 +22,13 @@ import {
   UtilityBar,
   Header,
   Footer,
-  RoleFormModal,
 } from "@/components/layout/SiteLayout";
-import type { RoleType } from "@/components/forms/RoleFormModal";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
 import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import causeEduImg from "@/assets/cause-education.jpg";
 import heroImg from "@/assets/sector_education_1.png";
 
 export default function CommunityLearningCentrePage() {
-  const [activeModal, setActiveModal] = useState<RoleType | null>(null);
-
   return (
     <div className="min-h-screen bg-white font-sans text-slate-800">
       <NotificationTicker />
@@ -53,23 +49,15 @@ export default function CommunityLearningCentrePage() {
           images={[heroImg, causeEduImg]}
         >
           <div className="flex flex-wrap items-center gap-3 pt-1">
-            <button
-              type="button"
-              onClick={() => setActiveModal("sponsor")}
-              className="inline-flex items-center gap-2 bg-brand-orange hover:bg-[#c2410c] text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-md transition cursor-pointer"
-            >
+            <Link to="/donate" search={{ financialType: "Education & Learning", initiative: "Community Learning Centre (CLC)" }} className="inline-flex items-center gap-2 bg-brand-orange hover:bg-[#c2410c] text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-md transition cursor-pointer">
               <Heart className="w-4 h-4 fill-white" />
               <span>Support This Initiative</span>
-            </button>
+            </Link>
 
-            <button
-              type="button"
-              onClick={() => setActiveModal("partner")}
-              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl backdrop-blur-md transition cursor-pointer"
-            >
+            <Link to="/partner" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl backdrop-blur-md transition cursor-pointer">
               <Building className="w-4 h-4 text-emerald-300" />
               <span>Donate for CLC Centre</span>
-            </button>
+            </Link>
           </div>
         </SubpageHeroCarousel>
 
@@ -340,31 +328,22 @@ export default function CommunityLearningCentrePage() {
               </div>
 
               <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => setActiveModal("sponsor")}
-                  className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer"
-                >
+                <Link to="/donate" search={{ financialType: "Education & Learning", initiative: "Community Learning Centre (CLC)" }} className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer">
                   <Heart className="w-4 h-4 fill-white" />
                   <span>Support This Initiative</span>
-                </button>
+                </Link>
 
-                <button
-                  type="button"
-                  onClick={() => setActiveModal("partner")}
-                  className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl backdrop-blur-xs transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer"
-                >
+                <Link to="/partner" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl backdrop-blur-xs transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer">
                   <Building className="w-4 h-4 text-brand-orange" />
                   <span>Donate for CLC Centre</span>
-                </button>
+                </Link>
               </div>
             </div>
           </div>
         </section>
       </main>
 
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal type={activeModal} onClose={() => setActiveModal(null)} />
+      <Footer />
     </div>
   );
 }

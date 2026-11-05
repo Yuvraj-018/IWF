@@ -1,14 +1,12 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { NotificationTicker, UtilityBar, Header, Footer, RoleFormModal } from "@/components/layout/SiteLayout";
+import { NotificationTicker, UtilityBar, Header, Footer } from "@/components/layout/SiteLayout";
 import { Home, ChevronRight, ArrowLeft, ArrowRight, Heart, Banknote, Users, BookOpen, Shield, Home as HomeIcon, CheckCircle2, HandHeart, Sparkles } from "lucide-react";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
 import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import heroImg from "@/assets/sector_women_1.png";
 
 export default function WidowsVulnerableWomen() {
-  const [activeModal, setActiveModal] = useState<"volunteer" | "partner" | "sponsor" | "mentor" | "employee" | null>(null);
-
   const SUPPORT_SERVICES = [
     { icon: Banknote, title: "Direct Monthly Welfare Stipends", desc: "Unconditional monthly financial support to help destitute widows meet critical food, medicine, and utility costs." },
     { icon: HomeIcon, title: "Emergency Shelter & Roof Repairs", desc: "Repairing leaking thatch/tin roofs, installing secure doors/windows, and providing safe housing assistance." },
@@ -130,8 +128,7 @@ export default function WidowsVulnerableWomen() {
           </div>
         </section>
       </main>
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal type={activeModal} onClose={() => setActiveModal(null)} />
+      <Footer />
     </div>
   );
 }

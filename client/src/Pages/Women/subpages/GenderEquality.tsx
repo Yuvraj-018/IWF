@@ -1,14 +1,12 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { NotificationTicker, UtilityBar, Header, Footer, RoleFormModal } from "@/components/layout/SiteLayout";
+import { NotificationTicker, UtilityBar, Header, Footer } from "@/components/layout/SiteLayout";
 import { Home, ChevronRight, ArrowLeft, ArrowRight, Users, BookOpen, GraduationCap, Heart, Megaphone, Shield, CheckCircle2, Lightbulb, Sparkles } from "lucide-react";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
 import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import heroImg from "@/assets/sector_women_1.png";
 
 export default function GenderEquality() {
-  const [activeModal, setActiveModal] = useState<"volunteer" | "partner" | "sponsor" | "mentor" | "employee" | null>(null);
-
   const PILLARS = [
     { icon: BookOpen, title: "Girls' Education Access", desc: "Advocating for 100% secondary school completion for girls and addressing dropout factors." },
     { icon: GraduationCap, title: "Women Leadership Mentoring", desc: "Training women to actively participate in Panchayat decisions, school committees, and village assemblies." },
@@ -135,8 +133,7 @@ export default function GenderEquality() {
           </div>
         </section>
       </main>
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal type={activeModal} onClose={() => setActiveModal(null)} />
+      <Footer />
     </div>
   );
 }

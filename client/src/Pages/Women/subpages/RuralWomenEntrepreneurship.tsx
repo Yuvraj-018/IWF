@@ -1,14 +1,12 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { NotificationTicker, UtilityBar, Header, Footer, RoleFormModal } from "@/components/layout/SiteLayout";
+import { NotificationTicker, UtilityBar, Header, Footer } from "@/components/layout/SiteLayout";
 import { Home, ChevronRight, ArrowLeft, ArrowRight, Lightbulb, TrendingUp, Store, DollarSign, Users, Award, CheckCircle2, ShieldCheck, HelpCircle } from "lucide-react";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
 import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import heroImg from "@/assets/sector_women_1.png";
 
 export default function RuralWomenEntrepreneurship() {
-  const [activeModal, setActiveModal] = useState<"volunteer" | "partner" | "sponsor" | "mentor" | "employee" | null>(null);
-
   const FEATURE_ROWS = [
     {
       icon: Store,
@@ -162,8 +160,7 @@ export default function RuralWomenEntrepreneurship() {
           </div>
         </section>
       </main>
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal type={activeModal} onClose={() => setActiveModal(null)} />
+      <Footer />
     </div>
   );
 }

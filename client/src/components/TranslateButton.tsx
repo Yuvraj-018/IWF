@@ -185,7 +185,9 @@ function initFormProtection() {
 
 function injectSuppressionStyle() {
   if (typeof document === "undefined") return;
-  initFormProtection();
+  // Note: form protection (DOM attribute stamping) is NOT installed here — doing it on
+  // module load mutates SSR markup before React hydrates lazy routes, causing hydration
+  // mismatches. It's installed in initGoogleTranslate(), i.e. only when translation is used.
   if (document.getElementById(SUPPRESSION_STYLE_ID)) return;
   const style = document.createElement("style");
   style.id = SUPPRESSION_STYLE_ID;
@@ -272,6 +274,7 @@ export function initGoogleTranslate(): Promise<void> {
   }
 
   injectSuppressionStyle();
+  initFormProtection();
 
   if (window._iwfTranslateReady && document.querySelector(".goog-te-combo")) {
     return Promise.resolve();

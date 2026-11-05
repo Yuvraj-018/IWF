@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { MEMBERS_DATA, MemberCategory, MemberItem } from "../communityData";
 import { ProfileDetailModal } from "./ProfileDetailModal";
-import { MemberVerificationModal } from "./MemberVerificationModal";
+import { Link } from "@tanstack/react-router";
 import type { RoleType } from "@/components/forms/RoleFormModal";
 import type { CommunityTab } from "./CommunitySelectiveBar";
 import { CommunityDirectorySubNav } from "./CommunityDirectorySubNav";
@@ -57,7 +57,6 @@ export function MembersDirectoryTab({
   const [selectedLocation, setSelectedLocation] = useState<string>("All Locations");
   const [sortBy, setSortBy] = useState<"latest" | "name_asc" | "id">("latest");
   const [selectedMember, setSelectedMember] = useState<MemberItem | null>(null);
-  const [isVerificationOpen, setIsVerificationOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 9;
 
@@ -367,24 +366,26 @@ export function MembersDirectoryTab({
                 Are you a member?
               </h4>
               <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
-                Log in to access your dashboard, view your profile, track status and renew your membership.
+                Check your membership status, renew your plan and download your member card.
               </p>
 
               <div className="space-y-2 pt-4">
-                <button
-                  onClick={() => setIsVerificationOpen(true)}
-                  className="w-full py-2.5 px-4 rounded-xl bg-[#071527] hover:bg-[#122e54] text-white text-xs font-bold transition-all duration-200 hover:-translate-y-0.5 flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
+                <Link
+                  to="/membership"
+                  hash="membership-status"
+                  className="w-full py-2.5 px-4 rounded-xl bg-[#071527] hover:bg-[#122e54] text-white text-xs font-bold transition-all duration-200 hover:-translate-y-0.5 flex items-center justify-center gap-1.5 shadow-xs"
                 >
-                  <span>Member Login</span>
+                  <span>Check Membership Status</span>
                   <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  onClick={() => setIsVerificationOpen(true)}
-                  className="w-full py-2 px-4 rounded-xl bg-white hover:bg-orange-50 border border-brand-orange text-brand-orange text-xs font-bold transition-all duration-200 hover:-translate-y-0.5 flex items-center justify-center gap-1.5 cursor-pointer"
+                </Link>
+                <Link
+                  to="/membership"
+                  hash="membership-status"
+                  className="w-full py-2 px-4 rounded-xl bg-white hover:bg-orange-50 border border-brand-orange text-brand-orange text-xs font-bold transition-all duration-200 hover:-translate-y-0.5 flex items-center justify-center gap-1.5"
                 >
                   <RefreshCw className="w-3.5 h-3.5" />
                   <span>Renew Membership</span>
-                </button>
+                </Link>
               </div>
             </div>
           </aside>
@@ -680,10 +681,6 @@ export function MembersDirectoryTab({
       )}
 
       {/* Verification Modal */}
-      <MemberVerificationModal
-        isOpen={isVerificationOpen}
-        onClose={() => setIsVerificationOpen(false)}
-      />
     </div>
   );
 }

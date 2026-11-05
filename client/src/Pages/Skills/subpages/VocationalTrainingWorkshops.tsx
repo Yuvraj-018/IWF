@@ -1,14 +1,12 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { NotificationTicker, UtilityBar, Header, Footer, RoleFormModal } from "@/components/layout/SiteLayout";
+import { NotificationTicker, UtilityBar, Header, Footer } from "@/components/layout/SiteLayout";
 import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import { Home, ChevronRight, ArrowLeft, ArrowRight, Wrench, Shield, CheckCircle2, ShieldCheck, Sparkles, Sun, Smartphone, Scissors } from "lucide-react";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
 import heroImg from "@/assets/sector_skills_1.png";
 
 export default function VocationalTrainingWorkshops() {
-  const [activeModal, setActiveModal] = useState<"volunteer" | "partner" | "sponsor" | "mentor" | "employee" | null>(null);
-
   const WORKSHOPS = [
     {
       icon: Sun,
@@ -134,8 +132,7 @@ export default function VocationalTrainingWorkshops() {
           </div>
         </section>
       </main>
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal type={activeModal} onClose={() => setActiveModal(null)} />
+      <Footer />
     </div>
   );
 }

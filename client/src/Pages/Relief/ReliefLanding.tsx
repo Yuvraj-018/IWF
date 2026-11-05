@@ -5,7 +5,6 @@ import {
   UtilityBar,
   Header,
   Footer,
-  RoleFormModal,
 } from "@/components/layout/SiteLayout";
 import {
   Home,
@@ -203,8 +202,6 @@ function SectionTitle({ label, title, subtitle }: { label: string; title: string
 }
 
 export default function ReliefLanding() {
-  const [modalRole, setModalRole] = useState<"partner" | "volunteer" | "sponsor" | "mentor" | null>(null);
-
   return (
     <div className="min-h-screen flex flex-col bg-white text-slate-800 antialiased">
       <NotificationTicker />
@@ -223,22 +220,14 @@ export default function ReliefLanding() {
         images={[heroImg]}
       >
         <div className="flex flex-wrap items-center gap-3 pt-2">
-          <button
-            type="button"
-            onClick={() => setModalRole("sponsor")}
-            className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold px-6 sm:px-7 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer"
-          >
+          <Link to="/donate" search={{ financialType: "Humanitarian Relief & Rehabilitation", initiative: "Humanitarian Relief & Rehabilitation" }} className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold px-6 sm:px-7 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-brand-orange/30 transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer">
             <span>Support Emergency Relief Kits</span>
             <ArrowRight className="w-4 h-4" />
-          </button>
-          <button
-            type="button"
-            onClick={() => setModalRole("partner")}
-            className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer backdrop-blur-xs"
-          >
+          </Link>
+          <Link to="/partner" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-95 text-xs sm:text-sm uppercase tracking-wider cursor-pointer backdrop-blur-xs">
             <Heart className="w-4 h-4 text-brand-orange" />
             <span>Partner for Relief Action</span>
-          </button>
+          </Link>
         </div>
       </SubpageHeroCarousel>
 
@@ -586,29 +575,18 @@ export default function ReliefLanding() {
               and livelihood restoration tools to crisis-stricken families across rural India.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
-              <button
-                onClick={() => setModalRole("sponsor")}
-                className="bg-brand-orange hover:bg-orange-600 text-white font-semibold text-sm px-6 py-2.5 rounded-full transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-95"
-              >
+              <Link to="/donate" search={{ financialType: "Humanitarian Relief & Rehabilitation", initiative: "Humanitarian Relief & Rehabilitation" }} className="bg-brand-orange hover:bg-orange-600 text-white font-semibold text-sm px-6 py-2.5 rounded-full transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-95">
                 Sponsor Relief Operations
-              </button>
-              <button
-                onClick={() => setModalRole("partner")}
-                className="border border-white/20 hover:bg-white/10 text-white font-semibold text-sm px-6 py-2.5 rounded-full transition-all duration-200 hover:scale-[1.02] active:scale-95"
-              >
+              </Link>
+              <Link to="/partner" className="border border-white/20 hover:bg-white/10 text-white font-semibold text-sm px-6 py-2.5 rounded-full transition-all duration-200 hover:scale-[1.02] active:scale-95">
                 Partner as Disaster Response Entity
-              </button>
+              </Link>
             </div>
           </ScrollReveal>
         </div>
       </section>
 
-      <Footer onOpenModal={(role) => setModalRole(role)} />
-
-      <RoleFormModal
-        type={modalRole}
-        onClose={() => setModalRole(null)}
-      />
+      <Footer />
     </div>
   );
 }

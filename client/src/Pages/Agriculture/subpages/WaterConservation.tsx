@@ -1,14 +1,12 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { NotificationTicker, UtilityBar, Header, Footer, RoleFormModal } from "@/components/layout/SiteLayout";
+import { NotificationTicker, UtilityBar, Header, Footer } from "@/components/layout/SiteLayout";
 import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import { Home, ChevronRight, ArrowLeft, ArrowRight, Droplets, Sun, Waves, CheckCircle2, ShieldCheck, Sparkles, Sprout } from "lucide-react";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
 import heroImg from "@/assets/thematic-agriculture.jpg";
 
 export default function WaterConservationAgri() {
-  const [activeModal, setActiveModal] = useState<"volunteer" | "partner" | "sponsor" | "mentor" | "employee" | null>(null);
-
   const STAGES = [
     {
       step: "01",
@@ -128,8 +126,7 @@ export default function WaterConservationAgri() {
           </div>
         </section>
       </main>
-      <Footer onOpenModal={setActiveModal} />
-      <RoleFormModal type={activeModal} onClose={() => setActiveModal(null)} />
+      <Footer />
     </div>
   );
 }
