@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Member, MemberCategory } from "../models/Member.js";
 import { Verification } from "../models/Verification.js";
 import { generateMemberNumber, generateReceiptNumber } from "../utils/idGenerator.js";
+import { calculateMembershipExpiry, calculateMembershipRenewalExpiry } from "../utils/dateUtils.js";
 import { Donation } from "../models/Donation.js";
 import { sendMembershipCardEmail } from "../services/emailService.js";
 import { generateAndSendOtp, verifyOtp } from "../services/otpService.js";
@@ -90,8 +91,7 @@ export async function registerMember(req: Request, res: Response): Promise<void>
     const receiptNo = generateReceiptNumber(donationCount + 1);
 
     const validFrom = new Date();
-    const validTill = new Date();
-    validTill.setFullYear(validTill.getFullYear() + periodMultiplier);
+    const validTill = calculateMembershipExpiry(validFrom, periodMultiplier);
 
     const member = new Member({
       memberNo,
@@ -349,11 +349,7 @@ export async function renewMember(req: Request, res: Response): Promise<void> {
     }
 
     const periodMultiplier = Number(membershipPeriod) === 2 ? 2 : 1;
-    const now = new Date();
-    // If currently active, extend from current validTill; if expired, extend from now
-    const baseDate = member.validTill > now ? member.validTill : now;
-    const newValidTill = new Date(baseDate);
-    newValidTill.setFullYear(newValidTill.getFullYear() + periodMultiplier);
+    const newValidTill = calculateMembershipRenewalExpiry(member.validTill, periodMultiplier);
 
     const donationCount = await Donation.countDocuments();
     const renewalReceiptNo = generateReceiptNumber(donationCount + 1);

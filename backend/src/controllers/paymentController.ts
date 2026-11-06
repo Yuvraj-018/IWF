@@ -13,6 +13,10 @@ import {
   generateReceiptNumber,
   generateMemberNumber,
 } from "../utils/idGenerator.js";
+import {
+  calculateMembershipExpiry,
+  calculateMembershipRenewalExpiry,
+} from "../utils/dateUtils.js";
 
 export async function createOrderController(req: Request, res: Response): Promise<void> {
   try {
@@ -178,10 +182,7 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
         });
 
         if (existing) {
-          const now = new Date();
-          const baseDate = existing.validTill > now ? existing.validTill : now;
-          const newValidTill = new Date(baseDate);
-          newValidTill.setFullYear(newValidTill.getFullYear() + periodMultiplier);
+          const newValidTill = calculateMembershipRenewalExpiry(existing.validTill, periodMultiplier);
 
           existing.validTill = newValidTill;
           existing.status = "Active";
@@ -219,8 +220,7 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
         const memberNo = generateMemberNumber(catCode, memberCount + 1);
 
         const validFrom = new Date();
-        const validTill = new Date();
-        validTill.setFullYear(validTill.getFullYear() + periodMultiplier);
+        const validTill = calculateMembershipExpiry(validFrom, periodMultiplier);
 
         const member = new Member({
           memberNo,
