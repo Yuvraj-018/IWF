@@ -285,7 +285,7 @@ export async function seedInitialPatients(): Promise<void> {
     for (const patientData of INITIAL_PATIENTS) {
       await Patient.findOneAndUpdate(
         { slug: patientData.slug },
-        { $set: patientData },
+        { $setOnInsert: patientData },
         { upsert: true, new: true, setDefaultsOnInsert: true }
       );
     }

@@ -301,7 +301,7 @@ export async function seedInitialNews(): Promise<void> {
     for (const item of INITIAL_NEWS_EVENTS) {
       await NewsEvent.findOneAndUpdate(
         { slug: item.slug },
-        { $set: item },
+        { $setOnInsert: item },
         { upsert: true, new: true, setDefaultsOnInsert: true }
       );
     }

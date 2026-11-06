@@ -313,9 +313,10 @@ export async function seedInitialMedia(): Promise<void> {
     }
 
     for (const item of INITIAL_MEDIA_ENTRIES) {
+      // ONLY insert if key does not exist yet. Never overwrite custom uploaded media!
       await Media.findOneAndUpdate(
         { key: item.key },
-        { ...item },
+        { $setOnInsert: item },
         { upsert: true, new: true, setDefaultsOnInsert: true }
       );
     }

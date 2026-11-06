@@ -16,9 +16,13 @@ export async function connectDB(): Promise<void> {
     });
     console.log(`[MongoDB] Connected successfully to ${conn.connection.host}/${conn.connection.name}`);
     
-    // Synchronize all initial collections and site settings into MongoDB
-    const { seedAll } = await import("../utils/seedAll.js");
-    await seedAll();
+    // Synchronize initial collections and site settings if DB is newly initialized
+    const mediaCount = await conn.connection.db?.collection("media").countDocuments();
+    if (!mediaCount || mediaCount === 0) {
+      console.log("[MongoDB] Uninitialized database detected. Seeding initial baseline datasets...");
+      const { seedAll } = await import("../utils/seedAll.js");
+      await seedAll();
+    }
   } catch (error) {
     console.error("[MongoDB] Connection error:", error);
     // In local dev, allow server to continue running if MongoDB is not yet started

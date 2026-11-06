@@ -200,7 +200,7 @@ export async function seedInitialMembers(): Promise<void> {
     for (const mem of INITIAL_MEMBERS) {
       await Member.findOneAndUpdate(
         { memberNo: mem.memberNo },
-        { $set: mem },
+        { $setOnInsert: mem },
         { upsert: true, new: true, setDefaultsOnInsert: true }
       );
     }
