@@ -55,9 +55,27 @@ export function VolunteersDirectoryTab({
   onOpenRoleModal,
 }: VolunteersDirectoryTabProps) {
   const { settings } = useSiteSettings();
-  const allVolunteers = (settings?.community_directory?.volunteers && settings.community_directory.volunteers.length > 0)
-    ? (settings.community_directory.volunteers as unknown as VolunteerItem[])
-    : VOLUNTEERS_DATA;
+  const allVolunteers = useMemo(() => {
+    if (settings?.community_directory?.volunteers && settings.community_directory.volunteers.length > 0) {
+      return settings.community_directory.volunteers as unknown as VolunteerItem[];
+    }
+    if (settings?.community_directory?.spotlight) {
+      const fromSpotlight = settings.community_directory.spotlight
+        .filter((s: any) => s.type === "volunteer" || s.type === "mentor")
+        .map((s: any) => ({
+          id: s.id,
+          name: s.name,
+          role: (s.type === "mentor" ? "Mentor" : "Volunteer") as any,
+          title: s.role || "Volunteer",
+          domain: s.category || "General Support",
+          location: s.location || "Pan India",
+          bio: s.bio || "",
+          initials: s.name ? s.name.slice(0, 2).toUpperCase() : "VL",
+        }));
+      if (fromSpotlight.length > 0) return fromSpotlight;
+    }
+    return [];
+  }, [settings]);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDomain, setSelectedDomain] = useState<string>("All");
@@ -247,7 +265,26 @@ export function VolunteersDirectoryTab({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* LEFT: 3-Column Volunteers Grid (9 Cards, Lift on Hover) */}
           <div className="lg:col-span-8 xl:col-span-9 space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+            {paginatedVolunteers.length === 0 ? (
+              <div className="bg-white rounded-2xl p-12 text-center border border-slate-200">
+                <GraduationCap className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+                <h4 className="text-sm font-bold text-slate-800">No volunteers or mentors found in directory</h4>
+                <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+                  {searchQuery || selectedDomain !== "All"
+                    ? "Try adjusting your search criteria or clearing active filters."
+                    : "No volunteers or mentors publicly listed yet. Join our volunteer network to support grassroots initiatives!"}
+                </p>
+                <div className="pt-4">
+                  <button
+                    onClick={() => onOpenRoleModal?.("volunteer")}
+                    className="px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition shadow-sm cursor-pointer"
+                  >
+                    Join as a Volunteer
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
               {paginatedVolunteers.map((vol) => {
                 const photo = VOLUNTEER_PHOTOS[vol.id];
                 const isMentor = vol.role === "Mentor";
@@ -326,8 +363,9 @@ export function VolunteersDirectoryTab({
                 );
               })}
             </div>
+          )}
 
-            {/* Pagination */}
+          {/* Pagination */}
             {totalPages > 1 && (
               <div className="flex justify-center items-center gap-2 pt-4">
                 <button

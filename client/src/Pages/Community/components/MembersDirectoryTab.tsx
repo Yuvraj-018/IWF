@@ -56,7 +56,7 @@ export function MembersDirectoryTab({
   const defaultMembers = useMemo(() => {
     return settings?.community_directory?.members && settings.community_directory.members.length > 0
       ? (settings.community_directory.members as unknown as MemberItem[])
-      : MEMBERS_DATA;
+      : [];
   }, [settings]);
 
   const [allMembers, setAllMembers] = useState<MemberItem[]>(defaultMembers);

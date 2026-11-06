@@ -14,11 +14,11 @@ export function PublicationsPage() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [activeStory, setActiveStory] = useState<SuccessStoryItem | null>(null);
 
-  const [pubs, setPubs] = useState<PublicationItem[]>(PUBLICATIONS_DATA.publications as any);
+  const [pubs, setPubs] = useState<PublicationItem[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalCount, setTotalCount] = useState(PUBLICATIONS_DATA.publications.length);
-  const [loading, setLoading] = useState(false);
+  const [totalCount, setTotalCount] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;

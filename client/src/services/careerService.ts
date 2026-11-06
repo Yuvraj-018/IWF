@@ -55,7 +55,7 @@ export async function fetchCareerOpenings(
     async () => {
       try {
         const res = await apiRequest<ListCareersResponse>(`/careers?${query.toString()}`);
-        if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
+        if (res && res.success && Array.isArray(res.data)) {
           // Normalize openingId to id for frontend compatibility
           const mapped = res.data.map((item: any) => ({
             ...item,
@@ -67,33 +67,17 @@ export async function fetchCareerOpenings(
           };
         }
       } catch (err) {
-        console.warn("Backend /api/careers unavailable, using client fallback:", err);
+        console.warn("Backend /api/careers error:", err);
       }
-
-      // Safe fallback from local content
-      let filtered = activeOpenings();
-      if (location && location !== "All") {
-        filtered = filtered.filter((o) => o.location === location);
-      }
-      if (department && department !== "All") {
-        filtered = filtered.filter((o) => o.department === department);
-      }
-      if (experienceBand && experienceBand !== "All") {
-        filtered = filtered.filter((o) => o.experienceBand === experienceBand);
-      }
-
-      const total = filtered.length;
-      const skip = (page - 1) * limit;
-      const paginated = filtered.slice(skip, skip + limit);
 
       return {
         success: true,
-        data: paginated,
+        data: [],
         pagination: {
-          total,
-          page,
+          total: 0,
+          page: 1,
           limit,
-          pages: Math.ceil(total / limit) || 1,
+          pages: 1,
         },
       };
     },

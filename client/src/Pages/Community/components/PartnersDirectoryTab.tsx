@@ -37,9 +37,27 @@ export function PartnersDirectoryTab({
   onOpenRoleModal,
 }: PartnersDirectoryTabProps) {
   const { settings } = useSiteSettings();
-  const allPartners = (settings?.community_directory?.partners && settings.community_directory.partners.length > 0)
-    ? (settings.community_directory.partners as unknown as PartnerItem[])
-    : PARTNERS_DATA;
+  const allPartners = useMemo(() => {
+    if (settings?.community_directory?.partners && settings.community_directory.partners.length > 0) {
+      return settings.community_directory.partners as unknown as PartnerItem[];
+    }
+    if (settings?.community_directory?.spotlight) {
+      const fromSpotlight = settings.community_directory.spotlight
+        .filter((s: any) => s.type === "partner")
+        .map((s: any) => ({
+          id: s.id,
+          name: s.name,
+          category: (s.category || "Strategic Partner") as any,
+          focusArea: s.bio || "Community Development",
+          location: s.location || "Pan India",
+          sinceYear: 2024,
+          description: s.bio || "",
+          badge: s.role || "Partner",
+        }));
+      if (fromSpotlight.length > 0) return fromSpotlight;
+    }
+    return [];
+  }, [settings]);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedArea, setSelectedArea] = useState<string>("All");
@@ -212,7 +230,26 @@ export function PartnersDirectoryTab({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* LEFT: 3-Column Partners Grid (9 Cards, Lift on Hover) */}
           <div className="lg:col-span-8 xl:col-span-9 space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+            {paginatedPartners.length === 0 ? (
+              <div className="bg-white rounded-2xl p-12 text-center border border-slate-200">
+                <Building2 className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+                <h4 className="text-sm font-bold text-slate-800">No partners found in directory</h4>
+                <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+                  {searchQuery || selectedArea !== "All"
+                    ? "Try adjusting your search criteria or clearing active filters."
+                    : "No institutional partners publicly listed yet. Partner with Islah Welfare Foundation to create social impact!"}
+                </p>
+                <div className="pt-4">
+                  <button
+                    onClick={() => onOpenRoleModal?.("partner")}
+                    className="px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition shadow-sm cursor-pointer"
+                  >
+                    Partner With Us
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
               {paginatedPartners.map((partner) => {
                 return (
                   <div
@@ -327,8 +364,9 @@ export function PartnersDirectoryTab({
                 );
               })}
             </div>
+          )}
 
-            {/* Pagination */}
+          {/* Pagination */}
             {totalPages > 1 && (
               <div className="flex justify-center items-center gap-2 pt-4">
                 <button

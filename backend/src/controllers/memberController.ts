@@ -5,6 +5,7 @@ import { generateMemberNumber, generateReceiptNumber } from "../utils/idGenerato
 import { Donation } from "../models/Donation.js";
 import { sendMembershipCardEmail } from "../services/emailService.js";
 import { generateAndSendOtp, verifyOtp } from "../services/otpService.js";
+import { invalidateCache } from "../middlewares/cache.js";
 
 const CATEGORY_FEE_MAP: Record<MemberCategory, number> = {
   Community: 2500,
@@ -150,6 +151,8 @@ export async function registerMember(req: Request, res: Response): Promise<void>
       }).catch((e) => console.warn("Membership email failed:", e));
     }
 
+    invalidateCache("members");
+
     res.status(201).json({
       success: true,
       message: "Membership created successfully",
@@ -197,24 +200,30 @@ export async function checkMemberStatus(req: Request, res: Response): Promise<vo
 }
 
 /**
- * List Members for Public Directory
- * Only sends Active members who agreed to public display, sorted by highest contribution first.
+ * List Members for Public Directory & Admin Ledger
+ * - Unauthenticated: Sends Active members who agreed to public display, sorted by highest contribution first with masked phone numbers.
+ * - Authenticated Admin: Returns complete member ledger with full contact details for CMS management.
  */
 export async function listMembers(req: Request, res: Response): Promise<void> {
   try {
     const { category, state, status, search } = req.query;
     const query: Record<string, any> = {};
+    const isAdmin = Boolean(req.headers.authorization);
 
-    // Filter Active by default unless explicitly searching status
-    if (status) {
-      query.status = status;
+    if (!isAdmin) {
+      // Filter Active by default for public directory
+      if (status) {
+        query.status = status;
+      } else {
+        query.status = "Active";
+        query.validTill = { $gte: new Date() };
+      }
+      // Protect member privacy: only show members who agreed to directory listing
+      query.consentDisplay = { $ne: "no" };
     } else {
-      query.status = "Active";
-      query.validTill = { $gte: new Date() };
+      // Admin filter
+      if (status && status !== "All") query.status = status;
     }
-
-    // Protect member privacy: only show members who agreed to directory listing
-    query.consentDisplay = { $ne: "no" };
 
     if (category && category !== "All") query.category = category;
     if (state && state !== "All") query.state = state;
@@ -229,10 +238,12 @@ export async function listMembers(req: Request, res: Response): Promise<void> {
     // Sort by highest contribution / tier first, then by registration date
     const members = await Member.find(query)
       .sort({ annualFee: -1, createdAt: -1 })
-      .limit(200);
+      .limit(isAdmin ? 500 : 200);
 
     const safeMembers = members.map((m) => ({
+      _id: m._id,
       id: m.memberNo,
+      memberNo: m.memberNo,
       name: m.name,
       category: m.category,
       district: m.district,
@@ -241,7 +252,9 @@ export async function listMembers(req: Request, res: Response): Promise<void> {
       annualFee: m.annualFee,
       validTill: m.validTill.toISOString().split("T")[0],
       joined: m.validFrom.toISOString().split("T")[0],
-      phone: m.phone ? `${m.phone.slice(0, 3)}****${m.phone.slice(-3)}` : "Private",
+      phone: isAdmin ? m.phone : (m.phone ? `${m.phone.slice(0, 3)}****${m.phone.slice(-3)}` : "Private"),
+      email: isAdmin ? m.email : undefined,
+      receiptNo: m.receiptNo,
     }));
 
     res.json({ success: true, count: safeMembers.length, data: safeMembers });
@@ -374,6 +387,8 @@ export async function renewMember(req: Request, res: Response): Promise<void> {
         receiptNo: renewalReceiptNo,
       }).catch((e) => console.warn("Renewal email notification failed:", e));
     }
+
+    invalidateCache("members");
 
     res.json({
       success: true,

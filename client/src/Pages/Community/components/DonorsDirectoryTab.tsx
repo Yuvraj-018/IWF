@@ -34,9 +34,27 @@ export function DonorsDirectoryTab({
   onOpenRoleModal,
 }: DonorsDirectoryTabProps) {
   const { settings } = useSiteSettings();
-  const allDonors = (settings?.community_directory?.donors && settings.community_directory.donors.length > 0)
-    ? (settings.community_directory.donors as unknown as DonorItem[])
-    : DONORS_DATA;
+  const allDonors = useMemo(() => {
+    if (settings?.community_directory?.donors && settings.community_directory.donors.length > 0) {
+      return settings.community_directory.donors as unknown as DonorItem[];
+    }
+    if (settings?.community_directory?.spotlight) {
+      const fromSpotlight = settings.community_directory.spotlight
+        .filter((s: any) => s.type === "donor")
+        .map((s: any) => ({
+          id: s.id,
+          name: s.name,
+          tier: (s.category || "Recognised") as any,
+          type: (s.role || "Individual Donor") as any,
+          causes: ["Community Support", "Education"],
+          sinceYear: 2024,
+          location: s.location || "Pan India",
+          description: s.bio,
+        }));
+      if (fromSpotlight.length > 0) return fromSpotlight;
+    }
+    return [];
+  }, [settings]);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTier, setSelectedTier] = useState<string>("All");
@@ -217,7 +235,26 @@ export function DonorsDirectoryTab({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* LEFT: 4-Column Donors Grid (8 Cards Desktop, Lift on Hover) */}
           <div className="lg:col-span-8 xl:col-span-9 space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+            {paginatedDonors.length === 0 ? (
+              <div className="bg-white rounded-2xl p-12 text-center border border-slate-200">
+                <Heart className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+                <h4 className="text-sm font-bold text-slate-800">No donors found in directory</h4>
+                <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+                  {searchQuery || selectedTier !== "All"
+                    ? "Try adjusting your search criteria or clearing active filters."
+                    : "No donors publicly listed in this directory yet. Join hands with us as a donor partner!"}
+                </p>
+                <div className="pt-4">
+                  <button
+                    onClick={() => onOpenRoleModal?.("donor")}
+                    className="px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition shadow-sm cursor-pointer"
+                  >
+                    Donate &amp; Support
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
               {paginatedDonors.map((donor) => {
                 // Tier styling
                 const tierStyle =
@@ -337,8 +374,9 @@ export function DonorsDirectoryTab({
                 );
               })}
             </div>
+          )}
 
-            {/* Pagination */}
+          {/* Pagination */}
             {totalPages > 1 && (
               <div className="flex justify-center items-center gap-2 pt-4">
                 <button

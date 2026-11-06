@@ -15,11 +15,11 @@ export function SuccessStoriesPage() {
   const [activeStory, setActiveStory] = useState<SuccessStoryItem | null>(null);
   const [videoOpen, setVideoOpen] = useState(false);
 
-  const [stories, setStories] = useState<SuccessStoryItem[]>(SUCCESS_STORIES_DATA.stories);
+  const [stories, setStories] = useState<SuccessStoryItem[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalCount, setTotalCount] = useState(SUCCESS_STORIES_DATA.stories.length);
-  const [loading, setLoading] = useState(false);
+  const [totalCount, setTotalCount] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;

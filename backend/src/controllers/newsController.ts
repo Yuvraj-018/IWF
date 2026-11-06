@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { NewsEvent } from "../models/NewsEvent.js";
+import { invalidateCache } from "../middlewares/cache.js";
 
 function slugify(text: string): string {
   return text
@@ -120,6 +121,7 @@ export async function createNewsEvent(req: Request, res: Response) {
       month: body.month || (body.date ? body.date.split(" ").slice(1).join(" ") : ""),
     });
 
+    invalidateCache("news");
     res.status(201).json({ success: true, message: "News event created successfully", data: created });
   } catch (err: any) {
     console.error("createNewsEvent error:", err);
@@ -136,6 +138,7 @@ export async function updateNewsEvent(req: Request, res: Response) {
       return res.status(404).json({ success: false, message: "News event not found" });
     }
 
+    invalidateCache("news");
     res.json({ success: true, message: "News event updated successfully", data: updated });
   } catch (err: any) {
     console.error("updateNewsEvent error:", err);
@@ -152,6 +155,7 @@ export async function deleteNewsEvent(req: Request, res: Response) {
       return res.status(404).json({ success: false, message: "News event not found" });
     }
 
+    invalidateCache("news");
     res.json({ success: true, message: "News event deleted successfully" });
   } catch (err: any) {
     console.error("deleteNewsEvent error:", err);

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { SiteSetting } from "../models/SiteSetting.js";
+import { invalidateCache } from "../middlewares/cache.js";
 
 const DEFAULT_SETTINGS: Record<string, { category: "impact" | "contact" | "general"; data: Record<string, any> }> = {
   // ── 1. Top-Level Core Milestones (Outcomes, Annual Reports, Global) ──
@@ -539,6 +540,8 @@ export async function updateSetting(req: Request, res: Response): Promise<void> 
       },
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
+
+    invalidateCache("settings");
 
     res.json({
       success: true,

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Media, MediaCategory, MediaType } from "../models/Media.js";
 import { uploadToCloudinary, deleteFromCloudinary } from "../services/cloudinaryService.js";
+import { invalidateCache } from "../middlewares/cache.js";
 
 export async function listMedia(req: Request, res: Response): Promise<void> {
   try {
@@ -221,6 +222,7 @@ export async function upsertMedia(req: Request, res: Response): Promise<void> {
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
 
+    invalidateCache("media");
     res.status(200).json({
       success: true,
       message: `Media '${key}' saved successfully in CMS`,
@@ -254,6 +256,7 @@ export async function deleteMedia(req: Request, res: Response): Promise<void> {
 
     await Media.deleteOne({ _id: item._id });
 
+    invalidateCache("media");
     res.json({
       success: true,
       message: `Media item '${key}' deleted from CMS`,

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Patient } from "../models/Patient.js";
+import { invalidateCache } from "../middlewares/cache.js";
 
 export async function listPatients(req: Request, res: Response): Promise<void> {
   try {
@@ -58,6 +59,7 @@ export async function createPatient(req: Request, res: Response): Promise<void> 
     const patient = new Patient(patientData);
     await patient.save();
 
+    invalidateCache("patients");
     res.status(201).json({ success: true, message: "Patient case created", patient });
   } catch (error) {
     console.error("createPatient error:", error);
@@ -81,6 +83,7 @@ export async function updatePatient(req: Request, res: Response): Promise<void> 
       return;
     }
 
+    invalidateCache("patients");
     res.json({ success: true, message: "Patient case updated", patient });
   } catch (error: any) {
     console.error("updatePatient error:", error);
@@ -98,6 +101,7 @@ export async function deletePatient(req: Request, res: Response): Promise<void> 
       return;
     }
 
+    invalidateCache("patients");
     res.json({ success: true, message: "Patient case deleted successfully" });
   } catch (error) {
     console.error("deletePatient error:", error);

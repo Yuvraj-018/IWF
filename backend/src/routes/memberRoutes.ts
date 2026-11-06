@@ -9,12 +9,12 @@ import {
 } from "../controllers/memberController.js";
 import { otpRateLimiter, formSubmissionLimiter } from "../middlewares/rateLimiter.js";
 import { honeypotCheck } from "../middlewares/honeypot.js";
-import { requireAdminAuth } from "../middlewares/auth.js";
+import { cacheResponse } from "../middlewares/cache.js";
 
 export const memberRouter = Router();
 
 memberRouter.post("/", formSubmissionLimiter, honeypotCheck, registerMember);
-memberRouter.get("/", requireAdminAuth, listMembers);
+memberRouter.get("/", cacheResponse(120, "members"), listMembers);
 memberRouter.get("/status/:memberNo", checkMemberStatus);
 memberRouter.post("/send-otp", otpRateLimiter, sendMemberOtp);
 memberRouter.post("/verify-otp", verifyMemberOtp);

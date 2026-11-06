@@ -128,25 +128,27 @@ function FilterSelect({
   );
 }
 
+const STANDARD_LOCATIONS = ["Darbhanga, Bihar", "Patna, Bihar", "New Delhi", "Lucknow, UP", "Remote"];
+const STANDARD_DEPARTMENTS = ["Programmes", "Healthcare", "Education", "Operations", "Finance & Admin", "Monitoring & Evaluation"];
+const STANDARD_EXPERIENCES = ["Fresher / Intern", "1–2 Years", "2–5 Years", "5+ Years"];
+
 export default function CareersPage() {
   useScrollToHash("career-form");
-  const localOpenings = useMemo(() => activeOpenings(), []);
-  const [openings, setOpenings] = useState<CareerOpening[]>(localOpenings.slice(0, 6));
+  const [openings, setOpenings] = useState<CareerOpening[]>([]);
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(Math.ceil(localOpenings.length / 6) || 1);
-  const [totalRoles, setTotalRoles] = useState(localOpenings.length);
-  const [loading, setLoading] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalRoles, setTotalRoles] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const [location, setLocation] = useState(ALL);
   const [department, setDepartment] = useState(ALL);
   const [experience, setExperience] = useState(ALL);
-  const [detailId, setDetailId] = useState<string | null>(localOpenings[0]?.id ?? null);
+  const [detailId, setDetailId] = useState<string | null>(null);
   const [applyFor, setApplyFor] = useState<string | undefined>();
 
-  const uniq = (list: string[]) => Array.from(new Set(list)).sort();
-  const locations = uniq(localOpenings.map((o) => o.location));
-  const departments = uniq(localOpenings.map((o) => o.department));
-  const experiences = uniq(localOpenings.map((o) => o.experienceBand));
+  const locations = STANDARD_LOCATIONS;
+  const departments = STANDARD_DEPARTMENTS;
+  const experiences = STANDARD_EXPERIENCES;
 
   // Fetch dynamic openings from backend with 6-per-lot pagination
   useEffect(() => {
@@ -163,7 +165,7 @@ export default function CareersPage() {
         setOpenings(res.data);
         setTotalPages(res.pagination?.pages || 1);
         setTotalRoles(res.pagination?.total || 0);
-        if (res.data.length > 0 && !detailId) {
+        if (res.data.length > 0 && (!detailId || !res.data.some(o => o.id === detailId))) {
           setDetailId(res.data[0].id);
         }
       }

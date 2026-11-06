@@ -39,7 +39,7 @@ export async function fetchSuccessStories(
     async () => {
       try {
         const res = await apiRequest<ListStoriesResponse>(`/stories?${query.toString()}`);
-        if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
+        if (res && res.success && Array.isArray(res.data)) {
           const mapped = res.data.map((item: any) => ({
             ...item,
             id: String(item._id || item.id),
@@ -50,36 +50,17 @@ export async function fetchSuccessStories(
           };
         }
       } catch (err) {
-        console.warn("Backend /api/stories offline, using fallback:", err);
+        console.warn("Backend /api/stories error:", err);
       }
-
-      // Local fallback from SUCCESS_STORIES_DATA
-      let filtered = SUCCESS_STORIES_DATA.stories;
-      if (category && category !== "All Stories" && category !== "All") {
-        filtered = filtered.filter((s) => s.category === category);
-      }
-      if (search) {
-        const q = search.toLowerCase();
-        filtered = filtered.filter(
-          (s) =>
-            s.title.toLowerCase().includes(q) ||
-            s.personName.toLowerCase().includes(q) ||
-            s.excerpt.toLowerCase().includes(q)
-        );
-      }
-
-      const total = filtered.length;
-      const skip = (page - 1) * limit;
-      const paginated = filtered.slice(skip, skip + limit);
 
       return {
         success: true,
-        data: paginated,
+        data: [],
         pagination: {
-          total,
-          page,
+          total: 0,
+          page: 1,
           limit,
-          pages: Math.ceil(total / limit) || 1,
+          pages: 1,
         },
       };
     },

@@ -56,7 +56,7 @@ export async function fetchPublications(
     async () => {
       try {
         const res = await apiRequest<ListPublicationsResponse>(`/publications?${query.toString()}`);
-        if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
+        if (res && res.success && Array.isArray(res.data)) {
           const mapped = res.data.map((item: any) => ({
             ...item,
             id: String(item._id || item.id),
@@ -69,36 +69,17 @@ export async function fetchPublications(
           };
         }
       } catch (err) {
-        console.warn("Backend /api/publications offline, using local fallback:", err);
+        console.warn("Backend /api/publications error:", err);
       }
-
-      // Local fallback from PUBLICATIONS_DATA
-      let filtered = PUBLICATIONS_DATA.publications;
-      if (type && type !== "All Publications" && type !== "All") {
-        filtered = filtered.filter((p) => p.type === type);
-      }
-      if (search) {
-        const q = search.toLowerCase();
-        filtered = filtered.filter(
-          (p) =>
-            p.title.toLowerCase().includes(q) ||
-            p.summary.toLowerCase().includes(q) ||
-            p.authors.toLowerCase().includes(q)
-        );
-      }
-
-      const total = filtered.length;
-      const skip = (page - 1) * limit;
-      const paginated = filtered.slice(skip, skip + limit);
 
       return {
         success: true,
-        data: paginated,
+        data: [],
         pagination: {
-          total,
-          page,
+          total: 0,
+          page: 1,
           limit,
-          pages: Math.ceil(total / limit) || 1,
+          pages: 1,
         },
       };
     },
