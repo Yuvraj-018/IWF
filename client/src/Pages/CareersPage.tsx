@@ -134,6 +134,8 @@ const STANDARD_EXPERIENCES = ["Fresher / Intern", "1–2 Years", "2–5 Years", 
 
 export default function CareersPage() {
   useScrollToHash("career-form");
+  // Built-in openings, used to resolve details when the API list doesn't include them.
+  const localOpenings = useMemo(() => activeOpenings(), []);
   const [openings, setOpenings] = useState<CareerOpening[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);

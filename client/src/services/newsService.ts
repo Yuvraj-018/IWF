@@ -326,6 +326,7 @@ export async function fetchNewsEvents(params?: {
     if (json.success && Array.isArray(json.data)) {
       return json;
     }
+    throw new Error("Unexpected /news response");
   } catch (err) {
     console.warn("Backend /api/news offline or unreached, using bundled fallback catalog:", err);
     return {

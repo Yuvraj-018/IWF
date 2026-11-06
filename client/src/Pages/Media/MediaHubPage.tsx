@@ -22,7 +22,6 @@ export function MediaHubPage() {
     "Success Stories": "media-section-stories",
     "News & Events": "media-section-news",
     "Annual Reports": "media-section-reports",
-    "Publications & Research": "media-section-publications",
     "Photo & Video Gallery": "media-section-gallery",
   };
 
@@ -30,7 +29,6 @@ export function MediaHubPage() {
     { value: mediaHubStats?.fieldEvents || "120+", label: "Field Events", desc: "Organized across 15+ rural districts" },
     { value: mediaHubStats?.newsBulletins || "250+", label: "News & Bulletins", desc: "Verified dispatches & media coverage" },
     { value: mediaHubStats?.livesReached || "50,000+", label: "Lives Reached", desc: "Direct beneficiary impact to date" },
-    { value: mediaHubStats?.publications || "18+", label: "Publications", desc: "Research briefs & whitepapers" },
     { value: mediaHubStats?.visualStories || "500+", label: "Visual Stories", desc: "Archived field documentation" },
   ];
 
@@ -68,12 +66,6 @@ export function MediaHubPage() {
               News & Events
             </Link>
             <Link
-              to="/media/publications"
-              className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider border border-white/20 transition backdrop-blur-sm"
-            >
-              Publications & Research
-            </Link>
-            <Link
               to="/media/gallery"
               className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider border border-white/20 transition backdrop-blur-sm"
             >
@@ -100,7 +92,7 @@ export function MediaHubPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
         {/* 2. Top Stats Ribbon (5 Cards) */}
         <section aria-label="Media Reach Metrics">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {statsRibbon.map((stat, idx) => (
               <div
                 key={idx}

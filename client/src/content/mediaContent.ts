@@ -38,14 +38,6 @@ import nlCover4 from "@/assets/media/newsletter_cover_4.jpg";
 import nlCover5 from "@/assets/media/newsletter_cover_5.jpg";
 import nlCover6 from "@/assets/media/newsletter_cover_6.jpg";
 
-import pubCover1 from "@/assets/media/pub_cover_1.jpg";
-import pubCover2 from "@/assets/media/pub_cover_2.jpg";
-import pubCover3 from "@/assets/media/pub_cover_3.jpg";
-import pubCover4 from "@/assets/media/pub_cover_4.jpg";
-import pubCover5 from "@/assets/media/pub_cover_5.jpg";
-import pubCover6 from "@/assets/media/pub_cover_6.jpg";
-import pubCover7 from "@/assets/media/pub_cover_7.jpg";
-import pubCover8 from "@/assets/media/pub_cover_8.jpg";
 
 import galPhoto1 from "@/assets/media/gallery_photo_1.jpg";
 import galPhoto2 from "@/assets/media/gallery_photo_2.jpg";
@@ -500,7 +492,6 @@ export const MEDIA_HUB_DATA = {
     { value: "120+", label: "Field Events", desc: "Organized across 15+ rural districts" },
     { value: "250+", label: "News & Bulletins", desc: "Verified dispatches & media coverage" },
     { value: "50,000+", label: "Lives Reached", desc: "Direct beneficiary impact to date" },
-    { value: "18+", label: "Publications", desc: "Research briefs & whitepapers" },
     { value: "500+", label: "Visual Stories", desc: "Archived field documentation" },
   ],
   sections: [
@@ -531,13 +522,6 @@ export const MEDIA_HUB_DATA = {
       image: report2023_24,
       link: "/media/annual-reports",
       actionText: "Download Reports",
-    },
-    {
-      title: "Publications & Research",
-      desc: "Explore our research briefs, quarterly newsletters, longitudinal impact studies, and open-access policy papers.",
-      image: pubCover1,
-      link: "/media/publications",
-      actionText: "Explore Research",
     },
     {
       title: "Photo & Video Gallery",
@@ -593,12 +577,6 @@ export const MEDIA_HUB_DATA = {
       icon: "Download",
     },
     {
-      title: "Publications & Research",
-      desc: "Research briefs, quarterly newsletters and policy papers.",
-      href: "/media/publications",
-      icon: "BookOpen",
-    },
-    {
       title: "Photo & Video Gallery",
       desc: "Moments captured from our programs and events.",
       href: "/media/gallery",
@@ -608,7 +586,6 @@ export const MEDIA_HUB_DATA = {
   quickHighlights: [
     { count: "120+", label: "Events", icon: "Calendar" },
     { count: "250+", label: "News Articles", icon: "FileText" },
-    { count: "18+", label: "Publications", icon: "BookOpen" },
     { count: "500+", label: "Gallery Photos", icon: "Image" },
   ],
 };
@@ -818,180 +795,8 @@ export const NEWS_EVENTS_DATA = {
 export const LATEST_UPDATES_DATA = NEWS_EVENTS_DATA;
 
 // -------------------------------------------------------------
-// 8. NEWSLETTERS & PUBLICATIONS DATA (Consolidated Knowledge & Research)
+// PRESS RELEASES (alias of News & Events)
 // -------------------------------------------------------------
-export const PUBLICATIONS_DATA = {
-  hero: {
-    badge: "RESEARCH & POLICY",
-    title: "PUBLICATIONS & POLICY PAPERS",
-    description: "Explore our peer-informed reports, quarterly newsletters, longitudinal impact studies, policy briefs, and open-access research documenting grassroots socio-economic transformation.",
-    image: publicationsHero,
-  },
-  statsRibbon: [
-    { value: "30+", label: "Publications & Issues", desc: "Empirical evaluations, briefs & newsletters" },
-    { value: "100%", label: "Open Access (CC-BY)", desc: "Free for civil society, researchers & partners" },
-    { value: "15+", label: "Survey Districts", desc: "Primary household data from rural Bihar & UP" },
-    { value: "6+", label: "Policy Frameworks", desc: "Actionable blueprints for scalable social change" },
-  ],
-  types: [
-    "All Publications",
-    "Newsletters",
-    "Research Papers",
-    "Policy Briefs",
-    "Project Reports",
-    "Annual Reports",
-    "Brochures",
-  ],
-  publications: [
-    {
-      id: "pub-1",
-      type: "Annual Reports",
-      title: "Annual Governance & Program Report 2023-24",
-      authors: "Research & Monitoring Directorate",
-      date: "October 15, 2024",
-      summary: "Comprehensive multi-sector evaluation covering 50,000+ beneficiaries across education, healthcare, and rural livelihoods.",
-      cover: pubCover1,
-      fileSize: "4.8 MB",
-      pdfUrl: "/docs/islah_report.pdf",
-    },
-    {
-      id: "nl-2024-q2",
-      type: "Newsletters",
-      title: "Q2 2024 Newsletter — Spring of Progress",
-      authors: "Islah Editorial Desk",
-      date: "June 30, 2024",
-      summary: "Highlights of our expanding initiatives in primary education, solar learning centres, rural health camps, and women micro-entrepreneurship.",
-      cover: nlCover1,
-      fileSize: "5.4 MB",
-      pdfUrl: "/docs/islah_report.pdf",
-    },
-    {
-      id: "pub-2",
-      type: "Project Reports",
-      title: "Education Program Longitudinal Impact Evaluation",
-      authors: "Education Advisory Cell, IWF",
-      date: "September 10, 2024",
-      summary: "Systematic assessment of remedial learning centres and secondary scholarship distributions in rural clusters.",
-      cover: pubCover2,
-      fileSize: "3.2 MB",
-      pdfUrl: "/docs/islah_report.pdf",
-    },
-    {
-      id: "nl-2024-q1",
-      type: "Newsletters",
-      title: "Q1 2024 Newsletter — Winter Relief & Education",
-      authors: "Islah Editorial Desk",
-      date: "March 31, 2024",
-      summary: "Quarterly review of winter blanket distributions, scholarship kit disbursements, new healthcare partnerships, and community training sessions.",
-      cover: nlCover2,
-      fileSize: "4.8 MB",
-      pdfUrl: "/docs/islah_report.pdf",
-    },
-    {
-      id: "pub-3",
-      type: "Research Papers",
-      title: "Socio-Economic Mobility through Rural Women SHGs",
-      authors: "Livelihoods & Micro-Enterprise Team",
-      date: "August 20, 2024",
-      summary: "A rigorous primary survey measuring household income changes and financial decision-making agency among 1,200 rural women.",
-      cover: pubCover3,
-      fileSize: "2.6 MB",
-      pdfUrl: "/docs/islah_report.pdf",
-    },
-    {
-      id: "nl-2023-q4",
-      type: "Newsletters",
-      title: "Q4 2023 Newsletter — Year-End Milestones",
-      authors: "Islah Editorial Desk",
-      date: "December 31, 2023",
-      summary: "Annual impact roundup, community volunteer felicitation, financial stewardship notes, and our strategic goals for Vision 2024.",
-      cover: nlCover3,
-      fileSize: "4.2 MB",
-      pdfUrl: "/docs/islah_report.pdf",
-    },
-    {
-      id: "pub-4",
-      type: "Policy Briefs",
-      title: "Policy Blueprint: Scalable Rural Sanitation & Water Security",
-      authors: "Community Infrastructure Directorate",
-      date: "July 30, 2024",
-      summary: "Recommendations for block and district authorities on community-managed groundwater purification plants and sanitary infrastructure.",
-      cover: pubCover4,
-      fileSize: "1.9 MB",
-      pdfUrl: "/docs/islah_brochure.pdf",
-    },
-    {
-      id: "nl-2023-q3",
-      type: "Newsletters",
-      title: "Q3 2023 Newsletter — Monsoon Resilience",
-      authors: "Islah Editorial Desk",
-      date: "September 30, 2023",
-      summary: "Flood relief logistics in North Bihar, clean water chlorination campaigns, mobile diagnostic clinics, and adolescent hygiene awareness workshops.",
-      cover: nlCover4,
-      fileSize: "4.6 MB",
-      pdfUrl: "/docs/islah_report.pdf",
-    },
-    {
-      id: "pub-5",
-      type: "Project Reports",
-      title: "Preventive Rural Healthcare & Telemedicine Reach",
-      authors: "Public Health Taskforce",
-      date: "July 10, 2024",
-      summary: "Clinical analysis and attendance patterns across 35 mobile health camps serving remote village panchayats.",
-      cover: pubCover5,
-      fileSize: "3.7 MB",
-      pdfUrl: "/docs/islah_report.pdf",
-    },
-    {
-      id: "nl-2023-q2",
-      type: "Newsletters",
-      title: "Q2 2023 Newsletter — Green Roots & Growth",
-      authors: "Islah Editorial Desk",
-      date: "June 30, 2023",
-      summary: "Celebrating World Environment Day with 10,000 saplings, farmers' organic crop techniques, and youth vocational certification ceremonies.",
-      cover: nlCover5,
-      fileSize: "4.1 MB",
-      pdfUrl: "/docs/islah_report.pdf",
-    },
-    {
-      id: "pub-6",
-      type: "Brochures",
-      title: "Comprehensive Organization & Program Profile",
-      authors: "Communications & Strategic Partnerships",
-      date: "May 25, 2024",
-      summary: "An overview of Islah Welfare Foundation's mission, governance, CSR partnership modalities, and measurable field footprint.",
-      cover: pubCover8,
-      fileSize: "1.6 MB",
-      pdfUrl: "/docs/islah_brochure.pdf",
-    },
-    {
-      id: "nl-2023-q1",
-      type: "Newsletters",
-      title: "Q1 2023 Newsletter — Foundations for Hope",
-      authors: "Islah Editorial Desk",
-      date: "March 31, 2023",
-      summary: "Inaugurating three new cluster learning centres, vocational sewing training batches for rural mothers, and maternal healthcare camps.",
-      cover: nlCover6,
-      fileSize: "3.9 MB",
-      pdfUrl: "/docs/islah_report.pdf",
-    },
-  ],
-  sidebarThemes: [
-    { title: "Rural Educational Equity", desc: "Overcoming dropout rates and building digital literacy in flood-prone districts." },
-    { title: "Women's Economic Agency", desc: "Impact of micro-savings, tailoring collectives, and financial literacy." },
-    { title: "Preventative Rural Healthcare", desc: "Grassroots diagnostic models and maternal wellness indicators." },
-    { title: "Community Climate Resilience", desc: "Afforestation, water-table regeneration, and emergency flood preparedness." },
-  ],
-  sidebarInside: [
-    { title: "Program Progress Updates", desc: "Verified milestone reviews across education, healthcare, and livelihood clusters." },
-    { title: "Grassroots Success Narratives", desc: "Inspiring first-person stories told directly by rural community members." },
-    { title: "Financial & Governance Transparency", desc: "Audited summaries of resource deployment and donor accountability." },
-    { title: "Upcoming Events & Campaigns", desc: "Advance schedules for free health camps, vocational batches, and drives." },
-  ],
-};
-
-// Consolidated aliases for backwards compatibility
-export const NEWSLETTERS_DATA = PUBLICATIONS_DATA;
 export const PRESS_RELEASES_DATA = NEWS_EVENTS_DATA;
 
 // -------------------------------------------------------------

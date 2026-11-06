@@ -245,12 +245,12 @@ export function DonorsDirectoryTab({
                     : "No donors publicly listed in this directory yet. Join hands with us as a donor partner!"}
                 </p>
                 <div className="pt-4">
-                  <button
-                    onClick={() => onOpenRoleModal?.("donor")}
-                    className="px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition shadow-sm cursor-pointer"
+                  <a
+                    href="/donate"
+                    className="inline-block px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition shadow-sm"
                   >
                     Donate &amp; Support
-                  </button>
+                  </a>
                 </div>
               </div>
             ) : (

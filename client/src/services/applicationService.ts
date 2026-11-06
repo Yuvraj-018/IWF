@@ -20,6 +20,8 @@ export interface ApplicationPayload {
   subclassifications?: string[];
   message?: string;
   turnstileToken?: string;
+  /** Uploaded résumé / supporting document URL (career and role applications). */
+  resumeUrl?: string;
   formData?: Record<string, any>;
 }
 

@@ -109,7 +109,6 @@ export const MEGA_DATA: Record<string, MegaSection> = {
       "Success Stories",
       "News & Events",
       "Annual Reports",
-      "Publications & Research",
       "Photo & Video Gallery",
     ],
   },
@@ -181,7 +180,6 @@ function getMegaHref(menu: string, item: string) {
   if (menu === "Media" && item === "Success Stories") return "/media/success-stories";
   if (menu === "Media" && (item === "News & Events" || item === "Latest Updates" || item === "Press Releases" || item === "Press Release")) return "/media/news-and-events";
   if (menu === "Media" && item === "Annual Reports") return "/media/annual-reports";
-  if (menu === "Media" && (item === "Publications & Research" || item === "Publications" || item === "Publication" || item === "Newsletters")) return "/media/publications";
   if (menu === "Media" && (item === "Photo & Video Gallery" || item === "Gallery" || item === "Photo Gallery")) return "/media/gallery";
   // Get Involved
   if (menu === "Get Involved" && item === "Careers & Opportunities") return "/careers";
