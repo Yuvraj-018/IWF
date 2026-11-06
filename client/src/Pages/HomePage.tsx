@@ -36,6 +36,7 @@ import { URGENT_PATIENTS } from "@/content/patients";
 import newLogo from "@/assets/new logo.png";
 import { NotificationTicker, UtilityBar, Header, Footer } from "@/components/layout/SiteLayout";
 import { useMedia } from "@/services/mediaService";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 // ─── Shared Components ────────────────────────────────────────────────────────
 
@@ -607,10 +608,26 @@ function StatCard({ stat, visible, lang, index }: { stat: typeof IMPACT_STATS[0]
   );
 }
 
+function parseStatNumber(val: string | undefined, fallback: number): number {
+  if (!val) return fallback;
+  const num = parseInt(val.replace(/[^0-9]/g, ""), 10);
+  return isNaN(num) ? fallback : num;
+}
+
 function ImpactStats({ lang }: LanguageProp) {
   const t = TRANSLATIONS[lang];
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const { homepageStats } = useSiteSettings();
+
+  const dynamicStats = [
+    { icon: Users, value: parseStatNumber(homepageStats.livesTouched, 5000), suffix: "+", label: "Lives Touched", color: "#15803d" },
+    { icon: HeartPulse, value: parseStatNumber(homepageStats.healthCamps, 100), suffix: "+", label: "Health Camps", color: "#ea580c" },
+    { icon: BookOpen, value: parseStatNumber(homepageStats.studentsSupported, 2000), suffix: "+", label: "Students Supported", color: "#1D4ED8" },
+    { icon: MapPin, value: parseStatNumber(homepageStats.villagesReached, 50), suffix: "+", label: "Villages Reached", color: "#D97706" },
+    { icon: Activity, value: parseStatNumber(homepageStats.activePrograms, 12), suffix: "", label: "Active Programs", color: "#7C3AED" },
+    { icon: Award, value: parseStatNumber(homepageStats.yearsOfService, 8), suffix: "", label: "Years of Service", color: "#DB2777" },
+  ];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -631,7 +648,7 @@ function ImpactStats({ lang }: LanguageProp) {
         />
 
         <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
-          {IMPACT_STATS.map((stat, i) => (
+          {dynamicStats.map((stat, i) => (
             <StatCard key={stat.label} stat={stat} visible={visible} lang={lang} index={i} />
           ))}
         </div>
