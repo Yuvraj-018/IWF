@@ -162,6 +162,18 @@ export const api = {
     return data;
   },
 
+  async deleteAlbum(albumId: string) {
+    const res = await fetch(`${API_BASE_URL}/media/albums/${albumId}`, {
+      method: "DELETE",
+      headers: getHeaders(),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.invalidateTag("media");
+    }
+    return data;
+  },
+
   // ── News & Events CMS (Cached: 5 mins) ──
   async listNews(params?: { category?: string; search?: string }, options?: CacheOptions) {
     const q = new URLSearchParams();

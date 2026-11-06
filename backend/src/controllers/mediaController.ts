@@ -234,6 +234,31 @@ export async function upsertMedia(req: Request, res: Response): Promise<void> {
   }
 }
 
+export async function deleteAlbum(req: Request, res: Response): Promise<void> {
+  try {
+    const rawAlbumId = req.params.albumId;
+    const albumId = Array.isArray(rawAlbumId) ? rawAlbumId[0] : rawAlbumId;
+
+    if (!albumId) {
+      res.status(400).json({ success: false, message: "albumId is required" });
+      return;
+    }
+
+    const result = await Media.deleteMany({
+      $or: [{ albumId }, { key: { $regex: new RegExp(`^gallery-${albumId}`, "i") } }],
+    });
+
+    invalidateCache("media");
+    res.json({
+      success: true,
+      message: `Album '${albumId}' and all its photos (${result.deletedCount} items) deleted successfully`,
+    });
+  } catch (error: any) {
+    console.error("deleteAlbum error:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+}
+
 export async function deleteMedia(req: Request, res: Response): Promise<void> {
   try {
     const rawKey = req.params.key;

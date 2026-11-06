@@ -794,6 +794,21 @@ export default function MediaManager() {
     }
   };
 
+  const handleDeleteAlbum = async (albumId: string) => {
+    if (!confirm(`Are you sure you want to delete the entire event album "${albumId}" and all its photos?`)) return;
+    try {
+      const res = await api.deleteAlbum(albumId);
+      if (res.success) {
+        toast.success(`Event album "${albumId}" deleted successfully`);
+        loadMedia(true);
+      } else {
+        toast.error(res.message || "Failed to delete album");
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Delete failed");
+    }
+  };
+
   // Filter slots based on active tab and type filter
   const displayedSlots = SYSTEM_SLOTS.filter((s) => {
     const matchesTab =
@@ -1066,24 +1081,34 @@ export default function MediaManager() {
                   )}
                 </div>
                 <div className="p-4 space-y-3">
-                  <div>
-                    <h4 className="font-bold text-[#071527] text-sm">{album.albumTitle}</h4>
-                    {album.location && (
-                      <p className="text-xs text-slate-500 flex items-center gap-1 mt-1 font-medium">
-                        <MapPin className="w-3.5 h-3.5 text-orange-500 shrink-0" />
-                        <span>{album.location} {album.date ? `• ${album.date}` : ""}</span>
-                      </p>
-                    )}
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <h4 className="font-bold text-[#071527] text-sm">{album.albumTitle}</h4>
+                      {album.location && (
+                        <p className="text-xs text-slate-500 flex items-center gap-1 mt-1 font-medium">
+                          <MapPin className="w-3.5 h-3.5 text-orange-500 shrink-0" />
+                          <span>{album.location} {album.date ? `• ${album.date}` : ""}</span>
+                        </p>
+                      )}
+                    </div>
+                    <button
+                      onClick={() => handleDeleteAlbum(album.albumId)}
+                      className="p-1.5 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition cursor-pointer"
+                      title="Delete this entire album"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </div>
+
                   <button
                     onClick={() => {
                       setSelectedAlbum(album);
                       setAlbumManageModalOpen(true);
                     }}
-                    className="w-full py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-orange-500 text-slate-700 hover:text-white border border-slate-200/80 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-2xs"
+                    className="w-full py-2.5 px-3 rounded-xl bg-orange-50 hover:bg-orange-500 text-orange-700 hover:text-white border border-orange-200 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-2xs"
                   >
                     <Layers className="w-4 h-4" />
-                    <span>Open Album &amp; Manage Photos ({album.count})</span>
+                    <span>Manage Photos &amp; Sub-Media ({album.count})</span>
                   </button>
                 </div>
               </div>
@@ -1454,6 +1479,39 @@ export default function MediaManager() {
                       const val = e.target.value;
                       if (!val) return;
 
+                      // Handle Event Album selection
+                      if (val === "__new_album") {
+                        setModalOpen(false);
+                        setNewAlbumModalOpen(true);
+                        return;
+                      }
+
+                      if (val.startsWith("__album_")) {
+                        const targetAlbumId = val.replace("__album_", "");
+                        const albumObj = albums.find((a) => a.albumId === targetAlbumId);
+                        const uniqueKey = `gallery-${targetAlbumId}-${Date.now().toString().slice(-6)}`;
+
+                        setSelectedFile(null);
+                        setFilePreview(null);
+                        setFormData({
+                          key: uniqueKey,
+                          category: "gallery",
+                          mediaType: "photo",
+                          title: albumObj?.albumTitle ? `${albumObj.albumTitle} - Photo` : "",
+                          subHeading: "",
+                          ctaLink: "",
+                          url: "",
+                          videoUrl: "",
+                          thumbnailUrl: "",
+                          altText: albumObj?.albumTitle || "",
+                          location: albumObj?.location || "Darbhanga, Bihar",
+                          date: albumObj?.date || "2026",
+                          tags: `gallery, ${targetAlbumId}`,
+                          order: (albumObj?.count || 0) + 1,
+                        });
+                        return;
+                      }
+
                       // 1. Adding a new item to any category
                       if (val.startsWith("__new_")) {
                         const section = val.replace("__new_", "") as any;
@@ -1601,20 +1659,20 @@ export default function MediaManager() {
                         ))}
                     </optgroup>
 
-                    <optgroup label="📸 Homepage Gallery Showcase">
-                      <option value="__new_gallery" className="font-bold text-orange-600">
-                        ➕ [Add New Photo] Create New Gallery Photo
+                    <optgroup label="📸 Homepage Gallery Showcase (Event Albums & Sub-Media)">
+                      <option value="__new_album" className="font-bold text-orange-600">
+                        ➕ [Create New Event Album] (Add New Event with Cover & Details)
                       </option>
-                      {SYSTEM_SLOTS.filter((s) => s.section === "gallery").map((s) => (
-                        <option key={s.key} value={s.key}>
-                          Update: {s.slotLabel} ({s.key})
+                      {albums.map((a) => (
+                        <option key={a.albumId} value={`__album_${a.albumId}`}>
+                          📁 Add Sub-Media to: {a.albumTitle} ({a.count} photos)
                         </option>
                       ))}
                       {mediaList
-                        .filter((m) => m.category === "gallery" && !SYSTEM_SLOTS.some((s) => s.key === m.key))
+                        .filter((m) => m.category === "gallery")
                         .map((m) => (
                           <option key={m.key} value={m.key}>
-                            Update: {m.title || m.key} ({m.key})
+                            Update Photo: {m.title || m.key} ({m.key})
                           </option>
                         ))}
                     </optgroup>
