@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useSearch } from "@tanstack/react-router";
-import { URGENT_PATIENTS } from "@/content/patients";
+import { usePatients } from "@/services/patientService";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Heart,
@@ -48,6 +48,7 @@ import {
   printDonationReceipt,
   type DonationReceiptInfo,
 } from "@/components/documents/donationReceipt";
+import { uploadSingleFile } from "@/services/uploadService";
 import { DonationReceiptView } from "@/components/documents/DonationReceiptView";
 import {
   DonationCertificateViewer,
@@ -302,8 +303,9 @@ export default function DonatePage() {
     cause?: string;
     type?: string;
   };
+  const { patients: livePatients } = usePatients(true);
   const contextPatient = search.patientId
-    ? URGENT_PATIENTS.find((p) => p.slug === search.patientId)
+    ? livePatients.find((p) => p.slug === search.patientId)
     : null;
   const contextAmount = search.amount ? parseInt(search.amount, 10) : undefined;
   const rawFinancialType = search.financialType || search.program || search.type || search.cause;
@@ -351,7 +353,7 @@ export default function DonatePage() {
   const watchPatientSlug = watch("patientSlug");
   const selectedPatient =
     watchFinancialType === "Medical Emergency" && watchPatientSlug
-      ? URGENT_PATIENTS.find((p) => p.slug === watchPatientSlug)
+      ? livePatients.find((p) => p.slug === watchPatientSlug)
       : undefined;
   const watchDonorType = watch("donorType");
   const watchFullName = watch("fullName");
@@ -487,7 +489,28 @@ export default function DonatePage() {
         },
       });
 
-      // STEP 3: Verify Payment Signature with backend
+      // STEP 3: Upload confidential PAN card to private bucket & optional photo
+      let panFileUrl: string | undefined = undefined;
+      if (data.taxExemption && data.panFile instanceof File) {
+        try {
+          const panUpload = await uploadSingleFile(data.panFile, "donations/pan", true);
+          panFileUrl = panUpload.url;
+        } catch (panErr) {
+          console.warn("PAN document upload warning, proceeding with payment:", panErr);
+        }
+      }
+
+      let donorPhotoUrl: string | undefined = undefined;
+      if (data.photoFile instanceof File) {
+        try {
+          const photoUpload = await uploadSingleFile(data.photoFile, "donors/photos", false);
+          donorPhotoUrl = photoUpload.url;
+        } catch (photoErr) {
+          console.warn("Donor photo upload warning, proceeding with payment:", photoErr);
+        }
+      }
+
+      // STEP 4: Verify Payment Signature with backend
       const verifyData = await verifyPayment({
         razorpay_order_id: paymentResult.razorpay_order_id,
         razorpay_payment_id: paymentResult.razorpay_payment_id,
@@ -508,6 +531,8 @@ export default function DonatePage() {
           amount: data.amount,
           taxExemption: data.taxExemption,
           pan: data.taxExemption ? data.pan?.toUpperCase() : undefined,
+          panFileUrl,
+          donorPhotoUrl,
           patientSlug: data.financialType === "Medical Emergency" ? data.patientSlug || undefined : undefined,
           websiteConsent: data.websiteConsent,
         },
@@ -773,7 +798,7 @@ export default function DonatePage() {
                             </label>
                             <select {...register("patientSlug")} className={inputCls}>
                               <option value="">Any patient — where the need is greatest</option>
-                              {URGENT_PATIENTS.map((p) => (
+                              {livePatients.map((p) => (
                                 <option key={p.slug} value={p.slug}>
                                   {p.name} — {p.disease}
                                 </option>

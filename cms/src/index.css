@@ -2,24 +2,297 @@
 
 @layer base {
   body {
-    background-color: #090d16;
-    color: #f1f5f9;
+    background-color: #f8fafc;
+    color: #0f172a;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   }
 }
 
-/* Custom scrollbars for CMS tables and sidebars */
+/* Custom scrollbars matching public website */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: #f1f5f9;
 }
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #cbd5e1;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: #94a3b8;
 }
 
+/* ========================================================
+   ISLAH Public Website Theme System for CMS Canvas
+   - Deep Navy: #071527
+   - Brand Orange: #f97316 (hover: #ea580c)
+   - Clean White Cards: #ffffff with subtle slate borders
+   - High Contrast Slate Typography
+   ======================================================== */
+
+.cms-canvas {
+  background-color: #f8fafc;
+}
+
+/* 1. Cards, Sections & Panels */
+.cms-canvas .bg-slate-900 {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04) !important;
+}
+.cms-canvas .bg-slate-900\/90,
+.cms-canvas .bg-slate-900\/80,
+.cms-canvas .bg-slate-900\/60,
+.cms-canvas .bg-slate-900\/40 {
+  background-color: rgba(255, 255, 255, 0.98) !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* 2. Textareas, Selects & Inputs */
+.cms-canvas input:not([type="checkbox"]):not([type="radio"]),
+.cms-canvas textarea,
+.cms-canvas select,
+.cms-canvas .bg-slate-950,
+.cms-canvas .bg-slate-950\/80,
+.cms-canvas .bg-slate-950\/60,
+.cms-canvas .bg-slate-950\/40 {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+.cms-canvas input::placeholder,
+.cms-canvas textarea::placeholder {
+  color: #94a3b8 !important;
+}
+.cms-canvas input:focus,
+.cms-canvas textarea:focus,
+.cms-canvas select:focus {
+  border-color: #f97316 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2) !important;
+}
+
+/* 3. Borders */
+.cms-canvas .border-slate-800,
+.cms-canvas .border-slate-800\/80,
+.cms-canvas .border-slate-800\/60 {
+  border-color: #e2e8f0 !important;
+}
+.cms-canvas .border-slate-700 {
+  border-color: #cbd5e1 !important;
+}
+
+/* 4. Secondary Buttons, Filter Pills & Badges */
+.cms-canvas .bg-slate-800 {
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+  color: #334155 !important;
+}
+.cms-canvas .bg-slate-800:hover,
+.cms-canvas .hover\:bg-slate-800:hover,
+.cms-canvas .hover\:bg-slate-800\/80:hover {
+  background-color: #e2e8f0 !important;
+  color: #071527 !important;
+}
+.cms-canvas .hover\:bg-slate-700:hover {
+  background-color: #e2e8f0 !important;
+  color: #071527 !important;
+}
+
+/* 5. Typography */
+.cms-canvas h1,
+.cms-canvas h2,
+.cms-canvas h3,
+.cms-canvas h4 {
+  color: #071527 !important;
+}
+.cms-canvas .text-slate-400 {
+  color: #475569 !important;
+}
+.cms-canvas .text-slate-300 {
+  color: #334155 !important;
+}
+.cms-canvas .text-slate-200,
+.cms-canvas .text-slate-100 {
+  color: #0f172a !important;
+}
+.cms-canvas .text-slate-500 {
+  color: #64748b !important;
+}
+
+/* Only turn text-white into navy on light surfaces, NEVER on colored buttons/dark badges */
+.cms-canvas h1.text-white,
+.cms-canvas h2.text-white,
+.cms-canvas h3.text-white,
+.cms-canvas h4.text-white,
+.cms-canvas p.text-white {
+  color: #071527 !important;
+}
+
+/* 6. Primary Action Buttons: Brand Orange */
+.cms-canvas .bg-emerald-600,
+.cms-canvas button.bg-emerald-600,
+.cms-canvas a.bg-emerald-600 {
+  background-color: #f97316 !important;
+  border-color: #ea580c !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 6px -1px rgba(249, 115, 22, 0.25) !important;
+}
+.cms-canvas .bg-emerald-600:hover,
+.cms-canvas button.bg-emerald-600:hover,
+.cms-canvas a.bg-emerald-600:hover {
+  background-color: #ea580c !important;
+  color: #ffffff !important;
+}
+.cms-canvas .text-emerald-400,
+.cms-canvas .text-emerald-500 {
+  color: #ea580c !important;
+}
+.cms-canvas .bg-emerald-500\/10,
+.cms-canvas .bg-emerald-600\/10 {
+  background-color: #fff7ed !important;
+  border-color: #fed7aa !important;
+  color: #c2410c !important;
+}
+
+/* 7. Tables & Grids */
+.cms-canvas thead {
+  background-color: #f8fafc !important;
+}
+.cms-canvas thead th {
+  color: #475569 !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+.cms-canvas tbody tr {
+  border-bottom: 1px solid #f1f5f9 !important;
+}
+.cms-canvas tbody tr:hover {
+  background-color: #f8fafc !important;
+}
+
+/* 8. Modals & Dialog Windows: Solid White Surface with High-Contrast Navy Typography */
+.cms-canvas .fixed [class*="bg-white"],
+.cms-canvas .fixed [class*="bg-white/"],
+.cms-canvas .fixed .bg-white,
+.cms-canvas [role="dialog"],
+.cms-modal,
+.fixed [class*="bg-white"],
+.fixed .bg-white,
+[role="dialog"] {
+  background-color: #ffffff !important;
+  color: #071527 !important;
+}
+
+.cms-canvas .fixed .bg-white h1,
+.cms-canvas .fixed .bg-white h2,
+.cms-canvas .fixed .bg-white h3,
+.cms-canvas .fixed .bg-white h4,
+.cms-canvas .fixed .bg-white label,
+.cms-canvas .fixed .bg-white p,
+.cms-canvas .fixed .bg-white select,
+.cms-canvas .fixed .bg-white input:not([type="checkbox"]):not([type="radio"]),
+.cms-canvas .fixed .bg-white textarea,
+.fixed [class*="bg-white"] label,
+.fixed .bg-white label,
+[role="dialog"] label {
+  color: #071527 !important;
+  font-weight: 700;
+}
+
+.fixed [class*="bg-white"] input:not([type="checkbox"]):not([type="radio"]),
+.fixed .bg-white input:not([type="checkbox"]):not([type="radio"]),
+.fixed [class*="bg-white"] select,
+.fixed .bg-white select,
+.fixed [class*="bg-white"] textarea,
+.fixed .bg-white textarea,
+[role="dialog"] input,
+[role="dialog"] select,
+[role="dialog"] textarea {
+  background-color: #ffffff !important;
+  color: #071527 !important;
+  border-color: #cbd5e1 !important;
+}
+
+.cms-canvas .fixed .bg-white .text-slate-400,
+.cms-canvas .fixed .bg-white .text-slate-500,
+.fixed [class*="bg-white"] .text-slate-400,
+.fixed [class*="bg-white"] .text-slate-500 {
+  color: #64748b !important;
+}
+
+.cms-canvas .fixed .bg-white .text-slate-600,
+.cms-canvas .fixed .bg-white .text-slate-700,
+.fixed [class*="bg-white"] .text-slate-600,
+.fixed [class*="bg-white"] .text-slate-700 {
+  color: #334155 !important;
+}
+
+.cms-canvas .fixed .bg-white input::placeholder,
+.cms-canvas .fixed .bg-white textarea::placeholder,
+.fixed [class*="bg-white"] input::placeholder,
+.fixed [class*="bg-white"] textarea::placeholder,
+[role="dialog"] input::placeholder,
+[role="dialog"] textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* 9. Primary Action Buttons (Brand Orange, Emerald, Rose) -> Always Crisp White Text */
+button.bg-orange-500,
+button.bg-orange-500 *,
+button.bg-orange-600,
+button.bg-orange-600 *,
+button.bg-emerald-600,
+button.bg-emerald-600 *,
+button.bg-rose-600,
+button.bg-rose-600 *,
+button.bg-red-600,
+button.bg-red-600 *,
+a.bg-orange-500,
+a.bg-orange-500 *,
+a.bg-orange-600,
+a.bg-orange-600 *,
+[class*="bg-gradient-to-r"] button,
+[class*="bg-gradient-to-r"] button * {
+  color: #ffffff !important;
+}
+
+/* 10. Secondary/Cancel Buttons -> High Contrast Slate */
+button.bg-white,
+button.bg-slate-100,
+button.bg-slate-50,
+.fixed [class*="bg-white"] button[type="button"]:not([class*="bg-orange"]):not([class*="bg-emerald"]):not([class*="bg-rose"]):not([class*="bg-red"]),
+.fixed .bg-white button[type="button"]:not([class*="bg-orange"]):not([class*="bg-emerald"]):not([class*="bg-rose"]):not([class*="bg-red"]),
+[role="dialog"] button[type="button"]:not([class*="bg-orange"]):not([class*="bg-emerald"]):not([class*="bg-rose"]):not([class*="bg-red"]) {
+  color: #334155 !important;
+  border-color: #cbd5e1 !important;
+  background-color: #f8fafc !important;
+}
+
+button.bg-white:hover,
+button.bg-slate-100:hover,
+button.bg-slate-50:hover,
+.fixed [class*="bg-white"] button[type="button"]:not([class*="bg-orange"]):not([class*="bg-emerald"]):not([class*="bg-rose"]):not([class*="bg-red"]):hover,
+.fixed .bg-white button[type="button"]:not([class*="bg-orange"]):not([class*="bg-emerald"]):not([class*="bg-rose"]):not([class*="bg-red"]):hover {
+  color: #071527 !important;
+  background-color: #e2e8f0 !important;
+}
+
+/* 11. Soft Badges */
+.cms-canvas .bg-blue-500\/10 {
+  background-color: #eff6ff !important;
+  border-color: #dbeafe !important;
+}
+.cms-canvas .bg-rose-500\/10 {
+  background-color: #fff1f2 !important;
+  border-color: #ffe4e6 !important;
+}
+.cms-canvas .bg-purple-500\/10 {
+  background-color: #faf5ff !important;
+  border-color: #f3e8ff !important;
+}
+.cms-canvas .bg-amber-500\/10 {
+  background-color: #fffbeb !important;
+  border-color: #fef3c7 !important;
+}

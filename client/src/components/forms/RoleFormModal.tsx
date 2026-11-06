@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 
-export type RoleType = "volunteer" | "partner" | "sponsor" | "mentor" | "employee";
+export type RoleType = "volunteer" | "partner" | "sponsor" | "mentor" | "employee" | "member";
 
 /** Where each role's application form lives. */
 export const ROLE_FORM_LINKS: Record<RoleType, { to: string; hash: string }> = {
@@ -10,6 +10,7 @@ export const ROLE_FORM_LINKS: Record<RoleType, { to: string; hash: string }> = {
   sponsor: { to: "/sponsor", hash: "sponsor-form" },
   mentor: { to: "/mentor", hash: "mentor-form" },
   employee: { to: "/careers", hash: "career-form" },
+  member: { to: "/membership", hash: "membership-form" },
 };
 
 export function roleFormHref(type: RoleType) {

@@ -31,6 +31,12 @@ export interface IMedia extends Document {
   location?: string;
   date?: string;
   tags?: string[];
+  albumId?: string; // e.g. "vision-academic-city", "bathiya-health-camp"
+  albumTitle?: string; // Human-readable album name e.g. "Vision Academic City"
+  isCover?: boolean; // True if this item acts as the album thumbnail cover
+  order?: number; // Display order (1, 2, 3...)
+  subHeading?: string; // For Hero slides
+  ctaLink?: string; // For Hero slides (e.g. "/donate", "/programs")
   createdAt: Date;
   updatedAt: Date;
 }
@@ -64,6 +70,12 @@ const MediaSchema = new Schema<IMedia>(
     location: { type: String },
     date: { type: String },
     tags: [{ type: String }],
+    albumId: { type: String, index: true },
+    albumTitle: { type: String },
+    isCover: { type: Boolean, default: false, index: true },
+    order: { type: Number, default: 0 },
+    subHeading: { type: String },
+    ctaLink: { type: String },
   },
   { timestamps: true }
 );

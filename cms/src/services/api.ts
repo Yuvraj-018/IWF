@@ -28,11 +28,11 @@ export const api = {
   },
 
   // ── Authentication ──
-  async login(email: string, password: string) {
+  async login(email: string, password: string, turnstileToken?: string) {
     const res = await fetch(`${API_BASE_URL}/auth/admin/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password, turnstileToken }),
     });
     return res.json();
   },
@@ -106,6 +106,20 @@ export const api = {
     const res = await fetch(url, { headers: getHeaders() });
     const data = await res.json();
 
+    if (res.ok) {
+      apiCache.set(cacheKey, data, 5 * 60 * 1000, "media");
+    }
+    return data;
+  },
+
+  async listAlbums(options?: CacheOptions) {
+    const cacheKey = "media_albums_list";
+    if (!options?.force) {
+      const cached = apiCache.get(cacheKey);
+      if (cached) return cached;
+    }
+    const res = await fetch(`${API_BASE_URL}/media/albums`, { headers: getHeaders() });
+    const data = await res.json();
     if (res.ok) {
       apiCache.set(cacheKey, data, 5 * 60 * 1000, "media");
     }

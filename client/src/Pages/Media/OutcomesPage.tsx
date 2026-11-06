@@ -17,10 +17,102 @@ import { StoryModal } from "@/components/media/StoryModal";
 import { MediaLayout } from "@/components/media/MediaLayout";
 import { OUTCOMES_DATA, SUCCESS_STORIES_DATA } from "@/content/mediaContent";
 import type { SuccessStoryItem } from "@/content/mediaContent";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { useMedia } from "@/services/mediaService";
 
 export function OutcomesPage() {
+  const { impactStats, demographics, outcomesSettings } = useSiteSettings();
+  const { getMedia } = useMedia();
   const [activeStory, setActiveStory] = useState<SuccessStoryItem | null>(null);
   const [activeTheme, setActiveTheme] = useState<string | null>(null);
+
+  const dynamicStatsRibbon = [
+    { value: impactStats?.livesTouched || "50,000+", label: "Lives Touched", desc: "Improving quality of life across rural communities" },
+    { value: impactStats?.villagesReached || "300+", label: "Villages Reached", desc: "Working in remote and underserved areas" },
+    { value: impactStats?.ongoingPrograms || "25+", label: "Ongoing Programs", desc: "Addressing key social development needs" },
+    { value: impactStats?.volunteersCount || "500+", label: "Community Volunteers", desc: "United in the mission of positive change" },
+    { value: impactStats?.partnersCount || "100+", label: "Partners & Supporters", desc: "Collaborating for greater impact" },
+    { value: impactStats?.yearsOfImpact || "10+", label: "Years of Impact", desc: "Dedicated to building sustainable communities" },
+  ];
+
+  const sectorSlotKeys: Record<string, string> = {
+    "Education & Child Development": "media-outcome-edu",
+    "Healthcare & Wellness": "media-outcome-health",
+    "Women Empowerment": "media-outcome-women",
+    "Skill Development & Livelihood": "media-outcome-skills",
+    "Agriculture & Livelihood": "media-outcome-agri",
+    "Environment Conservation": "media-outcome-env",
+    "Community Development": "media-outcome-comm",
+  };
+
+  const keyAreasData = OUTCOMES_DATA.keyAreas.map((area) => {
+    const dynamicArea = outcomesSettings?.keyAreas?.find(
+      (k) => k.title.toLowerCase().trim() === area.title.toLowerCase().trim()
+    );
+    return {
+      ...area,
+      achievements: dynamicArea?.achievements?.length ? dynamicArea.achievements : area.achievements,
+      image: getMedia(sectorSlotKeys[area.title] || "", area.image),
+    };
+  });
+
+  const totalCumulativeImpact =
+    impactStats?.totalCumulativeImpact ||
+    outcomesSettings?.totalCumulativeImpact ||
+    OUTCOMES_DATA.totalCumulativeImpact;
+
+  const themesData = outcomesSettings?.themes?.length ? outcomesSettings.themes : OUTCOMES_DATA.themes;
+
+  const growthHistoryData = outcomesSettings?.growthHistory?.length
+    ? outcomesSettings.growthHistory
+    : OUTCOMES_DATA.growthHistory;
+
+  const growthNote = outcomesSettings?.growthNote || OUTCOMES_DATA.growthNote;
+
+  const reachData = {
+    villages: outcomesSettings?.reach?.villages || impactStats?.villagesReached || OUTCOMES_DATA.reach.villages,
+    districts: outcomesSettings?.reach?.districts || impactStats?.districtsCovered || OUTCOMES_DATA.reach.districts,
+    states: outcomesSettings?.reach?.states || OUTCOMES_DATA.reach.states,
+    stateList: outcomesSettings?.reach?.stateList?.length
+      ? outcomesSettings.reach.stateList
+      : OUTCOMES_DATA.reach.stateList,
+  };
+
+  const demographicList = [
+    {
+      count: demographics?.childrenCount || "28,000+",
+      label: "Children",
+      desc: "Enrolled in schools and remedial learning centres",
+    },
+    {
+      count: demographics?.womenCount || "21,000+",
+      label: "Women",
+      desc: "Empowered through SHGs and health education",
+    },
+    {
+      count: demographics?.youthCount || "15,000+",
+      label: "Youth",
+      desc: "Trained in vocational and employment skills",
+    },
+    {
+      count: demographics?.seniorCitizensCount || "7,000+",
+      label: "Senior Citizens",
+      desc: "Provided free medical diagnostics and relief",
+    },
+  ];
+
+  const beneficiaryQuote = outcomesSettings?.beneficiaryQuote || OUTCOMES_DATA.beneficiaryQuote;
+
+  const communityMetrics = [
+    { value: impactStats?.villagesReached || "300+", label: "Villages Reached" },
+    { value: impactStats?.livesTouched || "50,000+", label: "Happy Beneficiaries" },
+    { value: impactStats?.volunteersCount || "500+", label: "Community Volunteers" },
+    { value: impactStats?.partnersCount || "100+", label: "Partners & Supporters" },
+    { value: impactStats?.yearsOfImpact || "10+", label: "Years of Transforming Lives" },
+  ];
+
+  const quoteText = outcomesSettings?.quoteText || OUTCOMES_DATA.quote.text;
+  const quoteAuthor = outcomesSettings?.quoteAuthor || OUTCOMES_DATA.quote.author;
 
   const handleOpenStory = (link: string) => {
     const id = link.includes("id=") ? link.split("id=")[1] : "";
@@ -45,7 +137,7 @@ export function OutcomesPage() {
             { label: "Media & Updates", href: "/media" },
             { label: "Outcomes & Impact" },
           ]}
-          image={OUTCOMES_DATA.hero.image}
+          image={getMedia("media-outcomes-hero", OUTCOMES_DATA.hero.image)}
           imageAlt="Islah Outcomes & Impact"
           actions={
             <div className="flex flex-wrap gap-2.5">
@@ -76,7 +168,7 @@ export function OutcomesPage() {
           {/* 2. Top Stats Ribbon (6 Cards) */}
           <section aria-label="Key Outcomes Statistics">
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-              {OUTCOMES_DATA.statsRibbon.map((stat, idx) => (
+              {dynamicStatsRibbon.map((stat, idx) => (
                 <div
                   key={idx}
                   className="bg-white rounded-2xl p-5 text-center shadow-sm border border-slate-200/80 hover:shadow-md transition group"
@@ -109,7 +201,7 @@ export function OutcomesPage() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4">
-              {OUTCOMES_DATA.keyAreas.map((area, idx) => (
+              {keyAreasData.map((area, idx) => (
                 <div
                   key={idx}
                   className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200/80 hover:shadow-md transition flex flex-col group"
@@ -157,12 +249,12 @@ export function OutcomesPage() {
                     <span>Impact by Theme</span>
                   </h3>
                   <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full">
-                    Total: {OUTCOMES_DATA.totalCumulativeImpact}
+                    Total: {totalCumulativeImpact}
                   </span>
                 </div>
 
                 <div className="mt-5 space-y-3.5">
-                  {OUTCOMES_DATA.themes.map((theme, idx) => (
+                  {themesData.map((theme, idx) => (
                     <div
                       key={idx}
                       onMouseEnter={() => setActiveTheme(theme.name)}
@@ -206,7 +298,7 @@ export function OutcomesPage() {
                 </div>
 
                 <div className="mt-8 h-56 flex items-end justify-between gap-2 sm:gap-4 px-2 pt-6">
-                  {OUTCOMES_DATA.growthHistory.map((item, idx) => (
+                  {growthHistoryData.map((item, idx) => (
                     <div key={idx} className="flex-1 flex flex-col items-center gap-2 group">
                       <span className="text-[11px] font-bold text-slate-700 group-hover:text-emerald-700 transition">
                         {item.value}
@@ -227,7 +319,7 @@ export function OutcomesPage() {
 
               <div className="mt-8 p-4 rounded-xl bg-emerald-50/80 border border-emerald-200/80 text-xs text-emerald-950 flex items-center gap-3">
                 <Sparkles className="w-5 h-5 text-emerald-700 shrink-0" />
-                <span>{OUTCOMES_DATA.growthNote}</span>
+                <span>{growthNote}</span>
               </div>
             </div>
           </section>
@@ -249,19 +341,19 @@ export function OutcomesPage() {
                 <div className="grid grid-cols-3 gap-3 my-6">
                   <div className="p-3 rounded-xl bg-white/10 text-center border border-white/10">
                     <div className="text-xl font-bold text-white">
-                      {OUTCOMES_DATA.reach.villages}
+                      {reachData.villages}
                     </div>
                     <div className="text-[10px] uppercase font-bold text-slate-300">Villages</div>
                   </div>
                   <div className="p-3 rounded-xl bg-white/10 text-center border border-white/10">
                     <div className="text-xl font-bold text-white">
-                      {OUTCOMES_DATA.reach.districts}
+                      {reachData.districts}
                     </div>
                     <div className="text-[10px] uppercase font-bold text-slate-300">Districts</div>
                   </div>
                   <div className="p-3 rounded-xl bg-white/10 text-center border border-white/10">
                     <div className="text-xl font-bold text-white">
-                      {OUTCOMES_DATA.reach.states}
+                      {reachData.states}
                     </div>
                     <div className="text-[10px] uppercase font-bold text-slate-300">Focus States</div>
                   </div>
@@ -271,7 +363,7 @@ export function OutcomesPage() {
                   <div className="text-[11px] uppercase tracking-wider text-emerald-300 font-bold">
                     Core Operation Hubs:
                   </div>
-                  {OUTCOMES_DATA.reach.stateList.map((state, i) => (
+                  {reachData.stateList.map((state, i) => (
                     <div key={i} className="flex items-center gap-2 text-xs text-white">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                       <span>{state}</span>
@@ -302,7 +394,7 @@ export function OutcomesPage() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
-                  {OUTCOMES_DATA.beneficiaries.map((b, i) => (
+                  {demographicList.map((b, i) => (
                     <div key={i} className="p-4 rounded-xl bg-slate-50 border border-slate-200/80">
                       <div className="text-2xl font-black text-emerald-800">{b.count}</div>
                       <div className="text-xs font-bold text-slate-900 uppercase tracking-wider mt-0.5">
@@ -317,7 +409,7 @@ export function OutcomesPage() {
               <div className="mt-6 p-4 rounded-xl bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200/80 flex items-start gap-3">
                 <Quote className="w-6 h-6 text-emerald-600 shrink-0 mt-0.5" />
                 <p className="text-xs italic font-medium text-emerald-950 leading-relaxed">
-                  "{OUTCOMES_DATA.beneficiaryQuote}"
+                  "{beneficiaryQuote}"
                 </p>
               </div>
             </div>
@@ -332,7 +424,7 @@ export function OutcomesPage() {
                   Community Reach Summary
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
-                  {OUTCOMES_DATA.communityMetrics.map((item, i) => (
+                  {communityMetrics.map((item, i) => (
                     <div
                       key={i}
                       className="text-center p-3 rounded-xl bg-slate-50 border border-slate-100"
@@ -352,11 +444,11 @@ export function OutcomesPage() {
               <div className="lg:col-span-5 p-6 rounded-2xl bg-gradient-to-br from-emerald-50 to-green-100/60 border border-emerald-200 relative">
                 <Quote className="w-8 h-8 text-emerald-600/40 absolute top-4 right-4" />
                 <p className="text-sm font-semibold italic text-emerald-950 leading-relaxed pr-6">
-                  "{OUTCOMES_DATA.quote.text}"
+                  "{quoteText}"
                 </p>
                 <div className="mt-4 flex items-center gap-2 text-xs font-bold text-emerald-800">
                   <Sparkles className="w-4 h-4 text-emerald-600" />
-                  <span>— {OUTCOMES_DATA.quote.author}</span>
+                  <span>— {quoteAuthor}</span>
                 </div>
               </div>
             </div>

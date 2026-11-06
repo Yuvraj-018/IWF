@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { uploadToR2, getSignedPrivateUrl } from "../services/r2Service.js";
 import { uploadToCloudinary, deleteFromCloudinary } from "../services/cloudinaryService.js";
 
 export async function uploadSingleFile(req: Request, res: Response): Promise<void> {
@@ -10,6 +11,34 @@ export async function uploadSingleFile(req: Request, res: Response): Promise<voi
     }
 
     const folder = (req.body.folder as string) || "islah/general";
+    const isPrivate = req.body.isPrivate === "true" || req.body.isPrivate === true;
+
+    // Prioritize Cloudflare R2 if configured
+    if (process.env.CLOUDFLARE_R2_ACCESS_KEY_ID && process.env.CLOUDFLARE_ACCOUNT_ID) {
+      const r2Result = await uploadToR2(file.buffer, {
+        folder,
+        originalName: file.originalname,
+        isPrivate,
+        mimeType: file.mimetype,
+      });
+
+      res.status(201).json({
+        success: true,
+        message: "File uploaded successfully to Cloudflare R2",
+        file: {
+          originalName: file.originalname,
+          mimeType: file.mimetype,
+          sizeBytes: file.size,
+          url: r2Result.url,
+          publicId: r2Result.key,
+          bucket: r2Result.bucket,
+          isPrivate: r2Result.isPrivate,
+        },
+      });
+      return;
+    }
+
+    // Fallback to Cloudinary / Local
     const result = await uploadToCloudinary(file.buffer, folder, file.originalname);
 
     res.status(201).json({
@@ -29,7 +58,7 @@ export async function uploadSingleFile(req: Request, res: Response): Promise<voi
     console.error("uploadSingleFile error:", error);
     res.status(500).json({
       success: false,
-      message: error.message || "Failed to upload file to Cloudinary",
+      message: error.message || "Failed to upload file",
     });
   }
 }
@@ -43,6 +72,35 @@ export async function uploadMultipleFiles(req: Request, res: Response): Promise<
     }
 
     const folder = (req.body.folder as string) || "islah/general";
+    const isPrivate = req.body.isPrivate === "true" || req.body.isPrivate === true;
+
+    if (process.env.CLOUDFLARE_R2_ACCESS_KEY_ID && process.env.CLOUDFLARE_ACCOUNT_ID) {
+      const uploadPromises = files.map(async (file) => {
+        const r2Result = await uploadToR2(file.buffer, {
+          folder,
+          originalName: file.originalname,
+          isPrivate,
+          mimeType: file.mimetype,
+        });
+        return {
+          originalName: file.originalname,
+          mimeType: file.mimetype,
+          sizeBytes: file.size,
+          url: r2Result.url,
+          publicId: r2Result.key,
+          bucket: r2Result.bucket,
+          isPrivate: r2Result.isPrivate,
+        };
+      });
+
+      const uploadedFiles = await Promise.all(uploadPromises);
+      res.status(201).json({
+        success: true,
+        message: `${uploadedFiles.length} files uploaded successfully to Cloudflare R2`,
+        files: uploadedFiles,
+      });
+      return;
+    }
 
     const uploadPromises = files.map(async (file) => {
       const result = await uploadToCloudinary(file.buffer, folder, file.originalname);
@@ -68,7 +126,27 @@ export async function uploadMultipleFiles(req: Request, res: Response): Promise<
     console.error("uploadMultipleFiles error:", error);
     res.status(500).json({
       success: false,
-      message: error.message || "Failed to upload files to Cloudinary",
+      message: error.message || "Failed to upload files",
+    });
+  }
+}
+
+export async function getPrivateFile(req: Request, res: Response): Promise<void> {
+  try {
+    const rawKey = req.params[0] || (req.params as any).key;
+    if (!rawKey) {
+      res.status(400).json({ success: false, message: "Document key is required" });
+      return;
+    }
+
+    // Generate a temporary 15-minute signed URL
+    const signedUrl = getSignedPrivateUrl(rawKey, 900);
+    res.redirect(signedUrl);
+  } catch (error: any) {
+    console.error("getPrivateFile error:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Could not retrieve confidential document",
     });
   }
 }

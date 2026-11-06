@@ -3,6 +3,15 @@ import patient2Img from "@/assets/patient-2.jpg";
 import patient3Img from "@/assets/patient-3.jpg";
 import patient4Img from "@/assets/patient-4.jpg";
 
+export const CLOUDFLARE_R2_PUBLIC_URL = "https://pub-9df833ce82f4452db02dda1a3edca3d4.r2.dev";
+
+export const PATIENT_IMAGES = {
+  patient1: `${CLOUDFLARE_R2_PUBLIC_URL}/patients/patient-1.jpg`,
+  patient2: `${CLOUDFLARE_R2_PUBLIC_URL}/patients/patient-2.jpg`,
+  patient3: `${CLOUDFLARE_R2_PUBLIC_URL}/patients/patient-3.jpg`,
+  patient4: `${CLOUDFLARE_R2_PUBLIC_URL}/patients/patient-4.jpg`,
+};
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export type PatientCondition = "Critical" | "Serious" | "Stable" | "Recovering" | "Discharged";
@@ -87,7 +96,7 @@ export const URGENT_PATIENTS: Patient[] = [
     admissionDate: "2026-06-28",
     condition: "Critical",
     urgent: true,
-    image: patient1Img,
+    image: PATIENT_IMAGES.patient1 || patient1Img,
 
     neededAmount: 85000,
     raisedAmount: 21000,
@@ -171,7 +180,7 @@ export const URGENT_PATIENTS: Patient[] = [
     admissionDate: "2026-06-25",
     condition: "Serious",
     urgent: true,
-    image: patient2Img,
+    image: PATIENT_IMAGES.patient2 || patient2Img,
 
     neededAmount: 125000,
     raisedAmount: 43500,
@@ -255,7 +264,7 @@ export const URGENT_PATIENTS: Patient[] = [
     admissionDate: "2026-07-01",
     condition: "Critical",
     urgent: true,
-    image: patient3Img,
+    image: PATIENT_IMAGES.patient3 || patient3Img,
 
     neededAmount: 95000,
     raisedAmount: 30000,
@@ -339,7 +348,7 @@ export const URGENT_PATIENTS: Patient[] = [
     admissionDate: "2026-06-20",
     condition: "Serious",
     urgent: true,
-    image: patient4Img,
+    image: PATIENT_IMAGES.patient4 || patient4Img,
 
     neededAmount: 110000,
     raisedAmount: 38000,

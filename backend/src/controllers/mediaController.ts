@@ -4,12 +4,15 @@ import { uploadToCloudinary, deleteFromCloudinary } from "../services/cloudinary
 
 export async function listMedia(req: Request, res: Response): Promise<void> {
   try {
-    const { category, mediaType, tag, search } = req.query;
+    const { category, mediaType, tag, search, albumId, isCover } = req.query;
     const query: Record<string, any> = {};
 
     if (category && category !== "all") query.category = category;
     if (mediaType && mediaType !== "all") query.mediaType = mediaType;
     if (tag && tag !== "all") query.tags = tag;
+    if (albumId) query.albumId = albumId;
+    if (isCover !== undefined) query.isCover = isCover === "true";
+
     if (search) {
       query.$or = [
         { key: { $regex: search as string, $options: "i" } },
@@ -17,10 +20,11 @@ export async function listMedia(req: Request, res: Response): Promise<void> {
         { altText: { $regex: search as string, $options: "i" } },
         { tags: { $regex: search as string, $options: "i" } },
         { location: { $regex: search as string, $options: "i" } },
+        { albumTitle: { $regex: search as string, $options: "i" } },
       ];
     }
 
-    const items = await Media.find(query).sort({ category: 1, createdAt: -1 });
+    const items = await Media.find(query).sort({ order: 1, createdAt: -1 });
 
     // Also return a convenient key-to-URL map for the frontend to consume
     const keyMap: Record<string, string> = {};
@@ -36,6 +40,68 @@ export async function listMedia(req: Request, res: Response): Promise<void> {
     });
   } catch (error: any) {
     console.error("listMedia error:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+}
+
+/**
+ * Returns Gallery Media grouped into distinct Albums / Event Sections.
+ * Each Album has a title, cover image, media count, and all related photos/videos.
+ */
+export async function listAlbums(req: Request, res: Response): Promise<void> {
+  try {
+    // Fetch all gallery items sorted
+    const allGalleryItems = await Media.find({ category: "gallery" }).sort({ order: 1, createdAt: -1 });
+
+    const albumMap = new Map<string, {
+      albumId: string;
+      albumTitle: string;
+      coverUrl: string;
+      mediaType: "photo" | "video";
+      videoUrl?: string;
+      date?: string;
+      location?: string;
+      count: number;
+      items: any[];
+    }>();
+
+    for (const item of allGalleryItems) {
+      const albumKey = item.albumId || item.key;
+      const title = item.albumTitle || item.title || "Gallery Event";
+
+      if (!albumMap.has(albumKey)) {
+        albumMap.set(albumKey, {
+          albumId: albumKey,
+          albumTitle: title,
+          coverUrl: item.thumbnailUrl || item.url,
+          mediaType: item.mediaType as any,
+          videoUrl: item.videoUrl,
+          date: item.date,
+          location: item.location,
+          count: 0,
+          items: [],
+        });
+      }
+
+      const album = albumMap.get(albumKey)!;
+      album.count += 1;
+      album.items.push(item);
+
+      // If this specific item is marked as cover, use its image as cover
+      if (item.isCover) {
+        album.coverUrl = item.thumbnailUrl || item.url;
+      }
+    }
+
+    const albums = Array.from(albumMap.values());
+
+    res.json({
+      success: true,
+      count: albums.length,
+      data: albums,
+    });
+  } catch (error: any) {
+    console.error("listAlbums error:", error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 }
@@ -61,7 +127,7 @@ export async function getMediaByKey(req: Request, res: Response): Promise<void> 
 export async function upsertMedia(req: Request, res: Response): Promise<void> {
   try {
     const {
-      key,
+      key: incomingKey,
       title,
       category,
       mediaType,
@@ -73,12 +139,30 @@ export async function upsertMedia(req: Request, res: Response): Promise<void> {
       date,
       tags,
       url,
+      albumId,
+      albumTitle,
+      isCover,
+      order,
+      subHeading,
+      ctaLink,
     } = req.body;
     const file = req.file;
 
-    if (!key) {
-      res.status(400).json({ success: false, message: "Media key is required (e.g. hero-slide-1)" });
-      return;
+    // Auto-generate key if not explicitly provided
+    let key = incomingKey;
+    if (!key || typeof key !== "string" || !key.trim()) {
+      const cat = category || "general";
+      const timestamp = Date.now();
+      if (cat === "hero") {
+        key = `hero-slide-${timestamp}`;
+      } else if (cat === "gallery") {
+        const cleanAlbum = (albumId || "event").toLowerCase().replace(/[^a-z0-9]/g, "-");
+        key = `gallery-${cleanAlbum}-${timestamp.toString().slice(-6)}`;
+      } else {
+        key = `media-${cat}-${timestamp}`;
+      }
+    } else {
+      key = key.trim();
     }
 
     let finalUrl = url;
@@ -127,6 +211,12 @@ export async function upsertMedia(req: Request, res: Response): Promise<void> {
         location: location || undefined,
         date: date || undefined,
         tags: parsedTags,
+        albumId: albumId || undefined,
+        albumTitle: albumTitle || undefined,
+        isCover: isCover === true || isCover === "true",
+        order: Number(order) || 0,
+        subHeading: subHeading || undefined,
+        ctaLink: ctaLink || undefined,
       },
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );

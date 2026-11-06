@@ -17,6 +17,7 @@ import {
   Compass,
 } from "lucide-react";
 import { VOLUNTEERS_DATA, VolunteerRole, VolunteerItem } from "../communityData";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { ProfileDetailModal } from "./ProfileDetailModal";
 import type { RoleType } from "@/components/forms/RoleFormModal";
 import type { CommunityTab } from "./CommunitySelectiveBar";
@@ -53,6 +54,11 @@ export function VolunteersDirectoryTab({
   onSwitchTab,
   onOpenRoleModal,
 }: VolunteersDirectoryTabProps) {
+  const { settings } = useSiteSettings();
+  const allVolunteers = (settings?.community_directory?.volunteers && settings.community_directory.volunteers.length > 0)
+    ? (settings.community_directory.volunteers as unknown as VolunteerItem[])
+    : VOLUNTEERS_DATA;
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDomain, setSelectedDomain] = useState<string>("All");
   const [selectedLocation, setSelectedLocation] = useState<string>("All");
@@ -75,7 +81,7 @@ export function VolunteersDirectoryTab({
   const locations = ["All", "Delhi NCR", "Bihar", "Uttar Pradesh", "Remote / Online"];
 
   const filteredVolunteers = useMemo(() => {
-    let result = [...VOLUNTEERS_DATA];
+    let result = [...allVolunteers];
 
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
@@ -543,7 +549,7 @@ export function VolunteersDirectoryTab({
       {/* Profile Detail Modal */}
       {selectedVolunteer && (
         <ProfileDetailModal
-          item={{
+          profile={{
             type: "volunteer",
             data: selectedVolunteer,
           }}

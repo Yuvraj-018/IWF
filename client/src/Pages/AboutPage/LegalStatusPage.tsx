@@ -29,12 +29,14 @@ import {
 import type { RoleType } from "@/components/forms/RoleFormModal";
 import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 import aboutHero from "@/assets/about-hero.jpg";
 import slide1 from "@/assets/hero-carousel/hero-slide-1.jpg";
 import slide2 from "@/assets/hero-carousel/hero-slide-2.jpg";
 
 export default function LegalStatusPage() {
+  const { statutoryReports: liveReports } = useSiteSettings();
   const [activeModal, setActiveModal] = useState<RoleType | null>(null);
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
@@ -386,9 +388,33 @@ export default function LegalStatusPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
-                    {statutoryReports.map((report) => (
+                    {(liveReports && liveReports.length > 0
+                      ? liveReports.map((r: { title: string; year: string; status: string; fileUrl?: string; fileSize?: string }) => ({
+                          name: r.title,
+                          year: r.year,
+                          status: r.status,
+                          fileUrl: r.fileUrl,
+                          fileSize: r.fileSize,
+                        }))
+                      : statutoryReports.map((s) => ({
+                          name: s.name,
+                          year: s.year,
+                          status: s.status,
+                          fileUrl: undefined as string | undefined,
+                          fileSize: undefined as string | undefined,
+                        }))
+                    ).map((report) => (
                       <tr key={report.name} className="hover:bg-slate-50/70 transition-colors">
-                        <td className="py-3 pr-3 font-semibold text-black">{report.name}</td>
+                        <td className="py-3 pr-3 font-semibold text-black">
+                          <div className="flex items-center gap-2">
+                            <span>{report.name}</span>
+                            {report.fileSize && (
+                              <span className="text-[10px] font-mono text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
+                                {report.fileSize}
+                              </span>
+                            )}
+                          </div>
+                        </td>
                         <td className="py-3 px-2 font-mono font-semibold text-slate-600">{report.year}</td>
                         <td className="py-3 px-2">
                           <span className="inline-flex items-center gap-1 font-bold text-[11px] text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
@@ -398,7 +424,9 @@ export default function LegalStatusPage() {
                         </td>
                         <td className="py-3 pl-2 text-right">
                           <a
-                            href="/policies"
+                            href={report.fileUrl || "/policies"}
+                            target={report.fileUrl && (report.fileUrl.startsWith("http") || report.fileUrl.endsWith(".pdf")) ? "_blank" : undefined}
+                            rel={report.fileUrl && report.fileUrl.startsWith("http") ? "noopener noreferrer" : undefined}
                             className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-600 hover:text-brand-orange transition-colors"
                           >
                             <span>View / Download</span>

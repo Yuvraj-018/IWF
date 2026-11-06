@@ -21,6 +21,7 @@ import PageTransition, { ScrollProgressBar } from "@/components/PageTransition";
 
 import { Toaster } from "@/components/ui/sonner";
 import { QuickMessageWidget } from "@/components/layout/QuickMessageWidget";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
@@ -177,6 +178,7 @@ function RootComponent() {
   }, []);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isHomepage = pathname === "/";
+  const { socialLinks } = useSiteSettings();
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -190,11 +192,11 @@ function RootComponent() {
       {/* Sticky Social Links Sidebar on Right Edge */}
       <div className="floating-social-sidebar fixed right-0 top-[62%] -translate-y-1/2 z-50 hidden sm:flex flex-col shadow-2xl rounded-l-xl overflow-hidden select-none">
         {[
-          { Icon: Facebook, color: "bg-[#1877f2] hover:bg-[#166fe5]", href: "https://www.facebook.com/islahindia/", name: "Facebook" },
-          { Icon: Twitter, color: "bg-[#1da1f2] hover:bg-[#0d95e8]", href: "https://x.com/islahindia/", name: "Twitter / X" },
-          { Icon: Instagram, color: "bg-gradient-to-tr from-[#f9cb2f] via-[#e5195f] to-[#8134af]", href: "https://www.instagram.com/islahindia/", name: "Instagram" },
-          { Icon: Linkedin, color: "bg-[#0077b5] hover:bg-[#00669c]", href: "https://www.linkedin.com/in/islahindia/", name: "LinkedIn" },
-          { Icon: Youtube, color: "bg-[#ff0000] hover:bg-[#e60000]", href: "https://www.youtube.com/channel/UC5sty9L25QQwC89JwGmEIVw/", name: "YouTube" },
+          { Icon: Facebook, color: "bg-[#1877f2] hover:bg-[#166fe5]", href: socialLinks.facebook || "https://www.facebook.com/islahindia/", name: "Facebook" },
+          { Icon: Twitter, color: "bg-[#1da1f2] hover:bg-[#0d95e8]", href: socialLinks.twitter || "https://x.com/islahindia/", name: "Twitter / X" },
+          { Icon: Instagram, color: "bg-gradient-to-tr from-[#f9cb2f] via-[#e5195f] to-[#8134af]", href: socialLinks.instagram || "https://www.instagram.com/islahindia/", name: "Instagram" },
+          { Icon: Linkedin, color: "bg-[#0077b5] hover:bg-[#00669c]", href: socialLinks.linkedin || "https://www.linkedin.com/in/islahindia/", name: "LinkedIn" },
+          { Icon: Youtube, color: "bg-[#ff0000] hover:bg-[#e60000]", href: socialLinks.youtube || "https://www.youtube.com/channel/UC5sty9L25QQwC89JwGmEIVw/", name: "YouTube" },
         ].map((social, i) => (
           <a
             key={i}
@@ -209,7 +211,7 @@ function RootComponent() {
         ))}
         {/* WhatsApp below YouTube in sidebar */}
         <a
-          href="https://wa.me/919811861633"
+          href={socialLinks.whatsapp || "https://wa.me/919811861633"}
           target="_blank"
           rel="noopener noreferrer"
           className="bg-[#25d366] hover:bg-[#20ba5a] w-8 h-8 md:w-9 md:h-9 flex items-center justify-center text-white transition-all duration-300 hover:w-11 group"

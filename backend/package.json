@@ -6,8 +6,10 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
+    "seed": "tsx src/utils/seedAll.ts",
     "seed:news": "tsx src/utils/seedNews.ts",
     "seed:media": "tsx src/utils/seedMedia.ts",
+    "upload:r2": "tsx src/scripts/uploadToR2.ts",
     "build": "rimraf dist && tsc",
     "start": "node dist/server.js"
   },

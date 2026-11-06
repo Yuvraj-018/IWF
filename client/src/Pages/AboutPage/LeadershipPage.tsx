@@ -32,6 +32,7 @@ import {
 import type { RoleType } from "@/components/forms/RoleFormModal";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
 import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 import aboutHero from "@/assets/about-hero.jpg";
 import slide1 from "@/assets/hero-carousel/hero-slide-1.jpg";
 import slide2 from "@/assets/hero-carousel/hero-slide-2.jpg";
@@ -273,14 +274,33 @@ const FIELD_TEAM = [
 function PhotoAvatar({
   name,
   gender,
+  image,
   size = "md",
   className = "",
 }: {
   name: string;
   gender?: "male" | "female";
+  image?: string;
   size?: "sm" | "md" | "lg";
   className?: string;
 }) {
+  const sizeClasses =
+    size === "sm"
+      ? "w-10 h-10 text-xs"
+      : size === "lg"
+      ? "w-16 h-16 text-base"
+      : "w-12 h-12 text-xs";
+
+  if (image) {
+    return (
+      <img
+        src={image}
+        alt={name}
+        className={`rounded-2xl object-cover shrink-0 border-2 border-white/90 ring-1 ring-slate-200/80 shadow-2xs ${sizeClasses} ${className}`}
+      />
+    );
+  }
+
   const cleanName = name
     .replace(/(Prof\.\s*\(Dr\.\)|Prof\.|Dr\.|Adv\.|Er\.|CA\s+|CS\.\s+|Mr\.|Ms\.|Md\.)/gi, "")
     .trim();
@@ -290,13 +310,6 @@ function PhotoAvatar({
       ? words[0][0] + words[words.length - 1][0]
       : words[0]?.slice(0, 2) || name.slice(0, 2)
   ).toUpperCase();
-
-  const sizeClasses =
-    size === "sm"
-      ? "w-10 h-10 text-xs"
-      : size === "lg"
-      ? "w-16 h-16 text-base"
-      : "w-12 h-12 text-xs";
 
   return (
     <div
@@ -317,8 +330,35 @@ function PhotoAvatar({
 }
 
 export default function LeadershipPage() {
+  const { leadershipData } = useSiteSettings();
   const [activeModal, setActiveModal] = useState<RoleType | null>(null);
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
+
+  const trusteesList = leadershipData?.trustees && leadershipData.trustees.length > 0 ? leadershipData.trustees : ALL_TRUSTEES;
+  const principalOfficers = trusteesList.filter((t: any) =>
+    ["Chairman", "Acting Chairman", "Secretary", "Joint Secretary", "Treasurer"].includes(t.designation)
+  );
+  const trusteeMembers = trusteesList.filter(
+    (t: any) => !["Chairman", "Acting Chairman", "Secretary", "Joint Secretary", "Treasurer"].includes(t.designation)
+  );
+  const effectiveOfficers = principalOfficers.length > 0 ? principalOfficers : trusteesList.slice(0, 4);
+  const effectiveTrustees = trusteeMembers.length > 0 ? trusteeMembers : trusteesList.slice(4);
+
+  const executiveList = leadershipData?.executive && leadershipData.executive.length > 0
+    ? leadershipData.executive.map((e: any, idx: number) => ({
+        ...e,
+        icon: [Compass, Layers, Briefcase, Sparkles, Scale, BookOpen][idx % 6] || Compass,
+      }))
+    : EXECUTIVE_BODY;
+
+  const advisoryList = leadershipData?.advisory && leadershipData.advisory.length > 0
+    ? leadershipData.advisory.map((a: any, idx: number) => ({
+        ...a,
+        icon: [GraduationCap, Compass, Users, FileText, Briefcase, Scale][idx % 6] || GraduationCap,
+      }))
+    : ADVISORY_BODY;
+
+  const fieldList = leadershipData?.field && leadershipData.field.length > 0 ? leadershipData.field : FIELD_TEAM;
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900 selection:bg-brand-orange/20 selection:text-[#0b1f3b]">
@@ -346,28 +386,28 @@ export default function LeadershipPage() {
               <h4 className="font-bold text-xs text-slate-900">Board of Trustees</h4>
               <p className="text-xs text-slate-500">Fiduciary & Governance</p>
             </div>
-            <div className="text-xl sm:text-2xl font-bold text-emerald-600">07</div>
+            <div className="text-xl sm:text-2xl font-bold text-emerald-600">{String(trusteesList.length).padStart(2, "0")}</div>
           </div>
           <div className="bg-slate-50 rounded-xl p-2.5 border border-slate-100 flex items-center justify-between">
             <div>
               <h4 className="font-bold text-xs text-slate-900">Executive Body</h4>
               <p className="text-xs text-slate-500">Operations & Programs</p>
             </div>
-            <div className="text-xl sm:text-2xl font-bold text-blue-600">06</div>
+            <div className="text-xl sm:text-2xl font-bold text-blue-600">{String(executiveList.length).padStart(2, "0")}</div>
           </div>
           <div className="bg-slate-50 rounded-xl p-2.5 border border-slate-100 flex items-center justify-between">
             <div>
               <h4 className="font-bold text-xs text-slate-900">Advisory Panel</h4>
               <p className="text-xs text-slate-500">Domain Specialists</p>
             </div>
-            <div className="text-xl sm:text-2xl font-bold text-amber-600">06</div>
+            <div className="text-xl sm:text-2xl font-bold text-amber-600">{String(advisoryList.length).padStart(2, "0")}</div>
           </div>
           <div className="bg-slate-50 rounded-xl p-2.5 border border-slate-100 flex items-center justify-between">
             <div>
               <h4 className="font-bold text-xs text-slate-900">Field Operations</h4>
               <p className="text-xs text-slate-500">Community Mobilizers</p>
             </div>
-            <div className="text-xl sm:text-2xl font-bold text-brand-orange">06</div>
+            <div className="text-xl sm:text-2xl font-bold text-brand-orange">{String(fieldList.length).padStart(2, "0")}</div>
           </div>
         </div>
       </div>
@@ -461,13 +501,13 @@ export default function LeadershipPage() {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                    {BOARD_PRINCIPAL_OFFICERS.map((trustee) => (
+                    {effectiveOfficers.map((trustee: any) => (
                       <div
-                        key={trustee.sno}
+                        key={trustee.sno || trustee.id}
                         className="bg-slate-50/90 rounded-xl p-3 border border-slate-200 shadow-2xs hover:shadow-md hover:bg-white transition-all flex flex-col justify-between group"
                       >
                         <div className="flex items-center gap-3">
-                          <PhotoAvatar name={trustee.name} gender={trustee.gender} size="md" />
+                          <PhotoAvatar name={trustee.name} gender={trustee.gender} image={trustee.image} size="md" />
                           <div className="min-w-0 flex-1">
                             <span className="inline-block text-[11px] font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded uppercase tracking-wide">
                               {trustee.designation}
@@ -490,24 +530,24 @@ export default function LeadershipPage() {
                   </div>
                 </div>
 
-                {/* Row 2: 3 Trustee Members (CA Sanjeet, Md. Atiqure Rahman, Saleh Hedayatullah) */}
+                {/* Row 2: Trustee Members */}
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
                       <Users className="w-3.5 h-3.5 text-slate-600" />
-                      Trustee Members (03)
+                      Trustee Members ({effectiveTrustees.length})
                     </span>
                     <span className="text-xs text-slate-400 font-normal">Strategic Review & Fiduciary Counsel</span>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    {BOARD_TRUSTEE_MEMBERS.map((trustee) => (
+                    {effectiveTrustees.map((trustee: any) => (
                       <div
-                        key={trustee.sno}
+                        key={trustee.sno || trustee.id}
                         className="bg-slate-50/90 rounded-xl p-3 border border-slate-200 shadow-2xs hover:shadow-md hover:bg-white transition-all flex flex-col justify-between group"
                       >
                         <div className="flex items-center gap-3">
-                          <PhotoAvatar name={trustee.name} gender={trustee.gender} size="md" />
+                          <PhotoAvatar name={trustee.name} gender={trustee.gender} image={trustee.image} size="md" />
                           <div className="min-w-0 flex-1">
                             <span className="inline-block text-[11px] font-semibold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded uppercase tracking-wide">
                               {trustee.designation}
@@ -545,11 +585,11 @@ export default function LeadershipPage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 text-slate-700 font-normal">
-                      {ALL_TRUSTEES.map((t) => (
-                        <tr key={t.sno} className="hover:bg-slate-50 transition">
+                      {trusteesList.map((t: any) => (
+                        <tr key={t.sno || t.id} className="hover:bg-slate-50 transition">
                           <td className="p-3 font-semibold text-slate-400">{t.sno}</td>
                           <td className="p-3">
-                            <PhotoAvatar name={t.name} gender={t.gender} size="sm" />
+                            <PhotoAvatar name={t.name} gender={t.gender} image={t.image} size="sm" />
                           </td>
                           <td className="p-3 font-bold text-slate-900">{t.name}</td>
                           <td className="p-3">
@@ -608,15 +648,15 @@ export default function LeadershipPage() {
 
             {viewMode === "cards" ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-0.5">
-                {EXECUTIVE_BODY.map((exec) => {
-                  const Icon = exec.icon;
+                {executiveList.map((exec: any) => {
+                  const Icon = exec.icon || Compass;
                   return (
                     <div
-                      key={exec.sno}
+                      key={exec.sno || exec.id}
                       className="rounded-xl p-3 border border-slate-200 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between group bg-slate-50/80 hover:bg-white"
                     >
                       <div className="flex items-center gap-3">
-                        <PhotoAvatar name={exec.name} gender={exec.gender} size="md" />
+                        <PhotoAvatar name={exec.name} gender={exec.gender} image={exec.image} size="md" />
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center justify-between">
                             <span className="inline-block text-[11px] font-semibold text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded uppercase tracking-wide">
@@ -636,13 +676,17 @@ export default function LeadershipPage() {
                       </div>
 
                       <div className="pt-2 mt-2 border-t border-slate-200/70 flex items-center justify-between text-xs text-slate-500 font-medium">
-                        <a
-                          href={`mailto:${exec.email}`}
-                          className="text-xs text-blue-600 hover:underline flex items-center gap-1"
-                        >
-                          <Mail className="w-3 h-3" />
-                          {exec.email}
-                        </a>
+                        {exec.email ? (
+                          <a
+                            href={`mailto:${exec.email}`}
+                            className="text-xs text-blue-600 hover:underline flex items-center gap-1"
+                          >
+                            <Mail className="w-3 h-3" />
+                            {exec.email}
+                          </a>
+                        ) : (
+                          <span className="text-slate-400">ISLAH Executive</span>
+                        )}
                         <span className="text-slate-400">#{exec.sno}</span>
                       </div>
                     </div>
@@ -664,11 +708,11 @@ export default function LeadershipPage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 text-slate-700 font-normal">
-                      {EXECUTIVE_BODY.map((exec) => (
-                        <tr key={exec.sno} className="hover:bg-slate-50 transition">
+                      {executiveList.map((exec: any) => (
+                        <tr key={exec.sno || exec.id} className="hover:bg-slate-50 transition">
                           <td className="p-3 font-semibold text-slate-400">{exec.sno}</td>
                           <td className="p-3">
-                            <PhotoAvatar name={exec.name} gender={exec.gender} size="sm" />
+                            <PhotoAvatar name={exec.name} gender={exec.gender} image={exec.image} size="sm" />
                           </td>
                           <td className="p-3 font-bold text-slate-900">{exec.name}</td>
                           <td className="p-3">
@@ -706,7 +750,7 @@ export default function LeadershipPage() {
               </div>
 
               <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full self-start md:self-auto">
-                06 Advisors Total
+                {String(advisoryList.length).padStart(2, "0")} Advisors Total
               </span>
             </div>
 
@@ -727,15 +771,15 @@ export default function LeadershipPage() {
 
             {viewMode === "cards" ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-0.5">
-                {ADVISORY_BODY.map((advisor) => {
-                  const Icon = advisor.icon;
+                {advisoryList.map((advisor: any) => {
+                  const Icon = advisor.icon || GraduationCap;
                   return (
                     <div
-                      key={advisor.sno}
+                      key={advisor.sno || advisor.id}
                       className="bg-slate-50/80 rounded-xl p-3 border border-slate-200 shadow-2xs hover:shadow-md hover:bg-white transition-all flex flex-col justify-between group"
                     >
                       <div className="flex items-center gap-3">
-                        <PhotoAvatar name={advisor.name} gender={advisor.gender} size="md" />
+                        <PhotoAvatar name={advisor.name} gender={advisor.gender} image={advisor.image} size="md" />
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center justify-between">
                             <span className="inline-block text-[11px] font-semibold text-sky-800 bg-sky-50 border border-sky-200 px-2 py-0.5 rounded uppercase tracking-wide">
@@ -777,11 +821,11 @@ export default function LeadershipPage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 text-slate-700 font-normal">
-                      {ADVISORY_BODY.map((advisor) => (
-                        <tr key={advisor.sno} className="hover:bg-slate-50 transition">
+                      {advisoryList.map((advisor: any) => (
+                        <tr key={advisor.sno || advisor.id} className="hover:bg-slate-50 transition">
                           <td className="p-3 font-semibold text-slate-400">{advisor.sno}</td>
                           <td className="p-3">
-                            <PhotoAvatar name={advisor.name} gender={advisor.gender} size="sm" />
+                            <PhotoAvatar name={advisor.name} gender={advisor.gender} image={advisor.image} size="sm" />
                           </td>
                           <td className="p-3 font-bold text-slate-900">{advisor.name}</td>
                           <td className="p-3">
@@ -819,7 +863,7 @@ export default function LeadershipPage() {
               </div>
 
               <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full self-start md:self-auto">
-                06 Members Total
+                {String(fieldList.length).padStart(2, "0")} Members Total
               </span>
             </div>
 
@@ -840,13 +884,13 @@ export default function LeadershipPage() {
 
             {viewMode === "cards" ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-0.5">
-                {FIELD_TEAM.map((member) => (
+                {fieldList.map((member: any) => (
                   <div
-                    key={member.sno}
+                    key={member.sno || member.id}
                     className="p-3 rounded-xl bg-slate-50/80 border border-slate-200 flex flex-col justify-between hover:bg-white hover:shadow-md transition group"
                   >
                     <div className="flex items-center gap-3">
-                      <PhotoAvatar name={member.name} gender={member.gender} size="md" />
+                      <PhotoAvatar name={member.name} gender={member.gender} image={member.image} size="md" />
                       <div className="min-w-0 flex-1">
                         <span className="inline-block text-[11px] font-semibold text-purple-800 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded uppercase tracking-wide">
                           {member.designation}
@@ -882,11 +926,11 @@ export default function LeadershipPage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 text-slate-700 font-normal">
-                      {FIELD_TEAM.map((member) => (
-                        <tr key={member.sno} className="hover:bg-slate-50 transition">
+                      {fieldList.map((member: any) => (
+                        <tr key={member.sno || member.id} className="hover:bg-slate-50 transition">
                           <td className="p-3 font-semibold text-slate-400">{member.sno}</td>
                           <td className="p-3">
-                            <PhotoAvatar name={member.name} gender={member.gender} size="sm" />
+                            <PhotoAvatar name={member.name} gender={member.gender} image={member.image} size="sm" />
                           </td>
                           <td className="p-3 font-bold text-slate-900">{member.name}</td>
                           <td className="p-3">

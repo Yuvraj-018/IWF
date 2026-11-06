@@ -35,8 +35,9 @@ import { PatientCard } from "@/components/healthcare/PatientCard";
 import { URGENT_PATIENTS } from "@/content/patients";
 import newLogo from "@/assets/new logo.png";
 import { NotificationTicker, UtilityBar, Header, Footer } from "@/components/layout/SiteLayout";
-import { useMedia } from "@/services/mediaService";
+import { useMedia, fetchGalleryAlbums, type GalleryAlbum } from "@/services/mediaService";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { API_BASE_URL } from "@/services/apiClient";
 
 // ─── Shared Components ────────────────────────────────────────────────────────
 
@@ -138,7 +139,30 @@ interface LanguageProp {
 
 function HeroSection({ lang }: LanguageProp) {
   const t = TRANSLATIONS[lang];
-  const notices = [
+  const [liveNotices, setLiveNotices] = useState<Array<{ d: string; m: string; title: string }>>([]);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/news?limit=8`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+          const events = data.data.filter((item: any) => item.category === "Events" || item.isUpcoming);
+          const sourceList = events.length > 0 ? events : data.data;
+          const mapped = sourceList.slice(0, 6).map((item: any) => {
+            const dateParts = (item.date || "").trim().split(/\s+/);
+            return {
+              d: item.day || dateParts[0] || "01",
+              m: (item.month || dateParts[1] || "EVENT").toUpperCase().slice(0, 3),
+              title: item.title,
+            };
+          });
+          if (mapped.length > 0) setLiveNotices(mapped);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const defaultNotices = [
     { d: "25", m: "MAY", title: lang === "en" ? "Free Health Camp — Darbhanga" : "निःशुल्क स्वास्थ्य शिविर — दरभंगा" },
     { d: "05", m: "JUN", title: lang === "en" ? "Environment Day Tree Plantation Drive" : "पर्यावरण दिवस वृक्षारोपण अभियान" },
     { d: "15", m: "JUL", title: lang === "en" ? "Shiksha Na Ruke Scholarship Distribution" : "शिक्षा न रुके छात्रवृत्ति वितरण" },
@@ -146,6 +170,8 @@ function HeroSection({ lang }: LanguageProp) {
     { d: "10", m: "NOV", title: lang === "en" ? "Winter Relief Blanket Distribution" : "शीतकालीन राहत कंबल वितरण अभियान" },
     { d: "12", m: "DEC", title: lang === "en" ? "Swabhimaan Livelihood Toolkit Drive" : "स्वाभिमान आजीविका टूलकिट वितरण" },
   ];
+
+  const notices = liveNotices.length > 0 ? liveNotices : defaultNotices;
 
   const loopNotices = [...notices, ...notices.slice(0, 4)];
   const [noticeIndex, setNoticeIndex] = useState(0);
@@ -376,6 +402,31 @@ function PatientCarousel() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
   const pausedRef = useRef(false);
+  const [patients, setPatients] = useState<any[]>(() => URGENT_PATIENTS.slice(0, 4));
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/patients?urgent=true`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+          const mapped = data.data.slice(0, 4).map((p: any) => ({
+            id: p.slug || p._id,
+            slug: p.slug || p._id,
+            name: p.name,
+            age: p.age,
+            gender: p.gender,
+            disease: p.disease,
+            hospital: p.hospital,
+            image: p.image || "/assets/medical-aid.jpg",
+            neededAmount: p.neededAmount,
+            condition: p.condition || "Critical",
+            urgent: p.urgent ?? true,
+          }));
+          setPatients(mapped);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -410,6 +461,8 @@ function PatientCarousel() {
     }, 6000);
   };
 
+  const topPatients = patients.slice(0, 4);
+
   return (
     <div>
       <div
@@ -420,14 +473,14 @@ function PatientCarousel() {
         onMouseLeave={() => (pausedRef.current = false)}
         className="flex lg:grid lg:grid-cols-4 gap-3 overflow-x-auto lg:overflow-visible snap-x snap-mandatory scroll-smooth scrollbar-hide -mx-4 px-4 lg:mx-0 lg:px-0 pb-1"
       >
-        {URGENT_PATIENTS.map((patient) => (
+        {topPatients.map((patient) => (
           <div key={patient.id} className="snap-start shrink-0 w-[78%] sm:w-[45%] md:w-[36%] lg:w-auto">
             <PatientCard {...patient} />
           </div>
         ))}
       </div>
       <div className="flex justify-center gap-1.5 mt-3 lg:hidden" aria-hidden="true">
-        {URGENT_PATIENTS.map((p, i) => (
+        {topPatients.map((p, i) => (
           <span
             key={p.id}
             className={`h-1.5 rounded-full transition-all ${i === active ? "w-5 bg-brand-orange" : "w-1.5 bg-slate-300"}`}
@@ -929,50 +982,140 @@ function OurPartnersSection({ lang }: LanguageProp) {
 function GallerySection({ lang }: LanguageProp) {
   const t = TRANSLATIONS[lang];
   const { getMedia } = useMedia();
-  const items = [
-    { type: "video", src: getMedia("gallery-1", g1), title: lang === "en" ? "VISION ACADEMIC CITY" : "विज़न एकेडमिक सिटी" },
-    { type: "video", src: getMedia("gallery-2", g2), title: lang === "en" ? "OPENING CEREMONY" : "उद्घाटन समारोह" },
-    { type: "photo", src: getMedia("gallery-3", g3), title: lang === "en" ? "HEALTH DIAGNOSTIC CAMP" : "स्वास्थ्य जाँच शिविर" },
-    { type: "photo", src: getMedia("gallery-4", g4), title: lang === "en" ? "ENVIRONMENT PLANTATION" : "पर्यावरण वृक्षारोपण" },
-    { type: "photo", src: getMedia("gallery-5", g5), title: lang === "en" ? "SHIKSHA NA RUKE CAMPAIGN" : "शिक्षा न रुके अभियान" },
-    { type: "photo", src: getMedia("gallery-6", g6), title: lang === "en" ? "VOCATIONAL TRAINING" : "व्यावसायिक प्रशिक्षण कार्यक्रम" },
+
+  // Dynamic gallery albums from backend CMS
+  const [dynamicAlbums, setDynamicAlbums] = useState<GalleryAlbum[]>([]);
+  const [selectedAlbum, setSelectedAlbum] = useState<GalleryAlbum | null>(null);
+  const [activePhotoIdx, setActivePhotoIdx] = useState(0);
+
+  useEffect(() => {
+    fetchGalleryAlbums().then((albums) => {
+      if (albums && albums.length > 0) {
+        setDynamicAlbums(albums);
+      }
+    });
+  }, []);
+
+  // Bundled fallback albums if no CMS albums exist yet
+  const fallbackAlbums: GalleryAlbum[] = [
+    {
+      albumId: "vision-academic-city",
+      albumTitle: lang === "en" ? "VISION ACADEMIC CITY" : "विज़न एकेडमिक सिटी",
+      coverUrl: getMedia("gallery-1", g1),
+      mediaType: "video",
+      location: "Darbhanga, Bihar",
+      date: "2026",
+      count: 3,
+      items: [
+        { _id: "f1", key: "g1", title: "Vision Academic City - Campus Tour", category: "gallery", url: getMedia("gallery-1", g1), mediaType: "video", caption: "State of the art educational hub in rural Bihar." },
+        { _id: "f2", key: "g2", title: "Smart Classrooms & Science Labs", category: "gallery", url: getMedia("gallery-2", g2), mediaType: "photo", caption: "Empowering children with modern digital tools." },
+        { _id: "f3", key: "g3", title: "Library & Community Hall", category: "gallery", url: getMedia("gallery-3", g3), mediaType: "photo", caption: "Community resource center open for all learners." },
+      ],
+    },
+    {
+      albumId: "opening-ceremony",
+      albumTitle: lang === "en" ? "OPENING CEREMONY" : "उद्घाटन समारोह",
+      coverUrl: getMedia("gallery-2", g2),
+      mediaType: "video",
+      location: "Baghant, Bihar",
+      date: "2026",
+      count: 3,
+      items: [
+        { _id: "f4", key: "g2", title: "Grand Foundation Opening Event", category: "gallery", url: getMedia("gallery-2", g2), mediaType: "video", caption: "Community gathering and foundation stone laying ceremony." },
+        { _id: "f5", key: "g1", title: "Dignitaries and Village Elders", category: "gallery", url: getMedia("gallery-1", g1), mediaType: "photo", caption: "Blessings and address by respected social leaders." },
+        { _id: "f6", key: "g4", title: "Cultural Program by Students", category: "gallery", url: getMedia("gallery-4", g4), mediaType: "photo", caption: "Performances highlighting social harmony and education." },
+      ],
+    },
+    {
+      albumId: "health-diagnostic-camp",
+      albumTitle: lang === "en" ? "HEALTH DIAGNOSTIC CAMP" : "स्वास्थ्य जाँच शिविर",
+      coverUrl: getMedia("gallery-3", g3),
+      mediaType: "photo",
+      location: "Bathiya Village",
+      date: "2026",
+      count: 4,
+      items: [
+        { _id: "f7", key: "g3", title: "General Health Screening Camp", category: "gallery", url: getMedia("gallery-3", g3), mediaType: "photo", caption: "Over 200+ villagers screened by specialist doctors." },
+        { _id: "f8", key: "g5", title: "Free Medicine & Diagnostic Tests", category: "gallery", url: getMedia("gallery-5", g5), mediaType: "photo", caption: "Distribution of essential prescribed medicines." },
+        { _id: "f9", key: "g6", title: "Pediatric Consultation", category: "gallery", url: getMedia("gallery-6", g6), mediaType: "photo", caption: "Child health and nutrition counselling." },
+      ],
+    },
+    {
+      albumId: "environment-plantation",
+      albumTitle: lang === "en" ? "ENVIRONMENT PLANTATION" : "पर्यावरण वृक्षारोपण",
+      coverUrl: getMedia("gallery-4", g4),
+      mediaType: "photo",
+      location: "Darbhanga & Madhubani",
+      date: "2026",
+      count: 3,
+      items: [
+        { _id: "f10", key: "g4", title: "Green Darbhanga Tree Plantation", category: "gallery", url: getMedia("gallery-4", g4), mediaType: "photo", caption: "1,000+ saplings planted across rural school campuses." },
+        { _id: "f11", key: "g3", title: "Youth Volunteers in Action", category: "gallery", url: getMedia("gallery-3", g3), mediaType: "photo", caption: "Youth volunteers nurturing green bio-fences." },
+      ],
+    },
+    {
+      albumId: "shiksha-na-ruke",
+      albumTitle: lang === "en" ? "SHIKSHA NA RUKE CAMPAIGN" : "शिक्षा न रुके अभियान",
+      coverUrl: getMedia("gallery-5", g5),
+      mediaType: "photo",
+      location: "Rural Learning Centres",
+      date: "2026",
+      count: 3,
+      items: [
+        { _id: "f12", key: "g5", title: "School Bags & Stationery Drive", category: "gallery", url: getMedia("gallery-5", g5), mediaType: "photo", caption: "Equipping underprivileged children for their academic year." },
+        { _id: "f13", key: "g1", title: "Remedial Coaching Class", category: "gallery", url: getMedia("gallery-1", g1), mediaType: "photo", caption: "Evening support classes for first-generation schoolgoers." },
+      ],
+    },
+    {
+      albumId: "vocational-training",
+      albumTitle: lang === "en" ? "VOCATIONAL TRAINING" : "व्यावसायिक प्रशिक्षण कार्यक्रम",
+      coverUrl: getMedia("gallery-6", g6),
+      mediaType: "photo",
+      location: "Women Skill Center",
+      date: "2026",
+      count: 3,
+      items: [
+        { _id: "f14", key: "g6", title: "Women Livelihood Stitching Center", category: "gallery", url: getMedia("gallery-6", g6), mediaType: "photo", caption: "Training rural women for independent sustainable livelihoods." },
+        { _id: "f15", key: "g4", title: "Certification and Toolkit Handover", category: "gallery", url: getMedia("gallery-4", g4), mediaType: "photo", caption: "Graduation ceremony for the first tailoring batch." },
+      ],
+    },
   ];
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const albums = dynamicAlbums.length > 0 ? dynamicAlbums : fallbackAlbums;
 
-  // Responsive scroll bounds
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [maxIndex, setMaxIndex] = useState(2);
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
-        setMaxIndex(2);
+        setMaxIndex(Math.max(0, albums.length - 4));
       } else if (window.innerWidth >= 640) {
-        setMaxIndex(4);
+        setMaxIndex(Math.max(0, albums.length - 2));
       } else {
-        setMaxIndex(5);
+        setMaxIndex(Math.max(0, albums.length - 1));
       }
     };
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [albums.length]);
 
-  // Keyboard navigation for Lightbox
+  // Keyboard navigation for Album Lightbox
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (!selectedAlbum) return;
       if (e.key === "Escape") {
-        setLightboxIndex(null);
-      } else if (e.key === "ArrowLeft" && lightboxIndex !== null && lightboxIndex > 0) {
-        setLightboxIndex(lightboxIndex - 1);
-      } else if (e.key === "ArrowRight" && lightboxIndex !== null && lightboxIndex < items.length - 1) {
-        setLightboxIndex(lightboxIndex + 1);
+        setSelectedAlbum(null);
+      } else if (e.key === "ArrowLeft") {
+        setActivePhotoIdx((prev) => (prev > 0 ? prev - 1 : selectedAlbum.items.length - 1));
+      } else if (e.key === "ArrowRight") {
+        setActivePhotoIdx((prev) => (prev < selectedAlbum.items.length - 1 ? prev + 1 : 0));
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [lightboxIndex, items.length]);
+  }, [selectedAlbum]);
 
   const handlePrev = () => {
     setCurrentIndex((prev) => Math.max(0, prev - 1));
@@ -982,19 +1125,22 @@ function GallerySection({ lang }: LanguageProp) {
     setCurrentIndex((prev) => Math.min(maxIndex, prev + 1));
   };
 
+  const openAlbum = (album: GalleryAlbum) => {
+    setSelectedAlbum(album);
+    setActivePhotoIdx(0);
+  };
+
   return (
     <section className="py-5 bg-white border-y border-slate-100 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4">
 
         {/* Header Title and navigation arrows */}
         <div className="flex items-center justify-between mb-4 relative">
-
-          {/* Centered Gallery Header */}
           <div className="flex-1">
             <SectionHeader
               tag={lang === "en" ? "GALLERY" : "गैलरी"}
               title={lang === "en" ? "A VISUAL JOURNEY OF IMPACT" : "दृश्य यात्रा"}
-              subtitle={lang === "en" ? "Stories of People, Communities and Change." : "लोगों, समुदायों और परिवर्तन की कहानियाँ।"}
+              subtitle={lang === "en" ? "Stories of People, Communities and Change. Click any album to view all photos." : "लोगों, समुदायों और परिवर्तन की कहानियाँ। सभी तस्वीरें देखने के लिए किसी भी एल्बम पर क्लिक करें।"}
             />
           </div>
 
@@ -1003,10 +1149,11 @@ function GallerySection({ lang }: LanguageProp) {
             <button
               onClick={handlePrev}
               disabled={currentIndex === 0}
-              className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${currentIndex === 0
-                ? "border-slate-200 text-slate-300 cursor-not-allowed"
-                : "border-brand-orange text-brand-orange hover:bg-brand-orange hover:text-white"
-                }`}
+              className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all cursor-pointer ${
+                currentIndex === 0
+                  ? "border-slate-200 text-slate-300 cursor-not-allowed"
+                  : "border-brand-orange text-brand-orange hover:bg-brand-orange hover:text-white"
+              }`}
               aria-label="Previous Slide"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -1014,10 +1161,11 @@ function GallerySection({ lang }: LanguageProp) {
             <button
               onClick={handleNext}
               disabled={currentIndex >= maxIndex}
-              className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${currentIndex >= maxIndex
-                ? "border-slate-200 text-slate-300 cursor-not-allowed"
-                : "border-brand-orange text-brand-orange hover:bg-brand-orange hover:text-white"
-                }`}
+              className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all cursor-pointer ${
+                currentIndex >= maxIndex
+                  ? "border-slate-200 text-slate-300 cursor-not-allowed"
+                  : "border-brand-orange text-brand-orange hover:bg-brand-orange hover:text-white"
+              }`}
               aria-label="Next Slide"
             >
               <ArrowRight className="w-4 h-4" />
@@ -1025,28 +1173,28 @@ function GallerySection({ lang }: LanguageProp) {
           </div>
         </div>
 
-        {/* Carousel Viewport */}
+        {/* Carousel Viewport of Albums */}
         <div className="relative w-full overflow-hidden">
           <div
             className="flex gap-4 w-full transition-transform duration-500 ease-out"
-            style={{ transform: `translateX(-${currentIndex * (100 / (maxIndex === 2 ? 4 : maxIndex === 4 ? 2 : 1))}%` }}
+            style={{ transform: `translateX(-${currentIndex * (100 / (maxIndex <= 2 ? 4 : 2))}%` }}
           >
-            {items.map((item, idx) => (
+            {albums.map((album, idx) => (
               <div
-                key={idx}
-                onClick={() => setLightboxIndex(idx)}
+                key={album.albumId || idx}
+                onClick={() => openAlbum(album)}
                 className="w-[calc(100%-16px)] shrink-0 sm:w-[calc(50%-12px)] lg:w-[calc(25%-12px)] rounded-2xl overflow-hidden shadow-md border border-slate-100 group relative aspect-[4/3] bg-slate-900 cursor-pointer"
               >
                 {/* Image */}
                 <img
-                  src={item.src}
-                  alt={item.title}
+                  src={album.coverUrl}
+                  alt={album.albumTitle}
                   loading="lazy"
                   className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
                 />
 
-                {/* Video Play Button Overlay */}
-                {item.type === "video" && (
+                {/* Video Play Button Overlay if album has videos */}
+                {album.mediaType === "video" && (
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                     <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm border border-white/50 flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:bg-white/40 transition-all duration-300">
                       <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center pl-1 shadow-md">
@@ -1058,11 +1206,22 @@ function GallerySection({ lang }: LanguageProp) {
                   </div>
                 )}
 
+                {/* Photo Count Badge */}
+                <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-full border border-white/20 flex items-center gap-1">
+                  <span>{album.items.length || album.count || 1} Media</span>
+                </div>
+
                 {/* Title Overlay with gradient shadow */}
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 pt-10">
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent p-4 pt-10">
                   <h4 className="text-white font-semibold text-xs tracking-wider uppercase group-hover:text-brand-orange transition-colors">
-                    {item.title}
+                    {album.albumTitle}
                   </h4>
+                  {album.location && (
+                    <p className="text-[10px] text-white/70 flex items-center gap-1 mt-0.5 font-medium">
+                      <MapPin className="w-3 h-3 text-brand-orange shrink-0" />
+                      <span>{album.location}</span>
+                    </p>
+                  )}
                 </div>
               </div>
             ))}
@@ -1072,74 +1231,116 @@ function GallerySection({ lang }: LanguageProp) {
         {/* View All link below the carousel */}
         <div className="text-center mt-5">
           <a
-            href="/news-and-events"
+            href="/media/gallery"
             className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-green hover:text-brand-green-dark hover:underline transition-colors uppercase tracking-wider"
           >
-            {lang === "en" ? "View All Media" : "सभी मीडिया देखें"} <ArrowRight className="w-3.5 h-3.5" />
+            {lang === "en" ? "View All Gallery Albums" : "सभी गैलरी एल्बम देखें"} <ArrowRight className="w-3.5 h-3.5" />
           </a>
         </div>
 
-        {/* Lightbox Modal */}
-        {lightboxIndex !== null && (
-          <div 
-            className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4 backdrop-blur-sm select-none"
-            onClick={() => setLightboxIndex(null)}
+        {/* ── Sub-Gallery Album Lightbox Modal ── */}
+        {selectedAlbum && (
+          <div
+            className="fixed inset-0 z-[100] bg-black/95 flex flex-col justify-between p-4 sm:p-6 backdrop-blur-md select-none animate-in fade-in duration-200"
+            onClick={() => setSelectedAlbum(null)}
           >
-            {/* Close button */}
-            <button 
-              className="absolute top-4 right-4 text-white hover:text-brand-orange transition-colors p-2 rounded-full bg-white/10 hover:bg-white/20 cursor-pointer transition-transform active:scale-95 z-[110]"
-              onClick={(e) => { e.stopPropagation(); setLightboxIndex(null); }}
-              aria-label="Close Lightbox"
-            >
-              <X className="w-6 h-6" />
-            </button>
-
-            {/* Left Arrow */}
-            <button
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-brand-orange transition-colors p-3 rounded-full bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer z-[110] transition-transform active:scale-95 hidden sm:flex items-center justify-center"
-              onClick={(e) => {
-                e.stopPropagation();
-                setLightboxIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : prev));
-              }}
-              disabled={lightboxIndex === 0}
-              aria-label="Previous image"
-            >
-              <ChevronLeft className="w-8 h-8" />
-            </button>
-
-            {/* Image Container */}
-            <div 
-              className="max-w-4xl max-h-[85vh] flex flex-col items-center gap-4 px-2"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <img
-                src={items[lightboxIndex].src}
-                alt={items[lightboxIndex].title}
-                className="max-w-full max-h-[72vh] object-contain rounded-xl shadow-2xl border border-white/10 animate-in zoom-in-95 duration-200"
-              />
-              {/* Title / Description */}
-              <div className="text-center bg-slate-900/60 backdrop-blur-md px-4 py-2 rounded-xl border border-white/5">
-                <h4 className="text-white text-sm font-extrabold tracking-wider uppercase">
-                  {items[lightboxIndex].title}
-                </h4>
-                <p className="text-[10px] text-white/50 mt-0.5 uppercase tracking-wider font-semibold">
-                  {items[lightboxIndex].type === "video" ? "Video Highlight" : "Photo Journey"}
-                </p>
+            {/* Top Bar: Album Title, Counter, and Close */}
+            <div className="flex items-center justify-between text-white pb-3 border-b border-white/10 shrink-0" onClick={(e) => e.stopPropagation()}>
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-widest text-brand-orange block">
+                  Event Album ({activePhotoIdx + 1} of {selectedAlbum.items.length})
+                </span>
+                <h3 className="text-base sm:text-lg font-black tracking-wide">
+                  {selectedAlbum.albumTitle}
+                </h3>
+                {selectedAlbum.location && (
+                  <p className="text-xs text-white/60 flex items-center gap-1 mt-0.5">
+                    <MapPin className="w-3 h-3 text-brand-orange" />
+                    <span>{selectedAlbum.location} {selectedAlbum.date ? `• ${selectedAlbum.date}` : ""}</span>
+                  </p>
+                )}
               </div>
+
+              <button
+                className="text-white hover:text-brand-orange transition-colors p-2.5 rounded-full bg-white/10 hover:bg-white/20 cursor-pointer"
+                onClick={() => setSelectedAlbum(null)}
+                aria-label="Close Album"
+              >
+                <X className="w-6 h-6" />
+              </button>
             </div>
 
-            {/* Right Arrow */}
-            <button
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-brand-orange transition-colors p-3 rounded-full bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer z-[110] transition-transform active:scale-95 hidden sm:flex items-center justify-center"
-              onClick={(e) => {
-                e.stopPropagation();
-                setLightboxIndex((prev) => (prev !== null && prev < items.length - 1 ? prev + 1 : prev));
-              }}
-              disabled={lightboxIndex === items.length - 1}
-              aria-label="Next image"
-            >
-              <ChevronRight className="w-8 h-8" />
-            </button>
+            {/* Main Stage: Photo/Video Viewer with Left/Right Arrows */}
+            <div className="relative flex-1 flex items-center justify-center my-3 overflow-hidden" onClick={(e) => e.stopPropagation()}>
+              {/* Previous Photo Button */}
+              {selectedAlbum.items.length > 1 && (
+                <button
+                  className="absolute left-2 sm:left-4 z-20 text-white hover:text-brand-orange transition-colors p-3 rounded-full bg-white/10 hover:bg-white/25 cursor-pointer backdrop-blur-sm"
+                  onClick={() => setActivePhotoIdx((prev) => (prev > 0 ? prev - 1 : selectedAlbum.items.length - 1))}
+                  aria-label="Previous photo in album"
+                >
+                  <ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8" />
+                </button>
+              )}
+
+              {/* Active Image or Video */}
+              <div className="max-w-4xl max-h-[62vh] sm:max-h-[68vh] flex flex-col items-center justify-center">
+                {selectedAlbum.items[activePhotoIdx]?.mediaType === "video" && selectedAlbum.items[activePhotoIdx]?.videoUrl ? (
+                  <div className="aspect-video w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-black">
+                    <iframe
+                      src={selectedAlbum.items[activePhotoIdx].videoUrl}
+                      title={selectedAlbum.items[activePhotoIdx].title}
+                      className="w-full h-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                ) : (
+                  <img
+                    src={selectedAlbum.items[activePhotoIdx]?.url || selectedAlbum.coverUrl}
+                    alt={selectedAlbum.items[activePhotoIdx]?.title || selectedAlbum.albumTitle}
+                    className="max-w-full max-h-[60vh] sm:max-h-[66vh] object-contain rounded-2xl shadow-2xl border border-white/10 animate-in zoom-in-95 duration-200"
+                  />
+                )}
+
+                {/* Caption / Title */}
+                {selectedAlbum.items[activePhotoIdx]?.caption && (
+                  <p className="text-xs text-white/80 mt-2 text-center max-w-2xl px-4 py-1 bg-black/40 rounded-lg">
+                    {selectedAlbum.items[activePhotoIdx].caption}
+                  </p>
+                )}
+              </div>
+
+              {/* Next Photo Button */}
+              {selectedAlbum.items.length > 1 && (
+                <button
+                  className="absolute right-2 sm:right-4 z-20 text-white hover:text-brand-orange transition-colors p-3 rounded-full bg-white/10 hover:bg-white/25 cursor-pointer backdrop-blur-sm"
+                  onClick={() => setActivePhotoIdx((prev) => (prev < selectedAlbum.items.length - 1 ? prev + 1 : 0))}
+                  aria-label="Next photo in album"
+                >
+                  <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8" />
+                </button>
+              )}
+            </div>
+
+            {/* Bottom Thumbnail Strip */}
+            {selectedAlbum.items.length > 1 && (
+              <div className="flex items-center justify-center gap-2 overflow-x-auto py-2 shrink-0 scrollbar-none" onClick={(e) => e.stopPropagation()}>
+                {selectedAlbum.items.map((item, pIdx) => (
+                  <button
+                    key={item._id || pIdx}
+                    onClick={() => setActivePhotoIdx(pIdx)}
+                    className={`relative w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${
+                      activePhotoIdx === pIdx
+                        ? "border-brand-orange scale-105 ring-2 ring-brand-orange/40"
+                        : "border-white/20 opacity-60 hover:opacity-100"
+                    }`}
+                  >
+                    <img src={item.thumbnailUrl || item.url} alt={item.title} className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -1154,13 +1355,22 @@ function GallerySection({ lang }: LanguageProp) {
 // ─── Hero Carousel Section Component ──────────────────────────────────────────
 
 function HeroCarouselSection() {
-  const { getMedia } = useMedia();
-  const slides = [
-    { id: 1, img: getMedia("hero-slide-1", slide1), alt: "Education for Every Child" },
-    { id: 2, img: getMedia("hero-slide-2", slide2), alt: "Building a Better India – Vision 2047" },
-    { id: 3, img: getMedia("hero-slide-3", slide3), alt: "Healthcare That Reaches the Last Mile" },
-    { id: 4, img: getMedia("hero-slide-4", slide4), alt: "Skills Today, Success Tomorrow" },
-  ];
+  const { getMedia, mediaList } = useMedia("hero");
+  const heroMediaItems = mediaList.filter((m) => m.category === "hero" && m.url);
+  const slides =
+    heroMediaItems.length > 0
+      ? heroMediaItems.map((item, idx) => ({
+          id: idx + 1,
+          img: item.url,
+          alt: item.title || item.altText || `Hero Slide ${idx + 1}`,
+          ctaLink: item.ctaLink,
+        }))
+      : [
+          { id: 1, img: getMedia("hero-slide-1", slide1), alt: "Education for Every Child" },
+          { id: 2, img: getMedia("hero-slide-2", slide2), alt: "Building a Better India – Vision 2047" },
+          { id: 3, img: getMedia("hero-slide-3", slide3), alt: "Healthcare That Reaches the Last Mile" },
+          { id: 4, img: getMedia("hero-slide-4", slide4), alt: "Skills Today, Success Tomorrow" },
+        ];
 
   const SLIDE_DURATION = 4000;
   const [currentSlide, setCurrentSlide] = useState(0);

@@ -36,6 +36,8 @@ export interface VerifyPaymentParams {
     amount: number;
     taxExemption?: boolean;
     pan?: string;
+    panFileUrl?: string;
+    donorPhotoUrl?: string;
     patientSlug?: string;
     websiteConsent?: string;
     recurringPledge?: boolean;

@@ -18,6 +18,7 @@ import {
   Globe,
 } from "lucide-react";
 import { PARTNERS_DATA, PartnerItem } from "../communityData";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { ProfileDetailModal } from "./ProfileDetailModal";
 import type { RoleType } from "@/components/forms/RoleFormModal";
 import type { CommunityTab } from "./CommunitySelectiveBar";
@@ -35,6 +36,11 @@ export function PartnersDirectoryTab({
   onSwitchTab,
   onOpenRoleModal,
 }: PartnersDirectoryTabProps) {
+  const { settings } = useSiteSettings();
+  const allPartners = (settings?.community_directory?.partners && settings.community_directory.partners.length > 0)
+    ? (settings.community_directory.partners as unknown as PartnerItem[])
+    : PARTNERS_DATA;
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedArea, setSelectedArea] = useState<string>("All");
   const [selectedLocation, setSelectedLocation] = useState<string>("All");
@@ -46,7 +52,7 @@ export function PartnersDirectoryTab({
   const locations = ["All", "Pan India", "Maharashtra", "Karnataka", "Jharkhand", "Bihar"];
 
   const filteredPartners = useMemo(() => {
-    let result = [...PARTNERS_DATA];
+    let result = [...allPartners];
 
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
@@ -544,7 +550,7 @@ export function PartnersDirectoryTab({
       {/* Profile Detail Modal */}
       {selectedPartner && (
         <ProfileDetailModal
-          item={{
+          profile={{
             type: "partner",
             data: selectedPartner,
           }}

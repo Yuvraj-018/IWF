@@ -25,6 +25,7 @@ import { ProfileDetailModal } from "./ProfileDetailModal";
 import { MEMBERS_DATA, DONORS_DATA, PARTNERS_DATA, VOLUNTEERS_DATA } from "../communityData";
 import type { CommunityTab } from "./CommunitySelectiveBar";
 import type { RoleType } from "@/components/forms/RoleFormModal";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 interface CommunityOverviewTabProps {
   onSwitchTab: (tab: CommunityTab) => void;
@@ -35,6 +36,7 @@ export function CommunityOverviewTab({
   onSwitchTab,
   onOpenRoleModal,
 }: CommunityOverviewTabProps) {
+  const { communityDirectory } = useSiteSettings();
   const [selectedProfile, setSelectedProfile] = useState<any>(null);
   const [exploreFilter, setExploreFilter] = useState<"all" | "members" | "donors" | "partners" | "volunteers">("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -439,7 +441,54 @@ export function CommunityOverviewTab({
     },
   ];
 
-  const filteredCards = cards.filter((c) => {
+  const dynamicCards = (communityDirectory || [])
+    .filter((d: any) => d.isPublicConsent !== false)
+    .map((d: any) => {
+      const isMember = d.type === "member";
+      const isDonor = d.type === "donor";
+      const isPartner = d.type === "partner";
+      const cardType: "member" | "donor" | "partner" | "volunteer" = isMember ? "member" : isDonor ? "donor" : isPartner ? "partner" : "volunteer";
+      return {
+        id: d.id,
+        type: cardType,
+        badgeText: isMember ? "Member" : isDonor ? "Donor" : isPartner ? "Partner" : "Volunteer",
+        badgeBg: isMember
+          ? "bg-[#e6f0fa] text-[#0f3b68] border border-[#cbe0f5]"
+          : isDonor
+          ? "bg-[#fef3d6] text-[#b45309] border border-[#fde68a]"
+          : isPartner
+          ? "bg-[#e1f0fa] text-[#1d6fad] border border-[#bae0fd]"
+          : "bg-[#f0ebf8] text-[#6c529e] border border-[#e2d5f5]",
+        BadgeIcon: isMember ? ShieldCheck : isDonor ? Heart : isPartner ? Building2 : GraduationCap,
+        name: d.name,
+        title: d.role,
+        location: d.location || "India",
+        image: d.avatar,
+        initials: d.name ? d.name.slice(0, 2).toUpperCase() : "IW",
+        isLogo: false,
+        logoType: undefined as string | undefined,
+        profileData: {
+          type: cardType,
+          data: {
+            id: d.id,
+            name: d.name,
+            category: d.category || "General",
+            profession: d.bio,
+            description: d.bio,
+            location: d.location,
+          },
+        },
+      };
+    });
+
+  const allCards = dynamicCards.length > 0
+    ? [
+        ...dynamicCards,
+        ...cards.filter((c) => !dynamicCards.some((dc: any) => dc.name.toLowerCase() === c.name.toLowerCase())),
+      ]
+    : cards;
+
+  const filteredCards = allCards.filter((c) => {
     if (exploreFilter === "members" && c.type !== "member") return false;
     if (exploreFilter === "donors" && c.type !== "donor") return false;
     if (exploreFilter === "partners" && c.type !== "partner") return false;
@@ -461,7 +510,7 @@ export function CommunityOverviewTab({
     (currentPage + 1) * PAGE_SIZE
   );
 
-  const getCardSubtitle = (card: (typeof cards)[0]) => {
+  const getCardSubtitle = (card: any) => {
     const d = card.profileData?.data;
     if (!d) return null;
     if (card.type === "member") return (d as any).profession || `ID: ${(d as any).id || ""}`;
@@ -822,7 +871,7 @@ export function CommunityOverviewTab({
 
             {/* Responsive Grid: 8 Cards on Desktop (4 cols x 2 rows), keeping 4 in a row */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 sm:gap-3.5">
-              {paginatedCards.map((card) => {
+              {paginatedCards.map((card: any) => {
                 const BadgeIcon = card.BadgeIcon;
                 const subtitle = getCardSubtitle(card);
                 return (

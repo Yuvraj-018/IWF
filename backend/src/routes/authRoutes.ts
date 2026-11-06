@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { adminLogin, getAdminProfile, adminLogout } from "../controllers/authController.js";
 import { createRateLimiter } from "../middlewares/rateLimiter.js";
+import { createTurnstileMiddleware } from "../middlewares/turnstile.js";
 
 export const authRouter = Router();
 
@@ -11,7 +12,12 @@ const adminAuthLimiter = createRateLimiter({
   message: "Too many login attempts. Please wait 15 minutes before trying again.",
 });
 
-authRouter.post("/admin/login", adminAuthLimiter, adminLogin);
+authRouter.post(
+  "/admin/login",
+  adminAuthLimiter,
+  createTurnstileMiddleware({ action: "cms_login" }),
+  adminLogin
+);
 authRouter.get("/admin/me", getAdminProfile);
 authRouter.post("/admin/logout", adminLogout);
 

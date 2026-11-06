@@ -30,7 +30,7 @@ export type MediaVariant = "photo" | "video" | "document";
 // Complete System Slot Registry mapping all website dynamic media
 export interface SystemSlot {
   key: string;
-  section: "hero" | "causes" | "gallery" | "reports" | "people" | "videos";
+  section: "hero" | "causes" | "gallery" | "reports" | "people" | "videos" | "media";
   sectionTitle: string;
   slotLabel: string;
   mediaType: MediaVariant;
@@ -281,12 +281,156 @@ export const SYSTEM_SLOTS: SystemSlot[] = [
     suggestedDimensions: "1:1 Square or 3:4 Portrait",
     defaultTags: ["Donor", "Benefactor"],
   },
+
+  // ── 7. Media Hub Section Cards (/media page) ──
+  {
+    key: "media-section-outcomes",
+    section: "media",
+    sectionTitle: "Media Hub Section Cards",
+    slotLabel: "Outcomes & Impact Card",
+    mediaType: "photo",
+    defaultDescription: "Cover image for Outcomes & Impact on /media",
+    suggestedDimensions: "800x600 (4:3)",
+    defaultTags: ["Media Hub", "Outcomes"],
+  },
+  {
+    key: "media-section-stories",
+    section: "media",
+    sectionTitle: "Media Hub Section Cards",
+    slotLabel: "Success Stories Card",
+    mediaType: "photo",
+    defaultDescription: "Cover image for Success Stories on /media",
+    suggestedDimensions: "800x600 (4:3)",
+    defaultTags: ["Media Hub", "Success Stories"],
+  },
+  {
+    key: "media-section-news",
+    section: "media",
+    sectionTitle: "Media Hub Section Cards",
+    slotLabel: "News & Events Card",
+    mediaType: "photo",
+    defaultDescription: "Cover image for News & Events on /media",
+    suggestedDimensions: "800x600 (4:3)",
+    defaultTags: ["Media Hub", "News"],
+  },
+  {
+    key: "media-section-reports",
+    section: "media",
+    sectionTitle: "Media Hub Section Cards",
+    slotLabel: "Annual Reports Card",
+    mediaType: "photo",
+    defaultDescription: "Cover image for Annual Reports on /media",
+    suggestedDimensions: "800x600 (4:3)",
+    defaultTags: ["Media Hub", "Annual Reports"],
+  },
+  {
+    key: "media-section-publications",
+    section: "media",
+    sectionTitle: "Media Hub Section Cards",
+    slotLabel: "Publications & Research Card",
+    mediaType: "photo",
+    defaultDescription: "Cover image for Publications & Research on /media",
+    suggestedDimensions: "800x600 (4:3)",
+    defaultTags: ["Media Hub", "Publications"],
+  },
+  {
+    key: "media-section-gallery",
+    section: "media",
+    sectionTitle: "Media Hub Section Cards",
+    slotLabel: "Photo & Video Gallery Card",
+    mediaType: "photo",
+    defaultDescription: "Cover image for Gallery on /media",
+    suggestedDimensions: "800x600 (4:3)",
+    defaultTags: ["Media Hub", "Gallery"],
+  },
+
+  // ── 8. Outcomes & Impact Focus Area Cards (/media/outcomes) ──
+  {
+    key: "media-outcomes-hero",
+    section: "media",
+    sectionTitle: "Outcomes & Impact (/media/outcomes)",
+    slotLabel: "Outcomes Hero Banner",
+    mediaType: "photo",
+    defaultDescription: "Hero background banner on /media/outcomes",
+    suggestedDimensions: "1920x600 (16:5)",
+    defaultTags: ["Outcomes", "Hero"],
+  },
+  {
+    key: "media-outcome-edu",
+    section: "media",
+    sectionTitle: "Outcomes & Impact (/media/outcomes)",
+    slotLabel: "Education & Child Development Card",
+    mediaType: "photo",
+    defaultDescription: "Cover for Education focus pillar on /media/outcomes",
+    suggestedDimensions: "600x400 (3:2)",
+    defaultTags: ["Outcomes", "Education"],
+  },
+  {
+    key: "media-outcome-health",
+    section: "media",
+    sectionTitle: "Outcomes & Impact (/media/outcomes)",
+    slotLabel: "Healthcare & Wellness Card",
+    mediaType: "photo",
+    defaultDescription: "Cover for Healthcare focus pillar on /media/outcomes",
+    suggestedDimensions: "600x400 (3:2)",
+    defaultTags: ["Outcomes", "Healthcare"],
+  },
+  {
+    key: "media-outcome-women",
+    section: "media",
+    sectionTitle: "Outcomes & Impact (/media/outcomes)",
+    slotLabel: "Women Empowerment Card",
+    mediaType: "photo",
+    defaultDescription: "Cover for Women Empowerment pillar on /media/outcomes",
+    suggestedDimensions: "600x400 (3:2)",
+    defaultTags: ["Outcomes", "Women"],
+  },
+  {
+    key: "media-outcome-skills",
+    section: "media",
+    sectionTitle: "Outcomes & Impact (/media/outcomes)",
+    slotLabel: "Skill Development & Livelihood Card",
+    mediaType: "photo",
+    defaultDescription: "Cover for Skills & Livelihood pillar on /media/outcomes",
+    suggestedDimensions: "600x400 (3:2)",
+    defaultTags: ["Outcomes", "Skills"],
+  },
+  {
+    key: "media-outcome-agri",
+    section: "media",
+    sectionTitle: "Outcomes & Impact (/media/outcomes)",
+    slotLabel: "Agriculture & Livelihood Card",
+    mediaType: "photo",
+    defaultDescription: "Cover for Agriculture focus pillar on /media/outcomes",
+    suggestedDimensions: "600x400 (3:2)",
+    defaultTags: ["Outcomes", "Agriculture"],
+  },
+  {
+    key: "media-outcome-env",
+    section: "media",
+    sectionTitle: "Outcomes & Impact (/media/outcomes)",
+    slotLabel: "Environment Conservation Card",
+    mediaType: "photo",
+    defaultDescription: "Cover for Environment Conservation pillar on /media/outcomes",
+    suggestedDimensions: "600x400 (3:2)",
+    defaultTags: ["Outcomes", "Environment"],
+  },
+  {
+    key: "media-outcome-comm",
+    section: "media",
+    sectionTitle: "Outcomes & Impact (/media/outcomes)",
+    slotLabel: "Community Development Card",
+    mediaType: "photo",
+    defaultDescription: "Cover for Community Development pillar on /media/outcomes",
+    suggestedDimensions: "600x400 (3:2)",
+    defaultTags: ["Outcomes", "Community"],
+  },
 ];
 
 export default function MediaManager() {
   const [mediaList, setMediaList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"all" | "hero" | "causes" | "gallery" | "videos" | "reports" | "people" | "custom">("all");
+  const [activeTab, setActiveTab] = useState<"all" | "hero" | "causes" | "gallery" | "videos" | "reports" | "people" | "media" | "custom">("all");
   const [typeFilter, setTypeFilter] = useState<"all" | "photo" | "video" | "document">("all");
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -296,6 +440,29 @@ export default function MediaManager() {
   const [inputMode, setInputMode] = useState<"file" | "url">("file");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [filePreview, setFilePreview] = useState<string | null>(null);
+
+  const [albums, setAlbums] = useState<any[]>([]);
+  const [selectedAlbum, setSelectedAlbum] = useState<any | null>(null);
+  const [albumManageModalOpen, setAlbumManageModalOpen] = useState(false);
+  const [newAlbumModalOpen, setNewAlbumModalOpen] = useState(false);
+  const [newAlbumData, setNewAlbumData] = useState({
+    title: "",
+    category: "gallery",
+    location: "Darbhanga, Bihar",
+    date: "2026",
+  });
+  const [newAlbumCoverFile, setNewAlbumCoverFile] = useState<File | null>(null);
+  const [newAlbumCoverUrl, setNewAlbumCoverUrl] = useState("");
+
+  const [albumItemFile, setAlbumItemFile] = useState<File | null>(null);
+  const [albumItemData, setAlbumItemData] = useState({
+    title: "",
+    caption: "",
+    url: "",
+    videoUrl: "",
+    mediaType: "photo" as MediaVariant,
+    isCover: false,
+  });
 
   const [formData, setFormData] = useState({
     key: "",
@@ -309,13 +476,22 @@ export default function MediaManager() {
     location: "Darbhanga, Bihar",
     date: "2026",
     tags: "" as string,
+    order: 0,
+    subHeading: "",
+    ctaLink: "",
   });
 
   const loadMedia = (force = false) => {
     setLoading(true);
-    api.listMedia(undefined, { force }).then((res) => {
-      if (res.success && res.data) {
-        setMediaList(res.data);
+    Promise.all([
+      api.listMedia(undefined, { force }),
+      api.listAlbums({ force }),
+    ]).then(([mediaRes, albumRes]) => {
+      if (mediaRes.success && mediaRes.data) {
+        setMediaList(mediaRes.data);
+      }
+      if (albumRes.success && albumRes.data) {
+        setAlbums(albumRes.data);
       }
       setLoading(false);
     });
@@ -347,6 +523,9 @@ export default function MediaManager() {
       location: existing?.location || "Darbhanga, Bihar",
       date: existing?.date || "2026",
       tags: existing?.tags ? existing.tags.join(", ") : slot.defaultTags.join(", "),
+      order: existing?.order || 0,
+      subHeading: existing?.subHeading || "",
+      ctaLink: existing?.ctaLink || "",
     });
     setModalOpen(true);
   };
@@ -367,6 +546,9 @@ export default function MediaManager() {
       location: "Bihar, India",
       date: "2026",
       tags: "Field Work, General",
+      order: 0,
+      subHeading: "",
+      ctaLink: "",
     });
     setModalOpen(true);
   };
@@ -436,6 +618,9 @@ export default function MediaManager() {
       if (formData.location) fd.append("location", formData.location.trim());
       if (formData.date) fd.append("date", formData.date.trim());
       if (formData.tags) fd.append("tags", formData.tags);
+      if (formData.order !== undefined) fd.append("order", String(formData.order));
+      if (formData.subHeading) fd.append("subHeading", formData.subHeading.trim());
+      if (formData.ctaLink) fd.append("ctaLink", formData.ctaLink.trim());
 
       const res = await api.uploadMedia(fd);
       if (res.success) {
@@ -451,6 +636,119 @@ export default function MediaManager() {
       toast.error(err.message || "Upload failed");
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleCreateAlbum = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newAlbumData.title.trim()) {
+      toast.error("Please enter an Album / Section title.");
+      return;
+    }
+    if (!newAlbumCoverFile && !newAlbumCoverUrl.trim()) {
+      toast.error("Please upload or enter a cover image URL for this album.");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const albumId = newAlbumData.title.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-");
+      const fd = new FormData();
+      fd.append("key", `gallery-${albumId}-cover`);
+      fd.append("title", newAlbumData.title.trim());
+      fd.append("category", "gallery");
+      fd.append("albumId", albumId);
+      fd.append("albumTitle", newAlbumData.title.trim());
+      fd.append("mediaType", "photo");
+      fd.append("isCover", "true");
+      fd.append("location", newAlbumData.location.trim());
+      fd.append("date", newAlbumData.date.trim());
+
+      if (newAlbumCoverFile) {
+        fd.append("file", newAlbumCoverFile);
+      } else {
+        fd.append("url", newAlbumCoverUrl.trim());
+      }
+
+      const res = await api.uploadMedia(fd);
+      if (res.success) {
+        toast.success(`Album "${newAlbumData.title}" created successfully!`);
+        setNewAlbumModalOpen(false);
+        setNewAlbumCoverFile(null);
+        setNewAlbumCoverUrl("");
+        setNewAlbumData({ title: "", category: "gallery", location: "Darbhanga, Bihar", date: "2026" });
+        loadMedia(true);
+      } else {
+        toast.error(res.message || "Failed to create album");
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Album creation failed");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleUploadToAlbum = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedAlbum) return;
+
+    if (albumItemData.mediaType === "video" && !albumItemData.videoUrl.trim() && !albumItemData.url.trim()) {
+      toast.error("Please provide a Video URL.");
+      return;
+    }
+    if (albumItemData.mediaType === "photo" && !albumItemFile && !albumItemData.url.trim()) {
+      toast.error("Please upload an image file or provide an image URL.");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const fd = new FormData();
+      const uniqueKey = `gallery-${selectedAlbum.albumId}-${Date.now().toString().slice(-6)}`;
+      fd.append("key", uniqueKey);
+      fd.append("title", albumItemData.title.trim() || selectedAlbum.albumTitle);
+      fd.append("category", "gallery");
+      fd.append("albumId", selectedAlbum.albumId);
+      fd.append("albumTitle", selectedAlbum.albumTitle);
+      fd.append("mediaType", albumItemData.mediaType);
+      if (albumItemData.caption.trim()) fd.append("caption", albumItemData.caption.trim());
+      if (albumItemData.isCover) fd.append("isCover", "true");
+
+      if (albumItemFile) {
+        fd.append("file", albumItemFile);
+      } else if (albumItemData.url.trim()) {
+        fd.append("url", albumItemData.url.trim());
+      }
+      if (albumItemData.videoUrl.trim()) fd.append("videoUrl", albumItemData.videoUrl.trim());
+
+      const res = await api.uploadMedia(fd);
+      if (res.success) {
+        toast.success("Media added to album!");
+        setAlbumItemFile(null);
+        setAlbumItemData({ title: "", caption: "", url: "", videoUrl: "", mediaType: "photo", isCover: false });
+        loadMedia(true);
+      } else {
+        toast.error(res.message || "Failed to add media");
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Upload failed");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleDeleteAlbumItem = async (key: string) => {
+    if (!confirm("Are you sure you want to remove this media item from the album?")) return;
+    try {
+      const res = await api.deleteMedia(key);
+      if (res.success) {
+        toast.success("Media item removed from album");
+        loadMedia(true);
+      } else {
+        toast.error(res.message || "Failed to delete");
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Delete failed");
     }
   };
 
@@ -475,13 +773,13 @@ export default function MediaManager() {
       {/* Top action header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-black text-white flex items-center gap-2">
+          <h2 className="text-xl font-black text-[#071527] flex items-center gap-2">
             <span>Multi-Format Media Control Center</span>
-            <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+            <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-orange-50 border border-orange-200 text-orange-600">
               Direct File Upload &amp; Cloud Auto-Config
             </span>
           </h2>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-500 mt-1">
             Upload images, documents, and videos directly from your device or link web assets to live website slots.
           </p>
         </div>
@@ -489,15 +787,15 @@ export default function MediaManager() {
           <button
             onClick={() => loadMedia(true)}
             disabled={loading}
-            className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition cursor-pointer disabled:opacity-50"
+            className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold border border-slate-200 transition cursor-pointer disabled:opacity-50 shadow-2xs"
             title="Bypass cache and sync live with MongoDB"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-emerald-400" : ""}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-orange-500" : ""}`} />
             <span className="hidden sm:inline">Refresh</span>
           </button>
           <button
             onClick={openCustomModal}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition shadow-lg shadow-emerald-900/30 cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition shadow-md shadow-orange-500/20 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Add Custom Asset</span>
@@ -506,17 +804,17 @@ export default function MediaManager() {
       </div>
 
       {/* Guide Card */}
-      <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 text-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-4 rounded-2xl bg-orange-50/70 border border-orange-200/80 text-xs flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-2xs">
         <div className="flex items-start gap-3">
-          <div className="p-2 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 mt-0.5">
+          <div className="p-2 rounded-xl bg-orange-100 border border-orange-200 text-orange-600 mt-0.5">
             <Info className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="font-bold text-white mb-0.5">Hands-Free Direct Upload System:</h4>
-            <div className="text-slate-400 space-y-1">
-              <p>• <strong className="text-slate-200">Drag &amp; Drop Upload:</strong> You don't need external links. Simply drop images, posters, or PDFs — the system stores and sets the URLs automatically.</p>
-              <p>• <strong className="text-slate-200">Patient Photos:</strong> Uploaded directly under the <strong className="text-rose-400">"Patients"</strong> tab when creating or editing a medical aid case.</p>
-              <p>• <strong className="text-slate-200">News &amp; Event Photos:</strong> Uploaded under the <strong className="text-emerald-400">"News &amp; Events"</strong> tab with each article.</p>
+            <h4 className="font-bold text-[#071527] mb-0.5 text-sm">Hands-Free Direct Upload System:</h4>
+            <div className="text-slate-600 space-y-1">
+              <p>• <strong className="text-slate-900 font-bold">Drag &amp; Drop Upload:</strong> You don't need external links. Simply drop images, posters, or PDFs — the system stores and sets the URLs automatically.</p>
+              <p>• <strong className="text-slate-900 font-bold">Patient Photos:</strong> Uploaded directly under the <strong className="text-rose-600 font-bold">"Patients"</strong> tab when creating or editing a medical aid case.</p>
+              <p>• <strong className="text-slate-900 font-bold">News &amp; Event Photos:</strong> Uploaded under the <strong className="text-orange-600 font-bold">"News &amp; Events"</strong> tab with each article.</p>
             </div>
           </div>
         </div>
@@ -528,12 +826,13 @@ export default function MediaManager() {
         <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
           {[
             { id: "all", label: "All Visual Slots", count: SYSTEM_SLOTS.length },
-            { id: "hero", label: "Hero Banners", count: 4 },
+            { id: "hero", label: "Hero Banners", count: mediaList.filter((m) => m.category === "hero").length || 4 },
+            { id: "gallery", label: "Gallery Albums & Sections", count: albums.length || 6 },
             { id: "causes", label: "Program Pillars", count: 5 },
-            { id: "gallery", label: "Homepage Gallery", count: 6 },
             { id: "videos", label: "Documentaries", count: 2 },
             { id: "reports", label: "Annual Reports & Pubs", count: 3 },
             { id: "people", label: "Leadership & Team", count: 3 },
+            { id: "media", label: "Media Hub Cards", count: 6 },
             { id: "custom", label: "Custom Overrides", count: customItems.length },
           ].map((tab) => (
             <button
@@ -541,14 +840,14 @@ export default function MediaManager() {
               onClick={() => setActiveTab(tab.id as any)}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer whitespace-nowrap ${
                 activeTab === tab.id
-                  ? "bg-emerald-600 text-white shadow-md shadow-emerald-950"
-                  : "bg-slate-900 text-slate-400 hover:text-white border border-slate-800"
+                  ? "bg-orange-500 text-white shadow-sm"
+                  : "bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-slate-200"
               }`}
             >
               <span>{tab.label}</span>
               <span
                 className={`px-1.5 py-0.2 rounded-full text-[10px] ${
-                  activeTab === tab.id ? "bg-white/20 text-white" : "bg-slate-800 text-slate-400"
+                  activeTab === tab.id ? "bg-white/20 text-white" : "bg-slate-100 text-slate-600"
                 }`}
               >
                 {tab.count}
@@ -558,7 +857,7 @@ export default function MediaManager() {
         </div>
 
         {/* Media Type Sub-Filter */}
-        <div className="flex items-center gap-1.5 bg-slate-900 p-1 rounded-xl border border-slate-800 shrink-0 self-start sm:self-auto">
+        <div className="flex items-center gap-1.5 bg-white p-1 rounded-xl border border-slate-200 shrink-0 self-start sm:self-auto shadow-2xs">
           {[
             { id: "all", label: "All Formats" },
             { id: "photo", label: "Photos", icon: Camera },
@@ -572,8 +871,8 @@ export default function MediaManager() {
                 onClick={() => setTypeFilter(type.id as any)}
                 className={`px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1.5 transition cursor-pointer ${
                   typeFilter === type.id
-                    ? "bg-slate-800 text-white border border-slate-700"
-                    : "text-slate-400 hover:text-white"
+                    ? "bg-orange-50 text-orange-600 border border-orange-200"
+                    : "text-slate-600 hover:text-slate-900"
                 }`}
               >
                 {Icon && <Icon className="w-3 h-3" />}
@@ -590,6 +889,165 @@ export default function MediaManager() {
           <Loader2 className="w-6 h-6 animate-spin text-emerald-400" />
           <p className="text-xs">Loading media registry...</p>
         </div>
+      ) : activeTab === "hero" ? (
+        <div className="space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs">
+            <div>
+              <h3 className="text-base font-bold text-[#071527] flex items-center gap-2">
+                <span>Dynamic Hero Carousel Banners</span>
+                <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-orange-50 border border-orange-200 text-orange-600">
+                  {mediaList.filter((m) => m.category === "hero").length} Live Slides
+                </span>
+              </h3>
+              <p className="text-xs text-slate-500 mt-1">
+                You can add as many banners as you like! The public website will automatically loop through all active slides.
+              </p>
+            </div>
+            <button
+              onClick={() => {
+                setSelectedFile(null);
+                setFilePreview(null);
+                setInputMode("file");
+                setFormData({
+                  key: `hero-slide-${Date.now()}`,
+                  title: "",
+                  category: "hero",
+                  mediaType: "photo",
+                  url: "",
+                  videoUrl: "",
+                  thumbnailUrl: "",
+                  altText: "",
+                  location: "Darbhanga, Bihar",
+                  date: "2026",
+                  tags: "Hero Banner",
+                  order: (mediaList.filter((m) => m.category === "hero").length || 0) + 1,
+                  subHeading: "",
+                  ctaLink: "/donate",
+                });
+                setModalOpen(true);
+              }}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition shadow-md shadow-orange-500/20 cursor-pointer shrink-0"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Add New Hero Slide</span>
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {mediaList
+              .filter((m) => m.category === "hero")
+              .map((heroItem, hIdx) => (
+                <div
+                  key={heroItem.key || hIdx}
+                  className="rounded-2xl border border-slate-200/90 bg-white shadow-2xs overflow-hidden flex flex-col justify-between group hover:border-orange-300 hover:shadow-md transition duration-300"
+                >
+                  <div className="relative h-44 w-full bg-slate-100 overflow-hidden">
+                    <img
+                      src={heroItem.url}
+                      alt={heroItem.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                    />
+                    <div className="absolute top-2 left-2 bg-black/75 backdrop-blur-md px-2.5 py-1 rounded-lg text-[10px] font-black text-white border border-white/10">
+                      Slide #{heroItem.order || hIdx + 1}
+                    </div>
+                  </div>
+                  <div className="p-4 space-y-2">
+                    <h4 className="font-bold text-[#071527] text-sm truncate">{heroItem.title || "Untitled Banner"}</h4>
+                    {heroItem.subHeading && (
+                      <p className="text-xs text-slate-500 line-clamp-2">{heroItem.subHeading}</p>
+                    )}
+                    {heroItem.ctaLink && (
+                      <span className="inline-block px-2 py-0.5 rounded text-[10px] font-mono bg-orange-50 text-orange-700 border border-orange-200">
+                        CTA: {heroItem.ctaLink}
+                      </span>
+                    )}
+                    <div className="pt-3 flex items-center justify-between border-t border-slate-100">
+                      <span className="text-[11px] font-mono text-slate-400">{heroItem.key}</span>
+                      <button
+                        onClick={() => handleDelete(heroItem.key)}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition cursor-pointer"
+                        title="Delete this hero slide"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+      ) : activeTab === "gallery" ? (
+        <div className="space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs">
+            <div>
+              <h3 className="text-base font-bold text-[#071527] flex items-center gap-2">
+                <span>Dynamic Gallery Event Sections &amp; Albums</span>
+                <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-orange-50 border border-orange-200 text-orange-600">
+                  {albums.length} Albums
+                </span>
+              </h3>
+              <p className="text-xs text-slate-500 mt-1">
+                Create event albums and upload photos. When visitors click a thumbnail on the homepage, all photos of that album open in a rich lightbox.
+              </p>
+            </div>
+            <button
+              onClick={() => setNewAlbumModalOpen(true)}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition shadow-md shadow-orange-500/20 cursor-pointer shrink-0"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Create New Album / Section</span>
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {albums.map((album) => (
+              <div
+                key={album.albumId}
+                className="rounded-2xl border border-slate-200/90 bg-white shadow-2xs overflow-hidden flex flex-col justify-between group hover:border-orange-300 hover:shadow-md transition duration-300"
+              >
+                <div className="relative h-48 w-full bg-slate-100 overflow-hidden">
+                  <img
+                    src={album.coverUrl}
+                    alt={album.albumTitle}
+                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                  />
+                  <div className="absolute top-2 right-2 bg-black/75 backdrop-blur-md px-2.5 py-1 rounded-lg text-[10px] font-black text-white flex items-center gap-1.5 border border-white/10">
+                    <ImageIcon className="w-3 h-3 text-orange-400" />
+                    <span>{album.count} Media</span>
+                  </div>
+                  {album.mediaType === "video" && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/35 pointer-events-none">
+                      <div className="w-12 h-12 rounded-full bg-orange-600 text-white flex items-center justify-center shadow-lg">
+                        <Play className="w-5 h-5 fill-white ml-0.5" />
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="p-4 space-y-3">
+                  <div>
+                    <h4 className="font-bold text-[#071527] text-sm">{album.albumTitle}</h4>
+                    {album.location && (
+                      <p className="text-xs text-slate-500 flex items-center gap-1 mt-1 font-medium">
+                        <MapPin className="w-3.5 h-3.5 text-orange-500 shrink-0" />
+                        <span>{album.location} {album.date ? `• ${album.date}` : ""}</span>
+                      </p>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => {
+                      setSelectedAlbum(album);
+                      setAlbumManageModalOpen(true);
+                    }}
+                    className="w-full py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-orange-500 text-slate-700 hover:text-white border border-slate-200/80 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-2xs"
+                  >
+                    <Layers className="w-4 h-4" />
+                    <span>Open Album &amp; Manage Photos ({album.count})</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       ) : (
         <div className="space-y-8">
           {displayedSlots.length > 0 && (
@@ -602,15 +1060,15 @@ export default function MediaManager() {
                 return (
                   <div
                     key={slot.key}
-                    className={`rounded-2xl border overflow-hidden flex flex-col justify-between group transition duration-300 ${
+                    className={`rounded-2xl border overflow-hidden flex flex-col justify-between group transition duration-300 shadow-2xs ${
                       live
-                        ? "bg-slate-900 border-slate-800 hover:border-emerald-500/50"
-                        : "bg-slate-900/60 border-slate-800/80 border-dashed hover:border-slate-700"
+                        ? "bg-white border-slate-200/90 hover:border-orange-300 hover:shadow-md"
+                        : "bg-white/80 border-slate-200 border-dashed hover:border-slate-300"
                     }`}
                   >
                     <div>
                       {/* Media Preview Box */}
-                      <div className="relative h-44 w-full bg-slate-950 overflow-hidden flex items-center justify-center">
+                      <div className="relative h-44 w-full bg-slate-100 border-b border-slate-200/80 overflow-hidden flex items-center justify-center">
                         {live?.url || live?.thumbnailUrl ? (
                           <>
                             <img
@@ -622,7 +1080,7 @@ export default function MediaManager() {
                             {/* Video Play Overlay */}
                             {isVideo && (
                               <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                                <div className="w-11 h-11 rounded-full bg-orange-600/90 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition">
+                                <div className="w-11 h-11 rounded-full bg-orange-600 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition">
                                   <Play className="w-5 h-5 fill-white ml-0.5" />
                                 </div>
                               </div>
@@ -631,7 +1089,7 @@ export default function MediaManager() {
                             {/* Document Overlay */}
                             {isDoc && (
                               <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                                <div className="px-3 py-1.5 rounded-xl bg-red-600/90 text-white font-bold text-xs flex items-center gap-1.5 shadow-lg">
+                                <div className="px-3 py-1.5 rounded-xl bg-red-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-lg">
                                   <FileText className="w-4 h-4" />
                                   <span>Official PDF Document</span>
                                 </div>
@@ -639,7 +1097,7 @@ export default function MediaManager() {
                             )}
 
                             <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
-                              <span className="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-emerald-600 text-white shadow-sm flex items-center gap-1">
+                              <span className="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-orange-600 text-white shadow-sm flex items-center gap-1">
                                 <Sparkles className="w-2.5 h-2.5" />
                                 <span>Live Cloud Override</span>
                               </span>
@@ -648,38 +1106,38 @@ export default function MediaManager() {
                         ) : (
                           <div className="p-6 text-center flex flex-col items-center justify-center text-slate-500">
                             {isVideo ? (
-                              <Video className="w-8 h-8 mb-2 text-orange-400" />
+                              <Video className="w-8 h-8 mb-2 text-orange-500" />
                             ) : isDoc ? (
-                              <FileText className="w-8 h-8 mb-2 text-red-400" />
+                              <FileText className="w-8 h-8 mb-2 text-red-500" />
                             ) : (
-                              <ImageIcon className="w-8 h-8 mb-2 text-slate-600" />
+                              <ImageIcon className="w-8 h-8 mb-2 text-slate-400" />
                             )}
-                            <p className="text-[11px] font-medium text-slate-400">Bundled Fallback Active</p>
-                            <p className="text-[10px] text-slate-600 mt-0.5">{slot.suggestedDimensions}</p>
+                            <p className="text-[11px] font-bold text-slate-600">Bundled Fallback Active</p>
+                            <p className="text-[10px] text-slate-400 mt-0.5 font-medium">{slot.suggestedDimensions}</p>
                           </div>
                         )}
 
                         {/* Format Badge */}
-                        <span className="absolute bottom-2.5 left-2.5 px-2 py-0.5 rounded bg-black/80 text-white text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 backdrop-blur-sm">
+                        <span className="absolute bottom-2.5 left-2.5 px-2 py-0.5 rounded-md bg-[#071527] text-white text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 shadow-sm">
                           {isVideo ? (
                             <>
                               <Video className="w-3 h-3 text-orange-400" />
-                              <span>Video</span>
+                              <span className="text-white font-bold">Video</span>
                             </>
                           ) : isDoc ? (
                             <>
                               <FileText className="w-3 h-3 text-red-400" />
-                              <span>PDF Doc</span>
+                              <span className="text-white font-bold">PDF Doc</span>
                             </>
                           ) : (
                             <>
-                              <Camera className="w-3 h-3 text-emerald-400" />
-                              <span>Photo</span>
+                              <Camera className="w-3 h-3 text-orange-400" />
+                              <span className="text-white font-bold">Photo</span>
                             </>
                           )}
                         </span>
 
-                        <span className="absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded bg-black/70 text-slate-300 text-[10px] font-mono backdrop-blur-sm">
+                        <span className="absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded-md bg-[#071527] text-slate-100 text-[10px] font-mono shadow-sm font-semibold">
                           {slot.key}
                         </span>
                       </div>
@@ -687,12 +1145,12 @@ export default function MediaManager() {
                       {/* Content Metadata */}
                       <div className="p-4">
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-orange-600">
                             {slot.sectionTitle}
                           </span>
                         </div>
-                        <h3 className="text-sm font-bold text-white mb-1">{slot.slotLabel}</h3>
-                        <p className="text-xs text-slate-400 line-clamp-2">
+                        <h3 className="text-sm font-extrabold text-[#071527] mb-1">{slot.slotLabel}</h3>
+                        <p className="text-xs text-slate-600 line-clamp-2">
                           {live?.title || slot.defaultDescription}
                         </p>
 
@@ -701,7 +1159,7 @@ export default function MediaManager() {
                           {(live?.tags || slot.defaultTags).map((t: string) => (
                             <span
                               key={t}
-                              className="px-1.5 py-0.5 rounded bg-slate-800 text-[10px] text-slate-400 font-medium"
+                              className="px-2 py-0.5 rounded-md bg-slate-100 border border-slate-200/80 text-[10px] text-slate-700 font-semibold"
                             >
                               #{t}
                             </span>
@@ -711,10 +1169,10 @@ export default function MediaManager() {
                     </div>
 
                     {/* Bottom Action Footer */}
-                    <div className="p-4 pt-2 border-t border-slate-800 flex items-center justify-between">
+                    <div className="p-4 pt-2.5 border-t border-slate-100 flex items-center justify-between bg-slate-50/50">
                       <button
                         onClick={() => openReplaceModal(slot)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600/10 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/20 text-xs font-bold transition cursor-pointer"
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-orange-50 hover:bg-orange-500 text-orange-700 hover:text-white border border-orange-200 text-xs font-bold transition cursor-pointer"
                       >
                         <Sparkles className="w-3.5 h-3.5" />
                         <span>{live ? "Replace Asset" : "Assign Live Asset"}</span>
@@ -727,7 +1185,7 @@ export default function MediaManager() {
                               href={live.videoUrl || live.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="p-1.5 text-slate-400 hover:text-white rounded-lg transition"
+                              className="p-1.5 text-slate-500 hover:text-slate-900 rounded-lg transition"
                               title={isVideo ? "Watch Video" : isDoc ? "View PDF" : "View Image"}
                             >
                               <ExternalLink className="w-3.5 h-3.5" />
@@ -735,7 +1193,7 @@ export default function MediaManager() {
                             <button
                               onClick={() => handleDelete(slot.key)}
                               title="Revert to bundled default image"
-                              className="p-1.5 text-slate-500 hover:text-red-400 rounded-lg transition cursor-pointer"
+                              className="p-1.5 text-slate-400 hover:text-red-500 rounded-lg transition cursor-pointer"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>
@@ -760,34 +1218,34 @@ export default function MediaManager() {
                 {customItems.map((item) => (
                   <div
                     key={item.key}
-                    className="rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden flex flex-col justify-between group hover:border-slate-700 transition"
+                    className="rounded-2xl bg-white border border-slate-200/90 shadow-2xs overflow-hidden flex flex-col justify-between group hover:border-orange-300 hover:shadow-md transition"
                   >
                     <div>
-                      <div className="relative h-44 w-full bg-slate-950 overflow-hidden">
+                      <div className="relative h-44 w-full bg-slate-100 overflow-hidden">
                         <img
                           src={item.thumbnailUrl || item.url}
                           alt={item.altText || item.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                         />
-                        <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-black/70 text-white backdrop-blur-sm">
+                        <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-[#071527] text-white shadow-sm">
                           {item.mediaType || "photo"}
                         </span>
                       </div>
                       <div className="p-4">
-                        <span className="inline-block px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-[11px] font-bold mb-2">
+                        <span className="inline-block px-2 py-0.5 rounded bg-orange-50 border border-orange-200 text-orange-700 font-mono text-[11px] font-bold mb-2">
                           {item.key}
                         </span>
-                        <h3 className="text-sm font-bold text-white mb-1">{item.title}</h3>
-                        <p className="text-xs text-slate-400 truncate">{item.altText || "No caption"}</p>
+                        <h3 className="text-sm font-extrabold text-[#071527] mb-1">{item.title}</h3>
+                        <p className="text-xs text-slate-600 truncate">{item.altText || "No caption"}</p>
                       </div>
                     </div>
 
-                    <div className="p-4 pt-2 border-t border-slate-800 flex items-center justify-between">
+                    <div className="p-4 pt-2.5 border-t border-slate-100 flex items-center justify-between bg-slate-50/50">
                       <a
                         href={item.videoUrl || item.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-[11px] text-emerald-400 hover:underline flex items-center gap-1"
+                        className="text-[11px] text-orange-600 hover:text-orange-700 font-bold hover:underline flex items-center gap-1"
                       >
                         <span>Open Asset</span>
                         <ExternalLink className="w-3 h-3" />
@@ -795,7 +1253,7 @@ export default function MediaManager() {
                       <button
                         onClick={() => handleDelete(item.key)}
                         title="Remove from CMS"
-                        className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition cursor-pointer"
+                        className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition cursor-pointer"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -810,351 +1268,595 @@ export default function MediaManager() {
 
       {/* Target Asset Assignment / Replacement Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6 shadow-2xl my-8">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-5">
-              <h3 className="text-base font-extrabold text-white flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-emerald-400" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-lg w-full shadow-2xl my-auto max-h-[calc(100vh-2rem)] sm:max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+            {/* Sticky Header */}
+            <div className="flex items-center justify-between p-5 sm:p-6 pb-4 border-b border-slate-200 shrink-0">
+              <h3 className="text-base font-extrabold text-[#071527] flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-orange-500" />
                 <span>Assign / Replace Dynamic Asset</span>
               </h3>
               <button
                 onClick={() => setModalOpen(false)}
-                className="p-1 text-slate-400 hover:text-white rounded-lg transition cursor-pointer"
+                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleCreate} className="space-y-4 text-xs">
-              {/* Media Type Selector */}
-              <div>
-                <label className="block text-slate-300 font-bold mb-1.5">Asset Format Type *</label>
-                <div className="grid grid-cols-3 gap-2">
-                  {[
-                    { id: "photo", label: "Photo / Banner", icon: Camera },
-                    { id: "video", label: "Video Reel / Stream", icon: Video },
-                    { id: "document", label: "PDF / Publication", icon: FileText },
-                  ].map((t) => {
-                    const Icon = t.icon;
-                    return (
-                      <button
-                        type="button"
-                        key={t.id}
-                        onClick={() => setFormData({ ...formData, mediaType: t.id as any })}
-                        className={`p-2.5 rounded-xl border text-center flex flex-col items-center justify-center gap-1 transition cursor-pointer ${
-                          formData.mediaType === t.id
-                            ? "bg-emerald-600/20 border-emerald-500 text-emerald-400 font-bold"
-                            : "bg-slate-950 border-slate-800 text-slate-400 hover:text-white"
-                        }`}
-                      >
-                        <Icon className="w-4 h-4" />
-                        <span className="text-[11px]">{t.label}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Placement Slot Selector */}
-              <div>
-                <label className="block text-slate-300 font-bold mb-1">
-                  Website Target Placement Slot *
-                </label>
-                <select
-                  value={formData.key}
-                  onChange={(e) => {
-                    const selectedSlot = SYSTEM_SLOTS.find((s) => s.key === e.target.value);
-                    if (selectedSlot) {
-                      setFormData({
-                        ...formData,
-                        key: selectedSlot.key,
-                        category: selectedSlot.section,
-                        mediaType: selectedSlot.mediaType,
-                        title: selectedSlot.defaultDescription,
-                        altText: selectedSlot.defaultDescription,
-                        tags: selectedSlot.defaultTags.join(", "),
-                      });
-                    } else {
-                      setFormData({ ...formData, key: e.target.value });
-                    }
-                  }}
-                  className="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white text-xs font-mono focus:border-emerald-500 outline-none"
-                >
-                  <option value="">-- Choose Target Website Slot --</option>
-                  <optgroup label="🌟 Homepage Hero Carousel">
-                    {SYSTEM_SLOTS.filter((s) => s.section === "hero").map((s) => (
-                      <option key={s.key} value={s.key}>
-                        {s.slotLabel} ({s.key})
-                      </option>
-                    ))}
-                  </optgroup>
-                  <optgroup label="🏛️ Core Program Pillars (Causes)">
-                    {SYSTEM_SLOTS.filter((s) => s.section === "causes").map((s) => (
-                      <option key={s.key} value={s.key}>
-                        {s.slotLabel} ({s.key})
-                      </option>
-                    ))}
-                  </optgroup>
-                  <optgroup label="📸 Homepage Gallery Showcase">
-                    {SYSTEM_SLOTS.filter((s) => s.section === "gallery").map((s) => (
-                      <option key={s.key} value={s.key}>
-                        {s.slotLabel} ({s.key})
-                      </option>
-                    ))}
-                  </optgroup>
-                  <optgroup label="🎥 Video Documentaries &amp; Reels">
-                    {SYSTEM_SLOTS.filter((s) => s.section === "videos").map((s) => (
-                      <option key={s.key} value={s.key}>
-                        {s.slotLabel} ({s.key})
-                      </option>
-                    ))}
-                  </optgroup>
-                  <optgroup label="📄 Annual Reports &amp; Publications">
-                    {SYSTEM_SLOTS.filter((s) => s.section === "reports").map((s) => (
-                      <option key={s.key} value={s.key}>
-                        {s.slotLabel} ({s.key})
-                      </option>
-                    ))}
-                  </optgroup>
-                  <optgroup label="👥 Leadership &amp; Team">
-                    {SYSTEM_SLOTS.filter((s) => s.section === "people").map((s) => (
-                      <option key={s.key} value={s.key}>
-                        {s.slotLabel} ({s.key})
-                      </option>
-                    ))}
-                  </optgroup>
-                  <option value="custom">✍️ Other / Custom Key</option>
-                </select>
-              </div>
-
-              {/* Custom Key Input */}
-              {(formData.key === "custom" || !SYSTEM_SLOTS.some((s) => s.key === formData.key)) && (
+            {/* Scrollable Form Content */}
+            <form onSubmit={handleCreate} className="flex flex-col flex-1 overflow-hidden min-h-0">
+              <div className="p-5 sm:p-6 overflow-y-auto flex-1 space-y-4 text-xs overscroll-contain">
+                {/* Media Type Selector */}
                 <div>
-                  <label className="block text-slate-300 font-bold mb-1">Custom Identifier Key *</label>
+                  <label className="block text-slate-700 font-bold mb-1.5">Asset Format Type *</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { id: "photo", label: "Photo / Banner", icon: Camera },
+                      { id: "video", label: "Video Reel / Stream", icon: Video },
+                      { id: "document", label: "PDF / Publication", icon: FileText },
+                    ].map((t) => {
+                      const Icon = t.icon;
+                      return (
+                        <button
+                          type="button"
+                          key={t.id}
+                          onClick={() => setFormData({ ...formData, mediaType: t.id as any })}
+                          className={`p-2.5 rounded-xl border text-center flex flex-col items-center justify-center gap-1 transition cursor-pointer ${
+                            formData.mediaType === t.id
+                              ? "bg-orange-50 border-orange-400 text-orange-700 font-bold shadow-xs"
+                              : "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-600"
+                          }`}
+                        >
+                          <Icon className="w-4 h-4" />
+                          <span className="text-[11px]">{t.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Placement Slot Selector */}
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1">
+                    Website Target Placement Slot *
+                  </label>
+                  <select
+                    value={formData.key}
+                    onChange={(e) => {
+                      const selectedSlot = SYSTEM_SLOTS.find((s) => s.key === e.target.value);
+                      if (selectedSlot) {
+                        setFormData({
+                          ...formData,
+                          key: selectedSlot.key,
+                          category: selectedSlot.section,
+                          mediaType: selectedSlot.mediaType,
+                          title: selectedSlot.defaultDescription,
+                          altText: selectedSlot.defaultDescription,
+                          tags: selectedSlot.defaultTags.join(", "),
+                        });
+                      } else {
+                        setFormData({ ...formData, key: e.target.value });
+                      }
+                    }}
+                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-mono focus:border-orange-500 outline-none"
+                  >
+                    <option value="">-- Choose Target Website Slot --</option>
+                    <optgroup label="🌟 Homepage Hero Carousel">
+                      {SYSTEM_SLOTS.filter((s) => s.section === "hero").map((s) => (
+                        <option key={s.key} value={s.key}>
+                          {s.slotLabel} ({s.key})
+                        </option>
+                      ))}
+                    </optgroup>
+                    <optgroup label="🏛️ Core Program Pillars (Causes)">
+                      {SYSTEM_SLOTS.filter((s) => s.section === "causes").map((s) => (
+                        <option key={s.key} value={s.key}>
+                          {s.slotLabel} ({s.key})
+                        </option>
+                      ))}
+                    </optgroup>
+                    <optgroup label="📸 Homepage Gallery Showcase">
+                      {SYSTEM_SLOTS.filter((s) => s.section === "gallery").map((s) => (
+                        <option key={s.key} value={s.key}>
+                          {s.slotLabel} ({s.key})
+                        </option>
+                      ))}
+                    </optgroup>
+                    <optgroup label="🎥 Video Documentaries &amp; Reels">
+                      {SYSTEM_SLOTS.filter((s) => s.section === "videos").map((s) => (
+                        <option key={s.key} value={s.key}>
+                          {s.slotLabel} ({s.key})
+                        </option>
+                      ))}
+                    </optgroup>
+                    <optgroup label="📄 Annual Reports &amp; Publications">
+                      {SYSTEM_SLOTS.filter((s) => s.section === "reports").map((s) => (
+                        <option key={s.key} value={s.key}>
+                          {s.slotLabel} ({s.key})
+                        </option>
+                      ))}
+                    </optgroup>
+                    <optgroup label="👥 Leadership &amp; Team">
+                      {SYSTEM_SLOTS.filter((s) => s.section === "people").map((s) => (
+                        <option key={s.key} value={s.key}>
+                          {s.slotLabel} ({s.key})
+                        </option>
+                      ))}
+                    </optgroup>
+                    <option value="custom">✍️ Other / Custom Key</option>
+                  </select>
+                </div>
+
+                {/* Custom Key Input */}
+                {(formData.key === "custom" || !SYSTEM_SLOTS.some((s) => s.key === formData.key)) && (
+                  <div>
+                    <label className="block text-slate-700 font-bold mb-1">Custom Identifier Key *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. partner-logo-1 or newsletter-2026-q1"
+                      value={formData.key === "custom" ? "" : formData.key}
+                      onChange={(e) => setFormData({ ...formData, key: e.target.value.toLowerCase().replace(/\s+/g, "-") })}
+                      className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-mono focus:border-orange-500 outline-none"
+                    />
+                  </div>
+                )}
+
+                {/* Title */}
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1">Title / Caption *</label>
                   <input
                     type="text"
                     required
-                    placeholder="e.g. partner-logo-1 or newsletter-2026-q1"
-                    value={formData.key === "custom" ? "" : formData.key}
-                    onChange={(e) => setFormData({ ...formData, key: e.target.value.toLowerCase().replace(/\s+/g, "-") })}
-                    className="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white text-xs font-mono focus:border-emerald-500 outline-none"
+                    placeholder="e.g. Primary School Digital Learning Center"
+                    value={formData.title}
+                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs focus:border-orange-500 outline-none"
                   />
                 </div>
-              )}
 
-              {/* Title */}
-              <div>
-                <label className="block text-slate-300 font-bold mb-1">Title / Caption *</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Primary School Digital Learning Center"
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white text-xs focus:border-emerald-500 outline-none"
-                />
-              </div>
-
-              {/* Video URL (if video selected) */}
-              {formData.mediaType === "video" && (
-                <div>
-                  <label className="block text-slate-300 font-bold mb-1">Video Stream / Embed URL (YouTube or MP4) *</label>
-                  <input
-                    type="url"
-                    required={!selectedFile}
-                    placeholder="https://www.youtube.com/watch?v=... or https://.../video.mp4"
-                    value={formData.videoUrl}
-                    onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
-                    className="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white text-xs focus:border-emerald-500 outline-none"
-                  />
-                </div>
-              )}
-
-              {/* Dual Input Mode: Direct File Upload vs Paste Link */}
-              <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <label className="block text-slate-300 font-bold">
-                    {formData.mediaType === "video"
-                      ? "Video Thumbnail Poster Image"
-                      : formData.mediaType === "document"
-                      ? "PDF / Document File *"
-                      : "Image Asset *"}
-                  </label>
-                  <div className="flex items-center gap-1 bg-slate-950 p-0.5 rounded-lg border border-slate-800">
-                    <button
-                      type="button"
-                      onClick={() => setInputMode("file")}
-                      className={`px-2.5 py-1 rounded text-[10px] font-bold flex items-center gap-1 transition ${
-                        inputMode === "file" ? "bg-emerald-600 text-white" : "text-slate-400 hover:text-white"
-                      }`}
-                    >
-                      <Upload className="w-3 h-3" />
-                      <span>Upload File</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setInputMode("url")}
-                      className={`px-2.5 py-1 rounded text-[10px] font-bold flex items-center gap-1 transition ${
-                        inputMode === "url" ? "bg-emerald-600 text-white" : "text-slate-400 hover:text-white"
-                      }`}
-                    >
-                      <LinkIcon className="w-3 h-3" />
-                      <span>Paste URL</span>
-                    </button>
-                  </div>
-                </div>
-
-                {inputMode === "file" ? (
-                  <div className="relative border-2 border-dashed border-slate-700 hover:border-emerald-500 rounded-2xl p-4 bg-slate-950 text-center transition group cursor-pointer">
-                    <input
-                      type="file"
-                      accept={
-                        formData.mediaType === "document"
-                          ? ".pdf,.doc,.docx"
-                          : formData.mediaType === "video"
-                          ? "video/*,image/*"
-                          : "image/*"
-                      }
-                      onChange={handleFileChange}
-                      className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10"
-                    />
-
-                    {selectedFile ? (
-                      <div className="flex items-center justify-between gap-3 text-left">
-                        <div className="flex items-center gap-3">
-                          {filePreview ? (
-                            <img src={filePreview} alt="Preview" className="w-14 h-14 object-cover rounded-xl border border-slate-800" />
-                          ) : (
-                            <div className="w-14 h-14 rounded-xl bg-slate-800 flex items-center justify-center text-emerald-400">
-                              <CheckCircle2 className="w-6 h-6" />
-                            </div>
-                          )}
-                          <div>
-                            <p className="text-white font-bold text-xs truncate max-w-[220px]">{selectedFile.name}</p>
-                            <p className="text-[10px] text-slate-400">{(selectedFile.size / (1024 * 1024)).toFixed(2)} MB • Ready to auto-configure</p>
-                            <span className="text-[10px] text-emerald-400 font-semibold">Click to change file</span>
-                          </div>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedFile(null);
-                            setFilePreview(null);
-                          }}
-                          className="p-1 text-slate-400 hover:text-red-400 rounded-lg z-20 cursor-pointer"
-                        >
-                          <X className="w-4 h-4" />
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="py-3 flex flex-col items-center justify-center gap-1.5">
-                        <div className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-emerald-400 group-hover:scale-110 transition">
-                          <Upload className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <p className="text-xs font-bold text-slate-200">
-                            Choose or drag &amp; drop file from device
-                          </p>
-                          <p className="text-[10px] text-slate-500">
-                            System auto-uploads and binds the live URL automatically
-                          </p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ) : (
+                {/* Video URL (if video selected) */}
+                {formData.mediaType === "video" && (
                   <div>
+                    <label className="block text-slate-700 font-bold mb-1">Video Stream / Embed URL (YouTube or MP4) *</label>
                     <input
                       type="url"
-                      placeholder={
-                        formData.mediaType === "document"
-                          ? "https://.../annual_report_2024.pdf"
-                          : "https://images.unsplash.com/... or Cloudinary URL"
-                      }
-                      value={formData.url}
-                      onChange={(e) => setFormData({ ...formData, url: e.target.value })}
-                      className="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white text-xs focus:border-emerald-500 outline-none"
+                      required={!selectedFile}
+                      placeholder="https://www.youtube.com/watch?v=... or https://.../video.mp4"
+                      value={formData.videoUrl}
+                      onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+                      className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs focus:border-orange-500 outline-none"
                     />
-
-                    {formData.url && formData.mediaType !== "document" && (
-                      <div className="mt-2.5 p-2 rounded-xl bg-slate-950 border border-slate-800 flex items-center gap-3">
-                        <img
-                          src={formData.url}
-                          alt="Preview"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1594708767771-a7502209ff51?auto=format&fit=crop&w=400&q=80";
-                          }}
-                          className="w-16 h-12 object-cover rounded-lg border border-slate-800"
-                        />
-                        <div className="text-[11px] text-slate-400">
-                          <p className="text-white font-bold flex items-center gap-1">
-                            <Eye className="w-3 h-3 text-emerald-400" />
-                            <span>Live Web Preview</span>
-                          </p>
-                          <p className="text-[10px] text-slate-500">Asset will bind to "{formData.key}" on the live website</p>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 )}
-              </div>
 
-              {/* Location & Year */}
-              <div className="grid grid-cols-2 gap-3">
+                {/* Dual Input Mode: Direct File Upload vs Paste Link */}
                 <div>
-                  <label className="block text-slate-300 font-bold mb-1">Field Location</label>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="block text-slate-700 font-bold">
+                      {formData.mediaType === "video"
+                        ? "Video Thumbnail Poster Image"
+                        : formData.mediaType === "document"
+                        ? "PDF / Document File *"
+                        : "Image Asset *"}
+                    </label>
+                    <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+                      <button
+                        type="button"
+                        onClick={() => setInputMode("file")}
+                        className={`px-2.5 py-1 rounded text-[10px] font-bold flex items-center gap-1 transition ${
+                          inputMode === "file" ? "bg-orange-500 text-white shadow-xs" : "text-slate-600 hover:text-slate-900"
+                        }`}
+                      >
+                        <Upload className="w-3 h-3" />
+                        <span>Upload File</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setInputMode("url")}
+                        className={`px-2.5 py-1 rounded text-[10px] font-bold flex items-center gap-1 transition ${
+                          inputMode === "url" ? "bg-orange-500 text-white shadow-xs" : "text-slate-600 hover:text-slate-900"
+                        }`}
+                      >
+                        <LinkIcon className="w-3 h-3" />
+                        <span>Paste URL</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {inputMode === "file" ? (
+                    <div className="relative border-2 border-dashed border-slate-300 hover:border-orange-500 rounded-2xl p-4 bg-slate-50/70 hover:bg-orange-50/20 text-center transition group cursor-pointer">
+                      <input
+                        type="file"
+                        accept={
+                          formData.mediaType === "document"
+                            ? ".pdf,.doc,.docx"
+                            : formData.mediaType === "video"
+                            ? "video/*,image/*"
+                            : "image/*"
+                        }
+                        onChange={handleFileChange}
+                        className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10"
+                      />
+
+                      {selectedFile ? (
+                        <div className="flex items-center justify-between gap-3 text-left">
+                          <div className="flex items-center gap-3">
+                            {filePreview ? (
+                              <img src={filePreview} alt="Preview" className="w-14 h-14 object-cover rounded-xl border border-slate-200" />
+                            ) : (
+                              <div className="w-14 h-14 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600">
+                                <CheckCircle2 className="w-6 h-6" />
+                              </div>
+                            )}
+                            <div>
+                              <p className="text-slate-900 font-bold text-xs truncate max-w-[220px]">{selectedFile.name}</p>
+                              <p className="text-[10px] text-slate-500">{(selectedFile.size / (1024 * 1024)).toFixed(2)} MB • Ready to auto-configure</p>
+                              <span className="text-[10px] text-orange-600 font-semibold">Click to change file</span>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedFile(null);
+                              setFilePreview(null);
+                            }}
+                            className="p-1 text-slate-400 hover:text-red-500 rounded-lg z-20 cursor-pointer"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="py-3 flex flex-col items-center justify-center gap-1.5">
+                          <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 shadow-2xs flex items-center justify-center text-slate-400 group-hover:text-orange-500 group-hover:scale-110 transition">
+                            <Upload className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <p className="text-xs font-bold text-slate-800">
+                              Choose or drag &amp; drop file from device
+                            </p>
+                            <p className="text-[10px] text-slate-500">
+                              System auto-uploads and binds the live URL automatically
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div>
+                      <input
+                        type="url"
+                        placeholder={
+                          formData.mediaType === "document"
+                            ? "https://.../annual_report_2024.pdf"
+                            : "https://images.unsplash.com/... or Cloudinary URL"
+                        }
+                        value={formData.url}
+                        onChange={(e) => setFormData({ ...formData, url: e.target.value })}
+                        className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs focus:border-orange-500 outline-none"
+                      />
+
+                      {formData.url && formData.mediaType !== "document" && (
+                        <div className="mt-2.5 p-2 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-3">
+                          <img
+                            src={formData.url}
+                            alt="Preview"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1594708767771-a7502209ff51?auto=format&fit=crop&w=400&q=80";
+                            }}
+                            className="w-16 h-12 object-cover rounded-lg border border-slate-200"
+                          />
+                          <div className="text-[11px] text-slate-600">
+                            <p className="text-slate-900 font-bold flex items-center gap-1">
+                              <Eye className="w-3 h-3 text-orange-600" />
+                              <span>Live Web Preview</span>
+                            </p>
+                            <p className="text-[10px] text-slate-500">Asset will bind to "{formData.key}" on the live website</p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Location & Year */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-slate-700 font-bold mb-1">Field Location</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Darbhanga, Bihar"
+                      value={formData.location}
+                      onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                      className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs focus:border-orange-500 outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-700 font-bold mb-1">Year / Date</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Oct 2026"
+                      value={formData.date}
+                      onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                      className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs focus:border-orange-500 outline-none"
+                    />
+                  </div>
+                </div>
+
+                {/* Tags */}
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1">Category Tags (comma-separated)</label>
                   <input
                     type="text"
-                    placeholder="e.g. Darbhanga, Bihar"
-                    value={formData.location}
-                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                    className="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white text-xs focus:border-emerald-500 outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-slate-300 font-bold mb-1">Year / Date</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Oct 2026"
-                    value={formData.date}
-                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    className="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white text-xs focus:border-emerald-500 outline-none"
+                    placeholder="e.g. Education, Field Work, Healthcare, Video"
+                    value={formData.tags}
+                    onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs focus:border-orange-500 outline-none"
                   />
                 </div>
               </div>
 
-              {/* Tags */}
-              <div>
-                <label className="block text-slate-300 font-bold mb-1">Category Tags (comma-separated)</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Education, Field Work, Healthcare, Video"
-                  value={formData.tags}
-                  onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-                  className="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white text-xs focus:border-emerald-500 outline-none"
-                />
-              </div>
-
-              {/* Submit Buttons */}
-              <div className="pt-4 border-t border-slate-800 flex justify-end gap-3">
+              {/* Sticky Submit Footer */}
+              <div className="p-4 sm:p-5 border-t border-slate-200 bg-slate-50/80 flex items-center justify-end gap-3 shrink-0">
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold border border-slate-200 transition cursor-pointer shadow-2xs"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="px-5 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer disabled:opacity-50 shadow-xs"
                 >
                   {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
                   <span>Save &amp; Update Live Site</span>
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ── Create New Gallery Album Modal ── */}
+      {newAlbumModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-md w-full shadow-2xl my-auto max-h-[calc(100vh-2rem)] sm:max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between p-5 pb-4 border-b border-slate-200 shrink-0">
+              <h3 className="text-base font-extrabold text-[#071527] flex items-center gap-2">
+                <Layers className="w-5 h-5 text-orange-500" />
+                <span>Create New Gallery Album / Section</span>
+              </h3>
+              <button
+                onClick={() => setNewAlbumModalOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateAlbum} className="flex flex-col flex-1 overflow-hidden min-h-0">
+              <div className="p-5 overflow-y-auto flex-1 space-y-4 text-xs overscroll-contain">
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1">Album / Event Title *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Free Eye Care Camp or Flood Relief 2026"
+                    value={newAlbumData.title}
+                    onChange={(e) => setNewAlbumData({ ...newAlbumData, title: e.target.value })}
+                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs focus:border-orange-500 outline-none"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-slate-700 font-bold mb-1">Location</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Bathiya Village"
+                      value={newAlbumData.location}
+                      onChange={(e) => setNewAlbumData({ ...newAlbumData, location: e.target.value })}
+                      className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs focus:border-orange-500 outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-700 font-bold mb-1">Date / Year</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Nov 2026"
+                      value={newAlbumData.date}
+                      onChange={(e) => setNewAlbumData({ ...newAlbumData, date: e.target.value })}
+                      className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs focus:border-orange-500 outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1">Album Cover Photo *</label>
+                  <div className="border-2 border-dashed border-slate-300 hover:border-orange-500 rounded-2xl p-4 bg-slate-50/70 text-center transition cursor-pointer">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        if (e.target.files?.[0]) setNewAlbumCoverFile(e.target.files[0]);
+                      }}
+                      className="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-orange-500 file:text-white hover:file:bg-orange-600 cursor-pointer"
+                    />
+                    <p className="text-[11px] text-slate-400 mt-2">Or paste an image web URL below:</p>
+                    <input
+                      type="url"
+                      placeholder="https://..."
+                      value={newAlbumCoverUrl}
+                      onChange={(e) => setNewAlbumCoverUrl(e.target.value)}
+                      className="w-full mt-2 p-2 bg-white border border-slate-200 rounded-lg text-slate-900 text-xs focus:border-orange-500 outline-none"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-4 border-t border-slate-200 bg-slate-50/80 flex items-center justify-end gap-3 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setNewAlbumModalOpen(false)}
+                  className="px-4 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold border border-slate-200 transition cursor-pointer shadow-2xs"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="px-5 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer disabled:opacity-50 shadow-xs"
+                >
+                  {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                  <span>Create Album</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ── Manage Album Photos & Videos Modal ── */}
+      {albumManageModalOpen && selectedAlbum && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-3xl w-full p-6 shadow-2xl my-auto max-h-[calc(100vh-2rem)] sm:max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between pb-4 border-b border-slate-200 shrink-0">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-orange-600 block">Album Photo Manager</span>
+                <h3 className="text-lg font-black text-[#071527]">{selectedAlbum.albumTitle}</h3>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  {selectedAlbum.items?.length || selectedAlbum.count || 0} items in this event section
+                </p>
+              </div>
+              <button
+                onClick={() => setAlbumManageModalOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="overflow-y-auto space-y-6 py-4 flex-1 pr-1 overscroll-contain">
+              {/* Upload to Album Card */}
+              <div className="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/90 shadow-2xs">
+                <h4 className="font-bold text-[#071527] text-xs mb-3 flex items-center gap-1.5">
+                  <Upload className="w-4 h-4 text-orange-500" />
+                  <span>Add New Photo or Video to this Album</span>
+                </h4>
+                <form onSubmit={handleUploadToAlbum} className="space-y-3 text-xs">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-slate-700 font-bold mb-1">Format</label>
+                      <select
+                        value={albumItemData.mediaType}
+                        onChange={(e) => setAlbumItemData({ ...albumItemData, mediaType: e.target.value as any })}
+                        className="w-full p-2 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs outline-none focus:border-orange-500"
+                      >
+                        <option value="photo">Photo / Image</option>
+                        <option value="video">Video (YouTube / Embed)</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-slate-700 font-bold mb-1">Title / Caption</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Youth Volunteers Distributing Kits"
+                        value={albumItemData.caption}
+                        onChange={(e) => setAlbumItemData({ ...albumItemData, caption: e.target.value })}
+                        className="w-full p-2 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs outline-none focus:border-orange-500"
+                      />
+                    </div>
+                  </div>
+
+                  {albumItemData.mediaType === "photo" ? (
+                    <div>
+                      <label className="block text-slate-700 font-bold mb-1">Upload Photo File or Paste URL</label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          if (e.target.files?.[0]) setAlbumItemFile(e.target.files[0]);
+                        }}
+                        className="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-orange-500 file:text-white hover:file:bg-orange-600 cursor-pointer"
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <label className="block text-slate-700 font-bold mb-1">YouTube / Video URL</label>
+                      <input
+                        type="url"
+                        placeholder="https://www.youtube.com/embed/..."
+                        value={albumItemData.videoUrl}
+                        onChange={(e) => setAlbumItemData({ ...albumItemData, videoUrl: e.target.value })}
+                        className="w-full p-2 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs outline-none focus:border-orange-500"
+                      />
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between pt-2">
+                    <label className="flex items-center gap-2 cursor-pointer text-slate-700 font-medium">
+                      <input
+                        type="checkbox"
+                        checked={albumItemData.isCover}
+                        onChange={(e) => setAlbumItemData({ ...albumItemData, isCover: e.target.checked })}
+                        className="rounded border-slate-300 text-orange-500 focus:ring-orange-500"
+                      />
+                      <span>Set as Album Cover Photo</span>
+                    </label>
+
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer disabled:opacity-50 shadow-xs"
+                    >
+                      {submitting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
+                      <span>Upload &amp; Add</span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              {/* Photos Grid inside Album */}
+              <div>
+                <h4 className="font-bold text-[#071527] text-xs mb-3">All Photos &amp; Videos in this Album:</h4>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                  {(selectedAlbum.items || []).map((item: any, idx: number) => (
+                    <div key={item.key || idx} className="relative rounded-xl overflow-hidden bg-slate-100 border border-slate-200 group aspect-square">
+                      <img src={item.thumbnailUrl || item.url} alt={item.title} className="w-full h-full object-cover" />
+                      {item.isCover && (
+                        <div className="absolute top-1 left-1 bg-orange-500 text-white text-[9px] font-black px-1.5 py-0.5 rounded shadow">
+                          Cover
+                        </div>
+                      )}
+                      <button
+                        onClick={() => handleDeleteAlbumItem(item.key)}
+                        className="absolute bottom-1 right-1 p-1.5 rounded-lg bg-black/70 hover:bg-rose-600 text-white transition cursor-pointer opacity-0 group-hover:opacity-100"
+                        title="Delete this photo"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="pt-4 border-t border-slate-200 flex justify-end shrink-0">
+              <button
+                type="button"
+                onClick={() => setAlbumManageModalOpen(false)}
+                className="px-5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition cursor-pointer border border-slate-200"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}

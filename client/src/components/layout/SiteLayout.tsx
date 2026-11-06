@@ -36,6 +36,7 @@ import {
 } from "lucide-react";
 import { CONTACT_DETAILS } from "@/content/siteContent";
 import type { RoleType } from "@/components/forms/RoleFormModal";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 export { RoleFormModal } from "@/components/forms/RoleFormModal";
 export type { RoleType } from "@/components/forms/RoleFormModal";
@@ -563,6 +564,7 @@ export function Header() {
 export function Footer({ onOpenModal }: { onOpenModal?: (type: any) => void }) {
   const currentLang = useCurrentLanguage();
   const localizedAddress = getLocalizedAddress(currentLang);
+  const { socialLinks } = useSiteSettings();
   const quickLinks = [
     ["Home", "/"],
     ["About Us", "/about"],
@@ -668,11 +670,11 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: any) => void }) {
               <span className="block text-xs font-bold tracking-widest text-white uppercase mb-2">Follow Us</span>
               <div className="flex gap-2">
                 {[
-                  { Icon: Facebook, color: "bg-[#1877f2] hover:bg-[#166fe5]", href: "https://www.facebook.com/islahindia/", label: "Facebook" },
-                  { Icon: Instagram, color: "bg-gradient-to-tr from-[#f9cb2f] via-[#e5195f] to-[#8134af] hover:opacity-90", href: "https://www.instagram.com/islahindia/", label: "Instagram" },
-                  { Icon: Youtube, color: "bg-[#ff0000] hover:bg-[#e60000]", href: "https://www.youtube.com/channel/UC5sty9L25QQwC89JwGmEIVw/", label: "YouTube" },
-                  { Icon: Linkedin, color: "bg-[#0077b5] hover:bg-[#00669c]", href: "https://www.linkedin.com/in/islahindia/", label: "LinkedIn" },
-                  { Icon: Twitter, color: "bg-[#1da1f2] hover:bg-[#0d95e8]", href: "https://x.com/islahindia/", label: "Twitter / X" },
+                  { Icon: Facebook, color: "bg-[#1877f2] hover:bg-[#166fe5]", href: socialLinks.facebook || "https://www.facebook.com/islahindia/", label: "Facebook" },
+                  { Icon: Instagram, color: "bg-gradient-to-tr from-[#f9cb2f] via-[#e5195f] to-[#8134af] hover:opacity-90", href: socialLinks.instagram || "https://www.instagram.com/islahindia/", label: "Instagram" },
+                  { Icon: Youtube, color: "bg-[#ff0000] hover:bg-[#e60000]", href: socialLinks.youtube || "https://www.youtube.com/channel/UC5sty9L25QQwC89JwGmEIVw/", label: "YouTube" },
+                  { Icon: Linkedin, color: "bg-[#0077b5] hover:bg-[#00669c]", href: socialLinks.linkedin || "https://www.linkedin.com/in/islahindia/", label: "LinkedIn" },
+                  { Icon: Twitter, color: "bg-[#1da1f2] hover:bg-[#0d95e8]", href: socialLinks.twitter || "https://x.com/islahindia/", label: "Twitter / X" },
                 ].map((s, i) => (
                   <a key={i} href={s.href} target="_blank" rel="noopener noreferrer" className={`w-7 h-7 rounded-full ${s.color} flex items-center justify-center text-white transition-all duration-200 shadow-sm`} aria-label={s.label}>
                     <s.Icon className="w-3.5 h-3.5" />
@@ -705,14 +707,16 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: any) => void }) {
               <Building2 className="w-4 h-4 text-brand-orange" /> Get Involved
             </h4>
             <ul className="space-y-3">
-              {[
-                { label: "Volunteer With Us", href: "/volunteer" },
-                { label: "Partner With Us", href: "/partner" },
-                { label: "Sponsor a Programme", href: "/sponsor" },
-                { label: "Become a Mentor", href: "/mentor" },
-                { label: "Become a Member", href: "/membership" },
-                { label: "Careers & Opportunities", href: "/careers" },
-              ].map((item) => (
+              {(
+                [
+                  { label: "Volunteer With Us", href: "/volunteer" },
+                  { label: "Partner With Us", href: "/partner" },
+                  { label: "Sponsor a Programme", href: "/sponsor" },
+                  { label: "Become a Mentor", href: "/mentor" },
+                  { label: "Become a Member", href: "/membership" },
+                  { label: "Careers & Opportunities", href: "/careers" },
+                ] as Array<{ label: string; href?: string; type?: RoleType }>
+              ).map((item) => (
                 <li key={item.label}>
                   {item.href ? (
                     <a

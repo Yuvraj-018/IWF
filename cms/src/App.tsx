@@ -9,6 +9,7 @@ import PatientsManager from "./pages/PatientsManager";
 import MembersManager from "./pages/MembersManager";
 import ApplicationsManager from "./pages/ApplicationsManager";
 import SiteSettingsManager from "./pages/SiteSettingsManager";
+import LeadershipManager from "./pages/LeadershipManager";
 import { Toaster } from "sonner";
 import { Loader2 } from "lucide-react";
 
@@ -36,6 +37,7 @@ function ControlCenter() {
       {activeTab === "media" && <MediaManager />}
       {activeTab === "patients" && <PatientsManager />}
       {activeTab === "members" && <MembersManager />}
+      {activeTab === "leadership" && <LeadershipManager />}
       {activeTab === "applications" && <ApplicationsManager />}
       {activeTab === "settings" && <SiteSettingsManager />}
     </AdminLayout>

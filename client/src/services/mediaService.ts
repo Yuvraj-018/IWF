@@ -16,6 +16,36 @@ export interface MediaItem {
   location?: string;
   date?: string;
   tags?: string[];
+  albumId?: string;
+  albumTitle?: string;
+  isCover?: boolean;
+  order?: number;
+  subHeading?: string;
+  ctaLink?: string;
+}
+
+export interface GalleryAlbum {
+  albumId: string;
+  albumTitle: string;
+  coverUrl: string;
+  mediaType: "photo" | "video";
+  videoUrl?: string;
+  date?: string;
+  location?: string;
+  count: number;
+  items: MediaItem[];
+}
+
+export async function fetchGalleryAlbums(): Promise<GalleryAlbum[]> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/media/albums`);
+    if (!res.ok) throw new Error("Albums fetch failed");
+    const json = await res.json();
+    return json.data || [];
+  } catch (err) {
+    console.warn("Could not fetch gallery albums from backend CMS:", err);
+    return [];
+  }
 }
 
 interface MediaResponse {

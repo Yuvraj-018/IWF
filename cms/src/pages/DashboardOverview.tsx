@@ -9,6 +9,8 @@ import {
   TrendingUp,
   RefreshCw,
   Loader2,
+  Award,
+  Activity,
 } from "lucide-react";
 import { type NavTab } from "../components/layout/AdminLayout";
 
@@ -81,15 +83,15 @@ export default function DashboardOverview({ onNavigate }: { onNavigate: (tab: Na
     <div className="space-y-8 max-w-6xl">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-black text-white">System Pulse &amp; Metrics</h2>
-          <p className="text-xs text-slate-400 mt-1">Real-time statistics across MongoDB database collections</p>
+          <h2 className="text-xl font-black text-[#071527]">System Pulse &amp; Metrics</h2>
+          <p className="text-xs text-slate-500 mt-1">Real-time statistics across MongoDB database collections</p>
         </div>
         <button
           onClick={() => fetchStats(true)}
           disabled={loading}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition cursor-pointer disabled:opacity-50"
+          className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold border border-slate-200 transition cursor-pointer disabled:opacity-50 shadow-2xs"
         >
-          <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-emerald-400" : ""}`} />
+          <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-orange-500" : ""}`} />
           <span>Refresh Metrics</span>
         </button>
       </div>
@@ -102,20 +104,20 @@ export default function DashboardOverview({ onNavigate }: { onNavigate: (tab: Na
             <div
               key={kpi.title}
               onClick={() => onNavigate(kpi.tab)}
-              className="p-6 rounded-2xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition cursor-pointer flex flex-col justify-between group shadow-sm"
+              className="p-6 rounded-2xl bg-white border border-slate-200/90 hover:border-orange-300 transition cursor-pointer flex flex-col justify-between group shadow-2xs hover:shadow-md"
             >
               <div className="flex items-center justify-between mb-4">
-                <span className="text-xs font-bold text-slate-400">{kpi.title}</span>
+                <span className="text-xs font-bold text-slate-500">{kpi.title}</span>
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center border ${kpi.bg} ${kpi.color}`}>
                   <Icon className="w-5 h-5" />
                 </div>
               </div>
               <div>
-                <p className="text-3xl font-black text-white group-hover:text-emerald-400 transition">
-                  {loading ? <Loader2 className="w-6 h-6 animate-spin text-slate-500" /> : kpi.value}
+                <p className="text-3xl font-black text-[#071527] group-hover:text-orange-600 transition">
+                  {loading ? <Loader2 className="w-6 h-6 animate-spin text-slate-400" /> : kpi.value}
                 </p>
-                <div className="mt-2 flex items-center gap-1.5 text-[11px] text-slate-400">
-                  <TrendingUp className="w-3.5 h-3.5 text-emerald-500" />
+                <div className="mt-2 flex items-center gap-1.5 text-[11px] text-slate-500">
+                  <TrendingUp className="w-3.5 h-3.5 text-emerald-600" />
                   <span>Live in database</span>
                 </div>
               </div>
@@ -125,34 +127,52 @@ export default function DashboardOverview({ onNavigate }: { onNavigate: (tab: Na
       </div>
 
       {/* Quick Actions Shortcuts */}
-      <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800">
-        <h3 className="text-sm font-extrabold text-white mb-4">Quick Management Shortcuts</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="p-6 rounded-2xl bg-white border border-slate-200/90 shadow-2xs">
+        <h3 className="text-sm font-extrabold text-[#071527] mb-4">Quick Management Shortcuts</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <button
             onClick={() => onNavigate("news")}
-            className="p-4 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 text-left transition cursor-pointer"
+            className="p-4 rounded-xl bg-slate-50/80 hover:bg-orange-50/40 border border-slate-200/80 hover:border-orange-200 text-left transition cursor-pointer group"
           >
-            <Newspaper className="w-5 h-5 text-purple-400 mb-2" />
-            <h4 className="text-xs font-bold text-white">Publish News / Press Release</h4>
-            <p className="text-[11px] text-slate-400 mt-1">Post official announcements and field camp updates.</p>
+            <Newspaper className="w-5 h-5 text-purple-600 mb-2" />
+            <h4 className="text-xs font-bold text-[#071527] group-hover:text-orange-600 transition">Publish News / Press Release</h4>
+            <p className="text-[11px] text-slate-500 mt-1">Post official announcements and field camp updates.</p>
           </button>
 
           <button
             onClick={() => onNavigate("media")}
-            className="p-4 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 text-left transition cursor-pointer"
+            className="p-4 rounded-xl bg-slate-50/80 hover:bg-orange-50/40 border border-slate-200/80 hover:border-orange-200 text-left transition cursor-pointer group"
           >
-            <TrendingUp className="w-5 h-5 text-emerald-400 mb-2" />
-            <h4 className="text-xs font-bold text-white">Update Homepage Banners</h4>
-            <p className="text-[11px] text-slate-400 mt-1">Swap hero carousel slides or sector photos.</p>
+            <TrendingUp className="w-5 h-5 text-emerald-600 mb-2" />
+            <h4 className="text-xs font-bold text-[#071527] group-hover:text-orange-600 transition">Update Homepage Banners &amp; Gallery</h4>
+            <p className="text-[11px] text-slate-500 mt-1">Swap hero carousel slides, album photos &amp; sector covers.</p>
           </button>
 
           <button
             onClick={() => onNavigate("patients")}
-            className="p-4 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 text-left transition cursor-pointer"
+            className="p-4 rounded-xl bg-slate-50/80 hover:bg-orange-50/40 border border-slate-200/80 hover:border-orange-200 text-left transition cursor-pointer group"
           >
-            <HeartPulse className="w-5 h-5 text-rose-400 mb-2" />
-            <h4 className="text-xs font-bold text-white">Add Emergency Medical Appeal</h4>
-            <p className="text-[11px] text-slate-400 mt-1">Launch emergency funding for a critical surgery.</p>
+            <HeartPulse className="w-5 h-5 text-rose-600 mb-2" />
+            <h4 className="text-xs font-bold text-[#071527] group-hover:text-orange-600 transition">Add Emergency Medical Appeal</h4>
+            <p className="text-[11px] text-slate-500 mt-1">Launch emergency funding for a critical surgery.</p>
+          </button>
+
+          <button
+            onClick={() => onNavigate("leadership")}
+            className="p-4 rounded-xl bg-slate-50/80 hover:bg-orange-50/40 border border-slate-200/80 hover:border-orange-200 text-left transition cursor-pointer group"
+          >
+            <Award className="w-5 h-5 text-amber-600 mb-2" />
+            <h4 className="text-xs font-bold text-[#071527] group-hover:text-orange-600 transition">Manage Board &amp; Leadership</h4>
+            <p className="text-[11px] text-slate-500 mt-1">Add, update, or remove leadership and advisory board members.</p>
+          </button>
+
+          <button
+            onClick={() => onNavigate("settings")}
+            className="p-4 rounded-xl bg-slate-50/80 hover:bg-orange-50/40 border border-slate-200/80 hover:border-orange-200 text-left transition cursor-pointer group"
+          >
+            <Activity className="w-5 h-5 text-blue-600 mb-2" />
+            <h4 className="text-xs font-bold text-[#071527] group-hover:text-orange-600 transition">Site Stats, Social &amp; Reports</h4>
+            <p className="text-[11px] text-slate-500 mt-1">Update media metrics, outcomes counters, and statutory PDFs.</p>
           </button>
         </div>
       </div>

@@ -13,6 +13,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { MEMBERS_DATA, MemberCategory, MemberItem } from "../communityData";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { ProfileDetailModal } from "./ProfileDetailModal";
 import { Link } from "@tanstack/react-router";
 import type { RoleType } from "@/components/forms/RoleFormModal";
@@ -50,6 +51,11 @@ export function MembersDirectoryTab({
   onSwitchTab,
   onOpenRoleModal,
 }: MembersDirectoryTabProps) {
+  const { settings } = useSiteSettings();
+  const allMembers = (settings?.community_directory?.members && settings.community_directory.members.length > 0)
+    ? (settings.community_directory.members as unknown as MemberItem[])
+    : MEMBERS_DATA;
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedType, setSelectedType] = useState<string>("All");
@@ -87,14 +93,14 @@ export function MembersDirectoryTab({
   // Unique locations from data
   const locations = useMemo(() => {
     const locs = Array.from(
-      new Set(MEMBERS_DATA.map((m) => `${m.district}, ${m.state}`))
+      new Set(allMembers.map((m) => `${m.district}, ${m.state}`))
     );
     return ["All Locations", ...locs];
-  }, []);
+  }, [allMembers]);
 
   // Filter & Sort logic
   const filteredMembers = useMemo(() => {
-    let result = [...MEMBERS_DATA];
+    let result = [...allMembers];
 
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
@@ -672,7 +678,7 @@ export function MembersDirectoryTab({
       {/* Profile Detail Modal */}
       {selectedMember && (
         <ProfileDetailModal
-          item={{
+          profile={{
             type: "member",
             data: selectedMember,
           }}

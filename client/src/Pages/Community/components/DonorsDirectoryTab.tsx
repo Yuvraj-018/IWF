@@ -14,6 +14,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { DONORS_DATA, DonorTier, DonorItem } from "../communityData";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { ProfileDetailModal } from "./ProfileDetailModal";
 import type { RoleType } from "@/components/forms/RoleFormModal";
 import type { CommunityTab } from "./CommunitySelectiveBar";
@@ -32,6 +33,11 @@ export function DonorsDirectoryTab({
   onSwitchTab,
   onOpenRoleModal,
 }: DonorsDirectoryTabProps) {
+  const { settings } = useSiteSettings();
+  const allDonors = (settings?.community_directory?.donors && settings.community_directory.donors.length > 0)
+    ? (settings.community_directory.donors as unknown as DonorItem[])
+    : DONORS_DATA;
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTier, setSelectedTier] = useState<string>("All");
   const [selectedYear, setSelectedYear] = useState<string>("All");
@@ -42,15 +48,15 @@ export function DonorsDirectoryTab({
 
   const years = useMemo(() => {
     const yrs = Array.from(
-      new Set(DONORS_DATA.map((d) => d.sinceYear.toString()))
+      new Set(allDonors.map((d) => d.sinceYear.toString()))
     )
       .sort()
       .reverse();
     return ["All", ...yrs];
-  }, []);
+  }, [allDonors]);
 
   const filteredDonors = useMemo(() => {
-    let result = [...DONORS_DATA];
+    let result = [...allDonors];
 
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
@@ -524,7 +530,7 @@ export function DonorsDirectoryTab({
       {/* Profile Detail Modal */}
       {selectedDonor && (
         <ProfileDetailModal
-          item={{
+          profile={{
             type: "donor",
             data: selectedDonor,
           }}

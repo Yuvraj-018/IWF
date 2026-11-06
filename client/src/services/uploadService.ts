@@ -27,11 +27,15 @@ export interface MultipleUploadResponse {
  */
 export async function uploadSingleFile(
   file: File,
-  folder = "islah/general"
+  folder = "islah/general",
+  isPrivate = false
 ): Promise<UploadedFileResult> {
   const formData = new FormData();
   formData.append("file", file);
   formData.append("folder", folder);
+  if (isPrivate) {
+    formData.append("isPrivate", "true");
+  }
 
   const res = await apiRequest<SingleUploadResponse>("/upload/single", {
     method: "POST",
@@ -46,17 +50,21 @@ export async function uploadSingleFile(
 }
 
 /**
- * Upload multiple files to Cloudinary via backend (max 10)
+ * Upload multiple files to Cloudflare R2 / Cloudinary via backend (max 10)
  */
 export async function uploadMultipleFiles(
   files: File[],
-  folder = "islah/general"
+  folder = "islah/general",
+  isPrivate = false
 ): Promise<UploadedFileResult[]> {
   const formData = new FormData();
   for (const file of files) {
     formData.append("files", file);
   }
   formData.append("folder", folder);
+  if (isPrivate) {
+    formData.append("isPrivate", "true");
+  }
 
   const res = await apiRequest<MultipleUploadResponse>("/upload/multiple", {
     method: "POST",

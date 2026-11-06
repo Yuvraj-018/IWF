@@ -13,7 +13,7 @@ interface AuthContextType {
   token: string | null;
   isAuthenticated: boolean;
   loading: boolean;
-  login: (email: string, password: string) => Promise<{ success: boolean; message?: string }>;
+  login: (email: string, password: string, turnstileToken?: string) => Promise<{ success: boolean; message?: string }>;
   logout: () => void;
 }
 
@@ -50,9 +50,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     checkAuth();
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string, turnstileToken?: string) => {
     try {
-      const res = await api.login(email, password);
+      const res = await api.login(email, password, turnstileToken);
       if (res.success && res.token) {
         localStorage.setItem("islah_admin_token", res.token);
         setToken(res.token);

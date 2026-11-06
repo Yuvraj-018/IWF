@@ -8,10 +8,31 @@ import { VideoModal } from "@/components/media/MediaLightboxModals";
 import { MediaLayout } from "@/components/media/MediaLayout";
 import { MEDIA_HUB_DATA, SUCCESS_STORIES_DATA } from "@/content/mediaContent";
 import type { SuccessStoryItem } from "@/content/mediaContent";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { useMedia } from "@/services/mediaService";
 
 export function MediaHubPage() {
+  const { mediaHubStats } = useSiteSettings();
+  const { getMedia } = useMedia();
   const [activeStory, setActiveStory] = useState<SuccessStoryItem | null>(null);
   const [videoOpen, setVideoOpen] = useState(false);
+
+  const sectionSlotKeys: Record<string, string> = {
+    "Outcomes & Impact": "media-section-outcomes",
+    "Success Stories": "media-section-stories",
+    "News & Events": "media-section-news",
+    "Annual Reports": "media-section-reports",
+    "Publications & Research": "media-section-publications",
+    "Photo & Video Gallery": "media-section-gallery",
+  };
+
+  const statsRibbon = [
+    { value: mediaHubStats?.fieldEvents || "120+", label: "Field Events", desc: "Organized across 15+ rural districts" },
+    { value: mediaHubStats?.newsBulletins || "250+", label: "News & Bulletins", desc: "Verified dispatches & media coverage" },
+    { value: mediaHubStats?.livesReached || "50,000+", label: "Lives Reached", desc: "Direct beneficiary impact to date" },
+    { value: mediaHubStats?.publications || "18+", label: "Publications", desc: "Research briefs & whitepapers" },
+    { value: mediaHubStats?.visualStories || "500+", label: "Visual Stories", desc: "Archived field documentation" },
+  ];
 
   const handleOpenLatest = (title: string) => {
     const matched = SUCCESS_STORIES_DATA.stories.find((s) =>
@@ -30,7 +51,7 @@ export function MediaHubPage() {
         title={MEDIA_HUB_DATA.hero.title}
         description={MEDIA_HUB_DATA.hero.description}
         breadcrumb={[{ label: "Media & Updates" }]}
-        image={MEDIA_HUB_DATA.hero.image}
+        image={getMedia("media-hero", MEDIA_HUB_DATA.hero.image)}
         imageAlt="Islah Media Hub"
         actions={
           <div className="flex flex-wrap gap-2.5">
@@ -80,7 +101,7 @@ export function MediaHubPage() {
         {/* 2. Top Stats Ribbon (5 Cards) */}
         <section aria-label="Media Reach Metrics">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-            {MEDIA_HUB_DATA.statsRibbon.map((stat, idx) => (
+            {statsRibbon.map((stat, idx) => (
               <div
                 key={idx}
                 className="bg-white rounded-2xl p-5 text-center shadow-sm border border-slate-200 hover:shadow-md transition group"
@@ -115,7 +136,7 @@ export function MediaHubPage() {
               >
                 <div className="relative h-48 w-full overflow-hidden bg-slate-100">
                   <img
-                    src={sec.image}
+                    src={getMedia(sectionSlotKeys[sec.title] || "", sec.image)}
                     alt={sec.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                   />

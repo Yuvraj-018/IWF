@@ -296,29 +296,37 @@ const INITIAL_NEWS_EVENTS = [
   },
 ];
 
+export async function seedInitialNews(): Promise<void> {
+  try {
+    for (const item of INITIAL_NEWS_EVENTS) {
+      await NewsEvent.findOneAndUpdate(
+        { slug: item.slug },
+        { $set: item },
+        { upsert: true, new: true, setDefaultsOnInsert: true }
+      );
+    }
+    console.log(`[Database Seed] Synchronized ${INITIAL_NEWS_EVENTS.length} News & Events entries into MongoDB.`);
+  } catch (err) {
+    console.error("[Database Seed] Error seeding news:", err);
+  }
+}
+
 async function seed() {
   const uri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/islah_welfare";
   console.log(`Connecting to MongoDB at ${uri}...`);
   await mongoose.connect(uri);
 
-  console.log("Upserting initial News & Events records...");
-  let inserted = 0;
-  for (const item of INITIAL_NEWS_EVENTS) {
-    await NewsEvent.findOneAndUpdate(
-      { slug: item.slug },
-      { $set: item },
-      { upsert: true, new: true }
-    );
-    inserted++;
-  }
+  await seedInitialNews();
 
-  console.log(`Successfully seeded ${inserted} News & Events entries into MongoDB!`);
   await mongoose.disconnect();
   console.log("Database disconnected.");
 }
 
-seed().catch((err) => {
-  console.error("Seed error:", err);
-  process.exit(1);
-});
+// Only auto-run if executed directly via CLI
+if (process.argv[1]?.includes("seedNews")) {
+  seed().catch((err) => {
+    console.error("Seed error:", err);
+    process.exit(1);
+  });
+}
 
