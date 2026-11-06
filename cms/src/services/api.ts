@@ -351,4 +351,251 @@ export const api = {
     }
     return resData;
   },
+
+  // ── Careers & Job Openings ──
+  async listCareers(params: { page?: number; limit?: number; all?: boolean; status?: string } = {}, options?: CacheOptions) {
+    const query = new URLSearchParams();
+    if (params.page) query.set("page", String(params.page));
+    if (params.limit) query.set("limit", String(params.limit));
+    if (params.all) query.set("all", "true");
+    if (params.status) query.set("status", params.status);
+
+    const q = query.toString() ? `?${query.toString()}` : "";
+    const cacheKey = `careers_${q}`;
+
+    if (!options?.force) {
+      const cached = apiCache.get(cacheKey);
+      if (cached) return cached;
+    }
+
+    const res = await fetch(`${API_BASE_URL}/careers${q}`, { headers: getHeaders() });
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.set(cacheKey, data, 3 * 60 * 1000, "careers");
+    }
+    return data;
+  },
+
+  async createCareer(body: Record<string, any>) {
+    const res = await fetch(`${API_BASE_URL}/careers`, {
+      method: "POST",
+      headers: getHeaders(),
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.invalidateTag("careers");
+    }
+    return data;
+  },
+
+  async updateCareer(id: string, body: Record<string, any>) {
+    const res = await fetch(`${API_BASE_URL}/careers/${id}`, {
+      method: "PUT",
+      headers: getHeaders(),
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.invalidateTag("careers");
+    }
+    return data;
+  },
+
+  async deleteCareer(id: string) {
+    const res = await fetch(`${API_BASE_URL}/careers/${id}`, {
+      method: "DELETE",
+      headers: getHeaders(),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.invalidateTag("careers");
+    }
+    return data;
+  },
+
+  // ── Publications & Research ──
+  async listPublications(params: { page?: number; limit?: number; type?: string; search?: string } = {}, options?: CacheOptions) {
+    const query = new URLSearchParams();
+    if (params.page) query.set("page", String(params.page));
+    if (params.limit) query.set("limit", String(params.limit));
+    if (params.type) query.set("type", params.type);
+    if (params.search) query.set("search", params.search);
+
+    const q = query.toString() ? `?${query.toString()}` : "";
+    const cacheKey = `publications_${q}`;
+
+    if (!options?.force) {
+      const cached = apiCache.get(cacheKey);
+      if (cached) return cached;
+    }
+
+    const res = await fetch(`${API_BASE_URL}/publications${q}`, { headers: getHeaders() });
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.set(cacheKey, data, 3 * 60 * 1000, "publications");
+    }
+    return data;
+  },
+
+  async createPublication(body: Record<string, any>) {
+    const res = await fetch(`${API_BASE_URL}/publications`, {
+      method: "POST",
+      headers: getHeaders(),
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.invalidateTag("publications");
+    }
+    return data;
+  },
+
+  async updatePublication(id: string, body: Record<string, any>) {
+    const res = await fetch(`${API_BASE_URL}/publications/${id}`, {
+      method: "PUT",
+      headers: getHeaders(),
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.invalidateTag("publications");
+    }
+    return data;
+  },
+
+  async deletePublication(id: string) {
+    const res = await fetch(`${API_BASE_URL}/publications/${id}`, {
+      method: "DELETE",
+      headers: getHeaders(),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.invalidateTag("publications");
+    }
+    return data;
+  },
+
+  // ── Success Stories ──
+  async listStories(params: { page?: number; limit?: number; category?: string; search?: string } = {}, options?: CacheOptions) {
+    const query = new URLSearchParams();
+    if (params.page) query.set("page", String(params.page));
+    if (params.limit) query.set("limit", String(params.limit));
+    if (params.category) query.set("category", params.category);
+    if (params.search) query.set("search", params.search);
+
+    const q = query.toString() ? `?${query.toString()}` : "";
+    const cacheKey = `stories_${q}`;
+
+    if (!options?.force) {
+      const cached = apiCache.get(cacheKey);
+      if (cached) return cached;
+    }
+
+    const res = await fetch(`${API_BASE_URL}/stories${q}`, { headers: getHeaders() });
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.set(cacheKey, data, 3 * 60 * 1000, "stories");
+    }
+    return data;
+  },
+
+  async createStory(body: Record<string, any>) {
+    const res = await fetch(`${API_BASE_URL}/stories`, {
+      method: "POST",
+      headers: getHeaders(),
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.invalidateTag("stories");
+    }
+    return data;
+  },
+
+  async updateStory(id: string, body: Record<string, any>) {
+    const res = await fetch(`${API_BASE_URL}/stories/${id}`, {
+      method: "PUT",
+      headers: getHeaders(),
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.invalidateTag("stories");
+    }
+    return data;
+  },
+
+  async deleteStory(id: string) {
+    const res = await fetch(`${API_BASE_URL}/stories/${id}`, {
+      method: "DELETE",
+      headers: getHeaders(),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.invalidateTag("stories");
+    }
+    return data;
+  },
+
+  // ── Tax Exemption (80G) Claims / Inbound Donations ──
+  async listTaxExemptions(params: { page?: number; limit?: number; search?: string } = {}, options?: CacheOptions) {
+    const query = new URLSearchParams();
+    query.set("taxExemption", "true");
+    if (params.page) query.set("page", String(params.page));
+    if (params.limit) query.set("limit", String(params.limit || 20));
+    if (params.search) query.set("search", params.search);
+
+    const q = `?${query.toString()}`;
+    const cacheKey = `tax_exemptions_${q}`;
+
+    if (!options?.force) {
+      const cached = apiCache.get(cacheKey);
+      if (cached) return cached;
+    }
+
+    const res = await fetch(`${API_BASE_URL}/donations${q}`, { headers: getHeaders() });
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.set(cacheKey, data, 2 * 60 * 1000, "tax_exemptions");
+    }
+    return data;
+  },
+
+  // ── Inbound Contact Inquiries ──
+  async listContacts(params: { page?: number; limit?: number; status?: string; search?: string } = {}, options?: CacheOptions) {
+    const query = new URLSearchParams();
+    if (params.page) query.set("page", String(params.page));
+    if (params.limit) query.set("limit", String(params.limit || 20));
+    if (params.status) query.set("status", params.status);
+    if (params.search) query.set("search", params.search);
+
+    const q = query.toString() ? `?${query.toString()}` : "";
+    const cacheKey = `contacts_${q}`;
+
+    if (!options?.force) {
+      const cached = apiCache.get(cacheKey);
+      if (cached) return cached;
+    }
+
+    const res = await fetch(`${API_BASE_URL}/contact${q}`, { headers: getHeaders() });
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.set(cacheKey, data, 2 * 60 * 1000, "contacts");
+    }
+    return data;
+  },
+
+  async updateContactStatus(id: string, status: string) {
+    const res = await fetch(`${API_BASE_URL}/contact/${id}/status`, {
+      method: "PATCH",
+      headers: getHeaders(),
+      body: JSON.stringify({ status }),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.invalidateTag("contacts");
+    }
+    return data;
+  },
 };

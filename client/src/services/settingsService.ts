@@ -1,4 +1,5 @@
 import { apiRequest } from "./apiClient";
+import { clientCache } from "./cacheService";
 
 export interface SiteSettingsData {
   impact_stats?: {
@@ -247,27 +248,21 @@ export interface GetSettingsResponse {
   data: SiteSettingsData;
 }
 
-let cachedSettings: SiteSettingsData | null = null;
-let lastFetchTime = 0;
-const CACHE_TTL_MS = 60 * 1000; // 1 minute in-memory cache
-
 export async function fetchSiteSettings(forceRefresh = false): Promise<SiteSettingsData> {
-  const now = Date.now();
-  if (!forceRefresh && cachedSettings && now - lastFetchTime < CACHE_TTL_MS) {
-    return cachedSettings;
-  }
-
-  try {
-    const res = await apiRequest<GetSettingsResponse>("/settings");
-    if (res && res.success && res.data) {
-      cachedSettings = res.data;
-      lastFetchTime = now;
-      return cachedSettings;
-    }
-  } catch (err) {
-    console.warn("Failed to fetch dynamic site settings from backend, using defaults:", err);
-  }
-
-  return cachedSettings || {};
+  return clientCache.wrap<SiteSettingsData>(
+    "site_settings",
+    async () => {
+      try {
+        const res = await apiRequest<GetSettingsResponse>("/settings");
+        if (res && res.success && res.data) {
+          return res.data;
+        }
+      } catch (err) {
+        console.warn("Failed to fetch dynamic site settings from backend, using defaults:", err);
+      }
+      return {};
+    },
+    { ttlMs: 10 * 60 * 1000, forceRefresh, tag: "settings" }
+  );
 }
 

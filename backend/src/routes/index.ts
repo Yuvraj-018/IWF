@@ -12,6 +12,9 @@ import { mediaRouter } from "./mediaRoutes.js";
 import { newsRouter } from "./newsRoutes.js";
 import { authRouter } from "./authRoutes.js";
 import { settingsRouter } from "./settingsRoutes.js";
+import { careerRouter } from "./careerRoutes.js";
+import { publicationRouter } from "./publicationRoutes.js";
+import { storyRouter } from "./storyRoutes.js";
 import {
   createOrderController,
   verifyPaymentController,
@@ -56,6 +59,9 @@ apiRouter.use("/media", mediaRouter);
 apiRouter.use("/news", newsRouter);
 apiRouter.use("/auth", authRouter);
 apiRouter.use("/settings", settingsRouter);
+apiRouter.use("/careers", careerRouter);
+apiRouter.use("/publications", publicationRouter);
+apiRouter.use("/stories", storyRouter);
 
 // Razorpay Direct Route Aliases
 apiRouter.post("/create-order", orderRateLimiter, createOrderController);

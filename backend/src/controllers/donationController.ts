@@ -176,19 +176,41 @@ export async function getDonationByReceiptNo(req: Request, res: Response): Promi
 
 export async function listDonations(req: Request, res: Response): Promise<void> {
   try {
-    const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 20;
+    const page = Math.max(1, parseInt(req.query.page as string) || 1);
+    const limit = Math.max(1, parseInt(req.query.limit as string) || 20);
     const skip = (page - 1) * limit;
 
+    const filter: any = {};
+    if (req.query.taxExemption === "true") {
+      filter.taxExemption = true;
+    } else if (req.query.taxExemption === "false") {
+      filter.taxExemption = false;
+    }
+
+    if (req.query.paymentStatus) {
+      filter.paymentStatus = req.query.paymentStatus;
+    }
+
+    if (req.query.search) {
+      const q = String(req.query.search).trim();
+      filter.$or = [
+        { donorName: { $regex: q, $options: "i" } },
+        { email: { $regex: q, $options: "i" } },
+        { phone: { $regex: q, $options: "i" } },
+        { pan: { $regex: q, $options: "i" } },
+        { receiptNo: { $regex: q, $options: "i" } },
+      ];
+    }
+
     const [donations, total] = await Promise.all([
-      Donation.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
-      Donation.countDocuments(),
+      Donation.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
+      Donation.countDocuments(filter),
     ]);
 
     res.json({
       success: true,
       data: donations,
-      pagination: { total, page, limit, pages: Math.ceil(total / limit) },
+      pagination: { total, page, limit, pages: Math.ceil(total / limit) || 1 },
     });
   } catch (error) {
     console.error("listDonations error:", error);

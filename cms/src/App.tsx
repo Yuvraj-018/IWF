@@ -10,6 +10,9 @@ import MembersManager from "./pages/MembersManager";
 import ApplicationsManager from "./pages/ApplicationsManager";
 import SiteSettingsManager from "./pages/SiteSettingsManager";
 import LeadershipManager from "./pages/LeadershipManager";
+import CareersManager from "./pages/CareersManager";
+import PublicationsManager from "./pages/PublicationsManager";
+import StoriesManager from "./pages/StoriesManager";
 import { Toaster } from "sonner";
 import { Loader2 } from "lucide-react";
 
@@ -37,6 +40,9 @@ function ControlCenter() {
       {activeTab === "media" && <MediaManager />}
       {activeTab === "patients" && <PatientsManager />}
       {activeTab === "members" && <MembersManager />}
+      {activeTab === "careers" && <CareersManager />}
+      {activeTab === "publications" && <PublicationsManager />}
+      {activeTab === "stories" && <StoriesManager />}
       {activeTab === "leadership" && <LeadershipManager />}
       {activeTab === "applications" && <ApplicationsManager />}
       {activeTab === "settings" && <SiteSettingsManager />}

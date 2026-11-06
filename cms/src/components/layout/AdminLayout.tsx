@@ -12,9 +12,23 @@ import {
   ExternalLink,
   Activity,
   Award,
+  Briefcase,
+  BookOpen,
+  Sparkles,
 } from "lucide-react";
 
-export type NavTab = "overview" | "news" | "media" | "patients" | "members" | "applications" | "leadership" | "settings";
+export type NavTab =
+  | "overview"
+  | "news"
+  | "media"
+  | "patients"
+  | "members"
+  | "careers"
+  | "publications"
+  | "stories"
+  | "applications"
+  | "leadership"
+  | "settings";
 
 interface AdminLayoutProps {
   activeTab: NavTab;
@@ -31,8 +45,11 @@ export default function AdminLayout({ activeTab, onTabChange, children }: AdminL
     { id: "media" as NavTab, label: "Media & Banners", icon: ImageIcon },
     { id: "patients" as NavTab, label: "Critical Patients", icon: HeartPulse },
     { id: "members" as NavTab, label: "Community & Directory", icon: Users },
+    { id: "careers" as NavTab, label: "Careers & Jobs", icon: Briefcase },
+    { id: "publications" as NavTab, label: "Publications & Reports", icon: BookOpen },
+    { id: "stories" as NavTab, label: "Success Stories", icon: Sparkles },
     { id: "leadership" as NavTab, label: "Leadership & Board", icon: Award },
-    { id: "applications" as NavTab, label: "Applications & Resumes", icon: FileText },
+    { id: "applications" as NavTab, label: "Applications & Forms", icon: FileText },
     { id: "settings" as NavTab, label: "Site Stats, Social & Docs", icon: Activity },
   ];
 

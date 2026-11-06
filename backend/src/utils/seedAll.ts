@@ -5,6 +5,9 @@ import { seedInitialPatients } from "./seedPatients.js";
 import { seedInitialNews } from "./seedNews.js";
 import { seedInitialMedia } from "./seedMedia.js";
 import { seedInitialMembers } from "./seedMembers.js";
+import { seedInitialCareers } from "./seedCareers.js";
+import { seedInitialPublications } from "./seedPublications.js";
+import { seedInitialStories } from "./seedStories.js";
 
 dotenv.config();
 
@@ -16,6 +19,9 @@ export async function seedAll(): Promise<void> {
     await seedInitialNews();
     await seedInitialMedia();
     await seedInitialMembers();
+    await seedInitialCareers();
+    await seedInitialPublications();
+    await seedInitialStories();
     console.log("✨ [SeedAll] All database collections and settings synchronized successfully!");
   } catch (err) {
     console.error("❌ [SeedAll] Error during database synchronization:", err);

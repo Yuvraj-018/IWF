@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { listMembers } from "@/services/memberService";
 import {
   Search,
   Users,
@@ -52,9 +53,39 @@ export function MembersDirectoryTab({
   onOpenRoleModal,
 }: MembersDirectoryTabProps) {
   const { settings } = useSiteSettings();
-  const allMembers = (settings?.community_directory?.members && settings.community_directory.members.length > 0)
-    ? (settings.community_directory.members as unknown as MemberItem[])
-    : MEMBERS_DATA;
+  const defaultMembers = useMemo(() => {
+    return settings?.community_directory?.members && settings.community_directory.members.length > 0
+      ? (settings.community_directory.members as unknown as MemberItem[])
+      : MEMBERS_DATA;
+  }, [settings]);
+
+  const [allMembers, setAllMembers] = useState<MemberItem[]>(defaultMembers);
+
+  useEffect(() => {
+    let cancelled = false;
+    listMembers().then((res) => {
+      if (!cancelled && res.success && Array.isArray(res.data) && res.data.length > 0) {
+        const mapped: MemberItem[] = res.data.map((m: any) => ({
+          id: m.memberNo || m.id || m._id,
+          name: m.name,
+          category: m.category as any,
+          type: (m.annualFee >= 1000 ? "Life Member" : "Annual Member") as any,
+          district: m.district || "Darbhanga",
+          state: m.state || "Bihar",
+          status: m.status as any,
+          joinDate: m.joined || m.validFrom || "2024-01-15",
+          validTill: m.validTill || "2026-12-31",
+          avatarUrl: m.photoUrl,
+          profession: m.metadata?.profession || "Community Member",
+        }));
+        setAllMembers(mapped);
+      }
+    }).catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);

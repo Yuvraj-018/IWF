@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import { Search, ArrowRight, Play, Quote, Sparkles } from "lucide-react";
+import { useState, useMemo, useEffect } from "react";
+import { Search, ArrowRight, Play, Quote, Sparkles, Loader2 } from "lucide-react";
 import { MediaSubpageHero } from "@/components/media/MediaSubpageHero";
 import { ActionStrip } from "@/components/media/ActionStrip";
 import { StoryModal } from "@/components/media/StoryModal";
@@ -7,6 +7,7 @@ import { VideoModal } from "@/components/media/MediaLightboxModals";
 import { MediaLayout } from "@/components/media/MediaLayout";
 import { SUCCESS_STORIES_DATA } from "@/content/mediaContent";
 import type { SuccessStoryItem } from "@/content/mediaContent";
+import { fetchSuccessStories } from "@/services/storyService";
 
 export function SuccessStoriesPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All Stories");
@@ -14,17 +15,34 @@ export function SuccessStoriesPage() {
   const [activeStory, setActiveStory] = useState<SuccessStoryItem | null>(null);
   const [videoOpen, setVideoOpen] = useState(false);
 
-  const filteredStories = useMemo(() => {
-    return SUCCESS_STORIES_DATA.stories.filter((item) => {
-      const matchesCat =
-        selectedCategory === "All Stories" || item.category === selectedCategory;
-      const matchesSearch =
-        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.personName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesCat && matchesSearch;
+  const [stories, setStories] = useState<SuccessStoryItem[]>(SUCCESS_STORIES_DATA.stories);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(SUCCESS_STORIES_DATA.stories.length);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+
+    fetchSuccessStories({
+      page,
+      limit: 6,
+      category: selectedCategory,
+      search: searchQuery || undefined,
+    }).then((res) => {
+      if (!cancelled && res.success && res.data) {
+        setStories(res.data);
+        setTotalPages(res.pagination?.pages || 1);
+        setTotalCount(res.pagination?.total || 0);
+      }
+      setLoading(false);
     });
-  }, [selectedCategory, searchQuery]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [page, selectedCategory, searchQuery]);
 
   return (
     <MediaLayout>
@@ -113,7 +131,12 @@ export function SuccessStoriesPage() {
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Main Story Cards (8 cols) */}
           <div className="lg:col-span-8">
-            {filteredStories.length === 0 ? (
+            {loading ? (
+              <div className="bg-white rounded-2xl p-16 text-center border border-slate-200 flex flex-col items-center justify-center gap-2">
+                <Loader2 className="w-6 h-6 animate-spin text-emerald-600" />
+                <p className="text-xs text-slate-500 font-medium">Loading inspirational journeys...</p>
+              </div>
+            ) : stories.length === 0 ? (
               <div className="bg-white rounded-2xl p-12 text-center border border-slate-200">
                 <p className="text-sm font-semibold text-slate-500">
                   No stories found matching your filter.
@@ -122,6 +145,7 @@ export function SuccessStoriesPage() {
                   onClick={() => {
                     setSelectedCategory("All Stories");
                     setSearchQuery("");
+                    setPage(1);
                   }}
                   className="mt-3 text-xs font-bold text-emerald-700 hover:underline cursor-pointer"
                 >
@@ -129,50 +153,83 @@ export function SuccessStoriesPage() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {filteredStories.map((story) => (
-                  <div
-                    key={story.id}
-                    className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-md transition flex flex-col group"
-                  >
-                    <div className="relative h-48 w-full overflow-hidden bg-slate-100">
-                      <img
-                        src={story.image}
-                        alt={story.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                      />
-                      <div className="absolute top-3 left-3">
-                        <span className="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-black/60 text-white backdrop-blur-sm">
-                          {story.category}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="p-5 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-base font-bold text-slate-900 group-hover:text-emerald-700 transition">
-                          {story.title}
-                        </h3>
-                        <div className="text-[11px] font-semibold text-emerald-700 mt-1">
-                          {story.personName} • {story.village}
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {stories.map((story) => (
+                    <div
+                      key={story.id}
+                      className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-md transition flex flex-col group"
+                    >
+                      <div className="relative h-48 w-full overflow-hidden bg-slate-100">
+                        {story.image ? (
+                          <img
+                            src={story.image}
+                            alt={story.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-slate-100 text-slate-400">
+                            <Sparkles className="w-10 h-10 text-slate-300" />
+                          </div>
+                        )}
+                        <div className="absolute top-3 left-3">
+                          <span className="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-black/60 text-white backdrop-blur-sm">
+                            {story.category}
+                          </span>
                         </div>
-                        <p className="text-xs text-slate-600 mt-2.5 leading-relaxed line-clamp-3">
-                          {story.excerpt}
-                        </p>
                       </div>
 
-                      <div className="pt-4 mt-3 border-t border-slate-100">
-                        <button
-                          onClick={() => setActiveStory(story)}
-                          className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 hover:text-emerald-800 transition cursor-pointer"
-                        >
-                          <span>Read More</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </button>
+                      <div className="p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                          <h3 className="text-base font-bold text-slate-900 group-hover:text-emerald-700 transition">
+                            {story.title}
+                          </h3>
+                          <div className="text-[11px] font-semibold text-emerald-700 mt-1">
+                            {story.personName} • {story.village}
+                          </div>
+                          <p className="text-xs text-slate-600 mt-2.5 leading-relaxed line-clamp-3">
+                            {story.excerpt}
+                          </p>
+                        </div>
+
+                        <div className="pt-4 mt-3 border-t border-slate-100">
+                          <button
+                            onClick={() => setActiveStory(story)}
+                            className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 hover:text-emerald-800 transition cursor-pointer"
+                          >
+                            <span>Read More</span>
+                            <ArrowRight className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
                     </div>
+                  ))}
+                </div>
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className="flex flex-wrap items-center justify-center gap-2 pt-6 border-t border-slate-200">
+                    <button
+                      type="button"
+                      disabled={page <= 1}
+                      onClick={() => setPage((p) => Math.max(1, p - 1))}
+                      className="px-3.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40 cursor-pointer"
+                    >
+                      ← Previous
+                    </button>
+                    <span className="text-xs font-mono text-slate-500 px-2">
+                      Page {page} of {totalPages} ({totalCount} stories)
+                    </span>
+                    <button
+                      type="button"
+                      disabled={page >= totalPages}
+                      onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                      className="px-3.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40 cursor-pointer"
+                    >
+                      Next →
+                    </button>
                   </div>
-                ))}
+                )}
               </div>
             )}
           </div>

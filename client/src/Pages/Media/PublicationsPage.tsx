@@ -1,32 +1,49 @@
 import { toast } from "@/utils/toast";
-import { useState, useMemo } from "react";
-import { Download, Search, BookOpen, CheckCircle2, FileText, Mail, ArrowRight } from "lucide-react";
+import { useState, useMemo, useEffect } from "react";
+import { Download, Search, BookOpen, CheckCircle2, FileText, Mail, ArrowRight, Loader2 } from "lucide-react";
 import { MediaSubpageHero } from "@/components/media/MediaSubpageHero";
 import { ActionStrip } from "@/components/media/ActionStrip";
 import { StoryModal } from "@/components/media/StoryModal";
 import { MediaLayout } from "@/components/media/MediaLayout";
 import { PUBLICATIONS_DATA } from "@/content/mediaContent";
 import type { SuccessStoryItem } from "@/content/mediaContent";
+import { fetchPublications, type PublicationItem } from "@/services/publicationService";
 
 export function PublicationsPage() {
   const [selectedType, setSelectedType] = useState<string>("All Publications");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [activeStory, setActiveStory] = useState<SuccessStoryItem | null>(null);
 
-  const filteredPubs = useMemo(() => {
-    return PUBLICATIONS_DATA.publications.filter((item) => {
-      const matchesType =
-        selectedType === "All Publications" || item.type === selectedType;
-      const matchesSearch =
-        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.authors.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.type.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesType && matchesSearch;
-    });
-  }, [selectedType, searchQuery]);
+  const [pubs, setPubs] = useState<PublicationItem[]>(PUBLICATIONS_DATA.publications as any);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(PUBLICATIONS_DATA.publications.length);
+  const [loading, setLoading] = useState(false);
 
-  const handleReadAbstract = (item: (typeof PUBLICATIONS_DATA.publications)[0]) => {
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+
+    fetchPublications({
+      page,
+      limit: 6,
+      type: selectedType,
+      search: searchQuery || undefined,
+    }).then((res) => {
+      if (!cancelled && res.success && res.data) {
+        setPubs(res.data);
+        setTotalPages(res.pagination?.pages || 1);
+        setTotalCount(res.pagination?.total || 0);
+      }
+      setLoading(false);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [page, selectedType, searchQuery]);
+
+  const handleReadAbstract = (item: PublicationItem) => {
     const isNewsletter = item.type === "Newsletters";
     const story: SuccessStoryItem = {
       id: String(item.id),
@@ -156,7 +173,12 @@ export function PublicationsPage() {
           <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             {/* Main Publications (8 cols) */}
             <div className="lg:col-span-8">
-              {filteredPubs.length === 0 ? (
+              {loading ? (
+                <div className="bg-white rounded-2xl p-16 text-center border border-slate-200 flex flex-col items-center justify-center gap-2">
+                  <Loader2 className="w-6 h-6 animate-spin text-emerald-600" />
+                  <p className="text-xs text-slate-500 font-medium">Loading publications & research...</p>
+                </div>
+              ) : pubs.length === 0 ? (
                 <div className="bg-white rounded-2xl p-12 text-center border border-slate-200">
                   <p className="text-sm font-semibold text-slate-500">
                     No publications or newsletters found matching your selection.
@@ -165,6 +187,7 @@ export function PublicationsPage() {
                     onClick={() => {
                       setSelectedType("All Publications");
                       setSearchQuery("");
+                      setPage(1);
                     }}
                     className="mt-3 text-xs font-bold text-emerald-700 hover:underline cursor-pointer"
                   >
@@ -172,66 +195,99 @@ export function PublicationsPage() {
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {filteredPubs.map((pub) => (
-                    <div
-                      key={pub.id}
-                      className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-md transition flex flex-col group"
-                    >
-                      <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
-                        <img
-                          src={pub.cover}
-                          alt={pub.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                        />
-                        <div className="absolute top-3 left-3 flex items-center gap-2">
-                          <span className="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-emerald-800 text-white shadow-sm">
-                            {pub.type}
-                          </span>
-                        </div>
-                        <div className="absolute bottom-3 left-3">
-                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-white/90 text-slate-800 backdrop-blur-sm">
-                            {pub.date}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="p-5 flex-1 flex flex-col justify-between">
-                        <div>
-                          <h3 className="text-base font-bold text-slate-900 group-hover:text-emerald-700 transition line-clamp-2">
-                            {pub.title}
-                          </h3>
-                          <p className="text-xs text-slate-600 mt-2 leading-relaxed line-clamp-3">
-                            {pub.summary}
-                          </p>
-                          <div className="mt-3 text-[11px] text-slate-500 font-medium">
-                            Authors / Editorial:{" "}
-                            <span className="text-slate-700 font-semibold">{pub.authors}</span>
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {pubs.map((pub) => (
+                      <div
+                        key={pub.id}
+                        className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-md transition flex flex-col group"
+                      >
+                        <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
+                          {pub.cover ? (
+                            <img
+                              src={pub.cover}
+                              alt={pub.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-slate-100 text-slate-400">
+                              <BookOpen className="w-10 h-10 text-slate-300" />
+                            </div>
+                          )}
+                          <div className="absolute top-3 left-3 flex items-center gap-2">
+                            <span className="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-emerald-800 text-white shadow-sm">
+                              {pub.type}
+                            </span>
+                          </div>
+                          <div className="absolute bottom-3 left-3">
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-white/90 text-slate-800 backdrop-blur-sm">
+                              {pub.date}
+                            </span>
                           </div>
                         </div>
 
-                        <div className="pt-4 mt-3 border-t border-slate-100 flex items-center justify-between">
-                          <a
-                            href={pub.pdfUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-800 text-xs font-bold transition cursor-pointer"
-                          >
-                            <Download className="w-3.5 h-3.5" />
-                            <span>PDF ({pub.fileSize})</span>
-                          </a>
+                        <div className="p-5 flex-1 flex flex-col justify-between">
+                          <div>
+                            <h3 className="text-base font-bold text-slate-900 group-hover:text-emerald-700 transition line-clamp-2">
+                              {pub.title}
+                            </h3>
+                            <p className="text-xs text-slate-600 mt-2 leading-relaxed line-clamp-3">
+                              {pub.summary}
+                            </p>
+                            <div className="mt-3 text-[11px] text-slate-500 font-medium">
+                              Authors / Editorial:{" "}
+                              <span className="text-slate-700 font-semibold">{pub.authors}</span>
+                            </div>
+                          </div>
 
-                          <button
-                            onClick={() => handleReadAbstract(pub)}
-                            className="text-xs font-bold text-slate-700 hover:text-emerald-700 flex items-center gap-1 transition cursor-pointer"
-                          >
-                            <BookOpen className="w-3.5 h-3.5" />
-                            <span>{pub.type === "Newsletters" ? "Read Issue" : "Abstract"}</span>
-                          </button>
+                          <div className="pt-4 mt-3 border-t border-slate-100 flex items-center justify-between">
+                            <a
+                              href={pub.pdfUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-800 text-xs font-bold transition cursor-pointer"
+                            >
+                              <Download className="w-3.5 h-3.5" />
+                              <span>PDF ({pub.fileSize || "Download"})</span>
+                            </a>
+
+                            <button
+                              onClick={() => handleReadAbstract(pub)}
+                              className="text-xs font-bold text-slate-700 hover:text-emerald-700 flex items-center gap-1 transition cursor-pointer"
+                            >
+                              <BookOpen className="w-3.5 h-3.5" />
+                              <span>{pub.type === "Newsletters" ? "Read Issue" : "Abstract"}</span>
+                            </button>
+                          </div>
                         </div>
                       </div>
+                    ))}
+                  </div>
+
+                  {/* Dynamic Pagination without restrictions */}
+                  {totalPages > 1 && (
+                    <div className="flex flex-wrap items-center justify-center gap-2 pt-6 border-t border-slate-200">
+                      <button
+                        type="button"
+                        disabled={page <= 1}
+                        onClick={() => setPage((p) => Math.max(1, p - 1))}
+                        className="px-3.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40 cursor-pointer"
+                      >
+                        ← Previous
+                      </button>
+                      <span className="text-xs font-mono text-slate-500 px-2">
+                        Page {page} of {totalPages} ({totalCount} total)
+                      </span>
+                      <button
+                        type="button"
+                        disabled={page >= totalPages}
+                        onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                        className="px-3.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40 cursor-pointer"
+                      >
+                        Next →
+                      </button>
                     </div>
-                  ))}
+                  )}
                 </div>
               )}
             </div>
