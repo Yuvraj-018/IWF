@@ -8,7 +8,12 @@ export async function connectDB(): Promise<void> {
   const uri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/islah_db";
 
   try {
-    const conn = await mongoose.connect(uri);
+    const conn = await mongoose.connect(uri, {
+      maxPoolSize: 100, // Support high concurrency: up to 100 parallel socket connections
+      minPoolSize: 10,  // Keep warm pool ready for instant query execution
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+    });
     console.log(`[MongoDB] Connected successfully to ${conn.connection.host}/${conn.connection.name}`);
     
     // Synchronize all initial collections and site settings into MongoDB

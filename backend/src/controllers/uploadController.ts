@@ -149,7 +149,19 @@ export async function getPrivateFile(req: Request, res: Response): Promise<void>
       .replace(/^\/?api\/upload\/private\//, "")
       .replace(/^\/+/, "");
 
-    // Generate a temporary 15-minute signed URL directly from Cloudflare R2
+    const isPanOrConfidential =
+      rawKey.toLowerCase().includes("pan") ||
+      rawKey.toLowerCase().includes("tax-exemption") ||
+      rawKey.toLowerCase().includes("confidential");
+
+    // If it's a public document (CV, Resume, Photo), redirect directly to Cloudflare Public Edge CDN
+    if (!isPanOrConfidential && process.env.CLOUDFLARE_R2_PUBLIC_URL) {
+      const publicBase = process.env.CLOUDFLARE_R2_PUBLIC_URL.replace(/\/+$/, "");
+      res.redirect(`${publicBase}/${rawKey}`);
+      return;
+    }
+
+    // Generate a temporary 15-minute signed URL directly from Cloudflare R2 for confidential documents
     const signedUrl = getSignedPrivateUrl(rawKey, 900);
     res.redirect(signedUrl);
   } catch (error: any) {

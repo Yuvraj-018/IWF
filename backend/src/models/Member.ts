@@ -70,4 +70,10 @@ const MemberSchema = new Schema<IMember>(
   { timestamps: true }
 );
 
+// High-performance compound indexes for directory listing and search
+MemberSchema.index({ status: 1, validTill: 1, consentDisplay: 1 });
+MemberSchema.index({ phone: 1 });
+MemberSchema.index({ email: 1 });
+MemberSchema.index({ category: 1, createdAt: -1 });
+
 export const Member = mongoose.model<IMember>("Member", MemberSchema);

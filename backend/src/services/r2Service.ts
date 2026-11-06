@@ -228,3 +228,64 @@ export function getSignedPrivateUrl(r2Key: string, expiresInSeconds: number = 90
   return `https://${host}${canonicalUri}?${queryParams.toString()}`;
 }
 
+/**
+ * Deletes an object from Cloudflare R2
+ */
+export async function deleteFromR2(r2Key: string, isPrivate: boolean = false): Promise<boolean> {
+  const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
+  const accessKeyId = process.env.CLOUDFLARE_R2_ACCESS_KEY_ID;
+  const secretAccessKey = process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY;
+  const publicBucket = process.env.CLOUDFLARE_R2_BUCKET_NAME || "islah-public-assets";
+  const privateBucket = process.env.CLOUDFLARE_R2_PRIVATE_BUCKET_NAME || "islah-private-docs";
+
+  if (!accountId || !accessKeyId || !secretAccessKey) return false;
+
+  const targetBucket = isPrivate ? privateBucket : publicBucket;
+  const host = `${accountId}.r2.cloudflarestorage.com`;
+  const canonicalUri = `/${targetBucket}/${encodeURIComponent(r2Key).replace(/%2F/g, "/")}`;
+
+  const now = new Date();
+  const amzDate = now.toISOString().replace(/[:-]|\.\d{3}/g, "");
+  const dateStamp = amzDate.substring(0, 8);
+  const region = "auto";
+  const service = "s3";
+  const payloadHash = crypto.createHash("sha256").update("").digest("hex");
+
+  const canonicalHeaders =
+    `host:${host}\n` +
+    `x-amz-content-sha256:${payloadHash}\n` +
+    `x-amz-date:${amzDate}\n`;
+
+  const signedHeaders = "host;x-amz-content-sha256;x-amz-date";
+  const canonicalRequest = `DELETE\n${canonicalUri}\n\n${canonicalHeaders}\n${signedHeaders}\n${payloadHash}`;
+
+  const credentialScope = `${dateStamp}/${region}/${service}/aws4_request`;
+  const stringToSign =
+    "AWS4-HMAC-SHA256\n" +
+    amzDate + "\n" +
+    credentialScope + "\n" +
+    crypto.createHash("sha256").update(canonicalRequest).digest("hex");
+
+  const signingKey = getSignatureKey(secretAccessKey, dateStamp, region, service);
+  const signature = crypto.createHmac("sha256", signingKey).update(stringToSign).digest("hex");
+
+  const authorizationHeader =
+    `AWS4-HMAC-SHA256 Credential=${accessKeyId}/${credentialScope}, ` +
+    `SignedHeaders=${signedHeaders}, Signature=${signature}`;
+
+  try {
+    const res = await fetch(`https://${host}${canonicalUri}`, {
+      method: "DELETE",
+      headers: {
+        "x-amz-date": amzDate,
+        "x-amz-content-sha256": payloadHash,
+        Authorization: authorizationHeader,
+      },
+    });
+    return res.ok;
+  } catch (e) {
+    console.warn("deleteFromR2 error:", e);
+    return false;
+  }
+}
+

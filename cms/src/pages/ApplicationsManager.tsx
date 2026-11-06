@@ -83,18 +83,26 @@ export default function ApplicationsManager() {
     }
   };
 
+  const CLOUDFLARE_PUBLIC_CDN = "https://pub-9df833ce82f4452db02dda1a3edca3d4.r2.dev";
+
   // Build universal document view / download link
-  const getDocDownloadUrl = (fileUrlOrKey?: string) => {
+  const getDocDownloadUrl = (fileUrlOrKey?: string, isPan: boolean = false) => {
     if (!fileUrlOrKey) return "#";
     // 1. If it's already an absolute URL (Cloudflare public edge CDN or external)
     if (fileUrlOrKey.startsWith("http://") || fileUrlOrKey.startsWith("https://")) {
       return fileUrlOrKey;
     }
-    // 2. If it's a relative path starting with /api/upload/private/ or just a key
-    const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
-    const token = localStorage.getItem("islah_admin_token");
     const cleanKey = fileUrlOrKey.replace(/^\/?api\/upload\/private\//, "").replace(/^\/+/, "");
-    return `${API_BASE_URL}/upload/private?key=${encodeURIComponent(cleanKey)}&token=${token || ""}`;
+
+    // 2. If it's a PAN card or explicitly confidential, route via secure backend presigned URL
+    if (isPan || cleanKey.toLowerCase().includes("pan")) {
+      const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+      const token = localStorage.getItem("islah_admin_token");
+      return `${API_BASE_URL}/upload/private?key=${encodeURIComponent(cleanKey)}&token=${token || ""}`;
+    }
+
+    // 3. For resumes, CVs, photos, and public files: serve directly from Cloudflare Public CDN!
+    return `${CLOUDFLARE_PUBLIC_CDN}/${cleanKey}`;
   };
 
   return (
@@ -209,7 +217,7 @@ export default function ApplicationsManager() {
 
                     {d.panFileUrl && (
                       <a
-                        href={getDocDownloadUrl(d.panFileUrl)}
+                        href={getDocDownloadUrl(d.panFileUrl, true)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 text-xs font-bold transition border border-amber-500/20"

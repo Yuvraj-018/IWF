@@ -71,4 +71,11 @@ const DonationSchema = new Schema<IDonation>(
   { timestamps: true }
 );
 
+// High-speed indexes for payments, tax exemptions, and webhook lookups
+DonationSchema.index({ paymentStatus: 1, createdAt: -1 });
+DonationSchema.index({ razorpayOrderId: 1 });
+DonationSchema.index({ razorpayPaymentId: 1 });
+DonationSchema.index({ email: 1 });
+DonationSchema.index({ phone: 1 });
+
 export const Donation = mongoose.model<IDonation>("Donation", DonationSchema);

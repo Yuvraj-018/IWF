@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Media, MediaCategory, MediaType } from "../models/Media.js";
 import { uploadToCloudinary, deleteFromCloudinary } from "../services/cloudinaryService.js";
+import { uploadToR2, deleteFromR2 } from "../services/r2Service.js";
 import { invalidateCache } from "../middlewares/cache.js";
 
 export async function listMedia(req: Request, res: Response): Promise<void> {
@@ -171,14 +172,26 @@ export async function upsertMedia(req: Request, res: Response): Promise<void> {
     let format: string | undefined;
     let bytes: number | undefined;
 
-    // If a file was uploaded in the request, stream to Cloudinary
+    // If a file was uploaded in the request, stream to Cloudflare R2 (or fallback to Cloudinary)
     if (file) {
       const folder = `islah/${category || "general"}`;
-      const uploadResult = await uploadToCloudinary(file.buffer, folder, key);
-      finalUrl = uploadResult.secureUrl;
-      publicId = uploadResult.publicId;
-      format = uploadResult.format;
-      bytes = uploadResult.bytes;
+      if (process.env.CLOUDFLARE_R2_ACCESS_KEY_ID && process.env.CLOUDFLARE_ACCOUNT_ID) {
+        const r2Result = await uploadToR2(file.buffer, {
+          folder,
+          originalName: file.originalname || `${key}.jpg`,
+          isPrivate: false,
+          mimeType: file.mimetype,
+        });
+        finalUrl = r2Result.url;
+        publicId = r2Result.key;
+        bytes = r2Result.sizeBytes;
+      } else {
+        const uploadResult = await uploadToCloudinary(file.buffer, folder, key);
+        finalUrl = uploadResult.secureUrl;
+        publicId = uploadResult.publicId;
+        format = uploadResult.format;
+        bytes = uploadResult.bytes;
+      }
     }
 
     if (!finalUrl && !videoUrl) {
@@ -270,12 +283,16 @@ export async function deleteMedia(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    // Delete from Cloudinary if publicId exists
+    // Delete from storage if publicId exists
     if (item.publicId) {
       try {
-        await deleteFromCloudinary(item.publicId);
-      } catch (cloudErr) {
-        console.warn("Could not delete asset from Cloudinary:", cloudErr);
+        if (process.env.CLOUDFLARE_R2_ACCESS_KEY_ID && process.env.CLOUDFLARE_ACCOUNT_ID) {
+          await deleteFromR2(item.publicId, false);
+        } else {
+          await deleteFromCloudinary(item.publicId);
+        }
+      } catch (storageErr) {
+        console.warn("Could not delete asset from storage:", storageErr);
       }
     }
 
