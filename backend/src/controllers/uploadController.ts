@@ -133,7 +133,11 @@ export async function uploadMultipleFiles(req: Request, res: Response): Promise<
 
 export async function getPrivateFile(req: Request, res: Response): Promise<void> {
   try {
-    const rawKey = req.params[0] || (req.params as any).key;
+    const rawKey =
+      (req.params as any).filePath ||
+      (req.params as any).key ||
+      req.params[0] ||
+      (req.query.key as string);
     if (!rawKey) {
       res.status(400).json({ success: false, message: "Document key is required" });
       return;

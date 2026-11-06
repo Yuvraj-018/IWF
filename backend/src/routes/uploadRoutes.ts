@@ -18,7 +18,8 @@ uploadRouter.post("/single", formSubmissionLimiter, uploadMiddleware.single("fil
 uploadRouter.post("/multiple", requireAdminAuth, uploadMiddleware.array("files", 10), uploadMultipleFiles);
 
 // View/Download confidential document from islah-private-docs via expiring signed URL (Admin authenticated)
-uploadRouter.get("/private/*", requireAdminAuth, getPrivateFile);
+uploadRouter.get("/private", requireAdminAuth, getPrivateFile);
+uploadRouter.get("/private/*filePath", requireAdminAuth, getPrivateFile);
 
 // Delete file by publicId / key - Restricted to authenticated CMS admins
 uploadRouter.delete("/", requireAdminAuth, deleteFile);
