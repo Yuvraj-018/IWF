@@ -79,13 +79,13 @@ export async function uploadToR2(
   const filename = `${cleanBase}_${Date.now()}${ext}`;
   const r2Key = `${folder}/${filename}`;
 
-  // Check if asset is confidential: PAN cards, job applications, resumes, donor documents
+  // Check if asset is confidential: PAN cards & explicitly private documents only
+  // (Photos, CVs, and Resumes are PUBLIC as requested, stored on public Cloudflare CDN)
   const isConfidential =
     options.isPrivate === true ||
     folder.includes("pan") ||
-    folder.includes("application") ||
-    folder.includes("resume") ||
-    folder.includes("private") ||
+    folder.includes("tax-exemption") ||
+    folder.includes("confidential") ||
     cleanBase.toLowerCase().includes("pan");
 
   const targetBucket = isConfidential ? privateBucket : publicBucket;

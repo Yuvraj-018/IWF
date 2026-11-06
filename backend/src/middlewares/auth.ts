@@ -9,7 +9,9 @@ export interface AuthenticatedRequest extends Request {
  * Middleware to require valid JWT admin authentication on protected routes.
  */
 export function requireAdminAuth(req: AuthenticatedRequest, res: Response, next: NextFunction): void {
-  const authHeader = req.headers.authorization;
+  const authHeader =
+    req.headers.authorization ||
+    (req.query.token ? `Bearer ${req.query.token}` : undefined);
 
   if (!authHeader) {
     res.status(401).json({

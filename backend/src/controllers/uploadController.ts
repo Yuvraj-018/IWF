@@ -133,17 +133,23 @@ export async function uploadMultipleFiles(req: Request, res: Response): Promise<
 
 export async function getPrivateFile(req: Request, res: Response): Promise<void> {
   try {
-    const rawKey =
+    let rawKey =
       (req.params as any).filePath ||
       (req.params as any).key ||
       req.params[0] ||
       (req.query.key as string);
+
     if (!rawKey) {
       res.status(400).json({ success: false, message: "Document key is required" });
       return;
     }
 
-    // Generate a temporary 15-minute signed URL
+    // Clean any leading path or slash prefix
+    rawKey = String(rawKey)
+      .replace(/^\/?api\/upload\/private\//, "")
+      .replace(/^\/+/, "");
+
+    // Generate a temporary 15-minute signed URL directly from Cloudflare R2
     const signedUrl = getSignedPrivateUrl(rawKey, 900);
     res.redirect(signedUrl);
   } catch (error: any) {

@@ -83,15 +83,17 @@ export default function ApplicationsManager() {
     }
   };
 
-  // Build secure private doc link
-  const getPrivateDocLink = (fileUrlOrKey: string) => {
+  // Build universal document view / download link
+  const getDocDownloadUrl = (fileUrlOrKey?: string) => {
     if (!fileUrlOrKey) return "#";
+    // 1. If it's already an absolute URL (Cloudflare public edge CDN or external)
+    if (fileUrlOrKey.startsWith("http://") || fileUrlOrKey.startsWith("https://")) {
+      return fileUrlOrKey;
+    }
+    // 2. If it's a relative path starting with /api/upload/private/ or just a key
     const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
     const token = localStorage.getItem("islah_admin_token");
-    // If it's a key or relative url
-    const cleanKey = fileUrlOrKey.startsWith("http")
-      ? fileUrlOrKey.split(".dev/")[1] || fileUrlOrKey
-      : fileUrlOrKey;
+    const cleanKey = fileUrlOrKey.replace(/^\/?api\/upload\/private\//, "").replace(/^\/+/, "");
     return `${API_BASE_URL}/upload/private?key=${encodeURIComponent(cleanKey)}&token=${token || ""}`;
   };
 
@@ -207,7 +209,7 @@ export default function ApplicationsManager() {
 
                     {d.panFileUrl && (
                       <a
-                        href={getPrivateDocLink(d.panFileUrl)}
+                        href={getDocDownloadUrl(d.panFileUrl)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 text-xs font-bold transition border border-amber-500/20"
@@ -360,7 +362,7 @@ export default function ApplicationsManager() {
                       <div className="pt-1 flex flex-wrap items-center gap-2">
                         {primaryResumeUrl && (
                           <a
-                            href={primaryResumeUrl}
+                            href={getDocDownloadUrl(primaryResumeUrl)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-50 hover:bg-orange-100 text-orange-600 text-xs font-bold transition border border-orange-200 shadow-xs"
@@ -374,7 +376,7 @@ export default function ApplicationsManager() {
                             return (
                               <a
                                 key={key}
-                                href={doc.url}
+                                href={getDocDownloadUrl(doc.url)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition border border-slate-200 shadow-xs"
