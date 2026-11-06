@@ -116,7 +116,7 @@ export async function updateCareerOpening(req: Request, res: Response): Promise<
     const updated = await CareerOpening.findOneAndUpdate(
       { $or: [{ openingId: id }, { _id: id.match(/^[0-9a-fA-F]{24}$/) ? id : null }] },
       { $set: req.body },
-      { new: true }
+      { returnDocument: 'after' }
     );
 
     if (!updated) {

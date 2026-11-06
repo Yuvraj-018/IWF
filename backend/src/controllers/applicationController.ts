@@ -150,7 +150,7 @@ export async function updateApplicationStatus(req: Request, res: Response): Prom
         status,
         ...(reviewNotes ? { "formData.reviewNotes": reviewNotes } : {}),
       },
-      { new: true }
+      { returnDocument: 'after' }
     );
 
     if (!application) {

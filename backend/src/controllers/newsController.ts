@@ -132,7 +132,7 @@ export async function createNewsEvent(req: Request, res: Response) {
 export async function updateNewsEvent(req: Request, res: Response) {
   try {
     const { id } = req.params;
-    const updated = await NewsEvent.findByIdAndUpdate(id, req.body, { new: true });
+    const updated = await NewsEvent.findByIdAndUpdate(id, req.body, { returnDocument: 'after' });
 
     if (!updated) {
       return res.status(404).json({ success: false, message: "News event not found" });

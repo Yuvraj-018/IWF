@@ -232,7 +232,7 @@ export async function upsertMedia(req: Request, res: Response): Promise<void> {
         subHeading: subHeading || undefined,
         ctaLink: ctaLink || undefined,
       },
-      { upsert: true, new: true, setDefaultsOnInsert: true }
+      { upsert: true, returnDocument: 'after', setDefaultsOnInsert: true }
     );
 
     invalidateCache("media");

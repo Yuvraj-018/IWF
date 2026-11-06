@@ -131,7 +131,7 @@ export async function updateContactStatus(req: Request, res: Response): Promise<
       return;
     }
 
-    const updated = await Contact.findByIdAndUpdate(id, { $set: { status } }, { new: true });
+    const updated = await Contact.findByIdAndUpdate(id, { $set: { status } }, { returnDocument: 'after' });
     if (!updated) {
       res.status(404).json({ success: false, message: "Contact enquiry not found" });
       return;

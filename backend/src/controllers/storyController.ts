@@ -113,7 +113,7 @@ export async function updateStory(req: Request, res: Response): Promise<void> {
     const updated = await SuccessStory.findByIdAndUpdate(
       id,
       { $set: body },
-      { new: true }
+      { returnDocument: 'after' }
     );
 
     if (!updated) {

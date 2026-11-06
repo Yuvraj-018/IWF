@@ -99,7 +99,7 @@ export async function updatePublication(req: Request, res: Response): Promise<vo
     const updated = await Publication.findByIdAndUpdate(
       id,
       { $set: req.body },
-      { new: true }
+      { returnDocument: 'after' }
     );
 
     if (!updated) {

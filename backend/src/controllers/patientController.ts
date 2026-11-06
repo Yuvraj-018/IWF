@@ -75,7 +75,7 @@ export async function updatePatient(req: Request, res: Response): Promise<void> 
     const patient = await Patient.findOneAndUpdate(
       { slug },
       { $set: updateData },
-      { new: true, runValidators: true }
+      { returnDocument: 'after', runValidators: true }
     );
 
     if (!patient) {
