@@ -347,19 +347,48 @@ export default function ApplicationsManager() {
                   )}
 
                   {/* Resume / Document Attachment */}
-                  {(item.resumeUrl || item.formData?.cvFileUrl) && (
-                    <div className="pt-1">
-                      <a
-                        href={item.resumeUrl || item.formData?.cvFileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-50 hover:bg-orange-100 text-orange-600 text-xs font-bold transition border border-orange-200"
-                      >
-                        <Download className="w-3.5 h-3.5" />
-                        <span>Download Applicant Resume ({item.formData?.cvFileName || "Resume.pdf"})</span>
-                      </a>
-                    </div>
-                  )}
+                  {(() => {
+                    const primaryResumeUrl = item.resumeUrl || item.formData?.cvFileUrl || item.formData?.resume?.url;
+                    const primaryResumeName = item.formData?.cvFileName || item.formData?.resume?.name || "Applicant_Resume.pdf";
+                    const docEntries = item.formData?.documents && typeof item.formData.documents === "object"
+                      ? Object.entries(item.formData.documents)
+                      : [];
+
+                    if (!primaryResumeUrl && docEntries.length === 0) return null;
+
+                    return (
+                      <div className="pt-1 flex flex-wrap items-center gap-2">
+                        {primaryResumeUrl && (
+                          <a
+                            href={primaryResumeUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-50 hover:bg-orange-100 text-orange-600 text-xs font-bold transition border border-orange-200 shadow-xs"
+                          >
+                            <Download className="w-3.5 h-3.5" />
+                            <span>Download Applicant Resume ({primaryResumeName})</span>
+                          </a>
+                        )}
+                        {docEntries.map(([key, doc]: [string, any]) => {
+                          if (doc?.url && doc.url !== primaryResumeUrl) {
+                            return (
+                              <a
+                                key={key}
+                                href={doc.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition border border-slate-200 shadow-xs"
+                              >
+                                <Download className="w-3.5 h-3.5" />
+                                <span>Download {doc.name || key}</span>
+                              </a>
+                            );
+                          }
+                          return null;
+                        })}
+                      </div>
+                    );
+                  })()}
                 </div>
 
                 {/* Status Action */}

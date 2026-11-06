@@ -21,7 +21,7 @@ export async function fetchPatients(urgent?: boolean): Promise<Patient[]> {
   try {
     const query = urgent !== undefined ? `?urgent=${urgent}` : "";
     const res = await apiRequest<PatientListResponse>(`/patients${query}`);
-    if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
+    if (res && res.success && Array.isArray(res.data)) {
       return res.data;
     }
     return URGENT_PATIENTS;

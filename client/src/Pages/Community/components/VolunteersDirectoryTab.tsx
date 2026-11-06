@@ -16,7 +16,7 @@ import {
   Sprout,
   Compass,
 } from "lucide-react";
-import { VOLUNTEERS_DATA, VolunteerRole, VolunteerItem } from "../communityData";
+import { VolunteerRole, VolunteerItem } from "../communityData";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { ProfileDetailModal } from "./ProfileDetailModal";
 import type { RoleType } from "@/components/forms/RoleFormModal";

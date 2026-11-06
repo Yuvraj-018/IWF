@@ -13,7 +13,7 @@ import {
   Check,
   RefreshCw,
 } from "lucide-react";
-import { MEMBERS_DATA, MemberCategory, MemberItem } from "../communityData";
+import { MemberCategory, MemberItem } from "../communityData";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { ProfileDetailModal } from "./ProfileDetailModal";
 import { Link } from "@tanstack/react-router";

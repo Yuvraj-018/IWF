@@ -420,13 +420,20 @@ export function ApplicationWizard({ config }: { config: WizardConfig }) {
       );
 
       const core = config.toPayload(v);
+      const primaryDoc = Object.values(uploaded)[0];
       const res = await submitApplication({
         type: config.applicationType,
         ...core,
+        resumeUrl: primaryDoc?.url,
         selectedSectors: sectorValue.sectors,
         subclassifications: flattenSectorAreas(sectorValue),
         turnstileToken,
-        formData: { ...visibleValues, documents: uploaded },
+        formData: {
+          ...visibleValues,
+          documents: uploaded,
+          cvFileUrl: primaryDoc?.url,
+          cvFileName: primaryDoc?.name,
+        },
       });
 
       const ref =

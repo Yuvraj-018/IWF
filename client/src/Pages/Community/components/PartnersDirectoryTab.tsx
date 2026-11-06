@@ -17,7 +17,7 @@ import {
   Layers,
   Globe,
 } from "lucide-react";
-import { PARTNERS_DATA, PartnerItem } from "../communityData";
+import { PartnerItem } from "../communityData";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { ProfileDetailModal } from "./ProfileDetailModal";
 import type { RoleType } from "@/components/forms/RoleFormModal";

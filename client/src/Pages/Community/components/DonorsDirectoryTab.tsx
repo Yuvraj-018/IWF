@@ -13,7 +13,7 @@ import {
   Medal,
   CheckCircle2,
 } from "lucide-react";
-import { DONORS_DATA, DonorTier, DonorItem } from "../communityData";
+import { DonorTier, DonorItem } from "../communityData";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { ProfileDetailModal } from "./ProfileDetailModal";
 import type { RoleType } from "@/components/forms/RoleFormModal";

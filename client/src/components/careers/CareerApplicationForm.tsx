@@ -106,12 +106,15 @@ export function CareerApplicationForm({
         countryCode: v.countryCode,
         city: v.location.trim(),
         message: v.position,
+        resumeUrl: file.url,
         turnstileToken: token,
         formData: {
           position: v.position,
           qualification: v.qualification,
           experience: v.experience,
           currentLocation: v.location.trim(),
+          cvFileUrl: file.url,
+          cvFileName: resume!.name,
           resume: { name: resume!.name, url: file.url },
         },
       });
