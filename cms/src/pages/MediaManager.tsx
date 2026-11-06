@@ -553,6 +553,48 @@ export default function MediaManager() {
     setModalOpen(true);
   };
 
+  const openNewItemModal = (section: string) => {
+    setSelectedFile(null);
+    setFilePreview(null);
+    setInputMode("file");
+    const prefix =
+      section === "hero"
+        ? "hero-slide"
+        : section === "gallery"
+        ? "gallery"
+        : section === "causes"
+        ? "cause"
+        : section === "videos"
+        ? "video"
+        : section === "reports"
+        ? "report"
+        : section === "people"
+        ? "person"
+        : "asset";
+    const uniqueKey = `${prefix}-${Date.now()}`;
+    const count = mediaList.filter((m) => m.category === section).length;
+    const mediaType =
+      section === "videos" ? "video" : section === "reports" ? "document" : "photo";
+
+    setFormData({
+      key: uniqueKey,
+      category: section as any,
+      mediaType,
+      title: section === "hero" ? `Hero Slide #${count + 1}` : "",
+      subHeading: "",
+      ctaLink: section === "hero" ? "/donate" : "",
+      url: "",
+      videoUrl: "",
+      thumbnailUrl: "",
+      altText: "",
+      location: "Darbhanga, Bihar",
+      date: "2026",
+      tags: section === "hero" ? "Hero Banner" : section,
+      order: count + 1,
+    });
+    setModalOpen(true);
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -1050,6 +1092,49 @@ export default function MediaManager() {
         </div>
       ) : (
         <div className="space-y-8">
+          {activeTab !== "all" && activeTab !== "custom" && (
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs">
+              <div>
+                <h3 className="text-base font-bold text-[#071527] flex items-center gap-2">
+                  <span>
+                    {activeTab === "causes"
+                      ? "Program Pillars & Causes"
+                      : activeTab === "videos"
+                      ? "Video Documentaries & Streams"
+                      : activeTab === "reports"
+                      ? "Annual Reports & Publications"
+                      : activeTab === "people"
+                      ? "Leadership & Team Profiles"
+                      : "Visual Media Assets"}
+                  </span>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-orange-50 border border-orange-200 text-orange-600">
+                    {mediaList.filter((m) => m.category === activeTab).length} Live Assets
+                  </span>
+                </h3>
+                <p className="text-xs text-slate-500 mt-1">
+                  Update any existing slot or add new dynamic assets to this section anytime.
+                </p>
+              </div>
+              <button
+                onClick={() => openNewItemModal(activeTab)}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition shadow-md shadow-orange-500/20 cursor-pointer shrink-0"
+              >
+                <Plus className="w-4 h-4" />
+                <span>
+                  Add New{" "}
+                  {activeTab === "causes"
+                    ? "Pillar"
+                    : activeTab === "videos"
+                    ? "Video"
+                    : activeTab === "reports"
+                    ? "Publication / PDF"
+                    : activeTab === "people"
+                    ? "Team Member"
+                    : "Asset"}
+                </span>
+              </button>
+            </div>
+          )}
           {displayedSlots.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {displayedSlots.map((slot) => {
@@ -1207,62 +1292,104 @@ export default function MediaManager() {
             </div>
           )}
 
-          {/* Custom Uploaded Items */}
-          {(activeTab === "all" || activeTab === "custom") && customItems.length > 0 && (
-            <div className="space-y-4 pt-6 border-t border-slate-800">
-              <h3 className="text-sm font-bold text-slate-300 flex items-center gap-2">
-                <Layers className="w-4 h-4 text-emerald-400" />
-                <span>Custom Uploaded Assets ({customItems.length})</span>
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {customItems.map((item) => (
-                  <div
-                    key={item.key}
-                    className="rounded-2xl bg-white border border-slate-200/90 shadow-2xs overflow-hidden flex flex-col justify-between group hover:border-orange-300 hover:shadow-md transition"
-                  >
-                    <div>
-                      <div className="relative h-44 w-full bg-slate-100 overflow-hidden">
-                        <img
-                          src={item.thumbnailUrl || item.url}
-                          alt={item.altText || item.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                        />
-                        <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-[#071527] text-white shadow-sm">
-                          {item.mediaType || "photo"}
-                        </span>
-                      </div>
-                      <div className="p-4">
-                        <span className="inline-block px-2 py-0.5 rounded bg-orange-50 border border-orange-200 text-orange-700 font-mono text-[11px] font-bold mb-2">
-                          {item.key}
-                        </span>
-                        <h3 className="text-sm font-extrabold text-[#071527] mb-1">{item.title}</h3>
-                        <p className="text-xs text-slate-600 truncate">{item.altText || "No caption"}</p>
-                      </div>
-                    </div>
+          {/* Additional Dynamic Uploaded Items for this section */}
+          {(() => {
+            const extraItems = mediaList.filter((m) => {
+              const isCustom = !SYSTEM_SLOTS.some((s) => s.key === m.key);
+              if (!isCustom) return false;
+              if (activeTab === "all" || activeTab === "custom") return true;
+              return m.category === activeTab;
+            });
 
-                    <div className="p-4 pt-2.5 border-t border-slate-100 flex items-center justify-between bg-slate-50/50">
-                      <a
-                        href={item.videoUrl || item.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[11px] text-orange-600 hover:text-orange-700 font-bold hover:underline flex items-center gap-1"
-                      >
-                        <span>Open Asset</span>
-                        <ExternalLink className="w-3 h-3" />
-                      </a>
-                      <button
-                        onClick={() => handleDelete(item.key)}
-                        title="Remove from CMS"
-                        className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition cursor-pointer"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+            if (extraItems.length === 0) return null;
+
+            return (
+              <div className="space-y-4 pt-6 border-t border-slate-200">
+                <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
+                  <Layers className="w-4 h-4 text-orange-500" />
+                  <span>
+                    Additional Dynamic {activeTab.toUpperCase()} Assets ({extraItems.length})
+                  </span>
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {extraItems.map((item) => (
+                    <div
+                      key={item.key}
+                      className="rounded-2xl bg-white border border-slate-200/90 shadow-2xs overflow-hidden flex flex-col justify-between group hover:border-orange-300 hover:shadow-md transition"
+                    >
+                      <div>
+                        <div className="relative h-44 w-full bg-slate-100 overflow-hidden">
+                          <img
+                            src={item.thumbnailUrl || item.url}
+                            alt={item.altText || item.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                          />
+                          <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-[#071527] text-white shadow-sm">
+                            {item.mediaType || "photo"}
+                          </span>
+                        </div>
+                        <div className="p-4">
+                          <span className="inline-block px-2 py-0.5 rounded bg-orange-50 border border-orange-200 text-orange-700 font-mono text-[11px] font-bold mb-2">
+                            {item.key}
+                          </span>
+                          <h3 className="text-sm font-extrabold text-[#071527] mb-1">{item.title}</h3>
+                          <p className="text-xs text-slate-600 truncate">{item.altText || item.subHeading || "No caption"}</p>
+                        </div>
+                      </div>
+
+                      <div className="p-4 pt-2.5 border-t border-slate-100 flex items-center justify-between bg-slate-50/50">
+                        <button
+                          onClick={() => {
+                            setSelectedFile(null);
+                            setFilePreview(item.thumbnailUrl || item.url || null);
+                            setFormData({
+                              key: item.key,
+                              category: item.category || "general",
+                              mediaType: item.mediaType || "photo",
+                              title: item.title || "",
+                              subHeading: item.subHeading || "",
+                              ctaLink: item.ctaLink || "",
+                              altText: item.altText || "",
+                              location: item.location || "Darbhanga, Bihar",
+                              date: item.date || "2026",
+                              tags: item.tags ? item.tags.join(", ") : "",
+                              order: item.order || 0,
+                              url: item.url || "",
+                              videoUrl: item.videoUrl || "",
+                              thumbnailUrl: item.thumbnailUrl || "",
+                            });
+                            setModalOpen(true);
+                          }}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-orange-50 hover:bg-orange-500 text-orange-700 hover:text-white border border-orange-200 text-xs font-bold transition cursor-pointer"
+                        >
+                          <Sparkles className="w-3.5 h-3.5" />
+                          <span>Edit / Replace</span>
+                        </button>
+
+                        <div className="flex items-center gap-1">
+                          <a
+                            href={item.videoUrl || item.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-1.5 text-slate-500 hover:text-slate-900 rounded-lg transition"
+                          >
+                            <ExternalLink className="w-3.5 h-3.5" />
+                          </a>
+                          <button
+                            onClick={() => handleDelete(item.key)}
+                            title="Delete this asset"
+                            className="p-1.5 text-slate-400 hover:text-red-500 rounded-lg transition cursor-pointer"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
         </div>
       )}
 
@@ -1324,84 +1451,254 @@ export default function MediaManager() {
                   <select
                     value={formData.key}
                     onChange={(e) => {
-                      const selectedSlot = SYSTEM_SLOTS.find((s) => s.key === e.target.value);
-                      if (selectedSlot) {
+                      const val = e.target.value;
+                      if (!val) return;
+
+                      // 1. Adding a new item to any category
+                      if (val.startsWith("__new_")) {
+                        const section = val.replace("__new_", "") as any;
+                        const prefix =
+                          section === "hero"
+                            ? "hero-slide"
+                            : section === "gallery"
+                            ? "gallery"
+                            : section === "causes"
+                            ? "cause"
+                            : section === "videos"
+                            ? "video"
+                            : section === "reports"
+                            ? "report"
+                            : section === "people"
+                            ? "person"
+                            : section;
+                        const uniqueKey = `${prefix}-${Date.now()}`;
+                        const count = mediaList.filter((m) => m.category === section).length;
+                        const mediaType =
+                          section === "videos"
+                            ? "video"
+                            : section === "reports"
+                            ? "document"
+                            : "photo";
+
+                        setSelectedFile(null);
+                        setFilePreview(null);
+                        setFormData({
+                          key: uniqueKey,
+                          category: section,
+                          mediaType,
+                          title: section === "hero" ? `Hero Slide #${count + 1}` : "",
+                          subHeading: "",
+                          ctaLink: section === "hero" ? "/donate" : "",
+                          url: "",
+                          videoUrl: "",
+                          thumbnailUrl: "",
+                          altText: "",
+                          location: "Darbhanga, Bihar",
+                          date: "2026",
+                          tags: section === "hero" ? "Hero Banner" : section,
+                          order: count + 1,
+                        });
+                        return;
+                      }
+
+                      // 2. Custom Key
+                      if (val === "custom") {
                         setFormData({
                           ...formData,
+                          key: "custom",
+                          category: "general",
+                          title: "",
+                          altText: "",
+                        });
+                        return;
+                      }
+
+                      // 3. Existing item in DB or standard slot
+                      const existingMedia = mediaList.find((m) => m.key === val);
+                      const selectedSlot = SYSTEM_SLOTS.find((s) => s.key === val);
+
+                      if (existingMedia) {
+                        setSelectedFile(null);
+                        setFilePreview(existingMedia.thumbnailUrl || existingMedia.url || null);
+                        setFormData({
+                          key: existingMedia.key,
+                          category: existingMedia.category || selectedSlot?.section || "general",
+                          mediaType: existingMedia.mediaType || selectedSlot?.mediaType || "photo",
+                          title: existingMedia.title || selectedSlot?.defaultDescription || "",
+                          subHeading: existingMedia.subHeading || "",
+                          ctaLink: existingMedia.ctaLink || "",
+                          altText: existingMedia.altText || "",
+                          location: existingMedia.location || "Darbhanga, Bihar",
+                          date: existingMedia.date || "2026",
+                          tags: existingMedia.tags
+                            ? existingMedia.tags.join(", ")
+                            : selectedSlot?.defaultTags.join(", ") || "",
+                          order: existingMedia.order || 0,
+                          url: existingMedia.url || "",
+                          videoUrl: existingMedia.videoUrl || "",
+                          thumbnailUrl: existingMedia.thumbnailUrl || "",
+                        });
+                      } else if (selectedSlot) {
+                        setSelectedFile(null);
+                        setFilePreview(null);
+                        setFormData({
                           key: selectedSlot.key,
                           category: selectedSlot.section,
                           mediaType: selectedSlot.mediaType,
                           title: selectedSlot.defaultDescription,
                           altText: selectedSlot.defaultDescription,
                           tags: selectedSlot.defaultTags.join(", "),
+                          order: 0,
+                          subHeading: "",
+                          ctaLink: "",
+                          url: "",
+                          videoUrl: "",
+                          thumbnailUrl: "",
+                          location: "Darbhanga, Bihar",
+                          date: "2026",
                         });
                       } else {
-                        setFormData({ ...formData, key: e.target.value });
+                        setFormData({ ...formData, key: val });
                       }
                     }}
                     className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-mono focus:border-orange-500 outline-none"
                   >
                     <option value="">-- Choose Target Website Slot --</option>
+                    
                     <optgroup label="🌟 Homepage Hero Carousel">
+                      <option value="__new_hero" className="font-bold text-orange-600">
+                        ➕ [Add New Slide] Create New Hero Carousel Slide
+                      </option>
                       {SYSTEM_SLOTS.filter((s) => s.section === "hero").map((s) => (
                         <option key={s.key} value={s.key}>
-                          {s.slotLabel} ({s.key})
+                          Update: {s.slotLabel} ({s.key})
                         </option>
                       ))}
+                      {mediaList
+                        .filter((m) => m.category === "hero" && !SYSTEM_SLOTS.some((s) => s.key === m.key))
+                        .map((m) => (
+                          <option key={m.key} value={m.key}>
+                            Update: {m.title || m.key} ({m.key})
+                          </option>
+                        ))}
                     </optgroup>
+
                     <optgroup label="🏛️ Core Program Pillars (Causes)">
+                      <option value="__new_causes" className="font-bold text-orange-600">
+                        ➕ [Add New Pillar] Create New Program Pillar
+                      </option>
                       {SYSTEM_SLOTS.filter((s) => s.section === "causes").map((s) => (
                         <option key={s.key} value={s.key}>
-                          {s.slotLabel} ({s.key})
+                          Update: {s.slotLabel} ({s.key})
                         </option>
                       ))}
+                      {mediaList
+                        .filter((m) => m.category === "causes" && !SYSTEM_SLOTS.some((s) => s.key === m.key))
+                        .map((m) => (
+                          <option key={m.key} value={m.key}>
+                            Update: {m.title || m.key} ({m.key})
+                          </option>
+                        ))}
                     </optgroup>
+
                     <optgroup label="📸 Homepage Gallery Showcase">
+                      <option value="__new_gallery" className="font-bold text-orange-600">
+                        ➕ [Add New Photo] Create New Gallery Photo
+                      </option>
                       {SYSTEM_SLOTS.filter((s) => s.section === "gallery").map((s) => (
                         <option key={s.key} value={s.key}>
-                          {s.slotLabel} ({s.key})
+                          Update: {s.slotLabel} ({s.key})
                         </option>
                       ))}
+                      {mediaList
+                        .filter((m) => m.category === "gallery" && !SYSTEM_SLOTS.some((s) => s.key === m.key))
+                        .map((m) => (
+                          <option key={m.key} value={m.key}>
+                            Update: {m.title || m.key} ({m.key})
+                          </option>
+                        ))}
                     </optgroup>
+
                     <optgroup label="🎥 Video Documentaries &amp; Reels">
+                      <option value="__new_videos" className="font-bold text-orange-600">
+                        ➕ [Add New Video] Add New Documentary / Reel
+                      </option>
                       {SYSTEM_SLOTS.filter((s) => s.section === "videos").map((s) => (
                         <option key={s.key} value={s.key}>
-                          {s.slotLabel} ({s.key})
+                          Update: {s.slotLabel} ({s.key})
                         </option>
                       ))}
+                      {mediaList
+                        .filter((m) => m.category === "videos" && !SYSTEM_SLOTS.some((s) => s.key === m.key))
+                        .map((m) => (
+                          <option key={m.key} value={m.key}>
+                            Update: {m.title || m.key} ({m.key})
+                          </option>
+                        ))}
                     </optgroup>
+
                     <optgroup label="📄 Annual Reports &amp; Publications">
+                      <option value="__new_reports" className="font-bold text-orange-600">
+                        ➕ [Add New Report] Add Annual Report / PDF
+                      </option>
                       {SYSTEM_SLOTS.filter((s) => s.section === "reports").map((s) => (
                         <option key={s.key} value={s.key}>
-                          {s.slotLabel} ({s.key})
+                          Update: {s.slotLabel} ({s.key})
                         </option>
                       ))}
+                      {mediaList
+                        .filter((m) => m.category === "reports" && !SYSTEM_SLOTS.some((s) => s.key === m.key))
+                        .map((m) => (
+                          <option key={m.key} value={m.key}>
+                            Update: {m.title || m.key} ({m.key})
+                          </option>
+                        ))}
                     </optgroup>
+
                     <optgroup label="👥 Leadership &amp; Team">
+                      <option value="__new_people" className="font-bold text-orange-600">
+                        ➕ [Add New Member] Add Leadership / Team Profile
+                      </option>
                       {SYSTEM_SLOTS.filter((s) => s.section === "people").map((s) => (
                         <option key={s.key} value={s.key}>
-                          {s.slotLabel} ({s.key})
+                          Update: {s.slotLabel} ({s.key})
                         </option>
                       ))}
+                      {mediaList
+                        .filter((m) => m.category === "people" && !SYSTEM_SLOTS.some((s) => s.key === m.key))
+                        .map((m) => (
+                          <option key={m.key} value={m.key}>
+                            Update: {m.title || m.key} ({m.key})
+                          </option>
+                        ))}
                     </optgroup>
-                    <option value="custom">✍️ Other / Custom Key</option>
+
+                    <option value="custom">✍️ Custom Slot / Key</option>
                   </select>
                 </div>
 
-                {/* Custom Key Input */}
-                {(formData.key === "custom" || !SYSTEM_SLOTS.some((s) => s.key === formData.key)) && (
-                  <div>
-                    <label className="block text-slate-700 font-bold mb-1">Custom Identifier Key *</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. partner-logo-1 or newsletter-2026-q1"
-                      value={formData.key === "custom" ? "" : formData.key}
-                      onChange={(e) => setFormData({ ...formData, key: e.target.value.toLowerCase().replace(/\s+/g, "-") })}
-                      className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-mono focus:border-orange-500 outline-none"
-                    />
-                  </div>
-                )}
+                {/* Target Slot Key Identifier Display & Edit */}
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1">
+                    Slot Key Identifier *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. hero-slide-5 or partner-logo-1"
+                    value={formData.key === "custom" ? "" : formData.key}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        key: e.target.value.toLowerCase().replace(/\s+/g, "-"),
+                      })
+                    }
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-xs font-mono focus:border-orange-500 outline-none"
+                  />
+                  <p className="text-[11px] text-slate-400 mt-1">
+                    Auto-assigned for new items. You can also customize this identifier key if needed.
+                  </p>
+                </div>
 
                 {/* Title */}
                 <div>
