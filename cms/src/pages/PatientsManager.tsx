@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { api } from "../services/api";
+import { getClientUrl } from "../services/config";
 import { Plus, HeartPulse, Loader2, X, Building2, AlertTriangle, RefreshCw, Upload, Link as LinkIcon, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -188,7 +189,7 @@ export default function PatientsManager() {
                 <div className="p-4 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs bg-slate-50/70">
                   <span className="text-[11px] text-slate-500 font-mono font-medium">/{p.slug}</span>
                   <a
-                    href={`http://localhost:3000/patients/${p.slug}`}
+                    href={`${getClientUrl()}/patients/${p.slug}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-xs text-orange-600 hover:text-orange-700 hover:underline font-bold flex items-center gap-1"

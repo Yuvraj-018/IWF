@@ -551,11 +551,13 @@ export const api = {
   },
 
   // ── Tax Exemption (80G) Claims / Inbound Donations ──
-  async listTaxExemptions(params: { page?: number; limit?: number; search?: string } = {}, options?: CacheOptions) {
+  async listTaxExemptions(params: { page?: number; limit?: number; search?: string; taxExemption?: string } = {}, options?: CacheOptions) {
     const query = new URLSearchParams();
-    query.set("taxExemption", "true");
+    if (params.taxExemption && params.taxExemption !== "all") {
+      query.set("taxExemption", params.taxExemption);
+    }
     if (params.page) query.set("page", String(params.page));
-    if (params.limit) query.set("limit", String(params.limit || 20));
+    if (params.limit) query.set("limit", String(params.limit || 50));
     if (params.search) query.set("search", params.search);
 
     const q = `?${query.toString()}`;

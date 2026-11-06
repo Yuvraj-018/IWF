@@ -1,5 +1,6 @@
 import { type ReactNode } from "react";
 import { useAuth } from "../../context/AuthContext";
+import { getClientUrl } from "../../services/config";
 import {
   LayoutDashboard,
   Newspaper,
@@ -95,7 +96,7 @@ export default function AdminLayout({ activeTab, onTabChange, children }: AdminL
         {/* Public site link & User profile strip */}
         <div className="p-4 border-t border-[#0d223f] space-y-3 bg-[#051120]">
           <a
-            href="http://localhost:3000"
+            href={getClientUrl()}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-between px-3 py-2 rounded-xl bg-[#07172c] hover:bg-orange-500/15 text-[11px] font-semibold text-slate-200 border border-[#122e54] hover:border-orange-500/40 hover:text-orange-300 transition"

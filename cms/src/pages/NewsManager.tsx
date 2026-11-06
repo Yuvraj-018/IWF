@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { api } from "../services/api";
+import { getClientUrl } from "../services/config";
 import {
   Plus,
   Trash2,
@@ -12,6 +13,7 @@ import {
   Upload,
   Link as LinkIcon,
   CheckCircle2,
+  ExternalLink,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -226,9 +228,15 @@ export default function NewsManager() {
               </div>
 
               <div className="p-4 pt-2.5 border-t border-slate-100 flex items-center justify-between bg-slate-50/50">
-                <span className="text-[10px] text-slate-400 font-mono truncate max-w-[180px]">
-                  /{item.slug}
-                </span>
+                <a
+                  href={`${getClientUrl()}/news/${item.slug}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-orange-600 hover:text-orange-700 font-bold flex items-center gap-1 font-mono truncate max-w-[180px]"
+                >
+                  <span>/{item.slug}</span>
+                  <ExternalLink className="w-3 h-3 shrink-0" />
+                </a>
                 <button
                   onClick={() => handleDelete(item._id, item.title)}
                   title="Delete from database"

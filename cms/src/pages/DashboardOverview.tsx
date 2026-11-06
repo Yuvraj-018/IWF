@@ -51,7 +51,7 @@ export default function DashboardOverview({ onNavigate }: { onNavigate: (tab: Na
       icon: HeartHandshake,
       color: "text-emerald-400",
       bg: "bg-emerald-500/10 border-emerald-500/20",
-      tab: "overview" as NavTab,
+      tab: "applications" as NavTab,
     },
     {
       title: "Critical Patient Cases",

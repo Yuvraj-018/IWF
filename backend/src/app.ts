@@ -44,8 +44,10 @@ export function createApp() {
           (process.env.CLIENT_URL && origin === process.env.CLIENT_URL) ||
           (process.env.CMS_URL && origin === process.env.CMS_URL) ||
           (process.env.ADMIN_URL && origin === process.env.ADMIN_URL) ||
+          origin === "https://iwf-89zl.vercel.app" ||
           /^https:\/\/([a-zA-Z0-9-]+\.)*iwfindia\.org$/.test(origin) ||
-          /^https:\/\/([a-zA-Z0-9-]+\.)*vercel\.app$/.test(origin)
+          /^https:\/\/([a-zA-Z0-9-]+\.)*vercel\.app$/.test(origin) ||
+          /^https:\/\/([a-zA-Z0-9-]+\.)*railway\.app$/.test(origin)
         ) {
           callback(null, true);
         } else if (process.env.NODE_ENV === "production") {
