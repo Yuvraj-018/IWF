@@ -1,7 +1,6 @@
 import { GENERAL_PROGRAMME_OPTIONS, SECTOR_PROGRAMMES } from "@/content/sectorCatalogue";
 import type { Values, WizardConfig } from "../ApplicationWizard";
 import {
-  DOC_ACCEPT,
   declaration,
   hearAboutFields,
   locationInitial,
@@ -219,28 +218,8 @@ export const sponsorFormConfig: WizardConfig = {
           ],
         },
         {
-          title: "Type of support & contribution",
+          title: "Contribution",
           fields: [
-            {
-              key: "supportTypes",
-              type: "chips",
-              columns: 3,
-              span: 2,
-              label: "What type of support would you like to provide?",
-              required: true,
-              options: [
-                "Programme Sponsorship",
-                "Project Sponsorship",
-                "Community / Village Initiative Sponsorship",
-                "Financial Support",
-                "In-Kind Support",
-                "Equipment / Infrastructure / Resource Support",
-                "CSR Support",
-                "Recurring Sponsorship",
-                "Training / Technical / Professional Support",
-                "Other — prefer to discuss",
-              ],
-            },
             {
               key: "estimate",
               type: "select",
@@ -400,14 +379,6 @@ export const sponsorFormConfig: WizardConfig = {
               label: "Additional Comments",
               optional: true,
             },
-            {
-              key: "supportingDoc",
-              type: "file",
-              accept: DOC_ACCEPT,
-              label: "Supporting Document",
-              optional: true,
-              hint: "Proposal, organisation profile, CSR guidelines or concept note — up to 5 MB.",
-            },
           ],
         },
         {
@@ -464,17 +435,6 @@ export const sponsorFormConfig: WizardConfig = {
               text: "I am authorised to permit ISLAH to display our organisation logo.",
               span: 2,
               visibleIf: isOrg,
-            },
-            {
-              key: "logoFile",
-              type: "file",
-              accept: "image/png,image/jpeg,image/webp,image/svg+xml",
-              imageOnly: true,
-              label: "Organisation Logo",
-              hint: "PNG, JPG, WEBP or SVG, up to 5 MB. A transparent or white background works best.",
-              required: true,
-              span: 2,
-              visibleIf: (v) => Boolean(v.logoConsent) && isOrg(v),
             },
           ],
         },

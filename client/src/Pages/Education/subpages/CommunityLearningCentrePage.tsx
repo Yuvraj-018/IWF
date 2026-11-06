@@ -54,9 +54,9 @@ export default function CommunityLearningCentrePage() {
               <span>Support This Initiative</span>
             </Link>
 
-            <Link to="/partner" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl backdrop-blur-md transition cursor-pointer">
+            <Link to="/sponsor" hash="sponsor-form" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl backdrop-blur-md transition cursor-pointer">
               <Building className="w-4 h-4 text-emerald-300" />
-              <span>Donate for CLC Centre</span>
+              <span>Sponsor for CLC Centre</span>
             </Link>
           </div>
         </SubpageHeroCarousel>
@@ -333,9 +333,9 @@ export default function CommunityLearningCentrePage() {
                   <span>Support This Initiative</span>
                 </Link>
 
-                <Link to="/partner" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl backdrop-blur-xs transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer">
+                <Link to="/sponsor" hash="sponsor-form" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl backdrop-blur-xs transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer">
                   <Building className="w-4 h-4 text-brand-orange" />
-                  <span>Donate for CLC Centre</span>
+                  <span>Sponsor for CLC Centre</span>
                 </Link>
               </div>
             </div>

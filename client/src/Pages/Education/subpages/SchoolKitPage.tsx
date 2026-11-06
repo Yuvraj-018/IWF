@@ -48,9 +48,9 @@ export default function SchoolKitPage() {
             <span>Support a Child</span>
           </Link>
 
-          <Link to="/partner" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs sm:text-sm px-5 py-2.5 sm:py-3 rounded-xl backdrop-blur-xs transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer">
+          <Link to="/sponsor" hash="sponsor-form" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs sm:text-sm px-5 py-2.5 sm:py-3 rounded-xl backdrop-blur-xs transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer">
             <PackageCheck className="w-4 h-4 text-brand-orange" />
-            <span>Donate for School Kits</span>
+            <span>Sponsor for School Kits</span>
           </Link>
         </div>
       </SubpageHeroCarousel>
@@ -382,9 +382,9 @@ export default function SchoolKitPage() {
                 <span>Support a Child</span>
               </Link>
 
-              <Link to="/partner" className="inline-flex items-center gap-2 bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 font-bold text-xs sm:text-sm px-5 py-3 rounded-xl shadow-xs transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer">
+              <Link to="/sponsor" hash="sponsor-form" className="inline-flex items-center gap-2 bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 font-bold text-xs sm:text-sm px-5 py-3 rounded-xl shadow-xs transition-all hover:scale-[1.02] active:scale-95 uppercase tracking-wider cursor-pointer">
                 <PackageCheck className="w-4 h-4 text-brand-orange" />
-                <span>Donate for School Kits</span>
+                <span>Sponsor for School Kits</span>
               </Link>
             </div>
           </div>

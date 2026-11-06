@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
+import { PatientCarousel as SharedPatientCarousel } from "@/components/healthcare/PatientCarousel";
 import {
   Phone, Mail, Facebook, Twitter, Instagram, Youtube, Linkedin,
   GraduationCap, HeartPulse, Users, Sprout, Wrench, Leaf,
@@ -361,7 +362,7 @@ function UrgentPatientsSection({ lang }: LanguageProp) {
     <section className="py-4 bg-white">
       <div className="max-w-7xl mx-auto px-4">
         <ScrollReveal>
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-4">
             <div>
               <p className="text-xs font-bold uppercase tracking-widest text-[#f97316] mb-1">
                 {lang === "en" ? "MEDICAL EMERGENCY" : "चिकित्सा आपातकाल"}
@@ -369,23 +370,20 @@ function UrgentPatientsSection({ lang }: LanguageProp) {
               <h2 className="text-2xl md:text-3xl font-bold text-slate-900 uppercase tracking-wide">
                 {lang === "en" ? "CRITICAL MEDICAL & EMERGENCY SUPPORT" : "क्रिटिकल मेडिकल और आपातकालीन सहायता"}
               </h2>
+              <p className="text-sm font-semibold text-black leading-snug mt-1">
+                {lang === "en" ? "Har Pal Anmol Hai" : "हर पल अनमोल है"}
+              </p>
+              <p className="text-sm font-normal text-black leading-relaxed max-w-4xl">
+                {t.urgentSub}
+              </p>
             </div>
             <a
               href="/programs/healthcare/critical-life-support"
-              className="inline-flex items-center gap-1.5 text-sm font-bold text-brand-green hover:text-slate-950 transition-colors shrink-0 sm:self-center"
+              className="inline-flex items-center gap-1.5 text-sm font-bold text-brand-green hover:text-slate-950 transition-colors shrink-0"
             >
               <span>{t.viewAllPatients}</span>
               <ArrowRight className="w-4 h-4" />
             </a>
-          </div>
-
-          <div className="mb-4 space-y-0.5">
-            <p className="text-sm font-semibold text-black leading-snug">
-              {lang === "en" ? "Har Pal Anmol Hai" : "हर पल अनमोल है"}
-            </p>
-            <p className="text-sm font-normal text-black leading-relaxed max-w-4xl">
-              {t.urgentSub}
-            </p>
           </div>
         </ScrollReveal>
         <PatientCarousel />
@@ -399,9 +397,6 @@ function UrgentPatientsSection({ lang }: LanguageProp) {
  * Desktop (lg+): a static four-column grid.
  */
 function PatientCarousel() {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(0);
-  const pausedRef = useRef(false);
   const [patients, setPatients] = useState<any[]>(() => URGENT_PATIENTS.slice(0, 4));
 
   useEffect(() => {
@@ -428,67 +423,7 @@ function PatientCarousel() {
       .catch(() => {});
   }, []);
 
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    const desktop = window.matchMedia("(width >= 64rem)");
-    const onScroll = () => {
-      const card = track.firstElementChild as HTMLElement | null;
-      if (!card) return;
-      const step = card.offsetWidth + 12;
-      setActive(Math.round(track.scrollLeft / step));
-    };
-    track.addEventListener("scroll", onScroll, { passive: true });
-    const id = window.setInterval(() => {
-      if (desktop.matches || pausedRef.current || document.hidden) return;
-      const card = track.firstElementChild as HTMLElement | null;
-      if (!card) return;
-      const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 8;
-      track.scrollTo({ left: atEnd ? 0 : track.scrollLeft + card.offsetWidth + 12, behavior: "smooth" });
-    }, 4000);
-    return () => {
-      window.clearInterval(id);
-      track.removeEventListener("scroll", onScroll);
-    };
-  }, []);
-
-  const pause = () => {
-    pausedRef.current = true;
-  };
-  const resume = () => {
-    window.setTimeout(() => {
-      pausedRef.current = false;
-    }, 6000);
-  };
-
-  const topPatients = patients.slice(0, 4);
-
-  return (
-    <div>
-      <div
-        ref={trackRef}
-        onTouchStart={pause}
-        onTouchEnd={resume}
-        onMouseEnter={pause}
-        onMouseLeave={() => (pausedRef.current = false)}
-        className="flex lg:grid lg:grid-cols-4 gap-3 overflow-x-auto lg:overflow-visible snap-x snap-mandatory scroll-smooth scrollbar-hide -mx-4 px-4 lg:mx-0 lg:px-0 pb-1"
-      >
-        {topPatients.map((patient) => (
-          <div key={patient.id} className="snap-start shrink-0 w-[78%] sm:w-[45%] md:w-[36%] lg:w-auto">
-            <PatientCard {...patient} />
-          </div>
-        ))}
-      </div>
-      <div className="flex justify-center gap-1.5 mt-3 lg:hidden" aria-hidden="true">
-        {topPatients.map((p, i) => (
-          <span
-            key={p.id}
-            className={`h-1.5 rounded-full transition-all ${i === active ? "w-5 bg-brand-orange" : "w-1.5 bg-slate-300"}`}
-          />
-        ))}
-      </div>
-    </div>
-  );
+  return <SharedPatientCarousel patients={patients.slice(0, 4)} />;
 }
 
 function FeaturedCauses({ lang }: LanguageProp) {

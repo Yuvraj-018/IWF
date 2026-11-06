@@ -324,7 +324,7 @@ export const partnerFormConfig: WizardConfig = {
         {
           title: "Supporting documents",
           desc: "Optional at the application stage. PDF, DOC or images up to 5 MB each.",
-          columns: 3,
+          columns: 2,
           fields: [
             {
               key: "docProfile",
@@ -348,24 +348,10 @@ export const partnerFormConfig: WizardConfig = {
               optional: true,
             },
             {
-              key: "docConcept",
-              type: "file",
-              accept: DOC_ACCEPT,
-              label: "Concept Note / Proposal",
-              optional: true,
-            },
-            {
               key: "docAuthorisation",
               type: "file",
               accept: DOC_ACCEPT,
               label: "Letter of Interest / Authorisation",
-              optional: true,
-            },
-            {
-              key: "docCredentials",
-              type: "file",
-              accept: DOC_ACCEPT,
-              label: "Professional Credentials",
               optional: true,
             },
           ],
