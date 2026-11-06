@@ -43,9 +43,13 @@ export function createApp() {
           /^http:\/\/127\.0\.0\.1(:\d+)?$/.test(origin) ||
           (process.env.CLIENT_URL && origin === process.env.CLIENT_URL) ||
           (process.env.CMS_URL && origin === process.env.CMS_URL) ||
-          (process.env.ADMIN_URL && origin === process.env.ADMIN_URL)
+          (process.env.ADMIN_URL && origin === process.env.ADMIN_URL) ||
+          /^https:\/\/([a-zA-Z0-9-]+\.)*iwfindia\.org$/.test(origin) ||
+          /^https:\/\/([a-zA-Z0-9-]+\.)*vercel\.app$/.test(origin)
         ) {
           callback(null, true);
+        } else if (process.env.NODE_ENV === "production") {
+          callback(new Error(`CORS blocked for untrusted origin: ${origin}`));
         } else {
           callback(null, true); // Permissive during preview/dev
         }

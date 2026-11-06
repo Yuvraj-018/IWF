@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Router } from "express";
 import { donationRouter } from "./donationRoutes.js";
 import { memberRouter } from "./memberRoutes.js";
@@ -24,10 +25,21 @@ export const apiRouter = Router();
 apiRouter.use(apiGlobalLimiter);
 
 apiRouter.get("/health", (_req, res) => {
-  res.json({
-    status: "ok",
+  const dbStateMap: Record<number, string> = {
+    0: "disconnected",
+    1: "connected",
+    2: "connecting",
+    3: "disconnecting",
+  };
+  const dbStatus = dbStateMap[mongoose.connection.readyState] || "unknown";
+  const isHealthy = mongoose.connection.readyState === 1;
+
+  res.status(isHealthy ? 200 : 503).json({
+    status: isHealthy ? "healthy" : "degraded",
     service: "ISLAH Backend API",
-    time: new Date().toISOString(),
+    database: dbStatus,
+    uptimeSeconds: Math.floor(process.uptime()),
+    timestamp: new Date().toISOString(),
   });
 });
 

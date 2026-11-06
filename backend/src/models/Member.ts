@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-export type MemberCategory = "Community" | "Contributing" | "Patron" | "Blue" | "Yellow" | "Green";
+export type MemberCategory = "Community" | "Contributing" | "Patron" | "Blue" | "Yellow" | "Green" | "Orange";
 
 export interface IMember extends Document {
   memberNo: string;
@@ -37,7 +37,7 @@ const MemberSchema = new Schema<IMember>(
     fatherName: { type: String },
     category: {
       type: String,
-      enum: ["Community", "Contributing", "Patron", "Blue", "Yellow", "Green"],
+      enum: ["Community", "Contributing", "Patron", "Blue", "Yellow", "Green", "Orange"],
       required: true,
     },
     annualFee: { type: Number, required: true },

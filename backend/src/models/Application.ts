@@ -16,7 +16,7 @@ export interface IApplication extends Document {
   subclassifications?: string[];
   resumeUrl?: string;
   message?: string;
-  status: "Pending" | "Reviewed" | "Approved" | "Rejected";
+  status: "Pending" | "Under Review" | "Shortlisted" | "Approved" | "Contacted" | "Rejected" | "Archived";
   formData: Record<string, any>;
   createdAt: Date;
   updatedAt: Date;
@@ -44,7 +44,7 @@ const ApplicationSchema = new Schema<IApplication>(
     message: { type: String },
     status: {
       type: String,
-      enum: ["Pending", "Reviewed", "Approved", "Rejected"],
+      enum: ["Pending", "Under Review", "Shortlisted", "Approved", "Contacted", "Rejected", "Archived"],
       default: "Pending",
     },
     formData: { type: Schema.Types.Mixed, default: {} },

@@ -7,6 +7,7 @@ import {
 import { formSubmissionLimiter } from "../middlewares/rateLimiter.js";
 import { honeypotCheck } from "../middlewares/honeypot.js";
 import { createTurnstileMiddleware } from "../middlewares/turnstile.js";
+import { requireAdminAuth } from "../middlewares/auth.js";
 
 export const applicationRouter = Router();
 
@@ -17,5 +18,5 @@ applicationRouter.post(
   createTurnstileMiddleware({ action: "application" }),
   submitApplication
 );
-applicationRouter.get("/", listApplications);
-applicationRouter.patch("/:id/status", updateApplicationStatus);
+applicationRouter.get("/", requireAdminAuth, listApplications);
+applicationRouter.patch("/:id/status", requireAdminAuth, updateApplicationStatus);

@@ -13,6 +13,7 @@ const CATEGORY_FEE_MAP: Record<MemberCategory, number> = {
   Blue: 2500,
   Yellow: 1000,
   Green: 500,
+  Orange: 9600,
 };
 
 const CATEGORY_CODE_MAP: Record<MemberCategory, string> = {
@@ -22,6 +23,7 @@ const CATEGORY_CODE_MAP: Record<MemberCategory, string> = {
   Blue: "BL",
   Yellow: "YL",
   Green: "GR",
+  Orange: "OR",
 };
 
 export async function registerMember(req: Request, res: Response): Promise<void> {
@@ -49,16 +51,34 @@ export async function registerMember(req: Request, res: Response): Promise<void>
     } = req.body;
 
     const memberName = (fullName || name || "").trim();
-    const memberPhone = (mobile || phone || "").trim();
+    const memberPhone = (mobile || phone || "").trim().replace(/[\s-]/g, "");
+    const memberEmail = (email || "").trim().toLowerCase();
 
-    if (!memberName || !category || !email || !memberPhone || !state || !district) {
-      res.status(400).json({ success: false, message: "Missing required membership fields" });
+    if (!memberName || memberName.length < 2) {
+      res.status(400).json({ success: false, message: "Valid full name is required" });
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!memberEmail || !emailRegex.test(memberEmail)) {
+      res.status(400).json({ success: false, message: "Valid email address is required" });
+      return;
+    }
+
+    const phoneRegex = /^[0-9+]{8,15}$/;
+    if (!memberPhone || !phoneRegex.test(memberPhone)) {
+      res.status(400).json({ success: false, message: "Valid 10-digit mobile number is required" });
+      return;
+    }
+
+    if (!category || !state || !district) {
+      res.status(400).json({ success: false, message: "Category, state, and district are mandatory" });
       return;
     }
 
     const catKey = category as MemberCategory;
     const baseFee = CATEGORY_FEE_MAP[catKey] || 2500;
-    const periodMultiplier = Number(membershipPeriod) === 2 ? 2 : 1;
+    const periodMultiplier = Math.max(1, Math.min(10, Number(membershipPeriod) || 1));
     const annualFee = baseFee * periodMultiplier;
     const catCode = CATEGORY_CODE_MAP[catKey] || "MEM";
 
@@ -79,7 +99,7 @@ export async function registerMember(req: Request, res: Response): Promise<void>
       category,
       annualFee,
       membershipPeriod: periodMultiplier,
-      email: email.trim(),
+      email: memberEmail,
       phone: memberPhone,
       countryCode: countryCode || "+91",
       state,

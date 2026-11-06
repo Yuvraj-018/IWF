@@ -18,30 +18,78 @@ export async function submitApplication(req: Request, res: Response): Promise<vo
       formData,
     } = req.body;
 
-    if (!type || !fullName || !email || !phone) {
-      res.status(400).json({ success: false, message: "Type, Full Name, Email, and Phone are required" });
+    const allowedTypes = ["volunteer", "mentor", "partner", "sponsor", "career"];
+    const normalizedType = typeof type === "string" ? type.toLowerCase().trim() : "";
+
+    if (!normalizedType || !allowedTypes.includes(normalizedType)) {
+      res.status(400).json({
+        success: false,
+        message: `Invalid application type. Must be one of: ${allowedTypes.join(", ")}`,
+      });
       return;
     }
 
-    const count = await Application.countDocuments({ type });
+    const trimmedName = typeof fullName === "string" ? fullName.trim() : "";
+    const trimmedEmail = typeof email === "string" ? email.trim() : "";
+    const trimmedPhone = typeof phone === "string" ? phone.trim().replace(/[\s-]/g, "") : "";
+
+    if (!trimmedName || trimmedName.length < 2) {
+      res.status(400).json({ success: false, message: "Valid full name (at least 2 characters) is required" });
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!trimmedEmail || !emailRegex.test(trimmedEmail)) {
+      res.status(400).json({ success: false, message: "Please provide a valid email address" });
+      return;
+    }
+
+    const phoneRegex = /^[0-9+]{8,15}$/;
+    if (!trimmedPhone || !phoneRegex.test(trimmedPhone)) {
+      res.status(400).json({ success: false, message: "Please provide a valid contact phone number" });
+      return;
+    }
+
+    const count = await Application.countDocuments({ type: normalizedType as any });
     const formattedAppId =
       req.body.applicationId ||
-      `ISLAH-${type.toUpperCase().slice(0, 3)}-${new Date().getFullYear()}-${String(count + 1).padStart(4, "0")}`;
+      `ISLAH-${normalizedType.toUpperCase().slice(0, 3)}-${new Date().getFullYear()}-${String(count + 1).padStart(4, "0")}`;
+
+    const appFormData = formData ? { ...formData } : {};
+    const extractedResumeUrl =
+      req.body.resumeUrl ||
+      appFormData.resume?.url ||
+      appFormData.cvFileUrl ||
+      appFormData.documents?.resume?.url ||
+      "";
+    const extractedResumeName =
+      appFormData.cvFileName ||
+      appFormData.resume?.name ||
+      appFormData.documents?.resume?.name ||
+      "Applicant_Resume.pdf";
+
+    if (extractedResumeUrl && !appFormData.cvFileUrl) {
+      appFormData.cvFileUrl = extractedResumeUrl;
+    }
+    if (extractedResumeName && !appFormData.cvFileName) {
+      appFormData.cvFileName = extractedResumeName;
+    }
 
     const application = new Application({
       applicationId: formattedAppId,
-      type,
-      fullName,
-      email,
-      phone,
+      type: normalizedType as any,
+      fullName: trimmedName,
+      email: trimmedEmail.toLowerCase(),
+      phone: trimmedPhone,
       countryCode: countryCode || "+91",
       city,
       state,
       organization,
       selectedSectors: selectedSectors || [],
       subclassifications: subclassifications || [],
+      resumeUrl: extractedResumeUrl || undefined,
       message,
-      formData: formData || {},
+      formData: appFormData,
     });
 
     await application.save();
@@ -79,13 +127,13 @@ export async function updateApplicationStatus(req: Request, res: Response): Prom
     const { status, reviewNotes } = req.body;
 
     const validStatuses = [
-      "Submitted",
+      "Pending",
       "Under Review",
-      "More Information Required",
-      "Interview Scheduled",
+      "Shortlisted",
       "Approved",
+      "Contacted",
       "Rejected",
-      "Withdrawn",
+      "Archived",
     ];
 
     if (!status || !validStatuses.includes(status)) {

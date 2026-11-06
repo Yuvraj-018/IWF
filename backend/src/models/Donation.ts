@@ -16,6 +16,8 @@ export interface IDonation extends Document {
   amount: number;
   taxExemption: boolean;
   pan?: string;
+  panFileUrl?: string;
+  donorPhotoUrl?: string;
   patientSlug?: string;
   paymentMode: "Online" | "Bank Transfer" | "Cheque" | "Cash";
   paymentStatus: "Pending" | "Success" | "Failed";
@@ -41,15 +43,17 @@ const DonationSchema = new Schema<IDonation>(
     email: { type: String, required: true },
     phone: { type: String, required: true },
     countryCode: { type: String, default: "+91" },
-    address: { type: String, required: true },
-    city: { type: String, required: true },
-    state: { type: String, required: true },
+    address: { type: String, default: "" },
+    city: { type: String, default: "Not Specified" },
+    state: { type: String, default: "Not Specified" },
     pincode: { type: String, default: "" }, // only collected when a tax receipt is requested
     financialType: { type: String, required: true },
     frequency: { type: String, enum: ["One Time", "Monthly", "Quarterly", "Yearly"], default: "One Time" },
     amount: { type: Number, required: true, min: 10 },
     taxExemption: { type: Boolean, default: false },
     pan: { type: String },
+    panFileUrl: { type: String },
+    donorPhotoUrl: { type: String },
     patientSlug: { type: String },
     paymentMode: { type: String, enum: ["Online", "Bank Transfer", "Cheque", "Cash"], default: "Online" },
     paymentStatus: { type: String, enum: ["Pending", "Success", "Failed"], default: "Pending" },

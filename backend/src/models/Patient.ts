@@ -67,7 +67,10 @@ const PatientSchema = new Schema<IPatient>(
     hospital: { type: String, required: true },
     hospitalAddress: { type: String },
     ward: { type: String },
-    admissionDate: { type: String, required: true },
+    admissionDate: {
+      type: String,
+      default: () => new Date().toISOString().split("T")[0],
+    },
     condition: {
       type: String,
       enum: ["Critical", "Serious", "Stable", "Recovering", "Discharged"],

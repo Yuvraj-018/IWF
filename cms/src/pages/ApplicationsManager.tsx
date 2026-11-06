@@ -154,6 +154,7 @@ export default function ApplicationsManager() {
                   <option value="Shortlisted">Shortlisted</option>
                   <option value="Approved">Approved</option>
                   <option value="Contacted">Contacted</option>
+                  <option value="Rejected">Rejected</option>
                   <option value="Archived">Archived</option>
                 </select>
               </div>

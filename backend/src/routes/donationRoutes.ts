@@ -4,9 +4,12 @@ import {
   getDonationByReceiptNo,
   listDonations,
 } from "../controllers/donationController.js";
+import { requireAdminAuth } from "../middlewares/auth.js";
+import { formSubmissionLimiter } from "../middlewares/rateLimiter.js";
+import { honeypotCheck } from "../middlewares/honeypot.js";
 
 export const donationRouter = Router();
 
-donationRouter.post("/", createDonation);
-donationRouter.get("/", listDonations);
+donationRouter.post("/", formSubmissionLimiter, honeypotCheck, createDonation);
+donationRouter.get("/", requireAdminAuth, listDonations);
 donationRouter.get("/:receiptNo", getDonationByReceiptNo);

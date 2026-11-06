@@ -12,9 +12,9 @@ function slugify(text: string): string {
 
 export async function listNewsEvents(req: Request, res: Response) {
   try {
-    const { category, search, featured, isUpcoming, limit = 50, page = 1 } = req.query;
+    const { category, search, featured, isUpcoming, limit = 50, page = 1, all } = req.query;
 
-    const query: Record<string, any> = { published: true };
+    const query: Record<string, any> = (all === "true" || req.headers.authorization) ? {} : { published: true };
 
     if (category && category !== "All") {
       query.category = category;
