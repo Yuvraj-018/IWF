@@ -278,17 +278,17 @@ export default function ApplicationsManager() {
                     {c.cityDistrict && <span>📍 {c.cityDistrict}, {c.state || ""}</span>}
                   </div>
 
-                  <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 mt-2 text-xs text-slate-300">
-                    <div className="font-semibold text-slate-200 mb-1">{c.subject || "Subject"}</div>
-                    <p className="line-clamp-3">"{c.message}"</p>
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 mt-2 text-xs text-slate-700">
+                    <div className="font-semibold text-[#071527] mb-1">{c.subject || "Subject"}</div>
+                    <p className="line-clamp-3 italic">"{c.message}"</p>
                   </div>
                 </div>
 
-                <div className="flex md:flex-col items-center md:items-end justify-between gap-2 shrink-0 border-t md:border-t-0 pt-3 md:pt-0 border-slate-800">
+                <div className="flex md:flex-col items-center md:items-end justify-between gap-2 shrink-0 border-t md:border-t-0 pt-3 md:pt-0 border-slate-200">
                   <select
                     value={c.status || "Unread"}
                     onChange={(e) => handleContactStatus(c._id, e.target.value)}
-                    className="p-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-blue-400 font-bold outline-none cursor-pointer"
+                    className="px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs text-orange-600 font-bold outline-none cursor-pointer hover:border-orange-500 shadow-sm transition"
                   >
                     <option value="Unread">Unread</option>
                     <option value="Read">Read</option>
@@ -340,9 +340,10 @@ export default function ApplicationsManager() {
                   </div>
 
                   {item.message && (
-                    <p className="text-xs text-slate-300 bg-slate-950/50 p-2.5 rounded-xl border border-slate-800/80 mt-2 line-clamp-2">
-                      "{item.message}"
-                    </p>
+                    <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 mt-2 text-xs text-slate-700">
+                      <span className="text-slate-500 font-semibold mr-1.5">Note:</span>
+                      <span className="italic">"{item.message}"</span>
+                    </div>
                   )}
 
                   {/* Resume / Document Attachment */}
@@ -352,7 +353,7 @@ export default function ApplicationsManager() {
                         href={item.resumeUrl || item.formData?.cvFileUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs font-bold transition border border-emerald-500/20"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-50 hover:bg-orange-100 text-orange-600 text-xs font-bold transition border border-orange-200"
                       >
                         <Download className="w-3.5 h-3.5" />
                         <span>Download Applicant Resume ({item.formData?.cvFileName || "Resume.pdf"})</span>
@@ -362,11 +363,11 @@ export default function ApplicationsManager() {
                 </div>
 
                 {/* Status Action */}
-                <div className="flex md:flex-col items-center md:items-end justify-between gap-2 shrink-0 border-t md:border-t-0 pt-3 md:pt-0 border-slate-800">
+                <div className="flex md:flex-col items-center md:items-end justify-between gap-2 shrink-0 border-t md:border-t-0 pt-3 md:pt-0 border-slate-200">
                   <select
                     value={item.status || "Pending"}
                     onChange={(e) => handleApplicationStatus(item._id, e.target.value)}
-                    className="p-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-emerald-400 font-bold outline-none cursor-pointer"
+                    className="px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs text-orange-600 font-bold outline-none cursor-pointer hover:border-orange-500 shadow-sm transition"
                   >
                     <option value="Pending">Pending</option>
                     <option value="Under Review">Under Review</option>

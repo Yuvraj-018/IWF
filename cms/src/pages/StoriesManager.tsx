@@ -378,160 +378,164 @@ export default function StoriesManager() {
 
       {/* Add / Edit Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-[#0f172a] border border-slate-700 rounded-2xl w-full max-w-2xl p-6 text-slate-100 shadow-2xl space-y-4 my-8">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <h3 className="text-base font-bold text-white">
-                {editingId ? "Edit Success Story" : "Publish New Success Story"}
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-2xl w-full shadow-2xl my-auto max-h-[calc(100vh-2rem)] sm:max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between p-5 sm:p-6 pb-4 border-b border-slate-200 shrink-0">
+              <h3 className="text-base font-extrabold text-[#071527] flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-orange-500" />
+                <span>{editingId ? "Edit Success Story" : "Publish New Success Story"}</span>
               </h3>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white"
+                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleSave} className="space-y-4 text-xs">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-slate-300 font-bold mb-1">Story Title *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.title}
-                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-emerald-500"
-                    placeholder="e.g. From a Dream to a Bright Future"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-300 font-bold mb-1">Category *</label>
-                  <select
-                    value={formData.category}
-                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-emerald-500"
-                  >
-                    <option value="Education">Education</option>
-                    <option value="Healthcare">Healthcare</option>
-                    <option value="Women Empowerment">Women Empowerment</option>
-                    <option value="Livelihood">Livelihood</option>
-                    <option value="Agriculture">Agriculture</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div>
-                  <label className="block text-slate-300 font-bold mb-1">Beneficiary Name *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.personName}
-                    onChange={(e) => setFormData({ ...formData, personName: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-emerald-500"
-                    placeholder="e.g. Anjali Kumari"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-300 font-bold mb-1">Village / District</label>
-                  <input
-                    type="text"
-                    value={formData.village}
-                    onChange={(e) => setFormData({ ...formData, village: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-emerald-500"
-                    placeholder="Bathiya, Darbhanga"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-300 font-bold mb-1">State</label>
-                  <input
-                    type="text"
-                    value={formData.state}
-                    onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-emerald-500"
-                    placeholder="Bihar"
-                  />
-                </div>
-              </div>
-
-              {/* Story Photo */}
-              <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-                <label className="block text-slate-200 font-bold">
-                  Beneficiary Photo (Stored in Cloudflare R2)
-                </label>
-                <div className="flex flex-col sm:flex-row items-center gap-2">
-                  <input
-                    type="text"
-                    value={formData.image}
-                    onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none font-mono text-[11px]"
-                    placeholder="https://pub-...r2.dev/islah/stories/photo.jpg"
-                  />
-                  <label className="w-full sm:w-auto shrink-0 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold cursor-pointer transition">
-                    <UploadCloud className="w-3.5 h-3.5" />
-                    <span>{uploadingImage ? "Uploading..." : "Upload Photo"}</span>
+            <form onSubmit={handleSave} className="flex flex-col flex-1 overflow-hidden min-h-0">
+              <div className="p-5 sm:p-6 overflow-y-auto flex-1 space-y-4 text-xs overscroll-contain">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-slate-700 font-bold mb-1">Story Title *</label>
                     <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      disabled={uploadingImage}
-                      className="hidden"
+                      type="text"
+                      required
+                      value={formData.title}
+                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
+                      placeholder="e.g. From a Dream to a Bright Future"
                     />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-700 font-bold mb-1">Category *</label>
+                    <select
+                      value={formData.category}
+                      onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
+                    >
+                      <option value="Education">Education</option>
+                      <option value="Healthcare">Healthcare</option>
+                      <option value="Women Empowerment">Women Empowerment</option>
+                      <option value="Livelihood">Livelihood</option>
+                      <option value="Agriculture">Agriculture</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-slate-700 font-bold mb-1">Beneficiary Name *</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.personName}
+                      onChange={(e) => setFormData({ ...formData, personName: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
+                      placeholder="e.g. Anjali Kumari"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-700 font-bold mb-1">Village / District</label>
+                    <input
+                      type="text"
+                      value={formData.village}
+                      onChange={(e) => setFormData({ ...formData, village: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
+                      placeholder="Bathiya, Darbhanga"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-700 font-bold mb-1">State</label>
+                    <input
+                      type="text"
+                      value={formData.state}
+                      onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
+                      placeholder="Bihar"
+                    />
+                  </div>
+                </div>
+
+                {/* Story Photo */}
+                <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                  <label className="block text-slate-800 font-bold">
+                    Beneficiary Photo (Stored in Cloudflare R2)
                   </label>
+                  <div className="flex flex-col sm:flex-row items-center gap-2">
+                    <input
+                      type="text"
+                      value={formData.image}
+                      onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                      className="w-full px-3 py-2 rounded-lg bg-white border border-slate-200 text-slate-900 outline-none font-mono text-[11px]"
+                      placeholder="https://pub-...r2.dev/islah/stories/photo.jpg"
+                    />
+                    <label className="w-full sm:w-auto shrink-0 flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold cursor-pointer transition shadow-sm">
+                      <UploadCloud className="w-3.5 h-3.5" />
+                      <span>{uploadingImage ? "Uploading..." : "Upload Photo"}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        disabled={uploadingImage}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1">Short Excerpt (Card Summary) *</label>
+                  <textarea
+                    required
+                    rows={2}
+                    value={formData.excerpt}
+                    onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
+                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
+                    placeholder="1-2 sentences summarizing the change in their life"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1">Full Detailed Story *</label>
+                  <textarea
+                    required
+                    rows={4}
+                    value={formData.fullStory}
+                    onChange={(e) => setFormData({ ...formData, fullStory: e.target.value })}
+                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
+                    placeholder="Complete narrative showing the background, intervention by IWF, and sustainable outcome..."
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1">Impact Metrics (one per line)</label>
+                  <textarea
+                    rows={2}
+                    value={formData.impactMetrics}
+                    onChange={(e) => setFormData({ ...formData, impactMetrics: e.target.value })}
+                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
+                    placeholder="Grade 10 Class Topper&#10;Full Merit Scholarship&#10;Aspiring Engineer"
+                  />
                 </div>
               </div>
 
-              <div>
-                <label className="block text-slate-300 font-bold mb-1">Short Excerpt (Card Summary) *</label>
-                <textarea
-                  required
-                  rows={2}
-                  value={formData.excerpt}
-                  onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-emerald-500"
-                  placeholder="1-2 sentences summarizing the change in their life"
-                />
-              </div>
-
-              <div>
-                <label className="block text-slate-300 font-bold mb-1">Full Detailed Story *</label>
-                <textarea
-                  required
-                  rows={4}
-                  value={formData.fullStory}
-                  onChange={(e) => setFormData({ ...formData, fullStory: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-emerald-500"
-                  placeholder="Complete narrative showing the background, intervention by IWF, and sustainable outcome..."
-                />
-              </div>
-
-              <div>
-                <label className="block text-slate-300 font-bold mb-1">Impact Metrics (one per line)</label>
-                <textarea
-                  rows={2}
-                  value={formData.impactMetrics}
-                  onChange={(e) => setFormData({ ...formData, impactMetrics: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-emerald-500"
-                  placeholder="Grade 10 Class Topper&#10;Full Merit Scholarship&#10;Aspiring Engineer"
-                />
-              </div>
-
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+              {/* Sticky Footer */}
+              <div className="p-4 sm:p-5 border-t border-slate-200 bg-slate-50 flex items-center justify-end gap-3 shrink-0">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold transition cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={uploadingImage}
-                  className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold cursor-pointer shadow-lg shadow-emerald-900/30 disabled:opacity-50"
+                  className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold cursor-pointer shadow-md shadow-orange-500/25 transition disabled:opacity-50"
                 >
                   <Save className="w-4 h-4" />
                   <span>Save Story</span>

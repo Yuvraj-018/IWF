@@ -290,170 +290,175 @@ export default function CareersManager() {
 
       {/* Add / Edit Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-[#0f172a] border border-slate-700 rounded-2xl w-full max-w-2xl p-6 text-slate-100 shadow-2xl space-y-4 my-8">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <h3 className="text-base font-bold text-white">
-                {editingId ? "Edit Career Opening" : "Post New Career Opening"}
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-2xl w-full shadow-2xl my-auto max-h-[calc(100vh-2rem)] sm:max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between p-5 sm:p-6 pb-4 border-b border-slate-200 shrink-0">
+              <h3 className="text-base font-extrabold text-[#071527] flex items-center gap-2">
+                <Briefcase className="w-5 h-5 text-orange-500" />
+                <span>{editingId ? "Edit Career Opening" : "Post New Career Opening"}</span>
               </h3>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white"
+                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleSave} className="space-y-4 text-xs">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <form onSubmit={handleSave} className="flex flex-col flex-1 overflow-hidden min-h-0">
+              <div className="p-5 sm:p-6 overflow-y-auto flex-1 space-y-4 text-xs overscroll-contain">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-slate-700 font-bold mb-1">Job Title *</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.title}
+                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
+                      placeholder="e.g. Field Officer — Community Health"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-700 font-bold mb-1">Department *</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.department}
+                      onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
+                      placeholder="Programmes, Healthcare, M&E"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-slate-700 font-bold mb-1">Location *</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.location}
+                      onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
+                      placeholder="Darbhanga, Bihar / Remote"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-700 font-bold mb-1">Employment Type</label>
+                    <select
+                      value={formData.type}
+                      onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
+                    >
+                      <option value="Full-Time">Full-Time</option>
+                      <option value="Part-Time">Part-Time</option>
+                      <option value="Contract">Contract</option>
+                      <option value="Internship">Internship</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-700 font-bold mb-1">Experience Band</label>
+                    <select
+                      value={formData.experienceBand}
+                      onChange={(e) => setFormData({ ...formData, experienceBand: e.target.value, experience: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
+                    >
+                      <option value="Fresher / Intern">Fresher / Intern</option>
+                      <option value="1–2 Years">1–2 Years</option>
+                      <option value="2–5 Years">2–5 Years</option>
+                      <option value="5+ Years">5+ Years</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-slate-700 font-bold mb-1">Apply Before (Last Date) *</label>
+                    <input
+                      type="date"
+                      required
+                      value={formData.lastDate}
+                      onChange={(e) => setFormData({ ...formData, lastDate: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-700 font-bold mb-1">Reports To</label>
+                    <input
+                      type="text"
+                      value={formData.reportsTo}
+                      onChange={(e) => setFormData({ ...formData, reportsTo: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
+                      placeholder="e.g. Program Director"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-700 font-bold mb-1">Status</label>
+                    <select
+                      value={formData.status}
+                      onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
+                    >
+                      <option value="Active">Active</option>
+                      <option value="Closed">Closed</option>
+                      <option value="Draft">Draft</option>
+                    </select>
+                  </div>
+                </div>
+
                 <div>
-                  <label className="block text-slate-300 font-bold mb-1">Job Title *</label>
-                  <input
-                    type="text"
+                  <label className="block text-slate-700 font-bold mb-1">Role Summary *</label>
+                  <textarea
                     required
-                    value={formData.title}
-                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-emerald-500"
-                    placeholder="e.g. Field Officer — Community Health"
+                    rows={2}
+                    value={formData.summary}
+                    onChange={(e) => setFormData({ ...formData, summary: e.target.value })}
+                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
+                    placeholder="Short 2-3 line overview of the role and key objective"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-bold mb-1">Department *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.department}
-                    onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-emerald-500"
-                    placeholder="Programmes, Healthcare, M&E"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div>
-                  <label className="block text-slate-300 font-bold mb-1">Location *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.location}
-                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-emerald-500"
-                    placeholder="Darbhanga, Bihar / Remote"
+                  <label className="block text-slate-700 font-bold mb-1">Key Responsibilities (one per line)</label>
+                  <textarea
+                    rows={3}
+                    value={formData.responsibilities}
+                    onChange={(e) => setFormData({ ...formData, responsibilities: e.target.value })}
+                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
+                    placeholder="Plan and coordinate education programmes&#10;Organise health camps"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-bold mb-1">Employment Type</label>
-                  <select
-                    value={formData.type}
-                    onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-emerald-500"
-                  >
-                    <option value="Full-Time">Full-Time</option>
-                    <option value="Part-Time">Part-Time</option>
-                    <option value="Contract">Contract</option>
-                    <option value="Internship">Internship</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-slate-300 font-bold mb-1">Experience Band</label>
-                  <select
-                    value={formData.experienceBand}
-                    onChange={(e) => setFormData({ ...formData, experienceBand: e.target.value, experience: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-emerald-500"
-                  >
-                    <option value="Fresher / Intern">Fresher / Intern</option>
-                    <option value="1–2 Years">1–2 Years</option>
-                    <option value="2–5 Years">2–5 Years</option>
-                    <option value="5+ Years">5+ Years</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div>
-                  <label className="block text-slate-300 font-bold mb-1">Apply Before (Last Date) *</label>
-                  <input
-                    type="date"
-                    required
-                    value={formData.lastDate}
-                    onChange={(e) => setFormData({ ...formData, lastDate: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-emerald-500"
+                  <label className="block text-slate-700 font-bold mb-1">Eligibility Criteria (one per line)</label>
+                  <textarea
+                    rows={3}
+                    value={formData.eligibility}
+                    onChange={(e) => setFormData({ ...formData, eligibility: e.target.value })}
+                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
+                    placeholder="Graduate in Social Work or related discipline&#10;Fluency in Hindi"
                   />
                 </div>
-
-                <div>
-                  <label className="block text-slate-300 font-bold mb-1">Reports To</label>
-                  <input
-                    type="text"
-                    value={formData.reportsTo}
-                    onChange={(e) => setFormData({ ...formData, reportsTo: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-emerald-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-300 font-bold mb-1">Status</label>
-                  <select
-                    value={formData.status}
-                    onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-emerald-500"
-                  >
-                    <option value="Active">Active</option>
-                    <option value="Closed">Closed</option>
-                    <option value="Draft">Draft</option>
-                  </select>
-                </div>
               </div>
 
-              <div>
-                <label className="block text-slate-300 font-bold mb-1">Role Summary *</label>
-                <textarea
-                  required
-                  rows={2}
-                  value={formData.summary}
-                  onChange={(e) => setFormData({ ...formData, summary: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-emerald-500"
-                  placeholder="Short 2-3 line overview of the role and key objective"
-                />
-              </div>
-
-              <div>
-                <label className="block text-slate-300 font-bold mb-1">Key Responsibilities (one per line)</label>
-                <textarea
-                  rows={3}
-                  value={formData.responsibilities}
-                  onChange={(e) => setFormData({ ...formData, responsibilities: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-emerald-500"
-                  placeholder="Plan and coordinate education programmes&#10;Organise health camps"
-                />
-              </div>
-
-              <div>
-                <label className="block text-slate-300 font-bold mb-1">Eligibility Criteria (one per line)</label>
-                <textarea
-                  rows={3}
-                  value={formData.eligibility}
-                  onChange={(e) => setFormData({ ...formData, eligibility: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-emerald-500"
-                  placeholder="Graduate in Social Work or related discipline&#10;Fluency in Hindi"
-                />
-              </div>
-
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+              {/* Sticky Footer */}
+              <div className="p-4 sm:p-5 border-t border-slate-200 bg-slate-50 flex items-center justify-end gap-3 shrink-0">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold transition cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold cursor-pointer shadow-lg shadow-emerald-900/30"
+                  className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold cursor-pointer shadow-md shadow-orange-500/25 transition"
                 >
                   <Save className="w-4 h-4" />
                   <span>Save Role</span>
