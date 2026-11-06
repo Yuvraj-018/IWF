@@ -480,18 +480,7 @@ export async function getSettings(req: Request, res: Response): Promise<void> {
     if (key) query.key = key;
     if (category) query.category = category;
 
-    let settings = await SiteSetting.find(query);
-
-    // Auto-seed defaults if not initialized in MongoDB yet
-    if (settings.length === 0 && !key && !category) {
-      const docs = Object.entries(DEFAULT_SETTINGS).map(([k, val]) => ({
-        key: k,
-        category: val.category,
-        data: val.data,
-      }));
-      settings = await SiteSetting.insertMany(docs);
-      console.log("⚡ [SETTINGS] Auto-initialized all site stats, sector metrics, and contact numbers.");
-    }
+    const settings = await SiteSetting.find(query);
 
     // Prepare map with fallbacks for any keys not yet created in existing DB instances
     const settingsMap: Record<string, any> = {};
