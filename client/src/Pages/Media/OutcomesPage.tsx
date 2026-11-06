@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   CheckCircle2,
@@ -18,6 +18,7 @@ import { MediaLayout } from "@/components/media/MediaLayout";
 import { OUTCOMES_DATA, SUCCESS_STORIES_DATA } from "@/content/mediaContent";
 import type { SuccessStoryItem } from "@/content/mediaContent";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { fetchSuccessStories } from "@/services/storyService";
 import { useMedia } from "@/services/mediaService";
 
 export function OutcomesPage() {
@@ -113,6 +114,33 @@ export function OutcomesPage() {
 
   const quoteText = outcomesSettings?.quoteText || OUTCOMES_DATA.quote.text;
   const quoteAuthor = outcomesSettings?.quoteAuthor || OUTCOMES_DATA.quote.author;
+
+  // "Stories behind the change": success stories from the backend (featured first).
+  const [liveStories, setLiveStories] = useState<SuccessStoryItem[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    fetchSuccessStories({ limit: 12 }).then((res) => {
+      if (cancelled || !res?.success || !res.data?.length) return;
+      const sorted = [...res.data].sort(
+        (a, b) => Number(Boolean((b as { featured?: boolean }).featured)) - Number(Boolean((a as { featured?: boolean }).featured)),
+      );
+      setLiveStories(sorted.slice(0, 3) as SuccessStoryItem[]);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const featuredStories = liveStories.length
+    ? liveStories.map((st) => ({
+        title: st.title,
+        category: st.category,
+        desc: st.excerpt,
+        image: st.image,
+        link: "",
+        story: st as SuccessStoryItem | undefined,
+      }))
+    : OUTCOMES_DATA.featuredStories.map((f) => ({ ...f, story: undefined as SuccessStoryItem | undefined }));
 
   const handleOpenStory = (link: string) => {
     const id = link.includes("id=") ? link.split("id=")[1] : "";
@@ -468,7 +496,7 @@ export function OutcomesPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {OUTCOMES_DATA.featuredStories.map((story, i) => (
+              {featuredStories.map((story, i) => (
                 <div
                   key={i}
                   className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200/90 hover:shadow-md transition flex flex-col group"
@@ -498,7 +526,7 @@ export function OutcomesPage() {
 
                     <div className="pt-4 mt-2 border-t border-slate-100">
                       <button
-                        onClick={() => handleOpenStory(story.link)}
+                        onClick={() => (story.story ? setActiveStory(story.story) : handleOpenStory(story.link))}
                         className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 hover:text-emerald-800 transition cursor-pointer"
                       >
                         <span>Read More</span>

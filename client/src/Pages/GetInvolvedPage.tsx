@@ -1,3 +1,4 @@
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { useState } from "react";
 import {
   Heart,
@@ -30,6 +31,14 @@ import type { RoleType } from "@/components/forms/RoleFormModal";
 import { StandardPageHero } from "@/components/layout/StandardPageHero";
 
 export default function GetInvolvedPage() {
+  const { settings } = useSiteSettings();
+  const counters = {
+    lives: "25,000+",
+    villages: "120+",
+    students: "18,500+",
+    volunteers: "5,800+",
+    ...((settings as { getinvolved_stats?: Record<string, string> }).getinvolved_stats ?? {}),
+  };
   const [activeModal, setActiveModal] = useState<RoleType | null>(null);
 
   const scrollToWays = () => {
@@ -407,19 +416,19 @@ export default function GetInvolvedPage() {
                 {/* 4 Mini Counters */}
                 <div className="mt-6 pt-5 border-t border-white/15 grid grid-cols-4 gap-2 text-center">
                   <div>
-                    <div className="text-base sm:text-lg font-black text-brand-orange">25,000+</div>
+                    <div className="text-base sm:text-lg font-black text-brand-orange">{counters.lives}</div>
                     <div className="text-[9px] text-white/75 font-semibold uppercase">Lives</div>
                   </div>
                   <div>
-                    <div className="text-base sm:text-lg font-black text-brand-orange">120+</div>
+                    <div className="text-base sm:text-lg font-black text-brand-orange">{counters.villages}</div>
                     <div className="text-[9px] text-white/75 font-semibold uppercase">Villages</div>
                   </div>
                   <div>
-                    <div className="text-base sm:text-lg font-black text-brand-orange">18,500+</div>
+                    <div className="text-base sm:text-lg font-black text-brand-orange">{counters.students}</div>
                     <div className="text-[9px] text-white/75 font-semibold uppercase">Students</div>
                   </div>
                   <div>
-                    <div className="text-base sm:text-lg font-black text-brand-orange">5,800+</div>
+                    <div className="text-base sm:text-lg font-black text-brand-orange">{counters.volunteers}</div>
                     <div className="text-[9px] text-white/75 font-semibold uppercase">Volunteers</div>
                   </div>
                 </div>

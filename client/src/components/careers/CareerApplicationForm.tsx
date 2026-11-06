@@ -51,6 +51,7 @@ export function CareerApplicationForm({
 }) {
   const [v, setV] = useState(EMPTY);
   const [resume, setResume] = useState<UploadedFile | null>(null);
+  const [photo, setPhoto] = useState<UploadedFile | null>(null);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [token, setToken] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -73,6 +74,7 @@ export function CareerApplicationForm({
 
   const validate = (): FieldErrors => {
     const e: FieldErrors = {};
+    if (!v.position) e.position = "Select the position you are applying for.";
     if (v.fullName.trim().length < 3) e.fullName = "Please enter your full name.";
     if (!isValidPhone(v.countryCode, v.phone))
       e.phone = phoneError(v.countryCode, v.phone) ?? "Enter a valid mobile number.";
@@ -80,7 +82,6 @@ export function CareerApplicationForm({
     if (!v.qualification) e.qualification = "Select your qualification.";
     if (!v.experience) e.experience = "Select your experience.";
     if (v.location.trim().length < 2) e.location = "Enter your current location.";
-    if (!v.position) e.position = "Select the position you are applying for.";
     if (!resume) e.resume = "Please upload your resume (PDF, DOC or DOCX).";
     if (!v.declaration) e.declaration = "Required";
     return e;
@@ -98,6 +99,9 @@ export function CareerApplicationForm({
     setApiError(null);
     try {
       const file = await uploadSingleFile(resume!.file, "islah/applications/career");
+      const photoFile = photo
+        ? await uploadSingleFile(photo.file, "islah/applications/career/photos")
+        : null;
       const res = await submitApplication({
         type: "career",
         fullName: v.fullName.trim(),
@@ -116,6 +120,12 @@ export function CareerApplicationForm({
           cvFileUrl: file.url,
           cvFileName: resume!.name,
           resume: { name: resume!.name, url: file.url },
+          ...(photoFile
+            ? {
+                photoUrl: photoFile.url,
+                documents: { photo: { name: photo!.name, url: photoFile.url } },
+              }
+            : {}),
         },
       });
       setReference(
@@ -154,6 +164,7 @@ export function CareerApplicationForm({
             setReference(null);
             setV(EMPTY);
             setResume(null);
+            setPhoto(null);
           }}
           className="mt-4 text-xs font-medium text-slate-600 hover:text-slate-900"
         >
@@ -168,6 +179,15 @@ export function CareerApplicationForm({
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-7 shadow-xs">
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-3.5">
+        <Field name="position" label="Position Applied For" required error={errors.position}>
+          <SelectInput
+            value={allPositions.includes(v.position) ? v.position : ""}
+            onChange={(x) => set("position", x)}
+            options={allPositions}
+            placeholder="Select position"
+            hasError={has("position")}
+          />
+        </Field>
         <Field name="fullName" label="Full Name" required error={errors.fullName}>
           <input
             type="text"
@@ -225,15 +245,6 @@ export function CareerApplicationForm({
             className={inputClass(has("location"))}
           />
         </Field>
-        <Field name="position" label="Position Applied For" required error={errors.position}>
-          <SelectInput
-            value={allPositions.includes(v.position) ? v.position : ""}
-            onChange={(x) => set("position", x)}
-            options={allPositions}
-            placeholder="Select position"
-            hasError={has("position")}
-          />
-        </Field>
         <Field
           name="resume"
           label="Upload Resume"
@@ -249,6 +260,14 @@ export function CareerApplicationForm({
             }}
             accept="application/pdf,.doc,.docx"
             hasError={has("resume")}
+          />
+        </Field>
+        <Field name="photo" label="Your Photo" optional hint="JPG, PNG or WEBP — max 5 MB.">
+          <FileUpload
+            value={photo}
+            onChange={setPhoto}
+            accept="image/jpeg,image/png,image/webp"
+            imageOnly
           />
         </Field>
       </div>

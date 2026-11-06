@@ -23,7 +23,7 @@ import {
 } from "@/components/layout/SiteLayout";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
 import { PatientCard } from "@/components/healthcare/PatientCard";
-import { URGENT_PATIENTS } from "@/content/patients";
+import { usePatients } from "@/services/patientService";
 import {
   CAMPAIGNS_DATA,
   ALL_CAMPAIGNS_LIST,
@@ -45,6 +45,7 @@ interface CampaignDetailPageProps {
 export default function CampaignDetailPage({
   campaignSlug,
 }: CampaignDetailPageProps) {
+  const { patients: livePatients } = usePatients(true);
   const [activeModal, setActiveModal] = useState<RoleType | null>(null);
   const [selectedDonation, setSelectedDonation] = useState<number | null>(null);
 
@@ -261,7 +262,7 @@ export default function CampaignDetailPage({
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {URGENT_PATIENTS.slice(0, 3).map((patient) => (
+              {livePatients.slice(0, 3).map((patient) => (
                 <PatientCard key={patient.id} {...patient} />
               ))}
             </div>

@@ -1,3 +1,4 @@
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { useState, useMemo } from "react";
 import {
   Search,
@@ -47,6 +48,17 @@ interface ProgramItem {
   href: string;
   initiatives: ProgramInitiative[];
 }
+
+/** Which sector_stats value (from the CMS) backs each programme card's figure. */
+const SECTOR_STAT: Record<string, { key: string; label: string }> = {
+  "edu-1": { key: "educationChildren", label: "Children" },
+  "health-1": { key: "healthPeople", label: "People" },
+  "women-1": { key: "womenEmpowered", label: "Women" },
+  "skills-1": { key: "youthTrained", label: "Youth Trained" },
+  "agriculture-1": { key: "farmersSupported", label: "Farmers" },
+  "environment-1": { key: "treesPlanted", label: "Trees" },
+  "relief-1": { key: "reliefFamilies", label: "Families" },
+};
 
 const PROGRAM_LIST: ProgramItem[] = [
   {
@@ -210,8 +222,22 @@ const CATEGORIES = [
 export default function ProgramsMasterPage() {
   const [activeCategory, setActiveCategory] = useState("All Programs");
   const [searchQuery, setSearchQuery] = useState("");
+  const { sectorStats } = useSiteSettings();
+  // Swap in the live figure for each card when the CMS provides one.
+  const programs = useMemo(
+    () =>
+      PROGRAM_LIST.map((p) => {
+        const stat = SECTOR_STAT[p.id];
+        const value = stat && (sectorStats as Record<string, string> | undefined)?.[stat.key];
+        if (!value) return p;
+        const initiatives = p.stats.split("•")[0].trim();
+        return { ...p, stats: `${initiatives} • ${value} ${stat.label}` };
+      }),
+    [sectorStats],
+  );
+
   const filteredPrograms = useMemo(() => {
-    return PROGRAM_LIST.filter((p) => {
+    return programs.filter((p) => {
       const matchesCategory =
         activeCategory === "All Programs" || p.category === activeCategory;
       const matchesSearch =
@@ -219,7 +245,7 @@ export default function ProgramsMasterPage() {
         p.desc.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesCategory && matchesSearch;
     });
-  }, [activeCategory, searchQuery]);
+  }, [programs, activeCategory, searchQuery]);
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900">

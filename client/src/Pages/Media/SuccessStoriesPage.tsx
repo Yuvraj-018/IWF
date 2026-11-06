@@ -8,9 +8,17 @@ import { MediaLayout } from "@/components/media/MediaLayout";
 import { SUCCESS_STORIES_DATA } from "@/content/mediaContent";
 import type { SuccessStoryItem } from "@/content/mediaContent";
 import { fetchSuccessStories } from "@/services/storyService";
+import { useSearch } from "@tanstack/react-router";
 
 export function SuccessStoriesPage() {
-  const [selectedCategory, setSelectedCategory] = useState<string>("All Stories");
+  const { category: categoryParam } = useSearch({ strict: false }) as { category?: string };
+  const initialCategory =
+    categoryParam && SUCCESS_STORIES_DATA.categories.includes(categoryParam) ? categoryParam : "All Stories";
+  const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
+  useEffect(() => {
+    setSelectedCategory(initialCategory);
+    setPage(1);
+  }, [initialCategory]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [activeStory, setActiveStory] = useState<SuccessStoryItem | null>(null);
   const [videoOpen, setVideoOpen] = useState(false);
@@ -43,6 +51,30 @@ export function SuccessStoriesPage() {
       cancelled = true;
     };
   }, [page, selectedCategory, searchQuery]);
+
+  // Real story counts per impact area (falls back to the bundled figures).
+  const [areaCounts, setAreaCounts] = useState<Record<string, number> | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    fetchSuccessStories({ limit: 100 }).then((res) => {
+      if (cancelled || !res?.success || !res.data?.length) return;
+      const counts: Record<string, number> = {};
+      for (const st of res.data) counts[st.category] = (counts[st.category] ?? 0) + 1;
+      setAreaCounts(counts);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const storiesByArea = areaCounts
+    ? SUCCESS_STORIES_DATA.categories
+        .filter((c) => c !== "All Stories" && areaCounts[c])
+        .map((area) => ({
+          area,
+          count: `${areaCounts[area]} ${areaCounts[area] === 1 ? "Story" : "Stories"}`,
+        }))
+    : SUCCESS_STORIES_DATA.storiesByArea;
 
   return (
     <MediaLayout>
@@ -257,7 +289,7 @@ export function SuccessStoriesPage() {
                 Stories by Impact Area
               </h3>
               <div className="divide-y divide-slate-100 mt-2">
-                {SUCCESS_STORIES_DATA.storiesByArea.map((item, idx) => (
+                {storiesByArea.map((item, idx) => (
                   <div
                     key={idx}
                     onClick={() => setSelectedCategory(item.area)}

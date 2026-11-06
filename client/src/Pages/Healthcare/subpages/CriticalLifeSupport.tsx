@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   NotificationTicker,
@@ -26,13 +26,15 @@ import {
   Ambulance,
   Heart,
   Share2,
-  Shield,
+  BookOpen,
 } from "lucide-react";
 import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import { PatientCarousel } from "@/components/healthcare/PatientCarousel";
 import { toast } from "sonner";
 import { URGENT_PATIENTS } from "@/content/patients";
 import { usePatients } from "@/services/patientService";
+import { fetchSuccessStories } from "@/services/storyService";
+import type { SuccessStoryItem } from "@/content/mediaContent";
 import criticalLifeSupportImg from "@/assets/critical_life_support.png";
 import MedicalEmergencyWorkflow from "@/components/healthcare/MedicalEmergencyWorkflow";
 
@@ -234,24 +236,44 @@ function PatientCardsSection() {
   );
 }
 
+function CaseThumb({ src, alt }: { src?: string; alt: string }) {
+  const [failed, setFailed] = useState(false);
+  if (!src || failed) {
+    return (
+      <span className="w-16 h-16 rounded-lg bg-orange-50 text-brand-orange flex items-center justify-center shrink-0">
+        <HeartPulse className="w-6 h-6" />
+      </span>
+    );
+  }
+  return (
+    <img
+      src={src}
+      alt={alt}
+      onError={() => setFailed(true)}
+      className="w-16 h-16 rounded-lg object-cover shrink-0 bg-slate-100"
+      loading="lazy"
+    />
+  );
+}
+
 function BottomCTABanner() {
   const reasons = [
-    {
-      icon: HeartPulse,
-      tint: "bg-red-50 text-red-500",
-      text: "Many patients in critical condition cannot afford life-saving treatment.",
-    },
-    {
-      icon: HandHeart,
-      tint: "bg-emerald-50 text-emerald-600",
-      text: "Your support helps them receive timely care and emergency help.",
-    },
-    {
-      icon: Shield,
-      tint: "bg-blue-50 text-blue-500",
-      text: "Every case is verified, and funds go directly to the hospital.",
-    },
+    "Many patients in critical condition cannot afford life-saving treatment.",
+    "Your support helps them receive timely care and emergency help.",
+    "Every case is verified, and funds go directly to the hospital.",
   ];
+
+  // Past healthcare cases from the CMS (Success Stories → Healthcare).
+  const [pastCases, setPastCases] = useState<SuccessStoryItem[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    fetchSuccessStories({ category: "Healthcare", limit: 3 }).then((res) => {
+      if (!cancelled && res?.success && Array.isArray(res.data)) setPastCases(res.data.slice(0, 3));
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const share = async () => {
     const url = window.location.href;
@@ -271,10 +293,12 @@ function BottomCTABanner() {
     }
   };
 
+  const storiesLink = { to: "/media/success-stories" as const, search: { category: "Healthcare" } };
+
   return (
     <section className={`bg-slate-50 border-y border-slate-200 ${SECTION}`}>
       <div className={CONTAINER}>
-        <div className="grid lg:grid-cols-[1.1fr_1fr] gap-6 lg:gap-10 items-center">
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-10 items-start">
           <div>
             <h2 className="text-xl sm:text-2xl font-semibold text-[#0b1f3b] text-balance">
               You can be the reason for someone&apos;s second chance at life.
@@ -282,33 +306,72 @@ function BottomCTABanner() {
             <p className="text-sm text-slate-600 mt-1.5 text-pretty">
               Join our mission to support critically ill patients in their most difficult moments.
             </p>
-            <div className="flex flex-wrap gap-3 mt-5">
+            <ul className="mt-4 space-y-2">
+              {reasons.map((text) => (
+                <li key={text} className="flex items-start gap-2.5 text-sm text-slate-700 leading-relaxed">
+                  <CheckCircle2 className="w-4 h-4 text-brand-orange shrink-0 mt-0.5" />
+                  <span>{text}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-2.5 sm:gap-3 mt-5">
               <Link
                 to="/donate"
                 search={{ financialType: "Medical Emergency" }}
-                className="inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition"
+                className="inline-flex items-center justify-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition"
               >
                 <Heart className="w-4 h-4 fill-white" /> Donate Now
+              </Link>
+              <Link
+                {...storiesLink}
+                className="inline-flex items-center justify-center gap-2 border border-slate-300 bg-white hover:bg-slate-100 text-[#0b1f3b] font-semibold text-sm px-5 py-2.5 rounded-xl transition"
+              >
+                <BookOpen className="w-4 h-4 text-brand-orange" /> View Patient Stories
               </Link>
               <button
                 type="button"
                 onClick={share}
-                className="inline-flex items-center gap-2 border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 font-semibold text-sm px-5 py-2.5 rounded-xl transition"
+                className="inline-flex items-center justify-center gap-1.5 text-slate-600 hover:text-[#0b1f3b] font-semibold text-sm px-2 py-1.5 sm:py-2.5 transition"
               >
-                <Share2 className="w-4 h-4 text-slate-500" /> Share This Page
+                <Share2 className="w-4 h-4" /> Share
               </button>
             </div>
           </div>
-          <ul className="space-y-3">
-            {reasons.map(({ icon: Icon, tint, text }) => (
-              <li key={text} className="flex items-start gap-3 bg-white rounded-xl border border-slate-200 p-3.5">
-                <span className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${tint}`}>
-                  <Icon className="w-4 h-4" />
-                </span>
-                <span className="text-sm text-slate-700 leading-relaxed">{text}</span>
-              </li>
-            ))}
-          </ul>
+
+          <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5">
+            <div className="flex items-center justify-between gap-3 mb-3">
+              <p className="text-xs font-bold uppercase tracking-widest text-brand-orange">Lives we&apos;ve helped</p>
+              <Link {...storiesLink} className="text-xs font-semibold text-[#0b1f3b] hover:text-brand-orange inline-flex items-center gap-1">
+                All stories <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+            {pastCases.length > 0 ? (
+              <ul className="divide-y divide-slate-100">
+                {pastCases.map((story) => (
+                  <li key={story.id}>
+                    <Link {...storiesLink} className="flex gap-3 py-3 first:pt-0 last:pb-0 group">
+                      <CaseThumb src={story.image} alt={story.personName} />
+                      <span className="min-w-0">
+                        <span className="block font-semibold text-sm text-[#0b1f3b] group-hover:text-brand-orange transition leading-snug">
+                          {story.title}
+                        </span>
+                        <span className="block text-xs text-slate-500 mt-0.5">
+                          {[story.personName, [story.village, story.state].filter(Boolean).join(", ")]
+                            .filter(Boolean)
+                            .join(" · ")}
+                        </span>
+                        <span className="block text-xs text-slate-600 leading-relaxed mt-1 line-clamp-2">{story.excerpt}</span>
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Read how timely support helped patients and their families through critical treatment.
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </section>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Play, ArrowRight } from "lucide-react";
 import { MediaSubpageHero } from "@/components/media/MediaSubpageHero";
@@ -10,6 +10,7 @@ import { MEDIA_HUB_DATA, SUCCESS_STORIES_DATA } from "@/content/mediaContent";
 import type { SuccessStoryItem } from "@/content/mediaContent";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { useMedia } from "@/services/mediaService";
+import { fetchNewsEvents, type NewsEventItem } from "@/services/newsService";
 
 export function MediaHubPage() {
   const { mediaHubStats } = useSiteSettings();
@@ -32,12 +33,50 @@ export function MediaHubPage() {
     { value: mediaHubStats?.visualStories || "500+", label: "Visual Stories", desc: "Archived field documentation" },
   ];
 
-  const handleOpenLatest = (title: string) => {
-    const matched = SUCCESS_STORIES_DATA.stories.find((s) =>
-      title.toLowerCase().includes(s.category.toLowerCase()) || s.title.toLowerCase().includes(title.toLowerCase())
+  // "Latest from our communities": newest published news from the backend.
+  const [latestNews, setLatestNews] = useState<NewsEventItem[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    fetchNewsEvents({ limit: 20 })
+      .then((res) => {
+        if (cancelled || !res?.success || !Array.isArray(res.data)) return;
+        setLatestNews(res.data.filter((n) => !n.isUpcoming && n.image).slice(0, 3));
+      })
+      .catch(() => {
+        /* keep bundled highlights */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const latestItems = latestNews.length
+    ? latestNews.map((n) => ({ title: n.title, category: n.category, desc: n.excerpt, image: n.image, news: n }))
+    : MEDIA_HUB_DATA.latestFromCommunities.map((i) => ({ ...i, news: undefined as NewsEventItem | undefined }));
+
+  const handleOpenLatest = (item: (typeof latestItems)[number]) => {
+    if (item.news) {
+      const n = item.news;
+      setActiveStory({
+        id: String(n.slug || n._id),
+        category: n.category,
+        title: n.title,
+        personName: n.author || "Media & Communications Desk",
+        village: n.date,
+        state: n.location || "",
+        excerpt: n.excerpt,
+        fullStory: n.fullStory || n.excerpt,
+        image: n.image,
+        impactMetrics: n.impactMetrics ?? [],
+      });
+      return;
+    }
+    const matched = SUCCESS_STORIES_DATA.stories.find(
+      (s) =>
+        item.title.toLowerCase().includes(s.category.toLowerCase()) ||
+        s.title.toLowerCase().includes(item.title.toLowerCase()),
     );
-    if (matched) setActiveStory(matched);
-    else setActiveStory(SUCCESS_STORIES_DATA.stories[0]);
+    setActiveStory(matched ?? SUCCESS_STORIES_DATA.stories[0]);
   };
 
   return (
@@ -166,7 +205,7 @@ export function MediaHubPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {MEDIA_HUB_DATA.latestFromCommunities.map((item, idx) => (
+            {latestItems.map((item, idx) => (
               <div
                 key={idx}
                 className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-md transition flex flex-col group"
@@ -193,7 +232,7 @@ export function MediaHubPage() {
                   </div>
                   <div className="pt-4 mt-3 border-t border-slate-100">
                     <button
-                      onClick={() => handleOpenLatest(item.title)}
+                      onClick={() => handleOpenLatest(item)}
                       className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 hover:text-emerald-800 transition cursor-pointer"
                     >
                       <span>Read More</span>

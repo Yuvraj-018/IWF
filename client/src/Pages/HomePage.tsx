@@ -818,43 +818,6 @@ function CampaignsSection({ lang }: LanguageProp) {
   );
 }
 
-// ─── News & Latest Updates ────────────────────────────────────────────────────
-
-const LATEST_NEWS = [
-  {
-    tag: "Health Camp",
-    tagColor: "#DC2626",
-    date: "June 28, 2025",
-    title: "Free Medical Camp Organized at Bathiya — 200+ Patients Treated",
-    excerpt: "Islah's Healthcare team conducted a comprehensive free medical camp at Bathiya, Darbhanga, providing consultations, medicines, and diagnostic services to over 200 patients from surrounding villages.",
-    img: "🏥",
-  },
-  {
-    tag: "Education",
-    tagColor: "#1D4ED8",
-    date: "June 15, 2025",
-    title: "Annual Scholarship Distribution Ceremony Held in Muzaffarpur",
-    excerpt: "100 meritorious students from underprivileged families received scholarships under the Shiksha Na Ruke campaign, covering school fees, uniforms, and study materials for the academic year.",
-    img: "🎓",
-  },
-  {
-    tag: "Women Empowerment",
-    tagColor: "#DB2777",
-    date: "June 05, 2025",
-    title: "New Self-Help Group Launched in Sitamarhi — 30 Women Enroll",
-    excerpt: "Under the She Can Fly campaign, a new SHG was formed at Sitamarhi with 30 women enrolled in vocational training programs for tailoring, candle making, and food processing.",
-    img: "🤝",
-  },
-  {
-    tag: "Annual Report",
-    tagColor: "#15803d",
-    date: "May 20, 2025",
-    title: "Islah Annual Report 2024–25 Published — Impact Across 50+ Villages",
-    excerpt: "The Annual Report 2024–25 documents Islah's work across education, healthcare, and livelihood programmes, reaching 50+ villages and impacting 5,000+ beneficiaries over the year.",
-    img: "📊",
-  },
-];
-
 // ─── Our Partners & Collaborators ───────────────────────────────────────────
 
 const PARTNERS = [
@@ -870,8 +833,30 @@ const PARTNERS = [
   { name: "Adani Foundation", short: "Adani", type: "Community Transformation", bg: "bg-violet-50 text-violet-700 border-violet-200" },
 ];
 
+const PARTNER_TINTS = PARTNERS.map((p) => p.bg);
+
 function OurPartnersSection({ lang }: LanguageProp) {
-  const repeatedPartners = [...PARTNERS, ...PARTNERS];
+  const { settings } = useSiteSettings();
+  // Partners managed in the CMS (community directory); bundled list until they load.
+  const cmsPartners = (
+    settings as {
+      community_directory?: {
+        partners?: { name?: string; badge?: string; focusArea?: string; category?: string }[];
+      };
+    }
+  ).community_directory?.partners;
+  const partners =
+    cmsPartners && cmsPartners.length > 0
+      ? cmsPartners
+          .filter((p) => p.name)
+          .map((p, i) => ({
+            name: p.name as string,
+            short: p.badge || (p.name as string).split(/\s+/).map((w) => w[0]).join("").slice(0, 4),
+            type: p.focusArea || p.category || "",
+            bg: PARTNER_TINTS[i % PARTNER_TINTS.length],
+          }))
+      : PARTNERS;
+  const repeatedPartners = [...partners, ...partners];
 
   return (
     <section className="py-6 bg-slate-50 border-t border-slate-100 overflow-hidden">
