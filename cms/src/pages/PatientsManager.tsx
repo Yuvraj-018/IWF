@@ -1,34 +1,83 @@
 import { useState, useEffect } from "react";
 import { api } from "../services/api";
 import { getClientUrl } from "../services/config";
-import { Plus, HeartPulse, Loader2, X, Building2, AlertTriangle, RefreshCw, Upload, Link as LinkIcon, CheckCircle2 } from "lucide-react";
+import { Plus, HeartPulse, Loader2, X, Building2, AlertTriangle, RefreshCw, Upload, Link as LinkIcon, CheckCircle2, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+
+const DEFAULT_PATIENT_FORM = {
+  slug: "",
+  name: "",
+  age: 12,
+  gender: "Male",
+  disease: "Acute Lymphoblastic Leukemia",
+  hospital: "AIIMS, New Delhi",
+  admissionDate: new Date().toISOString().split("T")[0],
+  condition: "Critical",
+  urgent: true,
+  neededAmount: 500000,
+  raisedAmount: 50000,
+  image: "",
+  familyBackground: "Father is an agricultural laborer with no steady income.",
+};
 
 export default function PatientsManager() {
   const [patients, setPatients] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [editingPatient, setEditingPatient] = useState<any | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [photoMode, setPhotoMode] = useState<"file" | "url">("file");
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
-  const [formData, setFormData] = useState({
-    slug: "",
-    name: "",
-    age: 12,
-    gender: "Male",
-    disease: "Acute Lymphoblastic Leukemia",
-    hospital: "AIIMS, New Delhi",
-    admissionDate: new Date().toISOString().split("T")[0],
-    condition: "Critical",
-    urgent: true,
-    neededAmount: 500000,
-    raisedAmount: 50000,
-    image: "",
-    familyBackground: "Father is an agricultural laborer with no steady income.",
-  });
+  const [formData, setFormData] = useState(DEFAULT_PATIENT_FORM);
+
+  const handleOpenCreate = () => {
+    setEditingPatient(null);
+    setFormData({
+      ...DEFAULT_PATIENT_FORM,
+      admissionDate: new Date().toISOString().split("T")[0],
+    });
+    setPhotoPreview(null);
+    setModalOpen(true);
+  };
+
+  const handleEdit = (p: any) => {
+    setEditingPatient(p);
+    setFormData({
+      slug: p.slug || "",
+      name: p.name || "",
+      age: p.age || 0,
+      gender: p.gender || "Male",
+      disease: p.disease || "",
+      hospital: p.hospital || "",
+      admissionDate: p.admissionDate ? p.admissionDate.split("T")[0] : new Date().toISOString().split("T")[0],
+      condition: p.condition || "Critical",
+      urgent: !!p.urgent,
+      neededAmount: p.neededAmount || 0,
+      raisedAmount: p.raisedAmount || 0,
+      image: p.image || "",
+      familyBackground: p.familyBackground || "",
+    });
+    setPhotoPreview(p.image || null);
+    setModalOpen(true);
+  };
+
+  const handleDelete = async (slug: string, name: string) => {
+    if (!confirm(`Are you sure you want to delete patient appeal for "${name}"?`)) return;
+    try {
+      const res = await api.deletePatient(slug);
+      if (res.success) {
+        toast.success("Patient appeal deleted from database");
+        setPatients(patients.filter((p) => p.slug !== slug));
+      } else {
+        toast.error(res.message || "Failed to delete patient");
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Delete failed");
+    }
+  };
 
   const handleFileUpload = async (file: File) => {
     setUploadingPhoto(true);
@@ -62,7 +111,7 @@ export default function PatientsManager() {
     loadPatients(false);
   }, []);
 
-  const handleCreate = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.disease || !formData.neededAmount) {
       toast.error("Please fill in patient name, disease, and goal amount.");
@@ -71,24 +120,35 @@ export default function PatientsManager() {
 
     setSubmitting(true);
     try {
-      const generatedSlug = formData.slug || formData.name.toLowerCase().replace(/[^a-z0-9]/g, "-");
-      const res = await api.createPatient({
-        ...formData,
-        slug: generatedSlug,
-        verificationId: `MED-VER-${Date.now().toString().slice(-6)}`,
-        verifiedBy: "ISLAH Medical Board",
-        verificationDate: new Date().toISOString().split("T")[0],
-      });
-
-      if (res.success) {
-        toast.success(`Patient appeal created: ${formData.name}`);
-        setModalOpen(false);
-        loadPatients();
+      if (editingPatient) {
+        const res = await api.updatePatient(editingPatient.slug, formData);
+        if (res.success) {
+          toast.success(`Patient appeal updated: ${formData.name}`);
+          setModalOpen(false);
+          loadPatients(true);
+        } else {
+          toast.error(res.message || "Failed to update patient");
+        }
       } else {
-        toast.error(res.message || "Failed to create patient appeal");
+        const generatedSlug = formData.slug || formData.name.toLowerCase().replace(/[^a-z0-9]/g, "-");
+        const res = await api.createPatient({
+          ...formData,
+          slug: generatedSlug,
+          verificationId: `MED-VER-${Date.now().toString().slice(-6)}`,
+          verifiedBy: "ISLAH Medical Board",
+          verificationDate: new Date().toISOString().split("T")[0],
+        });
+
+        if (res.success) {
+          toast.success(`Patient appeal created: ${formData.name}`);
+          setModalOpen(false);
+          loadPatients(true);
+        } else {
+          toast.error(res.message || "Failed to create patient appeal");
+        }
       }
     } catch (err: any) {
-      toast.error(err.message || "Error creating case");
+      toast.error(err.message || "Error submitting case");
     } finally {
       setSubmitting(false);
     }
@@ -112,7 +172,7 @@ export default function PatientsManager() {
             <span className="hidden sm:inline">Refresh</span>
           </button>
           <button
-            onClick={() => setModalOpen(true)}
+            onClick={handleOpenCreate}
             className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition shadow-md shadow-orange-500/20 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
@@ -187,16 +247,32 @@ export default function PatientsManager() {
                 </div>
 
                 <div className="p-4 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs bg-slate-50/70">
-                  <span className="text-[11px] text-slate-500 font-mono font-medium">/{p.slug}</span>
                   <a
                     href={`${getClientUrl()}/patients/${p.slug}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs text-orange-600 hover:text-orange-700 hover:underline font-bold flex items-center gap-1"
+                    className="text-xs text-orange-600 hover:text-orange-700 hover:underline font-bold flex items-center gap-1 font-mono truncate max-w-[150px]"
                   >
-                    <span>View Live Page</span>
+                    <span>/{p.slug}</span>
                     <span>↗</span>
                   </a>
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => handleEdit(p)}
+                      title="Edit patient appeal"
+                      className="p-1.5 text-slate-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition cursor-pointer flex items-center gap-1 text-xs font-semibold"
+                    >
+                      <Pencil className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">Edit</span>
+                    </button>
+                    <button
+                      onClick={() => handleDelete(p.slug, p.name)}
+                      title="Delete appeal"
+                      className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition cursor-pointer"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
             );
@@ -204,7 +280,7 @@ export default function PatientsManager() {
         </div>
       )}
 
-      {/* New Patient Modal */}
+      {/* New / Edit Patient Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm overflow-y-auto">
           <div className="bg-white border border-slate-200 rounded-3xl max-w-xl w-full shadow-2xl my-auto max-h-[calc(100vh-2rem)] sm:max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
@@ -212,7 +288,7 @@ export default function PatientsManager() {
             <div className="flex items-center justify-between p-5 sm:p-6 pb-4 border-b border-slate-200 shrink-0">
               <h3 className="text-base font-extrabold text-[#071527] flex items-center gap-2">
                 <HeartPulse className="w-5 h-5 text-rose-500" />
-                <span>Launch New Patient Emergency Appeal</span>
+                <span>{editingPatient ? "Edit Patient Emergency Appeal" : "Launch New Patient Emergency Appeal"}</span>
               </h3>
               <button
                 onClick={() => setModalOpen(false)}
@@ -223,7 +299,7 @@ export default function PatientsManager() {
             </div>
 
             {/* Scrollable Form Content */}
-            <form onSubmit={handleCreate} className="flex flex-col flex-1 overflow-hidden min-h-0">
+            <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden min-h-0">
               <div className="p-5 sm:p-6 overflow-y-auto flex-1 space-y-4 text-xs overscroll-contain">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
@@ -446,7 +522,7 @@ export default function PatientsManager() {
                   className="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer disabled:opacity-50 shadow-xs"
                 >
                   {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-                  <span>Publish Appeal</span>
+                  <span>{editingPatient ? "Update Appeal" : "Publish Appeal"}</span>
                 </button>
               </div>
             </form>

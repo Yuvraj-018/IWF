@@ -120,7 +120,7 @@ export default function PatientProfilePage() {
     }
   };
 
-  const otherPatients = (allPatients && allPatients.length > 0 ? allPatients : URGENT_PATIENTS)
+  const otherPatients = (allPatients || [])
     .filter((p) => p.slug !== patient.slug)
     .slice(0, 3);
 

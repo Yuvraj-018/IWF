@@ -32,10 +32,9 @@ export function cacheResponse(durationSeconds: number = 120, tag: string = "gene
 
     if (cached && Date.now() < cached.expiresAt) {
       res.setHeader("X-Cache", "HIT");
-      res.setHeader(
-        "Cache-Control",
-        `public, max-age=${durationSeconds}, s-maxage=${durationSeconds * 2}, stale-while-revalidate=${durationSeconds * 3}`
-      );
+      res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+      res.setHeader("Pragma", "no-cache");
+      res.setHeader("Expires", "0");
       res.setHeader("Content-Type", cached.contentType);
       res.send(cached.data);
       return;
@@ -44,10 +43,9 @@ export function cacheResponse(durationSeconds: number = 120, tag: string = "gene
     // Intercept res.send to capture and store response
     const originalSend = res.send.bind(res);
     res.setHeader("X-Cache", "MISS");
-    res.setHeader(
-      "Cache-Control",
-      `public, max-age=${durationSeconds}, s-maxage=${durationSeconds * 2}, stale-while-revalidate=${durationSeconds * 3}`
-    );
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", "0");
 
     res.send = (body: any) => {
       // Only cache successful 200 responses

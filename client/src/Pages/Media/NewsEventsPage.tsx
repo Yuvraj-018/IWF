@@ -29,9 +29,9 @@ export function NewsEventsPage() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [activeStory, setActiveStory] = useState<SuccessStoryItem | null>(null);
 
-  // Database news & events state with bundled fallback defaults
-  const [liveItems, setLiveItems] = useState<NewsEventItem[]>(FALLBACK_NEWS_EVENTS);
-  const [liveUpcoming, setLiveUpcoming] = useState<any[]>(FALLBACK_UPCOMING_EVENTS);
+  // Database news & events state
+  const [liveItems, setLiveItems] = useState<NewsEventItem[]>([]);
+  const [liveUpcoming, setLiveUpcoming] = useState<any[]>([]);
   const [liveCounts, setLiveCounts] = useState<{ name: string; count: number }[] | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -41,18 +41,16 @@ export function NewsEventsPage() {
 
     fetchNewsEvents()
       .then((res) => {
-        if (isMounted && res.success && res.data && res.data.length > 0) {
-          setLiveItems(res.data);
-          if (res.upcomingEvents && res.upcomingEvents.length > 0) {
-            setLiveUpcoming(res.upcomingEvents);
-          }
+        if (isMounted && res.success) {
+          setLiveItems(res.data || []);
+          setLiveUpcoming(res.upcomingEvents || []);
           if (res.categoryCounts && res.categoryCounts.length > 0) {
             setLiveCounts(res.categoryCounts);
           }
         }
       })
       .catch((err) => {
-        console.warn("Could not load news from backend DB, using fallback content:", err);
+        console.warn("Could not load news from backend DB:", err);
       })
       .finally(() => {
         if (isMounted) setLoading(false);
@@ -63,9 +61,18 @@ export function NewsEventsPage() {
     };
   }, []);
 
-  const itemsToDisplay = liveItems || NEWS_EVENTS_DATA.items;
-  const upcomingEvents = liveUpcoming || NEWS_EVENTS_DATA.upcomingEvents;
-  const categoryCounts = liveCounts || NEWS_EVENTS_DATA.categoryCounts;
+  const itemsToDisplay = liveItems;
+  const upcomingEvents = liveUpcoming;
+  const categoryCounts = useMemo(() => {
+    if (liveCounts && liveCounts.length > 0) return liveCounts;
+    const map: Record<string, number> = { All: liveItems.length };
+    liveItems.forEach((it) => {
+      if (it.category) {
+        map[it.category] = (map[it.category] || 0) + 1;
+      }
+    });
+    return Object.entries(map).map(([name, count]) => ({ name, count }));
+  }, [liveCounts, liveItems]);
 
   const filteredItems = useMemo(() => {
     return itemsToDisplay.filter((item) => {
@@ -274,27 +281,31 @@ export function NewsEventsPage() {
                   <span>Upcoming Events</span>
                 </h3>
 
-                <div className="divide-y divide-slate-100 mt-2">
-                  {upcomingEvents.map((evt: any, idx: number) => (
-                    <div key={idx} className="py-3.5 flex items-start gap-3">
-                      <div className="p-2 rounded-xl bg-emerald-50 text-emerald-800 text-center shrink-0 w-14 border border-emerald-100">
-                        <div className="text-[10px] font-bold uppercase tracking-wider">
-                          {evt.month}
+                {upcomingEvents.length === 0 ? (
+                  <p className="text-xs text-slate-400 mt-3 italic">No upcoming events scheduled at this time.</p>
+                ) : (
+                  <div className="divide-y divide-slate-100 mt-2">
+                    {upcomingEvents.map((evt: any, idx: number) => (
+                      <div key={idx} className="py-3.5 flex items-start gap-3">
+                        <div className="p-2 rounded-xl bg-emerald-50 text-emerald-800 text-center shrink-0 w-14 border border-emerald-100">
+                          <div className="text-[10px] font-bold uppercase tracking-wider">
+                            {evt.month}
+                          </div>
+                          <div className="text-lg font-black leading-tight">{evt.day}</div>
                         </div>
-                        <div className="text-lg font-black leading-tight">{evt.day}</div>
-                      </div>
-                      <div>
-                        <h4 className="text-xs font-bold text-slate-900 leading-snug">
-                          {evt.title}
-                        </h4>
-                        <div className="flex items-center gap-1 text-[11px] text-slate-500 mt-1">
-                          <MapPin className="w-3 h-3 text-emerald-600" />
-                          <span>{evt.location || "Bihar"}</span>
+                        <div>
+                          <h4 className="text-xs font-bold text-slate-900 leading-snug">
+                            {evt.title}
+                          </h4>
+                          <div className="flex items-center gap-1 text-[11px] text-slate-500 mt-1">
+                            <MapPin className="w-3 h-3 text-emerald-600" />
+                            <span>{evt.location || "Bihar"}</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
 
                 <div className="pt-3 border-t border-slate-100 mt-2">
                   <button

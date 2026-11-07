@@ -281,6 +281,19 @@ export const api = {
     return data;
   },
 
+  async deletePatient(slug: string) {
+    const res = await fetch(`${API_BASE_URL}/patients/${slug}`, {
+      method: "DELETE",
+      headers: getHeaders(),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      apiCache.invalidateTag("patients");
+      apiCache.invalidateTag("dashboard");
+    }
+    return data;
+  },
+
   // ── Members Directory (Cached: 5 mins) ──
   async listMembers(params?: { category?: string; status?: string; search?: string }, options?: CacheOptions) {
     const q = new URLSearchParams();

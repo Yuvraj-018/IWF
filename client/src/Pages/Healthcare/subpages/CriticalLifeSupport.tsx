@@ -203,7 +203,7 @@ function PatientCardsSection() {
   const { patients } = usePatients(true);
   const [sortOption, setSortOption] = useState<"most-urgent" | "highest-need" | "recently-added">("most-urgent");
 
-  const displayPatients = [...(patients && patients.length > 0 ? patients : URGENT_PATIENTS)].sort((a, b) => {
+  const displayPatients = [...(patients || [])].sort((a, b) => {
     if (sortOption === "highest-need") return b.neededAmount - b.raisedAmount - (a.neededAmount - a.raisedAmount);
     if (sortOption === "recently-added") return new Date(b.admissionDate).getTime() - new Date(a.admissionDate).getTime();
     return (b.urgent ? 1 : 0) - (a.urgent ? 1 : 0);
@@ -230,7 +230,14 @@ function PatientCardsSection() {
             <option value="recently-added">Sort by: Recently added</option>
           </select>
         </div>
-        <PatientCarousel patients={displayPatients} />
+        {displayPatients.length === 0 ? (
+          <div className="text-center py-12 bg-slate-50/70 rounded-2xl border border-slate-200">
+            <p className="text-slate-600 font-medium">No urgent medical appeals currently pending.</p>
+            <p className="text-xs text-slate-400 mt-1">All cases are thoroughly verified by the medical team before publishing.</p>
+          </div>
+        ) : (
+          <PatientCarousel patients={displayPatients} />
+        )}
       </div>
     </section>
   );

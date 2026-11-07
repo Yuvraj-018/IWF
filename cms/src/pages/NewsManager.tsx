@@ -14,8 +14,23 @@ import {
   Link as LinkIcon,
   CheckCircle2,
   ExternalLink,
+  Pencil,
 } from "lucide-react";
 import { toast } from "sonner";
+
+const DEFAULT_FORM_DATA = {
+  title: "",
+  category: "News & Updates",
+  date: new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }),
+  image: "",
+  excerpt: "",
+  fullStory: "",
+  location: "Darbhanga, Bihar",
+  readTime: "3 min",
+  author: "Media & Communications Desk",
+  featured: false,
+  isUpcoming: false,
+};
 
 export default function NewsManager() {
   const [items, setItems] = useState<any[]>([]);
@@ -24,24 +39,42 @@ export default function NewsManager() {
   const [search, setSearch] = useState("");
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<any | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [photoMode, setPhotoMode] = useState<"file" | "url">("file");
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
-  const [formData, setFormData] = useState({
-    title: "",
-    category: "News & Updates",
-    date: new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }),
-    image: "",
-    excerpt: "",
-    fullStory: "",
-    location: "Darbhanga, Bihar",
-    readTime: "3 min",
-    author: "Media & Communications Desk",
-    featured: false,
-    isUpcoming: false,
-  });
+  const [formData, setFormData] = useState(DEFAULT_FORM_DATA);
+
+  const handleOpenCreate = () => {
+    setEditingItem(null);
+    setFormData({
+      ...DEFAULT_FORM_DATA,
+      date: new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }),
+    });
+    setPhotoPreview(null);
+    setModalOpen(true);
+  };
+
+  const handleEdit = (item: any) => {
+    setEditingItem(item);
+    setFormData({
+      title: item.title || "",
+      category: item.category || "News & Updates",
+      date: item.date || new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }),
+      image: item.image || "",
+      excerpt: item.excerpt || "",
+      fullStory: item.fullStory || "",
+      location: item.location || "Darbhanga, Bihar",
+      readTime: item.readTime || "3 min",
+      author: item.author || "Media & Communications Desk",
+      featured: !!item.featured,
+      isUpcoming: !!item.isUpcoming,
+    });
+    setPhotoPreview(item.image || null);
+    setModalOpen(true);
+  };
 
   const handleFileUpload = async (file: File) => {
     setUploadingPhoto(true);
@@ -90,7 +123,7 @@ export default function NewsManager() {
     }
   };
 
-  const handleCreate = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.title || !formData.excerpt || !formData.image) {
       toast.error("Please fill in title, image URL, and excerpt.");
@@ -99,26 +132,24 @@ export default function NewsManager() {
 
     setSubmitting(true);
     try {
-      const res = await api.createNews(formData);
-      if (res.success) {
-        toast.success("News story published successfully!");
-        setModalOpen(false);
-        setFormData({
-          title: "",
-          category: "News & Updates",
-          date: new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }),
-          image: "",
-          excerpt: "",
-          fullStory: "",
-          location: "Darbhanga, Bihar",
-          readTime: "3 min",
-          author: "Media & Communications Desk",
-          featured: false,
-          isUpcoming: false,
-        });
-        loadData();
+      if (editingItem) {
+        const res = await api.updateNews(editingItem._id, formData);
+        if (res.success) {
+          toast.success("News article updated successfully!");
+          setModalOpen(false);
+          loadData(true);
+        } else {
+          toast.error(res.message || "Failed to update article");
+        }
       } else {
-        toast.error(res.message || "Failed to create story");
+        const res = await api.createNews(formData);
+        if (res.success) {
+          toast.success("News story published successfully!");
+          setModalOpen(false);
+          loadData(true);
+        } else {
+          toast.error(res.message || "Failed to create story");
+        }
       }
     } catch (err: any) {
       toast.error(err.message || "Submission failed");
@@ -146,7 +177,7 @@ export default function NewsManager() {
             <span className="hidden sm:inline">Refresh</span>
           </button>
           <button
-            onClick={() => setModalOpen(true)}
+            onClick={handleOpenCreate}
             className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition shadow-sm cursor-pointer"
           >
             <Plus className="w-4 h-4" />
@@ -232,25 +263,35 @@ export default function NewsManager() {
                   href={`${getClientUrl()}/news/${item.slug}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-orange-600 hover:text-orange-700 font-bold flex items-center gap-1 font-mono truncate max-w-[180px]"
+                  className="text-xs text-orange-600 hover:text-orange-700 font-bold flex items-center gap-1 font-mono truncate max-w-[150px]"
                 >
                   <span>/{item.slug}</span>
                   <ExternalLink className="w-3 h-3 shrink-0" />
                 </a>
-                <button
-                  onClick={() => handleDelete(item._id, item.title)}
-                  title="Delete from database"
-                  className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition cursor-pointer"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => handleEdit(item)}
+                    title="Edit story"
+                    className="p-1.5 text-slate-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition cursor-pointer flex items-center gap-1 text-xs font-semibold"
+                  >
+                    <Pencil className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline">Edit</span>
+                  </button>
+                  <button
+                    onClick={() => handleDelete(item._id, item.title)}
+                    title="Delete from database"
+                    className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition cursor-pointer"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
           ))}
         </div>
       )}
 
-      {/* Publish Modal */}
+      {/* Publish / Edit Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm overflow-y-auto">
           <div className="bg-white border border-slate-200 rounded-3xl max-w-2xl w-full shadow-2xl my-auto max-h-[calc(100vh-2rem)] sm:max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
@@ -258,7 +299,7 @@ export default function NewsManager() {
             <div className="flex items-center justify-between p-5 sm:p-6 pb-4 border-b border-slate-200 shrink-0">
               <h3 className="text-base font-extrabold text-[#071527] flex items-center gap-2">
                 <FileCheck className="w-5 h-5 text-orange-500" />
-                <span>Publish New Story or Event</span>
+                <span>{editingItem ? "Edit News Story or Event" : "Publish New Story or Event"}</span>
               </h3>
               <button
                 onClick={() => setModalOpen(false)}
@@ -269,7 +310,7 @@ export default function NewsManager() {
             </div>
 
             {/* Scrollable Form Content */}
-            <form onSubmit={handleCreate} className="flex flex-col flex-1 overflow-hidden min-h-0">
+            <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden min-h-0">
               <div className="p-5 sm:p-6 overflow-y-auto flex-1 space-y-4 text-xs overscroll-contain">
                 <div>
                   <label className="block text-slate-700 font-bold mb-1">Story Title *</label>
@@ -489,7 +530,7 @@ export default function NewsManager() {
                   className="px-5 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer disabled:opacity-50 shadow-xs"
                 >
                   {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-                  <span>Save to MongoDB</span>
+                  <span>{editingItem ? "Update Story" : "Save to MongoDB"}</span>
                 </button>
               </div>
             </form>

@@ -147,13 +147,11 @@ function HeroSection({ lang }: LanguageProp) {
       .then((res) => res.json())
       .then((data) => {
         if (data.success && Array.isArray(data.data) && data.data.length > 0) {
-          const events = data.data.filter((item: any) => item.category === "Events" || item.isUpcoming);
-          const sourceList = events.length > 0 ? events : data.data;
-          const mapped = sourceList.slice(0, 6).map((item: any) => {
+          const mapped = data.data.slice(0, 6).map((item: any) => {
             const dateParts = (item.date || "").trim().split(/\s+/);
             return {
               d: item.day || dateParts[0] || "01",
-              m: (item.month || dateParts[1] || "EVENT").toUpperCase().slice(0, 3),
+              m: (item.month || dateParts[1] || "NOV").toUpperCase().slice(0, 3),
               title: item.title,
             };
           });
@@ -401,13 +399,14 @@ function UrgentPatientsSection({ lang }: LanguageProp) {
  * Desktop (lg+): a static four-column grid.
  */
 function PatientCarousel() {
-  const [patients, setPatients] = useState<any[]>(() => URGENT_PATIENTS.slice(0, 4));
+  const [patients, setPatients] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/patients?urgent=true`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+        if (data.success && Array.isArray(data.data)) {
           const mapped = data.data.slice(0, 4).map((p: any) => ({
             id: p.slug || p._id,
             slug: p.slug || p._id,
@@ -424,8 +423,18 @@ function PatientCarousel() {
           setPatients(mapped);
         }
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
+
+  if (patients.length === 0 && !loading) {
+    return (
+      <div className="text-center py-10 bg-slate-50/70 rounded-2xl border border-slate-200/80 my-4">
+        <p className="text-slate-600 font-medium">No urgent medical appeals currently pending.</p>
+        <p className="text-xs text-slate-400 mt-1">New medical cases will appear here as soon as verified by the Islah Medical Board.</p>
+      </div>
+    );
+  }
 
   return <SharedPatientCarousel patients={patients.slice(0, 4)} />;
 }

@@ -82,10 +82,8 @@ export function usePatients(urgent = true) {
  * React hook to fetch a single patient case by slug
  */
 export function usePatient(slug: string) {
-  const [patient, setPatient] = useState<Patient | null>(
-    () => URGENT_PATIENTS.find((p) => p.slug === slug) || null
-  );
-  const [loading, setLoading] = useState<boolean>(!patient);
+  const [patient, setPatient] = useState<Patient | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
