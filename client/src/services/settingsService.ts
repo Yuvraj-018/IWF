@@ -262,7 +262,7 @@ export async function fetchSiteSettings(forceRefresh = false): Promise<SiteSetti
       }
       return {};
     },
-    { ttlMs: 10 * 60 * 1000, forceRefresh, tag: "settings" }
+    { ttlMs: 1000, forceRefresh, tag: "settings" }
   );
 }
 

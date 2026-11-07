@@ -38,7 +38,7 @@ export interface GalleryAlbum {
 
 export async function fetchGalleryAlbums(): Promise<GalleryAlbum[]> {
   try {
-    const res = await fetch(`${API_BASE_URL}/media/albums`);
+    const res = await fetch(`${API_BASE_URL}/media/albums`, { cache: "no-store" });
     if (!res.ok) throw new Error("Albums fetch failed");
     const json = await res.json();
     return json.data || [];
@@ -74,7 +74,7 @@ export async function fetchAllMedia(): Promise<MediaResponse> {
     return pendingPromise;
   }
 
-  pendingPromise = fetch(`${API_BASE_URL}/media`)
+  pendingPromise = fetch(`${API_BASE_URL}/media`, { cache: "no-store" })
     .then(async (res) => {
       if (!res.ok) {
         throw new Error(`Media fetch failed with status ${res.status}`);

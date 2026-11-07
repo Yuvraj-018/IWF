@@ -81,7 +81,7 @@ export async function fetchCareerOpenings(
         },
       };
     },
-    { ttlMs: 3 * 60 * 1000, forceRefresh, tag: "careers" }
+    { ttlMs: 1000, forceRefresh, tag: "careers" }
   );
 }
 

@@ -143,7 +143,7 @@ function HeroSection({ lang }: LanguageProp) {
   const [liveNotices, setLiveNotices] = useState<Array<{ d: string; m: string; title: string }>>([]);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/news?limit=8`)
+    fetch(`${API_BASE_URL}/news?limit=8`, { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (data.success && Array.isArray(data.data) && data.data.length > 0) {
@@ -403,7 +403,7 @@ function PatientCarousel() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/patients?urgent=true`)
+    fetch(`${API_BASE_URL}/patients?urgent=true`, { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (data.success && Array.isArray(data.data)) {

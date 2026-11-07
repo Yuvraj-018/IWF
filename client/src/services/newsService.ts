@@ -71,7 +71,7 @@ export async function fetchNewsEvents(params?: {
   const url = `${API_BASE_URL}/news${query.toString() ? `?${query.toString()}` : ""}`;
 
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) {
       throw new Error(`Failed to fetch news events (status: ${res.status})`);
     }
@@ -96,7 +96,7 @@ export async function fetchNewsEvents(params?: {
 
 export async function fetchNewsEventBySlug(slug: string): Promise<NewsEventItem | null> {
   try {
-    const res = await fetch(`${API_BASE_URL}/news/${slug}`);
+    const res = await fetch(`${API_BASE_URL}/news/${slug}`, { cache: "no-store" });
     if (!res.ok) {
       throw new Error(`Failed to fetch news item ${slug} (status: ${res.status})`);
     }

@@ -40,6 +40,7 @@ export async function apiRequest<T = any>(
   let response: Response;
   try {
     response = await fetch(url, {
+      cache: "no-store",
       ...options,
       headers,
     });

@@ -64,7 +64,7 @@ export async function fetchSuccessStories(
         },
       };
     },
-    { ttlMs: 3 * 60 * 1000, forceRefresh, tag: "stories" }
+    { ttlMs: 1000, forceRefresh, tag: "stories" }
   );
 }
 
