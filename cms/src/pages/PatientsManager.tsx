@@ -202,7 +202,7 @@ export default function PatientsManager() {
                 <div>
                   <div className="relative h-44 w-full bg-slate-100 overflow-hidden">
                     <img
-                      src={p.image || "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=800&q=80"}
+                      src={p.image || "https://pub-9df833ce82f4452db02dda1a3edca3d4.r2.dev/patients/patient-1.jpg"}
                       alt={p.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                     />
@@ -478,7 +478,7 @@ export default function PatientsManager() {
                     <div>
                       <input
                         type="url"
-                        placeholder="https://images.unsplash.com/... or Cloudinary URL"
+                        placeholder="https://pub-9df833ce82f4452db02dda1a3edca3d4.r2.dev/... or R2 CDN URL"
                         value={formData.image}
                         onChange={(e) => {
                           setFormData({ ...formData, image: e.target.value });
@@ -493,7 +493,7 @@ export default function PatientsManager() {
                             alt="Preview"
                             className="w-14 h-14 object-cover rounded-lg border border-slate-200"
                             onError={(e) => {
-                              (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=800&q=80";
+                              (e.target as HTMLImageElement).src = "https://pub-9df833ce82f4452db02dda1a3edca3d4.r2.dev/patients/patient-1.jpg";
                             }}
                           />
                           <div className="text-[11px] text-slate-600">

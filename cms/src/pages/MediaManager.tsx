@@ -1886,7 +1886,7 @@ export default function MediaManager() {
                         placeholder={
                           formData.mediaType === "document"
                             ? "https://.../annual_report_2024.pdf"
-                            : "https://images.unsplash.com/... or Cloudinary URL"
+                            : "https://pub-9df833ce82f4452db02dda1a3edca3d4.r2.dev/... or R2 CDN URL"
                         }
                         value={formData.url}
                         onChange={(e) => setFormData({ ...formData, url: e.target.value })}
@@ -1899,7 +1899,7 @@ export default function MediaManager() {
                             src={formData.url}
                             alt="Preview"
                             onError={(e) => {
-                              (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1594708767771-a7502209ff51?auto=format&fit=crop&w=400&q=80";
+                              (e.target as HTMLImageElement).src = "https://pub-9df833ce82f4452db02dda1a3edca3d4.r2.dev/branding/logo.png";
                             }}
                             className="w-16 h-12 object-cover rounded-lg border border-slate-200"
                           />
