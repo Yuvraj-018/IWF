@@ -12,6 +12,7 @@ import {
   Award,
   ArrowRight,
   Filter,
+  Download,
 } from "lucide-react";
 import { Footer, Header, NotificationTicker, RoleFormModal, UtilityBar } from "@/components/layout/SiteLayout";
 import ScrollReveal from "@/components/healthcare/ScrollReveal";
@@ -227,6 +228,31 @@ export default function MasterPoliciesPage() {
         {/* Master Policy Catalog */}
         <section className="py-10 sm:py-12 bg-white">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+            {/* Official Legal Compendium Download Banner */}
+            <div className="rounded-2xl border border-orange-200/90 bg-gradient-to-r from-orange-50 via-white to-amber-50/70 p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xs">
+              <div className="space-y-1">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-orange-100 text-brand-orange text-[11px] font-bold uppercase tracking-wider">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span>Official Statutory Compendium</span>
+                </div>
+                <h3 className="text-base sm:text-lg font-bold text-[#0b1f3b]">
+                  Download Complete Statutory Policies Compendium (PDF)
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 max-w-2xl">
+                  Official 50-page compendium containing all 18 institutional policies, anti-fraud safeguards, governance bylaws, and compliance disclosures.
+                </p>
+              </div>
+              <a
+                href="https://pub-9df833ce82f4452db02dda1a3edca3d4.r2.dev/docs/islah_annual_report_latest.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-brand-orange hover:bg-orange-600 text-white text-xs sm:text-sm font-bold shadow-md shadow-brand-orange/20 transition cursor-pointer shrink-0"
+              >
+                <Download className="w-4 h-4" />
+                <span>Download PDF (4.3 MB)</span>
+              </a>
+            </div>
+
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
               <div className="flex flex-wrap gap-2">
                 {CATEGORIES.map((cat) => {

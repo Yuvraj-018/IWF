@@ -13,6 +13,7 @@ import {
   Stethoscope,
   UserRoundCheck,
   Users,
+  Download,
 } from "lucide-react";
 import { Footer, Header, NotificationTicker, UtilityBar } from "@/components/layout/SiteLayout";
 import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
@@ -238,6 +239,30 @@ export default function VolunteerPage() {
               },
             ]}
           />
+
+          {/* Volunteer Handbook Download Banner */}
+          <div className="mt-8 rounded-2xl border border-orange-200/90 bg-gradient-to-r from-orange-50 via-white to-amber-50/70 p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xs">
+            <div className="space-y-1">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-orange-100 text-brand-orange text-[11px] font-bold uppercase tracking-wider">
+                Official Volunteer Blueprint
+              </span>
+              <h3 className="text-base sm:text-lg font-bold text-[#071527]">
+                Download Get Involved &amp; Volunteer Handbook
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 max-w-2xl">
+                Comprehensive 86-page guide covering volunteer roles, membership guidelines, mentorship pathways, code of conduct, and field safety protocols.
+              </p>
+            </div>
+            <a
+              href="https://pub-9df833ce82f4452db02dda1a3edca3d4.r2.dev/docs/get_involved_and_volunteer_handbook.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-brand-orange hover:bg-orange-600 text-white text-xs sm:text-sm font-bold shadow-md shadow-brand-orange/20 transition cursor-pointer shrink-0"
+            >
+              <Download className="w-4 h-4" />
+              <span>Download Handbook (PDF)</span>
+            </a>
+          </div>
         </Section>
 
         {/* 06. Application */}

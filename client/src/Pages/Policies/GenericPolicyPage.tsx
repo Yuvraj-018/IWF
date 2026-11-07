@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Calendar, ChevronRight, FileText, Mail, Phone } from "lucide-react";
+import { Calendar, ChevronRight, FileText, Mail, Phone, Download } from "lucide-react";
 import {
   Footer,
   Header,
@@ -141,6 +141,19 @@ export default function GenericPolicyPage({ slug }: { slug: ExtendedPolicySlug }
                     </dd>
                   </div>
                 </dl>
+                <a
+                  href={
+                    slug === "medical-treatment-policy"
+                      ? "https://pub-9df833ce82f4452db02dda1a3edca3d4.r2.dev/docs/fundraising_for_community_relief.pdf"
+                      : "https://pub-9df833ce82f4452db02dda1a3edca3d4.r2.dev/docs/islah_annual_report_latest.pdf"
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-lg bg-brand-orange hover:bg-orange-600 text-white text-xs font-bold transition shadow-xs cursor-pointer mt-2"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Download Official PDF</span>
+                </a>
                 <a
                   href="/policies"
                   className="flex items-center justify-between gap-2 pt-2 border-t border-slate-200 text-xs font-semibold text-[#0b1f3b] hover:text-brand-orange"

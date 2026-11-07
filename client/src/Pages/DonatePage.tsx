@@ -1242,13 +1242,24 @@ export default function DonatePage() {
         {/* ─── Section 2: Offline Contribution (Exact Reproduction of Page 72) ─── */}
         <section id="offline-contribution" className="py-12 sm:py-14 bg-white text-left">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-            <div className="border-b border-slate-200 pb-4">
-              <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight">
-                Contribute Offline
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                Direct bank transfer, cheque, or draft options for generous donors wishing to contribute offline.
-              </p>
+            <div className="border-b border-slate-200 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight">
+                  Contribute Offline
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                  Direct bank transfer, cheque, or draft options for generous donors wishing to contribute offline.
+                </p>
+              </div>
+              <a
+                href="https://pub-9df833ce82f4452db02dda1a3edca3d4.r2.dev/docs/official_banking_and_contact_details.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 text-xs font-bold border border-orange-200 transition cursor-pointer shrink-0"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Official Banking Details (PDF)</span>
+              </a>
             </div>
 
             {/* Offline 3-Column Table (Page 72) */}

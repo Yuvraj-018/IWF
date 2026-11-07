@@ -1181,11 +1181,18 @@ export default function MediaManager() {
                       <div className="relative h-44 w-full bg-slate-100 border-b border-slate-200/80 overflow-hidden flex items-center justify-center">
                         {live?.url || live?.thumbnailUrl ? (
                           <>
-                            <img
-                              src={live.thumbnailUrl || live.url}
-                              alt={live.altText || slot.defaultDescription}
-                              className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                            />
+                            {!(live.thumbnailUrl || live.url)?.endsWith(".pdf") ? (
+                              <img
+                                src={live.thumbnailUrl || live.url}
+                                alt={live.altText || slot.defaultDescription}
+                                className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                              />
+                            ) : (
+                              <div className="flex flex-col items-center justify-center p-6 text-red-600 bg-red-50/50 w-full h-full">
+                                <FileText className="w-12 h-12 mb-2 text-red-500" />
+                                <span className="text-xs font-bold text-slate-800">PDF Document Active</span>
+                              </div>
+                            )}
 
                             {/* Video Play Overlay */}
                             {isVideo && (

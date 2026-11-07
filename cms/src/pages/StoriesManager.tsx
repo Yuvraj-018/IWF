@@ -300,6 +300,9 @@ export default function StoriesManager() {
                       <img
                         src={item.image}
                         alt={item.personName}
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = "https://pub-9df833ce82f4452db02dda1a3edca3d4.r2.dev/islah/stories/anjali_edu.jpg";
+                        }}
                         className="w-16 h-16 rounded-xl object-cover shrink-0 border border-slate-800"
                       />
                     )}
