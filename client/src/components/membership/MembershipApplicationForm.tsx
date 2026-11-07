@@ -603,6 +603,47 @@ export function MembershipApplicationForm({
         },
       });
 
+      // ── Step 2.5: Upload Photo & Documents to Cloudflare R2 ──
+      const { uploadSingleFile } = await import("@/services/uploadService");
+      let uploadedPhotoUrl: string | undefined = undefined;
+
+      if (!isOrg && files.photo?.file instanceof File) {
+        try {
+          const uploadRes = await uploadSingleFile(files.photo.file, "members/photos", false);
+          uploadedPhotoUrl = uploadRes.url;
+        } catch (uploadErr) {
+          console.warn("Member photo Cloudflare R2 upload warning:", uploadErr);
+        }
+      }
+
+      const uploadedDocs: Record<string, any> = {};
+      for (const [key, f] of Object.entries(files)) {
+        if (f && f.file instanceof File && key !== "photo") {
+          try {
+            const isConfidential = key === "idProof" || key === "orgRegCert" || key === "orgAuthLetter";
+            const folder = isOrg ? "members/organizations" : "members/documents";
+            const docUpload = await uploadSingleFile(f.file, folder, isConfidential);
+            uploadedDocs[key] = {
+              name: f.name,
+              size: f.size,
+              type: f.type,
+              url: docUpload.url,
+              publicId: docUpload.publicId,
+            };
+          } catch (docErr) {
+            console.warn(`Document ${key} upload warning:`, docErr);
+            uploadedDocs[key] = { name: f.name, size: f.size, type: f.type };
+          }
+        } else if (f && key !== "photo") {
+          uploadedDocs[key] = { name: f.name, size: f.size, type: f.type };
+        }
+      }
+
+      const finalMetadata = {
+        ...payloadMetadata,
+        documents: uploadedDocs,
+      };
+
       // ── Step 3: Verify Payment Signature & Create Member in DB ──
       const verifyData = await verifyPayment({
         razorpay_order_id: paymentResult.razorpay_order_id,
@@ -625,8 +666,8 @@ export function MembershipApplicationForm({
           pincode: isOrg ? v.orgPin : v.pinCode,
           consentDisplay: v.recognition,
           isPublicConsent: v.recognition === "public",
-          photoUrl: !isOrg ? files.photo?.dataUrl : undefined,
-          metadata: payloadMetadata,
+          photoUrl: uploadedPhotoUrl,
+          metadata: finalMetadata,
         },
       });
 
@@ -655,7 +696,7 @@ export function MembershipApplicationForm({
           memberId: verifiedMemberNo,
           validFrom: formatDisplayMonth(validFromDate),
           validTill: formatDisplayMonth(validTillDate),
-          photoUrl: !isOrg ? files.photo?.dataUrl : undefined,
+          photoUrl: uploadedPhotoUrl || (!isOrg ? files.photo?.dataUrl : undefined),
           isOrganisation: isOrg,
         },
         receipt: {
