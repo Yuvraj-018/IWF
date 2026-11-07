@@ -350,28 +350,28 @@ export async function getMemberProfile(req: Request, res: Response): Promise<voi
       data: {
         member: member
           ? {
-              id: member.memberNo,
-              memberNo: member.memberNo,
-              name: member.name,
-              fatherName: member.fatherName,
-              category: member.category,
-              annualFee: member.annualFee,
-              status: isExpired ? "Expired" : member.status,
-              validFrom: member.validFrom.toISOString().split("T")[0],
-              validTill: member.validTill.toISOString().split("T")[0],
-              joined: member.validFrom.toISOString().split("T")[0],
-              phone: member.phone,
-              email: member.email,
-              state: member.state,
-              district: member.district,
-              address: member.address || "",
-              pincode: member.pincode || "",
-              receiptNo: member.receiptNo,
-              certificateNo: member.certificateNo || `CERT-${member.memberNo}`,
-              consentDisplay: member.consentDisplay || "public",
-              isPublicConsent: member.isPublicConsent !== false,
-              photoUrl: member.photoUrl,
-            }
+            id: member.memberNo,
+            memberNo: member.memberNo,
+            name: member.name,
+            fatherName: member.fatherName,
+            category: member.category,
+            annualFee: member.annualFee,
+            status: isExpired ? "Expired" : member.status,
+            validFrom: member.validFrom.toISOString().split("T")[0],
+            validTill: member.validTill.toISOString().split("T")[0],
+            joined: member.validFrom.toISOString().split("T")[0],
+            phone: member.phone,
+            email: member.email,
+            state: member.state,
+            district: member.district,
+            address: member.address || "",
+            pincode: member.pincode || "",
+            receiptNo: member.receiptNo,
+            certificateNo: member.certificateNo || `CERT-${member.memberNo}`,
+            consentDisplay: member.consentDisplay || "public",
+            isPublicConsent: member.isPublicConsent !== false,
+            photoUrl: member.photoUrl,
+          }
           : null,
         donations: donations.map((d) => ({
           receiptNo: d.receiptNo,
@@ -610,15 +610,23 @@ export async function verifyMemberOtp(req: Request, res: Response): Promise<void
  */
 export async function renewMember(req: Request, res: Response): Promise<void> {
   try {
-    const { memberNo, membershipPeriod = 1, paymentMode = "UPI", transactionId } = req.body;
+    const {
+      memberNo,
+      membershipPeriod = 1,
+      paymentMode = "UPI",
+      transactionId,
+      category,
+      contactUpdates,
+    } = req.body;
 
     if (!memberNo) {
       res.status(400).json({ success: false, message: "Member ID is required for renewal" });
       return;
     }
 
+    const cleanMemberNo = String(memberNo).trim();
     const member = await Member.findOne({
-      memberNo: { $regex: new RegExp(`^${memberNo.trim()}$`, "i") },
+      memberNo: { $regex: new RegExp(`^${cleanMemberNo}$`, "i") },
     });
 
     if (!member) {
@@ -626,7 +634,7 @@ export async function renewMember(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    const periodMultiplier = Number(membershipPeriod) === 2 ? 2 : 1;
+    const periodMultiplier = Number(membershipPeriod) >= 1 ? Number(membershipPeriod) : 1;
     const newValidTill = calculateMembershipRenewalExpiry(member.validTill, periodMultiplier);
 
     const donationCount = await Donation.countDocuments();
@@ -637,7 +645,40 @@ export async function renewMember(req: Request, res: Response): Promise<void> {
     member.receiptNo = renewalReceiptNo;
     member.paymentMode = paymentMode;
     if (transactionId) member.transactionId = transactionId;
+
+    if (category && typeof category === "string") {
+      member.category = category as any;
+    }
+
+    if (contactUpdates && typeof contactUpdates === "object") {
+      if (contactUpdates.name) member.name = String(contactUpdates.name).trim();
+      if (contactUpdates.phone) member.phone = String(contactUpdates.phone).trim();
+      if (contactUpdates.email) member.email = String(contactUpdates.email).trim().toLowerCase();
+      if (contactUpdates.address) member.address = String(contactUpdates.address).trim();
+      if (contactUpdates.district) member.district = String(contactUpdates.district).trim();
+      if (contactUpdates.state) member.state = String(contactUpdates.state).trim();
+      if (contactUpdates.pincode) member.pincode = String(contactUpdates.pincode).trim();
+    }
+
     await member.save();
+
+    // Auto-sync directory
+    syncToCommunityDirectory({
+      id: `dir-mem-${member.memberNo}`,
+      name: member.consentDisplay === "anonymous" ? "Anonymous Supporter" : member.name,
+      role: `${member.category} Member`,
+      type: "member",
+      location: [member.district, member.state].filter(Boolean).join(", ") || "Darbhanga, Bihar",
+      avatar: member.photoUrl || "",
+      category: `${member.category} Card`,
+      bio: `ISLAH Community Member (${member.category} Tier)`,
+      isPublicConsent: member.isPublicConsent !== false,
+      memberNo: member.memberNo,
+      receiptNo: renewalReceiptNo,
+      certificateNo: member.certificateNo || `CERT-${member.memberNo}`,
+    }).catch((err) =>
+      console.warn("Directory sync warning during renewal:", err)
+    );
 
     // Update Verification Record
     await Verification.findOneAndUpdate(
