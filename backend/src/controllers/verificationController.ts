@@ -79,22 +79,30 @@ export async function verifyDocument(req: Request, res: Response): Promise<void>
       return;
     }
 
-    // 2. Check Donations collection by receiptNo or transaction ID
+    // 2. Check Donations collection by receiptNo, certificateNo, or transaction ID
     const donation = await Donation.findOne({
       $or: [
         { receiptNo: { $regex: new RegExp(`^${cleanNo}$`, "i") } },
+        { certificateNo: { $regex: new RegExp(`^${cleanNo}$`, "i") } },
         { transactionId: cleanNo },
       ],
     });
 
     if (donation) {
+      const isCertQuery = Boolean(
+        cleanUpper.startsWith("CERT") ||
+        (donation.certificateNo && donation.certificateNo.toLowerCase() === cleanNo.toLowerCase())
+      );
+
       res.json({
         success: true,
         verified: donation.paymentStatus === "Success",
         data: {
-          documentNo: donation.receiptNo,
-          documentType: "donation_receipt",
-          title: `Official 80G Donation Receipt - ₹${donation.amount}`,
+          documentNo: isCertQuery ? (donation.certificateNo || cleanNo) : donation.receiptNo,
+          documentType: isCertQuery ? "programme_certificate" : "donation_receipt",
+          title: isCertQuery
+            ? `Donor Appreciation Certificate - ${donation.financialType || "General"}`
+            : `Official 80G Donation Receipt - ₹${donation.amount}`,
           issuedTo: donation.donorName,
           issuer: "Islah Welfare Foundation (ISLAH)",
           issueDate: donation.createdAt.toISOString().split("T")[0],
@@ -106,6 +114,8 @@ export async function verifyDocument(req: Request, res: Response): Promise<void>
             paymentMode: donation.paymentMode,
             pan: donation.pan || "N/A",
             transactionId: donation.transactionId || "N/A",
+            receiptNo: donation.receiptNo,
+            certificateNo: donation.certificateNo || "N/A",
           },
         },
       });

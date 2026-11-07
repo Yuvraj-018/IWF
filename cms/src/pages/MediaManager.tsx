@@ -27,6 +27,56 @@ import { toast } from "sonner";
 
 export type MediaVariant = "photo" | "video" | "document";
 
+export const isDocumentAsset = (item: any) => {
+  if (!item) return false;
+  const type = String(item.mediaType || "").toLowerCase();
+  const url = String(item.url || item.thumbnailUrl || "").toLowerCase();
+  const key = String(item.key || "").toLowerCase();
+  const title = String(item.title || "").toLowerCase();
+  const alt = String(item.altText || "").toLowerCase();
+  return (
+    type === "document" ||
+    type === "pdf" ||
+    url.endsWith(".pdf") ||
+    url.includes(".pdf?") ||
+    url.endsWith(".doc") ||
+    url.endsWith(".docx") ||
+    url.includes(".doc?") ||
+    key.includes("brochure") ||
+    key.includes("report") ||
+    key.includes("policy") ||
+    key.includes("dossier") ||
+    key.includes("pdf") ||
+    title.includes("brochure") ||
+    title.includes(".pdf") ||
+    alt.includes("pdf") ||
+    alt.includes("brochure")
+  );
+};
+
+export function DocumentPreviewBadge({ title, url }: { title?: string; url?: string }) {
+  const fileName = url ? url.split("/").pop()?.split("?")[0] : "";
+  const isPdf = !url || url.toLowerCase().includes(".pdf") || (title && title.toLowerCase().includes("pdf"));
+  return (
+    <div className="flex flex-col items-center justify-center p-5 w-full h-full text-center bg-gradient-to-br from-red-50 via-slate-50 to-orange-50 select-none group-hover:scale-105 transition duration-500">
+      <div className="w-16 h-16 rounded-2xl bg-red-100/90 border border-red-200 text-red-600 flex items-center justify-center shadow-xs">
+        <FileText className="w-8 h-8 text-red-600" />
+      </div>
+      <span className="mt-3 text-xs font-black text-slate-800 tracking-tight flex items-center gap-1.5">
+        <span className="px-1.5 py-0.5 rounded bg-red-600 text-white font-mono text-[9px] font-black uppercase tracking-wider">
+          {isPdf ? "PDF" : "DOC"}
+        </span>
+        <span className="truncate max-w-[180px]">{title || "Official Document"}</span>
+      </span>
+      {fileName && (
+        <span className="text-[10px] text-slate-400 font-mono mt-0.5 truncate max-w-[200px]" title={fileName}>
+          {fileName}
+        </span>
+      )}
+    </div>
+  );
+}
+
 // Complete System Slot Registry mapping all website dynamic media
 export interface SystemSlot {
   key: string;
@@ -1181,17 +1231,19 @@ export default function MediaManager() {
                       <div className="relative h-44 w-full bg-slate-100 border-b border-slate-200/80 overflow-hidden flex items-center justify-center">
                         {live?.url || live?.thumbnailUrl ? (
                           <>
-                            {!(live.thumbnailUrl || live.url)?.endsWith(".pdf") ? (
+                            {isDocumentAsset(live) || isDoc ? (
+                              <DocumentPreviewBadge title={live.title || slot.slotLabel} url={live.url} />
+                            ) : (
                               <img
                                 src={live.thumbnailUrl || live.url}
                                 alt={live.altText || slot.defaultDescription}
+                                onError={(e) => {
+                                  const target = e.target as HTMLImageElement;
+                                  target.onerror = null;
+                                  target.src = "https://pub-9df833ce82f4452db02dda1a3edca3d4.r2.dev/branding/logo.png";
+                                }}
                                 className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                               />
-                            ) : (
-                              <div className="flex flex-col items-center justify-center p-6 text-red-600 bg-red-50/50 w-full h-full">
-                                <FileText className="w-12 h-12 mb-2 text-red-500" />
-                                <span className="text-xs font-bold text-slate-800">PDF Document Active</span>
-                              </div>
                             )}
 
                             {/* Video Play Overlay */}
@@ -1350,14 +1402,38 @@ export default function MediaManager() {
                       className="rounded-2xl bg-white border border-slate-200/90 shadow-2xs overflow-hidden flex flex-col justify-between group hover:border-orange-300 hover:shadow-md transition"
                     >
                       <div>
-                        <div className="relative h-44 w-full bg-slate-100 overflow-hidden">
-                          <img
-                            src={item.thumbnailUrl || item.url}
-                            alt={item.altText || item.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                          />
-                          <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-[#071527] text-white shadow-sm">
-                            {item.mediaType || "photo"}
+                        <div className="relative h-44 w-full bg-slate-100 overflow-hidden flex items-center justify-center">
+                          {isDocumentAsset(item) ? (
+                            <DocumentPreviewBadge title={item.title} url={item.url} />
+                          ) : (
+                            <img
+                              src={item.thumbnailUrl || item.url}
+                              alt={item.altText || item.title}
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.onerror = null;
+                                target.src = "https://pub-9df833ce82f4452db02dda1a3edca3d4.r2.dev/branding/logo.png";
+                              }}
+                              className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                            />
+                          )}
+                          <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-[#071527] text-white shadow-sm flex items-center gap-1 z-10">
+                            {isDocumentAsset(item) ? (
+                              <>
+                                <FileText className="w-3 h-3 text-red-400" />
+                                <span>DOCUMENT</span>
+                              </>
+                            ) : item.mediaType === "video" ? (
+                              <>
+                                <Video className="w-3 h-3 text-orange-400" />
+                                <span>VIDEO</span>
+                              </>
+                            ) : (
+                              <>
+                                <Camera className="w-3 h-3 text-slate-300" />
+                                <span>PHOTO</span>
+                              </>
+                            )}
                           </span>
                         </div>
                         <div className="p-4">
@@ -1845,7 +1921,11 @@ export default function MediaManager() {
                       {selectedFile ? (
                         <div className="flex items-center justify-between gap-3 text-left">
                           <div className="flex items-center gap-3">
-                            {filePreview ? (
+                            {selectedFile.type.includes("pdf") || selectedFile.name.endsWith(".pdf") || selectedFile.name.endsWith(".doc") || selectedFile.name.endsWith(".docx") ? (
+                              <div className="w-14 h-14 rounded-xl bg-red-100 border border-red-200 flex items-center justify-center text-red-600 shrink-0">
+                                <FileText className="w-7 h-7 text-red-600" />
+                              </div>
+                            ) : filePreview ? (
                               <img src={filePreview} alt="Preview" className="w-14 h-14 object-cover rounded-xl border border-slate-200" />
                             ) : (
                               <div className="w-14 h-14 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600">
@@ -1900,7 +1980,31 @@ export default function MediaManager() {
                         className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs focus:border-orange-500 outline-none"
                       />
 
-                      {formData.url && formData.mediaType !== "document" && (
+                      {formData.url && isDocumentAsset(formData) ? (
+                        <div className="mt-2.5 p-3 rounded-xl bg-red-50/70 border border-red-200 flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-red-100 border border-red-200 text-red-600 flex items-center justify-center shrink-0">
+                              <FileText className="w-5 h-5 text-red-600" />
+                            </div>
+                            <div className="text-[11px] text-slate-700 min-w-0">
+                              <p className="font-bold text-slate-900 flex items-center gap-1.5">
+                                <span className="px-1.5 py-0.2 rounded bg-red-600 text-white font-mono text-[9px] font-black uppercase">PDF</span>
+                                <span>Official Document Linked</span>
+                              </p>
+                              <p className="text-[10px] text-slate-500 font-mono truncate max-w-[260px]">{formData.url}</p>
+                            </div>
+                          </div>
+                          <a
+                            href={formData.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-[11px] font-bold text-slate-700 transition shrink-0"
+                          >
+                            <ExternalLink className="w-3 h-3 text-slate-500" />
+                            <span>Open</span>
+                          </a>
+                        </div>
+                      ) : formData.url && (
                         <div className="mt-2.5 p-2 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-3">
                           <img
                             src={formData.url}

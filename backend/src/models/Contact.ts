@@ -15,7 +15,7 @@ export interface IContact extends Document {
   regionalOfficeTarget?: string;
   referenceNumber?: string;
   source: "Quick Float Modal" | "Contact Page" | "Other";
-  status: "Unread" | "Read" | "Resolved";
+  status: "Unread" | "Read" | "Resolved" | "Archived";
   metadata?: Record<string, any>;
   createdAt: Date;
   updatedAt: Date;
@@ -41,7 +41,7 @@ const ContactSchema = new Schema<IContact>(
       enum: ["Quick Float Modal", "Contact Page", "Other"],
       default: "Contact Page",
     },
-    status: { type: String, enum: ["Unread", "Read", "Resolved"], default: "Unread" },
+    status: { type: String, enum: ["Unread", "Read", "Resolved", "Archived"], default: "Unread" },
     metadata: { type: Schema.Types.Mixed, default: {} },
   },
   { timestamps: true }

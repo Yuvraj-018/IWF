@@ -131,6 +131,27 @@ export default function MembersManager() {
     }
   };
 
+  const handleToggleLedgerConsent = async (memberId: string) => {
+    try {
+      const res = await api.toggleMemberVisibility(memberId);
+      if (res.success) {
+        toast.success(res.message || "Member visibility updated live");
+        setMembers((prev) =>
+          prev.map((m) =>
+            m.memberNo === memberId || m.id === memberId || m._id === memberId
+              ? { ...m, isPublicConsent: res.isPublicConsent }
+              : m
+          )
+        );
+        loadDirectory(true);
+      } else {
+        toast.error(res.message || "Failed to update visibility");
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Update failed");
+    }
+  };
+
   const handleOpenAddDirectory = () => {
     setModalMode("add");
     setModalFormData({
@@ -508,7 +529,9 @@ export default function MembersManager() {
                       <th className="p-3.5">Name</th>
                       <th className="p-3.5">Card Tier</th>
                       <th className="p-3.5">Status</th>
+                      <th className="p-3.5">Directory Visibility</th>
                       <th className="p-3.5">Location</th>
+                      <th className="p-3.5">Receipt &amp; Cert</th>
                       <th className="p-3.5">Contact</th>
                       <th className="p-3.5 pr-5">Valid Till</th>
                     </tr>
@@ -517,7 +540,14 @@ export default function MembersManager() {
                     {members.map((m) => (
                       <tr key={m.memberNo || m.id || m._id} className="hover:bg-slate-50/80 transition">
                         <td className="p-3.5 pl-5 font-mono text-orange-600 font-bold">{m.memberNo || m.id}</td>
-                        <td className="p-3.5 font-bold text-[#071527]">{m.name || m.fullName}</td>
+                        <td className="p-3.5">
+                          <div className="font-bold text-[#071527]">{m.name || m.fullName}</div>
+                          {m.consentDisplay && (
+                            <span className="text-[10px] text-slate-400 font-mono">
+                              Pref: {m.consentDisplay}
+                            </span>
+                          )}
+                        </td>
                         <td className="p-3.5">
                           <span className={`px-2 py-0.5 rounded-full border text-[10px] font-bold ${getBadgeCls(m.category)}`}>
                             {m.category}
@@ -532,8 +562,28 @@ export default function MembersManager() {
                             {m.status || "Active"}
                           </span>
                         </td>
+                        <td className="p-3.5">
+                          <button
+                            onClick={() => handleToggleLedgerConsent(m.memberNo || m.id)}
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold border transition cursor-pointer ${
+                              m.isPublicConsent !== false
+                                ? "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100"
+                                : "bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200"
+                            }`}
+                            title="Click to toggle live website visibility"
+                          >
+                            <span className={`w-1.5 h-1.5 rounded-full ${m.isPublicConsent !== false ? "bg-emerald-500" : "bg-slate-400"}`}></span>
+                            <span>{m.isPublicConsent !== false ? "Public on Web" : "Hidden"}</span>
+                          </button>
+                        </td>
                         <td className="p-3.5 text-slate-700">
                           {m.district}, {m.state}
+                        </td>
+                        <td className="p-3.5 font-mono text-[11px] text-slate-600">
+                          <div>{m.receiptNo || "–"}</div>
+                          <div className="text-[10px] text-slate-400 font-medium">
+                            {m.certificateNo || `CERT-${m.memberNo || m.id}`}
+                          </div>
                         </td>
                         <td className="p-3.5 text-slate-500 font-mono">{m.phone || m.mobile || "Private"}</td>
                         <td className="p-3.5 pr-5 text-slate-500 font-mono">{m.validTill || "2027-01-01"}</td>

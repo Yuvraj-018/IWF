@@ -40,7 +40,7 @@ export function DonorsDirectoryTab({
     }
     if (settings?.community_directory?.spotlight) {
       const fromSpotlight = settings.community_directory.spotlight
-        .filter((s: any) => s.type === "donor")
+        .filter((s: any) => s.type === "donor" && s.isPublicConsent !== false)
         .map((s: any) => ({
           id: s.id,
           name: s.name,

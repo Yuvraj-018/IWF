@@ -4,6 +4,8 @@ import { Patient } from "../models/Patient.js";
 import { Verification } from "../models/Verification.js";
 import { generateReceiptNumber } from "../utils/idGenerator.js";
 import { verifyToken } from "../utils/authUtils.js";
+import { sendReceiptEmail, sendAdminInboundNotificationEmail } from "../services/emailService.js";
+import { syncToCommunityDirectory } from "../services/directorySyncService.js";
 
 function maskEmail(email: string): string {
   if (!email || !email.includes("@")) return "***";
@@ -71,9 +73,12 @@ export async function createDonation(req: Request, res: Response): Promise<void>
 
     const count = await Donation.countDocuments();
     const receiptNo = generateReceiptNumber(count + 1);
+    const certificateNo = receiptNo.replace(/RCPT|REC/i, "CERT");
+    const isPublicConsent = req.body.websiteConsent === "Yes" || Boolean(req.body.isPublicConsent);
 
     const donation = new Donation({
       receiptNo,
+      certificateNo,
       donorName: trimmedName,
       donorType: donorType || "Individual",
       email: trimmedEmail,
@@ -88,9 +93,12 @@ export async function createDonation(req: Request, res: Response): Promise<void>
       amount: Number(amount),
       taxExemption: Boolean(taxExemption),
       pan: pan ? pan.toUpperCase() : undefined,
+      donorPhotoUrl: req.body.donorPhotoUrl,
       patientSlug,
       paymentMode: paymentMode || "Online",
       paymentStatus: "Success", // In sandbox/mock or after gateway capture
+      websiteConsent: req.body.websiteConsent || "Yes",
+      isPublicConsent,
     });
 
     await donation.save();
@@ -116,8 +124,76 @@ export async function createDonation(req: Request, res: Response): Promise<void>
         pan: pan ? pan.toUpperCase() : undefined,
         financialType,
         receiptNo,
+        certificateNo,
       },
     });
+
+    // Auto-create document verification record for Donor Certificate
+    await Verification.create({
+      documentNo: certificateNo,
+      documentType: "programme_certificate",
+      title: `Donor Appreciation Certificate - ${financialType}`,
+      issuedTo: donorName,
+      issueDate: new Date(),
+      status: "Verified",
+      details: {
+        amount: Number(amount),
+        financialType,
+        receiptNo,
+        certificateNo,
+      },
+    });
+
+    // Synchronize into community directory spotlight
+    syncToCommunityDirectory({
+      id: `dir-donor-${receiptNo}`,
+      name: donorName,
+      role: `${financialType} Supporter`,
+      type: "donor",
+      location: [city, state].filter(Boolean).join(", ") || "India",
+      avatar: req.body.donorPhotoUrl || "",
+      category: financialType,
+      bio: `Supported ISLAH ${financialType} initiative.`,
+      isPublicConsent,
+      receiptNo,
+      certificateNo,
+    }).catch((e) => console.warn("Donor directory sync warning:", e));
+
+    // Dispatch Official 80G Donation Receipt Email with PDF Attachment (Async, Non-blocking)
+    if (trimmedEmail) {
+      sendReceiptEmail(trimmedEmail, {
+        donorName: trimmedName,
+        donorType: donorType || "Individual",
+        email: trimmedEmail,
+        phone: trimmedPhone,
+        address: donation.address,
+        city: donation.city,
+        state: donation.state,
+        pincode: donation.pincode,
+        receiptNo,
+        amount: Number(amount),
+        cause: financialType,
+        paymentMode: donation.paymentMode,
+        pan: donation.pan,
+        taxExemption: donation.taxExemption,
+        transactionId: donation.transactionId,
+        createdAt: donation.createdAt,
+      }).catch((e) => console.warn("Donation receipt email dispatch failed:", e));
+
+      // Admin Alert
+      sendAdminInboundNotificationEmail(`New Donation: ₹${Number(amount).toLocaleString("en-IN")} from ${trimmedName}`, {
+        category: "Donation",
+        title: `Donation Received - Receipt #${receiptNo}`,
+        items: [
+          { label: "Donor Name", value: trimmedName },
+          { label: "Amount", value: `₹${Number(amount).toLocaleString("en-IN")}` },
+          { label: "Cause / Purpose", value: financialType },
+          { label: "Payment Mode", value: donation.paymentMode },
+          { label: "80G Tax Exemption", value: donation.pan ? `Claimed (PAN: ${donation.pan})` : "General Contribution" },
+          { label: "Receipt No", value: receiptNo },
+        ],
+      }).catch((e) => console.warn("Admin donation alert failed:", e));
+    }
 
     res.status(201).json({
       success: true,

@@ -11,6 +11,14 @@ import {
   RefreshCw,
   RotateCcw,
   Search,
+  Receipt,
+  Award,
+  ShieldCheck,
+  Download,
+  CreditCard,
+  User,
+  Calendar,
+  ExternalLink,
 } from "lucide-react";
 import {
   blockNumbersOnKeyDown,
@@ -19,7 +27,8 @@ import {
   sanitizeName,
 } from "@/utils/formValidation";
 import { INDIAN_STATES } from "@/content/locations";
-import { checkMemberStatus, renewMember } from "@/services/memberService";
+import { checkMemberStatus, renewMember, fetchMemberProfile, type SupporterProfileData } from "@/services/memberService";
+import { downloadDonationReceiptPdf } from "@/components/documents/donationReceipt";
 import {
   EMAIL_RE,
   INDIVIDUAL_TIERS,
@@ -39,7 +48,6 @@ import {
 import {
   CheckboxRow,
   Field,
-  OtpVerifier,
   PhoneInput,
   CityField,
   RadioPills,
@@ -119,9 +127,10 @@ function demoProfile(query: string): MemberProfile {
 export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => void }) {
   // Lookup
   const [query, setQuery] = useState("");
-  const [lookupStarted, setLookupStarted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [member, setMember] = useState<MemberProfile | null>(null);
+  const [supporterData, setSupporterData] = useState<SupporterProfileData | null>(null);
+  const [activeTab, setActiveTab] = useState<"card" | "donations" | "verifications">("card");
 
   // Renewal
   const [stage, setStage] = useState<"overview" | "choose" | "form" | "done">("overview");
@@ -131,57 +140,94 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
   const [customYears, setCustomYears] = useState("3");
   const [editingContact, setEditingContact] = useState(false);
   const [contact, setContact] = useState<ContactFields | null>(null);
-  const [newPhoneVerifiedFor, setNewPhoneVerifiedFor] = useState<string | null>(null);
   const [agree, setAgree] = useState(false);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [receipt, setReceipt] = useState<ReceiptData | null>(null);
 
   const queryValid =
-    /^ISLAH-M[A-Z]{2}-\d{4}-\d{3,6}$/i.test(query.trim()) || /^[6-9]\d{9}$/.test(query.trim());
+    /^ISLAH-M[A-Z]{2}-\d{4}-\d{3,6}$/i.test(query.trim()) ||
+    /^[6-9]\d{9}$/.test(query.trim()) ||
+    EMAIL_RE.test(query.trim());
 
   // --------------------------------------------------------------------------
   // Lookup
   // --------------------------------------------------------------------------
 
   const fetchMember = async () => {
+    if (!queryValid) return;
     setLoading(true);
     try {
       let profile: MemberProfile | null = null;
+      let suppData: SupporterProfileData | null = null;
+
       try {
-        const res = await checkMemberStatus(query.trim());
-        if (res?.member) {
-          const m = res.member as typeof res.member &
-            Partial<MemberProfile> & { phone?: string; address?: string; pincode?: string };
-          const tier = normaliseTier(String(m.category));
-          profile = {
-            ...demoProfile(query),
-            id: m.id,
-            name: m.name,
-            tier,
-            isOrganisation: tier === "Orange",
-            status: m.status,
-            joined: m.joined,
-            validFrom: m.validFrom || m.joined,
-            validTill: m.validTill,
-            state: m.state,
-            district: m.district,
-            phone: m.phone || "",
-            email: m.email || "",
-            address: m.address || "",
-            pincode: m.pincode || "",
-          };
+        const profileRes = await fetchMemberProfile(query.trim());
+        if (profileRes.success && profileRes.data) {
+          suppData = profileRes.data;
+          const m = suppData.member;
+          if (m) {
+            const tier = normaliseTier(String(m.category));
+            profile = {
+              id: m.memberNo,
+              name: m.name,
+              tier,
+              isOrganisation: tier === "Orange",
+              status: m.status || "Active",
+              joined: m.joinedDate ? new Date(m.joinedDate).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "Recently",
+              validFrom: m.joinedDate ? new Date(m.joinedDate).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "Active",
+              validTill: m.validTill ? new Date(m.validTill).toLocaleDateString("en-IN", { month: "short", year: "numeric" }) : "Active",
+              countryCode: "+91",
+              phone: m.phone || "",
+              email: m.email || "",
+              address: m.address || "",
+              district: m.district || "",
+              state: m.state || "Bihar",
+              pincode: m.pincode || "",
+            };
+          }
         }
-      } catch {
-        /* API unavailable — fall back to demo record */
+      } catch (e) {
+        console.warn("Supporter profile fetch error:", e);
       }
+
+      if (!profile) {
+        try {
+          const res = await checkMemberStatus(query.trim());
+          if (res?.member) {
+            const m = res.member as typeof res.member &
+              Partial<MemberProfile> & { phone?: string; address?: string; pincode?: string };
+            const tier = normaliseTier(String(m.category));
+            profile = {
+              ...demoProfile(query),
+              id: m.id,
+              name: m.name,
+              tier,
+              isOrganisation: tier === "Orange",
+              status: m.status,
+              joined: m.joined,
+              validFrom: m.validFrom || m.joined,
+              validTill: m.validTill,
+              state: m.state,
+              district: m.district,
+              phone: m.phone || "",
+              email: m.email || "",
+              address: m.address || "",
+              pincode: m.pincode || "",
+            };
+          }
+        } catch {
+          /* Fallback demo */
+        }
+      }
+
       const found = profile || demoProfile(query);
-      // A lapsed validity date always means the membership has expired
       const till = parseValidTill(found.validTill);
       if (till && till.getTime() < new Date().setHours(0, 0, 0, 0)) found.status = "Expired";
       setMember(found);
+      setSupporterData(suppData);
       setStage("overview");
-      toast.success("Membership details retrieved.");
+      toast.success("Supporter & membership records loaded.");
     } finally {
       setLoading(false);
     }
@@ -189,10 +235,11 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
 
   const resetLookup = () => {
     setMember(null);
-    setLookupStarted(false);
+    setSupporterData(null);
     setQuery("");
     setStage("overview");
     setReceipt(null);
+    setActiveTab("card");
   };
 
   // --------------------------------------------------------------------------
@@ -208,21 +255,12 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const currentTill = parseValidTill(member.validTill);
-    // Renewal continues from the month after the current one ends, or this month if expired
     let from = startOfMonth(today);
     if (currentTill && currentTill >= today) {
       from = new Date(currentTill.getFullYear(), currentTill.getMonth() + 1, 1);
     }
     return { from, till: computeValidTill(from, Math.max(years, 1)) };
   }, [member, years]);
-
-  const phoneChanged = Boolean(
-    member &&
-    contact &&
-    (contact.phone !== member.phone || contact.countryCode !== member.countryCode),
-  );
-  const newPhoneVerified =
-    !phoneChanged || newPhoneVerifiedFor === `${contact?.countryCode}${contact?.phone}`;
 
   const startRenewal = (p: "same" | "change") => {
     if (!member) return;
@@ -243,7 +281,6 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
       pincode: member.pincode,
     });
     setEditingContact(false);
-    setNewPhoneVerifiedFor(null);
     setAgree(false);
     setErrors({});
     setStage("form");
@@ -274,7 +311,6 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
       if (contact.pincode && !/^\d{6}$/.test(contact.pincode))
         e.pincode = "PIN code must be 6 digits.";
     }
-    if (phoneChanged && !newPhoneVerified) e.newPhoneOtp = "Verify your new mobile number.";
     if (!agree) e.agree = "Required";
     return e;
   };
@@ -290,26 +326,64 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
     }
     setSubmitting(true);
     try {
-      const updates = Object.fromEntries(
-        (Object.keys(contact) as (keyof ContactFields)[])
-          .filter((k) => contact[k] !== member[k])
-          .map((k) => [k === "pincode" ? "pincode" : k, contact[k]]),
-      );
-      try {
-        await renewMember({
+      const { createPaymentOrder, verifyPayment } = await import("@/services/donationService");
+      const { openRazorpayModal } = await import("@/utils/razorpay");
+
+      // STEP 1: Create Razorpay Order with backend
+      const orderData = await createPaymentOrder({
+        amount: fee,
+        receipt: `renew_${Date.now()}`,
+        notes: {
           memberNo: member.id,
-          membershipPeriod: years,
-          renewalType: path,
-          category: targetTier,
-          contactUpdates: Object.keys(updates).length ? updates : undefined,
-        });
-      } catch {
-        /* Backend unreachable — continue with client-side confirmation */
+          isRenewal: "true",
+          tier: targetTier,
+          years: String(years),
+        },
+      });
+
+      if (!orderData || !orderData.order_id) {
+        throw new Error(orderData?.message || "Could not create payment order. Please try again.");
       }
+
+      // STEP 2: Open Razorpay Checkout Modal
+      const paymentResult = await openRazorpayModal({
+        orderId: orderData.order_id,
+        amount: orderData.amount,
+        keyId: orderData.key_id,
+        name: "ISLAH Welfare Foundation",
+        description: `Membership Renewal: ${targetTier} Plan (${years} Year${years > 1 ? "s" : ""})`,
+        prefill: {
+          name: contact.name,
+          email: contact.email,
+          contact: `${contact.countryCode || "+91"}${contact.phone}`,
+        },
+        notes: {
+          memberNo: member.id,
+          isRenewal: "true",
+        },
+      });
+
+      // STEP 3: Verify Payment Signature on backend
+      const verifyData = await verifyPayment({
+        razorpay_order_id: paymentResult.razorpay_order_id,
+        razorpay_payment_id: paymentResult.razorpay_payment_id,
+        razorpay_signature: paymentResult.razorpay_signature,
+        memberData: {
+          isRenewal: true,
+          memberNo: member.id,
+          category: targetTier,
+          membershipPeriod: years,
+          name: contact.name,
+          email: contact.email,
+          phone: contact.phone,
+        },
+      });
 
       const validFrom = formatDisplayMonth(renewalDates.from);
       const validTill = formatDisplayMonth(renewalDates.till);
       const tierCfg = MEMBERSHIP_TIERS[targetTier];
+      const generatedReceiptNo = verifyData?.receiptNo || generateReceiptNo();
+
       setMember({
         ...member,
         ...contact,
@@ -318,8 +392,9 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
         validFrom,
         validTill,
       });
+
       setReceipt({
-        receiptNo: generateReceiptNo(),
+        receiptNo: generatedReceiptNo,
         memberId: member.id,
         name: contact.name,
         tier: targetTier,
@@ -331,11 +406,19 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
         validTill,
         type: "Renewal",
       });
+
       setStage("done");
-      toast.success("Membership renewed successfully!");
+      toast.success("Membership renewed and payment verified!");
+      fetchMember();
       document
         .getElementById("membership-status")
         ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch (err: any) {
+      if (err?.message?.includes("cancelled") || err?.message?.includes("dismissed")) {
+        toast.info("Payment cancelled.");
+      } else {
+        toast.error(err?.message || "Renewal failed. Please try again.");
+      }
     } finally {
       setSubmitting(false);
     }
@@ -350,67 +433,57 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
       <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-7 max-w-2xl mx-auto shadow-xs">
         <Field
           name="lookup"
-          label="Member ID or Registered Mobile Number"
-          hint="e.g. ISLAH-MYL-2025-4819 or your 10-digit mobile number"
+          label="Supporter & Member Profile Access"
+          hint="Search with your Member ID (e.g. ISLAH-MYL-2025-4819), 10-digit mobile number, or registered email"
         >
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2.5">
             <div className="relative flex-1">
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={query}
-                onChange={(e) => {
-                  setQuery(e.target.value.toUpperCase().replace(/\s/g, ""));
-                  setLookupStarted(false);
-                }}
-                onKeyDown={(e) => e.key === "Enter" && queryValid && setLookupStarted(true)}
-                placeholder="Member ID or mobile number"
+                onChange={(e) => setQuery(e.target.value.trim())}
+                onKeyDown={(e) => e.key === "Enter" && queryValid && fetchMember()}
+                placeholder="ISLAH-MYL-... or 9876543210 or email@domain.com"
                 className={`${inputClass(false)} pl-9`}
               />
             </div>
-            {!lookupStarted && (
-              <button
-                type="button"
-                onClick={() => setLookupStarted(true)}
-                disabled={!queryValid}
-                className="px-4 py-2.5 rounded-lg bg-[#071527] hover:bg-slate-800 disabled:opacity-50 text-white text-xs font-semibold transition shrink-0"
-              >
-                Continue
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={fetchMember}
+              disabled={!queryValid || loading}
+              className="px-5 py-2.5 rounded-xl bg-[#071527] hover:bg-slate-800 disabled:opacity-50 text-white text-xs font-bold transition shrink-0 flex items-center justify-center gap-2 shadow-xs cursor-pointer"
+            >
+              {loading ? (
+                <>
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                  <span>Loading Profile…</span>
+                </>
+              ) : (
+                <>
+                  <User className="w-3.5 h-3.5" />
+                  <span>View Member Profile</span>
+                </>
+              )}
+            </button>
           </div>
         </Field>
-
-        {lookupStarted && (
-          <div className="mt-4">
-            {loading ? (
-              <div className="flex items-center gap-2 text-xs text-slate-600 py-3">
-                <RefreshCw className="w-4 h-4 animate-spin" /> Retrieving your membership…
-              </div>
-            ) : (
-              <OtpVerifier
-                target={query.trim()}
-                displayTarget="your registered mobile number"
-                verified={false}
-                onVerified={fetchMember}
-              />
-            )}
-          </div>
-        )}
       </div>
     );
   }
 
   const tierCfg = MEMBERSHIP_TIERS[member.tier];
   const isActive = member.status.toLowerCase() === "active";
+  const donations = supporterData?.donations || [];
+  const verifications = supporterData?.verifications || [];
 
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-7 shadow-xs">
+    <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-7 shadow-xs space-y-6">
       {/* Header */}
       <div className="flex flex-wrap items-start justify-between gap-3 pb-4 border-b border-slate-100">
         <div>
           <span className="text-[11px] text-slate-500 uppercase tracking-wide font-semibold">
-            Welcome back
+            Supporter Hub &amp; Member Portal
           </span>
           <h3 className="text-lg sm:text-xl font-semibold text-[#071527]">{member.name}</h3>
           <p className="text-xs text-slate-500 mt-0.5 font-mono">{member.id}</p>
@@ -428,12 +501,193 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
           <button
             type="button"
             onClick={resetLookup}
-            className="text-xs text-slate-500 hover:text-slate-800 hover:bg-slate-50 px-2 py-1 rounded transition"
+            className="text-xs text-slate-500 hover:text-slate-800 hover:bg-slate-50 px-2 py-1 rounded transition cursor-pointer"
           >
             Sign out
           </button>
         </div>
       </div>
+
+      {/* Tabs */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none border-b border-slate-100">
+        <button
+          type="button"
+          onClick={() => setActiveTab("card")}
+          className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition cursor-pointer whitespace-nowrap ${
+            activeTab === "card"
+              ? "bg-[#071527] text-white shadow-xs"
+              : "bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200"
+          }`}
+        >
+          <CreditCard className="w-3.5 h-3.5" />
+          <span>Membership Card</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("donations")}
+          className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition cursor-pointer whitespace-nowrap ${
+            activeTab === "donations"
+              ? "bg-[#071527] text-white shadow-xs"
+              : "bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200"
+          }`}
+        >
+          <Receipt className="w-3.5 h-3.5" />
+          <span>Donations &amp; 80G Receipts</span>
+          {donations.length > 0 && (
+            <span className={`ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-extrabold ${activeTab === "donations" ? "bg-white/20 text-white" : "bg-emerald-100 text-emerald-800"}`}>
+              {donations.length}
+            </span>
+          )}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("verifications")}
+          className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition cursor-pointer whitespace-nowrap ${
+            activeTab === "verifications"
+              ? "bg-[#071527] text-white shadow-xs"
+              : "bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200"
+          }`}
+        >
+          <ShieldCheck className="w-3.5 h-3.5" />
+          <span>Verifications</span>
+          {verifications.length > 0 && (
+            <span className={`ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-extrabold ${activeTab === "verifications" ? "bg-white/20 text-white" : "bg-blue-100 text-blue-800"}`}>
+              {verifications.length}
+            </span>
+          )}
+        </button>
+      </div>
+
+      {/* Tab 2: Past Donations & 80G Receipts */}
+      {activeTab === "donations" && (
+        <div className="space-y-4 pt-2">
+          {donations.length === 0 ? (
+            <div className="p-12 text-center rounded-2xl bg-slate-50 border border-slate-200 text-slate-500 space-y-2">
+              <Receipt className="w-8 h-8 text-slate-300 mx-auto" />
+              <p className="text-sm font-bold text-slate-700">No linked donation receipts found</p>
+              <p className="text-xs text-slate-400">
+                Any future donations made with this phone ({member.phone}) or email ({member.email}) will automatically show here with 1-click tax receipts.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {donations.map((d: any) => (
+                <div
+                  key={d.id}
+                  className="p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs"
+                >
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-sm font-bold text-emerald-700">
+                        ₹{Number(d.amount).toLocaleString("en-IN")}
+                      </span>
+                      <span className="text-[11px] font-mono text-slate-500">#{d.receiptNo}</span>
+                      {d.is80GEligible && (
+                        <span className="px-2 py-0.2 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                          80G Tax Deductible
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-xs text-slate-700 font-semibold">{d.purpose || "General Welfare Contribution"}</div>
+                    <div className="text-[11px] text-slate-400 flex items-center gap-2">
+                      <span>{new Date(d.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</span>
+                      {d.certificateNo && <span>• Cert: #{d.certificateNo}</span>}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        downloadDonationReceiptPdf({
+                          receiptNo: d.receiptNo,
+                          amount: Number(d.amount),
+                          donorName: member.name,
+                          purpose: d.purpose || "General Welfare Fund",
+                          date: new Date(d.createdAt).toLocaleDateString(),
+                          paymentMethod: d.paymentMethod || "Online / Razorpay",
+                          panNumber: d.panNumber,
+                          is80GEligible: Boolean(d.is80GEligible),
+                          certificateNo: d.certificateNo,
+                        }).catch(() => toast.error("Failed to generate PDF"))
+                      }
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold transition cursor-pointer"
+                    >
+                      <Download className="w-3.5 h-3.5 text-slate-500" />
+                      <span>Download Receipt (PDF)</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Tab 3: Official Verifications */}
+      {activeTab === "verifications" && (
+        <div className="space-y-4 pt-2">
+          {verifications.length === 0 ? (
+            <div className="p-12 text-center rounded-2xl bg-slate-50 border border-slate-200 text-slate-500 space-y-2">
+              <ShieldCheck className="w-8 h-8 text-slate-300 mx-auto" />
+              <p className="text-sm font-bold text-slate-700">Official membership verified</p>
+              <p className="text-xs text-slate-400">
+                Member ID: {member.id} is verified in the central registry.
+              </p>
+              <a
+                href={`/verify?ref=${encodeURIComponent(member.id)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#071527] text-white text-xs font-bold transition hover:bg-slate-800"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>Verify on Public Portal</span>
+              </a>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {verifications.map((v: any, idx: number) => (
+                <div
+                  key={idx}
+                  className="p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs"
+                >
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                        {v.documentType || "Official Document"}
+                      </span>
+                      <span className="text-xs font-mono font-bold text-slate-800">
+                        {v.referenceNo || member.id}
+                      </span>
+                      <span className="text-[10px] px-2 py-0.2 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold">
+                        Verified
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-500">
+                      Token: <span className="font-mono text-slate-700">{v.token || "REG-SECURE-TOKEN"}</span>
+                    </p>
+                  </div>
+                  <a
+                    href={`/verify?ref=${encodeURIComponent(v.token || v.referenceNo || member.id)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold transition shrink-0"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5 text-slate-500" />
+                    <span>Check Verification</span>
+                  </a>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Tab 1: Member Card & Details */}
+      {activeTab === "card" && (
+        <>
 
       {/* ------------------------------------------------------------------ */}
       {/* Overview: card + details + actions                                 */}
@@ -915,6 +1169,8 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
             </div>
           </div>
         </div>
+      )}
+      </>
       )}
     </div>
   );

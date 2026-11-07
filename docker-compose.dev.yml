@@ -1,0 +1,43 @@
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: islah-mongodb-dev
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: islah_db
+    volumes:
+      - mongodb_data_dev:/data/db
+    networks:
+      - islah-network-dev
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: islah-backend-dev
+    command: npm run dev
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - NODE_ENV=development
+      - MONGODB_URI=mongodb://mongodb:27017/islah_db
+      - CLIENT_URL=http://localhost:3000
+      - CMS_URL=http://localhost:3001
+      - JWT_SECRET=islah_welfare_super_secret_admin_jwt_key_2026
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      - mongodb
+    networks:
+      - islah-network-dev
+
+volumes:
+  mongodb_data_dev:
+
+networks:
+  islah-network-dev:
+    driver: bridge

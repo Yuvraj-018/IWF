@@ -316,6 +316,16 @@ export const api = {
     return data;
   },
 
+  async toggleMemberVisibility(memberId: string) {
+    const res = await fetch(`${API_BASE_URL}/members/${encodeURIComponent(memberId)}/visibility`, {
+      method: "PUT",
+      headers: getHeaders(),
+    });
+    apiCache.invalidateTag("members");
+    apiCache.invalidateTag("settings");
+    return res.json();
+  },
+
   // ── Inbound Applications (Cached: 3 mins) ──
   async listApplications(type?: string, options?: CacheOptions) {
     const q = type ? `?type=${type}` : "";

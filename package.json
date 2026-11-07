@@ -1,0 +1,31 @@
+{
+  "name": "islah-welfare-foundation",
+  "version": "1.0.0",
+  "description": "Comprehensive web platform, admin CMS, and backend API for ISLAH Welfare Foundation",
+  "private": true,
+  "scripts": {
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:client": "npm --prefix client run dev",
+    "dev:cms": "npm --prefix cms run dev",
+    "build:backend": "npm --prefix backend run build",
+    "build:client": "npm --prefix client run build",
+    "build:cms": "npm --prefix cms run build",
+    "build:all": "npm run build:backend && npm run build:cms && npm run build:client",
+    "docker:build": "docker compose build",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f"
+  },
+  "keywords": [
+    "islah",
+    "welfare-foundation",
+    "ngo",
+    "charity",
+    "bihar",
+    "tanstack",
+    "react",
+    "express"
+  ],
+  "author": "ISLAH Welfare Foundation <info@iwfindia.org>",
+  "license": "UNLICENSED"
+}

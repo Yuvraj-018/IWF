@@ -16,10 +16,15 @@ export function StoryModal({ story, onClose }: StoryModalProps) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Image with close button */}
-        <div className="relative h-60 w-full bg-slate-900 shrink-0">
+        <div className="relative h-60 w-full bg-slate-900 shrink-0 flex items-center justify-center overflow-hidden">
           <img
-            src={story.image}
+            src={story.image || `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='240' viewBox='0 0 600 240'><defs><linearGradient id='g' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%23059669'/><stop offset='100%' stop-color='%2310b981'/></linearGradient></defs><rect width='600' height='240' fill='url(%23g)'/><text x='50%' y='52%' dominant-baseline='middle' text-anchor='middle' fill='%23ffffff' font-family='system-ui,sans-serif' font-size='48' font-weight='800' letter-spacing='2'>${encodeURIComponent(story.personName?.slice(0, 2).toUpperCase() || "IWF")}</text></svg>`}
             alt={story.title}
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.onerror = null;
+              target.src = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='240' viewBox='0 0 600 240'><defs><linearGradient id='g' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%23059669'/><stop offset='100%' stop-color='%2310b981'/></linearGradient></defs><rect width='600' height='240' fill='url(%23g)'/><text x='50%' y='52%' dominant-baseline='middle' text-anchor='middle' fill='%23ffffff' font-family='system-ui,sans-serif' font-size='48' font-weight='800' letter-spacing='2'>${encodeURIComponent(story.personName?.slice(0, 2).toUpperCase() || "IWF")}</text></svg>`;
+            }}
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-transparent" />

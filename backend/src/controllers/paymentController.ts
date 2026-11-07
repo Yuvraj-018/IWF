@@ -9,6 +9,7 @@ import { Member, MemberCategory } from "../models/Member.js";
 import { Patient } from "../models/Patient.js";
 import { Verification } from "../models/Verification.js";
 import { sendReceiptEmail, sendMembershipCardEmail } from "../services/emailService.js";
+import { syncToCommunityDirectory } from "../services/directorySyncService.js";
 import {
   generateReceiptNumber,
   generateMemberNumber,
@@ -92,9 +93,12 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
     if (donationData) {
       const count = await Donation.countDocuments();
       createdReceiptNo = generateReceiptNumber(count + 1);
+      const createdCertificateNo = createdReceiptNo.replace(/RCPT|REC/i, "CERT");
+      const isPublicConsent = donationData.websiteConsent === "Yes" || Boolean(donationData.isPublicConsent);
 
       const donation = new Donation({
         receiptNo: createdReceiptNo,
+        certificateNo: createdCertificateNo,
         donorName: (donationData.donorName || "Anonymous Donor").trim(),
         donorType: donationData.donorType || "Individual",
         email: (donationData.email || "").trim().toLowerCase(),
@@ -119,6 +123,7 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
         razorpayPaymentId: razorpay_payment_id,
         razorpaySignature: razorpay_signature,
         websiteConsent: donationData.websiteConsent,
+        isPublicConsent,
         recurringPledge: donationData.recurringPledge,
         pledgeMonths: donationData.pledgeMonths,
         reminder: donationData.reminder || "None",
@@ -135,7 +140,7 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
         );
       }
 
-      // Add to Document Verification Centre
+      // Add Receipt to Document Verification Centre
       await Verification.create({
         documentNo: createdReceiptNo,
         documentType: "donation_receipt",
@@ -145,6 +150,7 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
         status: "Verified",
         details: {
           receiptNo: createdReceiptNo,
+          certificateNo: createdCertificateNo,
           amount: Number(donationData.amount),
           pan: donationData.pan,
           transactionId: razorpay_payment_id,
@@ -152,16 +158,56 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
         },
       });
 
-      // Dispatch 80G Donation Receipt email
+      // Add Certificate to Document Verification Centre
+      await Verification.create({
+        documentNo: createdCertificateNo,
+        documentType: "programme_certificate",
+        title: `Donor Appreciation Certificate - ${donationData.financialType || "General"}`,
+        issuedTo: donationData.donorName,
+        issueDate: new Date(),
+        status: "Verified",
+        details: {
+          receiptNo: createdReceiptNo,
+          certificateNo: createdCertificateNo,
+          amount: Number(donationData.amount),
+          transactionId: razorpay_payment_id,
+        },
+      });
+
+      // Synchronize with Community Directory Spotlight
+      syncToCommunityDirectory({
+        id: `dir-donor-${createdReceiptNo}`,
+        name: donationData.donorName,
+        role: `${donationData.financialType || "General"} Supporter`,
+        type: "donor",
+        location: [donationData.city, donationData.state].filter(Boolean).join(", ") || "India",
+        avatar: donationData.donorPhotoUrl || "",
+        category: donationData.financialType || "Recognised Supporter",
+        bio: `Supported ISLAH ${donationData.financialType || "community"} initiative.`,
+        isPublicConsent,
+        receiptNo: createdReceiptNo,
+        certificateNo: createdCertificateNo,
+      }).catch((e) => console.warn("Donor directory sync warning:", e));
+
+      // Dispatch 80G Donation Receipt email with PDF Attachment
       if (donation.email) {
         sendReceiptEmail(donation.email, {
           donorName: donation.donorName,
+          donorType: donation.donorType,
+          email: donation.email,
+          phone: donation.phone,
+          address: donation.address,
+          city: donation.city,
+          state: donation.state,
+          pincode: donation.pincode,
           receiptNo: createdReceiptNo,
           amount: donation.amount,
           cause: donation.financialType,
           paymentMode: donation.paymentMode,
           pan: donation.pan,
+          taxExemption: donation.taxExemption,
           transactionId: donation.transactionId,
+          createdAt: donation.createdAt,
         }).catch((e) => console.warn("Donation receipt email failed:", e));
       }
     }
@@ -218,6 +264,11 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
         // ── NEW MEMBER REGISTRATION VIA RAZORPAY ──
         const memberCount = await Member.countDocuments({ category: catKey });
         const memberNo = generateMemberNumber(catCode, memberCount + 1);
+        const memberCertNo = `CERT-${memberNo}`;
+        const isPublicConsent =
+          memberData.consentDisplay === "public" ||
+          memberData.consentDisplay === "yes" ||
+          Boolean(memberData.isPublicConsent);
 
         const validFrom = new Date();
         const validTill = calculateMembershipExpiry(validFrom, periodMultiplier);
@@ -236,18 +287,20 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
           district: memberData.district || "Darbhanga",
           address: memberData.address,
           pincode: memberData.pincode,
-          consentDisplay: memberData.consentDisplay,
+          consentDisplay: memberData.consentDisplay || "public",
+          isPublicConsent,
           status: "Active",
           validFrom,
           validTill,
           receiptNo: createdReceiptNo,
+          certificateNo: memberCertNo,
           paymentMode: "Razorpay / Online",
           transactionId: razorpay_payment_id,
         });
 
         savedEntity = await member.save();
 
-        // Add to Document Verification Centre
+        // Add Membership Certificate to Document Verification Centre
         await Verification.create({
           documentNo: memberNo,
           documentType: "membership_certificate",
@@ -258,6 +311,7 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
           status: "Verified",
           details: {
             memberNo,
+            certificateNo: memberCertNo,
             category: catKey,
             district: member.district,
             state: member.state,
@@ -265,6 +319,58 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
             orderId: razorpay_order_id,
           },
         });
+
+        // Also register secondary certificate token for verification lookup
+        await Verification.create({
+          documentNo: memberCertNo,
+          documentType: "membership_certificate",
+          title: `Official Membership Certificate - ${catKey}`,
+          issuedTo: member.name,
+          issueDate: validFrom,
+          validTill,
+          status: "Verified",
+          details: {
+            memberNo,
+            certificateNo: memberCertNo,
+            category: catKey,
+            district: member.district,
+            state: member.state,
+          },
+        });
+
+        // Add Membership Receipt to Document Verification Centre
+        await Verification.create({
+          documentNo: createdReceiptNo,
+          documentType: "donation_receipt",
+          title: `Membership Fee Receipt - ${catKey}`,
+          issuedTo: member.name,
+          issueDate: validFrom,
+          status: "Verified",
+          details: {
+            receiptNo: createdReceiptNo,
+            memberNo,
+            amount: member.annualFee,
+            transactionId: razorpay_payment_id,
+          },
+        });
+
+        // Synchronize with Community Directory Spotlight
+        const displayName =
+          memberData.consentDisplay === "anonymous" ? "Anonymous Supporter" : member.name;
+        syncToCommunityDirectory({
+          id: `dir-mem-${memberNo}`,
+          name: displayName,
+          role: `${catKey} Member`,
+          type: "member",
+          location: [member.district, member.state].filter(Boolean).join(", ") || "Darbhanga, Bihar",
+          avatar: member.photoUrl || "",
+          category: `${catKey} Card`,
+          bio: `ISLAH Community Member (${catKey} Tier)`,
+          isPublicConsent,
+          memberNo,
+          receiptNo: createdReceiptNo,
+          certificateNo: memberCertNo,
+        }).catch((e) => console.warn("Member directory sync warning:", e));
 
         // Dispatch Membership card welcome email
         if (member.email) {

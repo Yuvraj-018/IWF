@@ -10,6 +10,40 @@ import type { SuccessStoryItem } from "@/content/mediaContent";
 import { fetchSuccessStories } from "@/services/storyService";
 import { useSearch } from "@tanstack/react-router";
 
+const getInitialsAvatar = (name: string, category: string) => {
+  const initials = (name || "Beneficiary")
+    .split(" ")
+    .filter(Boolean)
+    .map((n) => n[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase() || "IWF";
+
+  let c1 = "#059669";
+  let c2 = "#10b981";
+  switch (category?.toLowerCase()) {
+    case "education": c1 = "#059669"; c2 = "#10b981"; break;
+    case "women empowerment": c1 = "#db2777"; c2 = "#f43f5e"; break;
+    case "livelihood": c1 = "#d97706"; c2 = "#f59e0b"; break;
+    case "healthcare": c1 = "#2563eb"; c2 = "#3b82f6"; break;
+    case "agriculture": c1 = "#65a30d"; c2 = "#84cc16"; break;
+    default: c1 = "#ea580c"; c2 = "#f97316"; break;
+  }
+
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='320' height='200' viewBox='0 0 320 200'>
+    <defs>
+      <linearGradient id='g' x1='0%' y1='0%' x2='100%' y2='100%'>
+        <stop offset='0%' stop-color='${c1}' />
+        <stop offset='100%' stop-color='${c2}' />
+      </linearGradient>
+    </defs>
+    <rect width='320' height='200' fill='url(#g)' />
+    <circle cx='160' cy='100' r='52' fill='rgba(255,255,255,0.18)' />
+    <text x='50%' y='54%' dominant-baseline='middle' text-anchor='middle' fill='#ffffff' font-family='system-ui, -apple-system, sans-serif' font-size='42' font-weight='800' letter-spacing='2'>${initials}</text>
+  </svg>`;
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+};
+
 export function SuccessStoriesPage() {
   const { category: categoryParam } = useSearch({ strict: false }) as { category?: string };
   const initialCategory =
@@ -192,21 +226,17 @@ export function SuccessStoriesPage() {
                       key={story.id}
                       className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-md transition flex flex-col group"
                     >
-                      <div className="relative h-48 w-full overflow-hidden bg-slate-100">
-                        {story.image ? (
-                          <img
-                            src={story.image}
-                            alt={story.title}
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = "https://pub-9df833ce82f4452db02dda1a3edca3d4.r2.dev/islah/stories/anjali_edu.jpg";
-                            }}
-                            className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-slate-100 text-slate-400">
-                            <Sparkles className="w-10 h-10 text-slate-300" />
-                          </div>
-                        )}
+                      <div className="relative h-48 w-full overflow-hidden bg-slate-100 flex items-center justify-center">
+                        <img
+                          src={story.image || getInitialsAvatar(story.personName, story.category)}
+                          alt={story.title}
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.onerror = null;
+                            target.src = getInitialsAvatar(story.personName, story.category);
+                          }}
+                          className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                        />
                         <div className="absolute top-3 left-3">
                           <span className="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-black/60 text-white backdrop-blur-sm">
                             {story.category}

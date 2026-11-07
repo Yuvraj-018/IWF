@@ -20,11 +20,13 @@ export interface IMember extends Document {
   transactionId?: string;
   paymentDate?: string;
   consentDisplay?: string;
+  isPublicConsent?: boolean;
   photoUrl?: string;
   status: "Active" | "Expired" | "Pending";
   validFrom: Date;
   validTill: Date;
   receiptNo?: string;
+  certificateNo?: string;
   metadata?: Record<string, any>;
   createdAt: Date;
   updatedAt: Date;
@@ -53,6 +55,7 @@ const MemberSchema = new Schema<IMember>(
     transactionId: { type: String },
     paymentDate: { type: String },
     consentDisplay: { type: String },
+    isPublicConsent: { type: Boolean, default: false },
     photoUrl: { type: String },
     status: { type: String, enum: ["Active", "Expired", "Pending"], default: "Active" },
     validFrom: { type: Date, default: Date.now },
@@ -65,6 +68,7 @@ const MemberSchema = new Schema<IMember>(
       },
     },
     receiptNo: { type: String },
+    certificateNo: { type: String },
     metadata: { type: Schema.Types.Mixed, default: {} },
   },
   { timestamps: true }

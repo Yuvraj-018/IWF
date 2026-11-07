@@ -128,6 +128,79 @@ export async function checkMemberStatus(
   );
 }
 
+export interface SupporterProfileData {
+  member: {
+    id: string;
+    memberNo: string;
+    name: string;
+    fatherName?: string;
+    category: MemberCategory | string;
+    annualFee: number;
+    status: string;
+    validFrom: string;
+    validTill: string;
+    joined: string;
+    phone: string;
+    email: string;
+    state: string;
+    district: string;
+    address: string;
+    pincode: string;
+    receiptNo?: string;
+    certificateNo?: string;
+    consentDisplay: string;
+    isPublicConsent: boolean;
+    photoUrl?: string;
+  } | null;
+  donations: Array<{
+    receiptNo: string;
+    certificateNo: string;
+    donorName: string;
+    amount: number;
+    financialType: string;
+    paymentMode: string;
+    paymentStatus: string;
+    transactionId?: string;
+    taxExemption: boolean;
+    pan?: string;
+    createdAt: string;
+  }>;
+  verifications: Array<{
+    documentNo: string;
+    documentType: string;
+    title: string;
+    issuedTo: string;
+    issueDate: string;
+    validTill: string | null;
+    status: string;
+  }>;
+  applications: Array<{
+    applicationId: string;
+    type: string;
+    status: string;
+    createdAt: string;
+  }>;
+  stats: {
+    totalDonated: number;
+    donationsCount: number;
+    hasActiveMembership: boolean;
+  };
+}
+
+export interface SupporterProfileResponse {
+  success: boolean;
+  data: SupporterProfileData;
+  message?: string;
+}
+
+export async function fetchMemberProfile(
+  identifier: string
+): Promise<SupporterProfileResponse> {
+  return apiRequest<SupporterProfileResponse>(
+    `/members/profile/${encodeURIComponent(identifier)}`
+  );
+}
+
 export async function listMembers(params?: {
   category?: string;
   state?: string;

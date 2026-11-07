@@ -2,6 +2,7 @@ import mongoose, { Schema, Document } from "mongoose";
 
 export interface IDonation extends Document {
   receiptNo: string;
+  certificateNo?: string;
   donorName: string;
   donorType: "Individual" | "Corporate";
   email: string;
@@ -26,6 +27,7 @@ export interface IDonation extends Document {
   razorpayPaymentId?: string;
   razorpaySignature?: string;
   websiteConsent?: string;
+  isPublicConsent?: boolean;
   recurringPledge?: boolean;
   pledgeMonths?: string;
   reminder?: "None" | "Monthly" | "Yearly";
@@ -38,6 +40,7 @@ export interface IDonation extends Document {
 const DonationSchema = new Schema<IDonation>(
   {
     receiptNo: { type: String, required: true, unique: true, index: true },
+    certificateNo: { type: String, index: true },
     donorName: { type: String, required: true },
     donorType: { type: String, enum: ["Individual", "Corporate"], default: "Individual" },
     email: { type: String, required: true },
@@ -62,6 +65,7 @@ const DonationSchema = new Schema<IDonation>(
     razorpayPaymentId: { type: String },
     razorpaySignature: { type: String },
     websiteConsent: { type: String },
+    isPublicConsent: { type: Boolean, default: false },
     recurringPledge: { type: Boolean },
     pledgeMonths: { type: String },
     reminder: { type: String, enum: ["None", "Monthly", "Yearly"], default: "None" },

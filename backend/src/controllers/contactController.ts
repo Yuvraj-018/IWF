@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
 import { Contact } from "../models/Contact.js";
+import {
+  sendContactAcknowledgementEmail,
+  sendAdminInboundNotificationEmail,
+} from "../services/emailService.js";
 
 export async function submitContact(req: Request, res: Response): Promise<void> {
   try {
@@ -68,6 +72,33 @@ export async function submitContact(req: Request, res: Response): Promise<void> 
 
     await contact.save();
 
+    // ── Dispatch User Acknowledgement & Admin Alert (Async, Non-blocking) ──
+    if (trimmedEmail) {
+      sendContactAcknowledgementEmail(trimmedEmail, {
+        name: trimmedName,
+        email: trimmedEmail,
+        phone: trimmedPhone,
+        subject: contact.subject,
+        message: trimmedMessage,
+        referenceNumber: contact.referenceNumber,
+        cityDistrict,
+        state,
+      }).catch((e) => console.warn("Contact user acknowledgement email failed:", e));
+
+      sendAdminInboundNotificationEmail(`New Contact Enquiry: ${trimmedName} (${contact.subject})`, {
+        category: "Contact",
+        title: `Contact Message: ${contact.referenceNumber || contact._id}`,
+        items: [
+          { label: "Full Name", value: trimmedName },
+          { label: "Email", value: trimmedEmail },
+          { label: "Phone", value: `${countryCode || "+91"} ${trimmedPhone}` },
+          { label: "Subject", value: contact.subject || "General Enquiry" },
+          { label: "Location", value: [cityDistrict, state].filter(Boolean).join(", ") || "India" },
+          { label: "Message Preview", value: trimmedMessage.slice(0, 100) },
+        ],
+      }).catch((e) => console.warn("Admin contact alert failed:", e));
+    }
+
     res.status(201).json({
       success: true,
       message: "Thank you! Your message has been received. Our team will get back to you shortly.",
@@ -125,7 +156,7 @@ export async function updateContactStatus(req: Request, res: Response): Promise<
     const { id } = req.params;
     const { status } = req.body;
 
-    const allowed = ["Unread", "Read", "Resolved"];
+    const allowed = ["Unread", "Read", "Resolved", "Archived"];
     if (!allowed.includes(status)) {
       res.status(400).json({ success: false, message: `Invalid status. Must be one of: ${allowed.join(", ")}` });
       return;

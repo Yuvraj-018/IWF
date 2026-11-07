@@ -1,5 +1,10 @@
 import { Request, Response } from "express";
 import { Application } from "../models/Application.js";
+import {
+  sendInboundApplicationAcknowledgementEmail,
+  sendAdminInboundNotificationEmail,
+  sendApplicationStatusUpdateEmail,
+} from "../services/emailService.js";
 
 export async function submitApplication(req: Request, res: Response): Promise<void> {
   try {
@@ -94,6 +99,34 @@ export async function submitApplication(req: Request, res: Response): Promise<vo
 
     await application.save();
 
+    // ── Dispatch Applicant Acknowledgement & Admin Alert (Async, Non-blocking) ──
+    if (trimmedEmail) {
+      sendInboundApplicationAcknowledgementEmail(trimmedEmail, {
+        applicationId: formattedAppId,
+        type: normalizedType,
+        fullName: trimmedName,
+        email: trimmedEmail,
+        phone: trimmedPhone,
+        organization,
+        selectedSectors,
+        message,
+        resumeFileName: extractedResumeName,
+      }).catch((e) => console.warn("Application email dispatch failed:", e));
+
+      sendAdminInboundNotificationEmail(`New ${normalizedType.toUpperCase()} Application: ${trimmedName}`, {
+        category: normalizedType === "career" ? "Career" : normalizedType === "partner" ? "CSR / Partner" : "Volunteer",
+        title: `Inbound Submission: ${formattedAppId}`,
+        items: [
+          { label: "Applicant Name", value: trimmedName },
+          { label: "Category", value: normalizedType.toUpperCase() },
+          { label: "Email", value: trimmedEmail },
+          { label: "Phone", value: `${countryCode || "+91"} ${trimmedPhone}` },
+          ...(organization ? [{ label: "Organization", value: organization }] : []),
+          { label: "Reference ID", value: formattedAppId },
+        ],
+      }).catch((e) => console.warn("Admin application alert failed:", e));
+    }
+
     res.status(201).json({
       success: true,
       message: `Your ${type} application has been submitted successfully. Our team will review and get in touch with you.`,
@@ -156,6 +189,17 @@ export async function updateApplicationStatus(req: Request, res: Response): Prom
     if (!application) {
       res.status(404).json({ success: false, message: "Application not found" });
       return;
+    }
+
+    // ── Dispatch Status Update Email to Applicant (Skip if Archived) ──
+    if (status !== "Archived" && application.email) {
+      sendApplicationStatusUpdateEmail(application.email, {
+        applicationId: application.applicationId || application._id.toString(),
+        type: application.type,
+        fullName: application.fullName,
+        newStatus: status,
+        reviewNotes: reviewNotes || (application.formData as any)?.reviewNotes,
+      }).catch((e) => console.warn("Application status update email failed:", e));
     }
 
     res.json({

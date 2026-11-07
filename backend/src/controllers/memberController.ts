@@ -4,9 +4,11 @@ import { Verification } from "../models/Verification.js";
 import { generateMemberNumber, generateReceiptNumber } from "../utils/idGenerator.js";
 import { calculateMembershipExpiry, calculateMembershipRenewalExpiry } from "../utils/dateUtils.js";
 import { Donation } from "../models/Donation.js";
+import { Application } from "../models/Application.js";
 import { sendMembershipCardEmail } from "../services/emailService.js";
 import { generateAndSendOtp, verifyOtp } from "../services/otpService.js";
 import { invalidateCache } from "../middlewares/cache.js";
+import { syncToCommunityDirectory } from "../services/directorySyncService.js";
 
 const CATEGORY_FEE_MAP: Record<MemberCategory, number> = {
   Community: 2500,
@@ -89,6 +91,11 @@ export async function registerMember(req: Request, res: Response): Promise<void>
 
     const donationCount = await Donation.countDocuments();
     const receiptNo = generateReceiptNumber(donationCount + 1);
+    const memberCertNo = `CERT-${memberNo}`;
+    const isPublicConsent =
+      consentDisplay === "public" ||
+      consentDisplay === "yes" ||
+      Boolean(req.body.isPublicConsent);
 
     const validFrom = new Date();
     const validTill = calculateMembershipExpiry(validFrom, periodMultiplier);
@@ -110,12 +117,14 @@ export async function registerMember(req: Request, res: Response): Promise<void>
       paymentMode: paymentMode || "UPI",
       transactionId,
       paymentDate,
-      consentDisplay,
+      consentDisplay: consentDisplay || "public",
+      isPublicConsent,
       photoUrl,
       status: "Active",
       validFrom,
       validTill,
       receiptNo,
+      certificateNo: memberCertNo,
       metadata: metadata || {},
     });
 
@@ -132,12 +141,63 @@ export async function registerMember(req: Request, res: Response): Promise<void>
       status: "Verified",
       details: {
         memberNo,
+        certificateNo: memberCertNo,
         category,
         district,
         state,
         receiptNo,
       },
     });
+
+    // Auto-create secondary certificate verification record
+    await Verification.create({
+      documentNo: memberCertNo,
+      documentType: "membership_certificate",
+      title: `Official Membership Certificate - ${category}`,
+      issuedTo: memberName,
+      issueDate: validFrom,
+      validTill: validTill,
+      status: "Verified",
+      details: {
+        memberNo,
+        certificateNo: memberCertNo,
+        category,
+        district,
+        state,
+      },
+    });
+
+    // Auto-create Receipt verification record
+    await Verification.create({
+      documentNo: receiptNo,
+      documentType: "donation_receipt",
+      title: `Membership Fee Receipt - ${category}`,
+      issuedTo: memberName,
+      issueDate: validFrom,
+      status: "Verified",
+      details: {
+        receiptNo,
+        memberNo,
+        amount: annualFee,
+      },
+    });
+
+    // Synchronize into community directory spotlight
+    const displayName = consentDisplay === "anonymous" ? "Anonymous Supporter" : memberName;
+    syncToCommunityDirectory({
+      id: `dir-mem-${memberNo}`,
+      name: displayName,
+      role: `${catKey} Member`,
+      type: "member",
+      location: `${district}, ${state}`,
+      avatar: photoUrl || "",
+      category: `${catKey} Card`,
+      bio: `ISLAH Community Member (${catKey} Tier)`,
+      isPublicConsent,
+      memberNo,
+      receiptNo,
+      certificateNo: memberCertNo,
+    }).catch((e) => console.warn("Member directory sync warning:", e));
 
     // Dispatch welcome / membership card email
     if (member.email) {
@@ -166,13 +226,20 @@ export async function registerMember(req: Request, res: Response): Promise<void>
 
 export async function checkMemberStatus(req: Request, res: Response): Promise<void> {
   try {
-    const { memberNo } = req.params;
+    const rawMemberNo = String(req.params.memberNo || "");
+    const clean = rawMemberNo.trim();
+    const cleanDigits = clean.replace(/[\s+-]/g, "");
+
     const member = await Member.findOne({
-      memberNo: { $regex: new RegExp(`^${memberNo}$`, "i") },
+      $or: [
+        { memberNo: { $regex: new RegExp(`^${clean}$`, "i") } },
+        { phone: { $regex: cleanDigits.length >= 8 ? cleanDigits.slice(-10) : `^${clean}$`, $options: "i" } },
+        { email: { $regex: new RegExp(`^${clean}$`, "i") } },
+      ],
     });
 
     if (!member) {
-      res.status(404).json({ success: false, message: "Membership ID not found" });
+      res.status(404).json({ success: false, message: "Membership ID or Phone not found" });
       return;
     }
 
@@ -188,13 +255,161 @@ export async function checkMemberStatus(req: Request, res: Response): Promise<vo
         category: member.category,
         state: member.state,
         district: member.district,
+        address: member.address || "",
+        pincode: member.pincode || "",
+        phone: member.phone,
+        email: member.email,
         status: effectiveStatus,
+        validFrom: member.validFrom.toISOString().split("T")[0],
         validTill: member.validTill.toISOString().split("T")[0],
         joined: member.validFrom.toISOString().split("T")[0],
+        receiptNo: member.receiptNo,
+        certificateNo: member.certificateNo || `CERT-${member.memberNo}`,
+        consentDisplay: member.consentDisplay || "public",
+        isPublicConsent: member.isPublicConsent !== false,
       },
     });
   } catch (error) {
     console.error("checkMemberStatus error:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+}
+
+/**
+ * Unified Supporter & Member Profile Hub (No OTP Required)
+ * Gathers complete membership, donation history, and verification tokens.
+ */
+export async function getMemberProfile(req: Request, res: Response): Promise<void> {
+  try {
+    const rawIdentifier = String(req.params.identifier || "");
+    if (!rawIdentifier || !rawIdentifier.trim()) {
+      res.status(400).json({ success: false, message: "Member ID, phone, or email is required" });
+      return;
+    }
+
+    const clean = rawIdentifier.trim();
+    const cleanDigits = clean.replace(/[\s+-]/g, "");
+
+    // 1. Find Member by memberNo, phone, or email
+    const member = await Member.findOne({
+      $or: [
+        { memberNo: { $regex: new RegExp(`^${clean}$`, "i") } },
+        { email: { $regex: new RegExp(`^${clean}$`, "i") } },
+        { phone: { $regex: cleanDigits.length >= 8 ? cleanDigits.slice(-10) : `^${clean}$`, $options: "i" } },
+        { receiptNo: { $regex: new RegExp(`^${clean}$`, "i") } },
+      ],
+    });
+
+    const candidateEmail = member?.email || (clean.includes("@") ? clean.toLowerCase() : "");
+    const candidatePhone = member?.phone || (cleanDigits.length >= 8 ? cleanDigits.slice(-10) : "");
+
+    // 2. Fetch all linked donations
+    const donationFilters: any[] = [];
+    if (candidateEmail) donationFilters.push({ email: candidateEmail });
+    if (candidatePhone) donationFilters.push({ phone: { $regex: candidatePhone } });
+    if (member?.receiptNo) donationFilters.push({ receiptNo: member.receiptNo });
+
+    const donations = donationFilters.length > 0
+      ? await Donation.find({ $or: donationFilters }).sort({ createdAt: -1 })
+      : [];
+
+    // 3. Fetch all linked verifications
+    const verificationFilters: any[] = [];
+    if (member?.memberNo) {
+      verificationFilters.push({ documentNo: member.memberNo });
+      verificationFilters.push({ documentNo: `CERT-${member.memberNo}` });
+    }
+    donations.forEach((d) => {
+      verificationFilters.push({ documentNo: d.receiptNo });
+      if (d.certificateNo) verificationFilters.push({ documentNo: d.certificateNo });
+    });
+
+    const verifications = verificationFilters.length > 0
+      ? await Verification.find({ $or: verificationFilters }).sort({ issueDate: -1 })
+      : [];
+
+    // 4. Fetch any applications (volunteer, career, etc.)
+    const appFilters: any[] = [];
+    if (candidateEmail) appFilters.push({ email: candidateEmail });
+    if (candidatePhone) appFilters.push({ phone: { $regex: candidatePhone } });
+
+    const applications = appFilters.length > 0
+      ? await Application.find({ $or: appFilters }).sort({ createdAt: -1 })
+      : [];
+
+    if (!member && donations.length === 0 && applications.length === 0) {
+      res.status(404).json({ success: false, message: "No membership or supporter record found for this identifier" });
+      return;
+    }
+
+    const now = new Date();
+    const isExpired = member ? member.validTill < now : false;
+
+    res.json({
+      success: true,
+      data: {
+        member: member
+          ? {
+              id: member.memberNo,
+              memberNo: member.memberNo,
+              name: member.name,
+              fatherName: member.fatherName,
+              category: member.category,
+              annualFee: member.annualFee,
+              status: isExpired ? "Expired" : member.status,
+              validFrom: member.validFrom.toISOString().split("T")[0],
+              validTill: member.validTill.toISOString().split("T")[0],
+              joined: member.validFrom.toISOString().split("T")[0],
+              phone: member.phone,
+              email: member.email,
+              state: member.state,
+              district: member.district,
+              address: member.address || "",
+              pincode: member.pincode || "",
+              receiptNo: member.receiptNo,
+              certificateNo: member.certificateNo || `CERT-${member.memberNo}`,
+              consentDisplay: member.consentDisplay || "public",
+              isPublicConsent: member.isPublicConsent !== false,
+              photoUrl: member.photoUrl,
+            }
+          : null,
+        donations: donations.map((d) => ({
+          receiptNo: d.receiptNo,
+          certificateNo: d.certificateNo || d.receiptNo.replace(/RCPT|REC/i, "CERT"),
+          donorName: d.donorName,
+          amount: d.amount,
+          financialType: d.financialType,
+          paymentMode: d.paymentMode,
+          paymentStatus: d.paymentStatus,
+          transactionId: d.transactionId,
+          taxExemption: d.taxExemption,
+          pan: d.pan,
+          createdAt: d.createdAt,
+        })),
+        verifications: verifications.map((v) => ({
+          documentNo: v.documentNo,
+          documentType: v.documentType,
+          title: v.title,
+          issuedTo: v.issuedTo,
+          issueDate: v.issueDate.toISOString().split("T")[0],
+          validTill: v.validTill ? v.validTill.toISOString().split("T")[0] : null,
+          status: v.status,
+        })),
+        applications: applications.map((a) => ({
+          applicationId: a.applicationId || a._id.toString(),
+          type: a.type,
+          status: a.status,
+          createdAt: a.createdAt,
+        })),
+        stats: {
+          totalDonated: donations.reduce((sum, d) => sum + (d.paymentStatus === "Success" ? d.amount : 0), 0),
+          donationsCount: donations.length,
+          hasActiveMembership: Boolean(member && !isExpired),
+        },
+      },
+    });
+  } catch (error) {
+    console.error("getMemberProfile error:", error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 }
@@ -219,7 +434,8 @@ export async function listMembers(req: Request, res: Response): Promise<void> {
         query.validTill = { $gte: new Date() };
       }
       // Protect member privacy: only show members who agreed to directory listing
-      query.consentDisplay = { $ne: "no" };
+      query.isPublicConsent = { $ne: false };
+      query.consentDisplay = { $nin: ["private", "no"] };
     } else {
       // Admin filter
       if (status && status !== "All") query.status = status;
@@ -240,26 +456,88 @@ export async function listMembers(req: Request, res: Response): Promise<void> {
       .sort({ annualFee: -1, createdAt: -1 })
       .limit(isAdmin ? 500 : 200);
 
-    const safeMembers = members.map((m) => ({
-      _id: m._id,
-      id: m.memberNo,
-      memberNo: m.memberNo,
-      name: m.name,
-      category: m.category,
-      district: m.district,
-      state: m.state,
-      status: m.status,
-      annualFee: m.annualFee,
-      validTill: m.validTill.toISOString().split("T")[0],
-      joined: m.validFrom.toISOString().split("T")[0],
-      phone: isAdmin ? m.phone : (m.phone ? `${m.phone.slice(0, 3)}****${m.phone.slice(-3)}` : "Private"),
-      email: isAdmin ? m.email : undefined,
-      receiptNo: m.receiptNo,
-    }));
+    const safeMembers = members.map((m) => {
+      const isAnon = m.consentDisplay === "anonymous";
+      return {
+        _id: m._id,
+        id: m.memberNo,
+        memberNo: m.memberNo,
+        name: !isAdmin && isAnon ? "Anonymous Supporter" : m.name,
+        category: m.category,
+        district: m.district,
+        state: m.state,
+        status: m.status,
+        annualFee: m.annualFee,
+        validTill: m.validTill.toISOString().split("T")[0],
+        joined: m.validFrom.toISOString().split("T")[0],
+        phone: isAdmin ? m.phone : (m.phone ? `${m.phone.slice(0, 3)}****${m.phone.slice(-3)}` : "Private"),
+        email: isAdmin ? m.email : undefined,
+        receiptNo: m.receiptNo,
+        certificateNo: m.certificateNo,
+        consentDisplay: m.consentDisplay || "public",
+        isPublicConsent: m.isPublicConsent !== false,
+      };
+    });
 
     res.json({ success: true, count: safeMembers.length, data: safeMembers });
   } catch (error) {
     console.error("listMembers error:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+}
+
+/**
+ * Toggle Member Public Directory Visibility (Admin Only)
+ */
+export async function toggleMemberVisibility(req: Request, res: Response): Promise<void> {
+  try {
+    const { id } = req.params;
+    const member = await Member.findOne({
+      $or: [{ memberNo: id }, { _id: id }],
+    });
+
+    if (!member) {
+      res.status(404).json({ success: false, message: "Member not found" });
+      return;
+    }
+
+    const nextConsent = member.isPublicConsent === false ? true : false;
+    member.isPublicConsent = nextConsent;
+    if (nextConsent) {
+      if (member.consentDisplay === "private" || member.consentDisplay === "no") {
+        member.consentDisplay = "public";
+      }
+    }
+    await member.save();
+
+    // Synchronize toggle with community directory spotlight
+    const displayName = member.consentDisplay === "anonymous" ? "Anonymous Supporter" : member.name;
+    await syncToCommunityDirectory({
+      id: `dir-mem-${member.memberNo}`,
+      name: displayName,
+      role: `${member.category} Member`,
+      type: "member",
+      location: `${member.district}, ${member.state}`,
+      avatar: member.photoUrl || "",
+      category: `${member.category} Card`,
+      bio: `ISLAH Community Member (${member.category} Tier)`,
+      isPublicConsent: nextConsent,
+      memberNo: member.memberNo,
+      receiptNo: member.receiptNo,
+      certificateNo: member.certificateNo,
+    });
+
+    invalidateCache("members");
+    invalidateCache("settings");
+
+    res.json({
+      success: true,
+      message: `Member visibility updated to ${nextConsent ? "Public" : "Hidden"}`,
+      isPublicConsent: nextConsent,
+      member,
+    });
+  } catch (error) {
+    console.error("toggleMemberVisibility error:", error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 }
