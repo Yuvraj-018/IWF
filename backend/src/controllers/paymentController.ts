@@ -215,8 +215,17 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
     // Handle Member registration or renewal upon verified payment
     if (memberData) {
       const catKey = (memberData.category as MemberCategory) || "Blue";
-      const catCode = catKey.slice(0, 2).toUpperCase();
-      const periodMultiplier = Number(memberData.membershipPeriod) === 2 ? 2 : 1;
+      const CATEGORY_CODE_MAP: Record<string, string> = {
+        Blue: "BL",
+        Yellow: "YL",
+        Green: "GR",
+        Orange: "OR",
+        Community: "COM",
+        Contributing: "CON",
+        Patron: "PAT",
+      };
+      const catCode = CATEGORY_CODE_MAP[catKey] || catKey.slice(0, 2).toUpperCase();
+      const periodMultiplier = Math.max(1, Math.min(10, Number(memberData.membershipPeriod) || 1));
 
       const count = await Donation.countDocuments();
       createdReceiptNo = generateReceiptNumber(count + 1);
@@ -294,6 +303,8 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
           validTill,
           receiptNo: createdReceiptNo,
           certificateNo: memberCertNo,
+          photoUrl: memberData.photoUrl,
+          metadata: memberData.metadata || {},
           paymentMode: "Razorpay / Online",
           transactionId: razorpay_payment_id,
         });

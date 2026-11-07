@@ -20,7 +20,6 @@ import {
   sanitizeName,
 } from "@/utils/formValidation";
 import { INDIAN_STATES } from "@/content/locations";
-import { registerMember, type RegisterMemberPayload } from "@/services/memberService";
 import {
   AGE_GROUPS,
   COUNTRIES,
@@ -58,7 +57,6 @@ import {
   CheckboxRow,
   Field,
   FileUpload,
-  OtpVerifier,
   PhoneInput,
   CityField,
   RadioCards,
@@ -444,7 +442,6 @@ export function MembershipApplicationForm({
         req("declRepDesignation", v.declRepDesignation, "Enter the designation.");
         if (!v.declElectronic) e.declElectronic = "Required";
       }
-      if (!otpVerified) e.otp = "Verify your mobile number to submit.";
     }
     return e;
   };
@@ -493,133 +490,204 @@ export function MembershipApplicationForm({
     const e = validate(3);
     if (Object.keys(e).length) {
       setErrors(e);
-      toast.error("Please accept the required declarations and verify your mobile number.");
+      toast.error("Please accept the required declarations and verify your details.");
       setTimeout(() => focusFirstError(e), 50);
       return;
     }
     setIsSubmitting(true);
     try {
-      const memberId = generateMemberId(effectiveTier);
-      const receiptNo = generateReceiptNo();
       const from = new Date();
       const till = computeValidTill(from, years);
       const name = isOrg ? v.orgLegalName.trim() : v.fullName.trim();
+      const email = (isOrg ? v.orgEmail : v.email).trim();
+      const phone = isOrg ? v.orgPhone : v.phone;
+      const countryCode = isOrg ? v.orgCountryCode : v.countryCode;
 
-      const payload: RegisterMemberPayload = {
-        name,
-        fullName: name,
-        category: effectiveTier,
-        email: (isOrg ? v.orgEmail : v.email).trim(),
-        phone: isOrg ? v.orgPhone : v.phone,
-        mobile: isOrg ? v.repPhone : v.phone,
-        countryCode: isOrg ? v.repCountryCode : v.countryCode,
-        state: isOrg ? v.orgState : v.state,
-        district: isOrg ? v.orgCity : v.district,
-        address: isOrg ? v.orgAddress : v.fullAddress,
-        pincode: isOrg ? v.orgPin : v.pinCode,
-        membershipPeriod: years,
-        consentDisplay: v.recognition,
-        metadata: {
-          formMode: mode,
-          ...(isOrg
-            ? {
-                orgType: v.orgType,
-                orgCommonName: v.orgCommonName,
-                orgEstYear: v.orgEstYear,
-                orgWebsite: v.orgWebsite,
-                orgOfficialPhone: `${v.orgCountryCode} ${v.orgPhone}`,
-                orgRegType: v.orgRegType,
-                orgRegNumber: v.orgRegNumber,
-                orgRegAuthority: v.orgRegAuthority,
-                orgPan: v.orgPan,
-                orgCountry: v.orgCountry,
-                correspondenceAddress: v.corrSame ? "Same as registered office" : v.corrAddress,
-                representative: {
-                  name: v.repName,
-                  designation: v.repDesignation,
-                  department: v.repDepartment,
-                  phone: `${v.repCountryCode} ${v.repPhone}`,
-                  email: v.repEmail,
-                  relationship: v.repRelationship,
-                  authorised: v.repAuthorised,
-                  signatoryDetails: v.signatoryDetails,
-                },
-                orgIntro: v.orgIntro,
-                contributions: v.contributions,
-                otherContribution: v.otherContribution,
-                whyJoin: v.orgWhyJoin,
-                strengths: v.orgStrengths,
-                collaborated: v.collaborated,
-                collabDetails: v.collabDetails,
-                hearAbout: v.orgHearAbout,
-                referralName: v.orgReferral,
-                logoConsent: v.logoConsent,
-                declaration: {
-                  name: v.declRepName,
-                  designation: v.declRepDesignation,
-                  date: from.toISOString(),
-                },
-              }
-            : {
-                ageGroup: v.ageGroup,
-                gender: v.gender,
-                country: v.country,
-                hearAbout: v.hearAbout,
-                referralName: v.referralName,
-                whyJoin: v.whyJoin,
-              }),
-          sectors: v.sectors,
-          otherSector: v.otherSector,
-          preferredSector: v.preferredSector,
-          optUpdates: v.optUpdates,
-          documents: Object.fromEntries(
-            Object.entries(files)
-              .filter(([, f]) => f)
-              .map(([k, f]) => [k, { name: f!.name, size: f!.size, type: f!.type }]),
-          ),
-        },
+      const payloadMetadata = {
+        formMode: mode,
+        ...(isOrg
+          ? {
+              orgType: v.orgType,
+              orgCommonName: v.orgCommonName,
+              orgEstYear: v.orgEstYear,
+              orgWebsite: v.orgWebsite,
+              orgOfficialPhone: `${v.orgCountryCode} ${v.orgPhone}`,
+              orgRegType: v.orgRegType,
+              orgRegNumber: v.orgRegNumber,
+              orgRegAuthority: v.orgRegAuthority,
+              orgPan: v.orgPan,
+              orgCountry: v.orgCountry,
+              correspondenceAddress: v.corrSame ? "Same as registered office" : v.corrAddress,
+              representative: {
+                name: v.repName,
+                designation: v.repDesignation,
+                department: v.repDepartment,
+                phone: `${v.repCountryCode} ${v.repPhone}`,
+                email: v.repEmail,
+                relationship: v.repRelationship,
+                authorised: v.repAuthorised,
+                signatoryDetails: v.signatoryDetails,
+              },
+              orgIntro: v.orgIntro,
+              contributions: v.contributions,
+              otherContribution: v.otherContribution,
+              whyJoin: v.orgWhyJoin,
+              strengths: v.orgStrengths,
+              collaborated: v.collaborated,
+              collabDetails: v.collabDetails,
+              hearAbout: v.orgHearAbout,
+              referralName: v.orgReferral,
+              logoConsent: v.logoConsent,
+              declaration: {
+                name: v.declRepName,
+                designation: v.declRepDesignation,
+                date: from.toISOString(),
+              },
+            }
+          : {
+              ageGroup: v.ageGroup,
+              gender: v.gender,
+              country: v.country,
+              hearAbout: v.hearAbout,
+              referralName: v.referralName,
+              whyJoin: v.whyJoin,
+            }),
+        sectors: v.sectors,
+        otherSector: v.otherSector,
+        preferredSector: v.preferredSector,
+        optUpdates: v.optUpdates,
+        documents: Object.fromEntries(
+          Object.entries(files)
+            .filter(([, f]) => f)
+            .map(([k, f]) => [k, { name: f!.name, size: f!.size, type: f!.type }]),
+        ),
       };
 
-      try {
-        await registerMember(payload);
-      } catch {
-        // Backend unreachable in local / mock mode — continue with client-side confirmation
+      const { createPaymentOrder, verifyPayment } = await import("@/services/donationService");
+      const { openRazorpayModal } = await import("@/utils/razorpay");
+
+      // ── Step 1: Create Razorpay Order on Backend ──
+      const orderData = await createPaymentOrder({
+        amount: fee,
+        receipt: `mem_${Date.now()}`,
+        notes: {
+          category: effectiveTier,
+          years: String(years),
+          name,
+          email,
+          phone,
+          isMembership: "true",
+        },
+      });
+
+      if (!orderData || !orderData.order_id) {
+        throw new Error(orderData?.message || "Could not initialize payment gateway. Please check connection and try again.");
       }
 
+      // ── Step 2: Open Razorpay Official Payment Gateway Modal ──
+      const paymentResult = await openRazorpayModal({
+        orderId: orderData.order_id,
+        amount: orderData.amount,
+        keyId: orderData.key_id,
+        name: "ISLAH Welfare Foundation",
+        description: `Official Membership: ${tierConfig.cardName} (${tierConfig.roleTitle}) - ${years} Year${years > 1 ? "s" : ""}`,
+        prefill: {
+          name,
+          email,
+          contact: `${countryCode}${phone}`,
+        },
+        notes: {
+          category: effectiveTier,
+          years: String(years),
+          fee: String(fee),
+        },
+      });
+
+      // ── Step 3: Verify Payment Signature & Create Member in DB ──
+      const verifyData = await verifyPayment({
+        razorpay_order_id: paymentResult.razorpay_order_id,
+        razorpay_payment_id: paymentResult.razorpay_payment_id,
+        razorpay_signature: paymentResult.razorpay_signature,
+        memberData: {
+          name,
+          fullName: name,
+          category: effectiveTier,
+          amount: fee,
+          annualFee: tierConfig.amount,
+          membershipPeriod: years,
+          email,
+          phone,
+          mobile: isOrg ? v.repPhone : v.phone,
+          countryCode,
+          state: isOrg ? v.orgState : v.state,
+          district: isOrg ? v.orgCity : v.district,
+          address: isOrg ? v.orgAddress : v.fullAddress,
+          pincode: isOrg ? v.orgPin : v.pinCode,
+          consentDisplay: v.recognition,
+          isPublicConsent: v.recognition === "public",
+          photoUrl: !isOrg ? files.photo?.dataUrl : undefined,
+          metadata: payloadMetadata,
+        },
+      });
+
+      if (!verifyData?.success) {
+        throw new Error(verifyData?.message || "Payment signature verification failed. Please contact support.");
+      }
+
+      // ── Step 4: Clear Local Storage Draft ──
       try {
         localStorage.removeItem(STORAGE_DRAFT_KEY);
       } catch {
         /* ignore */
       }
 
+      // ── Step 5: Render Result with Verified Official Member ID & Receipt ──
+      const savedMember = verifyData.entity;
+      const verifiedMemberNo = savedMember?.memberNo || generateMemberId(effectiveTier);
+      const verifiedReceiptNo = verifyData.receiptNo || savedMember?.receiptNo || generateReceiptNo();
+      const validFromDate = savedMember?.validFrom ? new Date(savedMember.validFrom) : from;
+      const validTillDate = savedMember?.validTill ? new Date(savedMember.validTill) : till;
+
       setResult({
         card: {
           tier: effectiveTier,
           name,
-          memberId,
-          validFrom: formatDisplayMonth(from),
-          validTill: formatDisplayMonth(till),
+          memberId: verifiedMemberNo,
+          validFrom: formatDisplayMonth(validFromDate),
+          validTill: formatDisplayMonth(validTillDate),
           photoUrl: !isOrg ? files.photo?.dataUrl : undefined,
           isOrganisation: isOrg,
         },
         receipt: {
-          receiptNo,
-          memberId,
+          receiptNo: verifiedReceiptNo,
+          memberId: verifiedMemberNo,
           name,
           tier: effectiveTier,
           category: `${tierConfig.cardName} (${tierConfig.roleTitle})`,
           period: years,
           amount: fee,
-          date: formatLongMonth(from),
-          validFrom: formatDisplayMonth(from),
-          validTill: formatDisplayMonth(till),
+          date: formatLongMonth(validFromDate),
+          validFrom: formatDisplayMonth(validFromDate),
+          validTill: formatDisplayMonth(validTillDate),
           type: "New Membership",
         },
       });
-      toast.success("Membership application submitted successfully!");
+
+      toast.success("Payment verified! Official membership card & receipt generated.");
       scrollToFormTop();
-    } catch {
-      toast.error("Failed to submit application. Please try again.");
+    } catch (err: any) {
+      console.error("Membership checkout error:", err);
+      const isDismissed =
+        err?.message?.includes("cancelled") ||
+        err?.message?.includes("dismissed") ||
+        err?.description?.includes("cancelled") ||
+        err?.reason === "payment_cancelled";
+
+      if (isDismissed) {
+        toast.info("Payment was cancelled. You can review your details and pay when ready.");
+      } else {
+        toast.error(err?.message || "Payment failed. Please try again.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -1865,21 +1933,14 @@ export function MembershipApplicationForm({
 
             <div className={section}>
               <SubHeading
-                title="Verify your mobile number"
-                desc="ISLAH does not use passwords — an OTP confirms your contact details."
+                title="Identity & Payment Verification"
+                desc="Your contact information and payment are verified securely via the Razorpay payment gateway upon completing your contribution."
               />
-              <div id="field-otp" className="scroll-mt-28 max-w-lg">
-                <OtpVerifier
-                  target={otpTarget}
-                  displayTarget={`${otpCountryCode} ${otpTarget}`}
-                  verified={otpVerified}
-                  onVerified={() => {
-                    setVerifiedFor(`${otpCountryCode}${otpTarget}`);
-                    setErrors(({ otp: _o, ...rest }) => rest);
-                  }}
-                  hasError={has("otp")}
-                />
-                {err("otp") && <p className="mt-1 text-[11px] text-red-600">{err("otp")}</p>}
+              <div className="flex items-center gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 max-w-xl">
+                <CheckCheck className="w-5 h-5 text-emerald-600 shrink-0" />
+                <span>
+                  Mobile: <strong className="text-slate-900 font-mono">{otpCountryCode} {otpTarget}</strong> will be authenticated directly via Razorpay during payment.
+                </span>
               </div>
             </div>
           </div>
@@ -1923,11 +1984,11 @@ export function MembershipApplicationForm({
               {isSubmitting ? (
                 <>
                   <RefreshCw className="w-4 h-4 animate-spin" />
-                  Submitting…
+                  Opening Secure Gateway…
                 </>
               ) : (
                 <>
-                  Submit & Pay ₹{fee.toLocaleString("en-IN")}
+                  Proceed to Pay ₹{fee.toLocaleString("en-IN")}
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}

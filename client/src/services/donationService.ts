@@ -60,9 +60,13 @@ export interface VerifyPaymentParams {
     address?: string;
     pincode?: string;
     consentDisplay?: string;
+    isPublicConsent?: boolean;
+    photoUrl?: string;
+    metadata?: Record<string, any>;
     paymentMode?: string;
     isRenewal?: boolean;
     memberNo?: string;
+    [key: string]: any;
   };
 }
 
