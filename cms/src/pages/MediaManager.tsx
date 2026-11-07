@@ -48,9 +48,11 @@ export const isDocumentAsset = (item: any) => {
     key.includes("dossier") ||
     key.includes("pdf") ||
     title.includes("brochure") ||
-    title.includes(".pdf") ||
+    title.includes("pdf") ||
+    title.includes("document") ||
     alt.includes("pdf") ||
-    alt.includes("brochure")
+    alt.includes("brochure") ||
+    alt.includes("document")
   );
 };
 
@@ -1251,16 +1253,6 @@ export default function MediaManager() {
                               <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                                 <div className="w-11 h-11 rounded-full bg-orange-600 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition">
                                   <Play className="w-5 h-5 fill-white ml-0.5" />
-                                </div>
-                              </div>
-                            )}
-
-                            {/* Document Overlay */}
-                            {isDoc && (
-                              <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                                <div className="px-3 py-1.5 rounded-xl bg-red-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-lg">
-                                  <FileText className="w-4 h-4" />
-                                  <span>Official PDF Document</span>
                                 </div>
                               </div>
                             )}
