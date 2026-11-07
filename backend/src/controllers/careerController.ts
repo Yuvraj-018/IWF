@@ -92,8 +92,8 @@ export async function createCareerOpening(req: Request, res: Response): Promise<
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)/g, "") +
-        "-" +
-        Date.now().toString().slice(-4);
+      "-" +
+      Date.now().toString().slice(-4);
 
     const newOpening = new CareerOpening({
       ...body,

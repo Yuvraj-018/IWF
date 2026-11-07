@@ -163,24 +163,15 @@ function HeroSection({ lang }: LanguageProp) {
       .catch(() => {});
   }, []);
 
-  const defaultNotices = [
-    { d: "25", m: "MAY", title: lang === "en" ? "Free Health Camp — Darbhanga" : "निःशुल्क स्वास्थ्य शिविर — दरभंगा" },
-    { d: "05", m: "JUN", title: lang === "en" ? "Environment Day Tree Plantation Drive" : "पर्यावरण दिवस वृक्षारोपण अभियान" },
-    { d: "15", m: "JUL", title: lang === "en" ? "Shiksha Na Ruke Scholarship Distribution" : "शिक्षा न रुके छात्रवृत्ति वितरण" },
-    { d: "20", m: "AUG", title: lang === "en" ? "Pari Ki Udaan Menstrual Hygiene Drive" : "परी की उड़ान स्वच्छता अभियान" },
-    { d: "10", m: "NOV", title: lang === "en" ? "Winter Relief Blanket Distribution" : "शीतकालीन राहत कंबल वितरण अभियान" },
-    { d: "12", m: "DEC", title: lang === "en" ? "Swabhimaan Livelihood Toolkit Drive" : "स्वाभिमान आजीविका टूलकिट वितरण" },
-  ];
-
-  const notices = liveNotices.length > 0 ? liveNotices : defaultNotices;
-
-  const loopNotices = [...notices, ...notices.slice(0, 4)];
+  const notices = liveNotices;
+  const loopNotices = notices.length > 4 ? [...notices, ...notices.slice(0, 4)] : notices;
   const [noticeIndex, setNoticeIndex] = useState(0);
   const [noticeTransition, setNoticeTransition] = useState(true);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const noticeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    if (notices.length <= 4) return;
     const tick = () => {
       setNoticeIndex((prev) => {
         const next = prev + 1;
@@ -200,17 +191,17 @@ function HeroSection({ lang }: LanguageProp) {
     return () => {
       if (noticeTimeoutRef.current) clearTimeout(noticeTimeoutRef.current);
     };
-  }, []);
+  }, [notices.length]);
 
   useEffect(() => {
-    if (noticeIndex === 6) {
+    if (notices.length > 4 && noticeIndex === notices.length) {
       const snapTimer = setTimeout(() => {
         setNoticeTransition(false);
         setNoticeIndex(0);
       }, 400);
       return () => clearTimeout(snapTimer);
     }
-  }, [noticeIndex]);
+  }, [noticeIndex, notices.length]);
 
   return (
     <section id="welcome-hero" className="relative scroll-mt-20 bg-white py-6 border-b border-slate-100">
@@ -287,30 +278,43 @@ function HeroSection({ lang }: LanguageProp) {
               </div>
 
               {/* Notice ticker — tall container for 5-6 events */}
-              <div className="overflow-hidden rounded-xl bg-slate-50 border border-slate-100 p-2.5 h-[280px]">
-                <div
-                  className="space-y-2.5"
-                  style={{
-                    transform: `translateY(-${noticeIndex * 66}px)`,
-                    transition: noticeTransition ? "transform 400ms cubic-bezier(0.4, 0, 0.2, 1)" : "none",
-                  }}
-                >
-                  {loopNotices.map((e, i) => (
-                    <div key={i} className="h-[58px] bg-white hover:bg-orange-50 rounded-xl px-3 py-2 flex gap-3 items-center border border-slate-200 shadow-2xs transition-colors duration-200 group">
-                      {/* Date pill */}
-                      <div className="text-center bg-[#0b1f3b] rounded-lg px-2 py-1 w-11 shrink-0">
-                        <div className="text-[9px] font-bold text-white/80 uppercase leading-none">{e.m}</div>
-                        <div className="text-base font-black text-white leading-none mt-0.5">{e.d}</div>
+              <div className="overflow-hidden rounded-xl bg-slate-50 border border-slate-100 p-2.5 h-[280px] flex flex-col justify-center">
+                {notices.length === 0 ? (
+                  <div className="text-center p-6 space-y-1.5 text-slate-400">
+                    <p className="text-xs sm:text-sm font-semibold text-slate-600">
+                      {lang === "en" ? "No active notices at this time" : "वर्तमान में कोई सक्रिय सूचना नहीं"}
+                    </p>
+                    <p className="text-[11px] text-slate-400">
+                      {lang === "en"
+                        ? "Upcoming foundation events will appear here once published."
+                        : "आगामी कार्यक्रम प्रकाशित होने पर यहाँ प्रदर्शित होंगे।"}
+                    </p>
+                  </div>
+                ) : (
+                  <div
+                    className="space-y-2.5"
+                    style={{
+                      transform: `translateY(-${noticeIndex * 66}px)`,
+                      transition: noticeTransition ? "transform 400ms cubic-bezier(0.4, 0, 0.2, 1)" : "none",
+                    }}
+                  >
+                    {loopNotices.map((e, i) => (
+                      <div key={i} className="h-[58px] bg-white hover:bg-orange-50 rounded-xl px-3 py-2 flex gap-3 items-center border border-slate-200 shadow-2xs transition-colors duration-200 group">
+                        {/* Date pill */}
+                        <div className="text-center bg-[#0b1f3b] rounded-lg px-2 py-1 w-11 shrink-0">
+                          <div className="text-[9px] font-bold text-white/80 uppercase leading-none">{e.m}</div>
+                          <div className="text-base font-black text-white leading-none mt-0.5">{e.d}</div>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-semibold text-xs sm:text-sm text-black truncate group-hover:text-brand-orange transition-colors">{e.title}</h4>
+                        </div>
+                        <a href="/news-and-events" className="text-xs font-bold text-brand-orange hover:underline shrink-0">
+                          {t.readMore} →
+                        </a>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold text-xs sm:text-sm text-black truncate group-hover:text-brand-orange transition-colors">{e.title}</h4>
-                      </div>
-                      <a href="/news-and-events" className="text-xs font-bold text-brand-orange hover:underline shrink-0">
-                        {t.readMore} →
-                      </a>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -547,14 +551,13 @@ function useCountUp(target: number, duration: number, active: boolean) {
   return count;
 }
 
-const IMPACT_STATS = [
-  { icon: Users, value: 5000, suffix: "+", label: "Lives Touched", color: "#15803d" },
-  { icon: HeartPulse, value: 100, suffix: "+", label: "Health Camps", color: "#ea580c" },
-  { icon: BookOpen, value: 2000, suffix: "+", label: "Students Supported", color: "#1D4ED8" },
-  { icon: MapPin, value: 50, suffix: "+", label: "Villages Reached", color: "#D97706" },
-  { icon: Activity, value: 12, suffix: "", label: "Active Programs", color: "#7C3AED" },
-  { icon: Award, value: 8, suffix: "", label: "Years of Service", color: "#DB2777" },
-];
+interface ImpactStatCardItem {
+  icon: any;
+  value: number;
+  suffix: string;
+  label: string;
+  color: string;
+}
 
 const STAT_TRANSLATIONS = {
   en: {
@@ -575,7 +578,7 @@ const STAT_TRANSLATIONS = {
   }
 };
 
-function StatCard({ stat, visible, lang, index }: { stat: typeof IMPACT_STATS[0]; visible: boolean; lang: "en" | "hi"; index: number }) {
+function StatCard({ stat, visible, lang, index }: { stat: ImpactStatCardItem; visible: boolean; lang: "en" | "hi"; index: number }) {
   const count = useCountUp(stat.value, 1800, visible);
   const Icon = stat.icon;
   const col = CHEERFUL_COLORS[index % 6];

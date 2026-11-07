@@ -24,15 +24,15 @@ export async function fetchPatients(urgent?: boolean): Promise<Patient[]> {
     if (res && res.success && Array.isArray(res.data)) {
       return res.data;
     }
-    return URGENT_PATIENTS;
+    return [];
   } catch (error) {
-    console.warn("Could not fetch patients from backend API, using local records:", error);
-    return URGENT_PATIENTS;
+    console.warn("Could not fetch patients from backend API:", error);
+    return [];
   }
 }
 
 /**
- * Fetch a single patient case by slug from backend API with fallback to static urgent patients
+ * Fetch a single patient case by slug from backend API
  */
 export async function fetchPatientBySlug(slug: string): Promise<Patient | null> {
   try {
@@ -41,19 +41,16 @@ export async function fetchPatientBySlug(slug: string): Promise<Patient | null> 
       return res.patient;
     }
   } catch (error) {
-    console.warn(`Could not fetch patient '${slug}' from backend, falling back to local:`, error);
+    console.warn(`Could not fetch patient '${slug}' from backend:`, error);
   }
-
-  // Fallback to local static content
-  const localMatch = URGENT_PATIENTS.find((p) => p.slug === slug);
-  return localMatch || null;
+  return null;
 }
 
 /**
  * React hook to fetch urgent patients with loading and error states
  */
 export function usePatients(urgent = true) {
-  const [patients, setPatients] = useState<Patient[]>(URGENT_PATIENTS);
+  const [patients, setPatients] = useState<Patient[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
