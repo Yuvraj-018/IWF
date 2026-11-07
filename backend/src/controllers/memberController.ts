@@ -1,7 +1,12 @@
 import { Request, Response } from "express";
 import { Member, MemberCategory } from "../models/Member.js";
 import { Verification } from "../models/Verification.js";
-import { generateMemberNumber, generateReceiptNumber } from "../utils/idGenerator.js";
+import {
+  generateMemberNumber,
+  generateReceiptNumber,
+  getNextReceiptNumber,
+  getNextMemberNumber,
+} from "../utils/idGenerator.js";
 import { calculateMembershipExpiry, calculateMembershipRenewalExpiry } from "../utils/dateUtils.js";
 import { Donation } from "../models/Donation.js";
 import { Application } from "../models/Application.js";
@@ -86,11 +91,8 @@ export async function registerMember(req: Request, res: Response): Promise<void>
     const annualFee = baseFee * periodMultiplier;
     const catCode = CATEGORY_CODE_MAP[catKey] || "MEM";
 
-    const count = await Member.countDocuments({ category });
-    const memberNo = generateMemberNumber(catCode, count + 1);
-
-    const donationCount = await Donation.countDocuments();
-    const receiptNo = generateReceiptNumber(donationCount + 1);
+    const memberNo = await getNextMemberNumber(catCode);
+    const receiptNo = await getNextReceiptNumber();
     const memberCertNo = `CERT-${memberNo}`;
     const isPublicConsent =
       consentDisplay === "public" ||
@@ -131,56 +133,68 @@ export async function registerMember(req: Request, res: Response): Promise<void>
     await member.save();
 
     // Auto-create document verification for Membership Card
-    await Verification.create({
-      documentNo: memberNo,
-      documentType: "membership_certificate",
-      title: `Official Membership Certificate - ${category}`,
-      issuedTo: memberName,
-      issueDate: validFrom,
-      validTill: validTill,
-      status: "Verified",
-      details: {
-        memberNo,
-        certificateNo: memberCertNo,
-        category,
-        district,
-        state,
-        receiptNo,
+    await Verification.findOneAndUpdate(
+      { documentNo: memberNo },
+      {
+        documentNo: memberNo,
+        documentType: "membership_certificate",
+        title: `Official Membership Certificate - ${category}`,
+        issuedTo: memberName,
+        issueDate: validFrom,
+        validTill: validTill,
+        status: "Verified",
+        details: {
+          memberNo,
+          certificateNo: memberCertNo,
+          category,
+          district,
+          state,
+          receiptNo,
+        },
       },
-    });
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
 
     // Auto-create secondary certificate verification record
-    await Verification.create({
-      documentNo: memberCertNo,
-      documentType: "membership_certificate",
-      title: `Official Membership Certificate - ${category}`,
-      issuedTo: memberName,
-      issueDate: validFrom,
-      validTill: validTill,
-      status: "Verified",
-      details: {
-        memberNo,
-        certificateNo: memberCertNo,
-        category,
-        district,
-        state,
+    await Verification.findOneAndUpdate(
+      { documentNo: memberCertNo },
+      {
+        documentNo: memberCertNo,
+        documentType: "membership_certificate",
+        title: `Official Membership Certificate - ${category}`,
+        issuedTo: memberName,
+        issueDate: validFrom,
+        validTill: validTill,
+        status: "Verified",
+        details: {
+          memberNo,
+          certificateNo: memberCertNo,
+          category,
+          district,
+          state,
+        },
       },
-    });
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
 
     // Auto-create Receipt verification record
-    await Verification.create({
-      documentNo: receiptNo,
-      documentType: "donation_receipt",
-      title: `Membership Fee Receipt - ${category}`,
-      issuedTo: memberName,
-      issueDate: validFrom,
-      status: "Verified",
-      details: {
-        receiptNo,
-        memberNo,
-        amount: annualFee,
+    await Verification.findOneAndUpdate(
+      { documentNo: receiptNo },
+      {
+        documentNo: receiptNo,
+        documentType: "donation_receipt",
+        title: `Membership Fee Receipt - ${category}`,
+        issuedTo: memberName,
+        issueDate: validFrom,
+        status: "Verified",
+        details: {
+          receiptNo,
+          memberNo,
+          amount: annualFee,
+        },
       },
-    });
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
 
     // Synchronize into community directory spotlight
     const displayName = consentDisplay === "anonymous" ? "Anonymous Supporter" : memberName;
@@ -637,8 +651,7 @@ export async function renewMember(req: Request, res: Response): Promise<void> {
     const periodMultiplier = Number(membershipPeriod) >= 1 ? Number(membershipPeriod) : 1;
     const newValidTill = calculateMembershipRenewalExpiry(member.validTill, periodMultiplier);
 
-    const donationCount = await Donation.countDocuments();
-    const renewalReceiptNo = generateReceiptNumber(donationCount + 1);
+    const renewalReceiptNo = await getNextReceiptNumber();
 
     member.validTill = newValidTill;
     member.status = "Active";

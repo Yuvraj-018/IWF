@@ -13,6 +13,8 @@ import { syncToCommunityDirectory } from "../services/directorySyncService.js";
 import {
   generateReceiptNumber,
   generateMemberNumber,
+  getNextReceiptNumber,
+  getNextMemberNumber,
 } from "../utils/idGenerator.js";
 import {
   calculateMembershipExpiry,
@@ -91,8 +93,7 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
 
     // Handle Donation persistence upon verified payment
     if (donationData) {
-      const count = await Donation.countDocuments();
-      createdReceiptNo = generateReceiptNumber(count + 1);
+      createdReceiptNo = await getNextReceiptNumber();
       const createdCertificateNo = createdReceiptNo.replace(/RCPT|REC/i, "CERT");
       const isPublicConsent = donationData.websiteConsent === "Yes" || Boolean(donationData.isPublicConsent);
 
@@ -141,38 +142,46 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
       }
 
       // Add Receipt to Document Verification Centre
-      await Verification.create({
-        documentNo: createdReceiptNo,
-        documentType: "donation_receipt",
-        title: `80G Donation Receipt - ${donationData.financialType || "General"}`,
-        issuedTo: donationData.donorName,
-        issueDate: new Date(),
-        status: "Verified",
-        details: {
-          receiptNo: createdReceiptNo,
-          certificateNo: createdCertificateNo,
-          amount: Number(donationData.amount),
-          pan: donationData.pan,
-          transactionId: razorpay_payment_id,
-          orderId: razorpay_order_id,
+      await Verification.findOneAndUpdate(
+        { documentNo: createdReceiptNo },
+        {
+          documentNo: createdReceiptNo,
+          documentType: "donation_receipt",
+          title: `80G Donation Receipt - ${donationData.financialType || "General"}`,
+          issuedTo: donationData.donorName,
+          issueDate: new Date(),
+          status: "Verified",
+          details: {
+            receiptNo: createdReceiptNo,
+            certificateNo: createdCertificateNo,
+            amount: Number(donationData.amount),
+            pan: donationData.pan,
+            transactionId: razorpay_payment_id,
+            orderId: razorpay_order_id,
+          },
         },
-      });
+        { upsert: true, new: true, setDefaultsOnInsert: true }
+      );
 
       // Add Certificate to Document Verification Centre
-      await Verification.create({
-        documentNo: createdCertificateNo,
-        documentType: "programme_certificate",
-        title: `Donor Appreciation Certificate - ${donationData.financialType || "General"}`,
-        issuedTo: donationData.donorName,
-        issueDate: new Date(),
-        status: "Verified",
-        details: {
-          receiptNo: createdReceiptNo,
-          certificateNo: createdCertificateNo,
-          amount: Number(donationData.amount),
-          transactionId: razorpay_payment_id,
+      await Verification.findOneAndUpdate(
+        { documentNo: createdCertificateNo },
+        {
+          documentNo: createdCertificateNo,
+          documentType: "programme_certificate",
+          title: `Donor Appreciation Certificate - ${donationData.financialType || "General"}`,
+          issuedTo: donationData.donorName,
+          issueDate: new Date(),
+          status: "Verified",
+          details: {
+            receiptNo: createdReceiptNo,
+            certificateNo: createdCertificateNo,
+            amount: Number(donationData.amount),
+            transactionId: razorpay_payment_id,
+          },
         },
-      });
+        { upsert: true, new: true, setDefaultsOnInsert: true }
+      );
 
       // Synchronize with Community Directory Spotlight
       syncToCommunityDirectory({
@@ -227,8 +236,7 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
       const catCode = CATEGORY_CODE_MAP[catKey] || catKey.slice(0, 2).toUpperCase();
       const periodMultiplier = Math.max(1, Math.min(10, Number(memberData.membershipPeriod) || 1));
 
-      const count = await Donation.countDocuments();
-      createdReceiptNo = generateReceiptNumber(count + 1);
+      createdReceiptNo = await getNextReceiptNumber();
 
       if (memberData.isRenewal && memberData.memberNo) {
         // ── RENEWAL FLOW VIA RAZORPAY ──
@@ -271,8 +279,7 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
         }
       } else {
         // ── NEW MEMBER REGISTRATION VIA RAZORPAY ──
-        const memberCount = await Member.countDocuments({ category: catKey });
-        const memberNo = generateMemberNumber(catCode, memberCount + 1);
+        const memberNo = await getNextMemberNumber(catCode);
         const memberCertNo = `CERT-${memberNo}`;
         const isPublicConsent =
           memberData.consentDisplay === "public" ||
@@ -312,58 +319,70 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
         savedEntity = await member.save();
 
         // Add Membership Certificate to Document Verification Centre
-        await Verification.create({
-          documentNo: memberNo,
-          documentType: "membership_certificate",
-          title: `Official Membership Certificate - ${catKey}`,
-          issuedTo: member.name,
-          issueDate: validFrom,
-          validTill,
-          status: "Verified",
-          details: {
-            memberNo,
-            certificateNo: memberCertNo,
-            category: catKey,
-            district: member.district,
-            state: member.state,
-            transactionId: razorpay_payment_id,
-            orderId: razorpay_order_id,
+        await Verification.findOneAndUpdate(
+          { documentNo: memberNo },
+          {
+            documentNo: memberNo,
+            documentType: "membership_certificate",
+            title: `Official Membership Certificate - ${catKey}`,
+            issuedTo: member.name,
+            issueDate: validFrom,
+            validTill,
+            status: "Verified",
+            details: {
+              memberNo,
+              certificateNo: memberCertNo,
+              category: catKey,
+              district: member.district,
+              state: member.state,
+              transactionId: razorpay_payment_id,
+              orderId: razorpay_order_id,
+            },
           },
-        });
+          { upsert: true, new: true, setDefaultsOnInsert: true }
+        );
 
         // Also register secondary certificate token for verification lookup
-        await Verification.create({
-          documentNo: memberCertNo,
-          documentType: "membership_certificate",
-          title: `Official Membership Certificate - ${catKey}`,
-          issuedTo: member.name,
-          issueDate: validFrom,
-          validTill,
-          status: "Verified",
-          details: {
-            memberNo,
-            certificateNo: memberCertNo,
-            category: catKey,
-            district: member.district,
-            state: member.state,
+        await Verification.findOneAndUpdate(
+          { documentNo: memberCertNo },
+          {
+            documentNo: memberCertNo,
+            documentType: "membership_certificate",
+            title: `Official Membership Certificate - ${catKey}`,
+            issuedTo: member.name,
+            issueDate: validFrom,
+            validTill,
+            status: "Verified",
+            details: {
+              memberNo,
+              certificateNo: memberCertNo,
+              category: catKey,
+              district: member.district,
+              state: member.state,
+            },
           },
-        });
+          { upsert: true, new: true, setDefaultsOnInsert: true }
+        );
 
         // Add Membership Receipt to Document Verification Centre
-        await Verification.create({
-          documentNo: createdReceiptNo,
-          documentType: "donation_receipt",
-          title: `Membership Fee Receipt - ${catKey}`,
-          issuedTo: member.name,
-          issueDate: validFrom,
-          status: "Verified",
-          details: {
-            receiptNo: createdReceiptNo,
-            memberNo,
-            amount: member.annualFee,
-            transactionId: razorpay_payment_id,
+        await Verification.findOneAndUpdate(
+          { documentNo: createdReceiptNo },
+          {
+            documentNo: createdReceiptNo,
+            documentType: "donation_receipt",
+            title: `Membership Fee Receipt - ${catKey}`,
+            issuedTo: member.name,
+            issueDate: validFrom,
+            status: "Verified",
+            details: {
+              receiptNo: createdReceiptNo,
+              memberNo,
+              amount: member.annualFee,
+              transactionId: razorpay_payment_id,
+            },
           },
-        });
+          { upsert: true, new: true, setDefaultsOnInsert: true }
+        );
 
         // Synchronize with Community Directory Spotlight
         const displayName =

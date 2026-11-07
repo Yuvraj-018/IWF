@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { Donation } from "../models/Donation.js";
 import { Patient } from "../models/Patient.js";
 import { Verification } from "../models/Verification.js";
-import { generateReceiptNumber } from "../utils/idGenerator.js";
+import { generateReceiptNumber, getNextReceiptNumber } from "../utils/idGenerator.js";
 import { verifyToken } from "../utils/authUtils.js";
 import { sendReceiptEmail, sendAdminInboundNotificationEmail } from "../services/emailService.js";
 import { syncToCommunityDirectory } from "../services/directorySyncService.js";
@@ -71,8 +71,7 @@ export async function createDonation(req: Request, res: Response): Promise<void>
       return;
     }
 
-    const count = await Donation.countDocuments();
-    const receiptNo = generateReceiptNumber(count + 1);
+    const receiptNo = await getNextReceiptNumber();
     const certificateNo = receiptNo.replace(/RCPT|REC/i, "CERT");
     const isPublicConsent = req.body.websiteConsent === "Yes" || Boolean(req.body.isPublicConsent);
 
@@ -112,37 +111,45 @@ export async function createDonation(req: Request, res: Response): Promise<void>
     }
 
     // Auto-create document verification record for this receipt
-    await Verification.create({
-      documentNo: receiptNo,
-      documentType: "donation_receipt",
-      title: `80G Donation Receipt - ${financialType}`,
-      issuedTo: donorName,
-      issueDate: new Date(),
-      status: "Verified",
-      details: {
-        amount: Number(amount),
-        pan: pan ? pan.toUpperCase() : undefined,
-        financialType,
-        receiptNo,
-        certificateNo,
+    await Verification.findOneAndUpdate(
+      { documentNo: receiptNo },
+      {
+        documentNo: receiptNo,
+        documentType: "donation_receipt",
+        title: `80G Donation Receipt - ${financialType}`,
+        issuedTo: donorName,
+        issueDate: new Date(),
+        status: "Verified",
+        details: {
+          amount: Number(amount),
+          pan: pan ? pan.toUpperCase() : undefined,
+          financialType,
+          receiptNo,
+          certificateNo,
+        },
       },
-    });
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
 
     // Auto-create document verification record for Donor Certificate
-    await Verification.create({
-      documentNo: certificateNo,
-      documentType: "programme_certificate",
-      title: `Donor Appreciation Certificate - ${financialType}`,
-      issuedTo: donorName,
-      issueDate: new Date(),
-      status: "Verified",
-      details: {
-        amount: Number(amount),
-        financialType,
-        receiptNo,
-        certificateNo,
+    await Verification.findOneAndUpdate(
+      { documentNo: certificateNo },
+      {
+        documentNo: certificateNo,
+        documentType: "programme_certificate",
+        title: `Donor Appreciation Certificate - ${financialType}`,
+        issuedTo: donorName,
+        issueDate: new Date(),
+        status: "Verified",
+        details: {
+          amount: Number(amount),
+          financialType,
+          receiptNo,
+          certificateNo,
+        },
       },
-    });
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
 
     // Synchronize into community directory spotlight
     syncToCommunityDirectory({
