@@ -2,10 +2,18 @@ import { Request, Response } from "express";
 import { Donation } from "../models/Donation.js";
 import { Patient } from "../models/Patient.js";
 import { Verification } from "../models/Verification.js";
-import { generateReceiptNumber, getNextReceiptNumber } from "../utils/idGenerator.js";
+import { LedgerEntry } from "../models/LedgerEntry.js";
+import {
+  generateReceiptNumber,
+  getNextReceiptNumber,
+  getNextReceiptNo,
+  getNextTransactionNo,
+  getCurrentFinancialYear,
+} from "../utils/idGenerator.js";
 import { verifyToken } from "../utils/authUtils.js";
 import { sendReceiptEmail, sendAdminInboundNotificationEmail } from "../services/emailService.js";
 import { syncToCommunityDirectory } from "../services/directorySyncService.js";
+import { generateReceiptPdfBuffer } from "../services/receiptPdfService.js";
 
 function maskEmail(email: string): string {
   if (!email || !email.includes("@")) return "***";
@@ -101,6 +109,35 @@ export async function createDonation(req: Request, res: Response): Promise<void>
     });
 
     await donation.save();
+
+    // Automatically post to append-only LedgerEntry
+    try {
+      const fy = getCurrentFinancialYear();
+      const now = new Date();
+      const month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+      const ledgerEntryNo = await getNextTransactionNo();
+      const amountInPaise = Math.round(Number(amount) * 100);
+      await LedgerEntry.create({
+        entryNo: ledgerEntryNo,
+        effectiveDate: now,
+        postedAt: now,
+        fy,
+        month,
+        direction: "credit",
+        amountPaise: amountInPaise,
+        type: "donation",
+        head: financialType || "General Donation",
+        sourceType: "donation",
+        sourceId: donation._id,
+        workAreaId: req.body.workAreaId || "HLT",
+        fundType: req.body.fundType || "general",
+        paymentMethod: paymentMode || "Online",
+        idempotencyKey: `don_rcpt_${receiptNo}`,
+        createdBy: "donation_controller",
+      });
+    } catch (ledgerErr) {
+      console.warn("Ledger entry recording warning in createDonation:", ledgerErr);
+    }
 
     // If donation was for an urgent patient, increment raisedAmount and donorsCount
     if (patientSlug) {
@@ -270,8 +307,39 @@ export async function listDonations(req: Request, res: Response): Promise<void> 
       filter.taxExemption = false;
     }
 
-    if (req.query.paymentStatus) {
+    if (req.query.paymentStatus && req.query.paymentStatus !== "all") {
       filter.paymentStatus = req.query.paymentStatus;
+    }
+
+    if (req.query.paymentMode && req.query.paymentMode !== "all") {
+      filter.paymentMode = { $regex: new RegExp(`^${String(req.query.paymentMode)}$`, "i") };
+    }
+
+    if (req.query.workAreaId && req.query.workAreaId !== "all") {
+      filter.workAreaId = String(req.query.workAreaId).toUpperCase();
+    }
+
+    if (req.query.from || req.query.to) {
+      filter.createdAt = {};
+      if (req.query.from) {
+        const fromDate = new Date(req.query.from as string);
+        fromDate.setHours(0, 0, 0, 0);
+        filter.createdAt.$gte = fromDate;
+      }
+      if (req.query.to) {
+        const toDate = new Date(req.query.to as string);
+        toDate.setHours(23, 59, 59, 999);
+        filter.createdAt.$lte = toDate;
+      }
+    } else if (req.query.fy && req.query.fy !== "all") {
+      const parts = String(req.query.fy).split("-");
+      const startYear = parseInt(parts[0], 10);
+      if (!isNaN(startYear)) {
+        filter.createdAt = {
+          $gte: new Date(startYear, 3, 1, 0, 0, 0, 0),
+          $lte: new Date(startYear + 1, 2, 31, 23, 59, 59, 999),
+        };
+      }
     }
 
     if (req.query.search) {
@@ -282,21 +350,401 @@ export async function listDonations(req: Request, res: Response): Promise<void> 
         { phone: { $regex: q, $options: "i" } },
         { pan: { $regex: q, $options: "i" } },
         { receiptNo: { $regex: q, $options: "i" } },
+        { transactionId: { $regex: q, $options: "i" } },
+        { razorpayPaymentId: { $regex: q, $options: "i" } },
+        { razorpayOrderId: { $regex: q, $options: "i" } },
       ];
     }
 
-    const [donations, total] = await Promise.all([
-      Donation.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
+    const [donations, total, stats] = await Promise.all([
+      Donation.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
       Donation.countDocuments(filter),
+      Donation.aggregate([
+        { $match: filter },
+        {
+          $group: {
+            _id: null,
+            totalAmount: { $sum: "$amount" },
+            successCount: {
+              $sum: { $cond: [{ $eq: ["$paymentStatus", "Success"] }, 1, 0] },
+            },
+            pendingCount: {
+              $sum: { $cond: [{ $eq: ["$paymentStatus", "Pending"] }, 1, 0] },
+            },
+            failedCount: {
+              $sum: { $cond: [{ $eq: ["$paymentStatus", "Failed"] }, 1, 0] },
+            },
+          },
+        },
+      ]),
     ]);
+
+    const statSummary = stats[0] || {
+      totalAmount: 0,
+      successCount: 0,
+      pendingCount: 0,
+      failedCount: 0,
+    };
 
     res.json({
       success: true,
       data: donations,
+      stats: statSummary,
       pagination: { total, page, limit, pages: Math.ceil(total / limit) || 1 },
     });
   } catch (error) {
     console.error("listDonations error:", error);
     res.status(500).json({ success: false, message: "Internal server error" });
+  }
+}
+
+/**
+ * Downloads official 80G Donation Receipt PDF on demand
+ */
+export async function downloadReceiptPdf(req: Request, res: Response): Promise<void> {
+  try {
+    const { receiptNo } = req.params;
+    const donation = await Donation.findOne({ receiptNo });
+
+    if (!donation) {
+      res.status(404).json({ success: false, message: "Donation receipt not found" });
+      return;
+    }
+
+    const pdfBuffer = await generateReceiptPdfBuffer({
+      receiptNo: donation.receiptNo,
+      donorName: donation.donorName,
+      donorType: donation.donorType,
+      email: donation.email,
+      phone: donation.phone,
+      address: donation.address,
+      city: donation.city,
+      state: donation.state,
+      pincode: donation.pincode,
+      amount: donation.amount,
+      financialType: donation.financialType,
+      frequency: donation.frequency,
+      paymentMode: donation.paymentMode,
+      transactionId: donation.transactionId,
+      pan: donation.pan,
+      taxExemption: donation.taxExemption,
+      createdAt: donation.createdAt,
+    });
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="ISLAH_Receipt_${donation.receiptNo}.pdf"`
+    );
+    res.setHeader("Content-Length", pdfBuffer.length);
+    res.status(200).send(pdfBuffer);
+  } catch (error: any) {
+    console.error("downloadReceiptPdf error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to generate receipt PDF",
+      error: error.message,
+    });
+  }
+}
+
+/**
+ * Re-sends official 80G receipt email to donor
+ */
+export async function resendReceiptEmail(req: Request, res: Response): Promise<void> {
+  try {
+    const { receiptNo } = req.params;
+    const donation = await Donation.findOne({ receiptNo });
+
+    if (!donation) {
+      res.status(404).json({ success: false, message: "Donation receipt not found" });
+      return;
+    }
+
+    if (!donation.email) {
+      res.status(400).json({ success: false, message: "No email address on record for this donation" });
+      return;
+    }
+
+    await sendReceiptEmail(donation.email, {
+      donorName: donation.donorName,
+      donorType: donation.donorType || "Individual",
+      email: donation.email,
+      phone: donation.phone,
+      address: donation.address,
+      city: donation.city,
+      state: donation.state,
+      pincode: donation.pincode,
+      receiptNo: donation.receiptNo,
+      amount: donation.amount,
+      cause: donation.financialType,
+      paymentMode: donation.paymentMode,
+      pan: donation.pan,
+      taxExemption: donation.taxExemption,
+      transactionId: donation.transactionId,
+      createdAt: donation.createdAt,
+    });
+
+    res.json({
+      success: true,
+      message: `Receipt #${donation.receiptNo} sent successfully to ${donation.email}`,
+    });
+  } catch (error: any) {
+    console.error("resendReceiptEmail error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to send receipt email",
+      error: error.message,
+    });
+  }
+}
+
+/**
+ * Dedicated Manual Offline Donation Endpoint (POST /api/finance/donations/manual)
+ */
+export async function createManualDonation(req: Request, res: Response): Promise<void> {
+  try {
+    const {
+      donorName,
+      donorType = "Individual",
+      email = "offline-donor@islahwelfare.org",
+      phone = "9999999999",
+      countryCode = "+91",
+      address,
+      city,
+      state,
+      pincode,
+      amount,
+      paymentMode = "Cash",
+      paymentReference,
+      workAreaId = "HLT",
+      initiativeId,
+      financialType = "General Donation",
+      taxExemption = true,
+      pan,
+      notes,
+    } = req.body;
+
+    if (!donorName || !amount) {
+      res.status(400).json({ success: false, message: "Donor name and donation amount are required" });
+      return;
+    }
+
+    if (taxExemption && pan) {
+      const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+      if (!panRegex.test(pan.toUpperCase())) {
+        res.status(400).json({ success: false, message: "Invalid PAN format. Must be 10 characters (e.g. ABCDE1234F)" });
+        return;
+      }
+    }
+
+    const currentYear = new Date().getFullYear();
+    const receiptNo = await getNextReceiptNo(currentYear);
+    const certificateNo = `CERT-${currentYear}-${receiptNo.replace(/\D/g, "").slice(-5)}`;
+    const transactionId = paymentReference || `MAN-${Date.now()}`;
+    const amountNum = Number(amount);
+    const amountPaise = Math.round(amountNum * 100);
+
+    const donation = new Donation({
+      receiptNo,
+      certificateNo,
+      transactionId,
+      donorName: donorName.trim(),
+      donorType,
+      email: email.trim().toLowerCase(),
+      phone: phone.trim(),
+      countryCode,
+      address,
+      city,
+      state,
+      pincode,
+      financialType,
+      amount: amountNum,
+      amountPaise,
+      grossPaise: amountPaise,
+      feePaise: 0,
+      netPaise: amountPaise,
+      workAreaId: workAreaId.toUpperCase(),
+      initiativeId,
+      taxExemption: Boolean(taxExemption),
+      pan: pan ? pan.toUpperCase() : undefined,
+      paymentMode,
+      paymentStatus: "Success",
+      websiteConsent: "Yes",
+      isPublicConsent: true,
+      notes,
+    });
+
+    await donation.save();
+
+    // Dual-entry Ledger append
+    try {
+      const fy = getCurrentFinancialYear();
+      const now = new Date();
+      const month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+      const txnNo = await getNextTransactionNo(currentYear);
+
+      await LedgerEntry.create({
+        entryNo: txnNo,
+        effectiveDate: now,
+        postedAt: now,
+        fy,
+        month,
+        direction: "credit",
+        amountPaise,
+        type: "manual_income",
+        head: financialType,
+        sourceType: "income",
+        sourceId: donation._id,
+        workAreaId: workAreaId.toUpperCase(),
+        initiativeId,
+        fundType: "general",
+        paymentMethod: paymentMode,
+        idempotencyKey: `man_don_${receiptNo}`,
+        createdBy: "admin_manual",
+      });
+    } catch (ledgerErr) {
+      console.warn("Manual donation ledger post warning:", ledgerErr);
+    }
+
+    // Auto-create document verification record for 80G receipt
+    await Verification.findOneAndUpdate(
+      { documentNo: receiptNo },
+      {
+        documentNo: receiptNo,
+        documentType: "donation_receipt",
+        title: `80G Donation Receipt - ${financialType}`,
+        issuedTo: donorName.trim(),
+        issueDate: new Date(),
+        status: "Verified",
+        details: {
+          amount: amountNum,
+          financialType,
+          receiptNo,
+          pan: pan ? pan.toUpperCase() : undefined,
+          paymentMode,
+        },
+      },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+
+    // Auto-create document verification record for donor certificate
+    await Verification.findOneAndUpdate(
+      { documentNo: certificateNo },
+      {
+        documentNo: certificateNo,
+        documentType: "programme_certificate",
+        title: `Donor Appreciation Certificate - ${financialType}`,
+        issuedTo: donorName.trim(),
+        issueDate: new Date(),
+        status: "Verified",
+        details: {
+          amount: amountNum,
+          financialType,
+          receiptNo,
+          certificateNo,
+        },
+      },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+
+    // Asynchronously dispatch official 80G receipt email if valid email provided
+    if (email && email.includes("@") && !email.includes("offline-donor")) {
+      sendReceiptEmail(email.trim().toLowerCase(), {
+        donorName: donorName.trim(),
+        donorType,
+        email: email.trim().toLowerCase(),
+        phone,
+        address,
+        city,
+        state,
+        pincode,
+        receiptNo,
+        amount: amountNum,
+        cause: financialType,
+        paymentMode,
+        pan: pan ? pan.toUpperCase() : undefined,
+        taxExemption: Boolean(taxExemption),
+        transactionId,
+        createdAt: donation.createdAt,
+      }).catch((e) => console.warn("Manual donation receipt email error:", e));
+    }
+
+    res.status(201).json({
+      success: true,
+      message: `Offline donation recorded successfully with Receipt #${receiptNo}`,
+      data: donation,
+    });
+  } catch (error: any) {
+    console.error("createManualDonation error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to record manual donation",
+      error: error.message,
+    });
+  }
+}
+
+/**
+ * List Receipts & Acknowledgements (GET /api/finance/receipts)
+ */
+export async function listReceipts(req: Request, res: Response): Promise<void> {
+  try {
+    const page = Math.max(1, parseInt(req.query.page as string) || 1);
+    const limit = Math.max(1, parseInt(req.query.limit as string) || 20);
+    const skip = (page - 1) * limit;
+
+    const filter: any = {
+      receiptNo: { $exists: true, $ne: null },
+    };
+
+    if (req.query.search) {
+      const q = String(req.query.search).trim();
+      filter.$or = [
+        { receiptNo: { $regex: q, $options: "i" } },
+        { certificateNo: { $regex: q, $options: "i" } },
+        { donorName: { $regex: q, $options: "i" } },
+        { email: { $regex: q, $options: "i" } },
+        { pan: { $regex: q, $options: "i" } },
+      ];
+    }
+
+    if (req.query.taxExemption === "true") {
+      filter.taxExemption = true;
+    }
+
+    const [donations, total] = await Promise.all([
+      Donation.find(filter)
+        .select("receiptNo certificateNo donorName email phone amount financialType taxExemption pan paymentMode paymentStatus createdAt")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Donation.countDocuments(filter),
+    ]);
+
+    const formatted = donations.map((d) => ({
+      receiptNo: d.receiptNo,
+      certificateNo: d.certificateNo || `CERT-${d.receiptNo}`,
+      donorName: d.donorName,
+      email: d.email,
+      phone: d.phone,
+      issueDate: new Date(d.createdAt).toISOString().split("T")[0],
+      amount: d.amount,
+      cause: d.financialType,
+      taxExemption: d.taxExemption,
+      pan: d.pan,
+      deliveryStatus: d.email && d.email.includes("@") && !d.email.includes("offline") ? "Sent" : "Queued",
+      verificationStatus: "Verified",
+    }));
+
+    res.json({
+      success: true,
+      data: formatted,
+      pagination: { total, page, limit, pages: Math.ceil(total / limit) || 1 },
+    });
+  } catch (error: any) {
+    console.error("listReceipts error:", error);
+    res.status(500).json({ success: false, message: "Failed to list receipts", error: error.message });
   }
 }

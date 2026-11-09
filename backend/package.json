@@ -6,6 +6,9 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
+    "seed:finance": "tsx src/scripts/seedFinanceTaxonomy.ts",
+    "test:phase1": "tsx src/scripts/testPhase1.ts",
+    "test:phase2": "tsx src/scripts/testPhase2.ts",
     "upload:r2": "tsx src/scripts/uploadToR2.ts",
     "build": "rimraf dist && tsc",
     "start": "node dist/server.js"

@@ -2,12 +2,15 @@ import { Request, Response } from "express";
 import {
   createRazorpayOrder,
   verifyRazorpaySignature,
+  verifyWebhookSignature,
 } from "../services/razorpayService.js";
 import { RAZORPAY_CONFIG } from "../config/razorpay.js";
 import { Donation } from "../models/Donation.js";
 import { Member, MemberCategory } from "../models/Member.js";
 import { Patient } from "../models/Patient.js";
 import { Verification } from "../models/Verification.js";
+import { PaymentEvent } from "../models/PaymentEvent.js";
+import { LedgerEntry } from "../models/LedgerEntry.js";
 import { sendReceiptEmail, sendMembershipCardEmail } from "../services/emailService.js";
 import { syncToCommunityDirectory } from "../services/directorySyncService.js";
 import {
@@ -15,6 +18,9 @@ import {
   generateMemberNumber,
   getNextReceiptNumber,
   getNextMemberNumber,
+  getNextReceiptNo,
+  getNextTransactionNo,
+  getCurrentFinancialYear,
 } from "../utils/idGenerator.js";
 import {
   calculateMembershipExpiry,
@@ -182,6 +188,41 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
         },
         { upsert: true, new: true, setDefaultsOnInsert: true }
       );
+
+      // Automatically post to append-only LedgerEntry
+      try {
+        const fy = getCurrentFinancialYear();
+        const now = new Date();
+        const month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+        const ledgerEntryNo = await getNextTransactionNo();
+        const amountInPaise = Math.round(Number(donationData.amount) * 100);
+        await LedgerEntry.findOneAndUpdate(
+          { idempotencyKey: `rzp_pay_${razorpay_payment_id}` },
+          {
+            $setOnInsert: {
+              entryNo: ledgerEntryNo,
+              effectiveDate: now,
+              postedAt: now,
+              fy,
+              month,
+              direction: "credit",
+              amountPaise: amountInPaise,
+              type: "donation",
+              head: donationData.financialType || "General Donation",
+              sourceType: "donation",
+              sourceId: savedEntity._id,
+              workAreaId: donationData.workAreaId || "HLT",
+              fundType: donationData.fundType || "general",
+              paymentMethod: "Razorpay / Online",
+              idempotencyKey: `rzp_pay_${razorpay_payment_id}`,
+              createdBy: "payment_verification",
+            },
+          },
+          { upsert: true, new: true, setDefaultsOnInsert: true }
+        );
+      } catch (ledgerErr) {
+        console.warn("Ledger entry recording warning:", ledgerErr);
+      }
 
       // Synchronize with Community Directory Spotlight
       syncToCommunityDirectory({
@@ -441,30 +482,65 @@ export async function handleWebhookController(req: Request, res: Response): Prom
       return;
     }
 
-    const { verifyWebhookSignature } = await import("../services/razorpayService.js");
-    const isValid = verifyWebhookSignature({ body: req.body, signature });
+    const rawBody = Buffer.isBuffer(req.body)
+      ? req.body
+      : Buffer.from(typeof req.body === "string" ? req.body : JSON.stringify(req.body), "utf8");
+
+    const isValid = verifyWebhookSignature({ body: rawBody, signature });
     if (!isValid) {
       res.status(400).json({ success: false, message: "Invalid webhook signature" });
       return;
     }
 
-    const event = req.body.event;
-    const payload = req.body.payload;
+    const bodyJson = Buffer.isBuffer(req.body)
+      ? JSON.parse(req.body.toString("utf8"))
+      : req.body;
+
+    const event = bodyJson.event;
+    const payload = bodyJson.payload;
+    const eventIdHeader = req.headers["x-razorpay-event-id"] as string;
+    const eventId =
+      eventIdHeader ||
+      bodyJson.id ||
+      (payload?.payment?.entity?.id ? `evt_${payload.payment.entity.id}` : undefined);
+
+    // Idempotency check via PaymentEvent
+    if (eventId) {
+      const existingEvent = await PaymentEvent.findOne({ eventId });
+      if (existingEvent && (existingEvent.status === "processed" || existingEvent.status === "ignored")) {
+        res.status(200).json({ status: "ok", message: "Event already processed" });
+        return;
+      }
+      if (!existingEvent) {
+        await PaymentEvent.create({
+          provider: "razorpay",
+          eventId,
+          eventType: event || "unknown",
+          payload: bodyJson,
+          status: "received",
+          receivedAt: new Date(),
+        });
+      }
+    }
 
     // Idempotent processing of payment.captured
     if (event === "payment.captured") {
       const payment = payload?.payment?.entity;
       if (payment) {
         const paymentId = payment.id;
-        const existingDonation = await Donation.findOne({ transactionId: paymentId });
-        if (!existingDonation) {
+        let donation = await Donation.findOne({ transactionId: paymentId });
+        if (!donation) {
           const notes = payment.notes || {};
-          const count = await Donation.countDocuments();
-          const receiptNo = generateReceiptNumber(count + 1);
-          const amountInRupees = payment.amount / 100;
+          const receiptNo = await getNextReceiptNo();
+          const amountInPaise = Number(payment.amount);
+          const amountInRupees = amountInPaise / 100;
+          const feeInPaise = Number(payment.fee || 0);
+          const taxInPaise = Number(payment.tax || 0);
+          const netInPaise = amountInPaise - feeInPaise - taxInPaise;
 
-          const donation = new Donation({
+          donation = new Donation({
             receiptNo,
+            donationNo: receiptNo,
             donorName: notes.donorName || "Supporter",
             donorType: notes.donorType || "Individual",
             email: payment.email || notes.email || "support@iwfindia.org",
@@ -477,11 +553,21 @@ export async function handleWebhookController(req: Request, res: Response): Prom
             financialType: notes.financialType || "General Donation",
             frequency: "One Time",
             amount: amountInRupees,
+            amountPaise: amountInPaise,
+            grossPaise: amountInPaise,
+            feePaise: feeInPaise,
+            taxOnFeePaise: taxInPaise,
+            netPaise: netInPaise,
+            workAreaId: notes.workAreaId || "HLT",
+            initiativeId: notes.initiativeId,
+            source: "online",
             taxExemption: Boolean(notes.pan),
             pan: notes.pan ? String(notes.pan).toUpperCase() : undefined,
             paymentMode: "Online",
             paymentStatus: "Success",
             transactionId: paymentId,
+            razorpayOrderId: payment.order_id,
+            razorpayPaymentId: paymentId,
             patientSlug: notes.patientSlug,
             reminder: notes.reminder || "None",
             notes: `Webhook Captured. Order ID: ${payment.order_id}`,
@@ -510,8 +596,43 @@ export async function handleWebhookController(req: Request, res: Response): Prom
               orderId: payment.order_id,
             },
           });
+
+          // Post to immutable LedgerEntry
+          try {
+            const fy = getCurrentFinancialYear();
+            const now = new Date();
+            const month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+            const ledgerEntryNo = await getNextTransactionNo();
+            await LedgerEntry.create({
+              entryNo: ledgerEntryNo,
+              effectiveDate: now,
+              postedAt: now,
+              fy,
+              month,
+              direction: "credit",
+              amountPaise: amountInPaise,
+              type: "donation",
+              head: notes.financialType || "General Donation",
+              sourceType: "donation",
+              sourceId: donation._id,
+              workAreaId: notes.workAreaId || "HLT",
+              fundType: notes.fundType || "general",
+              paymentMethod: "Razorpay / Online",
+              idempotencyKey: `rzp_pay_${paymentId}`,
+              createdBy: "razorpay_webhook",
+            });
+          } catch (ledgerErr) {
+            console.warn("Ledger entry recording warning from webhook:", ledgerErr);
+          }
         }
       }
+    }
+
+    if (eventId) {
+      await PaymentEvent.findOneAndUpdate(
+        { eventId },
+        { status: "processed", processedAt: new Date() }
+      );
     }
 
     res.status(200).json({ status: "ok" });
