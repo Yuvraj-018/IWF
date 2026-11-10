@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 import {
   Users,
@@ -12,9 +13,9 @@ import {
   Award,
   Activity,
 } from "lucide-react";
-import { type NavTab } from "../components/layout/AdminLayout";
 
-export default function DashboardOverview({ onNavigate }: { onNavigate: (tab: NavTab) => void }) {
+export default function DashboardOverview({ onNavigate }: { onNavigate?: (tab: string) => void }) {
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     totalMembers: 0,
     totalDonations: 0,
@@ -23,6 +24,27 @@ export default function DashboardOverview({ onNavigate }: { onNavigate: (tab: Na
     totalNews: 0,
   });
   const [loading, setLoading] = useState(true);
+
+  const handleNav = (tab: string) => {
+    if (onNavigate) {
+      onNavigate(tab);
+    } else {
+      const routeMap: Record<string, string> = {
+        overview: "/dashboard",
+        news: "/cms/news",
+        media: "/cms/media",
+        patients: "/cms/patients",
+        members: "/cms/members",
+        careers: "/cms/careers",
+        publications: "/cms/publications",
+        stories: "/cms/stories",
+        leadership: "/cms/leadership",
+        applications: "/cms/applications",
+        settings: "/cms/settings",
+      };
+      navigate(routeMap[tab] || `/${tab}`);
+    }
+  };
 
   const fetchStats = (force = false) => {
     setLoading(true);
@@ -43,7 +65,7 @@ export default function DashboardOverview({ onNavigate }: { onNavigate: (tab: Na
       icon: Users,
       color: "text-blue-400",
       bg: "bg-blue-500/10 border-blue-500/20",
-      tab: "members" as NavTab,
+      tab: "members",
     },
     {
       title: "80G Verified Donations",
@@ -51,7 +73,7 @@ export default function DashboardOverview({ onNavigate }: { onNavigate: (tab: Na
       icon: HeartHandshake,
       color: "text-emerald-400",
       bg: "bg-emerald-500/10 border-emerald-500/20",
-      tab: "applications" as NavTab,
+      tab: "applications",
     },
     {
       title: "Critical Patient Cases",
@@ -59,7 +81,7 @@ export default function DashboardOverview({ onNavigate }: { onNavigate: (tab: Na
       icon: HeartPulse,
       color: "text-rose-400",
       bg: "bg-rose-500/10 border-rose-500/20",
-      tab: "patients" as NavTab,
+      tab: "patients",
     },
     {
       title: "Inbound Applications",
@@ -67,7 +89,7 @@ export default function DashboardOverview({ onNavigate }: { onNavigate: (tab: Na
       icon: FileText,
       color: "text-amber-400",
       bg: "bg-amber-500/10 border-amber-500/20",
-      tab: "applications" as NavTab,
+      tab: "applications",
     },
     {
       title: "Live News & Events",
@@ -75,7 +97,7 @@ export default function DashboardOverview({ onNavigate }: { onNavigate: (tab: Na
       icon: Newspaper,
       color: "text-purple-400",
       bg: "bg-purple-500/10 border-purple-500/20",
-      tab: "news" as NavTab,
+      tab: "news",
     },
   ];
 
@@ -103,7 +125,7 @@ export default function DashboardOverview({ onNavigate }: { onNavigate: (tab: Na
           return (
             <div
               key={kpi.title}
-              onClick={() => onNavigate(kpi.tab)}
+              onClick={() => handleNav(kpi.tab)}
               className="p-6 rounded-2xl bg-white border border-slate-200/90 hover:border-orange-300 transition cursor-pointer flex flex-col justify-between group shadow-2xs hover:shadow-md"
             >
               <div className="flex items-center justify-between mb-4">
@@ -131,7 +153,7 @@ export default function DashboardOverview({ onNavigate }: { onNavigate: (tab: Na
         <h3 className="text-sm font-extrabold text-[#071527] mb-4">Quick Management Shortcuts</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <button
-            onClick={() => onNavigate("news")}
+            onClick={() => handleNav("news")}
             className="p-4 rounded-xl bg-slate-50/80 hover:bg-orange-50/40 border border-slate-200/80 hover:border-orange-200 text-left transition cursor-pointer group"
           >
             <Newspaper className="w-5 h-5 text-purple-600 mb-2" />
@@ -140,7 +162,7 @@ export default function DashboardOverview({ onNavigate }: { onNavigate: (tab: Na
           </button>
 
           <button
-            onClick={() => onNavigate("media")}
+            onClick={() => handleNav("media")}
             className="p-4 rounded-xl bg-slate-50/80 hover:bg-orange-50/40 border border-slate-200/80 hover:border-orange-200 text-left transition cursor-pointer group"
           >
             <TrendingUp className="w-5 h-5 text-emerald-600 mb-2" />
@@ -149,7 +171,7 @@ export default function DashboardOverview({ onNavigate }: { onNavigate: (tab: Na
           </button>
 
           <button
-            onClick={() => onNavigate("patients")}
+            onClick={() => handleNav("patients")}
             className="p-4 rounded-xl bg-slate-50/80 hover:bg-orange-50/40 border border-slate-200/80 hover:border-orange-200 text-left transition cursor-pointer group"
           >
             <HeartPulse className="w-5 h-5 text-rose-600 mb-2" />
@@ -158,7 +180,7 @@ export default function DashboardOverview({ onNavigate }: { onNavigate: (tab: Na
           </button>
 
           <button
-            onClick={() => onNavigate("leadership")}
+            onClick={() => handleNav("leadership")}
             className="p-4 rounded-xl bg-slate-50/80 hover:bg-orange-50/40 border border-slate-200/80 hover:border-orange-200 text-left transition cursor-pointer group"
           >
             <Award className="w-5 h-5 text-amber-600 mb-2" />
@@ -167,7 +189,7 @@ export default function DashboardOverview({ onNavigate }: { onNavigate: (tab: Na
           </button>
 
           <button
-            onClick={() => onNavigate("settings")}
+            onClick={() => handleNav("settings")}
             className="p-4 rounded-xl bg-slate-50/80 hover:bg-orange-50/40 border border-slate-200/80 hover:border-orange-200 text-left transition cursor-pointer group"
           >
             <Activity className="w-5 h-5 text-blue-600 mb-2" />

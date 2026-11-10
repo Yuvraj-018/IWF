@@ -62,6 +62,12 @@ export function createApp() {
     })
   );
 
+  // Raw body parsing for Razorpay Webhook routes (MUST precede express.json for HMAC verification)
+  app.use(
+    ["/api/webhook/razorpay", "/api/payment/webhook"],
+    express.raw({ type: "application/json" })
+  );
+
   // Request body parsing - restricted to 1mb to prevent memory/CPU exhaustion DoS attacks
   app.use(express.json({ limit: "1mb" }));
   app.use(express.urlencoded({ limit: "1mb", extended: true }));

@@ -15,11 +15,13 @@ import { settingsRouter } from "./settingsRoutes.js";
 import { careerRouter } from "./careerRoutes.js";
 import { publicationRouter } from "./publicationRoutes.js";
 import { storyRouter } from "./storyRoutes.js";
+import { financeRouter } from "./financeRoutes.js";
 import {
   createOrderController,
   verifyPaymentController,
   handleWebhookController,
 } from "../controllers/paymentController.js";
+import { getPublicFinancialSummary } from "../controllers/transparencyController.js";
 import { orderRateLimiter, apiGlobalLimiter } from "../middlewares/rateLimiter.js";
 
 export const apiRouter = Router();
@@ -62,8 +64,12 @@ apiRouter.use("/settings", settingsRouter);
 apiRouter.use("/careers", careerRouter);
 apiRouter.use("/publications", publicationRouter);
 apiRouter.use("/stories", storyRouter);
+apiRouter.use("/finance", financeRouter);
 
 // Razorpay Direct Route Aliases
 apiRouter.post("/create-order", orderRateLimiter, createOrderController);
 apiRouter.post("/verify-payment", verifyPaymentController);
 apiRouter.post("/webhook/razorpay", handleWebhookController);
+
+// Public Financial Transparency Summary (No Auth, Zero PII)
+apiRouter.get("/public/transparency/financial-summary", getPublicFinancialSummary);

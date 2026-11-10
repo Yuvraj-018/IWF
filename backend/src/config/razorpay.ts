@@ -11,10 +11,10 @@ if (!key_id || !key_secret) {
   );
 }
 
-export const razorpayInstance = new Razorpay({
-  key_id,
-  key_secret,
-});
+export const razorpayInstance =
+  key_id && key_secret
+    ? new Razorpay({ key_id, key_secret })
+    : new Razorpay({ key_id: "rzp_test_dummy", key_secret: "secret_dummy" });
 
 export const RAZORPAY_CONFIG = {
   key_id,
