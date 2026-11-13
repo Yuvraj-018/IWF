@@ -1,7 +1,8 @@
-import { useState, useEffect, type ReactNode } from "react";
+import { useState, useEffect, useRef, type ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { getClientUrl } from "../../services/config";
+import { api } from "../../services/api";
 import {
   LayoutDashboard,
   Globe,
@@ -28,6 +29,10 @@ import {
   FileCheck2,
   Settings,
   UserCheck,
+  CheckCircle2,
+  Inbox,
+  Clock,
+  Check,
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -41,6 +46,149 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [messagesOpen, setMessagesOpen] = useState(false);
+
+  // Live alerts & inquiries state
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [messages, setMessages] = useState<any[]>([]);
+  const [readNotificationIds, setReadNotificationIds] = useState<Set<string>>(() => {
+    try {
+      const saved = localStorage.getItem("islah_read_notifications");
+      return saved ? new Set(JSON.parse(saved)) : new Set();
+    } catch {
+      return new Set();
+    }
+  });
+  const [readMessageIds, setReadMessageIds] = useState<Set<string>>(() => {
+    try {
+      const saved = localStorage.getItem("islah_read_messages");
+      return saved ? new Set(JSON.parse(saved)) : new Set();
+    } catch {
+      return new Set();
+    }
+  });
+
+  // Helpers to identify active pending alerts vs resolved/archived records
+  const isPendingAlert = (a: any) => {
+    const s = (a.status || "").toLowerCase().trim();
+    return s === "pending" || s === "under review" || s === "submitted" || !a.status;
+  };
+
+  const isUnreadMessage = (m: any) => {
+    const s = (m.status || "").toLowerCase().trim();
+    return s === "unread" || s === "new" || !m.status;
+  };
+
+  // Click-outside references
+  const notificationsRef = useRef<HTMLDivElement>(null);
+  const messagesRef = useRef<HTMLDivElement>(null);
+  const userDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Load real applications & contact inquiries from backend with auto-sync
+  useEffect(() => {
+    let isMounted = true;
+    async function fetchHeaderData() {
+      try {
+        const [appsRes, contactsRes] = await Promise.all([
+          api.listApplications(undefined, { force: true }),
+          api.listContacts({ limit: 10 }, { force: true }),
+        ]);
+
+        if (isMounted) {
+          if (appsRes?.success && Array.isArray(appsRes.data)) {
+            setNotifications(appsRes.data);
+          }
+          if (contactsRes?.success && Array.isArray(contactsRes.data)) {
+            setMessages(contactsRes.data);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load header alerts:", err);
+      }
+    }
+
+    fetchHeaderData();
+    const interval = setInterval(fetchHeaderData, 20000); // 20s live sync
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  // Compute live dynamic counts
+  const activePendingAlerts = notifications.filter(isPendingAlert);
+  const unreadAlertsCount = activePendingAlerts.filter((n) => !readNotificationIds.has(n._id)).length;
+
+  const unreadMessagesList = messages.filter((m) => isUnreadMessage(m) && !readMessageIds.has(m._id));
+  const unreadMessagesCount = unreadMessagesList.length;
+
+  const handleMarkAllAlertsRead = () => {
+    const next = new Set(readNotificationIds);
+    notifications.forEach((n) => next.add(n._id));
+    setReadNotificationIds(next);
+    try {
+      localStorage.setItem("islah_read_notifications", JSON.stringify(Array.from(next)));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleNotificationClick = (id: string) => {
+    setReadNotificationIds((prev) => {
+      const next = new Set(prev).add(id);
+      try {
+        localStorage.setItem("islah_read_notifications", JSON.stringify(Array.from(next)));
+      } catch (e) {}
+      return next;
+    });
+    setNotificationsOpen(false);
+  };
+
+  const handleMarkAllMessagesRead = () => {
+    const next = new Set(readMessageIds);
+    messages.forEach((m) => {
+      next.add(m._id);
+      if (isUnreadMessage(m)) {
+        api.updateContactStatus(m._id, "Read").catch(() => {});
+      }
+    });
+    setReadMessageIds(next);
+    try {
+      localStorage.setItem("islah_read_messages", JSON.stringify(Array.from(next)));
+    } catch (e) {}
+  };
+
+  const handleMessageClick = (msg: any) => {
+    setReadMessageIds((prev) => {
+      const next = new Set(prev).add(msg._id);
+      try {
+        localStorage.setItem("islah_read_messages", JSON.stringify(Array.from(next)));
+      } catch (e) {}
+      return next;
+    });
+    if (isUnreadMessage(msg)) {
+      api.updateContactStatus(msg._id, "Read").catch(() => {});
+    }
+    setMessagesOpen(false);
+  };
+
+  // Handle click outside to auto-close popovers
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (notificationsRef.current && !notificationsRef.current.contains(event.target as Node)) {
+        setNotificationsOpen(false);
+      }
+      if (messagesRef.current && !messagesRef.current.contains(event.target as Node)) {
+        setMessagesOpen(false);
+      }
+      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target as Node)) {
+        setUserDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // Accordion state for expandable navigation items
   const [expanded, setExpanded] = useState<Record<string, boolean>>({
@@ -386,37 +534,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             {sidebarOpen && <span className="tracking-wide">Settings</span>}
           </Link>
         </nav>
-
-        {/* Sidebar Footer User Info */}
-        <div className="p-3 border-t border-[#0f2744] bg-[#051120]">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5 overflow-hidden">
-              <div className="w-8 h-8 rounded-md bg-[#163c6c] border border-blue-400/30 flex items-center justify-center text-xs font-black text-white shrink-0">
-                {user?.name?.slice(0, 2).toUpperCase() || "IM"}
-              </div>
-              {sidebarOpen && (
-                <div className="truncate text-left">
-                  <p className="text-xs font-bold text-white truncate">{user?.name || "Imteyazullah"}</p>
-                  <p className="text-[10px] text-[#f97316] font-semibold">Super Admin</p>
-                </div>
-              )}
-            </div>
-
-            <button
-              onClick={logout}
-              title="Sign Out"
-              className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-md transition cursor-pointer"
-            >
-              <LogOut className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
       </aside>
 
       {/* ── MAIN CONTENT CANVAS ── */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* ── TOP HEADER (SEARCH + NOTIFICATIONS + ADMIN PILL) ── */}
-        <header className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shadow-2xs z-10 sticky top-0">
+        <header className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shadow-2xs z-50 sticky top-0">
           {/* Global Search Bar */}
           <div className="relative w-full max-w-md">
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -443,30 +566,227 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               <span>Live Website</span>
             </a>
 
-            {/* Notification Bell with Badge */}
-            <div className="relative">
+            {/* Notification Bell with Live Dynamic Count */}
+            <div className="relative" ref={notificationsRef}>
               <button
-                className="p-2 text-slate-600 hover:text-[#071527] hover:bg-slate-100 rounded-full transition relative cursor-pointer"
-                title="Notifications"
+                onClick={() => {
+                  setNotificationsOpen(!notificationsOpen);
+                  setMessagesOpen(false);
+                  setUserDropdownOpen(false);
+                }}
+                className={`p-2 rounded-full transition relative cursor-pointer ${
+                  notificationsOpen ? "bg-slate-100 text-[#071527]" : "text-slate-600 hover:text-[#071527] hover:bg-slate-100"
+                }`}
+                title="Notifications & Approvals"
               >
                 <Bell className="w-4 h-4" />
-                <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-white">
-                  5
-                </span>
+                {unreadAlertsCount > 0 && (
+                  <span className="absolute top-1 right-1 min-w-[16px] h-4 px-1 bg-red-500 text-white text-[9px] font-black rounded-full flex items-center justify-center border-2 border-white animate-pulse">
+                    {unreadAlertsCount}
+                  </span>
+                )}
               </button>
+
+              {notificationsOpen && (
+                <div
+                  style={{ backgroundColor: "#ffffff", opacity: 1, zIndex: 99999 }}
+                  className="cms-popover absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35)] border border-slate-200 py-0 z-[99999] overflow-hidden"
+                >
+                  <div className="px-4 py-3 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Bell className="w-4 h-4 text-[#f97316]" />
+                      <span className="font-extrabold text-xs text-slate-800">Pending Approvals &amp; Alerts</span>
+                      {unreadAlertsCount > 0 ? (
+                        <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-700">
+                          {unreadAlertsCount}
+                        </span>
+                      ) : (
+                        <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                          0
+                        </span>
+                      )}
+                    </div>
+                    {notifications.length > 0 && (
+                      <button
+                        onClick={handleMarkAllAlertsRead}
+                        className="text-[10px] text-slate-500 hover:text-[#f97316] font-semibold cursor-pointer"
+                      >
+                        Mark all read
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="max-h-80 overflow-y-auto divide-y divide-slate-100 bg-white">
+                    {activePendingAlerts.length === 0 ? (
+                      <div className="p-6 text-center text-slate-400 text-xs bg-white">
+                        <CheckCircle2 className="w-8 h-8 text-emerald-500 mx-auto mb-2 opacity-80" />
+                        <p className="font-bold text-slate-700">All caught up!</p>
+                        <p className="text-[11px] text-slate-400 mt-0.5">No pending applications or critical alerts requiring action.</p>
+                      </div>
+                    ) : (
+                      activePendingAlerts.slice(0, 6).map((item) => {
+                        const isRead = readNotificationIds.has(item._id);
+                        return (
+                          <Link
+                            key={item._id}
+                            to="/membership/applications"
+                            onClick={() => handleNotificationClick(item._id)}
+                            style={{ backgroundColor: isRead ? "#ffffff" : "#fffaf5" }}
+                            className="p-3.5 hover:bg-slate-50 transition flex items-start gap-3 block text-left"
+                          >
+                            <div className="w-8 h-8 rounded-lg bg-orange-100 text-[#f97316] flex items-center justify-center shrink-0 mt-0.5">
+                              <FileCheck2 className="w-4 h-4" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center justify-between gap-1">
+                                <p className={`text-xs truncate ${isRead ? "text-slate-600 font-semibold" : "text-slate-900 font-bold"}`}>
+                                  {item.type ? item.type.toUpperCase() : "APPLICATION"}: {item.fullName || "New Applicant"}
+                                </p>
+                                <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 font-bold border border-amber-200/50 shrink-0">
+                                  {item.status || "Pending"}
+                                </span>
+                              </div>
+                              <p className="text-[11px] text-slate-500 truncate mt-0.5">
+                                {item.email || item.phone || "Awaiting administrative review"}
+                              </p>
+                              <p className="text-[10px] text-slate-400 mt-1">
+                                {item.createdAt ? new Date(item.createdAt).toLocaleDateString("en-IN", { month: "short", day: "numeric" }) : "Recent"}
+                              </p>
+                            </div>
+                          </Link>
+                        );
+                      })
+                    )}
+                  </div>
+
+                  <div className="p-2.5 bg-slate-50 border-t border-slate-100 text-center">
+                    <Link
+                      to="/membership/applications"
+                      onClick={() => setNotificationsOpen(false)}
+                      className="text-xs font-bold text-[#f97316] hover:text-[#ea580c] transition block py-1"
+                    >
+                      View All Applications &rarr;
+                    </Link>
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* Messages Mail with Badge */}
-            <div className="relative">
+            {/* Messages Mail with Live Dynamic Count */}
+            <div className="relative" ref={messagesRef}>
               <button
-                className="p-2 text-slate-600 hover:text-[#071527] hover:bg-slate-100 rounded-full transition relative cursor-pointer"
-                title="Messages"
+                onClick={() => {
+                  setMessagesOpen(!messagesOpen);
+                  setNotificationsOpen(false);
+                  setUserDropdownOpen(false);
+                }}
+                className={`p-2 rounded-full transition relative cursor-pointer ${
+                  messagesOpen ? "bg-slate-100 text-[#071527]" : "text-slate-600 hover:text-[#071527] hover:bg-slate-100"
+                }`}
+                title="Inbound Messages & Enquiries"
               >
                 <Mail className="w-4 h-4" />
-                <span className="absolute top-1 right-1 w-4 h-4 bg-[#f97316] text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-white">
-                  3
-                </span>
+                {unreadMessagesCount > 0 && (
+                  <span className="absolute top-1 right-1 min-w-[16px] h-4 px-1 bg-[#f97316] text-white text-[9px] font-black rounded-full flex items-center justify-center border-2 border-white animate-pulse">
+                    {unreadMessagesCount}
+                  </span>
+                )}
               </button>
+
+              {messagesOpen && (
+                <div
+                  style={{ backgroundColor: "#ffffff", opacity: 1, zIndex: 99999 }}
+                  className="cms-popover absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35)] border border-slate-200 py-0 z-[99999] overflow-hidden"
+                >
+                  <div className="px-4 py-3 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Mail className="w-4 h-4 text-[#f97316]" />
+                      <span className="font-extrabold text-xs text-slate-800">Inbound Enquiries &amp; Messages</span>
+                      {unreadMessagesCount > 0 ? (
+                        <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-orange-100 text-[#f97316]">
+                          {unreadMessagesCount} unread
+                        </span>
+                      ) : (
+                        <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                          0 unread
+                        </span>
+                      )}
+                    </div>
+                    {messages.length > 0 && (
+                      <button
+                        onClick={handleMarkAllMessagesRead}
+                        className="text-[10px] text-slate-500 hover:text-[#f97316] font-semibold cursor-pointer"
+                      >
+                        Mark all read
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="max-h-80 overflow-y-auto divide-y divide-slate-100 bg-white">
+                    {messages.length === 0 ? (
+                      <div className="p-8 text-center text-slate-400 text-xs bg-white">
+                        <Inbox className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+                        <p className="font-bold text-slate-700">No inbound messages</p>
+                        <p className="text-[11px] text-slate-400 mt-0.5">Public inquiries from the contact form will appear here in real time.</p>
+                      </div>
+                    ) : (
+                      messages.slice(0, 6).map((item) => {
+                        const isUnread = isUnreadMessage(item) && !readMessageIds.has(item._id);
+                        return (
+                          <Link
+                            key={item._id}
+                            to="/communications"
+                            onClick={() => handleMessageClick(item)}
+                            style={{ backgroundColor: isUnread ? "#fffaf5" : "#ffffff" }}
+                            className="p-3.5 hover:bg-slate-50 transition flex items-start gap-3 block text-left"
+                          >
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 border ${
+                              isUnread ? "bg-orange-100 text-[#f97316] border-orange-200" : "bg-slate-100 text-slate-600 border-slate-200"
+                            }`}>
+                              {item.name ? item.name.slice(0, 2).toUpperCase() : "IN"}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center justify-between gap-1">
+                                <p className={`text-xs truncate ${isUnread ? "font-extrabold text-slate-900" : "font-semibold text-slate-700"}`}>
+                                  {item.name || "Anonymous Inquirer"}
+                                </p>
+                                {isUnread ? (
+                                  <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-orange-100 text-[#f97316] font-bold shrink-0">
+                                    New
+                                  </span>
+                                ) : (
+                                  <span className="text-[9px] text-slate-400 shrink-0 font-medium">
+                                    {item.status || "Read"}
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-[11px] font-semibold text-slate-700 truncate mt-0.5">
+                                {item.subject || "General Enquiry"}
+                              </p>
+                              <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">
+                                {item.message || "No message body"}
+                              </p>
+                              <p className="text-[10px] text-slate-400 mt-1">
+                                {item.createdAt ? new Date(item.createdAt).toLocaleDateString("en-IN", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "Recent"}
+                              </p>
+                            </div>
+                          </Link>
+                        );
+                      })
+                    )}
+                  </div>
+
+                  <div className="p-2.5 bg-slate-50 border-t border-slate-100 text-center">
+                    <Link
+                      to="/communications"
+                      onClick={() => setMessagesOpen(false)}
+                      className="text-xs font-bold text-[#f97316] hover:text-[#ea580c] transition block py-1"
+                    >
+                      View All Inquiries &rarr;
+                    </Link>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Fullscreen Button */}
@@ -479,9 +799,13 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             </button>
 
             {/* User Profile Pill & Dropdown */}
-            <div className="relative">
+            <div className="relative" ref={userDropdownRef}>
               <button
-                onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                onClick={() => {
+                  setUserDropdownOpen(!userDropdownOpen);
+                  setNotificationsOpen(false);
+                  setMessagesOpen(false);
+                }}
                 className="flex items-center gap-2.5 p-1.5 pl-2 hover:bg-slate-100 rounded-lg transition cursor-pointer border border-transparent hover:border-slate-200"
               >
                 <div className="w-8 h-8 rounded-full bg-[#071527] text-white flex items-center justify-center font-black text-xs border border-[#163c6c] shadow-2xs">
@@ -497,7 +821,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               </button>
 
               {userDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-52 bg-white rounded-lg shadow-xl border border-slate-200 py-1.5 z-50 animate-in fade-in duration-100 text-xs">
+                <div
+                  style={{ backgroundColor: "#ffffff", opacity: 1, zIndex: 99999 }}
+                  className="cms-popover absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35)] border border-slate-200 py-1.5 z-[99999] text-xs"
+                >
                   <div className="px-3.5 py-2 border-b border-slate-100">
                     <p className="font-bold text-slate-800">{user?.name || "Imteyazullah"}</p>
                     <p className="text-[11px] text-slate-500">{user?.email || "admin@islah.org"}</p>
@@ -533,7 +860,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </header>
 
         {/* ── WORKSPACE VIEWPORT ── */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-[#f8fafc]">
+        <main className="cms-canvas flex-1 overflow-y-auto p-4 md:p-6 bg-[#f8fafc]">
           {children}
         </main>
       </div>

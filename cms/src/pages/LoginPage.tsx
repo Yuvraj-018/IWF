@@ -15,7 +15,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/dashboard", { replace: true });
+      navigate("/", { replace: true });
     }
   }, [isAuthenticated, navigate]);
 
@@ -32,7 +32,7 @@ export default function LoginPage() {
 
     if (res.success) {
       toast.success("Welcome back! Control session initialized.");
-      navigate("/dashboard", { replace: true });
+      navigate("/", { replace: true });
     } else {
       toast.error(res.message || "Invalid credentials.");
     }

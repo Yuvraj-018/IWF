@@ -290,15 +290,15 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
       )}
 
       {/* Top Header Card */}
-      <div className="bg-[#0b1b32] border border-[#163156] rounded-2xl p-6 shadow-xl relative overflow-hidden">
+      <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-2xs relative overflow-hidden">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-1">
-            <div className="flex items-center gap-2 text-xs font-semibold text-emerald-400 uppercase tracking-wider">
+            <div className="flex items-center gap-2 text-xs font-semibold text-emerald-700 uppercase tracking-wider">
               <Building2 className="w-4 h-4" />
               <span>Automated Bank Reconciliation Engine</span>
             </div>
-            <h1 className="text-2xl font-bold text-white tracking-tight">Bank & Settlement Reconciliation</h1>
-            <p className="text-slate-400 text-sm max-w-2xl">
+            <h1 className="text-2xl font-black text-slate-900 tracking-tight">Bank &amp; Settlement Reconciliation</h1>
+            <p className="text-slate-500 text-sm max-w-2xl">
               Match official bank statement feeds with payment gateway settlements and manual donation receipts to guarantee zero discrepancy.
             </p>
           </div>
@@ -309,7 +309,7 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
               <select
                 value={selectedAccountId}
                 onChange={(e) => setSelectedAccountId(e.target.value)}
-                className="bg-[#0e2444] border border-[#1f4273] rounded-xl px-4 py-2.5 text-sm text-white font-medium focus:outline-none focus:border-emerald-500 pr-8"
+                className="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 font-medium focus:outline-none focus:border-emerald-500 pr-8 shadow-2xs"
               >
                 {bankAccounts.map((acc) => (
                   <option key={acc._id} value={acc._id}>
@@ -324,7 +324,7 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
               <select
                 value={selectedStatementId}
                 onChange={(e) => setSelectedStatementId(e.target.value)}
-                className="bg-[#0e2444] border border-[#1f4273] rounded-xl px-3 py-2.5 text-xs text-slate-300 font-medium focus:outline-none focus:border-emerald-500"
+                className="bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-700 font-medium focus:outline-none focus:border-emerald-500 shadow-2xs"
               >
                 <option value="">All Uploaded Statements</option>
                 {statements.map((s) => (
@@ -340,7 +340,7 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
             <button
               onClick={handleAutoMatch}
               disabled={autoMatching}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#f97316] hover:bg-[#ea580c] text-white shadow-xs rounded-xl text-sm font-medium shadow-md transition disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#f97316] hover:bg-[#ea580c] text-white shadow-xs rounded-xl text-sm font-bold shadow-md transition disabled:opacity-50 cursor-pointer"
             >
               <Sparkles className={`w-4 h-4 ${autoMatching ? "animate-spin" : ""}`} />
               <span>{autoMatching ? "Matching..." : "Auto-Match All"}</span>
@@ -349,56 +349,56 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
             {/* Upload Button */}
             <button
               onClick={() => setIsUploadOpen(true)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#14325a] hover:bg-[#1a3e6f] border border-[#234b80] text-slate-200 rounded-xl text-sm font-medium transition"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-800 rounded-xl text-sm font-bold transition shadow-2xs cursor-pointer"
             >
-              <Upload className="w-4 h-4 text-emerald-400" />
+              <Upload className="w-4 h-4 text-emerald-600" />
               <span>Upload CSV</span>
             </button>
           </div>
         </div>
 
         {/* 4 Summary Stat Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 pt-6 border-t border-[#163156]/80">
-          <div className="bg-[#091628]/70 border border-[#132d52] rounded-xl p-3.5">
-            <span className="text-xs text-slate-400 font-medium">Total Statement Credits</span>
-            <div className="text-lg font-bold text-emerald-400 mt-0.5">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 pt-6 border-t border-slate-100">
+          <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5">
+            <span className="text-xs text-slate-500 font-medium">Total Statement Credits</span>
+            <div className="text-lg font-black text-emerald-700 mt-0.5">
               ₹ {Number(summary.totalCreditsRupees || 0).toLocaleString("en-IN")}
             </div>
             <div className="text-[11px] text-slate-500 mt-0.5 flex items-center gap-1">
-              <ArrowDownLeft className="w-3 h-3 text-emerald-400" />
-              Inflow from donors & settlements
+              <ArrowDownLeft className="w-3 h-3 text-emerald-600" />
+              Inflow from donors &amp; settlements
             </div>
           </div>
 
-          <div className="bg-[#091628]/70 border border-[#132d52] rounded-xl p-3.5">
-            <span className="text-xs text-slate-400 font-medium">Total Statement Debits</span>
-            <div className="text-lg font-bold text-amber-400 mt-0.5">
+          <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5">
+            <span className="text-xs text-slate-500 font-medium">Total Statement Debits</span>
+            <div className="text-lg font-black text-amber-700 mt-0.5">
               ₹ {Number(summary.totalDebitsRupees || 0).toLocaleString("en-IN")}
             </div>
             <div className="text-[11px] text-slate-500 mt-0.5 flex items-center gap-1">
-              <ArrowUpRight className="w-3 h-3 text-amber-400" />
-              Program expenses & bank fees
+              <ArrowUpRight className="w-3 h-3 text-amber-600" />
+              Program expenses &amp; bank fees
             </div>
           </div>
 
-          <div className="bg-[#091628]/70 border border-[#132d52] rounded-xl p-3.5">
-            <span className="text-xs text-slate-400 font-medium">Reconciled Volume</span>
-            <div className="text-lg font-bold text-teal-300 mt-0.5">
+          <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5">
+            <span className="text-xs text-slate-500 font-medium">Reconciled Volume</span>
+            <div className="text-lg font-black text-teal-700 mt-0.5">
               ₹ {Number(summary.reconciledRupees || 0).toLocaleString("en-IN")}
             </div>
             <div className="text-[11px] text-slate-500 mt-0.5 flex items-center gap-1">
-              <CheckCircle2 className="w-3 h-3 text-teal-400" />
+              <CheckCircle2 className="w-3 h-3 text-teal-600" />
               {summary.counts?.matched || 0} transaction lines verified
             </div>
           </div>
 
-          <div className="bg-[#091628]/70 border border-[#132d52] rounded-xl p-3.5">
-            <span className="text-xs text-slate-400 font-medium">Unmatched Discrepancy</span>
-            <div className={`text-lg font-bold mt-0.5 ${summary.discrepancyRupees > 0 ? "text-rose-400" : "text-slate-400"}`}>
+          <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5">
+            <span className="text-xs text-slate-500 font-medium">Unmatched Discrepancy</span>
+            <div className={`text-lg font-black mt-0.5 ${summary.discrepancyRupees > 0 ? "text-rose-600" : "text-slate-500"}`}>
               ₹ {Number(summary.discrepancyRupees || 0).toLocaleString("en-IN")}
             </div>
             <div className="text-[11px] text-slate-500 mt-0.5 flex items-center gap-1">
-              <AlertCircle className="w-3 h-3 text-rose-400" />
+              <AlertCircle className="w-3 h-3 text-rose-500" />
               {summary.counts?.unmatched || 0} lines requiring action
             </div>
           </div>
@@ -408,11 +408,11 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
       {/* Interactive Two-Pane Workspace */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Pane: Statement Lines (7 Cols) */}
-        <div className="lg:col-span-7 bg-[#0b1b32] border border-[#163156] rounded-2xl shadow-xl overflow-hidden">
+        <div className="lg:col-span-7 bg-white border border-slate-200/90 rounded-2xl shadow-2xs overflow-hidden">
           {/* Filter Bar & Tabs */}
-          <div className="p-4 border-b border-[#163156] bg-[#0d213d] flex flex-wrap items-center justify-between gap-3">
+          <div className="p-4 border-b border-slate-100 bg-slate-50/50 flex flex-wrap items-center justify-between gap-3">
             {/* Tabs */}
-            <div className="flex items-center gap-1.5 p-1 bg-[#081527] rounded-xl border border-[#19365c]">
+            <div className="flex items-center gap-1.5 p-1 bg-white rounded-xl border border-slate-200">
               {(
                 [
                   { id: "unmatched", label: "Unmatched", count: summary.counts?.unmatched },
@@ -425,17 +425,17 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition flex items-center gap-1.5 ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition flex items-center gap-1.5 cursor-pointer ${
                     activeTab === tab.id
-                      ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
-                      : "text-slate-400 hover:text-white"
+                      ? "bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                   }`}
                 >
                   <span>{tab.label}</span>
                   {tab.count !== undefined && (
                     <span
                       className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                        activeTab === tab.id ? "bg-emerald-500/30 text-emerald-200" : "bg-slate-800 text-slate-400"
+                        activeTab === tab.id ? "bg-emerald-100 text-emerald-800" : "bg-slate-100 text-slate-500"
                       }`}
                     >
                       {tab.count}
@@ -453,13 +453,13 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
                 placeholder="Search narration, ref..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-[#081527] border border-[#19365c] rounded-xl pl-8 pr-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 placeholder-slate-500"
+                className="w-full bg-white border border-slate-200 rounded-xl pl-8 pr-3 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-emerald-500 placeholder-slate-400"
               />
             </div>
           </div>
 
           {/* Statement Lines Table / List */}
-          <div className="divide-y divide-[#163156]/60 max-h-[620px] overflow-y-auto">
+          <div className="divide-y divide-slate-100 max-h-[620px] overflow-y-auto">
             {lines.length === 0 ? (
               <div className="p-12 text-center text-slate-400">
                 <FileSpreadsheet className="w-12 h-12 text-slate-600 mx-auto mb-3" />
@@ -478,13 +478,13 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
                     onClick={() => setSelectedLine(line)}
                     className={`p-4 transition cursor-pointer flex items-center justify-between gap-4 ${
                       isSelected
-                        ? "bg-emerald-950/30 border-l-4 border-l-emerald-400"
-                        : "hover:bg-[#0e2444]/60"
+                        ? "bg-emerald-50 border-l-4 border-l-emerald-600"
+                        : "hover:bg-slate-50"
                     }`}
                   >
                     <div className="space-y-1 min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="text-[11px] font-mono text-slate-400">
+                        <span className="text-[11px] font-mono text-slate-500 font-medium">
                           {new Date(line.date).toLocaleDateString("en-IN", {
                             day: "2-digit",
                             month: "short",
@@ -492,44 +492,44 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
                           })}
                         </span>
                         {line.reference && (
-                          <span className="text-[10px] bg-[#122846] text-slate-300 font-mono px-2 py-0.5 rounded border border-[#1c3c69]">
+                          <span className="text-[10px] bg-slate-100 text-slate-700 font-mono px-2 py-0.5 rounded border border-slate-200">
                             {line.reference}
                           </span>
                         )}
                         {/* Status Badge */}
                         <span
-                          className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+                          className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                             line.matchStatus === "matched"
-                              ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+                              ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
                               : line.matchStatus === "suggested"
-                              ? "bg-cyan-500/15 text-cyan-300 border border-cyan-500/30"
+                              ? "bg-cyan-50 text-cyan-700 border border-cyan-200"
                               : line.matchStatus === "ignored"
-                              ? "bg-slate-700/50 text-slate-400 border border-slate-600/30"
-                              : "bg-amber-500/15 text-amber-300 border border-amber-500/30"
+                              ? "bg-slate-100 text-slate-600 border border-slate-200"
+                              : "bg-amber-50 text-amber-700 border border-amber-200"
                           }`}
                         >
                           {line.matchStatus.toUpperCase()}
                         </span>
                       </div>
 
-                      <p className="text-sm text-slate-200 font-medium truncate" title={line.narration}>
+                      <p className="text-sm text-slate-900 font-bold truncate" title={line.narration}>
                         {line.narration}
                       </p>
 
                       {line.notes && (
-                        <p className="text-[11px] text-slate-400 italic truncate">{line.notes}</p>
+                        <p className="text-[11px] text-slate-500 italic truncate">{line.notes}</p>
                       )}
                     </div>
 
                     <div className="text-right flex-shrink-0">
                       <div
                         className={`text-sm font-bold font-mono ${
-                          isCredit ? "text-emerald-400" : "text-amber-400"
+                          isCredit ? "text-emerald-700" : "text-amber-700"
                         }`}
                       >
                         {isCredit ? "+" : "-"} ₹ {amount.toLocaleString("en-IN")}
                       </div>
-                      <span className="text-[10px] text-slate-500 uppercase tracking-wider">
+                      <span className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">
                         {isCredit ? "Credit (Deposit)" : "Debit (Disbursement)"}
                       </span>
                     </div>
@@ -543,18 +543,18 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
         {/* Right Pane: Match Inspector & Action Hub (5 Cols) */}
         <div className="lg:col-span-5 space-y-6">
           {selectedLine ? (
-            <div className="bg-[#0b1b32] border border-[#163156] rounded-2xl p-6 shadow-xl space-y-6">
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-2xs space-y-6">
               {/* Header */}
-              <div className="flex items-center justify-between border-b border-[#163156] pb-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-4">
                 <div className="space-y-0.5">
-                  <div className="text-xs text-slate-400 font-medium">Reconciliation Inspector</div>
-                  <h3 className="text-base font-bold text-white">Line Details</h3>
+                  <div className="text-xs text-slate-500 font-medium">Reconciliation Inspector</div>
+                  <h3 className="text-base font-bold text-slate-900">Line Details</h3>
                 </div>
                 <span
-                  className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
+                  className={`text-xs font-bold px-2.5 py-1 rounded-full ${
                     selectedLine.matchStatus === "matched"
-                      ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
-                      : "bg-amber-500/20 text-amber-300 border border-amber-500/40"
+                      ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                      : "bg-amber-50 text-amber-700 border border-amber-200"
                   }`}
                 >
                   {selectedLine.matchStatus.toUpperCase()}
@@ -562,11 +562,11 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
               </div>
 
               {/* Selected Line Card */}
-              <div className="bg-[#071527] border border-[#142e50] rounded-xl p-4 space-y-3">
+              <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-4 space-y-3">
                 <div className="flex justify-between items-start">
                   <div>
-                    <span className="text-[11px] text-slate-400">Statement Date</span>
-                    <div className="text-sm font-medium text-white">
+                    <span className="text-[11px] text-slate-500 font-medium">Statement Date</span>
+                    <div className="text-sm font-bold text-slate-900">
                       {new Date(selectedLine.date).toLocaleDateString("en-IN", {
                         day: "2-digit",
                         month: "long",
@@ -575,10 +575,10 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-[11px] text-slate-400">Amount</span>
+                    <span className="text-[11px] text-slate-500 font-medium">Amount</span>
                     <div
-                      className={`text-base font-bold font-mono ${
-                        selectedLine.creditPaise > 0 ? "text-emerald-400" : "text-amber-400"
+                      className={`text-base font-black font-mono ${
+                        selectedLine.creditPaise > 0 ? "text-emerald-700" : "text-amber-700"
                       }`}
                     >
                       ₹ {((selectedLine.creditPaise || selectedLine.debitPaise) / 100).toLocaleString("en-IN")}
@@ -587,16 +587,16 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
                 </div>
 
                 <div>
-                  <span className="text-[11px] text-slate-400">Bank Narration</span>
-                  <div className="text-xs text-slate-200 bg-[#0c203b] p-2.5 rounded-lg border border-[#18365e] font-mono break-all mt-1">
+                  <span className="text-[11px] text-slate-500 font-medium">Bank Narration</span>
+                  <div className="text-xs text-slate-800 bg-white p-2.5 rounded-lg border border-slate-200 font-mono break-all mt-1">
                     {selectedLine.narration}
                   </div>
                 </div>
 
                 {selectedLine.reference && (
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-400">Reference / UTR:</span>
-                    <span className="font-mono text-emerald-300 font-medium">{selectedLine.reference}</span>
+                    <span className="text-slate-500">Reference / UTR:</span>
+                    <span className="font-mono text-emerald-700 font-bold">{selectedLine.reference}</span>
                   </div>
                 )}
               </div>
@@ -604,16 +604,16 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
               {/* State 1: Line is Already Matched */}
               {selectedLine.matchStatus === "matched" ? (
                 <div className="space-y-4">
-                  <div className="p-4 bg-emerald-950/20 border border-emerald-500/30 rounded-xl space-y-2">
-                    <div className="flex items-center gap-2 text-emerald-400 font-semibold text-xs">
-                      <CheckCircle2 className="w-4 h-4" />
+                  <div className="p-4 bg-emerald-50/70 border border-emerald-200 rounded-xl space-y-2">
+                    <div className="flex items-center gap-2 text-emerald-800 font-bold text-xs">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                       <span>Successfully Reconciled with Ledger</span>
                     </div>
-                    <p className="text-xs text-slate-300">
+                    <p className="text-xs text-slate-600">
                       This statement line has been paired with an immutable ledger entry.
                     </p>
                     {selectedLine.matchedLedgerEntryId && (
-                      <div className="text-xs font-mono text-slate-300 bg-[#071527] p-2 rounded border border-[#163156] mt-2">
+                      <div className="text-xs font-mono text-slate-700 bg-white p-2 rounded border border-slate-200 mt-2">
                         Ledger ID: {typeof selectedLine.matchedLedgerEntryId === "object" ? selectedLine.matchedLedgerEntryId.entryNo || selectedLine.matchedLedgerEntryId._id : selectedLine.matchedLedgerEntryId}
                       </div>
                     )}
@@ -621,7 +621,7 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
 
                   <button
                     onClick={handleUnmatch}
-                    className="w-full py-2.5 px-4 bg-[#142e50] hover:bg-rose-950/50 hover:text-rose-200 border border-[#204575] hover:border-rose-500/50 text-slate-300 rounded-xl text-xs font-medium transition flex items-center justify-center gap-2"
+                    className="w-full py-2.5 px-4 bg-slate-50 hover:bg-rose-50 hover:text-rose-700 border border-slate-200 hover:border-rose-200 text-slate-700 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <X className="w-4 h-4" />
                     <span>Unlink / Revert Match</span>
@@ -631,17 +631,17 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
                 /* State 2: Unmatched or Suggested */
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-                      <Link2 className="w-3.5 h-3.5 text-emerald-400" />
+                    <span className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                      <Link2 className="w-3.5 h-3.5 text-emerald-600" />
                       Matching Ledger Candidates
                     </span>
-                    {loadingCandidates && <span className="text-[11px] text-slate-400 animate-pulse">Searching...</span>}
+                    {loadingCandidates && <span className="text-[11px] text-slate-500 animate-pulse">Searching...</span>}
                   </div>
 
                   {candidates.length === 0 ? (
-                    <div className="p-6 bg-[#071527] border border-[#142e50] rounded-xl text-center space-y-2">
-                      <HelpCircle className="w-8 h-8 text-slate-600 mx-auto" />
-                      <p className="text-xs text-slate-300 font-medium">No matching ledger records found.</p>
+                    <div className="p-6 bg-slate-50 border border-slate-200 rounded-xl text-center space-y-2">
+                      <HelpCircle className="w-8 h-8 text-slate-400 mx-auto" />
+                      <p className="text-xs text-slate-700 font-semibold">No matching ledger records found.</p>
                       <p className="text-[11px] text-slate-500">
                         This bank transaction does not match any existing donation or expense record.
                       </p>
@@ -651,31 +651,31 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
                       {candidates.map((cand) => (
                         <div
                           key={cand.ledgerEntryId}
-                          className="p-3 bg-[#071527] border border-[#183a66] hover:border-emerald-500/50 rounded-xl space-y-2 transition"
+                          className="p-3 bg-white border border-slate-200 hover:border-emerald-300 rounded-xl space-y-2 transition shadow-2xs"
                         >
                           <div className="flex items-center justify-between">
-                            <span className="text-xs font-mono font-bold text-white">{cand.entryNo}</span>
+                            <span className="text-xs font-mono font-bold text-slate-900">{cand.entryNo}</span>
                             <span
-                              className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+                              className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                                 cand.confidence === "high"
-                                  ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
-                                  : "bg-blue-500/20 text-blue-300 border border-blue-500/40"
+                                  ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                                  : "bg-blue-50 text-blue-700 border border-blue-200"
                               }`}
                             >
                               {cand.confidence.toUpperCase()} CONFIDENCE
                             </span>
                           </div>
 
-                          <div className="flex items-center justify-between text-xs text-slate-300">
-                            <span>{cand.head}</span>
-                            <span className="font-mono font-bold text-emerald-400">
+                          <div className="flex items-center justify-between text-xs text-slate-600">
+                            <span className="font-medium">{cand.head}</span>
+                            <span className="font-mono font-bold text-emerald-700">
                               ₹ {cand.amountRupees.toLocaleString("en-IN")}
                             </span>
                           </div>
 
                           <button
                             onClick={() => handleConfirmMatch(cand.ledgerEntryId)}
-                            className="w-full py-1.5 bg-[#f97316] hover:bg-[#ea580c] text-white rounded-lg text-xs font-medium transition flex items-center justify-center gap-1.5"
+                            className="w-full py-1.5 bg-[#f97316] hover:bg-[#ea580c] text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
                           >
                             <Check className="w-3.5 h-3.5" />
                             <span>Confirm Match & Reconcile</span>
@@ -686,7 +686,7 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
                   )}
 
                   {/* Actions for Unmatched Lines */}
-                  <div className="pt-4 border-t border-[#163156] space-y-2">
+                  <div className="pt-4 border-t border-slate-100 space-y-2">
                     {selectedLine.creditPaise > 0 && (
                       <button
                         onClick={() => {
@@ -696,7 +696,7 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
                           }));
                           setIsDirectIncomeOpen(true);
                         }}
-                        className="w-full py-2.5 px-4 bg-[#071527] hover:bg-[#f97316] text-white shadow-xs rounded-xl text-xs font-medium shadow transition flex items-center justify-center gap-2"
+                        className="w-full py-2.5 px-4 bg-[#071527] hover:bg-[#f97316] text-white shadow-2xs rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer"
                       >
                         <PlusCircle className="w-4 h-4" />
                         <span>Record as Direct Income & Reconcile</span>
@@ -705,7 +705,7 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
 
                     <button
                       onClick={handleIgnoreLine}
-                      className="w-full py-2 px-4 bg-[#081527] hover:bg-[#0f284a] border border-[#19365c] text-slate-400 hover:text-slate-200 rounded-xl text-xs font-medium transition"
+                      className="w-full py-2 px-4 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-600 hover:text-slate-900 rounded-xl text-xs font-semibold transition cursor-pointer"
                     >
                       Ignore / Bank Charge Adjustment
                     </button>
@@ -714,9 +714,9 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
               )}
             </div>
           ) : (
-            <div className="bg-[#0b1b32] border border-[#163156] rounded-2xl p-12 text-center text-slate-400 shadow-xl">
-              <Eye className="w-10 h-10 text-slate-600 mx-auto mb-3" />
-              <p className="text-sm font-medium">Select a statement line on the left</p>
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-12 text-center text-slate-400 shadow-2xs">
+              <Eye className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+              <p className="text-sm font-semibold text-slate-700">Select a statement line on the left</p>
               <p className="text-xs text-slate-500 mt-1">
                 Inspect matched ledger entries or pair unmatched lines to maintain zero discrepancy.
               </p>
@@ -727,16 +727,16 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
 
       {/* Upload Bank Statement Modal */}
       {isUploadOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0b1b32] border border-[#1c3e6b] rounded-2xl max-w-xl w-full p-6 shadow-2xl space-y-5 animate-in fade-in zoom-in-95">
-            <div className="flex items-center justify-between border-b border-[#163156] pb-4">
+        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 rounded-2xl max-w-xl w-full p-6 shadow-2xl space-y-5 animate-in fade-in zoom-in-95">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
               <div className="flex items-center gap-2.5">
-                <FileSpreadsheet className="w-5 h-5 text-emerald-400" />
-                <h3 className="text-lg font-bold text-white">Upload Bank Statement CSV</h3>
+                <FileSpreadsheet className="w-5 h-5 text-emerald-600" />
+                <h3 className="text-lg font-bold text-slate-900">Upload Bank Statement CSV</h3>
               </div>
               <button
                 onClick={() => setIsUploadOpen(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg"
+                className="text-slate-400 hover:text-slate-600 p-1 rounded-lg"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -744,11 +744,11 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
 
             <form onSubmit={handleUploadSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">Disbursing / Depository Bank Account</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">Disbursing / Depository Bank Account</label>
                 <select
                   value={selectedAccountId}
                   onChange={(e) => setSelectedAccountId(e.target.value)}
-                  className="w-full bg-[#081527] border border-[#19365c] rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500"
                 >
                   {bankAccounts.map((a) => (
                     <option key={a._id} value={a._id}>
@@ -760,11 +760,11 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
 
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <label className="block text-xs font-medium text-slate-300">Paste Bank Statement CSV Text</label>
+                  <label className="block text-xs font-bold text-slate-700">Paste Bank Statement CSV Text</label>
                   <button
                     type="button"
                     onClick={fillSampleCsv}
-                    className="text-[11px] text-emerald-400 hover:underline font-medium"
+                    className="text-[11px] text-emerald-600 hover:underline font-bold"
                   >
                     + Paste Sample SBI / HDFC CSV
                   </button>
@@ -774,26 +774,26 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
                   value={uploadCsvText}
                   onChange={(e) => setUploadCsvText(e.target.value)}
                   placeholder="Txn Date,Description,Ref No,Debit,Credit,Balance&#10;01/04/2025,Donation via UPI,UPI123456,,25000.00,1025000.00"
-                  className="w-full bg-[#081527] border border-[#19365c] rounded-xl p-3 text-xs font-mono text-white focus:outline-none focus:border-emerald-500 placeholder-slate-600"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-mono text-slate-900 focus:outline-none focus:border-emerald-500 placeholder-slate-400"
                   required
                 />
-                <p className="text-[11px] text-slate-400 mt-1">
+                <p className="text-[11px] text-slate-500 mt-1">
                   Supports SBI, HDFC, ICICI, Axis, or standard columns: Date, Description, Ref, Debit, Credit, Balance.
                 </p>
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#163156]">
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setIsUploadOpen(false)}
-                  className="px-4 py-2 bg-[#122846] hover:bg-[#18365e] text-slate-300 rounded-xl text-xs font-medium transition"
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={uploading}
-                  className="px-5 py-2 bg-[#f97316] hover:bg-[#ea580c] text-white rounded-xl text-xs font-medium shadow-md transition disabled:opacity-50 flex items-center gap-2"
+                  className="px-5 py-2 bg-[#f97316] hover:bg-[#ea580c] text-white rounded-xl text-xs font-bold shadow-md transition disabled:opacity-50 flex items-center gap-2 cursor-pointer"
                 >
                   {uploading ? (
                     <>
@@ -815,69 +815,69 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
 
       {/* Direct Income Entry Modal */}
       {isDirectIncomeOpen && selectedLine && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0b1b32] border border-[#1c3e6b] rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5 animate-in fade-in zoom-in-95">
-            <div className="flex items-center justify-between border-b border-[#163156] pb-4">
+        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5 animate-in fade-in zoom-in-95">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
               <div className="flex items-center gap-2.5">
-                <PlusCircle className="w-5 h-5 text-teal-400" />
-                <h3 className="text-lg font-bold text-white">Record Direct Bank Income</h3>
+                <PlusCircle className="w-5 h-5 text-teal-600" />
+                <h3 className="text-lg font-bold text-slate-900">Record Direct Bank Income</h3>
               </div>
               <button
                 onClick={() => setIsDirectIncomeOpen(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg"
+                className="text-slate-400 hover:text-slate-600 p-1 rounded-lg"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="bg-[#071527] p-3 rounded-xl border border-[#142e50] flex justify-between items-center text-xs">
-              <span className="text-slate-400">Statement Credit Amount:</span>
-              <span className="text-emerald-400 font-bold font-mono text-sm">
+            <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 flex justify-between items-center text-xs">
+              <span className="text-slate-500 font-medium">Statement Credit Amount:</span>
+              <span className="text-emerald-700 font-black font-mono text-sm">
                 ₹ {(selectedLine.creditPaise / 100).toLocaleString("en-IN")}
               </span>
             </div>
 
             <form onSubmit={handleDirectIncomeSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Donor Name *</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Donor Name *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Ayesha Khan or Corporate Partner"
                   value={directIncomeDonor.donorName}
                   onChange={(e) => setDirectIncomeDonor({ ...directIncomeDonor, donorName: e.target.value })}
-                  className="w-full bg-[#081527] border border-[#19365c] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Email</label>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Email</label>
                   <input
                     type="email"
                     value={directIncomeDonor.email}
                     onChange={(e) => setDirectIncomeDonor({ ...directIncomeDonor, email: e.target.value })}
-                    className="w-full bg-[#081527] border border-[#19365c] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-emerald-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Phone</label>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Phone</label>
                   <input
                     type="text"
                     value={directIncomeDonor.phone}
                     onChange={(e) => setDirectIncomeDonor({ ...directIncomeDonor, phone: e.target.value })}
-                    className="w-full bg-[#081527] border border-[#19365c] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-emerald-500"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Work Area / Sector</label>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Work Area / Sector</label>
                   <select
                     value={directIncomeDonor.workAreaId}
                     onChange={(e) => setDirectIncomeDonor({ ...directIncomeDonor, workAreaId: e.target.value })}
-                    className="w-full bg-[#081527] border border-[#19365c] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-emerald-500"
                   >
                     <option value="EDU">Education & Learning (EDU)</option>
                     <option value="HLT">Healthcare & Well-being (HLT)</option>
@@ -890,29 +890,29 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Donor PAN (Optional)</label>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Donor PAN (Optional)</label>
                   <input
                     type="text"
                     placeholder="ABCDE1234F"
                     value={directIncomeDonor.pan}
                     onChange={(e) => setDirectIncomeDonor({ ...directIncomeDonor, pan: e.target.value.toUpperCase() })}
-                    className="w-full bg-[#081527] border border-[#19365c] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-emerald-500 font-mono"
                   />
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#163156]">
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setIsDirectIncomeOpen(false)}
-                  className="px-4 py-2 bg-[#122846] hover:bg-[#18365e] text-slate-300 rounded-xl text-xs font-medium transition"
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={savingDirectIncome}
-                  className="px-5 py-2 bg-[#f97316] hover:bg-[#ea580c] text-white rounded-xl text-xs font-medium shadow-md transition disabled:opacity-50"
+                  className="px-5 py-2 bg-[#f97316] hover:bg-[#ea580c] text-white rounded-xl text-xs font-bold shadow-md transition disabled:opacity-50 cursor-pointer"
                 >
                   {savingDirectIncome ? "Recording & Reconciling..." : "Save & Reconcile"}
                 </button>

@@ -107,10 +107,9 @@ export default function DashboardOverview() {
   const categoryData = rawCategories.length > 0
     ? rawCategories.filter((c: any) => c.amount > 0)
     : [
-        { name: "Education", percentage: 25, amount: 25000, color: "#38bdf8" },
-        { name: "Healthcare", percentage: 75, amount: 75000, color: "#0284c7" },
+        { name: "General Fund", percentage: 100, amount: 0, color: "#10b981" },
       ];
-  const totalCategoryAmount = financeData?.donationsByCategory?.total || financeData?.kpis?.totalDonations?.amount || 100000;
+  const totalCategoryAmount = financeData?.donationsByCategory?.total ?? (financeData?.kpis?.totalDonations?.amount ?? (dbStats?.totalDonations ?? 0));
 
   // 3. Live Financial Trend from DB
   const financialTrendData = financeData?.donationTrends?.data?.map((d: any) => ({
@@ -193,7 +192,7 @@ export default function DashboardOverview() {
             <span className="text-xs font-semibold text-slate-600">Total Donations</span>
           </div>
           <div className="mt-3">
-            <h3 className="text-xl font-black text-slate-900 tracking-tight">{financeData?.kpis?.totalDonations?.formatted || (dbStats?.totalDonations ? "₹ " + dbStats.totalDonations.toLocaleString("en-IN") : "₹ 1,00,000")}</h3>
+            <h3 className="text-xl font-black text-slate-900 tracking-tight">{financeData?.kpis?.totalDonations?.formatted || (dbStats?.totalDonations != null ? "₹ " + Number(dbStats.totalDonations).toLocaleString("en-IN") : "₹ 0")}</h3>
             <div className="flex items-center justify-between mt-1">
               <span className="text-xs font-bold text-emerald-600">↑ 12%</span>
               <Sparkline color="#f97316" />
@@ -278,7 +277,7 @@ export default function DashboardOverview() {
             <span className="text-xs font-semibold text-slate-600">Available Balance</span>
           </div>
           <div className="mt-3">
-            <h3 className="text-xl font-black text-slate-900 tracking-tight">{financeData?.monthlyFinancialSummary?.formattedNetBalance || "₹ 1,00,000"}</h3>
+            <h3 className="text-xl font-black text-slate-900 tracking-tight">{financeData?.monthlyFinancialSummary?.formattedNetBalance || (financeData?.kpis?.totalDonations?.formatted || (dbStats?.totalDonations != null ? "₹ " + Number(dbStats.totalDonations).toLocaleString("en-IN") : "₹ 0"))}</h3>
             <div className="flex items-center justify-between mt-1">
               <span className="text-[11px] font-medium text-emerald-600">Reconciled</span>
               <Sparkline color="#06b6d4" />
@@ -355,7 +354,7 @@ export default function DashboardOverview() {
                 <Coins className="w-3.5 h-3.5" />
               </div>
               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tight">Total Income</span>
-              <p className="text-xs font-black text-slate-900 mt-0.5">{financeData?.monthlyFinancialSummary?.formattedIncome || "₹ 1,00,000"}</p>
+              <p className="text-xs font-black text-slate-900 mt-0.5">{financeData?.monthlyFinancialSummary?.formattedIncome || (financeData?.kpis?.totalDonations?.formatted || (dbStats?.totalDonations != null ? "₹ " + Number(dbStats.totalDonations).toLocaleString("en-IN") : "₹ 0"))}</p>
               <span className="text-[10px] font-bold text-emerald-600 mt-0.5">↑ 12%</span>
             </div>
 
@@ -375,7 +374,7 @@ export default function DashboardOverview() {
                 <Scale className="w-3.5 h-3.5" />
               </div>
               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tight">Net Balance</span>
-              <p className="text-xs font-black text-slate-900 mt-0.5">{financeData?.monthlyFinancialSummary?.formattedNetBalance || "₹ 1,00,000"}</p>
+              <p className="text-xs font-black text-slate-900 mt-0.5">{financeData?.monthlyFinancialSummary?.formattedNetBalance || (financeData?.kpis?.totalDonations?.formatted || (dbStats?.totalDonations != null ? "₹ " + Number(dbStats.totalDonations).toLocaleString("en-IN") : "₹ 0"))}</p>
               <span className="text-[10px] font-bold text-blue-600 mt-0.5">Surplus</span>
             </div>
           </div>
@@ -802,93 +801,42 @@ export default function DashboardOverview() {
       </div>
 
       {/* ═════════════════════════════════════════════════════════════
-          5. BOTTOM ROW: (SYSTEM HEALTH, RECENT DONATIONS, UPCOMING EVENTS)
+          5. BOTTOM ROW: RECENT DONATIONS & LIVE ANNOUNCEMENTS
           ═════════════════════════════════════════════════════════════ */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
-        {/* Col 1: System Health (4 cols) */}
-        <div className="lg:col-span-4 bg-white rounded-xl border border-slate-200/90 p-4 shadow-2xs flex flex-col justify-between">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-            <h3 className="text-sm font-bold text-slate-900">System Health</h3>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span>All Systems Operational</span>
-            </span>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3.5 my-3">
-            {/* Health 1 */}
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <div>
-                <p className="text-xs font-bold text-slate-800">Database Connection</p>
-                <p className="text-[10px] text-emerald-600 font-semibold">Healthy</p>
-              </div>
+        {/* Col 1: Recent Verified Donations (7 cols) */}
+        <div className="lg:col-span-7 bg-white rounded-xl border border-slate-200/90 p-4.5 shadow-2xs flex flex-col justify-between">
+          <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
+            <div>
+              <h3 className="text-sm font-bold text-slate-900">Recent Verified Donations</h3>
+              <p className="text-[11px] text-slate-500 mt-0.5">Live incoming transactions from payment gateway &amp; direct deposits</p>
             </div>
-
-            {/* Health 2 */}
-            <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-blue-600 shrink-0" />
-              <div>
-                <p className="text-xs font-bold text-slate-800">Last Backup</p>
-                <p className="text-[10px] text-slate-500 font-medium">28 Apr 2025, 02:00 AM</p>
-              </div>
-            </div>
-
-            {/* Health 3 */}
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <div>
-                <p className="text-xs font-bold text-slate-800">Payment Gateway</p>
-                <p className="text-[10px] text-emerald-600 font-semibold">Razorpay Healthy</p>
-              </div>
-            </div>
-
-            {/* Health 4 */}
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <div>
-                <p className="text-xs font-bold text-slate-800">Website / API</p>
-                <p className="text-[10px] text-emerald-600 font-semibold">Running (Port 5000)</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-            <span>Email Service: <strong className="text-emerald-700">Operational</strong></span>
-            <span>Latency: <strong className="text-slate-800">24ms</strong></span>
-          </div>
-        </div>
-
-        {/* Col 2: Recent Donations (5 cols) */}
-        <div className="lg:col-span-5 bg-white rounded-xl border border-slate-200/90 p-4 shadow-2xs flex flex-col justify-between">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-            <h3 className="text-sm font-bold text-slate-900">Recent Donations</h3>
             <Link to="/finance/transactions" className="text-xs font-bold text-[#f97316] hover:text-[#ea580c] flex items-center gap-0.5">
               <span>View All</span>
               <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
 
-          <div className="overflow-x-auto my-auto">
+          <div className="overflow-x-auto my-auto pt-2">
             <table className="w-full text-left text-xs">
               <thead>
                 <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                  <th className="py-2">Date</th>
-                  <th className="py-2">Donor Name</th>
-                  <th className="py-2">Amount</th>
-                  <th className="py-2">Method</th>
-                  <th className="py-2 text-right">Status</th>
+                  <th className="py-2.5">Date</th>
+                  <th className="py-2.5">Donor Name</th>
+                  <th className="py-2.5">Amount</th>
+                  <th className="py-2.5">Method</th>
+                  <th className="py-2.5 text-right">Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {financeData?.recentTransactions && financeData.recentTransactions.length > 0 ? (
-                  financeData.recentTransactions.slice(0, 5).map((tx: any) => (
+                  financeData.recentTransactions.slice(0, 6).map((tx: any) => (
                     <tr key={tx.id || tx.receiptNo} className="hover:bg-slate-50/70 transition">
-                      <td className="py-2 text-slate-500 font-medium">{tx.date}</td>
-                      <td className="py-2 font-bold text-slate-800">{tx.donorName}</td>
-                      <td className="py-2 font-bold text-slate-900">{tx.formattedAmount || `₹${Number(tx.amount).toLocaleString('en-IN')}`}</td>
-                      <td className="py-2 text-slate-600">{tx.paymentMethod}</td>
-                      <td className="py-2 text-right">
+                      <td className="py-2.5 text-slate-500 font-medium">{tx.date}</td>
+                      <td className="py-2.5 font-bold text-slate-800">{tx.donorName}</td>
+                      <td className="py-2.5 font-black text-slate-900 font-mono">{tx.formattedAmount || `₹${Number(tx.amount).toLocaleString('en-IN')}`}</td>
+                      <td className="py-2.5 text-slate-600">{tx.paymentMethod}</td>
+                      <td className="py-2.5 text-right">
                         <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
                           tx.status === "Success" || tx.status === "Completed"
                             ? "bg-emerald-50 text-emerald-700 border-emerald-200"
@@ -901,8 +849,8 @@ export default function DashboardOverview() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={5} className="py-6 text-center text-slate-400">
-                      No donations recorded yet in database
+                    <td colSpan={5} className="py-8 text-center text-slate-400 font-medium">
+                      No recent donations recorded in database
                     </td>
                   </tr>
                 )}
@@ -911,61 +859,46 @@ export default function DashboardOverview() {
           </div>
         </div>
 
-        {/* Col 3: Upcoming Events (3 cols) */}
-        <div className="lg:col-span-3 bg-white rounded-xl border border-slate-200/90 p-4 shadow-2xs flex flex-col justify-between">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-            <h3 className="text-sm font-bold text-slate-900">Upcoming Events</h3>
+        {/* Col 2: Recent News & Events (5 cols) */}
+        <div className="lg:col-span-5 bg-white rounded-xl border border-slate-200/90 p-4.5 shadow-2xs flex flex-col justify-between">
+          <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
+            <div>
+              <h3 className="text-sm font-bold text-slate-900">Recent Events &amp; News</h3>
+              <p className="text-[11px] text-slate-500 mt-0.5">Published bulletins &amp; activities</p>
+            </div>
             <Link to="/news" className="text-xs font-bold text-[#f97316] hover:text-[#ea580c] flex items-center gap-0.5">
-              <span>View All</span>
+              <span>Manage</span>
               <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
 
-          <div className="space-y-2.5 my-auto">
-            {/* Event 1 */}
-            <div className="flex items-center gap-2.5 p-1.5 rounded-lg hover:bg-slate-50 transition">
-              <div className="w-10 h-10 rounded-md bg-[#071527] text-white flex flex-col items-center justify-center shrink-0 leading-none">
-                <span className="text-xs font-black">05</span>
-                <span className="text-[9px] uppercase font-bold text-[#f97316]">May</span>
+          <div className="space-y-2.5 my-auto pt-2">
+            {dbStats?.recentNews && dbStats.recentNews.length > 0 ? (
+              dbStats.recentNews.slice(0, 4).map((item: any, idx: number) => (
+                <div key={item._id || idx} className="flex items-center justify-between p-2.5 rounded-xl border border-slate-100 bg-slate-50/50 hover:bg-slate-50 transition">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-8 h-8 rounded-lg bg-orange-100 text-[#f97316] flex items-center justify-center shrink-0">
+                      <Calendar className="w-4 h-4" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs font-bold text-slate-800 truncate">{item.title}</p>
+                      <p className="text-[10px] text-slate-400 mt-0.5">
+                        {item.category || "General"} • {item.date ? new Date(item.date).toLocaleDateString("en-IN") : "Recent"}
+                      </p>
+                    </div>
+                  </div>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0 ml-2">
+                    Published
+                  </span>
+                </div>
+              ))
+            ) : (
+              <div className="py-8 text-center text-slate-400 text-xs">
+                <Calendar className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+                <p className="font-semibold text-slate-600">No events or news published</p>
+                <p className="text-[11px] text-slate-400 mt-0.5">Publish articles in the Website &amp; CMS manager.</p>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-bold text-slate-800 truncate">Community Health Camp</p>
-                <p className="text-[10px] text-slate-500 truncate">Darbhanga • 8:00 AM - 2:00 PM</p>
-              </div>
-              <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                Confirmed
-              </span>
-            </div>
-
-            {/* Event 2 */}
-            <div className="flex items-center gap-2.5 p-1.5 rounded-lg hover:bg-slate-50 transition">
-              <div className="w-10 h-10 rounded-md bg-[#071527] text-white flex flex-col items-center justify-center shrink-0 leading-none">
-                <span className="text-xs font-black">12</span>
-                <span className="text-[9px] uppercase font-bold text-[#f97316]">May</span>
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-bold text-slate-800 truncate">Education Support Workshop</p>
-                <p className="text-[10px] text-slate-500 truncate">New Delhi • 10:00 AM - 1:00 PM</p>
-              </div>
-              <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                Confirmed
-              </span>
-            </div>
-
-            {/* Event 3 */}
-            <div className="flex items-center gap-2.5 p-1.5 rounded-lg hover:bg-slate-50 transition">
-              <div className="w-10 h-10 rounded-md bg-[#071527] text-white flex flex-col items-center justify-center shrink-0 leading-none">
-                <span className="text-xs font-black">18</span>
-                <span className="text-[9px] uppercase font-bold text-[#f97316]">May</span>
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-bold text-slate-800 truncate">Volunteer Training Session</p>
-                <p className="text-[10px] text-slate-500 truncate">Patna • 2:00 PM - 4:00 PM</p>
-              </div>
-              <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
-                Pending
-              </span>
-            </div>
+            )}
           </div>
         </div>
       </div>

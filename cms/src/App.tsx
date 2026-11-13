@@ -498,12 +498,12 @@ export default function App() {
             }
           />
 
-          {/* 10. Communications */}
+          {/* 10. Communications & Inbound Inquiries */}
           <Route
             path="/communications"
             element={
               <ProtectedRoute>
-                <CommunicationsModule />
+                <ApplicationsManager initialTab="contact_inquiries" />
               </ProtectedRoute>
             }
           />
@@ -511,7 +511,7 @@ export default function App() {
             path="/communications/notifications"
             element={
               <ProtectedRoute>
-                <CommunicationsModule />
+                <ApplicationsManager initialTab="all" />
               </ProtectedRoute>
             }
           />
@@ -519,7 +519,7 @@ export default function App() {
             path="/communications/email"
             element={
               <ProtectedRoute>
-                <CommunicationsModule />
+                <ApplicationsManager initialTab="contact_inquiries" />
               </ProtectedRoute>
             }
           />

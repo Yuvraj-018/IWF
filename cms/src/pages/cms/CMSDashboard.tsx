@@ -435,9 +435,9 @@ export default function CMSDashboard() {
         {/* Col 1: Page Management (5 cols on lg) */}
         <div className="lg:col-span-5 bg-white rounded-xl border border-slate-200/90 p-4.5 shadow-2xs flex flex-col justify-between">
           <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-            <h3 className="text-sm font-bold text-slate-900">Page Management</h3>
+            <h3 className="text-sm font-bold text-slate-900">Website Navigation &amp; Pages</h3>
             <Link to="/settings" className="text-xs font-bold text-[#f97316] hover:text-[#ea580c] flex items-center gap-0.5">
-              <span>View All</span>
+              <span>Settings</span>
               <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
@@ -446,88 +446,50 @@ export default function CMSDashboard() {
             <table className="w-full text-left text-xs">
               <thead>
                 <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                  <th className="py-2">Page Title</th>
-                  <th className="py-2">Status</th>
-                  <th className="py-2">Last Updated</th>
-                  <th className="py-2 text-right">Action</th>
+                  <th className="py-2.5">Page Title</th>
+                  <th className="py-2.5">Route</th>
+                  <th className="py-2.5">Status</th>
+                  <th className="py-2.5 text-right">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                <tr className="hover:bg-slate-50/70 transition">
-                  <td className="py-2 font-bold text-slate-800">About ISLAH</td>
-                  <td className="py-2">
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                      Published
-                    </span>
-                  </td>
-                  <td className="py-2 text-slate-500">Apr 28, 2025</td>
-                  <td className="py-2 text-right">
-                    <div className="inline-flex items-center gap-1.5 text-slate-400">
-                      <button className="hover:text-[#f97316] cursor-pointer"><Eye className="w-3.5 h-3.5" /></button>
-                      <button className="hover:text-blue-600 cursor-pointer"><Edit className="w-3.5 h-3.5" /></button>
-                    </div>
-                  </td>
-                </tr>
-                <tr className="hover:bg-slate-50/70 transition">
-                  <td className="py-2 font-bold text-slate-800">Our Programmes</td>
-                  <td className="py-2">
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                      Published
-                    </span>
-                  </td>
-                  <td className="py-2 text-slate-500">Apr 27, 2025</td>
-                  <td className="py-2 text-right">
-                    <div className="inline-flex items-center gap-1.5 text-slate-400">
-                      <button className="hover:text-[#f97316] cursor-pointer"><Eye className="w-3.5 h-3.5" /></button>
-                      <button className="hover:text-blue-600 cursor-pointer"><Edit className="w-3.5 h-3.5" /></button>
-                    </div>
-                  </td>
-                </tr>
-                <tr className="hover:bg-slate-50/70 transition">
-                  <td className="py-2 font-bold text-slate-800">Get Involved</td>
-                  <td className="py-2">
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
-                      Under Review
-                    </span>
-                  </td>
-                  <td className="py-2 text-slate-500">Apr 26, 2025</td>
-                  <td className="py-2 text-right">
-                    <div className="inline-flex items-center gap-1.5 text-slate-400">
-                      <button className="hover:text-[#f97316] cursor-pointer"><Eye className="w-3.5 h-3.5" /></button>
-                      <button className="hover:text-blue-600 cursor-pointer"><Edit className="w-3.5 h-3.5" /></button>
-                    </div>
-                  </td>
-                </tr>
-                <tr className="hover:bg-slate-50/70 transition">
-                  <td className="py-2 font-bold text-slate-800">Annual Report 2024</td>
-                  <td className="py-2">
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                      Published
-                    </span>
-                  </td>
-                  <td className="py-2 text-slate-500">Apr 25, 2025</td>
-                  <td className="py-2 text-right">
-                    <div className="inline-flex items-center gap-1.5 text-slate-400">
-                      <button className="hover:text-[#f97316] cursor-pointer"><Eye className="w-3.5 h-3.5" /></button>
-                      <button className="hover:text-blue-600 cursor-pointer"><Edit className="w-3.5 h-3.5" /></button>
-                    </div>
-                  </td>
-                </tr>
-                <tr className="hover:bg-slate-50/70 transition">
-                  <td className="py-2 font-bold text-slate-800">Contact Us</td>
-                  <td className="py-2">
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                      Published
-                    </span>
-                  </td>
-                  <td className="py-2 text-slate-500">Apr 24, 2025</td>
-                  <td className="py-2 text-right">
-                    <div className="inline-flex items-center gap-1.5 text-slate-400">
-                      <button className="hover:text-[#f97316] cursor-pointer"><Eye className="w-3.5 h-3.5" /></button>
-                      <button className="hover:text-blue-600 cursor-pointer"><Edit className="w-3.5 h-3.5" /></button>
-                    </div>
-                  </td>
-                </tr>
+                {[
+                  { title: "Homepage & Hero", path: "/", status: "Live" },
+                  { title: "About Foundation", path: "/about", status: "Live" },
+                  { title: "Programmes & Sectors", path: "/programmes", status: "Live" },
+                  { title: "Get Involved & Donate", path: "/donate", status: "Live" },
+                  { title: "Contact & Support", path: "/contact", status: "Live" },
+                ].map((pg, idx) => (
+                  <tr key={idx} className="hover:bg-slate-50/70 transition">
+                    <td className="py-2.5 font-bold text-slate-800">{pg.title}</td>
+                    <td className="py-2.5 font-mono text-[11px] text-slate-500">{pg.path}</td>
+                    <td className="py-2.5">
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        {pg.status}
+                      </span>
+                    </td>
+                    <td className="py-2.5 text-right">
+                      <div className="inline-flex items-center gap-1.5 text-slate-400">
+                        <a
+                          href={`http://localhost:3000${pg.path}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="hover:text-[#f97316] cursor-pointer p-1"
+                          title="Open Page"
+                        >
+                          <Eye className="w-3.5 h-3.5" />
+                        </a>
+                        <Link
+                          to="/settings"
+                          className="hover:text-blue-600 cursor-pointer p-1"
+                          title="Manage Page Settings"
+                        >
+                          <Edit className="w-3.5 h-3.5" />
+                        </Link>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -570,7 +532,7 @@ export default function CMSDashboard() {
         {/* Col 3: Recent Activity (3 cols on lg) */}
         <div className="lg:col-span-3 bg-white rounded-xl border border-slate-200/90 p-4.5 shadow-2xs flex flex-col justify-between">
           <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-            <h3 className="text-sm font-bold text-slate-900">Recent Activity</h3>
+            <h3 className="text-sm font-bold text-slate-900">Recent Content Updates</h3>
             <Link to="/news" className="text-xs font-bold text-[#f97316] hover:text-[#ea580c] flex items-center gap-0.5">
               <span>View All</span>
               <ArrowRight className="w-3 h-3" />
@@ -585,9 +547,9 @@ export default function CMSDashboard() {
                     {item.isUpcoming ? <Calendar className="w-3.5 h-3.5" /> : <Newspaper className="w-3.5 h-3.5" />}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-bold text-slate-800 leading-tight">{item.title}</p>
+                    <p className="text-xs font-bold text-slate-800 leading-tight truncate">{item.title}</p>
                     <p className="text-[11px] text-slate-600 truncate">{item.category} • {item.location || "Bihar"}</p>
-                    <p className="text-[10px] text-slate-400">{item.date || "Recently"}</p>
+                    <p className="text-[10px] text-slate-400">{item.date ? new Date(item.date).toLocaleDateString("en-IN") : "Recent"}</p>
                   </div>
                 </div>
               ))
@@ -595,84 +557,6 @@ export default function CMSDashboard() {
               <p className="text-xs text-slate-400 py-6 text-center">No recent content recorded in database</p>
             )}
           </div>
-        </div>
-      </div>
-
-      {/* ═════════════════════════════════════════════════════════════
-          5. BOTTOM ROW: SYSTEM HEALTH & IMPACT BANNER
-          ═════════════════════════════════════════════════════════════ */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
-        {/* System Health (8 cols) */}
-        <div className="lg:col-span-8 bg-white rounded-xl border border-slate-200/90 p-4 shadow-2xs flex flex-col justify-between">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-            <h3 className="text-sm font-bold text-slate-900">System Health</h3>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span>All Systems Operational</span>
-            </span>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 my-2">
-            <div className="flex items-center gap-2">
-              <Database className="w-4 h-4 text-emerald-600 shrink-0" />
-              <div>
-                <p className="text-xs font-bold text-slate-800">Database</p>
-                <p className="text-[10px] text-emerald-600 font-semibold">Healthy</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-              <div>
-                <p className="text-xs font-bold text-slate-800">Gateway</p>
-                <p className="text-[10px] text-emerald-600 font-semibold">Razorpay Healthy</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Globe className="w-4 h-4 text-emerald-600 shrink-0" />
-              <div>
-                <p className="text-xs font-bold text-slate-800">Website / API</p>
-                <p className="text-[10px] text-emerald-600 font-semibold">Healthy</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Mail className="w-4 h-4 text-emerald-600 shrink-0" />
-              <div>
-                <p className="text-xs font-bold text-slate-800">Email Service</p>
-                <p className="text-[10px] text-emerald-600 font-semibold">Healthy</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <RefreshCw className="w-4 h-4 text-blue-600 shrink-0" />
-              <div>
-                <p className="text-xs font-bold text-slate-800">Backup</p>
-                <p className="text-[10px] text-slate-500 font-medium">3 hrs ago</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Promo Card (4 cols) */}
-        <div className="lg:col-span-4 rounded-xl bg-gradient-to-r from-[#004724] to-[#072d1a] text-white p-4.5 flex items-center justify-between shadow-2xs">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-lg bg-white/10 overflow-hidden shrink-0 flex items-center justify-center">
-              <img src="/hero_seedling.png" alt="Impact" className="w-full h-full object-contain" />
-            </div>
-            <div>
-              <h4 className="text-sm font-black text-white leading-tight">Together we create</h4>
-              <h4 className="text-sm font-black text-white leading-tight">lasting change</h4>
-            </div>
-          </div>
-          <Link
-            to="/programmes"
-            className="px-3.5 py-1.5 bg-white/15 hover:bg-white/25 border border-white/20 text-xs font-bold text-white rounded-md flex items-center gap-1 transition"
-          >
-            <span>View Impact</span>
-            <ArrowRight className="w-3 h-3 text-[#f97316]" />
-          </Link>
         </div>
       </div>
     </div>

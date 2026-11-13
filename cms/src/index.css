@@ -37,18 +37,65 @@
 }
 
 /* 1. Cards, Sections & Panels */
-.cms-canvas .bg-slate-900 {
+.cms-canvas .bg-slate-900,
+.cms-canvas .bg-\[\#0b1b32\],
+.cms-canvas .bg-\[\#0b1f3b\],
+.cms-canvas .bg-\[\#071527\],
+.cms-canvas .bg-\[\#0b1a30\],
+.cms-canvas .bg-\[\#0f223a\] {
   background-color: #ffffff !important;
   border-color: #e2e8f0 !important;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04) !important;
 }
+
 .cms-canvas .bg-slate-900\/90,
 .cms-canvas .bg-slate-900\/80,
 .cms-canvas .bg-slate-900\/60,
 .cms-canvas .bg-slate-900\/40,
-.cms-canvas .bg-\[\#0f172a\] {
-  background-color: rgba(255, 255, 255, 0.98) !important;
+.cms-canvas .bg-\[\#0f172a\],
+.cms-canvas .bg-\[\#0d213d\],
+.cms-canvas .bg-\[\#081527\],
+.cms-canvas .bg-\[\#0e2444\],
+.cms-canvas .bg-\[\#091628\],
+.cms-canvas .bg-\[\#091628\]\/70,
+.cms-canvas .bg-\[\#0c203b\] {
+  background-color: #f8fafc !important;
   border-color: #e2e8f0 !important;
+}
+
+.cms-canvas .border-\[\#163156\],
+.cms-canvas .border-\[\#163156\]\/80,
+.cms-canvas .border-\[\#163156\]\/60,
+.cms-canvas .border-\[\#132d52\],
+.cms-canvas .border-\[\#19365c\],
+.cms-canvas .border-\[\#1f4273\],
+.cms-canvas .border-\[\#234b80\],
+.cms-canvas .border-\[\#1c3e6b\],
+.cms-canvas .border-\[\#142e50\],
+.cms-canvas .border-\[\#183a66\],
+.cms-canvas .border-\[\#18365e\],
+.cms-canvas .border-\[\#1c3c69\] {
+  border-color: #e2e8f0 !important;
+}
+
+.cms-canvas select.bg-\[\#0e2444\],
+.cms-canvas input.bg-\[\#081527\],
+.cms-canvas input.bg-\[\#0e2444\] {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+.cms-canvas button.bg-\[\#14325a\],
+.cms-canvas button.bg-\[\#142e50\] {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #334155 !important;
+}
+.cms-canvas button.bg-\[\#14325a\]:hover,
+.cms-canvas button.bg-\[\#142e50\]:hover {
+  background-color: #f1f5f9 !important;
+  color: #071527 !important;
 }
 
 /* 2. Textareas, Selects & Inputs */
@@ -130,7 +177,9 @@
 .cms-canvas h2.text-white,
 .cms-canvas h3.text-white,
 .cms-canvas h4.text-white,
-.cms-canvas p.text-white {
+.cms-canvas p.text-white,
+.cms-canvas div.text-white:not([class*="bg-"]):not(button *),
+.cms-canvas span.text-white:not([class*="bg-"]):not(button *) {
   color: #071527 !important;
 }
 
@@ -176,6 +225,11 @@
 }
 
 /* 8. Modals & Dialog Windows: Solid White Surface with High-Contrast Navy Typography */
+.cms-popover {
+  background-color: #ffffff !important;
+  opacity: 1 !important;
+  z-index: 99999 !important;
+}
 .cms-canvas .fixed [class*="bg-white"],
 .cms-canvas .fixed [class*="bg-white/"],
 .cms-canvas .fixed .bg-white,
