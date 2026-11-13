@@ -53,12 +53,12 @@ export default function ExpensesManager() {
   const [expenses, setExpenses] = useState<ExpenseItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
-    totalAmount: 782450,
-    pendingCount: 3,
-    pendingAmount: 85000,
-    unpaidCount: 2,
-    unpaidAmount: 62500,
-    paidAmount: 634950,
+    totalAmount: 0,
+    pendingCount: 0,
+    pendingAmount: 0,
+    unpaidCount: 0,
+    unpaidAmount: 0,
+    paidAmount: 0,
   });
 
   // Filter & tab states
@@ -66,7 +66,7 @@ export default function ExpensesManager() {
   const [search, setSearch] = useState("");
   const [head, setHead] = useState("all");
   const [workAreaId, setWorkAreaId] = useState("all");
-  const [fy, setFy] = useState("2025-26");
+  const [fy, setFy] = useState("all");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [pagination, setPagination] = useState({ total: 0, pages: 1 });
@@ -97,84 +97,10 @@ export default function ExpensesManager() {
         setPagination(res.pagination);
       }
     } catch (err: any) {
-      console.warn("Failed to fetch expenses, using verified baseline:", err.message);
-      setExpenses([
-        {
-          _id: "exp-1",
-          expenseNo: "EXP-2025-00042",
-          date: "2025-04-28",
-          amount: 35000,
-          amountPaise: 3500000,
-          head: "Medical Support",
-          workAreaId: "HLT",
-          initiativeId: "Critical Care Patient Fund",
-          payee: { name: "Apollo Med Pharmacy", pan: "AAACA1234A", gstin: "07AAACA1234A1Z5" },
-          invoiceRef: "INV-APL-8821",
-          description: "ICU medication & surgical supplies for emergency medical aid patient",
-          evidenceUrls: ["/docs/sample_invoice.pdf"],
-          status: "approved",
-          payment: { status: "unpaid" },
-          approval: { status: "approved", reviewedBy: "Imteyazullah", reviewedAt: "2025-04-28T11:00:00Z" },
-          createdBy: "accountant_rashid",
-          createdAt: "2025-04-28T09:00:00Z",
-        },
-        {
-          _id: "exp-2",
-          expenseNo: "EXP-2025-00041",
-          date: "2025-04-26",
-          amount: 27500,
-          amountPaise: 2750000,
-          head: "Programme Activities",
-          workAreaId: "EDU",
-          initiativeId: "Slum Learning Centers",
-          payee: { name: "National Book Trust", pan: "AAATN9876Q" },
-          invoiceRef: "INV-NBT-4412",
-          description: "Textbooks, notebooks, and learning toolkits for 150 primary students",
-          evidenceUrls: [],
-          status: "approved",
-          payment: { status: "paid", date: "2025-04-27", method: "Bank Transfer", reference: "UTR-SBI-992211" },
-          approval: { status: "approved", reviewedBy: "Imteyazullah" },
-          createdBy: "programme_officer",
-          createdAt: "2025-04-26T14:00:00Z",
-        },
-        {
-          _id: "exp-3",
-          expenseNo: "EXP-2025-00040",
-          date: "2025-04-25",
-          amount: 50000,
-          amountPaise: 5000000,
-          head: "Administration",
-          workAreaId: "HLT",
-          payee: { name: "City Diagnostics Lab", pan: "AABCC5544R" },
-          invoiceRef: "INV-CDL-0912",
-          description: "Pathology diagnostic tests and MRI scans for underprivileged patients",
-          evidenceUrls: [],
-          status: "submitted",
-          payment: { status: "unpaid" },
-          approval: { status: "pending" },
-          createdBy: "field_coordinator",
-          createdAt: "2025-04-25T10:30:00Z",
-        },
-        {
-          _id: "exp-4",
-          expenseNo: "EXP-2025-00039",
-          date: "2025-04-22",
-          amount: 12000,
-          amountPaise: 1200000,
-          head: "Travel & Logistics",
-          workAreaId: "HRR",
-          payee: { name: "Super Transport Logistics", pan: "AAACT7766M" },
-          invoiceRef: "INV-STL-2134",
-          description: "Transport of food grain kits to flood-affected rural hamlets",
-          evidenceUrls: [],
-          status: "approved",
-          payment: { status: "paid", date: "2025-04-23", method: "Bank Transfer", reference: "UTR-SBI-443322" },
-          approval: { status: "approved", reviewedBy: "Imteyazullah" },
-          createdBy: "relief_manager",
-          createdAt: "2025-04-22T08:00:00Z",
-        },
-      ]);
-      setPagination({ total: 4, pages: 1 });
+      console.error("Failed to fetch expenses:", err.message);
+      toast.error(err.message || "Failed to fetch expenses");
+      setExpenses([]);
+      setPagination({ total: 0, pages: 1 });
     } finally {
       setLoading(false);
     }
@@ -345,7 +271,8 @@ export default function ExpensesManager() {
             className="w-full py-2 px-3 rounded-xl border border-slate-200 text-xs bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-purple-500/30"
           >
             <option value="all">All Fiscal Years</option>
-            <option value="2025-26">FY 2025-26 (Current)</option>
+            <option value="2026-27">FY 2026-27 (Current)</option>
+            <option value="2025-26">FY 2025-26</option>
             <option value="2024-25">FY 2024-25</option>
           </select>
         </div>
@@ -457,7 +384,7 @@ export default function ExpensesManager() {
                         {exp.status === "approved" && exp.payment.status === "unpaid" && (
                           <button
                             onClick={() => setPayingExpense(exp)}
-                            className="px-2 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold transition cursor-pointer"
+                            className="px-2 py-1 rounded-lg bg-[#f97316] hover:bg-[#ea580c] text-white text-[10px] font-bold transition cursor-pointer"
                           >
                             Pay
                           </button>
@@ -588,7 +515,7 @@ export default function ExpensesManager() {
                 <div className="flex items-center gap-2 pt-1">
                   <button
                     onClick={() => handleReview(selectedExpense._id, "approve")}
-                    className="flex-1 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition cursor-pointer"
+                    className="flex-1 py-2 rounded-xl bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-bold transition cursor-pointer"
                   >
                     Approve Voucher
                   </button>
@@ -620,7 +547,7 @@ export default function ExpensesManager() {
                     setPayingExpense(selectedExpense);
                     setSelectedExpense(null);
                   }}
-                  className="w-full mt-2 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition cursor-pointer"
+                  className="w-full mt-2 py-2.5 rounded-xl bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-bold transition cursor-pointer"
                 >
                   Record Bank Disbursement
                 </button>
@@ -771,7 +698,7 @@ function RecordPaymentModal({
             <button
               type="submit"
               disabled={submitting}
-              className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs"
+              className="px-5 py-2 rounded-xl bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs"
             >
               {submitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
               <span>Post Disbursement to Ledger</span>

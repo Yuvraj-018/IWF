@@ -60,10 +60,10 @@ export default function TransactionsManager() {
   const [transactions, setTransactions] = useState<TransactionItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
-    totalAmount: 4825750,
-    successCount: 42,
-    pendingCount: 5,
-    failedCount: 1,
+    totalAmount: 0,
+    successCount: 0,
+    pendingCount: 0,
+    failedCount: 0,
   });
 
   // Filter states
@@ -72,7 +72,7 @@ export default function TransactionsManager() {
   const [paymentStatus, setPaymentStatus] = useState("all");
   const [workAreaId, setWorkAreaId] = useState("all");
   const [taxExemption, setTaxExemption] = useState("all");
-  const [fy, setFy] = useState("2025-26");
+  const [fy, setFy] = useState("all");
 
   // Pagination states
   const [page, setPage] = useState(1);
@@ -111,115 +111,10 @@ export default function TransactionsManager() {
         setPagination(res.pagination);
       }
     } catch (err: any) {
-      console.warn("Transactions query failed, loading baseline records:", err.message);
-      // Fallback sample baseline matching the ISLAH financial register
-      setTransactions([
-        {
-          _id: "tx-seed-1",
-          receiptNo: "REC-2025-00128",
-          certificateNo: "CERT-2025-00128",
-          transactionId: "pay_Q1a8b9c0d1e2f3",
-          donorName: "Ayesha Khan",
-          donorType: "Individual",
-          email: "ayesha.khan@example.org",
-          phone: "9876543210",
-          amount: 50000,
-          amountPaise: 5000000,
-          paymentMode: "UPI",
-          paymentStatus: "Success",
-          financialType: "Critical Healthcare Support",
-          workAreaId: "HLT",
-          taxExemption: true,
-          pan: "ABCDE1234F",
-          city: "New Delhi",
-          state: "Delhi",
-          createdAt: "2025-04-28T10:30:00.000Z",
-        },
-        {
-          _id: "tx-seed-2",
-          receiptNo: "REC-2025-00127",
-          certificateNo: "CERT-2025-00127",
-          transactionId: "BANK-NEFT-9872134",
-          donorName: "Global Good Foundation",
-          donorType: "Corporate",
-          email: "grants@globalgood.org",
-          phone: "9123456789",
-          amount: 100000,
-          amountPaise: 10000000,
-          paymentMode: "Bank Transfer",
-          paymentStatus: "Success",
-          financialType: "Primary Education Sponsorship",
-          workAreaId: "EDU",
-          taxExemption: true,
-          pan: "AAACG1234C",
-          city: "Mumbai",
-          state: "Maharashtra",
-          createdAt: "2025-04-27T14:15:00.000Z",
-        },
-        {
-          _id: "tx-seed-3",
-          receiptNo: "REC-2025-00126",
-          certificateNo: "CERT-2025-00126",
-          transactionId: "pay_Q8z7y6x5w4v3u2",
-          donorName: "Rahul Verma",
-          donorType: "Individual",
-          email: "rahul.verma@example.com",
-          phone: "9811223344",
-          amount: 25000,
-          amountPaise: 2500000,
-          paymentMode: "Razorpay",
-          paymentStatus: "Success",
-          financialType: "Youth Livelihoods Grant",
-          workAreaId: "SLE",
-          taxExemption: true,
-          pan: "BNMPR9876Q",
-          city: "Bangalore",
-          state: "Karnataka",
-          createdAt: "2025-04-26T09:45:00.000Z",
-        },
-        {
-          _id: "tx-seed-4",
-          receiptNo: "REC-2025-00125",
-          certificateNo: "CERT-2025-00125",
-          transactionId: "UPI-COLL-448822",
-          donorName: "Fatima Rizvi",
-          donorType: "Individual",
-          email: "fatima.rizvi@example.com",
-          phone: "9988776655",
-          amount: 10000,
-          amountPaise: 1000000,
-          paymentMode: "UPI",
-          paymentStatus: "Pending",
-          financialType: "Women Skill Development",
-          workAreaId: "WYE",
-          taxExemption: false,
-          city: "Hyderabad",
-          state: "Telangana",
-          createdAt: "2025-04-25T16:20:00.000Z",
-        },
-        {
-          _id: "tx-seed-5",
-          receiptNo: "REC-2025-00124",
-          certificateNo: "CERT-2025-00124",
-          transactionId: "CHQ-002931-SBI",
-          donorName: "Office Supplies Co.",
-          donorType: "Corporate",
-          email: "accounts@officesupplies.co.in",
-          phone: "9822334455",
-          amount: 12500,
-          amountPaise: 1250000,
-          paymentMode: "Cheque",
-          paymentStatus: "Success",
-          financialType: "General Contribution",
-          workAreaId: "ENV",
-          taxExemption: true,
-          pan: "AABCO9988Z",
-          city: "Kolkata",
-          state: "West Bengal",
-          createdAt: "2025-04-24T11:00:00.000Z",
-        },
-      ]);
-      setPagination({ total: 5, pages: 1 });
+      console.error("Transactions query failed:", err.message);
+      toast.error(err.message || "Failed to load transactions");
+      setTransactions([]);
+      setPagination({ total: 0, pages: 1 });
     } finally {
       setLoading(false);
     }
@@ -269,7 +164,7 @@ export default function TransactionsManager() {
     setPaymentStatus("all");
     setWorkAreaId("all");
     setTaxExemption("all");
-    setFy("2025-26");
+    setFy("all");
     setPage(1);
   };
 
@@ -297,7 +192,7 @@ export default function TransactionsManager() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setIsRecordDonationOpen(true)}
-            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer"
+            className="px-4 py-2 bg-[#f97316] hover:bg-[#ea580c] text-white rounded-xl text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer"
           >
             <PlusCircle className="w-4 h-4" />
             <span>Record Offline Donation</span>
@@ -342,7 +237,7 @@ export default function TransactionsManager() {
           {(search || paymentMode !== "all" || paymentStatus !== "all" || workAreaId !== "all" || taxExemption !== "all") && (
             <button
               onClick={clearFilters}
-              className="text-xs font-bold text-emerald-600 hover:text-emerald-700 cursor-pointer"
+              className="text-xs font-bold text-[#f97316] hover:text-[#ea580c] cursor-pointer"
             >
               Reset Filters
             </button>
@@ -370,7 +265,8 @@ export default function TransactionsManager() {
               className="w-full py-2 px-3 rounded-xl border border-slate-200 text-xs bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
             >
               <option value="all">All Financial Years</option>
-              <option value="2025-26">FY 2025-26 (Current)</option>
+              <option value="2026-27">FY 2026-27 (Current)</option>
+              <option value="2025-26">FY 2025-26</option>
               <option value="2024-25">FY 2024-25</option>
             </select>
           </div>
@@ -735,7 +631,7 @@ export default function TransactionsManager() {
               <button
                 onClick={() => handleDownloadPdf(selectedTx.receiptNo)}
                 disabled={isDownloading}
-                className="w-full sm:flex-1 py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
+                className="w-full sm:flex-1 py-2.5 px-3 rounded-xl bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
               >
                 {isDownloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
                 <span>Download Official 80G PDF</span>
@@ -968,7 +864,7 @@ function RecordDonationModal({
             <button
               type="submit"
               disabled={submitting}
-              className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs"
+              className="px-5 py-2 rounded-xl bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs"
             >
               {submitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
               <span>Record &amp; Issue Receipt</span>

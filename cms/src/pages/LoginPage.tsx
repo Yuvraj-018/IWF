@@ -1,15 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Shield, Lock, Mail, ArrowRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Turnstile } from "../components/common/Turnstile";
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const navigate = useNavigate();
+  const { login, isAuthenticated } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [turnstileToken, setTurnstileToken] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,6 +32,7 @@ export default function LoginPage() {
 
     if (res.success) {
       toast.success("Welcome back! Control session initialized.");
+      navigate("/dashboard", { replace: true });
     } else {
       toast.error(res.message || "Invalid credentials.");
     }

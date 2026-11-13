@@ -122,6 +122,7 @@ export default function BudgetsManager() {
               onChange={(e) => setFy(e.target.value)}
               className="text-xs font-bold text-slate-800 bg-transparent focus:outline-none"
             >
+              <option value="2026-27">Financial Year 2026-27 (Current)</option>
               <option value="2025-26">Financial Year 2025-26 (Active)</option>
               <option value="2024-25">Financial Year 2024-25</option>
             </select>
@@ -338,7 +339,7 @@ function EditBudgetModal({
             <button
               type="submit"
               disabled={submitting}
-              className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs"
+              className="px-5 py-2 rounded-xl bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs"
             >
               {submitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
               <span>Save Envelope</span>

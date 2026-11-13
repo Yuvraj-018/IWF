@@ -31,7 +31,7 @@ type ReportType =
 
 export default function FinancialReportsManager() {
   const [activeReport, setActiveReport] = useState<ReportType>("80g-register");
-  const [selectedFy, setSelectedFy] = useState("2025-26");
+  const [selectedFy, setSelectedFy] = useState("2026-27");
   const [selectedSector, setSelectedSector] = useState("all");
   const [reportData, setReportData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -220,7 +220,7 @@ export default function FinancialReportsManager() {
             {/* Publish Snapshot Button */}
             <button
               onClick={() => setIsPublishModalOpen(true)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white rounded-xl text-sm font-medium shadow-md transition"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#f97316] hover:bg-[#ea580c] text-white shadow-xs rounded-xl text-sm font-medium shadow-md transition"
             >
               <Globe className="w-4 h-4" />
               <span>Publish to Website</span>
@@ -278,7 +278,8 @@ export default function FinancialReportsManager() {
                 onChange={(e) => setSelectedFy(e.target.value)}
                 className="bg-[#081527] border border-[#19365c] rounded-lg px-2.5 py-1 text-xs text-white focus:outline-none focus:border-emerald-500"
               >
-                <option value="2025-26">FY 2025-26 (Active)</option>
+                <option value="2026-27">FY 2026-27 (Current)</option>
+                <option value="2025-26">FY 2025-26</option>
                 <option value="2024-25">FY 2024-25</option>
                 <option value="2023-24">FY 2023-24</option>
               </select>
@@ -653,8 +654,9 @@ export default function FinancialReportsManager() {
                   onChange={(e) => setSnapshotFy(e.target.value)}
                   className="w-full bg-[#081527] border border-[#19365c] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-teal-500"
                 >
-                  <option value="2025-26">FY 2025-26 (Current)</option>
-                  <option value="2024-25">FY 2024-25 (Audited)</option>
+                  <option value="2026-27">FY 2026-27 (Current)</option>
+                  <option value="2025-26">FY 2025-26 (Audited)</option>
+                  <option value="2024-25">FY 2024-25</option>
                   <option value="2023-24">FY 2023-24</option>
                 </select>
               </div>
@@ -699,7 +701,7 @@ export default function FinancialReportsManager() {
                 <button
                   type="submit"
                   disabled={publishing}
-                  className="px-5 py-2 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white rounded-xl text-xs font-medium shadow-md transition disabled:opacity-50 flex items-center gap-2"
+                  className="px-5 py-2 bg-[#f97316] hover:bg-[#ea580c] text-white shadow-xs rounded-xl text-xs font-medium shadow-md transition disabled:opacity-50 flex items-center gap-2"
                 >
                   {publishing ? "Publishing Snapshot..." : "Publish Live to Website"}
                 </button>

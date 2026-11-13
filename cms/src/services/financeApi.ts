@@ -230,7 +230,7 @@ export const financeApi = {
   /**
    * Fetch overview metrics, charts and feeds
    */
-  async getFinancialDashboardOverview(params: OverviewQueryParams): Promise<{
+  async getFinancialDashboardOverview(params: OverviewQueryParams = {}): Promise<{
     success: boolean;
     data: FinancialDashboardOverviewData;
     message?: string;

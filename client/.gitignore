@@ -30,4 +30,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# Environment files
 .env
+.env.*
+.env.local
+.env.*.local
+.env.development
+.env.development.local
+.env.test
+.env.test.local
+.env.production
+.env.production.local
+!.env.example
