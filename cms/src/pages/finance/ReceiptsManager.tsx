@@ -60,79 +60,10 @@ export default function ReceiptsManager() {
         setPagination(res.pagination);
       }
     } catch (err: any) {
-      console.warn("Failed to fetch receipts, using verified baseline:", err.message);
-      setReceipts([
-        {
-          receiptNo: "REC-2025-00128",
-          certificateNo: "CERT-2025-00128",
-          donorName: "Ayesha Khan",
-          email: "ayesha.khan@example.org",
-          phone: "9876543210",
-          issueDate: "2025-04-28",
-          amount: 50000,
-          cause: "Critical Healthcare Support",
-          taxExemption: true,
-          pan: "ABCDE1234F",
-          deliveryStatus: "Sent",
-          verificationStatus: "Verified",
-        },
-        {
-          receiptNo: "REC-2025-00127",
-          certificateNo: "CERT-2025-00127",
-          donorName: "Global Good Foundation",
-          email: "grants@globalgood.org",
-          phone: "9123456789",
-          issueDate: "2025-04-27",
-          amount: 100000,
-          cause: "Primary Education Sponsorship",
-          taxExemption: true,
-          pan: "AAACG1234C",
-          deliveryStatus: "Sent",
-          verificationStatus: "Verified",
-        },
-        {
-          receiptNo: "REC-2025-00126",
-          certificateNo: "CERT-2025-00126",
-          donorName: "Rahul Verma",
-          email: "rahul.verma@example.com",
-          phone: "9811223344",
-          issueDate: "2025-04-26",
-          amount: 25000,
-          cause: "Youth Livelihoods Grant",
-          taxExemption: true,
-          pan: "BNMPR9876Q",
-          deliveryStatus: "Sent",
-          verificationStatus: "Verified",
-        },
-        {
-          receiptNo: "REC-2025-00125",
-          certificateNo: "CERT-2025-00125",
-          donorName: "Fatima Rizvi",
-          email: "fatima.rizvi@example.com",
-          phone: "9988776655",
-          issueDate: "2025-04-25",
-          amount: 10000,
-          cause: "Women Skill Development",
-          taxExemption: false,
-          deliveryStatus: "Queued",
-          verificationStatus: "Verified",
-        },
-        {
-          receiptNo: "REC-2025-00124",
-          certificateNo: "CERT-2025-00124",
-          donorName: "Office Supplies Co.",
-          email: "accounts@officesupplies.co.in",
-          phone: "9822334455",
-          issueDate: "2025-04-24",
-          amount: 12500,
-          cause: "General Contribution",
-          taxExemption: true,
-          pan: "AABCO9988Z",
-          deliveryStatus: "Sent",
-          verificationStatus: "Verified",
-        },
-      ]);
-      setPagination({ total: 5, pages: 1 });
+      console.error("Failed to fetch receipts:", err.message);
+      toast.error(err.message || "Failed to fetch receipts");
+      setReceipts([]);
+      setPagination({ total: 0, pages: 1 });
     } finally {
       setLoading(false);
     }

@@ -18,7 +18,19 @@ dist-ssr/
 # Environment files
 .env
 .env.*
+.env.local
+.env.*.local
+*.env
+client/.env
+client/.env.*
+backend/.env
+backend/.env.*
+cms/.env
+cms/.env.*
 !.env.example
+!client/.env.example
+!backend/.env.example
+!cms/.env.example
 
 # Logs
 logs

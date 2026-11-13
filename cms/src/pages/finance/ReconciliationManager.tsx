@@ -340,7 +340,7 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
             <button
               onClick={handleAutoMatch}
               disabled={autoMatching}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl text-sm font-medium shadow-md transition disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#f97316] hover:bg-[#ea580c] text-white shadow-xs rounded-xl text-sm font-medium shadow-md transition disabled:opacity-50"
             >
               <Sparkles className={`w-4 h-4 ${autoMatching ? "animate-spin" : ""}`} />
               <span>{autoMatching ? "Matching..." : "Auto-Match All"}</span>
@@ -675,7 +675,7 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
 
                           <button
                             onClick={() => handleConfirmMatch(cand.ledgerEntryId)}
-                            className="w-full py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-medium transition flex items-center justify-center gap-1.5"
+                            className="w-full py-1.5 bg-[#f97316] hover:bg-[#ea580c] text-white rounded-lg text-xs font-medium transition flex items-center justify-center gap-1.5"
                           >
                             <Check className="w-3.5 h-3.5" />
                             <span>Confirm Match & Reconcile</span>
@@ -696,7 +696,7 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
                           }));
                           setIsDirectIncomeOpen(true);
                         }}
-                        className="w-full py-2.5 px-4 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white rounded-xl text-xs font-medium shadow transition flex items-center justify-center gap-2"
+                        className="w-full py-2.5 px-4 bg-[#071527] hover:bg-[#f97316] text-white shadow-xs rounded-xl text-xs font-medium shadow transition flex items-center justify-center gap-2"
                       >
                         <PlusCircle className="w-4 h-4" />
                         <span>Record as Direct Income & Reconcile</span>
@@ -793,7 +793,7 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
                 <button
                   type="submit"
                   disabled={uploading}
-                  className="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-medium shadow-md transition disabled:opacity-50 flex items-center gap-2"
+                  className="px-5 py-2 bg-[#f97316] hover:bg-[#ea580c] text-white rounded-xl text-xs font-medium shadow-md transition disabled:opacity-50 flex items-center gap-2"
                 >
                   {uploading ? (
                     <>
@@ -912,7 +912,7 @@ ${today},Bank Maintenance & Consolidated SMS Alert Charges,CHG9921,118.00,,43075
                 <button
                   type="submit"
                   disabled={savingDirectIncome}
-                  className="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-medium shadow-md transition disabled:opacity-50"
+                  className="px-5 py-2 bg-[#f97316] hover:bg-[#ea580c] text-white rounded-xl text-xs font-medium shadow-md transition disabled:opacity-50"
                 >
                   {savingDirectIncome ? "Recording & Reconciling..." : "Save & Reconcile"}
                 </button>

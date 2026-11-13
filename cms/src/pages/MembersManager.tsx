@@ -36,22 +36,11 @@ export interface DirectoryItem {
   isPublicConsent: boolean;
 }
 
-const DEFAULT_SPOTLIGHT: DirectoryItem[] = [
-  { id: "dir-1", name: "Ayesha Khan", role: "Individual Member", type: "member", location: "Darbhanga, Bihar", category: "Blue", bio: "Educator & Social Worker", isPublicConsent: true },
-  { id: "dir-2", name: "Rahul Sharma", role: "Individual Donor", type: "donor", location: "New Delhi, Delhi", category: "Gold", bio: "Healthcare & Rural Development", isPublicConsent: true },
-  { id: "dir-3", name: "Tata Consultancy Services", role: "Corporate Partner", type: "partner", location: "Pan India", category: "Corporate Partner", bio: "Technology & Digital Skills", isPublicConsent: true },
-  { id: "dir-4", name: "Neha Verma", role: "Education Volunteer", type: "volunteer", location: "Lucknow, Uttar Pradesh", category: "Youth Volunteer", bio: "Digital Literacy & Tech", isPublicConsent: true },
-  { id: "dir-5", name: "Dr. Tariq Anwar", role: "Executive Member", type: "member", location: "Darbhanga, Bihar", category: "Yellow", bio: "Medical Consultant", isPublicConsent: true },
-  { id: "dir-6", name: "Reliance Foundation", role: "Development Partner", type: "partner", location: "Maharashtra / Bihar", category: "Development Partner", bio: "Healthcare & Rural Development", isPublicConsent: true },
-  { id: "dir-7", name: "Azim Premji Philanthropy", role: "Platinum Foundation Donor", type: "donor", location: "Pan India", category: "Platinum", bio: "Primary Education & Grassroots Health", isPublicConsent: true },
-  { id: "dir-8", name: "Dr. Ayesha Rahman", role: "Education Mentor", type: "mentor", location: "Delhi NCR", category: "Mentor", bio: "Education & Career Guidance", isPublicConsent: true },
-];
-
 export default function MembersManager() {
   const [managerTab, setManagerTab] = useState<"directory" | "ledger">("directory");
 
-  // ── Directory State ──
-  const [spotlight, setSpotlight] = useState<DirectoryItem[]>(DEFAULT_SPOTLIGHT);
+  // ── Directory State (Loaded live from DB community_directory) ──
+  const [spotlight, setSpotlight] = useState<DirectoryItem[]>([]);
   const [directoryLoading, setDirectoryLoading] = useState(true);
   const [directorySaving, setDirectorySaving] = useState(false);
   const [directoryFilter, setDirectoryFilter] = useState<"all" | "member" | "donor" | "partner" | "volunteer">("all");

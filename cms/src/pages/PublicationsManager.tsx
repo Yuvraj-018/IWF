@@ -15,6 +15,7 @@ import {
   FileText,
   UploadCloud,
   CheckCircle,
+  FileCheck2,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -98,52 +99,46 @@ export default function PublicationsManager() {
     setIsModalOpen(true);
   };
 
-  const openEditModal = (item: any) => {
-    setEditingId(item._id);
+  const openEditModal = (pub: any) => {
+    setEditingId(pub._id);
     setFormData({
-      title: item.title,
-      type: item.type,
-      authors: item.authors || "",
-      date: item.date || "",
-      summary: item.summary || "",
-      coverUrl: item.coverUrl || "",
-      downloadUrl: item.downloadUrl || "",
-      fileSize: item.fileSize || "PDF",
-      pages: item.pages || "Document",
-      featured: Boolean(item.featured),
-      order: item.order || 0,
+      title: pub.title,
+      type: pub.type || "Research Papers",
+      authors: pub.authors || "Islah Welfare Foundation Research Team",
+      date: pub.date || "",
+      summary: pub.summary || "",
+      coverUrl: pub.coverUrl || "",
+      downloadUrl: pub.downloadUrl || "",
+      fileSize: pub.fileSize || "PDF",
+      pages: pub.pages || "Document",
+      featured: pub.featured || false,
+      order: pub.order || 0,
     });
     setIsModalOpen(true);
   };
 
-  // Upload PDF Document to Cloudflare R2
-  const handlePdfUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUploadPdf = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    setUploadingPdf(true);
-    const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
-    const token = localStorage.getItem("islah_admin_token");
-    const fd = new FormData();
-    fd.append("file", file);
-    fd.append("folder", "islah/publications");
+    if (file.type !== "application/pdf") {
+      toast.error("Please upload a PDF document.");
+      return;
+    }
 
+    setUploadingPdf(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/upload/single`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: fd,
-      });
-      const data = await res.json();
-      if (data.success && data.file?.url) {
+      const res = await api.uploadSingleFile(file);
+      if (res.success && res.file?.url) {
+        const sizeStr = `${(file.size / (1024 * 1024)).toFixed(1)} MB`;
         setFormData((prev) => ({
           ...prev,
-          downloadUrl: data.file.url,
-          fileSize: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
+          downloadUrl: res.file!.url,
+          fileSize: sizeStr,
         }));
-        toast.success("Publication document uploaded to Cloudflare R2");
+        toast.success("PDF document uploaded successfully");
       } else {
-        toast.error(data.message || "Failed to upload document");
+        toast.error(res.message || "Upload failed");
       }
     } catch (err: any) {
       toast.error(err.message || "Upload failed");
@@ -152,30 +147,26 @@ export default function PublicationsManager() {
     }
   };
 
-  // Upload Cover Image
-  const handleCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUploadCover = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    setUploadingCover(true);
-    const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
-    const token = localStorage.getItem("islah_admin_token");
-    const fd = new FormData();
-    fd.append("file", file);
-    fd.append("folder", "islah/publications");
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please upload an image file for the cover");
+      return;
+    }
 
+    setUploadingCover(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/upload/single`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: fd,
-      });
-      const data = await res.json();
-      if (data.success && data.file?.url) {
-        setFormData((prev) => ({ ...prev, coverUrl: data.file.url }));
+      const res = await api.uploadSingleFile(file);
+      if (res.success && res.file?.url) {
+        setFormData((prev) => ({
+          ...prev,
+          coverUrl: res.file!.url,
+        }));
         toast.success("Cover image uploaded");
       } else {
-        toast.error(data.message || "Failed to upload cover image");
+        toast.error(res.message || "Upload failed");
       }
     } catch (err: any) {
       toast.error(err.message || "Upload failed");
@@ -232,30 +223,38 @@ export default function PublicationsManager() {
   };
 
   return (
-    <div className="space-y-6 max-w-6xl">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="space-y-6 max-w-7xl mx-auto pb-12 font-sans">
+      {/* ── TOP HEADER (CLEAN WHITE WITH NAVY BLUE AND BRAND ORANGE) ── */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
         <div>
-          <h2 className="text-xl font-black text-white flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-emerald-400" />
-            <span>Publications &amp; Research Repository</span>
-          </h2>
-          <p className="text-xs text-slate-400 mt-1">
-            Unlimited uploads with Cloudflare R2 storage and live pagination ({totalCount} total)
-          </p>
+          <div className="flex items-center gap-2.5">
+            <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-200 flex items-center justify-center text-[#f97316]">
+              <BookOpen className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className="text-lg md:text-xl font-black text-[#071527] tracking-tight">
+                Publications &amp; Research Repository
+              </h2>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Official documents, annual activity reports, newsletters, and policy dossiers ({totalCount} total)
+              </p>
+            </div>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
+
+        <div className="flex items-center gap-2.5">
           <button
             onClick={() => loadPublications(page, true)}
             disabled={loading}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition cursor-pointer"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold border border-slate-200 transition cursor-pointer shadow-xs disabled:opacity-50"
             title="Refresh"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-[#f97316]" : "text-slate-500"}`} />
             <span>Refresh</span>
           </button>
           <button
             onClick={openAddModal}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition shadow-lg shadow-emerald-900/30 cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-bold transition shadow-xs cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Upload Publication</span>
@@ -263,8 +262,8 @@ export default function PublicationsManager() {
         </div>
       </div>
 
-      {/* Filters & Search */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-900/80 p-3 rounded-2xl border border-slate-800">
+      {/* ── FILTERS & SEARCH (CLEAN WHITE WITH NAVY TABS) ── */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white p-3 rounded-2xl border border-slate-200 shadow-xs">
         <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto scrollbar-none">
           {["All", "Newsletters", "Research Papers", "Policy Briefs", "Annual Reports", "Other"].map((t) => (
             <button
@@ -273,10 +272,10 @@ export default function PublicationsManager() {
                 setSelectedType(t);
                 setPage(1);
               }}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap cursor-pointer ${
                 selectedType === t
-                  ? "bg-emerald-600 text-white"
-                  : "bg-slate-800 text-slate-400 hover:text-white"
+                  ? "bg-[#071527] text-white shadow-xs"
+                  : "bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-[#071527]"
               }`}
             >
               {t}
@@ -284,26 +283,26 @@ export default function PublicationsManager() {
           ))}
         </div>
 
-        <form onSubmit={handleSearchSubmit} className="relative w-full sm:w-64">
+        <form onSubmit={handleSearchSubmit} className="relative w-full sm:w-72">
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search publications..."
-            className="w-full pl-8 pr-3 py-1.5 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white placeholder-slate-500 outline-none focus:border-emerald-500"
+            className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-800 placeholder-slate-400 outline-none focus:bg-white focus:border-[#f97316] transition"
           />
-          <Search className="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
         </form>
       </div>
 
-      {/* List */}
+      {/* ── PUBLICATIONS LIST (CLEAN WHITE CARDS WITH OFFICIAL PALETTE) ── */}
       {loading ? (
-        <div className="p-16 flex flex-col items-center justify-center text-slate-500 gap-2">
-          <Loader2 className="w-6 h-6 animate-spin text-emerald-400" />
-          <p className="text-xs">Loading publications repository...</p>
+        <div className="p-16 flex flex-col items-center justify-center text-slate-500 gap-2 bg-white rounded-2xl border border-slate-200">
+          <Loader2 className="w-7 h-7 animate-spin text-[#f97316]" />
+          <p className="text-xs font-semibold text-slate-600">Loading publications repository...</p>
         </div>
       ) : publications.length === 0 ? (
-        <div className="p-16 rounded-2xl bg-slate-900 border border-slate-800 text-center text-slate-500 text-xs">
+        <div className="p-16 rounded-2xl bg-white border border-slate-200 text-center text-slate-500 text-xs shadow-xs">
           No publications found. Click "Upload Publication" to add reports, papers or newsletters.
         </div>
       ) : (
@@ -312,63 +311,63 @@ export default function PublicationsManager() {
             {publications.map((pub) => (
               <div
                 key={pub._id}
-                className="p-5 rounded-2xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition flex flex-col justify-between gap-4 group"
+                className="p-5 rounded-2xl bg-white border border-slate-200/90 hover:border-[#f97316]/50 transition flex flex-col justify-between gap-4 group shadow-xs"
               >
-                <div className="space-y-2">
+                <div className="space-y-2.5">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-orange-50 text-[#ea580c] border border-orange-200">
                       {pub.type}
                     </span>
                     <span className="text-[11px] font-mono text-slate-500 flex items-center gap-1">
-                      <Calendar className="w-3 h-3 text-slate-500" />
+                      <Calendar className="w-3.5 h-3.5 text-slate-400" />
                       <span>{pub.date}</span>
                     </span>
                   </div>
 
-                  <h3 className="text-base font-bold text-white group-hover:text-emerald-300 transition">
+                  <h3 className="text-sm font-bold text-[#071527] group-hover:text-[#f97316] transition">
                     {pub.title}
                   </h3>
 
-                  <div className="text-xs text-slate-400 font-medium">
+                  <div className="text-xs text-slate-500 font-medium">
                     By {pub.authors}
                   </div>
 
-                  <p className="text-xs text-slate-300 line-clamp-2 mt-1">
+                  <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
                     {pub.summary}
                   </p>
 
-                  <div className="flex items-center gap-3 pt-2 text-[11px] text-slate-400 font-mono">
-                    <span>{pub.fileSize || "PDF"}</span>
+                  <div className="flex items-center gap-3 pt-1 text-[11px] text-slate-400 font-mono">
+                    <span className="font-semibold text-slate-600">{pub.fileSize || "PDF"}</span>
                     <span>•</span>
                     <span>{pub.pages || "Document"}</span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between gap-2 pt-3 border-t border-slate-800">
+                <div className="flex items-center justify-between gap-2 pt-3 border-t border-slate-100">
                   <a
                     href={pub.downloadUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs font-bold transition"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#071527] hover:bg-[#0c2444] text-white text-xs font-bold transition shadow-xs"
                   >
-                    <Download className="w-3.5 h-3.5" />
+                    <Download className="w-3.5 h-3.5 text-[#f97316]" />
                     <span>Download PDF</span>
                   </a>
 
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => openEditModal(pub)}
-                      className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer"
+                      className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition cursor-pointer"
                       title="Edit"
                     >
-                      <Edit2 className="w-4 h-4" />
+                      <Edit2 className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={() => handleDelete(pub._id)}
-                      className="p-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 transition cursor-pointer"
+                      className="p-2 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 transition cursor-pointer"
                       title="Delete"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
@@ -378,21 +377,21 @@ export default function PublicationsManager() {
 
           {/* Pagination Controls */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-center gap-2 pt-6">
+            <div className="flex items-center justify-center gap-2 pt-4">
               <button
                 disabled={page <= 1}
                 onClick={() => setPage(page - 1)}
-                className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs font-bold text-slate-300 hover:bg-slate-800 disabled:opacity-40 cursor-pointer"
+                className="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-40 cursor-pointer shadow-xs"
               >
                 Previous
               </button>
-              <span className="text-xs text-slate-400 px-2 font-mono">
+              <span className="text-xs text-slate-600 px-2 font-mono font-semibold">
                 Page {page} of {totalPages}
               </span>
               <button
                 disabled={page >= totalPages}
                 onClick={() => setPage(page + 1)}
-                className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs font-bold text-slate-300 hover:bg-slate-800 disabled:opacity-40 cursor-pointer"
+                className="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-40 cursor-pointer shadow-xs"
               >
                 Next
               </button>
@@ -401,13 +400,13 @@ export default function PublicationsManager() {
         </div>
       )}
 
-      {/* Add / Edit Modal */}
+      {/* ── ADD / EDIT MODAL ── */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-sm overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-xs overflow-y-auto">
           <div className="bg-white border border-slate-200 rounded-3xl max-w-2xl w-full shadow-2xl my-auto max-h-[calc(100vh-2rem)] sm:max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between p-5 sm:p-6 pb-4 border-b border-slate-200 shrink-0">
               <h3 className="text-base font-extrabold text-[#071527] flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-orange-500" />
+                <BookOpen className="w-5 h-5 text-[#f97316]" />
                 <span>{editingId ? "Edit Publication Details" : "Upload New Publication"}</span>
               </h3>
               <button
@@ -427,8 +426,8 @@ export default function PublicationsManager() {
                     required
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
-                    placeholder="e.g. Annual Governance & Program Report 2024-25"
+                    className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-[#f97316]"
+                    placeholder="e.g. Annual Governance &amp; Program Report 2024-25"
                   />
                 </div>
 
@@ -438,7 +437,7 @@ export default function PublicationsManager() {
                     <select
                       value={formData.type}
                       onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                      className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
+                      className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-[#f97316]"
                     >
                       <option value="Research Papers">Research Papers</option>
                       <option value="Newsletters">Newsletters</option>
@@ -449,139 +448,79 @@ export default function PublicationsManager() {
                   </div>
 
                   <div>
-                    <label className="block text-slate-700 font-bold mb-1">Publication Date *</label>
+                    <label className="block text-slate-700 font-bold mb-1">Publishing Date *</label>
                     <input
                       type="text"
-                      required
                       value={formData.date}
                       onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                      className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
-                      placeholder="e.g. October 2024 or October 15, 2024"
+                      className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-[#f97316]"
+                      placeholder="e.g. March 2024"
                     />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-slate-700 font-bold mb-1">Authors / Directorate</label>
-                    <input
-                      type="text"
-                      value={formData.authors}
-                      onChange={(e) => setFormData({ ...formData, authors: e.target.value })}
-                      className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
-                      placeholder="Research & Monitoring Directorate"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-slate-700 font-bold mb-1">Page Count / Size Label</label>
-                    <input
-                      type="text"
-                      value={formData.pages}
-                      onChange={(e) => setFormData({ ...formData, pages: e.target.value })}
-                      className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
-                      placeholder="e.g. 24 Pages"
-                    />
-                  </div>
-                </div>
-
-                {/* PDF Document Upload to Cloudflare R2 */}
-                <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                  <label className="block text-slate-800 font-bold">
-                    PDF / Document File * (Stored in Cloudflare R2)
-                  </label>
-                  <div className="flex flex-col sm:flex-row items-center gap-2">
-                    <input
-                      type="text"
-                      required
-                      value={formData.downloadUrl}
-                      onChange={(e) => setFormData({ ...formData, downloadUrl: e.target.value })}
-                      className="w-full px-3 py-2 rounded-lg bg-white border border-slate-200 text-slate-900 outline-none font-mono text-[11px]"
-                      placeholder="https://pub-...r2.dev/islah/publications/doc.pdf"
-                    />
-                    <label className="w-full sm:w-auto shrink-0 flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold cursor-pointer transition shadow-sm">
-                      <UploadCloud className="w-3.5 h-3.5" />
-                      <span>{uploadingPdf ? "Uploading..." : "Upload PDF"}</span>
-                      <input
-                        type="file"
-                        accept=".pdf,.doc,.docx"
-                        onChange={handlePdfUpload}
-                        disabled={uploadingPdf}
-                        className="hidden"
-                      />
-                    </label>
-                  </div>
-                </div>
-
-                {/* Cover Image */}
-                <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                  <label className="block text-slate-800 font-bold">
-                    Cover Image URL (Optional)
-                  </label>
-                  <div className="flex flex-col sm:flex-row items-center gap-2">
-                    <input
-                      type="text"
-                      value={formData.coverUrl}
-                      onChange={(e) => setFormData({ ...formData, coverUrl: e.target.value })}
-                      className="w-full px-3 py-2 rounded-lg bg-white border border-slate-200 text-slate-900 outline-none font-mono text-[11px]"
-                      placeholder="https://pub-...r2.dev/islah/publications/cover.jpg"
-                    />
-                    <label className="w-full sm:w-auto shrink-0 flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 font-bold cursor-pointer transition shadow-sm">
-                      <UploadCloud className="w-3.5 h-3.5" />
-                      <span>{uploadingCover ? "Uploading..." : "Upload Cover"}</span>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleCoverUpload}
-                        disabled={uploadingCover}
-                        className="hidden"
-                      />
-                    </label>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-slate-700 font-bold mb-1">Executive Summary / Abstract *</label>
+                  <label className="block text-slate-700 font-bold mb-1">Author / Research Group</label>
+                  <input
+                    type="text"
+                    value={formData.authors}
+                    onChange={(e) => setFormData({ ...formData, authors: e.target.value })}
+                    className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-[#f97316]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1">Summary / Abstract</label>
                   <textarea
-                    required
                     rows={3}
                     value={formData.summary}
                     onChange={(e) => setFormData({ ...formData, summary: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-orange-500"
-                    placeholder="Summary of research methodology, cluster findings, and key recommendations..."
+                    className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 outline-none focus:border-[#f97316]"
+                    placeholder="Brief description of the document or research methodology..."
                   />
                 </div>
 
-                <div className="flex items-center gap-2 pt-1">
+                {/* PDF File Upload */}
+                <div className="p-4 rounded-2xl border border-slate-200 bg-slate-50 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-slate-800 text-xs flex items-center gap-1.5">
+                      <FileCheck2 className="w-4 h-4 text-[#f97316]" />
+                      <span>PDF Document File *</span>
+                    </span>
+                    {uploadingPdf && <span className="text-[11px] text-[#f97316] font-semibold">Uploading...</span>}
+                  </div>
+
                   <input
-                    type="checkbox"
-                    id="featured-pub"
-                    checked={formData.featured}
-                    onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
-                    className="w-4 h-4 rounded text-orange-500 border-slate-300 focus:ring-orange-500"
+                    type="file"
+                    accept=".pdf"
+                    onChange={handleUploadPdf}
+                    className="w-full text-xs text-slate-600 cursor-pointer"
                   />
-                  <label htmlFor="featured-pub" className="text-slate-700 font-medium cursor-pointer">
-                    Feature this publication on homepage / media hero
-                  </label>
+
+                  {formData.downloadUrl && (
+                    <div className="text-[11px] text-emerald-700 font-mono flex items-center gap-1 truncate mt-1">
+                      <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-600" />
+                      <span className="truncate">{formData.downloadUrl}</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
-              {/* Sticky Footer */}
-              <div className="p-4 sm:p-5 border-t border-slate-200 bg-slate-50 flex items-center justify-end gap-3 shrink-0">
+              <div className="flex items-center justify-end gap-3 p-5 sm:p-6 pt-3 border-t border-slate-200 shrink-0">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold transition cursor-pointer"
+                  className="px-4 py-2 rounded-xl border border-slate-200 text-slate-600 font-bold hover:bg-slate-50 transition cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={uploadingPdf || uploadingCover}
-                  className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold cursor-pointer shadow-md shadow-orange-500/25 transition disabled:opacity-50"
+                  className="px-5 py-2 rounded-xl bg-[#f97316] hover:bg-[#ea580c] text-white font-bold transition shadow-xs cursor-pointer flex items-center gap-1.5 disabled:opacity-50"
                 >
                   <Save className="w-4 h-4" />
-                  <span>Save Publication</span>
+                  <span>{editingId ? "Save Changes" : "Publish Document"}</span>
                 </button>
               </div>
             </form>
@@ -591,4 +530,3 @@ export default function PublicationsManager() {
     </div>
   );
 }
-

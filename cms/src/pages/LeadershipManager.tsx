@@ -45,44 +45,15 @@ export interface LeadershipData {
   field: LeaderItem[];
 }
 
-const DEFAULT_LEADERSHIP: LeadershipData = {
-  trustees: [
-    { id: "lead-t1", sno: 1, name: "Er. Nasera Firdausi", designation: "Acting Chairman", portfolio: "Governance Stewardship & Strategic Direction", email: "chairman@iwfindia.org", badgeColor: "bg-emerald-600", gender: "female" },
-    { id: "lead-t2", sno: 2, name: "Er. Md. Ejazullah", designation: "Secretary", portfolio: "Statutory Governance & Board Administration", email: "secretary@iwfindia.org", badgeColor: "bg-blue-600", gender: "male" },
-    { id: "lead-t3", sno: 3, name: "Md. Sajid", designation: "Joint Secretary", portfolio: "Operational Alignment & Inter-Body Coordination", email: "jointsec@iwfindia.org", badgeColor: "bg-indigo-600", gender: "male" },
-    { id: "lead-t4", sno: 4, name: "Mr. Md. Azizullah", designation: "Treasurer", portfolio: "Financial Oversight & Fiduciary Compliance", email: "treasurer@iwfindia.org", badgeColor: "bg-amber-600", gender: "male" },
-    { id: "lead-t5", sno: 5, name: "CA Sanjeet", designation: "Member", portfolio: "Financial Audits, Accounts Review & Fiscal Policy", email: "trustee@iwfindia.org", badgeColor: "bg-slate-700", gender: "male" },
-    { id: "lead-t6", sno: 6, name: "Md. Atiqure Rahman", designation: "Member", portfolio: "Community Outreach & Programmatic Review", email: "trustee@iwfindia.org", badgeColor: "bg-slate-700", gender: "male" },
-    { id: "lead-t7", sno: 7, name: "Saleh Hedayatullah", designation: "Member", portfolio: "Institutional Partnerships & Social Initiatives", email: "trustee@iwfindia.org", badgeColor: "bg-slate-700", gender: "male" },
-  ],
-  executive: [
-    { id: "lead-e1", sno: 1, name: "Er. Nasera Firdausi", designation: "Acting Chairman", portfolio: "Executive Leadership, Strategic Operations & Institutional Management", email: "chairman@iwfindia.org", gender: "female" },
-    { id: "lead-e2", sno: 2, name: "Md. Shahid Raza", designation: "Program Manager", portfolio: "Project Planning, Field Coordination & Ground Operations", email: "programs@iwfindia.org", gender: "male" },
-    { id: "lead-e3", sno: 3, name: "Ms. Farifa Khatoon", designation: "Admin Coordinator", portfolio: "Administrative Systems, Personnel Logistics & Facility Oversight", email: "admin@iwfindia.org", gender: "female" },
-    { id: "lead-e4", sno: 4, name: "Mr. Arun Kumar Jha", designation: "Communications Coordinator", portfolio: "Institutional Communications, Media Relations & Public Affairs", email: "communications@iwfindia.org", gender: "male" },
-    { id: "lead-e5", sno: 5, name: "Adv. Kanhaiya Mishra", designation: "Legal & Compliance Coordinator", portfolio: "Statutory Adherence, Legal Documentation & Regulatory Compliance", email: "legal@iwfindia.org", gender: "male" },
-    { id: "lead-e6", sno: 6, name: "Mr. Rakesh Ranjan", designation: "Finance Officer", portfolio: "Financial Reporting, Budget Administration & Audit Facilitation", email: "finance@iwfindia.org", gender: "male" },
-  ],
-  advisory: [
-    { id: "lead-a1", sno: 1, name: "Prof. (Dr.) Karan Singh", designation: "Academic Advisor", expertise: "Academic Advisor", focus: "Higher Education, Pedagogical Frameworks & Academic Linkages", gender: "male" },
-    { id: "lead-a2", sno: 2, name: "Prof. (Dr.) Tayyab Khan", designation: "Technical Advisor", expertise: "Technical Advisor", focus: "Technical Infrastructure, Digital Systems & Scalable Solutions", gender: "male" },
-    { id: "lead-a3", sno: 3, name: "Prof. (Dr.) Md. Arquam", designation: "Social Inclusion Advisor", expertise: "Social Inclusion Advisor", focus: "Marginalized Rights, Equitable Access & Community Inclusivity", gender: "male" },
-    { id: "lead-a4", sno: 4, name: "Dr. Intiyaz Ahmad", designation: "Program & Policy Advisor", expertise: "Program & Policy Advisor", focus: "Policy Research, Evidence-Based Design & Program Governance", gender: "male" },
-    { id: "lead-a5", sno: 5, name: "CS. Satish Kumar", designation: "Finance Advisor", expertise: "Finance Advisor", focus: "Corporate Governance, Statutory Compliance & Fiscal Oversight", gender: "male" },
-    { id: "lead-a6", sno: 6, name: "Adv. Pankaj Kumar", designation: "Legal Advisor", expertise: "Legal Advisor", focus: "Statutory Law, Legal Safeguards & Trust Regulations", gender: "male" },
-  ],
-  field: [
-    { id: "lead-f1", sno: 1, name: "Mr. Mohammad Rashid", designation: "Field Coordinator", focus: "Community Mobilization & Field Operations", gender: "male" },
-    { id: "lead-f2", sno: 2, name: "Mr. Rakesh Kumar", designation: "Field Coordinator", focus: "Programme Delivery & Direct Community Outreach", gender: "male" },
-    { id: "lead-f3", sno: 3, name: "Ms. Saksi Kumari", designation: "Field Coordinator", focus: "Women & Child Community Mobilization", gender: "female" },
-    { id: "lead-f4", sno: 4, name: "Mr. Ravi Paswan", designation: "Field Documentation", focus: "Field Monitoring, Beneficiary Records & Documentation", gender: "male" },
-    { id: "lead-f5", sno: 5, name: "Ms. Samia Khatoon", designation: "Community Volunteers", focus: "Volunteer Coordination & Community Support", gender: "female" },
-    { id: "lead-f6", sno: 6, name: "Mr. Tarique Anwar", designation: "Field Coordinator", focus: "Healthcare Mobilization & Patient Care", gender: "male" },
-  ],
+const EMPTY_LEADERSHIP: LeadershipData = {
+  trustees: [],
+  executive: [],
+  advisory: [],
+  field: [],
 };
 
 export default function LeadershipManager() {
-  const [data, setData] = useState<LeadershipData>(DEFAULT_LEADERSHIP);
+  const [data, setData] = useState<LeadershipData>(EMPTY_LEADERSHIP);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<LeadershipCategory | "all">("all");
@@ -112,10 +83,10 @@ export default function LeadershipManager() {
       const res = await api.getSettings({ force });
       if (res.success && res.data?.leadership_data) {
         setData({
-          trustees: res.data.leadership_data.trustees || DEFAULT_LEADERSHIP.trustees,
-          executive: res.data.leadership_data.executive || DEFAULT_LEADERSHIP.executive,
-          advisory: res.data.leadership_data.advisory || DEFAULT_LEADERSHIP.advisory,
-          field: res.data.leadership_data.field || DEFAULT_LEADERSHIP.field,
+          trustees: res.data.leadership_data.trustees || [],
+          executive: res.data.leadership_data.executive || [],
+          advisory: res.data.leadership_data.advisory || [],
+          field: res.data.leadership_data.field || [],
         });
       }
     } catch (e) {
@@ -225,8 +196,8 @@ export default function LeadershipManager() {
   };
 
   const handleResetDefaults = () => {
-    if (window.confirm("Reset all 4 tiers of leadership to official Foundation Charter defaults?")) {
-      persistData(DEFAULT_LEADERSHIP);
+    if (window.confirm("Reload leadership data from database?")) {
+      loadData(true);
     }
   };
 

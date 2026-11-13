@@ -73,199 +73,81 @@ function TrendTooltip({ active, payload, label }: any) {
   return null;
 }
 
-// Fallback baseline data matching ISLAH Financial Report specification
-const defaultMockData: FinancialDashboardOverviewData = {
+// Clean zero-state baseline for financial overview
+const emptyDashboardData: FinancialDashboardOverviewData = {
   period: {
-    from: "2025-04-01",
-    to: "2025-04-30",
+    from: "",
+    to: "",
     interval: "monthly",
   },
   kpis: {
-    totalDonations: { amount: 4825750, amountPaise: 482575000, formatted: "₹ 48,25,750" },
-    totalDonationsDelta: 12,
-    onlineDonations: { amount: 3245200, amountPaise: 324520000, formatted: "₹ 32,45,200" },
-    onlineDonationsShare: 67,
-    onlineDonationsDelta: 18,
-    offlineDonations: { amount: 1580550, amountPaise: 158055000, formatted: "₹ 15,80,550" },
-    offlineDonationsShare: 33,
-    offlineDonationsDelta: 5,
-    pendingPayments: { amount: 245000, amountPaise: 24500000, formatted: "₹ 2,45,000", count: 5, delta: -8 },
-    receiptsIssued: { count: 1248, deliveryRate: 96, delta: 16 },
+    totalDonations: { amount: 0, amountPaise: 0, formatted: "₹ 0" },
+    totalDonationsDelta: 0,
+    onlineDonations: { amount: 0, amountPaise: 0, formatted: "₹ 0" },
+    onlineDonationsShare: 0,
+    onlineDonationsDelta: 0,
+    offlineDonations: { amount: 0, amountPaise: 0, formatted: "₹ 0" },
+    offlineDonationsShare: 0,
+    offlineDonationsDelta: 0,
+    pendingPayments: { amount: 0, amountPaise: 0, formatted: "₹ 0", count: 0, delta: 0 },
+    receiptsIssued: { count: 0, deliveryRate: 0, delta: 0 },
   },
   donationTrends: {
-    data: [
-      { label: "Nov", total: 400000, online: 268000, offline: 132000, corporate: 32000, other: 8000 },
-      { label: "Dec", total: 2400000, online: 1608000, offline: 792000, corporate: 192000, other: 48000 },
-      { label: "Jan", total: 2250000, online: 1507500, offline: 742500, corporate: 180000, other: 45000 },
-      { label: "Feb", total: 2800000, online: 1876000, offline: 924000, corporate: 224000, other: 56000 },
-      { label: "Mar", total: 3400000, online: 2278000, offline: 1122000, corporate: 272000, other: 68000 },
-      { label: "Apr", total: 4825750, online: 3245200, offline: 1580550, corporate: 386000, other: 96000 },
-    ],
+    data: [],
     summary: {
-      total: 4825750,
-      growthPercentage: 12,
+      total: 0,
+      growthPercentage: 0,
       breakdown: {
-        online: 67,
-        offline: 33,
-        corporate: 8,
-        other: 2,
+        online: 0,
+        offline: 0,
+        corporate: 0,
+        other: 0,
       },
     },
   },
   donationsByCategory: {
-    total: 4825750,
-    categories: [
-      { code: "EDU", name: "Education", amount: 1351210, percentage: 28, color: "#3b82f6" },
-      { code: "HLT", name: "Healthcare", amount: 1061665, percentage: 22, color: "#0ea5e9" },
-      { code: "SLE", name: "Livelihoods", amount: 723862, percentage: 15, color: "#06b6d4" },
-      { code: "WYE", name: "Women & Youth", amount: 579090, percentage: 12, color: "#ec4899" },
-      { code: "ENV", name: "Environment", amount: 386060, percentage: 8, color: "#10b981" },
-      { code: "OTH", name: "Others", amount: 723862, percentage: 15, color: "#8b5cf6" },
-    ],
+    total: 0,
+    categories: [],
   },
-  recentTransactions: [
-    {
-      id: "tx-1",
-      receiptNo: "REC-2025-00128",
-      date: "28 Apr 2025",
-      donorName: "Ayesha Khan",
-      amount: 50000,
-      formattedAmount: "₹ 50,000",
-      paymentMethod: "UPI",
-      status: "Success",
-    },
-    {
-      id: "tx-2",
-      receiptNo: "REC-2025-00127",
-      date: "27 Apr 2025",
-      donorName: "Global Good Foundation",
-      amount: 100000,
-      formattedAmount: "₹ 1,00,000",
-      paymentMethod: "Bank Transfer",
-      status: "Success",
-    },
-    {
-      id: "tx-3",
-      receiptNo: "REC-2025-00126",
-      date: "26 Apr 2025",
-      donorName: "Rahul Verma",
-      amount: 25000,
-      formattedAmount: "₹ 25,000",
-      paymentMethod: "Razorpay",
-      status: "Success",
-    },
-    {
-      id: "tx-4",
-      receiptNo: "REC-2025-00125",
-      date: "25 Apr 2025",
-      donorName: "Fatima Rizvi",
-      amount: 10000,
-      formattedAmount: "₹ 10,000",
-      paymentMethod: "UPI",
-      status: "Pending",
-    },
-    {
-      id: "tx-5",
-      receiptNo: "REC-2025-00124",
-      date: "24 Apr 2025",
-      donorName: "Office Supplies Co.",
-      amount: 12500,
-      formattedAmount: "₹ 12,500",
-      paymentMethod: "Bank Transfer",
-      status: "Success",
-    },
-  ],
+  recentTransactions: [],
   expenseSummary: {
-    totalExpenses: 782450,
-    formattedTotal: "₹ 7,82,450",
-    categories: [
-      { head: "Medical Support", amount: 328629, percentage: 42, color: "#3b82f6" },
-      { head: "Programme Activities", amount: 187788, percentage: 24, color: "#a855f7" },
-      { head: "Administration", amount: 117367, percentage: 15, color: "#f59e0b" },
-      { head: "Travel & Logistics", amount: 78245, percentage: 10, color: "#06b6d4" },
-      { head: "Others", amount: 70420, percentage: 9, color: "#64748b" },
-    ],
+    totalExpenses: 0,
+    formattedTotal: "₹ 0",
+    categories: [],
   },
   monthlyFinancialSummary: {
-    income: 4825750,
-    formattedIncome: "₹ 48,25,750",
-    incomeDelta: 12,
-    expenses: 782450,
-    formattedExpenses: "₹ 7,82,450",
-    expenseDelta: 8,
-    netBalance: 4043300,
-    formattedNetBalance: "₹ 40,43,300",
+    income: 0,
+    formattedIncome: "₹ 0",
+    incomeDelta: 0,
+    expenses: 0,
+    formattedExpenses: "₹ 0",
+    expenseDelta: 0,
+    netBalance: 0,
+    formattedNetBalance: "₹ 0",
   },
-  recentActivity: [
-    {
-      id: "act-1",
-      type: "donation",
-      title: "Donation received",
-      subtitle: "₹50,000 from Ayesha Khan",
-      timeAgo: "2 hours ago",
-      icon: "heart",
-      color: "emerald",
-    },
-    {
-      id: "act-2",
-      type: "payment",
-      title: "Payment verified",
-      subtitle: "₹25,000 (Razorpay)",
-      timeAgo: "3 hours ago",
-      icon: "card",
-      color: "blue",
-    },
-    {
-      id: "act-3",
-      type: "receipt",
-      title: "Receipt issued",
-      subtitle: "#ISL-2025-0456",
-      timeAgo: "4 hours ago",
-      icon: "receipt",
-      color: "purple",
-    },
-    {
-      id: "act-4",
-      type: "expense",
-      title: "Expense approved",
-      subtitle: "Medical supplies - ₹12,500",
-      timeAgo: "6 hours ago",
-      icon: "expense",
-      color: "amber",
-    },
-    {
-      id: "act-5",
-      type: "reconciliation",
-      title: "Reconciliation completed",
-      subtitle: "Bank - Axis Bank",
-      timeAgo: "7 hours ago",
-      icon: "sync",
-      color: "teal",
-    },
-    {
-      id: "act-6",
-      type: "refund",
-      title: "Refund processed",
-      subtitle: "₹8,000 to Rahul Verma",
-      timeAgo: "1 day ago",
-      icon: "refund",
-      color: "rose",
-    },
-  ],
+  recentActivity: [],
 };
 
 export default function DonationOverview() {
   const navigate = useNavigate();
 
+  // Dynamic Current Financial Year Calculation (Apr 1 - Mar 31)
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const fyStartYear = now.getMonth() >= 3 ? currentYear : currentYear - 1;
+  const currentFyLabel = `FY ${fyStartYear}-${String(fyStartYear + 1).slice(2)}`;
+  const currentFyStart = `${fyStartYear}-04-01`;
+  const currentFyEnd = `${fyStartYear + 1}-03-31`;
+
   // State
-  const [dashboardData, setDashboardData] = useState<FinancialDashboardOverviewData>(defaultMockData);
+  const [dashboardData, setDashboardData] = useState<FinancialDashboardOverviewData>(emptyDashboardData);
   const [loading, setLoading] = useState(false);
   const [trendInterval, setTrendInterval] = useState<"monthly" | "weekly" | "daily">("monthly");
 
-  // Date Range state
-  const [datePreset, setDatePreset] = useState("01 Apr 2025 - 30 Apr 2025");
-  const [fromDate, setFromDate] = useState("2025-04-01");
-  const [toDate, setToDate] = useState("2025-04-30");
+  // Date Range state defaulting to current financial year
+  const [datePreset, setDatePreset] = useState(`Financial Year ${fyStartYear}-${String(fyStartYear + 1).slice(2)} (Current)`);
+  const [fromDate, setFromDate] = useState(currentFyStart);
+  const [toDate, setToDate] = useState(currentFyEnd);
   const [showDateDropdown, setShowDateDropdown] = useState(false);
 
   // Quick Action Modal states
@@ -273,44 +155,17 @@ export default function DonationOverview() {
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
   const [isIssueReceiptOpen, setIsIssueReceiptOpen] = useState(false);
 
-  // Load Data
+  // Load Data directly from backend
   const loadDashboard = async (from = fromDate, to = toDate, interval = trendInterval) => {
     setLoading(true);
     try {
       const res = await financeApi.getFinancialDashboardOverview({ from, to, interval });
       if (res.success && res.data) {
-        // Merge with defaults so UI remains populated even on empty DB periods
-        const merged: FinancialDashboardOverviewData = {
-          ...defaultMockData,
-          ...res.data,
-          kpis: {
-            ...defaultMockData.kpis,
-            ...(res.data.kpis?.totalDonations?.amount > 0 ? res.data.kpis : defaultMockData.kpis),
-          },
-          donationTrends: res.data.donationTrends?.data?.length
-            ? res.data.donationTrends
-            : defaultMockData.donationTrends,
-          donationsByCategory: res.data.donationsByCategory?.categories?.length
-            ? res.data.donationsByCategory
-            : defaultMockData.donationsByCategory,
-          recentTransactions: res.data.recentTransactions?.length
-            ? res.data.recentTransactions
-            : defaultMockData.recentTransactions,
-          expenseSummary: res.data.expenseSummary?.categories?.length
-            ? res.data.expenseSummary
-            : defaultMockData.expenseSummary,
-          monthlyFinancialSummary: res.data.monthlyFinancialSummary?.income > 0
-            ? res.data.monthlyFinancialSummary
-            : defaultMockData.monthlyFinancialSummary,
-          recentActivity: res.data.recentActivity?.length
-            ? res.data.recentActivity
-            : defaultMockData.recentActivity,
-        };
-        setDashboardData(merged);
+        setDashboardData(res.data);
       }
     } catch (err: any) {
-      console.warn("Using baseline financial metrics:", err.message);
-      // Fallback stays on defaultMockData
+      console.error("Financial dashboard load error:", err);
+      toast.error(err.message || "Failed to load live financial dashboard data");
     } finally {
       setLoading(false);
     }
@@ -373,7 +228,7 @@ export default function DonationOverview() {
                 <p className="text-sm md:text-base italic font-semibold text-emerald-900 tracking-tight leading-tight">
                   Small Contributions
                 </p>
-                <p className="text-base md:text-lg italic font-extrabold text-emerald-950 tracking-tight leading-tight">
+                <p className="text-base md:text-lg italic font-extrabold text-[#071527] tracking-tight leading-tight">
                   Big Impact
                 </p>
               </div>
@@ -409,13 +264,19 @@ export default function DonationOverview() {
                   Select Reporting Window
                 </div>
                 <button
-                  onClick={() => handleSelectPreset("01 Apr 2025 - 30 Apr 2025", "2025-04-01", "2025-04-30")}
+                  onClick={() => handleSelectPreset("Financial Year 2026-27", "2026-04-01", "2027-03-31")}
                   className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition cursor-pointer flex items-center justify-between"
                 >
-                  <span>01 Apr 2025 - 30 Apr 2025</span>
+                  <span>Financial Year 2026-27</span>
                   <span className="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold">
-                    Demo
+                    Current
                   </span>
+                </button>
+                <button
+                  onClick={() => handleSelectPreset("Financial Year 2025-26", "2025-04-01", "2026-03-31")}
+                  className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition cursor-pointer"
+                >
+                  Financial Year 2025-26
                 </button>
                 <button
                   onClick={() => {
@@ -440,10 +301,10 @@ export default function DonationOverview() {
                   Last Month
                 </button>
                 <button
-                  onClick={() => handleSelectPreset("Financial Year 2025-26", "2025-04-01", "2026-03-31")}
+                  onClick={() => handleSelectPreset("All Records", "2020-01-01", "2030-12-31")}
                   className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition cursor-pointer"
                 >
-                  Financial Year 2025-26
+                  All Time
                 </button>
                 <div className="pt-2 border-t border-slate-100 mt-1 px-3">
                   <p className="text-[10px] text-slate-400 font-medium">Custom Range</p>
@@ -466,7 +327,7 @@ export default function DonationOverview() {
                       setDatePreset(`${fromDate} to ${toDate}`);
                       setShowDateDropdown(false);
                     }}
-                    className="w-full mt-1.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition cursor-pointer"
+                    className="w-full mt-1.5 py-1.5 bg-[#f97316] hover:bg-[#ea580c] text-white rounded-lg text-xs font-bold transition cursor-pointer"
                   >
                     Apply Custom
                   </button>
@@ -780,7 +641,7 @@ export default function DonationOverview() {
                   <h3 className="text-sm font-bold text-slate-900">Recent Transactions</h3>
                   <Link
                     to="/finance/transactions"
-                    className="text-xs font-bold text-emerald-600 hover:text-emerald-700 flex items-center gap-1"
+                    className="text-xs font-bold text-[#f97316] hover:text-[#ea580c] flex items-center gap-1"
                   >
                     <span>View All</span>
                     <ArrowRight className="w-3 h-3" />
@@ -800,7 +661,14 @@ export default function DonationOverview() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
-                      {transactions.slice(0, 5).map((tx, idx) => (
+                      {transactions.length === 0 ? (
+                        <tr>
+                          <td colSpan={5} className="py-8 text-center text-xs text-slate-400">
+                            No donations recorded in this period.
+                          </td>
+                        </tr>
+                      ) : (
+                        transactions.slice(0, 5).map((tx, idx) => (
                         <tr key={tx.id || idx} className="hover:bg-slate-50/70 transition">
                           <td className="py-2.5 text-[11px] text-slate-500 font-medium whitespace-nowrap">
                             {tx.date}
@@ -835,8 +703,9 @@ export default function DonationOverview() {
                             </span>
                           </td>
                         </tr>
-                      ))}
-                    </tbody>
+                      ))
+                    )}
+                  </tbody>
                   </table>
                 </div>
               </div>
@@ -845,7 +714,7 @@ export default function DonationOverview() {
               <div className="pt-3 border-t border-slate-100 text-center">
                 <Link
                   to="/finance/transactions"
-                  className="text-xs font-bold text-emerald-600 hover:text-emerald-700 inline-flex items-center gap-1"
+                  className="text-xs font-bold text-[#f97316] hover:text-[#ea580c] inline-flex items-center gap-1"
                 >
                   <span>View All Transactions</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -861,7 +730,7 @@ export default function DonationOverview() {
                   <h3 className="text-sm font-bold text-slate-900">Expense Summary</h3>
                   <Link
                     to="/finance/expenses"
-                    className="text-xs font-bold text-emerald-600 hover:text-emerald-700 flex items-center gap-1"
+                    className="text-xs font-bold text-[#f97316] hover:text-[#ea580c] flex items-center gap-1"
                   >
                     <span>View All</span>
                     <ArrowRight className="w-3 h-3" />
@@ -951,7 +820,7 @@ export default function DonationOverview() {
 
                   <div>
                     <p className="text-[10px] text-slate-500 font-medium">Net Balance</p>
-                    <p className="text-xs font-black text-emerald-700 mt-0.5">
+                    <p className="text-xs font-black text-slate-600 mt-0.5">
                       {monthly.formattedNetBalance}
                     </p>
                     <span className="text-[9px] font-semibold text-slate-400">Surplus</span>
@@ -1012,13 +881,13 @@ export default function DonationOverview() {
             </Link>
 
             {/* Brand Trust Card */}
-            <div className="col-span-2 md:col-span-1 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-3.5 border border-emerald-200/60 shadow-2xs flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0">
+            <div className="col-span-2 md:col-span-1 bg-gradient-to-br from-slate-50 to-orange-50/30 rounded-2xl p-3.5 border border-slate-200 shadow-2xs flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-[#071527] text-[#f97316] flex items-center justify-center shrink-0">
                 <Sprout className="w-5 h-5 text-emerald-200" />
               </div>
               <div>
-                <p className="text-xs font-bold text-emerald-950">Transparency Builds Trust</p>
-                <p className="text-[10px] text-emerald-700 mt-0.5 leading-tight">
+                <p className="text-xs font-bold text-[#071527]">Transparency Builds Trust</p>
+                <p className="text-[10px] text-slate-600 mt-0.5 leading-tight">
                   Every contribution makes a difference.
                 </p>
               </div>
@@ -1039,9 +908,9 @@ export default function DonationOverview() {
               {/* Action 1: Record Donation */}
               <button
                 onClick={() => setIsRecordDonationOpen(true)}
-                className="flex flex-col items-center justify-center p-3.5 rounded-xl bg-[#e6f7f4] hover:bg-[#d0f1eb] text-teal-900 border border-teal-200/50 transition cursor-pointer group text-center space-y-2"
+                className="flex flex-col items-center justify-center p-3.5 rounded-xl bg-white hover:bg-orange-50/40 text-[#071527] border border-slate-200 hover:border-[#f97316] transition cursor-pointer group text-center space-y-2"
               >
-                <div className="w-9 h-9 rounded-xl bg-teal-600 text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition">
+                <div className="w-9 h-9 rounded-xl bg-[#071527] group-hover:bg-[#f97316] text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition">
                   <Heart className="w-4.5 h-4.5 fill-white" />
                 </div>
                 <span className="text-[11px] font-bold leading-tight">Record Donation</span>
@@ -1088,7 +957,7 @@ export default function DonationOverview() {
               <h3 className="text-sm font-bold text-slate-900">Recent Activity</h3>
               <Link
                 to="/finance/transactions"
-                className="text-xs font-bold text-emerald-600 hover:text-emerald-700 flex items-center gap-1"
+                className="text-xs font-bold text-[#f97316] hover:text-[#ea580c] flex items-center gap-1"
               >
                 <span>View All</span>
                 <ArrowRight className="w-3 h-3" />
@@ -1097,7 +966,12 @@ export default function DonationOverview() {
 
             {/* Timeline List */}
             <div className="space-y-3.5">
-              {activities.map((act) => {
+              {activities.length === 0 ? (
+                <div className="py-6 text-center text-xs text-slate-400">
+                  No recent activities recorded.
+                </div>
+              ) : (
+                activities.map((act) => {
                 // Color map
                 const iconBg =
                   act.color === "emerald"
@@ -1142,7 +1016,7 @@ export default function DonationOverview() {
                     </div>
                   </div>
                 );
-              })}
+              }))}
             </div>
           </div>
         </div>
@@ -1372,7 +1246,7 @@ function RecordDonationModal({
             <button
               type="submit"
               disabled={submitting}
-              className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs"
+              className="px-5 py-2 rounded-xl bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs"
             >
               {submitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
               <span>Save &amp; Generate Receipt</span>

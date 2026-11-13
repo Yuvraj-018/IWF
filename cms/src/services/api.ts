@@ -51,34 +51,58 @@ export const api = {
     totalApplications: number;
     totalPatients: number;
     totalNews: number;
+    totalMedia: number;
+    totalCareers: number;
+    totalPublications: number;
+    totalStories: number;
+    totalContacts: number;
+    upcomingEvents: any[];
+    recentNews: any[];
+    settings: any;
+    pendingMembership: number;
+    pendingVolunteers: number;
+    pendingPartners: number;
   }> {
     const cacheKey = "dashboard_stats";
     if (!options?.force) {
-      const cached = apiCache.get<{
-        totalMembers: number;
-        totalDonations: number;
-        totalApplications: number;
-        totalPatients: number;
-        totalNews: number;
-      }>(cacheKey);
+      const cached = apiCache.get<any>(cacheKey);
       if (cached) return cached;
     }
 
     try {
-      const [members, donations, applications, patients, news] = await Promise.all([
+      const [members, donations, applications, patients, news, media, careers, publications, stories, contact, settings] = await Promise.all([
         fetch(`${API_BASE_URL}/members`, { headers: getHeaders() }).then((r) => r.json()).catch(() => ({ total: 0 })),
         fetch(`${API_BASE_URL}/donations`, { headers: getHeaders() }).then((r) => r.json()).catch(() => ({ count: 0 })),
         fetch(`${API_BASE_URL}/applications`, { headers: getHeaders() }).then((r) => r.json()).catch(() => ({ count: 0 })),
         fetch(`${API_BASE_URL}/patients`, { headers: getHeaders() }).then((r) => r.json()).catch(() => ({ count: 0 })),
         fetch(`${API_BASE_URL}/news`, { headers: getHeaders() }).then((r) => r.json()).catch(() => ({ count: 0 })),
+        fetch(`${API_BASE_URL}/media`, { headers: getHeaders() }).then((r) => r.json()).catch(() => ({ total: 0 })),
+        fetch(`${API_BASE_URL}/careers`, { headers: getHeaders() }).then((r) => r.json()).catch(() => ({ total: 0 })),
+        fetch(`${API_BASE_URL}/publications`, { headers: getHeaders() }).then((r) => r.json()).catch(() => ({ total: 0 })),
+        fetch(`${API_BASE_URL}/stories`, { headers: getHeaders() }).then((r) => r.json()).catch(() => ({ total: 0 })),
+        fetch(`${API_BASE_URL}/contact`, { headers: getHeaders() }).then((r) => r.json()).catch(() => ({ total: 0 })),
+        fetch(`${API_BASE_URL}/settings`, { headers: getHeaders() }).then((r) => r.json()).catch(() => ({ data: {} })),
       ]);
 
+      const appData = Array.isArray(applications.data) ? applications.data : [];
+
       const result = {
-        totalMembers: members.total || members.count || 0,
-        totalDonations: donations.count || 0,
-        totalApplications: applications.count || 0,
-        totalPatients: patients.count || 0,
-        totalNews: news.count || 0,
+        totalMembers: members.total || members.count || (Array.isArray(members.data) ? members.data.length : 0),
+        totalDonations: donations.pagination?.total || donations.total || donations.count || (Array.isArray(donations.data) ? donations.data.length : 0),
+        totalApplications: applications.total || applications.count || appData.length,
+        totalPatients: patients.total || patients.count || (Array.isArray(patients.data) ? patients.data.length : 0),
+        totalNews: news.total || news.count || (Array.isArray(news.data) ? news.data.length : 0),
+        totalMedia: media.total || media.count || (Array.isArray(media.data) ? media.data.length : 0),
+        totalCareers: careers.total || careers.count || (Array.isArray(careers.data) ? careers.data.length : 0),
+        totalPublications: publications.total || publications.count || (Array.isArray(publications.data) ? publications.data.length : 0),
+        totalStories: stories.total || stories.count || (Array.isArray(stories.data) ? stories.data.length : 0),
+        totalContacts: contact.total || contact.count || (Array.isArray(contact.data) ? contact.data.length : 0),
+        upcomingEvents: Array.isArray(news.upcomingEvents) ? news.upcomingEvents : [],
+        recentNews: Array.isArray(news.data) ? news.data.slice(0, 5) : [],
+        settings: settings.data || {},
+        pendingMembership: appData.filter((a: any) => a.type === "membership" && a.status !== "approved").length,
+        pendingVolunteers: appData.filter((a: any) => a.type === "volunteer" && a.status !== "approved").length,
+        pendingPartners: appData.filter((a: any) => (a.type === "partner" || a.type === "sponsor") && a.status !== "approved").length,
       };
 
       apiCache.set(cacheKey, result, 60 * 1000, "dashboard");
@@ -90,6 +114,17 @@ export const api = {
         totalApplications: 0,
         totalPatients: 0,
         totalNews: 0,
+        totalMedia: 0,
+        totalCareers: 0,
+        totalPublications: 0,
+        totalStories: 0,
+        totalContacts: 0,
+        upcomingEvents: [],
+        recentNews: [],
+        settings: {},
+        pendingMembership: 0,
+        pendingVolunteers: 0,
+        pendingPartners: 0,
       };
     }
   },
