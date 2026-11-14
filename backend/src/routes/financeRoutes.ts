@@ -47,84 +47,255 @@ import {
   toggleSnapshotPublish,
   getPublicFinancialSummary,
 } from "../controllers/transparencyController.js";
-import { requireAdminAuth } from "../middlewares/auth.js";
+import { authenticate, requirePermission, requireReauth } from "../middlewares/rbac.js";
 
 export const financeRouter = Router();
 
 /**
- * Overview Dashboard
+ * Overview Dashboard (Fixes Finding 4: Previously unauthenticated)
  */
-financeRouter.get("/dashboard/overview", getDashboardOverview);
+financeRouter.get(
+  "/dashboard/overview",
+  authenticate,
+  requirePermission("finance.dashboard:view"),
+  getDashboardOverview
+);
 
 /**
  * Transactions & Donations Register
  */
-financeRouter.get("/donations", requireAdminAuth, listDonations);
-financeRouter.post("/donations/manual", requireAdminAuth, createManualDonation);
+financeRouter.get(
+  "/donations",
+  authenticate,
+  requirePermission("finance.donation:view"),
+  listDonations
+);
+financeRouter.post(
+  "/donations/manual",
+  authenticate,
+  requirePermission("finance.donation:create"),
+  createManualDonation
+);
 
 /**
  * Receipts & Acknowledgements
  */
-financeRouter.get("/receipts", requireAdminAuth, listReceipts);
+financeRouter.get(
+  "/receipts",
+  authenticate,
+  requirePermission("finance.receipt:view"),
+  listReceipts
+);
+// Public receipt download for donors
 financeRouter.get("/receipts/:receiptNo/pdf", downloadReceiptPdf);
-financeRouter.post("/receipts/:receiptNo/resend", requireAdminAuth, resendReceiptEmail);
+financeRouter.post(
+  "/receipts/:receiptNo/resend",
+  authenticate,
+  requirePermission("finance.receipt:edit"),
+  resendReceiptEmail
+);
 
 /**
  * Expense Management & Approval Workflow
  */
-financeRouter.get("/expenses", requireAdminAuth, listExpenses);
-financeRouter.post("/expenses", requireAdminAuth, createExpense);
-financeRouter.post("/expenses/:id/review", requireAdminAuth, reviewExpense);
-financeRouter.post("/expenses/:id/pay", requireAdminAuth, recordPayment);
-financeRouter.post("/expenses/:id/reverse", requireAdminAuth, reverseExpense);
+financeRouter.get(
+  "/expenses",
+  authenticate,
+  requirePermission("finance.expense:view"),
+  listExpenses
+);
+financeRouter.post(
+  "/expenses",
+  authenticate,
+  requirePermission("finance.expense:create"),
+  createExpense
+);
+financeRouter.post(
+  "/expenses/:id/review",
+  authenticate,
+  requirePermission("finance.expense:approve"),
+  reviewExpense
+);
+financeRouter.post(
+  "/expenses/:id/pay",
+  authenticate,
+  requirePermission("finance.expense:pay"),
+  recordPayment
+);
+financeRouter.post(
+  "/expenses/:id/reverse",
+  authenticate,
+  requirePermission("finance.expense:reverse"),
+  requireReauth(15),
+  reverseExpense
+);
 
 /**
  * Budget Management
  */
-financeRouter.get("/budgets", requireAdminAuth, getBudgets);
-financeRouter.post("/budgets", requireAdminAuth, setBudget);
+financeRouter.get(
+  "/budgets",
+  authenticate,
+  requirePermission("finance.budget:view"),
+  getBudgets
+);
+financeRouter.post(
+  "/budgets",
+  authenticate,
+  requirePermission("finance.budget:edit"),
+  setBudget
+);
 
 /**
  * Bank Reconciliation Engine
  */
-financeRouter.get("/reconciliation/accounts", requireAdminAuth, listBankAccounts);
-financeRouter.get("/reconciliation/statements", requireAdminAuth, listStatements);
-financeRouter.post("/reconciliation/upload", requireAdminAuth, uploadBankStatement);
-financeRouter.get("/reconciliation/lines", requireAdminAuth, listStatementLines);
-financeRouter.post("/reconciliation/auto-match", requireAdminAuth, triggerAutoMatch);
-financeRouter.post("/reconciliation/match", requireAdminAuth, confirmMatch);
-financeRouter.post("/reconciliation/unmatch", requireAdminAuth, unmatch);
-financeRouter.get("/reconciliation/lines/:lineId/candidates", requireAdminAuth, getCandidates);
-financeRouter.post("/reconciliation/direct-income", requireAdminAuth, recordDirectIncome);
-financeRouter.post("/reconciliation/ignore", requireAdminAuth, ignoreStatementLine);
+financeRouter.get(
+  "/reconciliation/accounts",
+  authenticate,
+  requirePermission("finance.reconciliation:view"),
+  listBankAccounts
+);
+financeRouter.get(
+  "/reconciliation/statements",
+  authenticate,
+  requirePermission("finance.reconciliation:view"),
+  listStatements
+);
+financeRouter.post(
+  "/reconciliation/upload",
+  authenticate,
+  requirePermission("finance.reconciliation:create"),
+  uploadBankStatement
+);
+financeRouter.get(
+  "/reconciliation/lines",
+  authenticate,
+  requirePermission("finance.reconciliation:view"),
+  listStatementLines
+);
+financeRouter.post(
+  "/reconciliation/auto-match",
+  authenticate,
+  requirePermission("finance.reconciliation:reconcile"),
+  triggerAutoMatch
+);
+financeRouter.post(
+  "/reconciliation/match",
+  authenticate,
+  requirePermission("finance.reconciliation:reconcile"),
+  confirmMatch
+);
+financeRouter.post(
+  "/reconciliation/unmatch",
+  authenticate,
+  requirePermission("finance.reconciliation:unmatch"),
+  unmatch
+);
+financeRouter.get(
+  "/reconciliation/lines/:lineId/candidates",
+  authenticate,
+  requirePermission("finance.reconciliation:view"),
+  getCandidates
+);
+financeRouter.post(
+  "/reconciliation/direct-income",
+  authenticate,
+  requirePermission("finance.reconciliation:reconcile"),
+  recordDirectIncome
+);
+financeRouter.post(
+  "/reconciliation/ignore",
+  authenticate,
+  requirePermission("finance.reconciliation:ignore"),
+  ignoreStatementLine
+);
 
 /**
  * Refunds & Reversals Workflow
  */
-financeRouter.get("/refunds", requireAdminAuth, listRefunds);
-financeRouter.post("/refunds", requireAdminAuth, createRefund);
-financeRouter.get("/refunds/:id", requireAdminAuth, getRefundById);
+financeRouter.get(
+  "/refunds",
+  authenticate,
+  requirePermission("finance.refund:view"),
+  listRefunds
+);
+financeRouter.post(
+  "/refunds",
+  authenticate,
+  requirePermission("finance.refund:create"),
+  createRefund
+);
+financeRouter.get(
+  "/refunds/:id",
+  authenticate,
+  requirePermission("finance.refund:view"),
+  getRefundById
+);
 
 /**
  * Statutory Financial Reports Suite
  */
-financeRouter.get("/reports/income-source", requireAdminAuth, getIncomeBySource);
-financeRouter.get("/reports/expenditure-sector", requireAdminAuth, getExpenditureBySector);
-financeRouter.get("/reports/income-vs-expenditure", requireAdminAuth, getIncomeVsExpenditure);
-financeRouter.get("/reports/budget-variance", requireAdminAuth, getBudgetVariance);
-financeRouter.get("/reports/80g-register", requireAdminAuth, getTax80GRegisterReport);
-financeRouter.get("/reports/export", requireAdminAuth, exportFinancialReport);
+financeRouter.get(
+  "/reports/income-source",
+  authenticate,
+  requirePermission("finance.report:view"),
+  getIncomeBySource
+);
+financeRouter.get(
+  "/reports/expenditure-sector",
+  authenticate,
+  requirePermission("finance.report:view"),
+  getExpenditureBySector
+);
+financeRouter.get(
+  "/reports/income-vs-expenditure",
+  authenticate,
+  requirePermission("finance.report:view"),
+  getIncomeVsExpenditure
+);
+financeRouter.get(
+  "/reports/budget-variance",
+  authenticate,
+  requirePermission("finance.report:view"),
+  getBudgetVariance
+);
+financeRouter.get(
+  "/reports/80g-register",
+  authenticate,
+  requirePermission("finance.report:view"),
+  getTax80GRegisterReport
+);
+financeRouter.get(
+  "/reports/export",
+  authenticate,
+  requirePermission("finance.report:export"),
+  exportFinancialReport
+);
 
 /**
  * Public Transparency Snapshot Publisher
  */
-financeRouter.post("/transparency/publish", requireAdminAuth, publishSnapshot);
-financeRouter.get("/transparency/snapshots", requireAdminAuth, listSnapshots);
-financeRouter.post("/transparency/snapshots/:id/toggle", requireAdminAuth, toggleSnapshotPublish);
+financeRouter.post(
+  "/transparency/publish",
+  authenticate,
+  requirePermission("finance.transparency:publish"),
+  requireReauth(15),
+  publishSnapshot
+);
+financeRouter.get(
+  "/transparency/snapshots",
+  authenticate,
+  requirePermission("finance.transparency:view"),
+  listSnapshots
+);
+financeRouter.post(
+  "/transparency/snapshots/:id/toggle",
+  authenticate,
+  requirePermission("finance.transparency:toggle"),
+  toggleSnapshotPublish
+);
 
 /**
  * Unauthenticated Public Financial Transparency Summary
  */
 financeRouter.get("/public/transparency/financial-summary", getPublicFinancialSummary);
-
-

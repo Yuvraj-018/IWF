@@ -1,37 +1,14 @@
 import { Request, Response, NextFunction } from "express";
-import { verifyToken } from "../utils/authUtils.js";
+import { authenticate, requirePermission, requireReauth, getActor, RbacRequest } from "./rbac.js";
 
-export interface AuthenticatedRequest extends Request {
-  adminUser?: any;
-}
+export { authenticate, requirePermission, requireReauth, getActor, RbacRequest };
+export type { AdminUserContext } from "./rbac.js";
+
+export interface AuthenticatedRequest extends RbacRequest {}
 
 /**
- * Middleware to require valid JWT admin authentication on protected routes.
+ * Backward compatibility alias: requireAdminAuth maps directly to live authenticate
  */
-export function requireAdminAuth(req: AuthenticatedRequest, res: Response, next: NextFunction): void {
-  const authHeader =
-    req.headers.authorization ||
-    (req.query.token ? `Bearer ${req.query.token}` : undefined);
-
-  if (!authHeader) {
-    res.status(401).json({
-      success: false,
-      message: "Unauthorized: Missing Authorization header. Admin login required.",
-    });
-    return;
-  }
-
-  const { valid, payload } = verifyToken(authHeader);
-
-  if (!valid || !payload) {
-    res.status(401).json({
-      success: false,
-      message: "Unauthorized: Invalid or expired admin authentication session.",
-    });
-    return;
-  }
-
-  req.adminUser = payload;
-  next();
+export async function requireAdminAuth(req: Request, res: Response, next: NextFunction): Promise<void> {
+  return authenticate(req as RbacRequest, res, next);
 }
-

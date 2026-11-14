@@ -14,6 +14,8 @@ import { verifyToken } from "../utils/authUtils.js";
 import { sendReceiptEmail, sendAdminInboundNotificationEmail } from "../services/emailService.js";
 import { syncToCommunityDirectory } from "../services/directorySyncService.js";
 import { generateReceiptPdfBuffer } from "../services/receiptPdfService.js";
+import { projectDonor } from "../utils/piiFilter.js";
+import { getActor, logAudit } from "../services/auditService.js";
 
 function maskEmail(email: string): string {
   if (!email || !email.includes("@")) return "***";
@@ -386,9 +388,13 @@ export async function listDonations(req: Request, res: Response): Promise<void> 
       failedCount: 0,
     };
 
+    const user = (req as any).adminUser;
+    const canViewPii = user?.permissionsSet?.has("*") || user?.permissionsSet?.has("finance.donation:view_pii");
+    const projectedDonations = donations.map((d: any) => projectDonor(d, canViewPii));
+
     res.json({
       success: true,
-      data: donations,
+      data: projectedDonations,
       stats: statSummary,
       pagination: { total, page, limit, pages: Math.ceil(total / limit) || 1 },
     });
@@ -577,6 +583,17 @@ export async function createManualDonation(req: Request, res: Response): Promise
 
     await donation.save();
 
+    const actor = getActor(req);
+
+    await logAudit({
+      req,
+      action: "finance.donation:create",
+      resourceType: "donation",
+      resourceId: donation._id.toString(),
+      after: { receiptNo, donorName, amount: amountNum, financialType },
+      reason: `Manual donation recorded by ${actor.name || actor.email}`,
+    });
+
     // Dual-entry Ledger append
     try {
       const fy = getCurrentFinancialYear();
@@ -601,7 +618,7 @@ export async function createManualDonation(req: Request, res: Response): Promise
         fundType: "general",
         paymentMethod: paymentMode,
         idempotencyKey: `man_don_${receiptNo}`,
-        createdBy: "admin_manual",
+        createdBy: actor.name || actor.email,
       });
     } catch (ledgerErr) {
       console.warn("Manual donation ledger post warning:", ledgerErr);

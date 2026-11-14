@@ -10,6 +10,7 @@ import {
   recordDirectIncomeFromLine,
   findCandidatesForLine,
 } from "../services/reconciliationService.js";
+import { getActor, logAudit } from "../services/auditService.js";
 
 /**
  * 1. List Bank Accounts for selector
@@ -30,8 +31,8 @@ export async function listBankAccounts(req: Request, res: Response): Promise<voi
  */
 export async function uploadBankStatement(req: Request, res: Response): Promise<void> {
   try {
-    const user = (req as any).adminUser || (req as any).user;
-    const uploadedBy = user?.name || user?.id || "superadmin";
+    const actor = getActor(req);
+    const uploadedBy = actor.name || actor.email || "finance_entry";
 
     let csvContent = req.body.csvContent;
     let bankAccountId = req.body.bankAccountId;
@@ -242,13 +243,22 @@ export async function confirmMatch(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    const user = (req as any).adminUser || (req as any).user;
-    const adminUser = user?.name || user?.id || "superadmin";
+    const actor = getActor(req);
+    const adminUser = actor.name || actor.email || "finance_approver";
 
     const updatedLine = await confirmLineMatch({
       lineId,
       ledgerEntryId,
       adminUser,
+    });
+
+    await logAudit({
+      req,
+      action: "finance.reconciliation:reconcile",
+      resourceType: "reconciliation_line",
+      resourceId: String(lineId),
+      after: { ledgerEntryId },
+      reason: `Reconciliation confirmed by ${adminUser}`,
     });
 
     res.json({
@@ -325,8 +335,8 @@ export async function recordDirectIncome(req: Request, res: Response): Promise<v
       return;
     }
 
-    const user = (req as any).adminUser || (req as any).user;
-    const adminUser = user?.name || user?.id || "superadmin";
+    const actor = getActor(req);
+    const adminUser = actor.name || actor.email || "finance_approver";
 
     const result = await recordDirectIncomeFromLine({
       lineId,
@@ -339,6 +349,15 @@ export async function recordDirectIncome(req: Request, res: Response): Promise<v
       financialType,
       taxExemption,
       adminUser,
+    });
+
+    await logAudit({
+      req,
+      action: "finance.reconciliation:reconcile",
+      resourceType: "reconciliation_direct_income",
+      resourceId: String(lineId),
+      after: { receiptNo: result.donation.receiptNo, amount: result.donation.amount },
+      reason: `Direct bank income recorded and reconciled by ${adminUser}`,
     });
 
     res.status(201).json({

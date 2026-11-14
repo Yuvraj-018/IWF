@@ -4,6 +4,7 @@ import { LedgerEntry } from "../models/LedgerEntry.js";
 import { Donation } from "../models/Donation.js";
 import { Expense } from "../models/Expense.js";
 import { WORK_AREA_NAMES } from "../services/reportService.js";
+import { getActor, logAudit } from "../services/auditService.js";
 
 /**
  * 1. Publish / Create a Verified Public Transparency Snapshot
@@ -11,8 +12,8 @@ import { WORK_AREA_NAMES } from "../services/reportService.js";
 export async function publishSnapshot(req: Request, res: Response): Promise<void> {
   try {
     const { fy = "2024-25", title, notes } = req.body;
-    const user = (req as any).adminUser || (req as any).user;
-    const publishedBy = user?.name || user?.id || "superadmin";
+    const actor = getActor(req);
+    const publishedBy = actor.name || actor.email || "finance_approver";
 
     // Aggregate credit volume (donations)
     let donationsAgg = await LedgerEntry.aggregate([
@@ -86,6 +87,16 @@ export async function publishSnapshot(req: Request, res: Response): Promise<void
       publishedAt: new Date(),
     });
 
+    await logAudit({
+      req,
+      action: "finance.transparency:publish",
+      resourceType: "transparency_snapshot",
+      resourceId: snapshot._id.toString(),
+      severity: "high",
+      after: { snapshotNo, fy, isPublished: true },
+      reason: `Financial transparency snapshot ${snapshotNo} published by ${publishedBy}`,
+    });
+
     res.status(201).json({
       success: true,
       message: `Financial transparency snapshot ${snapshotNo} published to public website.`,
@@ -125,6 +136,17 @@ export async function toggleSnapshotPublish(req: Request, res: Response): Promis
     snapshot.isPublished = !snapshot.isPublished;
     if (snapshot.isPublished) snapshot.publishedAt = new Date();
     await snapshot.save();
+
+    const actor = getActor(req);
+    await logAudit({
+      req,
+      action: "finance.transparency:toggle",
+      resourceType: "transparency_snapshot",
+      resourceId: snapshot._id.toString(),
+      severity: "warning",
+      after: { isPublished: snapshot.isPublished },
+      reason: `Snapshot visibility toggled to ${snapshot.isPublished} by ${actor.name}`,
+    });
 
     res.json({
       success: true,

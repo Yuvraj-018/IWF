@@ -14,6 +14,8 @@ import { sendMembershipCardEmail } from "../services/emailService.js";
 import { generateAndSendOtp, verifyOtp } from "../services/otpService.js";
 import { invalidateCache } from "../middlewares/cache.js";
 import { syncToCommunityDirectory } from "../services/directorySyncService.js";
+import { projectMember, maskPhone, maskEmail } from "../utils/piiFilter.js";
+import { getActor, logAudit } from "../services/auditService.js";
 
 const CATEGORY_FEE_MAP: Record<MemberCategory, number> = {
   Community: 2500,
@@ -470,6 +472,9 @@ export async function listMembers(req: Request, res: Response): Promise<void> {
       .sort({ annualFee: -1, createdAt: -1 })
       .limit(isAdmin ? 500 : 200);
 
+    const user = (req as any).adminUser;
+    const canViewPii = isAdmin && (user?.permissionsSet?.has("*") || user?.permissionsSet?.has("membership.member:view_pii"));
+
     const safeMembers = members.map((m) => {
       const isAnon = m.consentDisplay === "anonymous";
       return {
@@ -484,8 +489,8 @@ export async function listMembers(req: Request, res: Response): Promise<void> {
         annualFee: m.annualFee,
         validTill: m.validTill.toISOString().split("T")[0],
         joined: m.validFrom.toISOString().split("T")[0],
-        phone: isAdmin ? m.phone : (m.phone ? `${m.phone.slice(0, 3)}****${m.phone.slice(-3)}` : "Private"),
-        email: isAdmin ? m.email : undefined,
+        phone: canViewPii ? m.phone : (m.phone ? maskPhone(m.phone) : "Private"),
+        email: canViewPii ? m.email : (isAdmin ? maskEmail(m.email) : undefined),
         receiptNo: m.receiptNo,
         certificateNo: m.certificateNo,
         consentDisplay: m.consentDisplay || "public",

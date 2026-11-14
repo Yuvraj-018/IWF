@@ -6,14 +6,16 @@ import {
   updateNewsEvent,
   deleteNewsEvent,
 } from "../controllers/newsController.js";
-import { requireAdminAuth } from "../middlewares/auth.js";
 import { cacheResponse } from "../middlewares/cache.js";
+import { authenticate, requirePermission } from "../middlewares/rbac.js";
 
 export const newsRouter = Router();
 
+// Public News & Events (Preserved Exactly)
 newsRouter.get("/", cacheResponse(180, "news"), listNewsEvents);
 newsRouter.get("/:slug", cacheResponse(300, "news"), getNewsEventBySlug);
-newsRouter.post("/", requireAdminAuth, createNewsEvent);
-newsRouter.put("/:id", requireAdminAuth, updateNewsEvent);
-newsRouter.delete("/:id", requireAdminAuth, deleteNewsEvent);
 
+// Protected Admin Operations
+newsRouter.post("/", authenticate, requirePermission("cms.news:create"), createNewsEvent);
+newsRouter.put("/:id", authenticate, requirePermission("cms.news:edit"), updateNewsEvent);
+newsRouter.delete("/:id", authenticate, requirePermission("cms.news:delete"), deleteNewsEvent);
