@@ -12,6 +12,7 @@ import {
   verifyAndActivate2FA,
   validate2FALogin,
   resetStaff2FA,
+  disable2FA,
 } from "../controllers/twoFactorController.js";
 import { createRateLimiter } from "../middlewares/rateLimiter.js";
 import { createTurnstileMiddleware } from "../middlewares/turnstile.js";
@@ -46,4 +47,5 @@ authRouter.post("/admin/reauth", authenticate, reauthenticate);
 // 2FA Management
 authRouter.post("/admin/2fa/setup", authenticate, setup2FA);
 authRouter.post("/admin/2fa/verify", authenticate, verifyAndActivate2FA);
+authRouter.post("/admin/2fa/disable", authenticate, disable2FA);
 authRouter.post("/admin/staff/:id/2fa/reset", authenticate, requirePermission("system.staff:edit"), resetStaff2FA);

@@ -409,3 +409,4 @@ export function isValidPermission(perm: string): boolean {
   if (perm === "*") return true;
   return ALL_PERMISSION_KEYS.includes(perm);
 }
+

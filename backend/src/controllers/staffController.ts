@@ -540,3 +540,4 @@ export async function forceSignOut(req: RbacRequest, res: Response): Promise<voi
     res.status(500).json({ success: false, message: "Failed to revoke sessions", error: error.message });
   }
 }
+

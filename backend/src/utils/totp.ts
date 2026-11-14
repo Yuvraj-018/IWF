@@ -134,3 +134,4 @@ export function verifyAndConsumeRecoveryCode(
   remaining.splice(idx, 1);
   return { valid: true, remainingHashedCodes: remaining };
 }
+

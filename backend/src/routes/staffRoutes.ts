@@ -26,3 +26,4 @@ staffRouter.post("/:id/reset-password", requirePermission("system.staff:edit"), 
 staffRouter.post("/:id/deactivate", requirePermission("system.staff:delete"), deactivateStaff);
 staffRouter.post("/:id/reactivate", requirePermission("system.staff:edit"), reactivateStaff);
 staffRouter.post("/:id/force-signout", requirePermission("system.staff:edit"), forceSignOut);
+

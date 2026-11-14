@@ -20,3 +20,4 @@ roleRouter.get("/", requirePermission("system.role:view"), listRoles);
 roleRouter.post("/", requirePermission("system.role:create"), createRole);
 roleRouter.put("/:key", requirePermission("system.role:edit"), requireReauth(15), updateRole);
 roleRouter.delete("/:key", requirePermission("system.role:delete"), deleteRole);
+

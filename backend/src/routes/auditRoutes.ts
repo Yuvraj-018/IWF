@@ -8,3 +8,4 @@ auditRouter.use(authenticate);
 
 auditRouter.get("/", requirePermission("governance.audit_log:view"), listAuditLogs);
 auditRouter.get("/export", requirePermission("governance.audit_log:export"), exportAuditLogs);
+
