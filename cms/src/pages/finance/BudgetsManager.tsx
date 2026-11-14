@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { financeApi, BudgetOverview } from "../../services/financeApi";
+import { useAuth } from "../../context/AuthContext";
 
 function formatINR(val: number): string {
   if (isNaN(val) || val === 0) return "₹ 0";
@@ -39,6 +40,7 @@ const SECTOR_DESCRIPTIONS: Record<string, string> = {
 };
 
 export default function BudgetsManager() {
+  const { can } = useAuth();
   const [fy, setFy] = useState("2025-26");
   const [data, setData] = useState<BudgetOverview | null>(null);
   const [loading, setLoading] = useState(true);
@@ -54,27 +56,8 @@ export default function BudgetsManager() {
         setData(res);
       }
     } catch (err: any) {
-      console.warn("Failed to fetch budgets, using baseline allocations:", err.message);
-      setData({
-        success: true,
-        fy,
-        summary: {
-          totalAllocated: 12000000,
-          totalSpent: 4825750,
-          totalRemaining: 7174250,
-          overallUtilization: 40,
-        },
-        sectorBudgets: [
-          { code: "EDU", name: "Education & Learning", allocated: 3000000, spent: 1351210, remaining: 1648790, utilization: 45, status: "approved" },
-          { code: "HLT", name: "Healthcare & Well-being", allocated: 2500000, spent: 1061665, remaining: 1438335, utilization: 42, status: "approved" },
-          { code: "SLE", name: "Livelihoods & Enterprise", allocated: 1500000, spent: 723862, remaining: 776138, utilization: 48, status: "approved" },
-          { code: "WYE", name: "Women & Youth Empowerment", allocated: 1200000, spent: 579090, remaining: 620910, utilization: 48, status: "approved" },
-          { code: "ENV", name: "Environment & Climate", allocated: 800000, spent: 386060, remaining: 413940, utilization: 48, status: "approved" },
-          { code: "SJL", name: "Social Justice & Legal", allocated: 600000, spent: 215000, remaining: 385000, utilization: 36, status: "approved" },
-          { code: "AGR", name: "Agriculture & Food Security", allocated: 1000000, spent: 320000, remaining: 680000, utilization: 32, status: "approved" },
-          { code: "HRR", name: "Humanitarian Relief", allocated: 1400000, spent: 188863, remaining: 1211137, utilization: 13, status: "approved" },
-        ],
-      });
+      toast.error(err.message || "Failed to fetch budget allocations");
+      setData(null);
     } finally {
       setLoading(false);
     }
@@ -85,10 +68,10 @@ export default function BudgetsManager() {
   }, [fy]);
 
   const summary = data?.summary || {
-    totalAllocated: 12000000,
-    totalSpent: 4825750,
-    totalRemaining: 7174250,
-    overallUtilization: 40,
+    totalAllocated: 0,
+    totalSpent: 0,
+    totalRemaining: 0,
+    overallUtilization: 0,
   };
 
   const sectors = data?.sectorBudgets || [];
@@ -99,14 +82,14 @@ export default function BudgetsManager() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-1">
-            <Link to="/finance" className="hover:text-emerald-700 transition">
+            <Link to="/finance" className="hover:text-blue-700 transition">
               Donations &amp; Finance
             </Link>
             <span>/</span>
             <span className="text-slate-800 font-bold">Budgets &amp; Sector Allocations</span>
           </div>
           <h1 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
-            <PieIcon className="w-6 h-6 text-emerald-600" />
+            <PieIcon className="w-6 h-6 text-blue-600" />
             <span>Budgets &amp; Sector Allocations</span>
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
@@ -116,7 +99,7 @@ export default function BudgetsManager() {
 
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-2xs">
-            <Calendar className="w-4 h-4 text-emerald-600" />
+            <Calendar className="w-4 h-4 text-blue-600" />
             <select
               value={fy}
               onChange={(e) => setFy(e.target.value)}
@@ -140,14 +123,14 @@ export default function BudgetsManager() {
 
         <div className="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-2xs">
           <p className="text-xs text-slate-500 font-medium">Actual Incurred Spend</p>
-          <h3 className="text-xl font-black text-purple-700 mt-1">{formatINR(summary.totalSpent)}</h3>
+          <h3 className="text-xl font-black text-blue-700 mt-1">{formatINR(summary.totalSpent)}</h3>
           <p className="text-[10px] text-slate-400 mt-0.5">Verified voucher disbursements</p>
         </div>
 
         <div className="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-2xs">
           <p className="text-xs text-slate-500 font-medium">Remaining Budget Envelope</p>
-          <h3 className="text-xl font-black text-emerald-700 mt-1">{formatINR(summary.totalRemaining)}</h3>
-          <p className="text-[10px] text-emerald-800 font-medium mt-0.5">Available for deployment</p>
+          <h3 className="text-xl font-black text-orange-600 mt-1">{formatINR(summary.totalRemaining)}</h3>
+          <p className="text-[10px] text-orange-700 font-medium mt-0.5">Available for deployment</p>
         </div>
 
         <div className="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-2xs">
@@ -155,7 +138,7 @@ export default function BudgetsManager() {
           <h3 className="text-xl font-black text-slate-900 mt-1">{summary.overallUtilization}%</h3>
           <div className="w-full bg-slate-100 rounded-full h-1.5 mt-2 overflow-hidden">
             <div
-              className="bg-emerald-600 h-1.5 rounded-full"
+              className="bg-blue-600 h-1.5 rounded-full"
               style={{ width: `${Math.min(100, summary.overallUtilization)}%` }}
             />
           </div>
@@ -166,14 +149,14 @@ export default function BudgetsManager() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {loading ? (
           <div className="col-span-full py-16 text-center text-slate-400">
-            <Loader2 className="w-7 h-7 animate-spin mx-auto text-emerald-600 mb-2" />
+            <Loader2 className="w-7 h-7 animate-spin mx-auto text-blue-600 mb-2" />
             <p className="text-xs font-semibold">Loading fiscal budget allocations...</p>
           </div>
         ) : (
           sectors.map((sec) => {
             const isHigh = sec.utilization > 90;
             const isMedium = sec.utilization > 75 && !isHigh;
-            const progressColor = isHigh ? "bg-rose-500" : isMedium ? "bg-amber-500" : "bg-emerald-500";
+            const progressColor = isHigh ? "bg-rose-500" : isMedium ? "bg-amber-500" : "bg-blue-600";
 
             return (
               <div
@@ -182,22 +165,24 @@ export default function BudgetsManager() {
               >
                 <div>
                   <div className="flex items-center justify-between">
-                    <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 font-mono font-bold text-[10px]">
+                    <span className="px-2 py-0.5 rounded-full bg-blue-50 text-blue-800 font-mono font-bold text-[10px]">
                       {sec.code}
                     </span>
-                    <button
-                      onClick={() =>
-                        setEditingSector({
-                          code: sec.code,
-                          name: sec.name,
-                          allocated: sec.allocated,
-                        })
-                      }
-                      title="Edit Budget Allocation"
-                      className="p-1 rounded-lg text-slate-400 hover:text-emerald-700 hover:bg-slate-50 transition cursor-pointer"
-                    >
-                      <Edit2 className="w-3.5 h-3.5" />
-                    </button>
+                    {can("finance.budget:manage") && (
+                      <button
+                        onClick={() =>
+                          setEditingSector({
+                            code: sec.code,
+                            name: sec.name,
+                            allocated: sec.allocated,
+                          })
+                        }
+                        title="Edit Budget Allocation"
+                        className="p-1 rounded-lg text-slate-400 hover:text-orange-600 hover:bg-slate-50 transition cursor-pointer"
+                      >
+                        <Edit2 className="w-3.5 h-3.5" />
+                      </button>
+                    )}
                   </div>
                   <h4 className="text-sm font-black text-slate-900 mt-2">{sec.name}</h4>
                   <p className="text-[10px] text-slate-400 mt-0.5 line-clamp-2">
@@ -226,11 +211,11 @@ export default function BudgetsManager() {
                     </div>
                     <div>
                       <p className="text-[10px] text-slate-400">Incurred</p>
-                      <p className="font-bold text-purple-700">{formatINR(sec.spent)}</p>
+                      <p className="font-bold text-blue-700">{formatINR(sec.spent)}</p>
                     </div>
                     <div className="col-span-2 pt-1 border-t border-slate-50 flex items-center justify-between">
                       <span className="text-[10px] text-slate-400">Remaining</span>
-                      <span className="text-xs font-bold text-emerald-700">{formatINR(sec.remaining)}</span>
+                      <span className="text-xs font-bold text-orange-600">{formatINR(sec.remaining)}</span>
                     </div>
                   </div>
                 </div>
@@ -324,7 +309,7 @@ function EditBudgetModal({
               min={1000}
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="w-full mt-1 px-3 py-2 rounded-xl border border-slate-200 text-sm font-black text-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+              className="w-full mt-1 px-3 py-2 rounded-xl border border-slate-200 text-sm font-black text-slate-900 focus:ring-2 focus:ring-[#f97316] focus:outline-none"
             />
           </div>
 

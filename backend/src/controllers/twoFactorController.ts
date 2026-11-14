@@ -207,6 +207,7 @@ export async function validate2FALogin(req: Request, res: Response): Promise<voi
         scope: admin.scope,
         twoFactorEnabled: admin.twoFactorEnabled,
         mustChangePassword: admin.mustChangePassword,
+        rbacEnforcementMode: (process.env.RBAC_ENFORCEMENT_MODE || "report").toLowerCase(),
       },
     });
   } catch (error: any) {

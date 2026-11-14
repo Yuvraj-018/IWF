@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "seed:finance": "tsx src/scripts/seedFinanceTaxonomy.ts",
+    "seed:demo-accounts": "tsx src/scripts/seedDemoAccounts.ts",
     "test:phase1": "tsx src/scripts/testPhase1.ts",
     "test:phase2": "tsx src/scripts/testPhase2.ts",
     "upload:r2": "tsx src/scripts/uploadToR2.ts",

@@ -1,20 +1,8 @@
 import { apiCache, CacheOptions } from "./cache";
-
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+import { apiFetch, API_BASE_URL, getAuthHeaders } from "./httpClient";
 
 function getHeaders(isFormData = false): HeadersInit {
-  const token = localStorage.getItem("islah_admin_token");
-  const headers: Record<string, string> = {};
-
-  if (!isFormData) {
-    headers["Content-Type"] = "application/json";
-  }
-
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
-
-  return headers;
+  return getAuthHeaders(isFormData);
 }
 
 export const api = {
@@ -38,10 +26,210 @@ export const api = {
   },
 
   async getMe() {
-    const res = await fetch(`${API_BASE_URL}/auth/admin/me`, {
-      headers: getHeaders(),
+    return apiFetch("/auth/admin/me");
+  },
+
+  // ── 2FA Validation During Login ──
+  async validate2FALogin(twoFactorToken: string, code: string, isRecoveryCode = false) {
+    return apiFetch("/auth/admin/2fa/validate-login", {
+      method: "POST",
+      body: JSON.stringify({ twoFactorToken, code, isRecoveryCode }),
     });
-    return res.json();
+  },
+
+  // ── Password Management & Acceptance ──
+  async acceptInvite(token: string, newPassword: string) {
+    return apiFetch("/auth/admin/accept-invite", {
+      method: "POST",
+      body: JSON.stringify({ token, newPassword }),
+    });
+  },
+
+  async changePassword(newPassword: string, currentPassword?: string) {
+    const body: Record<string, string> = { newPassword };
+    if (currentPassword) body.currentPassword = currentPassword;
+    return apiFetch("/auth/admin/change-password", {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
+  },
+
+  // ── High-Risk Re-Authentication ──
+  async reauthenticate(password?: string, totpCode?: string) {
+    const body: Record<string, string> = {};
+    if (password) body.password = password;
+    if (totpCode) body.totpCode = totpCode;
+    return apiFetch("/auth/admin/reauth", {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
+  },
+
+  // ── 2FA Self-Service Management ──
+  async setup2FA() {
+    return apiFetch("/auth/admin/2fa/setup", {
+      method: "POST",
+      body: JSON.stringify({}),
+    });
+  },
+
+  async verify2FA(token: string) {
+    return apiFetch("/auth/admin/2fa/verify", {
+      method: "POST",
+      body: JSON.stringify({ token }),
+    });
+  },
+
+  async disable2FA(password: string) {
+    return apiFetch("/auth/admin/2fa/disable", {
+      method: "POST",
+      body: JSON.stringify({ password }),
+    });
+  },
+
+  async resetStaff2FA(staffId: string) {
+    return apiFetch(`/auth/admin/staff/${staffId}/2fa/reset`, {
+      method: "POST",
+      body: JSON.stringify({}),
+    });
+  },
+
+  // ── Staff Accounts Governance APIs ──
+  async listStaff(params: { page?: number; limit?: number; search?: string; role?: string; status?: string } = {}) {
+    const query = new URLSearchParams();
+    if (params.page) query.set("page", String(params.page));
+    if (params.limit) query.set("limit", String(params.limit || 20));
+    if (params.search) query.set("search", params.search);
+    if (params.role) query.set("role", params.role);
+    if (params.status) query.set("status", params.status);
+    const q = query.toString() ? `?${query.toString()}` : "";
+    return apiFetch(`/admin/staff${q}`);
+  },
+
+  async getStaffById(id: string) {
+    return apiFetch(`/admin/staff/${id}`);
+  },
+
+  async inviteStaff(data: { name: string; email: string; roles: string[]; scope?: any; initialPassword?: string }) {
+    return apiFetch("/admin/staff/invite", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  async updateStaff(id: string, data: { name?: string; roles?: string[]; scope?: any; directPermissions?: any }) {
+    return apiFetch(`/admin/staff/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+  },
+
+  async deactivateStaff(id: string) {
+    return apiFetch(`/admin/staff/${id}/deactivate`, {
+      method: "POST",
+      body: JSON.stringify({}),
+    });
+  },
+
+  async reactivateStaff(id: string) {
+    return apiFetch(`/admin/staff/${id}/reactivate`, {
+      method: "POST",
+      body: JSON.stringify({}),
+    });
+  },
+
+  async resetStaffCredentials(id: string, temporaryPassword?: string) {
+    return apiFetch(`/admin/staff/${id}/reset-password`, {
+      method: "POST",
+      body: JSON.stringify({ temporaryPassword }),
+    });
+  },
+
+  async forceSignoutStaff(id: string) {
+    return apiFetch(`/admin/staff/${id}/force-signout`, {
+      method: "POST",
+      body: JSON.stringify({}),
+    });
+  },
+
+  // ── Roles & Permissions Registry APIs ──
+  async getPermissionsRegistry() {
+    return apiFetch("/admin/roles/permissions-registry");
+  },
+
+  async listRoles() {
+    return apiFetch("/admin/roles");
+  },
+
+  async getRoleByKey(key: string) {
+    return apiFetch(`/admin/roles/${key}`);
+  },
+
+  async createRole(data: { key: string; name: string; description?: string; permissions: string[]; requires2FA?: boolean }) {
+    return apiFetch("/admin/roles", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  async updateRole(key: string, data: { name?: string; description?: string; permissions?: string[]; requires2FA?: boolean }) {
+    return apiFetch(`/admin/roles/${key}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+  },
+
+  async deleteRole(key: string) {
+    return apiFetch(`/admin/roles/${key}`, {
+      method: "DELETE",
+    });
+  },
+
+  // ── Audit Logs & Governance APIs ──
+  async listAuditLogs(params: {
+    page?: number;
+    limit?: number;
+    actor?: string;
+    action?: string;
+    resourceType?: string;
+    outcome?: string;
+    severity?: string;
+    startDate?: string;
+    endDate?: string;
+  } = {}) {
+    const query = new URLSearchParams();
+    if (params.page) query.set("page", String(params.page));
+    if (params.limit) query.set("limit", String(params.limit || 25));
+    if (params.actor) query.set("actor", params.actor);
+    if (params.action) query.set("action", params.action);
+    if (params.resourceType) query.set("resourceType", params.resourceType);
+    if (params.outcome) query.set("outcome", params.outcome);
+    if (params.severity) query.set("severity", params.severity);
+    if (params.startDate) query.set("startDate", params.startDate);
+    if (params.endDate) query.set("endDate", params.endDate);
+    const q = query.toString() ? `?${query.toString()}` : "";
+    return apiFetch(`/admin/audit-logs${q}`);
+  },
+
+  getAuditExportUrl(params: {
+    actor?: string;
+    action?: string;
+    resourceType?: string;
+    outcome?: string;
+    severity?: string;
+    startDate?: string;
+    endDate?: string;
+  } = {}) {
+    const query = new URLSearchParams();
+    if (params.actor) query.set("actor", params.actor);
+    if (params.action) query.set("action", params.action);
+    if (params.resourceType) query.set("resourceType", params.resourceType);
+    if (params.outcome) query.set("outcome", params.outcome);
+    if (params.severity) query.set("severity", params.severity);
+    if (params.startDate) query.set("startDate", params.startDate);
+    if (params.endDate) query.set("endDate", params.endDate);
+    const q = query.toString() ? `?${query.toString()}` : "";
+    return `${API_BASE_URL}/admin/audit-logs/export${q}`;
   },
 
   // ── Live Backend System Health ──

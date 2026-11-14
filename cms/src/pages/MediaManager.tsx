@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { api } from "../services/api";
+import { useAuth } from "../context/AuthContext";
 import {
   Plus,
   Trash2,
@@ -480,6 +481,7 @@ export const SYSTEM_SLOTS: SystemSlot[] = [
 ];
 
 export default function MediaManager() {
+  const { can } = useAuth();
   const [mediaList, setMediaList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"all" | "hero" | "causes" | "gallery" | "videos" | "reports" | "people" | "media" | "custom">("all");
@@ -1072,13 +1074,15 @@ export default function MediaManager() {
                     )}
                     <div className="pt-3 flex items-center justify-between border-t border-slate-100">
                       <span className="text-[11px] font-mono text-slate-400">{heroItem.key}</span>
-                      <button
-                        onClick={() => handleDelete(heroItem.key)}
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition cursor-pointer"
-                        title="Delete this hero slide"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                      {can("cms.media:delete") && (
+                        <button
+                          onClick={() => handleDelete(heroItem.key)}
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition cursor-pointer"
+                          title="Delete this hero slide"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -1192,24 +1196,26 @@ export default function MediaManager() {
                   Update any existing slot or add new dynamic assets to this section anytime.
                 </p>
               </div>
-              <button
-                onClick={() => openNewItemModal(activeTab)}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition shadow-md shadow-orange-500/20 cursor-pointer shrink-0"
-              >
-                <Plus className="w-4 h-4" />
-                <span>
-                  Add New{" "}
-                  {activeTab === "causes"
-                    ? "Pillar"
-                    : activeTab === "videos"
-                    ? "Video"
-                    : activeTab === "reports"
-                    ? "Publication / PDF"
-                    : activeTab === "people"
-                    ? "Team Member"
-                    : "Asset"}
-                </span>
-              </button>
+              {can("cms.media:create") && (
+                <button
+                  onClick={() => openNewItemModal(activeTab)}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition shadow-md shadow-orange-500/20 cursor-pointer shrink-0"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>
+                    Add New{" "}
+                    {activeTab === "causes"
+                      ? "Pillar"
+                      : activeTab === "videos"
+                      ? "Video"
+                      : activeTab === "reports"
+                      ? "Publication / PDF"
+                      : activeTab === "people"
+                      ? "Team Member"
+                      : "Asset"}
+                  </span>
+                </button>
+              )}
             </div>
           )}
           {displayedSlots.length > 0 && (
@@ -1351,13 +1357,15 @@ export default function MediaManager() {
                             >
                               <ExternalLink className="w-3.5 h-3.5" />
                             </a>
-                            <button
-                              onClick={() => handleDelete(slot.key)}
-                              title="Revert to bundled default image"
-                              className="p-1.5 text-slate-400 hover:text-red-500 rounded-lg transition cursor-pointer"
-                            >
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </button>
+                            {can("cms.media:delete") && (
+                              <button
+                                onClick={() => handleDelete(slot.key)}
+                                title="Revert to bundled default image"
+                                className="p-1.5 text-slate-400 hover:text-red-500 rounded-lg transition cursor-pointer"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            )}
                           </>
                         )}
                       </div>
@@ -1475,13 +1483,15 @@ export default function MediaManager() {
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
                           </a>
-                          <button
-                            onClick={() => handleDelete(item.key)}
-                            title="Delete this asset"
-                            className="p-1.5 text-slate-400 hover:text-red-500 rounded-lg transition cursor-pointer"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
+                          {can("cms.media:delete") && (
+                            <button
+                              onClick={() => handleDelete(item.key)}
+                              title="Delete this asset"
+                              className="p-1.5 text-slate-400 hover:text-red-500 rounded-lg transition cursor-pointer"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>

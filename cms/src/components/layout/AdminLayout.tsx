@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { getClientUrl } from "../../services/config";
 import { api } from "../../services/api";
+import { ReauthModal } from "../common/ReauthModal";
 import {
   LayoutDashboard,
   Globe,
@@ -34,6 +35,9 @@ import {
   Clock,
   Check,
   X,
+  AlertTriangle,
+  KeyRound,
+  User as UserIcon,
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -41,7 +45,7 @@ interface AdminLayoutProps {
 }
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
-  const { user, logout } = useAuth();
+  const { user, logout, can } = useAuth();
   const location = useLocation();
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -250,20 +254,23 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   }, [pathname]);
 
   /* ─────────────────────────────────────────────────────────
-     NAVIGATION CONFIGURATION EXACTLY PER ISLAH_SUPER_ADMIN_DASHBOARD DOC (SECTION 3)
+     PERMISSION-DRIVEN NAVIGATION CONFIGURATION
+     Filterable by user permissions; empty sections automatically hidden
      ───────────────────────────────────────────────────────── */
-  const navSections = [
+  const rawNavSections = [
     {
       key: "finance",
       label: "Donations & Finance",
       icon: Coins,
       prefix: "/finance",
       subItems: [
-        { label: "Donation Management", path: "/finance" },
-        { label: "Expenses & Budget", path: "/finance/expenses" },
-        { label: "Bank Reconciliation", path: "/finance/reconciliation" },
-        { label: "Financial Reports", path: "/finance/reports" },
-        { label: "Donation Receipts", path: "/finance/receipts" },
+        { label: "Donation Management", path: "/finance", permission: "finance.donation:view" },
+        { label: "Expenses & Budget", path: "/finance/expenses", permission: "finance.expense:view" },
+        { label: "Bank Reconciliation", path: "/finance/reconciliation", permission: "finance.reconcile:view" },
+        { label: "Financial Reports", path: "/finance/reports", permission: "finance.report:view" },
+        { label: "Donation Receipts", path: "/finance/receipts", permission: "finance.receipt:view" },
+        { label: "Refunds", path: "/finance/refunds", permission: "finance.refund:view" },
+        { label: "Budgets", path: "/finance/budgets", permission: "finance.budget:view" },
       ],
     },
     {
@@ -272,12 +279,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       icon: Users,
       prefix: "/membership",
       subItems: [
-        { label: "Membership Overview", path: "/membership" },
-        { label: "Membership Applications", path: "/membership/applications" },
-        { label: "Member Records", path: "/membership/records" },
-        { label: "Membership Categories", path: "/membership/categories" },
-        { label: "Membership Cards", path: "/membership/cards" },
-        { label: "Renewals & Expiry", path: "/membership/renewals" },
+        { label: "Membership Overview", path: "/membership", permission: "membership.member:view" },
+        { label: "Membership Applications", path: "/membership/applications", permission: "membership.application:view" },
+        { label: "Member Records", path: "/membership/records", permission: "membership.member:view" },
+        { label: "Membership Categories", path: "/membership/categories", permission: "membership.member:view" },
+        { label: "Membership Cards", path: "/membership/cards", permission: "membership.member:view" },
+        { label: "Renewals & Expiry", path: "/membership/renewals", permission: "membership.member:view" },
       ],
     },
     {
@@ -286,12 +293,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       icon: HeartHandshake,
       prefix: "/volunteers",
       subItems: [
-        { label: "Overview", path: "/volunteers" },
-        { label: "Volunteer Applications", path: "/volunteers/applications" },
-        { label: "Mentor Applications", path: "/volunteers/mentor-applications" },
-        { label: "Volunteer Directory", path: "/volunteers/directory" },
-        { label: "Mentor Directory", path: "/volunteers/mentors" },
-        { label: "Assignments & Activities", path: "/volunteers/activities" },
+        { label: "Overview", path: "/volunteers", permission: "membership.application:view" },
+        { label: "Volunteer Applications", path: "/volunteers/applications", permission: "membership.application:view" },
+        { label: "Mentor Applications", path: "/volunteers/mentor-applications", permission: "membership.application:view" },
+        { label: "Volunteer Directory", path: "/volunteers/directory", permission: "membership.application:view" },
+        { label: "Mentor Directory", path: "/volunteers/mentors", permission: "membership.application:view" },
+        { label: "Assignments & Activities", path: "/volunteers/activities", permission: "membership.application:view" },
       ],
     },
     {
@@ -300,12 +307,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       icon: Briefcase,
       prefix: "/partners",
       subItems: [
-        { label: "Overview", path: "/partners" },
-        { label: "Partner Enquiries", path: "/partners/enquiries" },
-        { label: "Sponsor Enquiries", path: "/partners/sponsors-enquiries" },
-        { label: "Partner Directory", path: "/partners/directory" },
-        { label: "Sponsor Directory", path: "/partners/sponsors-directory" },
-        { label: "Agreements & Collaborations", path: "/partners/agreements" },
+        { label: "Overview", path: "/partners", permission: "membership.application:view" },
+        { label: "Partner Enquiries", path: "/partners/enquiries", permission: "membership.application:view" },
+        { label: "Sponsor Enquiries", path: "/partners/sponsors-enquiries", permission: "membership.application:view" },
+        { label: "Partner Directory", path: "/partners/directory", permission: "membership.application:view" },
+        { label: "Sponsor Directory", path: "/partners/sponsors-directory", permission: "membership.application:view" },
+        { label: "Agreements & Collaborations", path: "/partners/agreements", permission: "membership.application:view" },
       ],
     },
     {
@@ -314,11 +321,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       icon: Globe,
       prefix: "/community",
       subItems: [
-        { label: "Community Overview", path: "/community" },
-        { label: "Member Directory", path: "/community/members" },
-        { label: "Donor Directory", path: "/community/donors" },
-        { label: "Partner & Sponsor Directory", path: "/community/partners" },
-        { label: "Volunteer & Mentor Directory", path: "/community/volunteers" },
+        { label: "Community Overview", path: "/community", permission: "community.directory:view" },
+        { label: "Member Directory", path: "/community/members", permission: "community.directory:view" },
+        { label: "Donor Directory", path: "/community/donors", permission: "community.directory:view" },
+        { label: "Partner & Sponsor Directory", path: "/community/partners", permission: "community.directory:view" },
+        { label: "Volunteer & Mentor Directory", path: "/community/volunteers", permission: "community.directory:view" },
       ],
     },
     {
@@ -327,12 +334,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       icon: Award,
       prefix: "/programmes",
       subItems: [
-        { label: "Sector Overview", path: "/programmes" },
-        { label: "Initiatives", path: "/programmes/initiatives" },
-        { label: "Activities", path: "/programmes/activities" },
-        { label: "Beneficiary Management", path: "/programmes/beneficiaries" },
-        { label: "Programme Budgets", path: "/programmes/budgets" },
-        { label: "Impact Reports", path: "/programmes/reports" },
+        { label: "Sector Overview", path: "/programmes", permission: "programme.overview:view" },
+        { label: "Initiatives", path: "/programmes/initiatives", permission: "programme.initiative:view" },
+        { label: "Activities", path: "/programmes/activities", permission: "programme.activity:view" },
+        { label: "Beneficiary Management", path: "/programmes/beneficiaries", permission: "programme.beneficiary:view" },
+        { label: "Impact Reports", path: "/programmes/reports", permission: "programme.impact:view" },
       ],
     },
     {
@@ -341,11 +347,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       icon: Shield,
       prefix: "/governance",
       subItems: [
-        { label: "Legal & Registration Documents", path: "/governance/legal" },
-        { label: "Governance Records", path: "/governance/records" },
-        { label: "Annual Reports", path: "/governance/annual-reports" },
-        { label: "Financial Reports", path: "/governance/financial-reports" },
-        { label: "Transparency & Disclosures", path: "/governance/transparency" },
+        { label: "Legal & Registration", path: "/governance/legal", permission: "governance.document:view" },
+        { label: "Governance Records", path: "/governance/records", permission: "governance.document:view" },
+        { label: "Annual Reports", path: "/governance/annual-reports", permission: "governance.report:view" },
+        { label: "Financial Reports", path: "/governance/financial-reports", permission: "finance.report:view" },
+        { label: "Transparency & Disclosures", path: "/governance/transparency", permission: "governance.disclosure:view" },
       ],
     },
     {
@@ -354,10 +360,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       icon: MessageSquare,
       prefix: "/communications",
       subItems: [
-        { label: "Notifications", path: "/communications/notifications" },
-        { label: "Email Management", path: "/communications/email" },
-        { label: "Announcements", path: "/communications/announcements" },
-        { label: "Campaign Communications", path: "/communications/campaigns" },
+        { label: "Notifications", path: "/communications/notifications", permission: "comms.notice:view" },
+        { label: "Email Management", path: "/communications/email", permission: "comms.email:view" },
+        { label: "Announcements", path: "/communications/announcements", permission: "comms.notice:view" },
+        { label: "Campaign Communications", path: "/communications/campaigns", permission: "comms.campaign:view" },
       ],
     },
     {
@@ -366,27 +372,43 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       icon: Activity,
       prefix: "/system-health",
       subItems: [
-        { label: "Database Status", path: "/system-health/database" },
-        { label: "API Status", path: "/system-health/api" },
-        { label: "Payment Gateway", path: "/system-health/payment-gateway" },
-        { label: "Email Service", path: "/system-health/email" },
-        { label: "Backup & Recovery", path: "/system-health/backup" },
-        { label: "Error Logs", path: "/system-health/logs" },
+        { label: "Database Status", path: "/system-health/database", permission: "system.health:view" },
+        { label: "API Status", path: "/system-health/api", permission: "system.health:view" },
+        { label: "Payment Gateway", path: "/system-health/payment-gateway", permission: "system.health:view" },
+        { label: "Email Service", path: "/system-health/email", permission: "system.health:view" },
+        { label: "Backup & Recovery", path: "/system-health/backup", permission: "system.health:view" },
+        { label: "Error Logs", path: "/system-health/logs", permission: "system.health:view" },
       ],
     },
     {
       key: "staff",
-      label: "Staff & Roles",
+      label: "Staff & Governance",
       icon: UserCheck,
       prefix: "/staff",
       subItems: [
-        { label: "Staff Directory", path: "/staff/directory" },
-        { label: "User Accounts", path: "/staff/accounts" },
-        { label: "Roles & Permissions", path: "/staff/roles" },
-        { label: "Activity Logs", path: "/staff/logs" },
+        { label: "User Accounts", path: "/staff/accounts", permission: "system.staff:view" },
+        { label: "Roles & Permissions", path: "/staff/roles", permission: "system.role:view" },
+        { label: "Staff Directory", path: "/staff/directory", permission: "system.staff:view" },
+        { label: "Activity Logs", path: "/staff/logs", permission: "system.audit:view" },
       ],
     },
   ];
+
+  // Filter sections and sub-items based on user permissions
+  const navSections = rawNavSections
+    .map((sec) => ({
+      ...sec,
+      subItems: sec.subItems.filter((sub) => can(sub.permission)),
+    }))
+    .filter((sec) => sec.subItems.length > 0);
+
+  const canViewCms =
+    can("cms.dashboard:view") ||
+    can("cms.page:view") ||
+    can("cms.news:view") ||
+    can("cms.media:view");
+
+  const canViewSettings = can("cms.settings:view") || can("cms.settings:edit");
 
   const renderNavLinks = (isExpanded: boolean, onNavigate?: () => void) => (
     <>
@@ -408,25 +430,27 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         {isExpanded && <span className="tracking-wide">Dashboard</span>}
       </Link>
 
-      {/* 2. Website & CMS */}
-      <Link
-        to="/cms"
-        onClick={onNavigate}
-        className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-md text-xs font-semibold transition ${
-          pathname.startsWith("/cms")
-            ? "bg-[#0d2a4d] text-white font-bold border-l-4 border-[#f97316] shadow-2xs"
-            : "text-slate-300 hover:text-white hover:bg-[#0c2444]"
-        }`}
-      >
-        <Globe
-          className={`w-4 h-4 shrink-0 ${
-            pathname.startsWith("/cms") ? "text-[#f97316]" : "text-slate-400"
+      {/* 2. Website & CMS (Gated by permission) */}
+      {canViewCms && (
+        <Link
+          to="/cms"
+          onClick={onNavigate}
+          className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-md text-xs font-semibold transition ${
+            pathname.startsWith("/cms")
+              ? "bg-[#0d2a4d] text-white font-bold border-l-4 border-[#f97316] shadow-2xs"
+              : "text-slate-300 hover:text-white hover:bg-[#0c2444]"
           }`}
-        />
-        {isExpanded && <span className="tracking-wide">Website &amp; CMS</span>}
-      </Link>
+        >
+          <Globe
+            className={`w-4 h-4 shrink-0 ${
+              pathname.startsWith("/cms") ? "text-[#f97316]" : "text-slate-400"
+            }`}
+          />
+          {isExpanded && <span className="tracking-wide">Website &amp; CMS</span>}
+        </Link>
+      )}
 
-      {/* 3 to 12: Expandable Sections Per Section 3 */}
+      {/* Expandable Sections Filtered by RBAC */}
       {navSections.map((sec) => {
         const Icon = sec.icon;
         const isSectionActive = pathname.startsWith(sec.prefix);
@@ -484,23 +508,25 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         );
       })}
 
-      {/* 13. Settings */}
-      <Link
-        to="/settings"
-        onClick={onNavigate}
-        className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-md text-xs font-semibold transition ${
-          pathname === "/settings"
-            ? "bg-[#0d2a4d] text-white font-bold border-l-4 border-[#f97316] shadow-2xs"
-            : "text-slate-300 hover:text-white hover:bg-[#0c2444]"
-        }`}
-      >
-        <Settings
-          className={`w-4 h-4 shrink-0 ${
-            pathname === "/settings" ? "text-[#f97316]" : "text-slate-400"
+      {/* Settings (Gated by permission) */}
+      {canViewSettings && (
+        <Link
+          to="/settings"
+          onClick={onNavigate}
+          className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-md text-xs font-semibold transition ${
+            pathname === "/settings"
+              ? "bg-[#0d2a4d] text-white font-bold border-l-4 border-[#f97316] shadow-2xs"
+              : "text-slate-300 hover:text-white hover:bg-[#0c2444]"
           }`}
-        />
-        {isExpanded && <span className="tracking-wide">Settings</span>}
-      </Link>
+        >
+          <Settings
+            className={`w-4 h-4 shrink-0 ${
+              pathname === "/settings" ? "text-[#f97316]" : "text-slate-400"
+            }`}
+          />
+          {isExpanded && <span className="tracking-wide">Settings</span>}
+        </Link>
+      )}
     </>
   );
 
@@ -676,7 +702,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                           {unreadAlertsCount}
                         </span>
                       ) : (
-                        <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                        <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700">
                           0
                         </span>
                       )}
@@ -694,7 +720,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   <div className="max-h-80 overflow-y-auto divide-y divide-slate-100 bg-white">
                     {activePendingAlerts.length === 0 ? (
                       <div className="p-6 text-center text-slate-400 text-xs bg-white">
-                        <CheckCircle2 className="w-8 h-8 text-emerald-500 mx-auto mb-2 opacity-80" />
+                        <CheckCircle2 className="w-8 h-8 text-blue-500 mx-auto mb-2 opacity-80" />
                         <p className="font-bold text-slate-700">All caught up!</p>
                         <p className="text-[11px] text-slate-400 mt-0.5">No pending applications or critical alerts requiring action.</p>
                       </div>
@@ -782,7 +808,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                           {unreadMessagesCount} unread
                         </span>
                       ) : (
-                        <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                        <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700">
                           0 unread
                         </span>
                       )}
@@ -884,13 +910,15 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 className="flex items-center gap-2.5 p-1.5 pl-2 hover:bg-slate-100 rounded-lg transition cursor-pointer border border-transparent hover:border-slate-200"
               >
                 <div className="w-8 h-8 rounded-full bg-[#071527] text-white flex items-center justify-center font-black text-xs border border-[#163c6c] shadow-2xs">
-                  {user?.name?.slice(0, 2).toUpperCase() || "IM"}
+                  {user?.name ? user.name.slice(0, 2).toUpperCase() : "AD"}
                 </div>
                 <div className="text-left hidden md:block">
                   <p className="text-xs font-bold text-slate-800 leading-tight">
-                    {user?.name || "Imteyazullah"}
+                    {user?.name || "Administrator"}
                   </p>
-                  <p className="text-[10px] text-slate-500 font-medium">Super Admin</p>
+                  <p className="text-[10px] text-slate-500 font-medium capitalize">
+                    {user?.roles?.[0]?.replace(/_/g, " ") || user?.role || "Staff"}
+                  </p>
                 </div>
                 <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
               </button>
@@ -898,25 +926,42 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               {userDropdownOpen && (
                 <div
                   style={{ backgroundColor: "#ffffff", opacity: 1, zIndex: 99999 }}
-                  className="cms-popover absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35)] border border-slate-200 py-1.5 z-[99999] text-xs"
+                  className="cms-popover absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35)] border border-slate-200 py-1.5 z-[99999] text-xs"
                 >
                   <div className="px-3.5 py-2 border-b border-slate-100">
-                    <p className="font-bold text-slate-800">{user?.name || "Imteyazullah"}</p>
-                    <p className="text-[11px] text-slate-500">{user?.email || "admin@islah.org"}</p>
+                    <p className="font-bold text-slate-800">{user?.name || "Administrator"}</p>
+                    <p className="text-[11px] text-slate-500 truncate">{user?.email || "admin@iwfindia.org"}</p>
+                    <div className="mt-1 flex flex-wrap gap-1">
+                      {user?.roles?.map((r) => (
+                        <span key={r} className="px-1.5 py-0.2 rounded text-[10px] bg-slate-100 font-semibold text-slate-700">
+                          {r}
+                        </span>
+                      ))}
+                    </div>
                   </div>
+                  <Link
+                    to="/account"
+                    onClick={() => setUserDropdownOpen(false)}
+                    className="flex items-center gap-2 px-3.5 py-2 hover:bg-slate-50 text-slate-700 font-medium"
+                  >
+                    <KeyRound className="w-3.5 h-3.5 text-orange-500" />
+                    <span>Security &amp; Account</span>
+                  </Link>
                   <Link
                     to="/settings"
                     onClick={() => setUserDropdownOpen(false)}
-                    className="block px-3.5 py-2 hover:bg-slate-50 text-slate-700 font-medium"
+                    className="flex items-center gap-2 px-3.5 py-2 hover:bg-slate-50 text-slate-700 font-medium"
                   >
-                    System Settings
+                    <Settings className="w-3.5 h-3.5 text-slate-400" />
+                    <span>System Settings</span>
                   </Link>
                   <Link
                     to="/finance/reports"
                     onClick={() => setUserDropdownOpen(false)}
-                    className="block px-3.5 py-2 hover:bg-slate-50 text-slate-700 font-medium"
+                    className="flex items-center gap-2 px-3.5 py-2 hover:bg-slate-50 text-slate-700 font-medium"
                   >
-                    Audited Reports
+                    <Receipt className="w-3.5 h-3.5 text-slate-400" />
+                    <span>Audited Reports</span>
                   </Link>
                   <button
                     onClick={() => {
@@ -936,9 +981,27 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
         {/* ── WORKSPACE VIEWPORT ── */}
         <main className="cms-canvas flex-1 overflow-y-auto p-4 md:p-6 bg-[#f8fafc]">
+          {/* Super Admin Advisory Notice for Report Mode */}
+          {user?.roles?.includes("super_admin") && user?.rbacEnforcementMode !== "enforce" && (
+            <div className="mb-4 px-4 py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between text-xs text-amber-800">
+              <div className="flex items-center gap-2 font-medium">
+                <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+                <span>
+                  <strong>Advisory:</strong> RBAC engine is currently operating in <strong>REPORT MODE</strong>. Policy violations are monitored in audit logs rather than rejected.
+                </span>
+              </div>
+              <span className="hidden sm:inline-block px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-[10px] font-bold uppercase tracking-wider">
+                Report Mode
+              </span>
+            </div>
+          )}
+
           {children}
         </main>
       </div>
+
+      {/* Global High-Risk Re-Authentication Challenge Modal */}
+      <ReauthModal />
     </div>
   );
 }

@@ -189,6 +189,7 @@ export async function adminLogin(req: Request, res: Response) {
         scope: admin.scope,
         twoFactorEnabled: admin.twoFactorEnabled,
         mustChangePassword: admin.mustChangePassword,
+        rbacEnforcementMode: (process.env.RBAC_ENFORCEMENT_MODE || "report").toLowerCase(),
       },
     });
   } catch (err: any) {
@@ -235,6 +236,7 @@ export async function getAdminProfile(req: RbacRequest, res: Response) {
         lastLogin: admin.lastLogin,
         lastReauthAt: admin.lastReauthAt,
         tokenVersion: admin.tokenVersion,
+        rbacEnforcementMode: (process.env.RBAC_ENFORCEMENT_MODE || "report").toLowerCase(),
       },
     });
   } catch (err: any) {

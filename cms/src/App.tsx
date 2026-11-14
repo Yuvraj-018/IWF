@@ -1,7 +1,20 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider, useAuth } from "./context/AuthContext";
+import { AuthProvider } from "./context/AuthContext";
 import AdminLayout from "./components/layout/AdminLayout";
+import { RequirePermission } from "./components/common/RequirePermission";
+
 import LoginPage from "./pages/LoginPage";
+import ForcedPasswordChangePage from "./pages/ForcedPasswordChangePage";
+import TwoFactorEnrollmentWizard from "./pages/TwoFactorEnrollmentWizard";
+import AcceptInvitePage from "./pages/AcceptInvitePage";
+import MyAccountPage from "./pages/MyAccountPage";
+
+// Staff Governance Modules
+import UserAccountsManager from "./pages/staff/UserAccountsManager";
+import RolesPermissionsManager from "./pages/staff/RolesPermissionsManager";
+import StaffDirectoryManager from "./pages/staff/StaffDirectoryManager";
+import ActivityLogsViewer from "./pages/staff/ActivityLogsViewer";
+
 import DashboardOverview from "./pages/DashboardOverview";
 import NewsManager from "./pages/NewsManager";
 import MediaManager from "./pages/MediaManager";
@@ -42,25 +55,23 @@ import {
 } from "./pages/modules/GeneralModules";
 
 import { Toaster } from "sonner";
-import { Loader2 } from "lucide-react";
 
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#071527] flex flex-col items-center justify-center text-slate-400 gap-3 font-sans">
-        <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
-        <p className="text-xs font-mono text-slate-300">Verifying session...</p>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-
-  return <AdminLayout>{children}</AdminLayout>;
+function ProtectedRoute({
+  permission,
+  anyOf,
+  moduleName,
+  children,
+}: {
+  permission?: string;
+  anyOf?: string[];
+  moduleName?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <RequirePermission permission={permission} anyOf={anyOf} moduleName={moduleName}>
+      <AdminLayout>{children}</AdminLayout>
+    </RequirePermission>
+  );
 }
 
 export default function App() {
@@ -69,8 +80,21 @@ export default function App() {
       <Toaster position="top-right" richColors theme="dark" closeButton />
       <BrowserRouter>
         <Routes>
-          {/* Public Login Route */}
+          {/* Public Login & Onboarding Routes */}
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/accept-invite" element={<AcceptInvitePage />} />
+          <Route path="/change-password" element={<ForcedPasswordChangePage />} />
+          <Route path="/2fa-enroll" element={<TwoFactorEnrollmentWizard />} />
+
+          {/* User Account & Security Settings */}
+          <Route
+            path="/account"
+            element={
+              <ProtectedRoute>
+                <MyAccountPage />
+              </ProtectedRoute>
+            }
+          />
 
           {/* 1. Root & Super Admin Dashboard */}
           <Route
@@ -598,44 +622,44 @@ export default function App() {
             }
           />
 
-          {/* 12. Staff & Roles */}
+          {/* 12. Staff & Roles Governance */}
           <Route
             path="/staff"
             element={
-              <ProtectedRoute>
-                <LeadershipManager />
+              <ProtectedRoute permission="system.staff:view" moduleName="Staff Accounts">
+                <UserAccountsManager />
               </ProtectedRoute>
             }
           />
           <Route
             path="/staff/directory"
             element={
-              <ProtectedRoute>
-                <LeadershipManager />
+              <ProtectedRoute permission="system.staff:view" moduleName="Staff Directory">
+                <StaffDirectoryManager />
               </ProtectedRoute>
             }
           />
           <Route
             path="/staff/accounts"
             element={
-              <ProtectedRoute>
-                <LeadershipManager />
+              <ProtectedRoute permission="system.staff:view" moduleName="User Accounts">
+                <UserAccountsManager />
               </ProtectedRoute>
             }
           />
           <Route
             path="/staff/roles"
             element={
-              <ProtectedRoute>
-                <LeadershipManager />
+              <ProtectedRoute permission="system.role:view" moduleName="Roles & Permissions">
+                <RolesPermissionsManager />
               </ProtectedRoute>
             }
           />
           <Route
             path="/staff/logs"
             element={
-              <ProtectedRoute>
-                <LeadershipManager />
+              <ProtectedRoute permission="system.audit:view" moduleName="Activity Logs">
+                <ActivityLogsViewer />
               </ProtectedRoute>
             }
           />

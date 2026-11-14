@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { api } from "../services/api";
+import { useAuth } from "../context/AuthContext";
 import {
   Download,
   Loader2,
@@ -22,6 +23,7 @@ import {
 import { toast } from "sonner";
 
 export default function ApplicationsManager({ initialTab }: { initialTab?: string } = {}) {
+  const { can } = useAuth();
   const [apps, setApps] = useState<any[]>([]);
   const [taxRequests, setTaxRequests] = useState<any[]>([]);
   const [contacts, setContacts] = useState<any[]>([]);
@@ -492,26 +494,34 @@ export default function ApplicationsManager({ initialTab }: { initialTab?: strin
 
                 {/* Restore / Status Actions */}
                 <div className="flex md:flex-col items-center md:items-end justify-between gap-2 shrink-0 border-t md:border-t-0 pt-3 md:pt-0 border-slate-200">
-                  <button
-                    onClick={() => handleApplicationStatus(item._id, "Pending")}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-orange-50 hover:bg-[#f97316] hover:text-white text-[#ea580c] text-xs font-bold border border-orange-200 transition cursor-pointer shadow-xs"
-                  >
-                    <ArchiveRestore className="w-3.5 h-3.5" />
-                    <span>Restore to Active</span>
-                  </button>
-                  <select
-                    value={item.status || "Archived"}
-                    onChange={(e) => handleApplicationStatus(item._id, e.target.value)}
-                    className="px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-700 font-bold outline-none cursor-pointer hover:border-orange-500 shadow-sm transition"
-                  >
-                    <option value="Archived">Status: Archived</option>
-                    <option value="Pending">Restore as Pending</option>
-                    <option value="Under Review">Restore as Under Review</option>
-                    <option value="Shortlisted">Restore as Shortlisted</option>
-                    <option value="Approved">Restore as Approved</option>
-                    <option value="Contacted">Restore as Contacted</option>
-                    <option value="Rejected">Restore as Rejected</option>
-                  </select>
+                  {can("membership.application:review") ? (
+                    <>
+                      <button
+                        onClick={() => handleApplicationStatus(item._id, "Pending")}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-orange-50 hover:bg-[#f97316] hover:text-white text-[#ea580c] text-xs font-bold border border-orange-200 transition cursor-pointer shadow-xs"
+                      >
+                        <ArchiveRestore className="w-3.5 h-3.5" />
+                        <span>Restore to Active</span>
+                      </button>
+                      <select
+                        value={item.status || "Archived"}
+                        onChange={(e) => handleApplicationStatus(item._id, e.target.value)}
+                        className="px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-700 font-bold outline-none cursor-pointer hover:border-orange-500 shadow-sm transition"
+                      >
+                        <option value="Archived">Status: Archived</option>
+                        <option value="Pending">Restore as Pending</option>
+                        <option value="Under Review">Restore as Under Review</option>
+                        <option value="Shortlisted">Restore as Shortlisted</option>
+                        <option value="Approved">Restore as Approved</option>
+                        <option value="Contacted">Restore as Contacted</option>
+                        <option value="Rejected">Restore as Rejected</option>
+                      </select>
+                    </>
+                  ) : (
+                    <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-500 border border-slate-200">
+                      {item.status || "Archived"}
+                    </span>
+                  )}
                 </div>
               </div>
             ))}
@@ -699,19 +709,25 @@ export default function ApplicationsManager({ initialTab }: { initialTab?: strin
 
                 {/* Status Action */}
                 <div className="flex md:flex-col items-center md:items-end justify-between gap-2 shrink-0 border-t md:border-t-0 pt-3 md:pt-0 border-slate-200">
-                  <select
-                    value={item.status || "Pending"}
-                    onChange={(e) => handleApplicationStatus(item._id, e.target.value)}
-                    className="px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs text-orange-600 font-bold outline-none cursor-pointer hover:border-orange-500 shadow-sm transition"
-                  >
-                    <option value="Pending">Pending</option>
-                    <option value="Under Review">Under Review</option>
-                    <option value="Shortlisted">Shortlisted</option>
-                    <option value="Approved">Approved</option>
-                    <option value="Contacted">Contacted</option>
-                    <option value="Rejected">Rejected</option>
-                    <option value="Archived">Move to Archive</option>
-                  </select>
+                  {can("membership.application:review") ? (
+                    <select
+                      value={item.status || "Pending"}
+                      onChange={(e) => handleApplicationStatus(item._id, e.target.value)}
+                      className="px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs text-orange-600 font-bold outline-none cursor-pointer hover:border-orange-500 shadow-sm transition"
+                    >
+                      <option value="Pending">Pending</option>
+                      <option value="Under Review">Under Review</option>
+                      <option value="Shortlisted">Shortlisted</option>
+                      <option value="Approved">Approved</option>
+                      <option value="Contacted">Contacted</option>
+                      <option value="Rejected">Rejected</option>
+                      <option value="Archived">Move to Archive</option>
+                    </select>
+                  ) : (
+                    <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-500 border border-slate-200">
+                      {item.status || "Pending"}
+                    </span>
+                  )}
                 </div>
               </div>
             ))}
