@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Admin } from "../models/Admin.js";
-import { verifyToken, signToken } from "../utils/authUtils.js";
+import { Role } from "../models/Role.js";
+import { verifyToken, signToken, verifyPassword } from "../utils/authUtils.js";
 import {
   generateBase32Secret,
   verifyTOTPCode,
@@ -9,7 +10,7 @@ import {
   verifyAndConsumeRecoveryCode,
 } from "../utils/totp.js";
 import { logAudit, getActor } from "../services/auditService.js";
-import { RbacRequest } from "../middlewares/rbac.js";
+import { RbacRequest, resolveAdminPermissions } from "../middlewares/rbac.js";
 
 /**
  * 1. Initialize 2FA Setup
@@ -177,6 +178,8 @@ export async function validate2FALogin(req: Request, res: Response): Promise<voi
       tokenVersion: admin.tokenVersion || 0,
     });
 
+    const { permissions } = await resolveAdminPermissions(admin);
+
     await logAudit({
       req,
       actor: { id: admin._id.toString(), name: admin.name, email: admin.email },
@@ -191,15 +194,19 @@ export async function validate2FALogin(req: Request, res: Response): Promise<voi
       success: true,
       message: "Two-Factor authentication verified successfully",
       token: fullToken,
+      requires2FA: false,
+      mustEnroll2FA: false,
+      mustChangePassword: !!admin.mustChangePassword,
       admin: {
         id: admin._id,
         email: admin.email,
         name: admin.name,
         role: admin.role,
         roles: admin.roles,
+        permissions,
+        scope: admin.scope,
         twoFactorEnabled: admin.twoFactorEnabled,
         mustChangePassword: admin.mustChangePassword,
-        scope: admin.scope,
       },
     });
   } catch (error: any) {
@@ -246,3 +253,81 @@ export async function resetStaff2FA(req: RbacRequest, res: Response): Promise<vo
     res.status(500).json({ success: false, message: "Failed to reset 2FA", error: error.message });
   }
 }
+
+/**
+ * 5. Authenticated User Disable 2FA
+ * Requires password verification. Blocked if any assigned role strictly mandates 2FA.
+ */
+export async function disable2FA(req: RbacRequest, res: Response): Promise<void> {
+  try {
+    const user = req.adminUser;
+    const { password } = req.body;
+
+    if (!user) {
+      res.status(401).json({ success: false, message: "Authentication required" });
+      return;
+    }
+
+    if (!password) {
+      res.status(400).json({ success: false, message: "Password confirmation is required to disable 2FA." });
+      return;
+    }
+
+    const admin = await Admin.findById(user.id);
+    if (!admin) {
+      res.status(404).json({ success: false, message: "Admin account not found" });
+      return;
+    }
+
+    // Verify password
+    const isPasswordValid = verifyPassword(password, admin.passwordHash);
+    if (!isPasswordValid) {
+      res.status(401).json({ success: false, message: "Invalid password. 2FA was not disabled." });
+      return;
+    }
+
+    // Check if any held role strictly mandates 2FA
+    const roleKeys = admin.roles || [admin.role || "super_admin"];
+    const mandatoryRoles = await Role.find({ key: { $in: roleKeys }, requires2FA: true });
+    if (mandatoryRoles.length > 0) {
+      res.status(403).json({
+        success: false,
+        message: `Cannot disable 2FA: Two-Factor Authentication is mandatory for your assigned role(s): [${mandatoryRoles.map((r) => r.name).join(", ")}].`,
+      });
+      return;
+    }
+
+    admin.twoFactorEnabled = false;
+    admin.twoFactorSecret = null;
+    admin.twoFactorRecoveryCodes = [];
+    admin.tokenVersion = (admin.tokenVersion || 0) + 1; // Invalidate other sessions
+    await admin.save();
+
+    await logAudit({
+      req,
+      action: "auth.2fa_disabled",
+      resourceType: "admin",
+      resourceId: admin._id.toString(),
+      severity: "high",
+      reason: `2FA disabled by user ${admin.name}`,
+    });
+
+    const freshToken = signToken({
+      adminId: admin._id,
+      email: admin.email,
+      name: admin.name,
+      tokenVersion: admin.tokenVersion,
+    });
+
+    res.json({
+      success: true,
+      message: "Two-Factor Authentication disabled successfully.",
+      token: freshToken,
+    });
+  } catch (error: any) {
+    console.error("disable2FA error:", error);
+    res.status(500).json({ success: false, message: "Failed to disable 2FA", error: error.message });
+  }
+}
+
+
