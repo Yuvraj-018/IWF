@@ -8,9 +8,9 @@ import { logAudit, getActor } from "../services/auditService.js";
 export type RbacEnforcementMode = "off" | "report" | "enforce";
 
 export function getRbacEnforcementMode(): RbacEnforcementMode {
-  const mode = (process.env.RBAC_ENFORCEMENT_MODE || "report").toLowerCase();
-  if (mode === "off" || mode === "enforce") return mode;
-  return "report"; // Default mode for safe deployment
+  const mode = (process.env.RBAC_ENFORCEMENT_MODE || "enforce").toLowerCase();
+  if (mode === "off" || mode === "report") return mode;
+  return "enforce"; // Enforce active by default
 }
 
 export interface AdminUserContext {

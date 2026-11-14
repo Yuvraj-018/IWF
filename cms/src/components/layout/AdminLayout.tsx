@@ -286,12 +286,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       icon: Users,
       prefix: "/membership",
       subItems: [
-        { label: "Membership Overview", path: "/membership", permission: "membership.member:view" },
+        { label: "Member Directory", path: "/membership", permission: "membership.member:view" },
         { label: "Membership Applications", path: "/membership/applications", permission: "membership.application:view" },
-        { label: "Member Records", path: "/membership/records", permission: "membership.member:view" },
-        { label: "Membership Categories", path: "/membership/categories", permission: "membership.member:view" },
-        { label: "Membership Cards", path: "/membership/cards", permission: "membership.member:view" },
-        { label: "Renewals & Expiry", path: "/membership/renewals", permission: "membership.member:view" },
       ],
     },
     {
@@ -300,12 +296,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       icon: HeartHandshake,
       prefix: "/volunteers",
       subItems: [
-        { label: "Overview", path: "/volunteers", permission: "membership.application:view" },
         { label: "Volunteer Applications", path: "/volunteers/applications", permission: "membership.application:view" },
         { label: "Mentor Applications", path: "/volunteers/mentor-applications", permission: "membership.application:view" },
-        { label: "Volunteer Directory", path: "/volunteers/directory", permission: "membership.application:view" },
-        { label: "Mentor Directory", path: "/volunteers/mentors", permission: "membership.application:view" },
-        { label: "Assignments & Activities", path: "/volunteers/activities", permission: "membership.application:view" },
+        { label: "Volunteer Activities", path: "/volunteers/activities", permission: "membership.application:view" },
       ],
     },
     {
@@ -314,11 +307,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       icon: Briefcase,
       prefix: "/partners",
       subItems: [
-        { label: "Overview", path: "/partners", permission: "membership.application:view" },
         { label: "Partner Enquiries", path: "/partners/enquiries", permission: "membership.application:view" },
         { label: "Sponsor Enquiries", path: "/partners/sponsors-enquiries", permission: "membership.application:view" },
-        { label: "Partner Directory", path: "/partners/directory", permission: "membership.application:view" },
-        { label: "Sponsor Directory", path: "/partners/sponsors-directory", permission: "membership.application:view" },
         { label: "Agreements & Collaborations", path: "/partners/agreements", permission: "membership.application:view" },
       ],
     },
@@ -341,10 +331,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       icon: Award,
       prefix: "/programmes",
       subItems: [
-        { label: "Sector Overview", path: "/programmes", permission: "programme.overview:view" },
-        { label: "Initiatives", path: "/programmes/initiatives", permission: "programme.initiative:view" },
-        { label: "Activities", path: "/programmes/activities", permission: "programme.activity:view" },
-        { label: "Beneficiary Management", path: "/programmes/beneficiaries", permission: "programme.beneficiary:view" },
+        { label: "Programmes Overview", path: "/programmes", permission: "programme.overview:view" },
+        { label: "Initiatives & Activities", path: "/programmes/initiatives", permission: "programme.initiative:view" },
         { label: "Impact Reports", path: "/programmes/reports", permission: "programme.impact:view" },
       ],
     },
@@ -354,11 +342,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       icon: Shield,
       prefix: "/governance",
       subItems: [
-        { label: "Legal & Registration", path: "/governance/legal", permission: "governance.document:view" },
-        { label: "Governance Records", path: "/governance/records", permission: "governance.document:view" },
-        { label: "Annual Reports", path: "/governance/annual-reports", permission: "governance.report:view" },
-        { label: "Financial Reports", path: "/governance/financial-reports", permission: "finance.report:view" },
-        { label: "Transparency & Disclosures", path: "/governance/transparency", permission: "governance.disclosure:view" },
+        { label: "Governance & Disclosures", path: "/governance", permission: "governance.document:view" },
+        { label: "Audited Financial Reports", path: "/governance/financial-reports", permission: "finance.report:view" },
       ],
     },
     {
@@ -367,24 +352,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       icon: MessageSquare,
       prefix: "/communications",
       subItems: [
-        { label: "Notifications", path: "/communications/notifications", permission: "comms.notice:view" },
-        { label: "Email Management", path: "/communications/email", permission: "comms.email:view" },
-        { label: "Announcements", path: "/communications/announcements", permission: "comms.notice:view" },
-        { label: "Campaign Communications", path: "/communications/campaigns", permission: "comms.campaign:view" },
-      ],
-    },
-    {
-      key: "systemHealth",
-      label: "System Health",
-      icon: Activity,
-      prefix: "/system-health",
-      subItems: [
-        { label: "Database Status", path: "/system-health/database", permission: "system.health:view" },
-        { label: "API Status", path: "/system-health/api", permission: "system.health:view" },
-        { label: "Payment Gateway", path: "/system-health/payment-gateway", permission: "system.health:view" },
-        { label: "Email Service", path: "/system-health/email", permission: "system.health:view" },
-        { label: "Backup & Recovery", path: "/system-health/backup", permission: "system.health:view" },
-        { label: "Error Logs", path: "/system-health/logs", permission: "system.health:view" },
+        { label: "Campaigns & Inquiries", path: "/communications", permission: "comms.email:view" },
+        { label: "Announcements & News", path: "/communications/announcements", permission: "comms.notice:view" },
       ],
     },
     {
@@ -417,6 +386,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     can("cms.media:view");
 
   const canViewSettings = can("cms.settings:view") || can("cms.settings:edit");
+  const canViewHealth = can("system.health:view");
 
   const renderNavLinks = (isExpanded: boolean, onNavigate?: () => void) => (
     <>
@@ -520,6 +490,26 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </div>
         );
       })}
+
+      {/* System Health (Direct 1-Click Link) */}
+      {canViewHealth && (
+        <Link
+          to="/system-health"
+          onClick={onNavigate}
+          className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-md text-xs font-semibold transition ${
+            pathname.startsWith("/system-health")
+              ? "bg-[#0d2a4d] text-white font-bold border-l-4 border-[#f97316] shadow-2xs"
+              : "text-slate-300 hover:text-white hover:bg-[#0c2444]"
+          }`}
+        >
+          <Activity
+            className={`w-4 h-4 shrink-0 ${
+              pathname.startsWith("/system-health") ? "text-[#f97316]" : "text-slate-400"
+            }`}
+          />
+          {isExpanded && <span className="tracking-wide">System Health</span>}
+        </Link>
+      )}
 
       {/* Settings (Gated by permission) */}
       {canViewSettings && (
@@ -1009,21 +999,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
         {/* ── WORKSPACE VIEWPORT ── */}
         <main className="cms-canvas flex-1 overflow-y-auto p-4 md:p-6 bg-[#f8fafc]">
-          {/* Super Admin Advisory Notice for Report Mode */}
-          {user?.roles?.includes("super_admin") && user?.rbacEnforcementMode !== "enforce" && (
-            <div className="mb-4 px-4 py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between text-xs text-amber-800">
-              <div className="flex items-center gap-2 font-medium">
-                <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
-                <span>
-                  <strong>Advisory:</strong> RBAC engine is currently operating in <strong>REPORT MODE</strong>. Policy violations are monitored in audit logs rather than rejected.
-                </span>
-              </div>
-              <span className="hidden sm:inline-block px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-[10px] font-bold uppercase tracking-wider">
-                Report Mode
-              </span>
-            </div>
-          )}
-
           {children}
         </main>
       </div>

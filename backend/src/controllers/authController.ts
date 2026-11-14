@@ -4,7 +4,7 @@ import { Role } from "../models/Role.js";
 import { hashPassword, verifyPassword, signToken } from "../utils/authUtils.js";
 import { verifyTOTPCode } from "../utils/totp.js";
 import { logAudit, getActor } from "../services/auditService.js";
-import { resolveAdminPermissions, RbacRequest } from "../middlewares/rbac.js";
+import { resolveAdminPermissions, RbacRequest, getRbacEnforcementMode } from "../middlewares/rbac.js";
 
 /**
  * 1. Admin Login with Brute-Force Lockout & 2FA Challenge Support
@@ -168,7 +168,7 @@ export async function adminLogin(req: Request, res: Response) {
         scope: admin.scope,
         twoFactorEnabled: false,
         mustChangePassword: admin.mustChangePassword,
-        rbacEnforcementMode: (process.env.RBAC_ENFORCEMENT_MODE || "report").toLowerCase(),
+        rbacEnforcementMode: getRbacEnforcementMode(),
       },
     });
   } catch (err: any) {
@@ -215,7 +215,7 @@ export async function getAdminProfile(req: RbacRequest, res: Response) {
         lastLogin: admin.lastLogin,
         lastReauthAt: admin.lastReauthAt,
         tokenVersion: admin.tokenVersion,
-        rbacEnforcementMode: (process.env.RBAC_ENFORCEMENT_MODE || "report").toLowerCase(),
+        rbacEnforcementMode: getRbacEnforcementMode(),
       },
     });
   } catch (err: any) {

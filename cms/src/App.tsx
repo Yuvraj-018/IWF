@@ -203,7 +203,7 @@ export default function App() {
           <Route
             path="/membership"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute permission="membership.member:view" moduleName="Member Directory">
                 <MembersManager />
               </ProtectedRoute>
             }
@@ -211,57 +211,22 @@ export default function App() {
           <Route
             path="/membership/applications"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute permission="membership.application:view" moduleName="Membership Applications">
                 <ApplicationsManager initialTab="membership" />
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/membership/records"
-            element={
-              <ProtectedRoute>
-                <MembersManager />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/membership/categories"
-            element={
-              <ProtectedRoute>
-                <MembersManager />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/membership/cards"
-            element={
-              <ProtectedRoute>
-                <MembersManager />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/membership/renewals"
-            element={
-              <ProtectedRoute>
-                <MembersManager />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/membership/*" element={<Navigate to="/membership" replace />} />
 
           {/* 5. Volunteers & Mentors */}
           <Route
             path="/volunteers"
-            element={
-              <ProtectedRoute>
-                <ApplicationsManager initialTab="volunteer" />
-              </ProtectedRoute>
-            }
+            element={<Navigate to="/volunteers/applications" replace />}
           />
           <Route
             path="/volunteers/applications"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute permission="membership.application:view" moduleName="Volunteer Applications">
                 <ApplicationsManager initialTab="volunteer" />
               </ProtectedRoute>
             }
@@ -269,23 +234,7 @@ export default function App() {
           <Route
             path="/volunteers/mentor-applications"
             element={
-              <ProtectedRoute>
-                <ApplicationsManager initialTab="mentor" />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/volunteers/directory"
-            element={
-              <ProtectedRoute>
-                <ApplicationsManager initialTab="volunteer" />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/volunteers/mentors"
-            element={
-              <ProtectedRoute>
+              <ProtectedRoute permission="membership.application:view" moduleName="Mentor Applications">
                 <ApplicationsManager initialTab="mentor" />
               </ProtectedRoute>
             }
@@ -293,25 +242,22 @@ export default function App() {
           <Route
             path="/volunteers/activities"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute permission="membership.application:view" moduleName="Volunteer Activities">
                 <VolunteersModule />
               </ProtectedRoute>
             }
           />
+          <Route path="/volunteers/*" element={<Navigate to="/volunteers/applications" replace />} />
 
           {/* 6. Partners & Sponsors */}
           <Route
             path="/partners"
-            element={
-              <ProtectedRoute>
-                <ApplicationsManager initialTab="partner" />
-              </ProtectedRoute>
-            }
+            element={<Navigate to="/partners/enquiries" replace />}
           />
           <Route
             path="/partners/enquiries"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute permission="membership.application:view" moduleName="Partner Enquiries">
                 <ApplicationsManager initialTab="partner" />
               </ProtectedRoute>
             }
@@ -319,23 +265,7 @@ export default function App() {
           <Route
             path="/partners/sponsors-enquiries"
             element={
-              <ProtectedRoute>
-                <ApplicationsManager initialTab="sponsor" />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/partners/directory"
-            element={
-              <ProtectedRoute>
-                <ApplicationsManager initialTab="partner" />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/partners/sponsors-directory"
-            element={
-              <ProtectedRoute>
+              <ProtectedRoute permission="membership.application:view" moduleName="Sponsor Enquiries">
                 <ApplicationsManager initialTab="sponsor" />
               </ProtectedRoute>
             }
@@ -343,11 +273,12 @@ export default function App() {
           <Route
             path="/partners/agreements"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute permission="membership.application:view" moduleName="Partner Agreements">
                 <PartnersModule />
               </ProtectedRoute>
             }
           />
+          <Route path="/partners/*" element={<Navigate to="/partners/enquiries" replace />} />
 
           {/* 7. ISLAH Community Control Center */}
           <Route
@@ -403,15 +334,7 @@ export default function App() {
           <Route
             path="/programmes"
             element={
-              <ProtectedRoute>
-                <ProgrammesDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/programmes/overview"
-            element={
-              <ProtectedRoute>
+              <ProtectedRoute permission="programme.overview:view" moduleName="Programmes Dashboard">
                 <ProgrammesDashboard />
               </ProtectedRoute>
             }
@@ -419,209 +342,69 @@ export default function App() {
           <Route
             path="/programmes/initiatives"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute permission="programme.initiative:view" moduleName="Initiatives & Field Activities">
                 <ProgrammesModule />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/programmes/activities"
-            element={
-              <ProtectedRoute>
-                <ProgrammesModule />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/programmes/beneficiaries"
-            element={
-              <ProtectedRoute>
-                <ProgrammesModule />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/programmes/budgets"
-            element={
-              <ProtectedRoute>
-                <BudgetsManager />
               </ProtectedRoute>
             }
           />
           <Route
             path="/programmes/reports"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute permission="programme.impact:view" moduleName="Impact Reports">
                 <FinancialReportsManager />
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/programmes/evidence"
-            element={
-              <ProtectedRoute>
-                <MediaManager />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/programmes/expenses"
-            element={
-              <ProtectedRoute>
-                <ExpensesManager />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/programmes/*" element={<Navigate to="/programmes" replace />} />
 
           {/* 9. Governance & Reports */}
           <Route
             path="/governance"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute permission="governance.document:view" moduleName="Governance & Disclosures">
                 <GovernanceModule />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/governance/legal"
-            element={
-              <ProtectedRoute>
-                <PublicationsManager />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/governance/records"
-            element={
-              <ProtectedRoute>
-                <GovernanceModule />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/governance/annual-reports"
-            element={
-              <ProtectedRoute>
-                <PublicationsManager />
               </ProtectedRoute>
             }
           />
           <Route
             path="/governance/financial-reports"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute permission="finance.report:view" moduleName="Audited Financial Reports">
                 <FinancialReportsManager />
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/governance/transparency"
-            element={
-              <ProtectedRoute>
-                <GovernanceModule />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/governance/*" element={<Navigate to="/governance" replace />} />
 
           {/* 10. Communications & Inbound Inquiries */}
           <Route
             path="/communications"
             element={
-              <ProtectedRoute>
-                <ApplicationsManager initialTab="contact_inquiries" />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/communications/notifications"
-            element={
-              <ProtectedRoute>
-                <ApplicationsManager initialTab="all" />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/communications/email"
-            element={
-              <ProtectedRoute>
-                <ApplicationsManager initialTab="contact_inquiries" />
+              <ProtectedRoute permission="comms.email:view" moduleName="Communications Console">
+                <CommunicationsModule />
               </ProtectedRoute>
             }
           />
           <Route
             path="/communications/announcements"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute permission="comms.notice:view" moduleName="Announcements & News">
                 <NewsManager />
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/communications/campaigns"
-            element={
-              <ProtectedRoute>
-                <CommunicationsModule />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/communications/*" element={<Navigate to="/communications" replace />} />
 
-          {/* 11. System Health */}
+          {/* 11. System Health (Single Dedicated Page) */}
           <Route
             path="/system-health"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute permission="system.health:view" moduleName="System Health">
                 <SystemHealthModule />
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/system-health/database"
-            element={
-              <ProtectedRoute>
-                <SystemHealthModule />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/system-health/api"
-            element={
-              <ProtectedRoute>
-                <SystemHealthModule />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/system-health/payment-gateway"
-            element={
-              <ProtectedRoute>
-                <SystemHealthModule />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/system-health/email"
-            element={
-              <ProtectedRoute>
-                <SystemHealthModule />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/system-health/backup"
-            element={
-              <ProtectedRoute>
-                <SystemHealthModule />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/system-health/logs"
-            element={
-              <ProtectedRoute>
-                <SystemHealthModule />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/system-health/*" element={<Navigate to="/system-health" replace />} />
 
           {/* 12. Staff & Roles Governance */}
           <Route
