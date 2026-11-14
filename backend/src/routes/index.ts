@@ -19,6 +19,7 @@ import { financeRouter } from "./financeRoutes.js";
 import { staffRouter } from "./staffRoutes.js";
 import { roleRouter } from "./roleRoutes.js";
 import { auditRouter } from "./auditRoutes.js";
+import { accessRequestRouter } from "./accessRequests.js";
 import {
   createOrderController,
   verifyPaymentController,
@@ -73,6 +74,7 @@ apiRouter.use("/finance", financeRouter);
 apiRouter.use("/admin/staff", staffRouter);
 apiRouter.use("/admin/roles", roleRouter);
 apiRouter.use("/admin/audit-logs", auditRouter);
+apiRouter.use("/admin/access-requests", accessRequestRouter);
 
 // Razorpay Direct Route Aliases (Preserved Exactly)
 apiRouter.post("/create-order", orderRateLimiter, createOrderController);

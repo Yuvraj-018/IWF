@@ -37,6 +37,7 @@ import {
   X,
   AlertTriangle,
   KeyRound,
+  ShieldCheck,
   User as UserIcon,
 } from "lucide-react";
 
@@ -58,6 +59,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   // Live alerts & inquiries state
   const [notifications, setNotifications] = useState<any[]>([]);
   const [messages, setMessages] = useState<any[]>([]);
+  const [pendingAccessCount, setPendingAccessCount] = useState<number>(0);
   const [readNotificationIds, setReadNotificationIds] = useState<Set<string>>(() => {
     try {
       const saved = localStorage.getItem("islah_read_notifications");
@@ -96,9 +98,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     let isMounted = true;
     async function fetchHeaderData() {
       try {
-        const [appsRes, contactsRes] = await Promise.all([
+        const [appsRes, contactsRes, accessRes] = await Promise.all([
           api.listApplications(undefined, { force: true }),
           api.listContacts({ limit: 10 }, { force: true }),
+          api.listAccessRequests({ status: "pending" }).catch(() => null),
         ]);
 
         if (isMounted) {
@@ -107,6 +110,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           }
           if (contactsRes?.success && Array.isArray(contactsRes.data)) {
             setMessages(contactsRes.data);
+          }
+          if (accessRes?.success && accessRes.pendingCount !== undefined) {
+            setPendingAccessCount(accessRes.pendingCount);
           }
         }
       } catch (err) {
@@ -265,8 +271,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       prefix: "/finance",
       subItems: [
         { label: "Donation Management", path: "/finance", permission: "finance.donation:view" },
+        { label: "Transactions Register", path: "/finance/transactions", permission: "finance.donation:view" },
         { label: "Expenses & Budget", path: "/finance/expenses", permission: "finance.expense:view" },
-        { label: "Bank Reconciliation", path: "/finance/reconciliation", permission: "finance.reconcile:view" },
+        { label: "Bank Reconciliation", path: "/finance/reconciliation", permission: "finance.reconciliation:view" },
         { label: "Financial Reports", path: "/finance/reports", permission: "finance.report:view" },
         { label: "Donation Receipts", path: "/finance/receipts", permission: "finance.receipt:view" },
         { label: "Refunds", path: "/finance/refunds", permission: "finance.refund:view" },
@@ -390,6 +397,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         { label: "Roles & Permissions", path: "/staff/roles", permission: "system.role:view" },
         { label: "Staff Directory", path: "/staff/directory", permission: "system.staff:view" },
         { label: "Activity Logs", path: "/staff/logs", permission: "system.audit:view" },
+        { label: "Access Requests", path: "/staff/access-requests", permission: "system.staff:view" },
       ],
     },
   ];
@@ -492,13 +500,18 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                       key={idx}
                       to={sub.path}
                       onClick={onNavigate}
-                      className={`block px-3 py-1.5 rounded-md text-[11px] font-medium transition ${
+                      className={`flex items-center justify-between px-3 py-1.5 rounded-md text-[11px] font-medium transition ${
                         isActive
                           ? "bg-[#0e315b] text-white font-bold border-l-2 border-[#f97316]"
                           : "text-slate-300 hover:text-white hover:bg-[#0c2444]"
                       }`}
                     >
-                      {sub.label}
+                      <span>{sub.label}</span>
+                      {sub.path === "/staff/access-requests" && pendingAccessCount > 0 && (
+                        <span className="px-1.5 py-0.2 rounded-full text-[9px] font-black bg-[#f97316] text-white animate-pulse">
+                          {pendingAccessCount}
+                        </span>
+                      )}
                     </Link>
                   );
                 })}
@@ -946,6 +959,21 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   >
                     <KeyRound className="w-3.5 h-3.5 text-orange-500" />
                     <span>Security &amp; Account</span>
+                  </Link>
+                  <Link
+                    to="/staff/access-requests"
+                    onClick={() => setUserDropdownOpen(false)}
+                    className="flex items-center justify-between px-3.5 py-2 hover:bg-slate-50 text-slate-700 font-medium"
+                  >
+                    <div className="flex items-center gap-2">
+                      <ShieldCheck className="w-3.5 h-3.5 text-orange-500" />
+                      <span>Access Requests</span>
+                    </div>
+                    {pendingAccessCount > 0 && (
+                      <span className="px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-[#f97316] text-white">
+                        {pendingAccessCount}
+                      </span>
+                    )}
                   </Link>
                   <Link
                     to="/settings"

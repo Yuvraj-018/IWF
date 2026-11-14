@@ -14,6 +14,7 @@ import UserAccountsManager from "./pages/staff/UserAccountsManager";
 import RolesPermissionsManager from "./pages/staff/RolesPermissionsManager";
 import StaffDirectoryManager from "./pages/staff/StaffDirectoryManager";
 import ActivityLogsViewer from "./pages/staff/ActivityLogsViewer";
+import AccessRequestsManager from "./pages/staff/AccessRequestsManager";
 
 import DashboardOverview from "./pages/DashboardOverview";
 import NewsManager from "./pages/NewsManager";
@@ -136,7 +137,7 @@ export default function App() {
           <Route
             path="/finance"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute permission="finance.donation:view" moduleName="Donation Management">
                 <DonationOverview />
               </ProtectedRoute>
             }
@@ -144,7 +145,7 @@ export default function App() {
           <Route
             path="/finance/expenses"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute permission="finance.expense:view" moduleName="Expenses Ledger">
                 <ExpensesManager />
               </ProtectedRoute>
             }
@@ -152,7 +153,7 @@ export default function App() {
           <Route
             path="/finance/reconciliation"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute permission="finance.reconciliation:view" moduleName="Bank Reconciliation">
                 <ReconciliationManager />
               </ProtectedRoute>
             }
@@ -160,7 +161,7 @@ export default function App() {
           <Route
             path="/finance/reports"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute permission="finance.report:view" moduleName="Financial Reports">
                 <FinancialReportsManager />
               </ProtectedRoute>
             }
@@ -168,7 +169,7 @@ export default function App() {
           <Route
             path="/finance/receipts"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute permission="finance.receipt:view" moduleName="Donation Receipts">
                 <ReceiptsManager />
               </ProtectedRoute>
             }
@@ -176,7 +177,7 @@ export default function App() {
           <Route
             path="/finance/transactions"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute permission="finance.donation:view" moduleName="Transactions Register">
                 <TransactionsManager />
               </ProtectedRoute>
             }
@@ -184,7 +185,7 @@ export default function App() {
           <Route
             path="/finance/refunds"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute permission="finance.refund:view" moduleName="Donation Refunds">
                 <RefundsManager />
               </ProtectedRoute>
             }
@@ -192,7 +193,7 @@ export default function App() {
           <Route
             path="/finance/budgets"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute permission="finance.budget:view" moduleName="Fiscal Budgets">
                 <BudgetsManager />
               </ProtectedRoute>
             }
@@ -660,6 +661,14 @@ export default function App() {
             element={
               <ProtectedRoute permission="system.audit:view" moduleName="Activity Logs">
                 <ActivityLogsViewer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/staff/access-requests"
+            element={
+              <ProtectedRoute moduleName="Access Requests">
+                <AccessRequestsManager />
               </ProtectedRoute>
             }
           />

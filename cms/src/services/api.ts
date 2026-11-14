@@ -870,4 +870,37 @@ export const api = {
     }
     return data;
   },
+
+  // ── Access Requests & Elevation ──
+  async createAccessRequest(data: {
+    requestedResource: string;
+    requestedPermission: string;
+    moduleName?: string;
+    reason?: string;
+    accessType?: "read_only" | "full";
+  }) {
+    return apiFetch("/admin/access-requests", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  async listAccessRequests(params: { status?: string } = {}) {
+    const q = params.status ? `?status=${encodeURIComponent(params.status)}` : "";
+    return apiFetch(`/admin/access-requests${q}`);
+  },
+
+  async approveAccessRequest(id: string, reviewNote?: string) {
+    return apiFetch(`/admin/access-requests/${id}/approve`, {
+      method: "POST",
+      body: JSON.stringify({ reviewNote }),
+    });
+  },
+
+  async rejectAccessRequest(id: string, reviewNote?: string) {
+    return apiFetch(`/admin/access-requests/${id}/reject`, {
+      method: "POST",
+      body: JSON.stringify({ reviewNote }),
+    });
+  },
 };

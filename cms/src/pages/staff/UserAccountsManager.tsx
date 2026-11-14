@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { api } from "../../services/api";
 import { formatKolkataTime } from "../../services/httpClient";
@@ -288,15 +289,25 @@ export default function UserAccountsManager() {
           </p>
         </div>
 
-        {canCreateStaff && (
-          <button
-            onClick={() => setShowInviteModal(true)}
-            className="px-4 py-2.5 bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-bold text-xs rounded-xl shadow-md shadow-orange-500/20 transition flex items-center gap-2 cursor-pointer self-start sm:self-auto"
+        <div className="flex items-center gap-2.5 self-start sm:self-auto">
+          <Link
+            to="/staff/access-requests"
+            className="px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-bold text-xs rounded-xl shadow-2xs transition flex items-center gap-2 cursor-pointer"
           >
-            <UserPlus className="w-4 h-4" />
-            <span>Invite New Staff Member</span>
-          </button>
-        )}
+            <KeyRound className="w-4 h-4 text-orange-500" />
+            <span>Access Requests</span>
+          </Link>
+
+          {canCreateStaff && (
+            <button
+              onClick={() => setShowInviteModal(true)}
+              className="px-4 py-2.5 bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-bold text-xs rounded-xl shadow-md shadow-orange-500/20 transition flex items-center gap-2 cursor-pointer"
+            >
+              <UserPlus className="w-4 h-4" />
+              <span>Invite New Staff Member</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Filter / Search Bar */}
