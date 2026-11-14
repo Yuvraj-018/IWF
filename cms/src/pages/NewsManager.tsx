@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { api } from "../services/api";
 import { getClientUrl } from "../services/config";
+import { useAuth } from "../context/AuthContext";
 import {
   Plus,
   Trash2,
@@ -33,6 +34,7 @@ const DEFAULT_FORM_DATA = {
 };
 
 export default function NewsManager() {
+  const { can } = useAuth();
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -176,13 +178,15 @@ export default function NewsManager() {
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-orange-500" : ""}`} />
             <span className="hidden sm:inline">Refresh</span>
           </button>
-          <button
-            onClick={handleOpenCreate}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition shadow-sm cursor-pointer"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Publish New Story</span>
-          </button>
+          {can("cms.news:create") && (
+            <button
+              onClick={handleOpenCreate}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-bold transition shadow-sm cursor-pointer"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Publish New Story</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -269,21 +273,25 @@ export default function NewsManager() {
                   <ExternalLink className="w-3 h-3 shrink-0" />
                 </a>
                 <div className="flex items-center gap-1">
-                  <button
-                    onClick={() => handleEdit(item)}
-                    title="Edit story"
-                    className="p-1.5 text-slate-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition cursor-pointer flex items-center gap-1 text-xs font-semibold"
-                  >
-                    <Pencil className="w-3.5 h-3.5" />
-                    <span className="hidden sm:inline">Edit</span>
-                  </button>
-                  <button
-                    onClick={() => handleDelete(item._id, item.title)}
-                    title="Delete from database"
-                    className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition cursor-pointer"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                  {can("cms.news:update") && (
+                    <button
+                      onClick={() => handleEdit(item)}
+                      title="Edit story"
+                      className="p-1.5 text-slate-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition cursor-pointer flex items-center gap-1 text-xs font-semibold"
+                    >
+                      <Pencil className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">Edit</span>
+                    </button>
+                  )}
+                  {can("cms.news:delete") && (
+                    <button
+                      onClick={() => handleDelete(item._id, item.title)}
+                      title="Delete from database"
+                      className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition cursor-pointer"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

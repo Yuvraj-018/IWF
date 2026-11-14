@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import {
   Heart,
   Users,
@@ -63,6 +64,7 @@ function Sparkline({ color = "#0d9488" }: { color?: string }) {
 
 export default function DashboardOverview() {
   const navigate = useNavigate();
+  const { user, can } = useAuth();
 
   // Live Database stats & live finance data
   const [dbStats, setDbStats] = useState<any>(null);
@@ -145,7 +147,7 @@ export default function DashboardOverview() {
           </div>
           <div className="space-y-0.5">
             <h1 className="text-xl md:text-2xl font-black text-[#071527] tracking-tight">
-              Welcome to ISLAH Control Center
+              Welcome to ISLAH Control Center{user?.name ? `, ${user.name}` : ""}
             </h1>
             <p className="text-xs font-semibold text-slate-600">
               Empowering Communities • Creating Opportunities • Building a Better Tomorrow

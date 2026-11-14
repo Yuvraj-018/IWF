@@ -7,10 +7,11 @@ import {
 import { formSubmissionLimiter } from "../middlewares/rateLimiter.js";
 import { honeypotCheck } from "../middlewares/honeypot.js";
 import { createTurnstileMiddleware } from "../middlewares/turnstile.js";
-import { requireAdminAuth } from "../middlewares/auth.js";
+import { authenticate, requirePermission } from "../middlewares/rbac.js";
 
 export const applicationRouter = Router();
 
+// Public Application Submission (Preserved Exactly)
 applicationRouter.post(
   "/",
   formSubmissionLimiter,
@@ -18,5 +19,18 @@ applicationRouter.post(
   createTurnstileMiddleware({ action: "application" }),
   submitApplication
 );
-applicationRouter.get("/", requireAdminAuth, listApplications);
-applicationRouter.patch("/:id/status", requireAdminAuth, updateApplicationStatus);
+
+// Protected Admin Application Operations
+applicationRouter.get(
+  "/",
+  authenticate,
+  requirePermission("membership.application:view"),
+  listApplications
+);
+
+applicationRouter.patch(
+  "/:id/status",
+  authenticate,
+  requirePermission("membership.application:review"),
+  updateApplicationStatus
+);

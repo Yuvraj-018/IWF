@@ -28,6 +28,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { financeApi, ExpenseItem } from "../../services/financeApi";
+import { useAuth } from "../../context/AuthContext";
+import { PiiField } from "../../components/common/PiiField";
 
 function formatINR(val: number): string {
   if (isNaN(val) || val === 0) return "₹ 0";
@@ -50,6 +52,7 @@ const WORK_AREA_NAMES: Record<string, string> = {
 };
 
 export default function ExpensesManager() {
+  const { user: currentUser, can } = useAuth();
   const [expenses, setExpenses] = useState<ExpenseItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
@@ -512,26 +515,55 @@ export default function ExpensesManager() {
                 <p className="text-[11px] text-blue-800">
                   Creator: <span className="font-bold">{selectedExpense.createdBy}</span>. Only an independent reviewer or superadmin can authorize disbursement.
                 </p>
-                <div className="flex items-center gap-2 pt-1">
-                  <button
-                    onClick={() => handleReview(selectedExpense._id, "approve")}
-                    className="flex-1 py-2 rounded-xl bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-bold transition cursor-pointer"
-                  >
-                    Approve Voucher
-                  </button>
-                  <button
-                    onClick={() => handleReview(selectedExpense._id, "return", "Missing legible invoice copy")}
-                    className="flex-1 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition cursor-pointer"
-                  >
-                    Return for Edit
-                  </button>
-                  <button
-                    onClick={() => handleReview(selectedExpense._id, "reject", "Expense out of policy")}
-                    className="flex-1 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition cursor-pointer"
-                  >
-                    Reject
-                  </button>
-                </div>
+
+                {(() => {
+                  const isCreator = Boolean(
+                    currentUser &&
+                    (currentUser.id === (selectedExpense as any).creatorId ||
+                     currentUser.email?.toLowerCase() === (selectedExpense.createdBy || "").toLowerCase() ||
+                     currentUser.name?.toLowerCase() === (selectedExpense.createdBy || "").toLowerCase())
+                  );
+
+                  if (isCreator) {
+                    return (
+                      <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800 flex items-start gap-2">
+                        <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                        <span>
+                          <strong>Separation of Duties:</strong> You created this record, so another person must act on it.
+                        </span>
+                      </div>
+                    );
+                  }
+
+                  const canApprove = can("finance.expense:approve");
+
+                  return (
+                    <div className="flex items-center gap-2 pt-1">
+                      <button
+                        onClick={() => handleReview(selectedExpense._id, "approve")}
+                        disabled={!canApprove}
+                        className="flex-1 py-2 rounded-xl bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-bold transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                        title={!canApprove ? "Requires permission: finance.expense:approve" : undefined}
+                      >
+                        Approve Voucher
+                      </button>
+                      <button
+                        onClick={() => handleReview(selectedExpense._id, "return", "Missing legible invoice copy")}
+                        disabled={!canApprove}
+                        className="flex-1 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                      >
+                        Return for Edit
+                      </button>
+                      <button
+                        onClick={() => handleReview(selectedExpense._id, "reject", "Expense out of policy")}
+                        disabled={!canApprove}
+                        className="flex-1 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  );
+                })()}
               </div>
             )}
 
@@ -542,15 +574,40 @@ export default function ExpensesManager() {
                 <p className="text-[11px] text-emerald-800">
                   Authorised by {selectedExpense.approval?.reviewedBy || "Super Admin"}. Proceed to execute bank payout.
                 </p>
-                <button
-                  onClick={() => {
-                    setPayingExpense(selectedExpense);
-                    setSelectedExpense(null);
-                  }}
-                  className="w-full mt-2 py-2.5 rounded-xl bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-bold transition cursor-pointer"
-                >
-                  Record Bank Disbursement
-                </button>
+
+                {(() => {
+                  const isCreator = Boolean(
+                    currentUser &&
+                    (currentUser.id === (selectedExpense as any).creatorId ||
+                     currentUser.email?.toLowerCase() === (selectedExpense.createdBy || "").toLowerCase() ||
+                     currentUser.name?.toLowerCase() === (selectedExpense.createdBy || "").toLowerCase())
+                  );
+
+                  if (isCreator) {
+                    return (
+                      <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800 flex items-start gap-2">
+                        <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                        <span>You created this record, so another person must execute disbursement.</span>
+                      </div>
+                    );
+                  }
+
+                  const canPay = can("finance.expense:pay");
+
+                  return (
+                    <button
+                      onClick={() => {
+                        setPayingExpense(selectedExpense);
+                        setSelectedExpense(null);
+                      }}
+                      disabled={!canPay}
+                      className="w-full mt-2 py-2.5 rounded-xl bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-bold transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                      title={!canPay ? "Requires permission: finance.expense:pay" : undefined}
+                    >
+                      Record Bank Disbursement
+                    </button>
+                  );
+                })()}
               </div>
             )}
           </div>

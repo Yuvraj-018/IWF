@@ -6,22 +6,37 @@ import {
   deleteFile,
   getPrivateFile,
 } from "../controllers/uploadController.js";
-import { requireAdminAuth } from "../middlewares/auth.js";
 import { formSubmissionLimiter } from "../middlewares/rateLimiter.js";
+import { authenticate, requirePermission } from "../middlewares/rbac.js";
 
 export const uploadRouter = Router();
 
-// Single file upload (field: "file") - Used by Career & Application Wizard for resumes/documents
+// Single file upload (field: "file") - Used by Public Career & Application Wizard for resumes/documents
 uploadRouter.post("/single", formSubmissionLimiter, uploadMiddleware.single("file"), uploadSingleFile);
 
 // Multiple files upload (field: "files", max 10 files) - Restricted to authenticated CMS admins
-uploadRouter.post("/multiple", requireAdminAuth, uploadMiddleware.array("files", 10), uploadMultipleFiles);
+uploadRouter.post(
+  "/multiple",
+  authenticate,
+  requirePermission("cms.media:create"),
+  uploadMiddleware.array("files", 10),
+  uploadMultipleFiles
+);
 
 // View/Download confidential document from islah-private-docs via expiring signed URL (Admin authenticated)
-uploadRouter.get("/private", requireAdminAuth, getPrivateFile);
-uploadRouter.get("/private/*filePath", requireAdminAuth, getPrivateFile);
+uploadRouter.get(
+  "/private",
+  authenticate,
+  requirePermission("membership.application:view_pii"),
+  getPrivateFile
+);
+uploadRouter.get(
+  "/private/*filePath",
+  authenticate,
+  requirePermission("membership.application:view_pii"),
+  getPrivateFile
+);
 
 // Delete file by publicId / key - Restricted to authenticated CMS admins
-uploadRouter.delete("/", requireAdminAuth, deleteFile);
-uploadRouter.delete("/:publicId", requireAdminAuth, deleteFile);
-
+uploadRouter.delete("/", authenticate, requirePermission("cms.media:delete"), deleteFile);
+uploadRouter.delete("/:publicId", authenticate, requirePermission("cms.media:delete"), deleteFile);

@@ -6,15 +6,16 @@ import {
   updateStory,
   deleteStory,
 } from "../controllers/storyController.js";
-import { requireAdminAuth } from "../middlewares/auth.js";
 import { cacheResponse } from "../middlewares/cache.js";
+import { authenticate, requirePermission } from "../middlewares/rbac.js";
 
 export const storyRouter = Router();
 
+// Public Stories (Preserved Exactly)
 storyRouter.get("/", cacheResponse(180, "stories"), listStories);
 storyRouter.get("/:id", cacheResponse(300, "stories"), getStoryById);
 
-storyRouter.post("/", requireAdminAuth, createStory);
-storyRouter.put("/:id", requireAdminAuth, updateStory);
-storyRouter.delete("/:id", requireAdminAuth, deleteStory);
-
+// Protected Admin Operations
+storyRouter.post("/", authenticate, requirePermission("cms.story:create"), createStory);
+storyRouter.put("/:id", authenticate, requirePermission("cms.story:edit"), updateStory);
+storyRouter.delete("/:id", authenticate, requirePermission("cms.story:delete"), deleteStory);

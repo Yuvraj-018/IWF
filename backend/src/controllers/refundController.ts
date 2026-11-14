@@ -5,6 +5,7 @@ import { LedgerEntry } from "../models/LedgerEntry.js";
 import { Verification } from "../models/Verification.js";
 import { getNextRefundNo, getNextTransactionNo, getCurrentFinancialYear } from "../utils/idGenerator.js";
 import { refundRazorpayPayment } from "../services/razorpayService.js";
+import { getActor, logAudit } from "../services/auditService.js";
 
 /**
  * 1. Process Donation Refund (Full or Partial)
@@ -75,8 +76,8 @@ export async function createRefund(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    const user = (req as any).adminUser || (req as any).user;
-    const adminUser = user?.name || user?.id || "superadmin";
+    const actor = getActor(req);
+    const adminUser = actor.name || actor.email || "finance_approver";
 
     // 1. Online Gateway Refund (if paid via Razorpay)
     let razorpayRefundId: string | undefined = undefined;
@@ -106,6 +107,15 @@ export async function createRefund(req: Request, res: Response): Promise<void> {
       status: "processed",
       requestedBy: adminUser,
       approvedBy: adminUser,
+    });
+
+    await logAudit({
+      req,
+      action: "finance.refund:process",
+      resourceType: "refund",
+      resourceId: refund._id.toString(),
+      after: { refundNo, donationId: donation._id.toString(), amountPaise: targetPaise, reason: reason.trim() },
+      reason: `Refund ${refundNo} processed by ${adminUser}`,
     });
 
     // 4. Update Donation paymentStatus

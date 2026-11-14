@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import {
   Heart,
   CreditCard,
@@ -130,6 +131,7 @@ const emptyDashboardData: FinancialDashboardOverviewData = {
 
 export default function DonationOverview() {
   const navigate = useNavigate();
+  const { can } = useAuth();
 
   // Dynamic Current Financial Year Calculation (Apr 1 - Mar 31)
   const now = new Date();
@@ -196,10 +198,10 @@ export default function DonationOverview() {
       {/* ── TOP HERO BANNER & DATE RANGE PICKER (ROW 1) ── */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 items-stretch">
         {/* HERO BANNER (Left 9 columns on xl) */}
-        <div className="xl:col-span-9 relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#f0fbf8] via-[#e6f7f2] to-[#d8f3eb] border border-emerald-200/70 p-6 md:p-7 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+        <div className="xl:col-span-9 relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-50/70 via-slate-50 to-orange-50/50 border border-blue-200/60 p-6 md:p-7 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div className="space-y-1.5 z-10 max-w-xl">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-600/10 border border-emerald-600/20 text-emerald-800 text-[11px] font-bold tracking-tight">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-600/10 border border-blue-600/20 text-blue-800 text-[11px] font-bold tracking-tight">
+              <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
               <span>Donations &amp; Finance</span>
             </div>
             <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
@@ -225,7 +227,7 @@ export default function DonationOverview() {
                 />
               </div>
               <div className="text-left font-serif">
-                <p className="text-sm md:text-base italic font-semibold text-emerald-900 tracking-tight leading-tight">
+                <p className="text-sm md:text-base italic font-semibold text-blue-900 tracking-tight leading-tight">
                   Small Contributions
                 </p>
                 <p className="text-base md:text-lg italic font-extrabold text-[#071527] tracking-tight leading-tight">
@@ -235,9 +237,9 @@ export default function DonationOverview() {
             </div>
           </div>
 
-          {/* Soft background glow & botanical decorative circles */}
-          <div className="absolute -top-12 -right-12 w-48 h-48 bg-emerald-400/10 rounded-full blur-2xl pointer-events-none" />
-          <div className="absolute -bottom-10 right-32 w-36 h-36 bg-teal-400/10 rounded-full blur-xl pointer-events-none" />
+          {/* Soft background glow & decorative circles */}
+          <div className="absolute -top-12 -right-12 w-48 h-48 bg-blue-400/10 rounded-full blur-2xl pointer-events-none" />
+          <div className="absolute -bottom-10 right-32 w-36 h-36 bg-orange-400/10 rounded-full blur-xl pointer-events-none" />
         </div>
 
         {/* DATE RANGE CARD (Right 3 columns on xl) */}
@@ -248,10 +250,10 @@ export default function DonationOverview() {
           <div className="relative">
             <button
               onClick={() => setShowDateDropdown(!showDateDropdown)}
-              className="w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-emerald-500 text-xs font-bold text-slate-800 transition cursor-pointer"
+              className="w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-orange-500 text-xs font-bold text-slate-800 transition cursor-pointer"
             >
               <div className="flex items-center gap-2 truncate">
-                <Calendar className="w-4 h-4 text-emerald-600 shrink-0" />
+                <Calendar className="w-4 h-4 text-blue-600 shrink-0" />
                 <span className="truncate">{datePreset}</span>
               </div>
               <ChevronDown className="w-4 h-4 text-slate-400 shrink-0" />
@@ -265,16 +267,16 @@ export default function DonationOverview() {
                 </div>
                 <button
                   onClick={() => handleSelectPreset("Financial Year 2026-27", "2026-04-01", "2027-03-31")}
-                  className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition cursor-pointer flex items-center justify-between"
+                  className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-orange-50 hover:text-orange-800 transition cursor-pointer flex items-center justify-between"
                 >
                   <span>Financial Year 2026-27</span>
-                  <span className="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold">
+                  <span className="text-[10px] bg-orange-100 text-orange-800 px-1.5 py-0.5 rounded font-bold">
                     Current
                   </span>
                 </button>
                 <button
                   onClick={() => handleSelectPreset("Financial Year 2025-26", "2025-04-01", "2026-03-31")}
-                  className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition cursor-pointer"
+                  className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-orange-50 hover:text-orange-800 transition cursor-pointer"
                 >
                   Financial Year 2025-26
                 </button>
@@ -285,7 +287,7 @@ export default function DonationOverview() {
                     const end = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split("T")[0];
                     handleSelectPreset("This Month", start, end);
                   }}
-                  className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition cursor-pointer"
+                  className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-orange-50 hover:text-orange-800 transition cursor-pointer"
                 >
                   This Month
                 </button>
@@ -296,13 +298,13 @@ export default function DonationOverview() {
                     const end = new Date(now.getFullYear(), now.getMonth(), 0).toISOString().split("T")[0];
                     handleSelectPreset("Last Month", start, end);
                   }}
-                  className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition cursor-pointer"
+                  className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-orange-50 hover:text-orange-800 transition cursor-pointer"
                 >
                   Last Month
                 </button>
                 <button
                   onClick={() => handleSelectPreset("All Records", "2020-01-01", "2030-12-31")}
-                  className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition cursor-pointer"
+                  className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-orange-50 hover:text-orange-800 transition cursor-pointer"
                 >
                   All Time
                 </button>
@@ -349,10 +351,10 @@ export default function DonationOverview() {
             {/* CARD 1: Total Donations */}
             <div className="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-2xs hover:shadow-xs transition flex flex-col justify-between">
               <div className="flex items-center justify-between">
-                <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                  <Heart className="w-4.5 h-4.5 text-emerald-600 fill-emerald-600/20" />
+                <div className="w-9 h-9 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center">
+                  <Heart className="w-4.5 h-4.5 text-orange-600 fill-orange-600/20" />
                 </div>
-                <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full">
                   <TrendingUp className="w-3 h-3" />
                   <span>+{kpis.totalDonationsDelta}%</span>
                 </span>
@@ -906,48 +908,56 @@ export default function DonationOverview() {
 
             <div className="grid grid-cols-2 gap-3">
               {/* Action 1: Record Donation */}
-              <button
-                onClick={() => setIsRecordDonationOpen(true)}
-                className="flex flex-col items-center justify-center p-3.5 rounded-xl bg-white hover:bg-orange-50/40 text-[#071527] border border-slate-200 hover:border-[#f97316] transition cursor-pointer group text-center space-y-2"
-              >
-                <div className="w-9 h-9 rounded-xl bg-[#071527] group-hover:bg-[#f97316] text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition">
-                  <Heart className="w-4.5 h-4.5 fill-white" />
-                </div>
-                <span className="text-[11px] font-bold leading-tight">Record Donation</span>
-              </button>
+              {can("finance.donation:create") && (
+                <button
+                  onClick={() => setIsRecordDonationOpen(true)}
+                  className="flex flex-col items-center justify-center p-3.5 rounded-xl bg-white hover:bg-orange-50/40 text-[#071527] border border-slate-200 hover:border-[#f97316] transition cursor-pointer group text-center space-y-2"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-[#071527] group-hover:bg-[#f97316] text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition">
+                    <Heart className="w-4.5 h-4.5 fill-white" />
+                  </div>
+                  <span className="text-[11px] font-bold leading-tight">Record Donation</span>
+                </button>
+              )}
 
               {/* Action 2: Issue Receipt */}
-              <button
-                onClick={() => setIsIssueReceiptOpen(true)}
-                className="flex flex-col items-center justify-center p-3.5 rounded-xl bg-[#eff6ff] hover:bg-[#dbeafe] text-blue-900 border border-blue-200/50 transition cursor-pointer group text-center space-y-2"
-              >
-                <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition">
-                  <FileText className="w-4.5 h-4.5" />
-                </div>
-                <span className="text-[11px] font-bold leading-tight">Issue Receipt</span>
-              </button>
+              {can("finance.donation:receipt") && (
+                <button
+                  onClick={() => setIsIssueReceiptOpen(true)}
+                  className="flex flex-col items-center justify-center p-3.5 rounded-xl bg-[#eff6ff] hover:bg-[#dbeafe] text-blue-900 border border-blue-200/50 transition cursor-pointer group text-center space-y-2"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition">
+                    <FileText className="w-4.5 h-4.5" />
+                  </div>
+                  <span className="text-[11px] font-bold leading-tight">Issue Receipt</span>
+                </button>
+              )}
 
               {/* Action 3: Add Expense */}
-              <button
-                onClick={() => setIsAddExpenseOpen(true)}
-                className="flex flex-col items-center justify-center p-3.5 rounded-xl bg-[#f5f3ff] hover:bg-[#ede9fe] text-purple-900 border border-purple-200/50 transition cursor-pointer group text-center space-y-2"
-              >
-                <div className="w-9 h-9 rounded-xl bg-purple-600 text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition">
-                  <Receipt className="w-4.5 h-4.5" />
-                </div>
-                <span className="text-[11px] font-bold leading-tight">Add Expense</span>
-              </button>
+              {can("finance.expense:create") && (
+                <button
+                  onClick={() => setIsAddExpenseOpen(true)}
+                  className="flex flex-col items-center justify-center p-3.5 rounded-xl bg-[#f5f3ff] hover:bg-[#ede9fe] text-purple-900 border border-purple-200/50 transition cursor-pointer group text-center space-y-2"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-purple-600 text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition">
+                    <Receipt className="w-4.5 h-4.5" />
+                  </div>
+                  <span className="text-[11px] font-bold leading-tight">Add Expense</span>
+                </button>
+              )}
 
               {/* Action 4: Reconcile Payments */}
-              <button
-                onClick={() => navigate("/finance/reconciliation")}
-                className="flex flex-col items-center justify-center p-3.5 rounded-xl bg-[#fffbeb] hover:bg-[#fef3c7] text-amber-900 border border-amber-200/50 transition cursor-pointer group text-center space-y-2"
-              >
-                <div className="w-9 h-9 rounded-xl bg-amber-600 text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition">
-                  <RefreshCw className="w-4.5 h-4.5" />
-                </div>
-                <span className="text-[11px] font-bold leading-tight">Reconcile Payments</span>
-              </button>
+              {can("finance.recon:view") && (
+                <button
+                  onClick={() => navigate("/finance/reconciliation")}
+                  className="flex flex-col items-center justify-center p-3.5 rounded-xl bg-[#fffbeb] hover:bg-[#fef3c7] text-amber-900 border border-amber-200/50 transition cursor-pointer group text-center space-y-2"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-amber-600 text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition">
+                    <RefreshCw className="w-4.5 h-4.5" />
+                  </div>
+                  <span className="text-[11px] font-bold leading-tight">Reconcile Payments</span>
+                </button>
+              )}
             </div>
           </div>
 

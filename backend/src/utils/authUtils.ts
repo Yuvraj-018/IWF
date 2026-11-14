@@ -1,6 +1,17 @@
 import crypto from "crypto";
+import dotenv from "dotenv";
+dotenv.config();
 
-const JWT_SECRET = process.env.JWT_SECRET || "islah_welfare_super_secret_admin_jwt_key_2026";
+function getJwtSecret(): string {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    throw new Error("FATAL: JWT_SECRET environment variable is missing. Startup aborted.");
+  }
+  return secret;
+}
+
+// Fail-fast boot check: guarantees secret is defined
+const JWT_SECRET = getJwtSecret();
 
 /**
  * High-security password hashing using native scrypt with unique salt
@@ -17,7 +28,10 @@ export function verifyPassword(password: string, stored: string): boolean {
   if (!salt || !originalHash) return false;
   const hash = crypto.scryptSync(password, salt, 64).toString("hex");
   try {
-    return crypto.timingSafeEqual(Buffer.from(hash, "utf8"), Buffer.from(originalHash, "utf8"));
+    const hashBuf = Buffer.from(hash, "utf8");
+    const origBuf = Buffer.from(originalHash, "utf8");
+    if (hashBuf.length !== origBuf.length) return false;
+    return crypto.timingSafeEqual(hashBuf, origBuf);
   } catch {
     return false;
   }
@@ -59,7 +73,7 @@ export function signToken(payload: Record<string, any>, expiresInHours = 12): st
 }
 
 /**
- * Validates JWT signature and expiration
+ * Validates JWT signature and expiration with timing-safe comparison
  */
 export function verifyToken(token: string): { valid: boolean; payload?: any } {
   if (!token) return { valid: false };
@@ -74,7 +88,10 @@ export function verifyToken(token: string): { valid: boolean; payload?: any } {
     .update(`${encodedHeader}.${encodedPayload}`)
     .digest("base64url");
 
-  if (signature !== expectedSignature) {
+  // Constant-time signature verification
+  const sigBuf = Buffer.from(signature, "utf8");
+  const expectedSigBuf = Buffer.from(expectedSignature, "utf8");
+  if (sigBuf.length !== expectedSigBuf.length || !crypto.timingSafeEqual(sigBuf, expectedSigBuf)) {
     return { valid: false };
   }
 

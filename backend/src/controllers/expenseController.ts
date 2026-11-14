@@ -7,6 +7,10 @@ import {
   getNextTransactionNo,
   getCurrentFinancialYear,
 } from "../utils/idGenerator.js";
+import { getActor, logAudit } from "../services/auditService.js";
+import { checkSeparationOfDuties } from "../services/separationOfDuties.js";
+import { applyScopeFilter } from "../utils/piiFilter.js";
+import { RbacRequest } from "../middlewares/rbac.js";
 
 /**
  * 1. Submit an Expense Voucher
@@ -40,12 +44,11 @@ export async function createExpense(req: Request, res: Response): Promise<void> 
     const amountPaise = Math.round(Number(amount) * 100);
     const expenseYear = expenseDate.getFullYear();
     const expenseNo = await getNextExpenseNo(expenseYear);
-    const user = (req as any).adminUser || (req as any).user;
-    const createdBy = user?.name || user?.id || "finance_staff";
-    const userRole = user?.role || "staff";
+    const actor = getActor(req);
+    const createdBy = actor.name || actor.email || "finance_staff";
 
-    // If superadmin explicitly marks auto-approved
-    const isApproved = autoApprove || userRole === "superadmin";
+    // Non-negotiable Separation of Duties: Superadmin CANNOT auto-approve their own expenses
+    const isApproved = false;
 
     const expense = new Expense({
       expenseNo,
@@ -79,6 +82,15 @@ export async function createExpense(req: Request, res: Response): Promise<void> 
 
     await expense.save();
 
+    await logAudit({
+      req,
+      action: "finance.expense:create",
+      resourceType: "expense",
+      resourceId: expense._id.toString(),
+      after: { expenseNo, amount: Number(amount), head, workAreaId },
+      reason: `Expense voucher ${expenseNo} created by ${createdBy}`,
+    });
+
     res.status(201).json({
       success: true,
       message: `Expense voucher ${expenseNo} submitted successfully`,
@@ -103,7 +115,7 @@ export async function listExpenses(req: Request, res: Response): Promise<void> {
     const limit = Math.max(1, parseInt(req.query.limit as string) || 20);
     const skip = (page - 1) * limit;
 
-    const filter: any = {};
+    let filter: any = {};
 
     // Tab stage filter
     const stage = req.query.stage as string;
@@ -152,6 +164,9 @@ export async function listExpenses(req: Request, res: Response): Promise<void> {
         { head: { $regex: q, $options: "i" } },
       ];
     }
+
+    const user = (req as RbacRequest).adminUser;
+    filter = applyScopeFilter(filter, user, "workAreaId");
 
     const [expenses, total, stats] = await Promise.all([
       Expense.find(filter).sort({ date: -1 }).skip(skip).limit(limit).lean(),
@@ -253,15 +268,20 @@ export async function reviewExpense(req: Request, res: Response): Promise<void> 
       return;
     }
 
-    const user = (req as any).adminUser || (req as any).user;
-    const reviewer = user?.name || user?.id || "superadmin";
-    const userRole = user?.role || "staff";
+    const actor = getActor(req);
+    const reviewer = actor.name || actor.email;
 
-    // Separation of Duties Check: Creator cannot approve their own expense
-    if (expense.createdBy === reviewer && userRole !== "superadmin") {
+    // Separation of Duties Check: Creator cannot approve or reject their own expense (NO superadmin bypass)
+    const sodCheck = checkSeparationOfDuties(
+      action === "approve" ? "approve" : "reject",
+      actor,
+      expense,
+      req.body.breakGlassReason
+    );
+    if (!sodCheck.allowed) {
       res.status(403).json({
         success: false,
-        message: "Separation of duties violation: You cannot approve an expense created by yourself.",
+        message: sodCheck.reason,
       });
       return;
     }
@@ -296,6 +316,15 @@ export async function reviewExpense(req: Request, res: Response): Promise<void> 
     }
 
     await expense.save();
+
+    await logAudit({
+      req,
+      action: action === "approve" ? "finance.expense:approve" : "finance.expense:reject",
+      resourceType: "expense",
+      resourceId: expense._id.toString(),
+      severity: action === "approve" ? "info" : "warning",
+      reason: comments || `Voucher ${action}d by ${reviewer}`,
+    });
 
     res.json({
       success: true,
@@ -336,6 +365,18 @@ export async function recordPayment(req: Request, res: Response): Promise<void> 
       return;
     }
 
+    const actor = getActor(req);
+
+    // Separation of Duties Check: Creator cannot disburse/record payment for their own expense
+    const sodCheck = checkSeparationOfDuties("pay", actor, expense, req.body.breakGlassReason);
+    if (!sodCheck.allowed) {
+      res.status(403).json({
+        success: false,
+        message: sodCheck.reason,
+      });
+      return;
+    }
+
     const payDate = paymentDate ? new Date(paymentDate) : new Date();
 
     expense.payment = {
@@ -347,6 +388,14 @@ export async function recordPayment(req: Request, res: Response): Promise<void> 
     };
 
     await expense.save();
+
+    await logAudit({
+      req,
+      action: "finance.expense:pay",
+      resourceType: "expense",
+      resourceId: expense._id.toString(),
+      reason: `Payment disbursed by ${actor.name} (${actor.email})`,
+    });
 
     // Dual-entry Ledger Post: Debit expense
     try {
@@ -371,7 +420,7 @@ export async function recordPayment(req: Request, res: Response): Promise<void> 
         fundType: "general",
         paymentMethod,
         idempotencyKey: `pay_exp_${expense.expenseNo}`,
-        createdBy: (req as any).user?.name || "finance_payout",
+        createdBy: actor.name || actor.email,
       });
     } catch (ledgerErr) {
       console.warn("Ledger creation warning for recorded payment:", ledgerErr);
@@ -413,16 +462,37 @@ export async function reverseExpense(req: Request, res: Response): Promise<void>
       return;
     }
 
+    const actor = getActor(req);
+
+    // Separation of Duties Check: Creator cannot reverse their own expense
+    const sodCheck = checkSeparationOfDuties("reverse", actor, expense, req.body.breakGlassReason);
+    if (!sodCheck.allowed) {
+      res.status(403).json({
+        success: false,
+        message: sodCheck.reason,
+      });
+      return;
+    }
+
     const wasPaid = expense.payment?.status === "paid";
     expense.status = "cancelled";
     expense.approval = {
       status: "cancelled",
-      reviewedBy: (req as any).user?.name || "superadmin",
+      reviewedBy: actor.name || actor.email,
       reviewedAt: new Date(),
       comments: reason || "Expense cancelled and reversed",
     };
 
     await expense.save();
+
+    await logAudit({
+      req,
+      action: "finance.expense:reverse",
+      resourceType: "expense",
+      resourceId: expense._id.toString(),
+      severity: "high",
+      reason: reason || `Expense cancelled and reversed by ${actor.name}`,
+    });
 
     // If it was already paid and ledgered, post an offsetting credit reversal
     if (wasPaid) {
@@ -447,7 +517,7 @@ export async function reverseExpense(req: Request, res: Response): Promise<void>
           workAreaId: expense.workAreaId,
           fundType: "general",
           idempotencyKey: `rev_exp_${expense.expenseNo}`,
-          createdBy: (req as any).user?.name || "superadmin",
+          createdBy: actor.name || actor.email,
         });
 
         // Decrement spentPaise in Budget
@@ -576,6 +646,7 @@ export async function setBudget(req: Request, res: Response): Promise<void> {
     }
 
     const allocatedPaise = Math.round(Number(allocatedAmount) * 100);
+    const actor = getActor(req);
 
     const budget = await Budget.findOneAndUpdate(
       { fy, workAreaId: workAreaId.toUpperCase(), initiativeId: initiativeId || null },
@@ -585,10 +656,20 @@ export async function setBudget(req: Request, res: Response): Promise<void> {
         initiativeId: initiativeId || undefined,
         allocatedPaise,
         status: "approved",
-        approvedBy: (req as any).user?.name || "superadmin",
+        approvedBy: actor.name || actor.email,
       },
       { upsert: true, returnDocument: "after", setDefaultsOnInsert: true }
     );
+
+    await logAudit({
+      req,
+      action: "finance.budget:edit",
+      resourceType: "budget",
+      resourceId: `${workAreaId}_${fy}`,
+      severity: "info",
+      after: { fy, workAreaId, allocatedAmount: Number(allocatedAmount) },
+      reason: `Budget updated by ${actor.name}`,
+    });
 
     res.json({
       success: true,

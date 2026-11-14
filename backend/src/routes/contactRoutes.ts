@@ -7,10 +7,11 @@ import {
 import { formSubmissionLimiter } from "../middlewares/rateLimiter.js";
 import { honeypotCheck } from "../middlewares/honeypot.js";
 import { createTurnstileMiddleware } from "../middlewares/turnstile.js";
-import { requireAdminAuth } from "../middlewares/auth.js";
+import { authenticate, requirePermission } from "../middlewares/rbac.js";
 
 export const contactRouter = Router();
 
+// Public Contact Form Submission (Preserved Exactly)
 contactRouter.post(
   "/",
   formSubmissionLimiter,
@@ -19,5 +20,6 @@ contactRouter.post(
   submitContact
 );
 
-contactRouter.get("/", requireAdminAuth, listContacts);
-contactRouter.patch("/:id/status", requireAdminAuth, updateContactStatus);
+// Protected Admin Operations
+contactRouter.get("/", authenticate, requirePermission("cms.contact:view"), listContacts);
+contactRouter.patch("/:id/status", authenticate, requirePermission("cms.contact:edit"), updateContactStatus);

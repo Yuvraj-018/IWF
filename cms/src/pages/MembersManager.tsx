@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { api } from "../services/api";
+import { useAuth } from "../context/AuthContext";
 import {
   Search,
   Download,
@@ -50,6 +51,7 @@ export interface DirectoryItem {
 export type ManagerTab = "ledger" | "categories" | "cards" | "renewals" | "directory";
 
 export default function MembersManager() {
+  const { can } = useAuth();
   const location = useLocation();
   const [managerTab, setManagerTab] = useState<ManagerTab>("ledger");
 
@@ -765,13 +767,15 @@ export default function MembersManager() {
                   className="w-full pl-9 pr-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-orange-500 transition"
                 />
               </div>
-              <button
-                onClick={handleOpenAddDirectory}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-xs font-bold transition shrink-0 cursor-pointer shadow-xs"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                <span>Add Profile</span>
-              </button>
+              {can("membership.member:create") && (
+                <button
+                  onClick={handleOpenAddDirectory}
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-xs font-bold transition shrink-0 cursor-pointer shadow-xs"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Add Profile</span>
+                </button>
+              )}
             </div>
           </div>
 
@@ -852,20 +856,24 @@ export default function MembersManager() {
                       {item.category || item.type}
                     </span>
                     <div className="flex items-center gap-1">
-                      <button
-                        onClick={() => handleOpenEditDirectory(item)}
-                        className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 transition cursor-pointer"
-                        title="Edit Profile"
-                      >
-                        <Edit2 className="w-3.5 h-3.5" />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteDirectory(item.id)}
-                        className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition cursor-pointer"
-                        title="Delete Profile"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
+                      {can("membership.member:update") && (
+                        <button
+                          onClick={() => handleOpenEditDirectory(item)}
+                          className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 transition cursor-pointer"
+                          title="Edit Profile"
+                        >
+                          <Edit2 className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                      {can("membership.member:delete") && (
+                        <button
+                          onClick={() => handleDeleteDirectory(item.id)}
+                          className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition cursor-pointer"
+                          title="Delete Profile"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -993,7 +1001,7 @@ export default function MembersManager() {
                         <td className="p-3.5">
                           <span
                             className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
-                              m.status === "Active" ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-slate-100 text-slate-600 border-slate-200"
+                              m.status === "Active" ? "bg-blue-50 text-blue-700 border-blue-200" : "bg-slate-100 text-slate-600 border-slate-200"
                             }`}
                           >
                             {m.status || "Active"}
@@ -1001,15 +1009,18 @@ export default function MembersManager() {
                         </td>
                         <td className="p-3.5">
                           <button
-                            onClick={() => handleToggleLedgerConsent(m.memberNo || m.id)}
-                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold border transition cursor-pointer ${
+                            onClick={() => can("membership.member:update") && handleToggleLedgerConsent(m.memberNo || m.id)}
+                            disabled={!can("membership.member:update")}
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold border transition ${
+                              can("membership.member:update") ? "cursor-pointer" : "cursor-not-allowed opacity-75"
+                            } ${
                               m.isPublicConsent !== false
-                                ? "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100"
+                                ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100"
                                 : "bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200"
                             }`}
-                            title="Click to toggle live website visibility"
+                            title={can("membership.member:update") ? "Click to toggle live website visibility" : "Requires membership.member:update"}
                           >
-                            <span className={`w-1.5 h-1.5 rounded-full ${m.isPublicConsent !== false ? "bg-emerald-500" : "bg-slate-400"}`}></span>
+                            <span className={`w-1.5 h-1.5 rounded-full ${m.isPublicConsent !== false ? "bg-blue-500" : "bg-slate-400"}`}></span>
                             <span>{m.isPublicConsent !== false ? "Public on Web" : "Hidden"}</span>
                           </button>
                         </td>
