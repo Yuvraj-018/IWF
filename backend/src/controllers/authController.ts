@@ -130,29 +130,8 @@ export async function adminLogin(req: Request, res: Response) {
     admin.lastReauthAt = new Date();
     await admin.save();
 
-    // Check if 2FA is active on account
-    if (admin.twoFactorEnabled) {
-      // Issue a temporary 15-minute 2FA challenge token
-      const twoFactorToken = signToken(
-        {
-          adminId: admin._id,
-          pending2FA: true,
-        },
-        0.25 // 15 minutes
-      );
-
-      return res.json({
-        success: true,
-        requires2FA: true,
-        twoFactorToken,
-        message: "Two-Factor Authentication code required.",
-      });
-    }
-
-    // Check if role requires 2FA enrollment
-    const roleKeys = admin.roles || [admin.role || "super_admin"];
-    const rolesWith2FA = await Role.find({ key: { $in: roleKeys }, requires2FA: true });
-    const mustEnroll2FA = rolesWith2FA.length > 0 && !admin.twoFactorEnabled;
+    // 2FA bypassed/disabled
+    const mustEnroll2FA = false;
 
     const token = signToken({
       adminId: admin._id,
@@ -177,7 +156,7 @@ export async function adminLogin(req: Request, res: Response) {
       message: "Admin authentication successful",
       token,
       requires2FA: false,
-      mustEnroll2FA,
+      mustEnroll2FA: false,
       mustChangePassword: !!admin.mustChangePassword,
       admin: {
         id: admin._id,
@@ -187,7 +166,7 @@ export async function adminLogin(req: Request, res: Response) {
         roles: admin.roles,
         permissions,
         scope: admin.scope,
-        twoFactorEnabled: admin.twoFactorEnabled,
+        twoFactorEnabled: false,
         mustChangePassword: admin.mustChangePassword,
         rbacEnforcementMode: (process.env.RBAC_ENFORCEMENT_MODE || "report").toLowerCase(),
       },
@@ -230,8 +209,8 @@ export async function getAdminProfile(req: RbacRequest, res: Response) {
         roles: admin.roles,
         permissions,
         scope: admin.scope,
-        twoFactorEnabled: admin.twoFactorEnabled,
-        mustEnroll2FA,
+        twoFactorEnabled: false,
+        mustEnroll2FA: false,
         mustChangePassword: admin.mustChangePassword,
         lastLogin: admin.lastLogin,
         lastReauthAt: admin.lastReauthAt,

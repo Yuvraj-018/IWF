@@ -29,3 +29,4 @@ main().catch((err) => {
   console.error("Error updating demo passwords:", err);
   process.exit(1);
 });
+

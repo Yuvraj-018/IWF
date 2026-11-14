@@ -84,7 +84,7 @@ export default function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/accept-invite" element={<AcceptInvitePage />} />
           <Route path="/change-password" element={<ForcedPasswordChangePage />} />
-          <Route path="/2fa-enroll" element={<TwoFactorEnrollmentWizard />} />
+          <Route path="/2fa-enroll" element={<Navigate to="/dashboard" replace />} />
 
           {/* User Account & Security Settings */}
           <Route

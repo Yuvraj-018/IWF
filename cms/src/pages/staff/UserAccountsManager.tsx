@@ -373,7 +373,6 @@ export default function UserAccountsManager() {
                   <th className="py-3 px-4">Staff Member</th>
                   <th className="py-3 px-4">Assigned Roles</th>
                   <th className="py-3 px-4">Operational Scope</th>
-                  <th className="py-3 px-4">2FA Status</th>
                   <th className="py-3 px-4">Status</th>
                   <th className="py-3 px-4">Last Login</th>
                   <th className="py-3 px-4 text-right">Actions</th>
@@ -441,20 +440,6 @@ export default function UserAccountsManager() {
                         )}
                       </td>
 
-                      {/* 2FA Status */}
-                      <td className="py-3 px-4">
-                        {staff.twoFactorEnabled ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                            <Smartphone className="w-3 h-3 text-emerald-600" />
-                            <span>Active</span>
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-500">
-                            Disabled
-                          </span>
-                        )}
-                      </td>
-
                       {/* Status */}
                       <td className="py-3 px-4">
                         {staff.isActive ? (
@@ -485,18 +470,6 @@ export default function UserAccountsManager() {
                           >
                             <Edit2 className="w-3.5 h-3.5" />
                           </button>
-
-                          {/* Reset 2FA */}
-                          {staff.twoFactorEnabled && (
-                            <button
-                              onClick={() => handleReset2FA(staff)}
-                              disabled={!canEditStaff}
-                              className="p-1.5 text-slate-600 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition disabled:opacity-30 disabled:cursor-not-allowed"
-                              title="Reset 2FA (Emergency Recovery)"
-                            >
-                              <Smartphone className="w-3.5 h-3.5" />
-                            </button>
-                          )}
 
                           {/* Reset Password */}
                           <button

@@ -100,8 +100,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           roles: Array.isArray(res.admin.roles) ? res.admin.roles : [res.admin.role || "super_admin"],
           permissions: Array.isArray(res.admin.permissions) ? res.admin.permissions : [],
           scope: res.admin.scope || { workAreas: [], offices: [] },
-          twoFactorEnabled: !!res.admin.twoFactorEnabled,
-          mustEnroll2FA: !!res.admin.mustEnroll2FA,
+          twoFactorEnabled: false,
+          mustEnroll2FA: false,
           mustChangePassword: !!res.admin.mustChangePassword,
           lastLogin: res.admin.lastLogin,
           lastReauthAt: res.admin.lastReauthAt,
@@ -220,15 +220,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const res = await api.login(email, password, turnstileToken);
       if (res.success) {
-        if (res.requires2FA) {
-          return {
-            success: true,
-            requires2FA: true,
-            twoFactorToken: res.twoFactorToken,
-            message: res.message,
-          };
-        }
-
         if (res.token && res.admin) {
           const adminData: AdminUser = {
             id: res.admin.id || res.admin._id,
@@ -238,15 +229,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             roles: Array.isArray(res.admin.roles) ? res.admin.roles : [res.admin.role || "super_admin"],
             permissions: Array.isArray(res.admin.permissions) ? res.admin.permissions : [],
             scope: res.admin.scope || { workAreas: [], offices: [] },
-            twoFactorEnabled: !!res.admin.twoFactorEnabled,
-            mustEnroll2FA: !!res.mustEnroll2FA,
+            twoFactorEnabled: false,
+            mustEnroll2FA: false,
             mustChangePassword: !!res.mustChangePassword,
             rbacEnforcementMode: res.admin.rbacEnforcementMode || "report",
           };
           setSession(res.token, adminData);
           return {
             success: true,
-            mustEnroll2FA: !!res.mustEnroll2FA,
+            mustEnroll2FA: false,
             mustChangePassword: !!res.mustChangePassword,
             message: res.message,
           };

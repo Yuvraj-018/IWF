@@ -40,10 +40,6 @@ export function RequirePermission({
     return <Navigate to="/change-password" replace />;
   }
 
-  if (user?.mustEnroll2FA && location.pathname !== "/2fa-enroll" && location.pathname !== "/change-password") {
-    return <Navigate to="/2fa-enroll" replace />;
-  }
-
   // Permission evaluation
   if (permission && !can(permission)) {
     return <AccessDeniedPage requiredPermission={permission} moduleName={moduleName} />;

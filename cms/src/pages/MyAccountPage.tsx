@@ -28,12 +28,6 @@ export default function MyAccountPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [submittingPassword, setSubmittingPassword] = useState(false);
 
-  // Disable 2FA state
-  const [disabling2FA, setDisabling2FA] = useState(false);
-  const [disablePassword, setDisablePassword] = useState("");
-  const [disableError, setDisableError] = useState<string | null>(null);
-  const [showDisableModal, setShowDisableModal] = useState(false);
-
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!currentPassword) {
@@ -60,32 +54,6 @@ export default function MyAccountPage() {
       setConfirmPassword("");
     } else {
       toast.error(res.message || "Failed to update password.");
-    }
-  };
-
-  const handleDisable2FA = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setDisableError(null);
-    if (!disablePassword) {
-      setDisableError("Password confirmation is required.");
-      return;
-    }
-
-    setDisabling2FA(true);
-    try {
-      const res = await api.disable2FA(disablePassword);
-      if (res.success) {
-        toast.success("Two-Factor Authentication has been disabled.");
-        setShowDisableModal(false);
-        setDisablePassword("");
-        await refreshProfile();
-      } else {
-        setDisableError(res.message || "Failed to disable 2FA.");
-      }
-    } catch (err: any) {
-      setDisableError(err.message || "Error communicating with server.");
-    } finally {
-      setDisabling2FA(false);
     }
   };
 
@@ -190,66 +158,8 @@ export default function MyAccountPage() {
           </div>
         </div>
 
-        {/* Right 2 Columns: 2FA & Password Management */}
+        {/* Right 2 Columns: Password Management */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Two-Factor Authentication Card */}
-          <div className="bg-[#0b1f3b] border border-[#16365f] rounded-2xl p-6 shadow-xl">
-            <div className="flex items-start justify-between">
-              <div className="flex items-center gap-3">
-                <div
-                  className={`w-11 h-11 rounded-xl flex items-center justify-center ${
-                    user?.twoFactorEnabled
-                      ? "bg-emerald-500/15 border border-emerald-500/30 text-emerald-400"
-                      : "bg-orange-500/15 border border-orange-500/30 text-orange-400"
-                  }`}
-                >
-                  <Smartphone className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-white">Two-Factor Authentication (TOTP)</h3>
-                  <p className="text-xs text-slate-400">
-                    Require a 6-digit authenticator code from your phone on every sign-in.
-                  </p>
-                </div>
-              </div>
-
-              <span
-                className={`px-3 py-1 rounded-full text-xs font-bold border ${
-                  user?.twoFactorEnabled
-                    ? "bg-emerald-950/60 border-emerald-800/50 text-emerald-300"
-                    : "bg-amber-950/60 border-amber-800/50 text-amber-300"
-                }`}
-              >
-                {user?.twoFactorEnabled ? "ACTIVE" : "DISABLED"}
-              </span>
-            </div>
-
-            <div className="mt-5 pt-4 border-t border-[#16365f] flex flex-col sm:flex-row items-center justify-between gap-4">
-              <p className="text-xs text-slate-300">
-                {user?.twoFactorEnabled
-                  ? "Your account is protected by hardware/app-based authenticator codes and emergency recovery keys."
-                  : "Two-Factor authentication is strongly recommended to protect sensitive charitable data and funds."}
-              </p>
-
-              {user?.twoFactorEnabled ? (
-                <button
-                  type="button"
-                  onClick={() => setShowDisableModal(true)}
-                  className="px-4 py-2 bg-[#071527] hover:bg-rose-950/40 border border-[#1c4070] hover:border-rose-800/50 text-slate-300 hover:text-rose-300 rounded-xl text-xs font-bold transition shrink-0 cursor-pointer"
-                >
-                  Disable 2FA
-                </button>
-              ) : (
-                <Link
-                  to="/2fa-enroll"
-                  className="px-5 py-2.5 bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white rounded-xl text-xs font-bold shadow-md shadow-orange-500/20 transition shrink-0 cursor-pointer"
-                >
-                  Enroll in 2FA
-                </Link>
-              )}
-            </div>
-          </div>
-
           {/* Change Password Card */}
           <div className="bg-[#0b1f3b] border border-[#16365f] rounded-2xl p-6 shadow-xl">
             <div className="flex items-center gap-3 mb-5">
@@ -328,64 +238,6 @@ export default function MyAccountPage() {
           </div>
         </div>
       </div>
-
-      {/* Disable 2FA Modal */}
-      {showDisableModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
-          <div className="w-full max-w-md bg-[#0b1f3b] border border-[#16365f] rounded-2xl p-6 shadow-2xl relative text-slate-200">
-            <h3 className="text-base font-bold text-white mb-2">Disable Two-Factor Authentication</h3>
-            <p className="text-xs text-slate-400 mb-4">
-              Please enter your password to confirm disabling Two-Factor Authentication. Note that staff members with roles requiring 2FA will be blocked by policy.
-            </p>
-
-            {disableError && (
-              <div className="mb-4 p-3 rounded-xl bg-rose-950/40 border border-rose-800/50 text-xs text-rose-300 flex items-start gap-2">
-                <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
-                <span>{disableError}</span>
-              </div>
-            )}
-
-            <form onSubmit={handleDisable2FA} className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
-                  Confirm Password
-                </label>
-                <input
-                  type="password"
-                  autoFocus
-                  required
-                  value={disablePassword}
-                  onChange={(e) => setDisablePassword(e.target.value)}
-                  placeholder="Enter current password"
-                  className="w-full px-3.5 py-2 bg-[#071527] border border-[#1c4070] rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-orange-500"
-                />
-              </div>
-
-              <div className="flex items-center justify-end gap-2.5 pt-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowDisableModal(false);
-                    setDisableError(null);
-                    setDisablePassword("");
-                  }}
-                  className="px-4 py-2 bg-[#071527] hover:bg-[#16365f] text-xs font-semibold rounded-xl text-slate-300"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={disabling2FA}
-                  className="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
-                >
-                  {disabling2FA ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : null}
-                  <span>Confirm Disable 2FA</span>
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
