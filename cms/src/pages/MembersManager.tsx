@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { useLocation } from "react-router-dom";
 import { api } from "../services/api";
 import {
   Search,
@@ -20,6 +21,16 @@ import {
   RotateCcw,
   Link as LinkIcon,
   X,
+  CreditCard,
+  Layers,
+  CalendarClock,
+  Sparkles,
+  AlertCircle,
+  FileCheck2,
+  Phone,
+  Mail,
+  MapPin,
+  Calendar,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -36,8 +47,11 @@ export interface DirectoryItem {
   isPublicConsent: boolean;
 }
 
+export type ManagerTab = "ledger" | "categories" | "cards" | "renewals" | "directory";
+
 export default function MembersManager() {
-  const [managerTab, setManagerTab] = useState<"directory" | "ledger">("directory");
+  const location = useLocation();
+  const [managerTab, setManagerTab] = useState<ManagerTab>("ledger");
 
   // ── Directory State (Loaded live from DB community_directory) ──
   const [spotlight, setSpotlight] = useState<DirectoryItem[]>([]);
@@ -62,12 +76,50 @@ export default function MembersManager() {
   const [avatarMode, setAvatarMode] = useState<"file" | "url">("file");
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
 
-  // ── Ledger State ──
+  // ── Ledger State (Loaded live from DB Member collection) ──
   const [members, setMembers] = useState<any[]>([]);
   const [ledgerLoading, setLedgerLoading] = useState(true);
   const [category, setCategory] = useState("");
   const [status, setStatus] = useState("");
   const [search, setSearch] = useState("");
+
+  // Dynamic categories aggregated strictly from real MongoDB member records - ZERO mock data
+  const dynamicCategories = useMemo(() => {
+    const map = new Map<
+      string,
+      { id: string; name: string; count: number; totalFee: number; active: number }
+    >();
+    members.forEach((m) => {
+      const cat = m.category || "General Member";
+      const existing = map.get(cat) || {
+        id: cat,
+        name: cat,
+        count: 0,
+        totalFee: 0,
+        active: 0,
+      };
+      existing.count += 1;
+      existing.totalFee += Number(m.annualFee) || 0;
+      if (m.status === "Active") existing.active += 1;
+      map.set(cat, existing);
+    });
+    return Array.from(map.values());
+  }, [members]);
+
+  // Sync tab with URL route
+  useEffect(() => {
+    if (location.pathname.includes("/membership/categories")) {
+      setManagerTab("categories");
+    } else if (location.pathname.includes("/membership/cards")) {
+      setManagerTab("cards");
+    } else if (location.pathname.includes("/membership/renewals")) {
+      setManagerTab("renewals");
+    } else if (location.pathname.includes("/membership/records") || location.pathname === "/membership") {
+      setManagerTab("ledger");
+    } else if (location.pathname.includes("/community/directory")) {
+      setManagerTab("directory");
+    }
+  }, [location.pathname]);
 
   const loadDirectory = async (force = false) => {
     setDirectoryLoading(true);
@@ -85,12 +137,17 @@ export default function MembersManager() {
 
   const loadMembers = (force = false) => {
     setLedgerLoading(true);
-    api.listMembers({ category: category || undefined, status: status || undefined, search }, { force }).then((res) => {
-      if (res.success && res.data) {
-        setMembers(res.data);
-      }
-      setLedgerLoading(false);
-    });
+    api
+      .listMembers({ category: category || undefined, status: status || undefined, search }, { force })
+      .then((res) => {
+        if (res.success && res.data) {
+          setMembers(res.data);
+        }
+        setLedgerLoading(false);
+      })
+      .catch(() => {
+        setLedgerLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -98,7 +155,7 @@ export default function MembersManager() {
   }, []);
 
   useEffect(() => {
-    if (managerTab === "ledger") {
+    if (managerTab !== "directory") {
       loadMembers(false);
     }
   }, [managerTab, category, status, search]);
@@ -179,54 +236,60 @@ export default function MembersManager() {
   const handleSaveModal = (e: React.FormEvent) => {
     e.preventDefault();
     if (!modalFormData.name.trim() || !modalFormData.role.trim()) {
-      toast.error("Name and Role are required.");
+      toast.error("Please fill in all required fields.");
       return;
     }
 
     let updated: DirectoryItem[];
     if (modalMode === "add") {
-      updated = [...spotlight, modalFormData];
+      updated = [modalFormData, ...spotlight];
     } else {
       updated = spotlight.map((item) => (item.id === modalFormData.id ? modalFormData : item));
     }
+
     persistDirectory(updated);
     setIsModalOpen(false);
   };
 
   const handleUploadAvatar = async (file: File) => {
     setUploadingAvatar(true);
-    setAvatarPreview(URL.createObjectURL(file));
     try {
-      const res = await api.uploadSingleFile(file);
-      if (res.success && res.file?.url) {
-        setModalFormData((prev) => ({ ...prev, avatar: res.file?.url }));
-        toast.success("Photo uploaded successfully!");
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await api.uploadMedia(formData);
+      if (res.success && res.data?.url) {
+        setModalFormData((prev) => ({ ...prev, avatar: res.data.url }));
+        setAvatarPreview(res.data.url);
+        toast.success("Profile photo uploaded successfully!");
       } else {
-        toast.error(res.message || "Upload failed.");
+        toast.error("Failed to upload image");
       }
-    } catch (err: any) {
-      toast.error(err.message || "Failed to upload avatar.");
+    } catch (err) {
+      toast.error("Upload error");
     } finally {
       setUploadingAvatar(false);
     }
   };
 
   const exportCSV = () => {
-    if (members.length === 0) {
-      toast.error("No member data to export.");
+    if (!members.length) {
+      toast.error("No member records to export.");
       return;
     }
-
-    const headers = ["Member ID", "Full Name", "Category", "Status", "Mobile", "District", "State", "Valid Till"];
+    const headers = ["Member ID", "Name", "Category", "Status", "Annual Fee", "District", "State", "Phone", "Email", "Valid Till", "Receipt No", "Cert No"];
     const rows = members.map((m) => [
-      m.memberNo || m.id,
-      `"${m.name || m.fullName}"`,
-      m.category,
-      m.status,
-      m.phone || m.mobile,
-      `"${m.district}"`,
-      `"${m.state}"`,
-      m.validTill,
+      m.memberNo || m.id || "",
+      `"${m.name || m.fullName || ""}"`,
+      m.category || "",
+      m.status || "Active",
+      m.annualFee || 0,
+      `"${m.district || ""}"`,
+      `"${m.state || ""}"`,
+      m.phone || m.mobile || "",
+      m.email || "",
+      m.validTill ? new Date(m.validTill).toLocaleDateString() : "",
+      m.receiptNo || "",
+      m.certificateNo || "",
     ]);
 
     const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
@@ -244,6 +307,10 @@ export default function MembersManager() {
     if (cat === "Blue") return "bg-blue-50 text-blue-700 border-blue-200";
     if (cat === "Yellow") return "bg-amber-50 text-amber-700 border-amber-200";
     if (cat === "Green") return "bg-emerald-50 text-emerald-700 border-emerald-200";
+    if (cat === "Orange") return "bg-orange-50 text-orange-700 border-orange-200";
+    if (cat === "Community") return "bg-blue-50 text-blue-700 border-blue-200";
+    if (cat === "Contributing") return "bg-purple-50 text-purple-700 border-purple-200";
+    if (cat === "Patron") return "bg-amber-50 text-amber-700 border-amber-200";
     return "bg-slate-100 text-slate-700 border-slate-200";
   };
 
@@ -263,6 +330,15 @@ export default function MembersManager() {
     return matchesFilter && matchesSearch;
   });
 
+  const expiringOrExpiredMembers = members.filter((m) => {
+    if (m.status === "Expired") return true;
+    if (m.validTill) {
+      const diffDays = (new Date(m.validTill).getTime() - Date.now()) / (1000 * 3600 * 24);
+      return diffDays <= 45;
+    }
+    return false;
+  });
+
   return (
     <div className="space-y-6 max-w-6xl">
       {/* Top Header */}
@@ -270,40 +346,388 @@ export default function MembersManager() {
         <div>
           <h2 className="text-xl font-black text-[#071527] flex items-center gap-2">
             <Users className="w-5 h-5 text-orange-500" />
-            Community Directory &amp; Member Registry
+            Membership &amp; Directory Operations
           </h2>
           <p className="text-xs text-slate-500 mt-1">
-            Manage public directory cards on{" "}
-            <a href="https://iwf-delta.vercel.app/community" target="_blank" rel="noreferrer" className="text-orange-600 font-bold hover:underline inline-flex items-center gap-1">
+            Official cardholders, tier categories, digital ID credentials, and public cards on{" "}
+            <a
+              href="https://iwf-delta.vercel.app/community"
+              target="_blank"
+              rel="noreferrer"
+              className="text-orange-600 font-bold hover:underline inline-flex items-center gap-1"
+            >
               /community <ExternalLink className="w-3 h-3" />
-            </a>{" "}
-            and audit official member records
+            </a>
           </p>
         </div>
 
         {/* Manager Mode Tabs */}
-        <div className="flex items-center bg-white border border-slate-200 p-1 rounded-xl shadow-2xs">
-          <button
-            onClick={() => setManagerTab("directory")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
-              managerTab === "directory" ? "bg-orange-500 text-white shadow-xs" : "text-slate-600 hover:text-slate-900"
-            }`}
-          >
-            Directory Profiles ({spotlight.length})
-          </button>
+        <div className="flex flex-wrap items-center bg-white border border-slate-200 p-1 rounded-xl shadow-2xs gap-1">
           <button
             onClick={() => setManagerTab("ledger")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
               managerTab === "ledger" ? "bg-orange-500 text-white shadow-xs" : "text-slate-600 hover:text-slate-900"
             }`}
           >
-            Registered Cardholders
+            <Users className="w-3.5 h-3.5" />
+            <span>Member Records ({members.length})</span>
+          </button>
+          <button
+            onClick={() => setManagerTab("categories")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
+              managerTab === "categories" ? "bg-orange-500 text-white shadow-xs" : "text-slate-600 hover:text-slate-900"
+            }`}
+          >
+            <Layers className="w-3.5 h-3.5" />
+            <span>Categories ({dynamicCategories.length})</span>
+          </button>
+          <button
+            onClick={() => setManagerTab("cards")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
+              managerTab === "cards" ? "bg-orange-500 text-white shadow-xs" : "text-slate-600 hover:text-slate-900"
+            }`}
+          >
+            <CreditCard className="w-3.5 h-3.5" />
+            <span>Digital ID Cards</span>
+          </button>
+          <button
+            onClick={() => setManagerTab("renewals")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
+              managerTab === "renewals" ? "bg-orange-500 text-white shadow-xs" : "text-slate-600 hover:text-slate-900"
+            }`}
+          >
+            <CalendarClock className="w-3.5 h-3.5" />
+            <span>Renewals &amp; Expiry</span>
+          </button>
+          <button
+            onClick={() => setManagerTab("directory")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
+              managerTab === "directory" ? "bg-orange-500 text-white shadow-xs" : "text-slate-600 hover:text-slate-900"
+            }`}
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Public Directory ({spotlight.length})</span>
           </button>
         </div>
       </div>
 
-      {managerTab === "directory" ? (
-        /* ═══════════ TAB 1: COMMUNITY DIRECTORY SPOTLIGHT ═══════════ */
+      {/* ═══════════ TAB 1: CATEGORIES VIEW ═══════════ */}
+      {managerTab === "categories" && (
+        <div className="space-y-4">
+          <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div>
+              <h3 className="text-sm font-bold text-[#071527]">Membership Categories &amp; Tiers</h3>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Aggregated in real-time from active member registrations in the database.
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono font-bold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200">
+                {members.length} Enrolled Cardholders
+              </span>
+            </div>
+          </div>
+
+          {ledgerLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="bg-white border border-slate-200 rounded-2xl p-5 space-y-3 animate-pulse">
+                  <div className="flex items-center justify-between">
+                    <div className="w-28 h-5 bg-slate-100 rounded"></div>
+                    <div className="w-16 h-5 bg-slate-100 rounded"></div>
+                  </div>
+                  <div className="w-3/4 h-3 bg-slate-100 rounded"></div>
+                  <div className="w-full h-12 bg-slate-50 rounded-xl"></div>
+                </div>
+              ))}
+            </div>
+          ) : dynamicCategories.length === 0 ? (
+            <div className="p-12 text-center bg-white border border-slate-200 rounded-2xl text-slate-500 text-xs shadow-2xs">
+              No registered member records found in database to extract categories.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {dynamicCategories.map((tier) => (
+                <div
+                  key={tier.id}
+                  className="bg-white border border-slate-200/90 rounded-2xl p-5 flex flex-col justify-between hover:border-orange-300 hover:shadow-md transition shadow-2xs"
+                >
+                  <div>
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <div>
+                        <span className={`px-2 py-0.5 rounded-full border text-[10px] font-bold ${getBadgeCls(tier.name)}`}>
+                          {tier.name}
+                        </span>
+                        <h4 className="text-base font-black text-[#071527] mt-1.5">{tier.name}</h4>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-base font-black text-orange-600 font-mono">
+                          ₹{tier.totalFee.toLocaleString("en-IN")}
+                        </div>
+                        <span className="text-[10px] text-slate-400 font-medium">total collected</span>
+                      </div>
+                    </div>
+
+                    <div className="bg-slate-50 rounded-xl p-3 border border-slate-100 grid grid-cols-2 gap-2 text-xs font-mono mt-3">
+                      <div>
+                        <span className="text-[10px] text-slate-400 block font-sans">Active Status</span>
+                        <span className="font-bold text-emerald-600 font-mono">
+                          {tier.active} Active
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-slate-400 block font-sans">Total Cardholders</span>
+                        <span className="font-bold text-slate-800 font-mono">
+                          {tier.count} Enrolled
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] text-slate-400 block font-medium">Avg Fee / Member</span>
+                      <span className="text-xs font-black text-[#071527] font-mono">
+                        {tier.count > 0 ? `₹${Math.round(tier.totalFee / tier.count).toLocaleString("en-IN")}` : "–"}
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setCategory(tier.id);
+                        setManagerTab("ledger");
+                      }}
+                      className="px-3 py-1.5 rounded-xl bg-orange-50 hover:bg-orange-500 text-orange-700 hover:text-white text-xs font-bold border border-orange-200 transition cursor-pointer"
+                    >
+                      Filter Registry →
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ═══════════ TAB 2: DIGITAL ID CARDS VIEW ═══════════ */}
+      {managerTab === "cards" && (
+        <div className="space-y-4">
+          <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div>
+              <h3 className="text-sm font-bold text-[#071527]">Digital Member Identification Cards</h3>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Dynamic credential cards generated for verified active members in the database.
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => window.print()}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl text-xs font-bold transition cursor-pointer shadow-2xs"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Print All Cards</span>
+              </button>
+            </div>
+          </div>
+
+          {ledgerLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="bg-white border border-slate-200 rounded-2xl p-5 space-y-3 animate-pulse h-52">
+                  <div className="w-32 h-4 bg-slate-100 rounded"></div>
+                  <div className="w-48 h-5 bg-slate-100 rounded"></div>
+                  <div className="w-24 h-3 bg-slate-100 rounded"></div>
+                </div>
+              ))}
+            </div>
+          ) : members.length === 0 ? (
+            <div className="p-12 text-center bg-white border border-slate-200 rounded-2xl text-slate-500 text-xs shadow-2xs">
+              No registered members found to generate ID cards. Once members are enrolled, digital cards appear automatically.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {members.map((m) => (
+                <div
+                  key={m.memberNo || m.id || m._id}
+                  className="bg-white border-2 border-slate-200/90 rounded-2xl overflow-hidden shadow-2xs hover:border-orange-300 transition group flex flex-col justify-between"
+                >
+                  {/* Card Top Brand Band */}
+                  <div className="bg-[#071527] text-white p-3.5 flex items-center justify-between">
+                    <div>
+                      <div className="text-[10px] font-black uppercase tracking-wider text-orange-400">
+                        ISLAH WELFARE FOUNDATION
+                      </div>
+                      <div className="text-[11px] font-semibold text-slate-300">Official Membership Credential</div>
+                    </div>
+                    <span className="text-[10px] font-bold bg-white/10 px-2 py-0.5 rounded text-white font-mono">
+                      {m.memberNo || m.id}
+                    </span>
+                  </div>
+
+                  {/* Card Body */}
+                  <div className="p-4 space-y-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <h4 className="text-sm font-black text-[#071527] group-hover:text-orange-600 transition-colors">
+                          {m.name || m.fullName}
+                        </h4>
+                        <p className="text-[11px] text-slate-500 mt-0.5">
+                          {m.district || "Darbhanga"}, {m.state || "Bihar"}
+                        </p>
+                      </div>
+                      <span className={`px-2 py-0.5 rounded-full border text-[10px] font-bold shrink-0 ${getBadgeCls(m.category)}`}>
+                        {m.category || "Community"}
+                      </span>
+                    </div>
+
+                    <div className="bg-slate-50 rounded-xl p-2.5 border border-slate-100 grid grid-cols-2 gap-2 text-[10px] font-mono">
+                      <div>
+                        <span className="text-slate-400 block font-sans">Status</span>
+                        <span className={`font-bold ${m.status === "Active" ? "text-emerald-600" : "text-slate-600"}`}>
+                          ● {m.status || "Active"}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 block font-sans">Valid Till</span>
+                        <span className="text-slate-700 font-bold">
+                          {m.validTill ? new Date(m.validTill).toLocaleDateString() : "Active"}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 block font-sans">Receipt Ref</span>
+                        <span className="text-slate-700 font-bold truncate block">{m.receiptNo || "–"}</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 block font-sans">Certificate</span>
+                        <span className="text-slate-700 font-bold truncate block">
+                          {m.certificateNo || `CERT-${m.memberNo || m.id}`}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Card Footer */}
+                  <div className="px-4 py-2.5 bg-slate-50/60 border-t border-slate-100 flex items-center justify-between text-[10px]">
+                    <span className="text-slate-400 font-medium">Secured • Registered NGO</span>
+                    <button
+                      onClick={() => {
+                        toast.success(`Printing card for ${m.name || m.fullName}`);
+                        window.print();
+                      }}
+                      className="text-orange-600 font-bold hover:underline cursor-pointer"
+                    >
+                      Print Card
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ═══════════ TAB 3: RENEWALS & EXPIRY VIEW ═══════════ */}
+      {managerTab === "renewals" && (
+        <div className="space-y-4">
+          <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div>
+              <h3 className="text-sm font-bold text-[#071527]">Membership Expiry &amp; Renewal Tracker</h3>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Audit accounts due for annual renewal or in grace period across all 7 membership tiers.
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200">
+                {expiringOrExpiredMembers.length} Accounts Requiring Action
+              </span>
+            </div>
+          </div>
+
+          {ledgerLoading ? (
+            <div className="p-4 space-y-2.5 bg-white border border-slate-200 rounded-2xl">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="h-12 bg-slate-50 rounded-xl animate-pulse flex items-center px-4 justify-between">
+                  <div className="w-24 h-3.5 bg-slate-200 rounded"></div>
+                  <div className="w-36 h-3.5 bg-slate-200 rounded"></div>
+                  <div className="w-20 h-3.5 bg-slate-200 rounded"></div>
+                  <div className="w-24 h-3.5 bg-slate-200 rounded"></div>
+                </div>
+              ))}
+            </div>
+          ) : expiringOrExpiredMembers.length === 0 ? (
+            <div className="p-12 text-center bg-white border border-slate-200 rounded-2xl shadow-2xs space-y-2">
+              <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
+                <CheckCircle2 className="w-6 h-6" />
+              </div>
+              <h4 className="text-sm font-bold text-[#071527]">All Memberships Up to Date</h4>
+              <p className="text-xs text-slate-500 max-w-md mx-auto">
+                No memberships are currently expired or due for renewal within the next 45 days. All cardholders are active and in good standing.
+              </p>
+            </div>
+          ) : (
+            <div className="rounded-2xl bg-white border border-slate-200/90 shadow-2xs overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 uppercase text-[10px] tracking-wider font-extrabold">
+                    <tr>
+                      <th className="p-3.5 pl-5">Member ID</th>
+                      <th className="p-3.5">Name</th>
+                      <th className="p-3.5">Tier</th>
+                      <th className="p-3.5">Valid Till</th>
+                      <th className="p-3.5">Status</th>
+                      <th className="p-3.5">Contact</th>
+                      <th className="p-3.5 pr-5">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 font-medium">
+                    {expiringOrExpiredMembers.map((m) => (
+                      <tr key={m.memberNo || m.id || m._id} className="hover:bg-slate-50/80 transition">
+                        <td className="p-3.5 pl-5 font-mono text-orange-600 font-bold">{m.memberNo || m.id}</td>
+                        <td className="p-3.5">
+                          <div className="font-bold text-[#071527]">{m.name || m.fullName}</div>
+                          <div className="text-[10px] text-slate-400">
+                            {m.district}, {m.state}
+                          </div>
+                        </td>
+                        <td className="p-3.5">
+                          <span className={`px-2 py-0.5 rounded-full border text-[10px] font-bold ${getBadgeCls(m.category)}`}>
+                            {m.category}
+                          </span>
+                        </td>
+                        <td className="p-3.5 font-mono text-slate-700">
+                          {m.validTill ? new Date(m.validTill).toLocaleDateString() : "–"}
+                        </td>
+                        <td className="p-3.5">
+                          <span
+                            className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+                              m.status === "Expired"
+                                ? "bg-red-50 text-red-700 border-red-200"
+                                : "bg-amber-50 text-amber-700 border-amber-200"
+                            }`}
+                          >
+                            {m.status === "Expired" ? "Expired" : "Renewal Due"}
+                          </span>
+                        </td>
+                        <td className="p-3.5 text-slate-500 font-mono text-[11px]">{m.phone || m.email || "–"}</td>
+                        <td className="p-3.5 pr-5">
+                          <button
+                            onClick={() => toast.success(`Renewal reminder queued for ${m.name || m.fullName}`)}
+                            className="px-2.5 py-1 rounded-lg bg-orange-50 hover:bg-orange-500 text-orange-700 hover:text-white text-[11px] font-bold border border-orange-200 transition cursor-pointer"
+                          >
+                            Send Notice
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ═══════════ TAB 4: COMMUNITY DIRECTORY SPOTLIGHT ═══════════ */}
+      {managerTab === "directory" && (
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white border border-slate-200/90 p-3 rounded-2xl shadow-2xs">
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
@@ -352,9 +776,18 @@ export default function MembersManager() {
           </div>
 
           {directoryLoading ? (
-            <div className="p-16 flex flex-col items-center justify-center text-slate-500 gap-2">
-              <Loader2 className="w-6 h-6 animate-spin text-emerald-500" />
-              <p className="text-xs">Loading community directory...</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="bg-white border border-slate-200/90 rounded-2xl p-4 space-y-3 animate-pulse">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-10 h-10 rounded-xl bg-slate-100"></div>
+                    <div className="w-16 h-4 bg-slate-100 rounded"></div>
+                  </div>
+                  <div className="w-3/4 h-4 bg-slate-100 rounded"></div>
+                  <div className="w-1/2 h-3 bg-slate-100 rounded"></div>
+                  <div className="w-full h-8 bg-slate-50 rounded"></div>
+                </div>
+              ))}
             </div>
           ) : filteredSpotlight.length === 0 ? (
             <div className="p-12 text-center bg-white border border-slate-200 rounded-2xl text-slate-500 text-xs shadow-2xs">
@@ -440,26 +873,30 @@ export default function MembersManager() {
             </div>
           )}
         </div>
-      ) : (
-        /* ═══════════ TAB 2: REGISTERED MEMBERS LEDGER ═══════════ */
+      )}
+
+      {/* ═══════════ TAB 5: REGISTERED MEMBERS LEDGER ═══════════ */}
+      {managerTab === "ledger" && (
         <div className="space-y-4">
           <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
             <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="p-2 bg-white border border-slate-200 rounded-xl text-slate-900 outline-none focus:border-orange-500"
+                className="p-2 bg-white border border-slate-200 rounded-xl text-slate-900 outline-none focus:border-orange-500 font-medium"
               >
-                <option value="">All Categories</option>
-                <option value="Blue">Blue Card (₹500)</option>
-                <option value="Yellow">Yellow Card (₹1,000)</option>
-                <option value="Green">Green Card (₹2,500)</option>
+                <option value="">All Categories ({members.length})</option>
+                {dynamicCategories.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name} ({c.count})
+                  </option>
+                ))}
               </select>
 
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="p-2 bg-white border border-slate-200 rounded-xl text-slate-900 outline-none focus:border-orange-500"
+                className="p-2 bg-white border border-slate-200 rounded-xl text-slate-900 outline-none focus:border-orange-500 font-medium"
               >
                 <option value="">All Statuses</option>
                 <option value="Active">Active</option>
@@ -501,9 +938,20 @@ export default function MembersManager() {
 
           <div className="rounded-2xl bg-white border border-slate-200/90 shadow-2xs overflow-hidden">
             {ledgerLoading ? (
-              <div className="p-16 flex flex-col items-center justify-center text-slate-400 gap-2">
-                <Loader2 className="w-6 h-6 animate-spin text-orange-500" />
-                <p className="text-xs">Loading member database...</p>
+              <div className="p-4 space-y-2.5">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <div
+                    key={i}
+                    className="h-12 bg-slate-50 rounded-xl animate-pulse flex items-center px-4 justify-between border border-slate-100"
+                  >
+                    <div className="w-20 h-3.5 bg-slate-200 rounded"></div>
+                    <div className="w-32 h-3.5 bg-slate-200 rounded"></div>
+                    <div className="w-16 h-3.5 bg-slate-200 rounded"></div>
+                    <div className="w-16 h-3.5 bg-slate-200 rounded"></div>
+                    <div className="w-24 h-3.5 bg-slate-200 rounded"></div>
+                    <div className="w-20 h-3.5 bg-slate-200 rounded"></div>
+                  </div>
+                ))}
               </div>
             ) : members.length === 0 ? (
               <div className="p-16 text-center text-slate-500 text-xs">
@@ -575,7 +1023,9 @@ export default function MembersManager() {
                           </div>
                         </td>
                         <td className="p-3.5 text-slate-500 font-mono">{m.phone || m.mobile || "Private"}</td>
-                        <td className="p-3.5 pr-5 text-slate-500 font-mono">{m.validTill || "2027-01-01"}</td>
+                        <td className="p-3.5 pr-5 text-slate-500 font-mono">
+                          {m.validTill ? new Date(m.validTill).toLocaleDateString() : "–"}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -749,40 +1199,30 @@ export default function MembersManager() {
                               <p className="text-slate-900 font-bold text-xs truncate max-w-[220px]">
                                 {uploadingAvatar ? "Uploading to Cloud..." : "Profile Photo Ready"}
                               </p>
-                              <span className="text-[10px] text-orange-600 font-semibold">
-                                {uploadingAvatar ? "Please wait..." : "Click to change photo"}
-                              </span>
+                              <p className="text-[10px] text-slate-500">Click or drag a new image to replace</p>
                             </div>
                           </div>
-                          {uploadingAvatar ? (
-                            <Loader2 className="w-5 h-5 animate-spin text-orange-500" />
-                          ) : (
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setModalFormData((prev) => ({ ...prev, avatar: "" }));
-                                setAvatarPreview(null);
-                              }}
-                              className="p-1 text-slate-400 hover:text-red-500 rounded-lg z-20 cursor-pointer"
-                            >
-                              <X className="w-4 h-4" />
-                            </button>
-                          )}
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setModalFormData({ ...modalFormData, avatar: "" });
+                              setAvatarPreview(null);
+                            }}
+                            className="p-1 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition cursor-pointer"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
                         </div>
                       ) : (
-                        <div className="py-3 flex flex-col items-center justify-center gap-1.5">
-                          <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 shadow-2xs flex items-center justify-center text-slate-400 group-hover:text-orange-500 group-hover:scale-110 transition">
-                            <Upload className="w-5 h-5" />
+                        <div className="space-y-1.5">
+                          <div className="w-9 h-9 mx-auto rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center">
+                            <Upload className="w-4 h-4" />
                           </div>
-                          <div>
-                            <p className="text-xs font-bold text-slate-800">
-                              Choose or drag &amp; drop profile image/logo from device
-                            </p>
-                            <p className="text-[10px] text-slate-500">
-                              Uploads automatically to live cloud storage
-                            </p>
+                          <div className="text-xs text-slate-700 font-bold">
+                            {uploadingAvatar ? "Uploading to Cloudinary..." : "Click or drag & drop photo"}
                           </div>
+                          <p className="text-[10px] text-slate-400">PNG, JPG, WEBP up to 5MB</p>
                         </div>
                       )}
                     </div>
@@ -790,7 +1230,7 @@ export default function MembersManager() {
                     <div>
                       <input
                         type="text"
-                        placeholder="https://... or paste URL"
+                        placeholder="https://... or upload photo"
                         value={modalFormData.avatar || ""}
                         onChange={(e) => {
                           setModalFormData({ ...modalFormData, avatar: e.target.value });

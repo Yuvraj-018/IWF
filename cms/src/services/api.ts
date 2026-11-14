@@ -44,6 +44,18 @@ export const api = {
     return res.json();
   },
 
+  // ── Live Backend System Health ──
+  async getHealth(): Promise<{
+    status: string;
+    service: string;
+    database: string;
+    uptimeSeconds: number;
+    timestamp: string;
+  }> {
+    const res = await fetch(`${API_BASE_URL}/health`);
+    return res.json();
+  },
+
   // ── Dashboard Overview Metrics (Cached: 60s) ──
   async getDashboardStats(options?: CacheOptions): Promise<{
     totalMembers: number;

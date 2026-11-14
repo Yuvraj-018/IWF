@@ -33,6 +33,7 @@ import {
   Inbox,
   Clock,
   Check,
+  X,
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -44,6 +45,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const location = useLocation();
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -243,6 +245,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     }
   };
 
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
   /* ─────────────────────────────────────────────────────────
      NAVIGATION CONFIGURATION EXACTLY PER ISLAH_SUPER_ADMIN_DASHBOARD DOC (SECTION 3)
      ───────────────────────────────────────────────────────── */
@@ -382,16 +388,132 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     },
   ];
 
-  return (
-    <div className="min-h-screen bg-[#f8fafc] flex text-slate-900 font-sans">
-      {/* ── SIDEBAR (OFFICIAL WEBSITE DEEP NAVY #071527) ── */}
-      <aside
-        className={`${
-          sidebarOpen ? "w-68" : "w-20"
-        } transition-all duration-200 bg-[#071527] border-r border-[#0f2744] flex flex-col shrink-0 text-white shadow-xl z-20`}
+  const renderNavLinks = (isExpanded: boolean, onNavigate?: () => void) => (
+    <>
+      {/* 1. Dashboard */}
+      <Link
+        to="/dashboard"
+        onClick={onNavigate}
+        className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-md text-xs font-semibold transition ${
+          pathname === "/" || pathname === "/dashboard"
+            ? "bg-[#0d2a4d] text-white font-bold border-l-4 border-[#f97316] shadow-2xs"
+            : "text-slate-300 hover:text-white hover:bg-[#0c2444]"
+        }`}
       >
-        {/* Header Branding with Official ISLAH Logo */}
-        <div className="p-4 border-b border-[#0f2744] flex items-center justify-between">
+        <LayoutDashboard
+          className={`w-4 h-4 shrink-0 ${
+            pathname === "/" || pathname === "/dashboard" ? "text-[#f97316]" : "text-slate-400"
+          }`}
+        />
+        {isExpanded && <span className="tracking-wide">Dashboard</span>}
+      </Link>
+
+      {/* 2. Website & CMS */}
+      <Link
+        to="/cms"
+        onClick={onNavigate}
+        className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-md text-xs font-semibold transition ${
+          pathname.startsWith("/cms")
+            ? "bg-[#0d2a4d] text-white font-bold border-l-4 border-[#f97316] shadow-2xs"
+            : "text-slate-300 hover:text-white hover:bg-[#0c2444]"
+        }`}
+      >
+        <Globe
+          className={`w-4 h-4 shrink-0 ${
+            pathname.startsWith("/cms") ? "text-[#f97316]" : "text-slate-400"
+          }`}
+        />
+        {isExpanded && <span className="tracking-wide">Website &amp; CMS</span>}
+      </Link>
+
+      {/* 3 to 12: Expandable Sections Per Section 3 */}
+      {navSections.map((sec) => {
+        const Icon = sec.icon;
+        const isSectionActive = pathname.startsWith(sec.prefix);
+        const isOpen = expanded[sec.key];
+
+        return (
+          <div key={sec.key}>
+            <button
+              onClick={() => toggleSection(sec.key)}
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-md text-xs font-semibold transition cursor-pointer ${
+                isSectionActive
+                  ? "bg-[#0d2a4d] text-white font-bold border-l-4 border-[#f97316] shadow-2xs"
+                  : isOpen
+                  ? "text-white bg-[#0a203b]"
+                  : "text-slate-300 hover:text-white hover:bg-[#0c2444]"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <Icon
+                  className={`w-4 h-4 shrink-0 ${isSectionActive ? "text-[#f97316]" : "text-slate-400"}`}
+                />
+                {isExpanded && <span className="tracking-wide">{sec.label}</span>}
+              </div>
+              {isExpanded && (
+                isOpen ? (
+                  <ChevronDown className="w-3.5 h-3.5 text-[#f97316]" />
+                ) : (
+                  <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+                )
+              )}
+            </button>
+
+            {isExpanded && isOpen && (
+              <div className="mt-1 ml-4 pl-2 border-l border-[#13345e] space-y-0.5 py-1">
+                {sec.subItems.map((sub, idx) => {
+                  const isActive = pathname === sub.path;
+                  return (
+                    <Link
+                      key={idx}
+                      to={sub.path}
+                      onClick={onNavigate}
+                      className={`block px-3 py-1.5 rounded-md text-[11px] font-medium transition ${
+                        isActive
+                          ? "bg-[#0e315b] text-white font-bold border-l-2 border-[#f97316]"
+                          : "text-slate-300 hover:text-white hover:bg-[#0c2444]"
+                      }`}
+                    >
+                      {sub.label}
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+      })}
+
+      {/* 13. Settings */}
+      <Link
+        to="/settings"
+        onClick={onNavigate}
+        className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-md text-xs font-semibold transition ${
+          pathname === "/settings"
+            ? "bg-[#0d2a4d] text-white font-bold border-l-4 border-[#f97316] shadow-2xs"
+            : "text-slate-300 hover:text-white hover:bg-[#0c2444]"
+        }`}
+      >
+        <Settings
+          className={`w-4 h-4 shrink-0 ${
+            pathname === "/settings" ? "text-[#f97316]" : "text-slate-400"
+          }`}
+        />
+        {isExpanded && <span className="tracking-wide">Settings</span>}
+      </Link>
+    </>
+  );
+
+  return (
+    <div className="h-screen bg-[#f8fafc] flex text-slate-900 font-sans overflow-hidden">
+      {/* ── DESKTOP SIDEBAR (HIDDEN ON MOBILE, VISIBLE ON LG+) ── */}
+      <aside
+        className={`hidden lg:flex ${
+          sidebarOpen ? "w-68" : "w-20"
+        } sticky top-0 h-screen transition-all duration-200 bg-[#071527] border-r border-[#0f2744] flex-col shrink-0 text-white shadow-xl z-20 overflow-hidden`}
+      >
+        {/* Desktop Header */}
+        <div className="p-4 border-b border-[#0f2744] flex items-center justify-between shrink-0">
           <Link to="/" className="flex items-center gap-3 overflow-hidden group">
             <img
               src="/islah_logo.png"
@@ -424,132 +546,85 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </button>
         </div>
 
-        {/* Navigation List - Exact Section 3 Structure */}
-        <nav className="p-2 space-y-0.5 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-800">
-          {/* 1. Dashboard */}
-          <Link
-            to="/dashboard"
-            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-md text-xs font-semibold transition ${
-              pathname === "/" || pathname === "/dashboard"
-                ? "bg-[#0d2a4d] text-white font-bold border-l-4 border-[#f97316] shadow-2xs"
-                : "text-slate-300 hover:text-white hover:bg-[#0c2444]"
-            }`}
-          >
-            <LayoutDashboard
-              className={`w-4 h-4 shrink-0 ${
-                pathname === "/" || pathname === "/dashboard" ? "text-[#f97316]" : "text-slate-400"
-              }`}
+        {/* Navigation List with Dynamic Independent Scrollbar */}
+        <nav className="p-2 space-y-0.5 flex-1 overflow-y-auto overflow-x-hidden sidebar-scrollbar">
+          {renderNavLinks(sidebarOpen)}
+        </nav>
+      </aside>
+
+      {/* ── MOBILE BACKDROP OVERLAY ── */}
+      {mobileOpen && (
+        <div
+          onClick={() => setMobileOpen(false)}
+          className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 lg:hidden transition-opacity duration-300"
+        />
+      )}
+
+      {/* ── MOBILE DRAWER SIDEBAR (SLIDES OUT ON TOGGLE) ── */}
+      <aside
+        className={`fixed inset-y-0 left-0 w-72 max-w-[85vw] h-full bg-[#071527] border-r border-[#0f2744] flex flex-col text-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out lg:hidden ${
+          mobileOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="p-4 border-b border-[#0f2744] flex items-center justify-between shrink-0">
+          <Link to="/" onClick={() => setMobileOpen(false)} className="flex items-center gap-3 overflow-hidden">
+            <img
+              src="/islah_logo.png"
+              alt="ISLAH Logo"
+              className="h-9 w-auto object-contain shrink-0"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = "/logo.png";
+              }}
             />
-            {sidebarOpen && <span className="tracking-wide">Dashboard</span>}
-          </Link>
-
-          {/* 2. Website & CMS (Direct single link - no bloated duplicate submenus) */}
-          <Link
-            to="/cms"
-            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-md text-xs font-semibold transition ${
-              pathname.startsWith("/cms")
-                ? "bg-[#0d2a4d] text-white font-bold border-l-4 border-[#f97316] shadow-2xs"
-                : "text-slate-300 hover:text-white hover:bg-[#0c2444]"
-            }`}
-          >
-            <Globe
-              className={`w-4 h-4 shrink-0 ${
-                pathname.startsWith("/cms") ? "text-[#f97316]" : "text-slate-400"
-              }`}
-            />
-            {sidebarOpen && <span className="tracking-wide">Website &amp; CMS</span>}
-          </Link>
-
-          {/* 3 to 12: Expandable Sections Per Section 3 */}
-          {navSections.map((sec) => {
-            const Icon = sec.icon;
-            const isSectionActive = pathname.startsWith(sec.prefix);
-            const isOpen = expanded[sec.key];
-
-            return (
-              <div key={sec.key}>
-                <button
-                  onClick={() => toggleSection(sec.key)}
-                  className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-md text-xs font-semibold transition cursor-pointer ${
-                    isSectionActive
-                      ? "bg-[#0d2a4d] text-white font-bold border-l-4 border-[#f97316] shadow-2xs"
-                      : isOpen
-                      ? "text-white bg-[#0a203b]"
-                      : "text-slate-300 hover:text-white hover:bg-[#0c2444]"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Icon
-                      className={`w-4 h-4 shrink-0 ${isSectionActive ? "text-[#f97316]" : "text-slate-400"}`}
-                    />
-                    {sidebarOpen && <span className="tracking-wide">{sec.label}</span>}
-                  </div>
-                  {sidebarOpen && (
-                    isOpen ? (
-                      <ChevronDown className="w-3.5 h-3.5 text-[#f97316]" />
-                    ) : (
-                      <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-                    )
-                  )}
-                </button>
-
-                {sidebarOpen && isOpen && (
-                  <div className="mt-1 ml-4 pl-2 border-l border-[#13345e] space-y-0.5 py-1">
-                    {sec.subItems.map((sub, idx) => {
-                      const isActive = pathname === sub.path;
-                      return (
-                        <Link
-                          key={idx}
-                          to={sub.path}
-                          className={`block px-3 py-1.5 rounded-md text-[11px] font-medium transition ${
-                            isActive
-                              ? "bg-[#0e315b] text-white font-bold border-l-2 border-[#f97316]"
-                              : "text-slate-300 hover:text-white hover:bg-[#0c2444]"
-                          }`}
-                        >
-                          {sub.label}
-                        </Link>
-                      );
-                    })}
-                  </div>
-                )}
+            <div>
+              <div className="flex items-center gap-1.5">
+                <h2 className="text-sm font-black text-white tracking-wider uppercase">ISLAH</h2>
+                <span className="text-[9px] font-bold bg-[#f97316]/20 text-[#f97316] px-1.5 py-0.5 rounded border border-[#f97316]/30 uppercase">
+                  Admin
+                </span>
               </div>
-            );
-          })}
-
-          {/* 13. Settings (Direct clean link to Settings page) */}
-          <Link
-            to="/settings"
-            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-md text-xs font-semibold transition ${
-              pathname === "/settings"
-                ? "bg-[#0d2a4d] text-white font-bold border-l-4 border-[#f97316] shadow-2xs"
-                : "text-slate-300 hover:text-white hover:bg-[#0c2444]"
-            }`}
-          >
-            <Settings
-              className={`w-4 h-4 shrink-0 ${
-                pathname === "/settings" ? "text-[#f97316]" : "text-slate-400"
-              }`}
-            />
-            {sidebarOpen && <span className="tracking-wide">Settings</span>}
+              <p className="text-[10px] text-slate-300 font-medium truncate">Welfare Foundation</p>
+            </div>
           </Link>
+
+          <button
+            onClick={() => setMobileOpen(false)}
+            className="p-1.5 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg transition cursor-pointer"
+            title="Close Menu"
+          >
+            <X className="w-5 h-5 text-slate-300" />
+          </button>
+        </div>
+
+        <nav className="p-2 space-y-0.5 flex-1 overflow-y-auto overflow-x-hidden sidebar-scrollbar">
+          {renderNavLinks(true, () => setMobileOpen(false))}
         </nav>
       </aside>
 
       {/* ── MAIN CONTENT CANVAS ── */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
         {/* ── TOP HEADER (SEARCH + NOTIFICATIONS + ADMIN PILL) ── */}
-        <header className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shadow-2xs z-50 sticky top-0">
-          {/* Global Search Bar */}
-          <div className="relative w-full max-w-md">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              placeholder="Search anything... (e.g. donors, members, programmes, reports)"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-full border border-slate-200 text-xs text-slate-800 placeholder-slate-400 bg-slate-50/70 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#071527]/20 focus:border-[#071527] transition"
-            />
+        <header className="h-16 bg-white border-b border-slate-200 px-3 sm:px-6 flex items-center justify-between shadow-2xs z-40 sticky top-0 shrink-0">
+          {/* Global Search Bar + Mobile Hamburger Button */}
+          <div className="flex items-center gap-2 flex-1 max-w-md mr-2 sm:mr-4">
+            <button
+              onClick={() => setMobileOpen(true)}
+              className="lg:hidden p-2 text-slate-700 hover:text-[#f97316] hover:bg-slate-100 rounded-xl transition cursor-pointer shrink-0 border border-slate-200"
+              title="Open Navigation Menu"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+
+            <div className="relative w-full">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Search anything... (e.g. donors, members, reports)"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-9 sm:pl-10 pr-4 py-2 rounded-full border border-slate-200 text-xs text-slate-800 placeholder-slate-400 bg-slate-50/70 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#071527]/20 focus:border-[#071527] transition"
+              />
+            </div>
           </div>
 
           {/* Right Header Badges and Actions */}
