@@ -13,7 +13,6 @@ import { resolveAdminPermissions } from "../middlewares/rbac.js";
 import { checkSeparationOfDuties } from "../services/separationOfDuties.js";
 import { applyScopeFilter, projectDonor, maskPhone, maskEmail, maskPan } from "../utils/piiFilter.js";
 import { hashPassword, verifyPassword, signToken, verifyToken } from "../utils/authUtils.js";
-import { generateBase32Secret, generateTOTPCode, verifyTOTPCode, generateRecoveryCodes, verifyAndConsumeRecoveryCode } from "../utils/totp.js";
 
 let passedCount = 0;
 let failedCount = 0;
@@ -51,12 +50,11 @@ async function runTestSuite() {
   assert(roleCountAfterSecond === 13, "Role count remains strictly 13 after re-seeding (no duplicates)");
 
   // -------------------------------------------------------------------------
-  // TEST SUITE 2: System Role Permissions & 2FA Policy
+  // TEST SUITE 2: System Role Permissions
   // -------------------------------------------------------------------------
   console.log("\n📋 [SUITE 2] Role Permissions & Security Policy");
   const superAdminRole = await Role.findOne({ key: "super_admin" });
   assert(superAdminRole !== null, "super_admin role exists in database");
-  assert(superAdminRole?.requires2FA === true, "super_admin strictly requires 2FA");
   assert(
     superAdminRole?.permissions.length === ALL_PERMISSION_KEYS.length,
     `super_admin possesses all ${ALL_PERMISSION_KEYS.length} registered permissions`
@@ -69,7 +67,6 @@ async function runTestSuite() {
   assert(!cmsAdminRole?.permissions.includes("system.staff:edit"), "cms_admin does NOT possess staff management authority");
 
   const financeApproverRole = await Role.findOne({ key: "finance_approver" });
-  assert(Boolean(financeApproverRole?.requires2FA), "finance_approver strictly requires 2FA");
   assert(Boolean(financeApproverRole?.permissions.includes("finance.expense:approve")), "finance_approver can approve expenses");
   assert(Boolean(financeApproverRole?.permissions.includes("finance.refund:process")), "finance_approver can process refunds");
 
@@ -150,7 +147,6 @@ async function runTestSuite() {
     permissionsSet: new Set<string>(),
     scope: { workAreas: [] as string[], offices: [] as string[] },
     tokenVersion: 0,
-    twoFactorEnabled: false,
   };
 
   const emptyFilter = applyScopeFilter({}, programmeManagerEmptyScope, "workAreaId");
@@ -168,7 +164,6 @@ async function runTestSuite() {
     permissionsSet: new Set<string>(),
     scope: { workAreas: ["EDU", "HLT"], offices: [] as string[] },
     tokenVersion: 0,
-    twoFactorEnabled: false,
   };
 
   const scopedFilter = applyScopeFilter({}, programmeManagerScoped, "workAreaId");
@@ -186,7 +181,6 @@ async function runTestSuite() {
     permissionsSet: new Set<string>(),
     scope: { workAreas: [] as string[], offices: [] as string[] },
     tokenVersion: 0,
-    twoFactorEnabled: true,
   };
 
   const saFilter = applyScopeFilter({ status: "approved" }, superAdminScope, "workAreaId");
@@ -248,33 +242,6 @@ async function runTestSuite() {
     tokenV1 !== undefined && verificationV1.payload.tokenVersion !== refreshedAdmin?.tokenVersion,
     "Token version mismatch detected after credential change (v1 != v2)"
   );
-
-  // -------------------------------------------------------------------------
-  // TEST SUITE 8: 2FA TOTP RFC 6238 Engine
-  // -------------------------------------------------------------------------
-  console.log("\n📋 [SUITE 8] 2FA TOTP (RFC 6238 Engine)");
-  const secret = generateBase32Secret(20);
-  assert(secret.length >= 32, "Base32 secret generation yields >= 32 characters");
-
-  const currentCode = generateTOTPCode(secret);
-  assert(currentCode.length === 6, "TOTP generator produces 6-digit numeric passcode");
-  const isCodeValid = verifyTOTPCode(secret, currentCode);
-  assert(isCodeValid === true, "Current TOTP code verifies successfully");
-
-  const badCode = "999999";
-  const isBadCodeValid = verifyTOTPCode(secret, badCode);
-  assert(isBadCodeValid === false, "Incorrect TOTP code is rejected");
-
-  const { plainCodes, hashedCodes } = generateRecoveryCodes(8);
-  assert(plainCodes.length === 8 && hashedCodes.length === 8, "Generates 8 single-use recovery codes");
-
-  const firstRecovery = plainCodes[0];
-  const consumeResult = verifyAndConsumeRecoveryCode(firstRecovery, hashedCodes);
-  assert(consumeResult.valid === true, "Valid recovery code is accepted");
-  assert(consumeResult.remainingHashedCodes.length === 7, "Recovery code is consumed and reduced to 7 remaining");
-
-  const reuseResult = verifyAndConsumeRecoveryCode(firstRecovery, consumeResult.remainingHashedCodes);
-  assert(reuseResult.valid === false, "Consumed recovery code cannot be reused");
 
   // -------------------------------------------------------------------------
   // TEST SUITE 9: Audit Log Append-Only Immutability

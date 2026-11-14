@@ -1,13 +1,11 @@
 import { Request, Response } from "express";
 import { Admin } from "../models/Admin.js";
-import { Role } from "../models/Role.js";
 import { hashPassword, verifyPassword, signToken } from "../utils/authUtils.js";
-import { verifyTOTPCode } from "../utils/totp.js";
 import { logAudit, getActor } from "../services/auditService.js";
 import { resolveAdminPermissions, RbacRequest, getRbacEnforcementMode } from "../middlewares/rbac.js";
 
 /**
- * 1. Admin Login with Brute-Force Lockout & 2FA Challenge Support
+ * 1. Admin Login with Brute-Force Lockout
  * Eliminates auto-creation of accounts on arbitrary passwords.
  */
 export async function adminLogin(req: Request, res: Response) {
@@ -130,18 +128,7 @@ export async function adminLogin(req: Request, res: Response) {
     admin.lastReauthAt = new Date();
     await admin.save();
 
-    // 2FA bypassed/disabled
-    const mustEnroll2FA = false;
-
-    const token = signToken({
-      adminId: admin._id,
-      email: admin.email,
-      name: admin.name,
-      tokenVersion: admin.tokenVersion || 0,
-    });
-
     const { permissions } = await resolveAdminPermissions(admin);
-
     await logAudit({
       req,
       actor: { id: admin._id.toString(), name: admin.name, email: admin.email },
@@ -151,12 +138,17 @@ export async function adminLogin(req: Request, res: Response) {
       severity: "info",
     });
 
+    const token = signToken({
+      adminId: admin._id,
+      email: admin.email,
+      name: admin.name,
+      tokenVersion: admin.tokenVersion || 0,
+    });
+
     res.json({
       success: true,
       message: "Admin authentication successful",
       token,
-      requires2FA: false,
-      mustEnroll2FA: false,
       mustChangePassword: !!admin.mustChangePassword,
       admin: {
         id: admin._id,
@@ -166,7 +158,6 @@ export async function adminLogin(req: Request, res: Response) {
         roles: admin.roles,
         permissions,
         scope: admin.scope,
-        twoFactorEnabled: false,
         mustChangePassword: admin.mustChangePassword,
         rbacEnforcementMode: getRbacEnforcementMode(),
       },
@@ -187,17 +178,12 @@ export async function getAdminProfile(req: RbacRequest, res: Response) {
       return res.status(401).json({ success: false, message: "Authentication required" });
     }
 
-    const admin = await Admin.findById(user.id).select("-passwordHash -twoFactorSecret -twoFactorRecoveryCodes");
+    const admin = await Admin.findById(user.id).select("-passwordHash");
     if (!admin || !admin.isActive) {
       return res.status(401).json({ success: false, message: "Admin account not found or inactive" });
     }
 
     const { permissions } = await resolveAdminPermissions(admin);
-
-    // Check if 2FA is required for any assigned role
-    const roleKeys = admin.roles || [admin.role || "super_admin"];
-    const rolesWith2FA = await Role.find({ key: { $in: roleKeys }, requires2FA: true });
-    const mustEnroll2FA = rolesWith2FA.length > 0 && !admin.twoFactorEnabled;
 
     res.json({
       success: true,
@@ -209,8 +195,6 @@ export async function getAdminProfile(req: RbacRequest, res: Response) {
         roles: admin.roles,
         permissions,
         scope: admin.scope,
-        twoFactorEnabled: false,
-        mustEnroll2FA: false,
         mustChangePassword: admin.mustChangePassword,
         lastLogin: admin.lastLogin,
         lastReauthAt: admin.lastReauthAt,
@@ -304,7 +288,6 @@ export async function acceptInvite(req: Request, res: Response) {
         roles: admin.roles,
         permissions,
         scope: admin.scope,
-        twoFactorEnabled: admin.twoFactorEnabled,
       },
     });
   } catch (err: any) {
@@ -380,12 +363,12 @@ export async function changePassword(req: RbacRequest, res: Response) {
 
 /**
  * 6. High-Risk Re-Authentication
- * Confirms identity via password or TOTP before executing sensitive operations.
+ * Confirms identity via the current password before executing sensitive operations.
  */
 export async function reauthenticate(req: RbacRequest, res: Response) {
   try {
     const user = req.adminUser;
-    const { password, totpCode } = req.body;
+    const { password } = req.body;
 
     if (!user) {
       return res.status(401).json({ success: false, message: "Authentication required" });
@@ -400,8 +383,6 @@ export async function reauthenticate(req: RbacRequest, res: Response) {
 
     if (password) {
       verified = verifyPassword(password, admin.passwordHash);
-    } else if (totpCode && admin.twoFactorSecret) {
-      verified = verifyTOTPCode(admin.twoFactorSecret, totpCode);
     }
 
     if (!verified) {

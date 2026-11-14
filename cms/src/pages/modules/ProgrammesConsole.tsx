@@ -66,25 +66,21 @@ export default function ProgrammesConsole({ initialTab }: { initialTab?: "initia
 
   useEffect(() => {
     setLoading(true);
-    // Load real patient and member totals from backend
-    api.getDashboardStats().then((res) => {
-      if (res) {
-        setPatientCount(res.totalPatients || 0);
-        setMemberCount(res.totalMembers || 0);
-      }
-      const saved = localStorage.getItem("islah_programmes_initiatives");
-      if (saved) {
-        try {
-          setInitiatives(JSON.parse(saved));
-        } catch {}
-      }
-      setLoading(false);
-    }).catch(() => {
-      setLoading(false);
-    });
+    Promise.all([api.getDashboardStats(), api.listInitiatives()])
+      .then(([stats, initiativesRes]) => {
+        setPatientCount(stats?.totalPatients || 0);
+        setMemberCount(stats?.totalMembers || 0);
+        if (initiativesRes?.success && Array.isArray(initiativesRes.data)) {
+          setInitiatives(initiativesRes.data);
+        }
+      })
+      .catch((error) => {
+        toast.error(error.message || "Failed to load programme initiatives.");
+      })
+      .finally(() => setLoading(false));
   }, []);
 
-  const handleAddInitiative = (e: React.FormEvent) => {
+  const handleAddInitiative = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTitle.trim()) {
       toast.error("Please enter initiative title.");
@@ -102,24 +98,26 @@ export default function ProgrammesConsole({ initialTab }: { initialTab?: "initia
       "Humanitarian Relief & Rehabilitation": "RLF",
     };
 
-    const newItem: InitiativeItem = {
-      id: `INIT-${sectorCodeMap[newSector] || "OPS"}-${Date.now().toString().slice(-4)}`,
-      title: newTitle.trim(),
-      sector: newSector,
-      sectorCode: sectorCodeMap[newSector] || "GEN",
-      targetBeneficiaries: Number(newBeneficiaries) || 0,
-      allocatedBudget: Number(newBudget) || 0,
-      leadOfficer: newLead.trim() || "Field Officer",
-      status: "Active",
-      progressPct: 0,
-    };
-
-    const updated = [newItem, ...initiatives];
-    setInitiatives(updated);
-    localStorage.setItem("islah_programmes_initiatives", JSON.stringify(updated));
-    toast.success("Initiative registered and linked to master sector.");
-    setIsModalOpen(false);
-    setNewTitle("");
+    try {
+      const res = await api.createInitiative({
+        title: newTitle.trim(),
+        sector: newSector,
+        sectorCode: sectorCodeMap[newSector] || "GEN",
+        targetBeneficiaries: Number(newBeneficiaries) || 0,
+        allocatedBudget: Number(newBudget) || 0,
+        leadOfficer: newLead.trim() || "Field Officer",
+      });
+      if (!res.success || !res.data) {
+        toast.error(res.message || "Failed to create initiative.");
+        return;
+      }
+      setInitiatives((current) => [res.data, ...current]);
+      toast.success("Initiative registered in the central database.");
+      setIsModalOpen(false);
+      setNewTitle("");
+    } catch (error: any) {
+      toast.error(error.message || "Failed to create initiative.");
+    }
   };
 
   const filteredInitiatives = initiatives.filter((init) => {

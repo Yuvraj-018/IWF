@@ -6,7 +6,6 @@ export interface IRole extends Document {
   description: string;
   permissions: string[];
   isSystem: boolean;
-  requires2FA: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -39,10 +38,6 @@ const RoleSchema = new Schema<IRole>(
       type: Boolean,
       default: false,
       index: true,
-    },
-    requires2FA: {
-      type: Boolean,
-      default: false,
     },
   },
   { timestamps: true }

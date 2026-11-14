@@ -102,7 +102,6 @@ const REQUIRED_PUBLIC_ENDPOINTS = [
   "GET /api/finance/public/transparency/financial-summary",
   "POST /api/auth/admin/login",
   "POST /api/auth/admin/accept-invite",
-  "POST /api/auth/admin/2fa/validate-login",
 ];
 
 export function collectAllRoutes(): DiscoveredRoute[] {

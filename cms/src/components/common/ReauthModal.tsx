@@ -21,7 +21,7 @@ export function ReauthModal() {
     }
 
     setLoading(true);
-    const res = await reauthenticate(password, undefined);
+    const res = await reauthenticate(password);
     setLoading(false);
 
     if (res.success) {

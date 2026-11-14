@@ -32,15 +32,15 @@ export async function generateAndSendOtp(
     attempts: 0,
   });
 
-  // Zero-cost Developer Console Output
-  console.log("\n=======================================================");
-  console.log("🔐 [ISLAH ZERO-COST OTP CONSOLE]");
-  console.log(`📱 Identifier: ${identifier}`);
-  console.log(`👉 OTP CODE:   ${code}`);
-  console.log(`⏳ Validity:   10 Minutes`);
-  console.log(`🛡️ Max Tries:  ${MAX_VERIFICATION_ATTEMPTS} attempts before lockout`);
-  console.log(`💡 Dev Bypass: '123456' is also accepted in development`);
-  console.log("=======================================================\n");
+  if (process.env.NODE_ENV !== "production") {
+    console.log("\n=======================================================");
+    console.log("🔐 [ISLAH ZERO-COST OTP CONSOLE]");
+    console.log(`📱 Identifier: ${identifier}`);
+    console.log(`👉 OTP CODE:   ${code}`);
+    console.log(`⏳ Validity:   10 Minutes`);
+    console.log(`🛡️ Max Tries:  ${MAX_VERIFICATION_ATTEMPTS} attempts before lockout`);
+    console.log("=======================================================\n");
+  }
 
   // If associated email is available, also dispatch via email
   const targetEmail = associatedEmail || (cleanId.includes("@") ? cleanId : null);
@@ -53,7 +53,7 @@ export async function generateAndSendOtp(
   return {
     success: true,
     message: `Verification code sent to ${identifier.slice(0, 3)}****${identifier.slice(-3)}`,
-    devHint: process.env.NODE_ENV !== "production" ? `Dev code printed in console. You can also use 123456.` : undefined,
+    devHint: process.env.NODE_ENV !== "production" ? "Dev code printed in console." : undefined,
   };
 }
 
@@ -81,8 +81,8 @@ export function verifyOtp(
   const cleanId = identifier.trim().toLowerCase();
   const cleanCode = inputCode.trim();
 
-  // 1. Dev bypass code (0 cost testing)
-  if (cleanCode === "123456" || cleanCode === "000000") {
+  // Development-only compatibility bypass; never accept fixed OTPs in production.
+  if (process.env.NODE_ENV !== "production" && (cleanCode === "123456" || cleanCode === "000000")) {
     return { success: true, message: "OTP verified successfully (Dev Bypass)" };
   }
 

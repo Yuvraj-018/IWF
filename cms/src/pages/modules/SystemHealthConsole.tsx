@@ -23,6 +23,11 @@ export default function SystemHealthConsole({ subView }: { subView?: string }) {
     status: string;
     service: string;
     database: string;
+    services: {
+      razorpayConfigured: boolean;
+      emailConfigured: boolean;
+      cloudStorageConfigured: boolean;
+    };
     uptimeSeconds: number;
     timestamp: string;
   } | null>(null);
@@ -66,10 +71,15 @@ export default function SystemHealthConsole({ subView }: { subView?: string }) {
       setLatencyMs(Math.round(end - start));
       // Fallback state if server is momentarily unreachable
       setHealthData({
-        status: "healthy",
-        service: "ISLAH Backend API",
-        database: "connected",
-        uptimeSeconds: 86400,
+        status: "unavailable",
+        service: "Backend unreachable",
+        database: "unknown",
+        services: {
+          razorpayConfigured: false,
+          emailConfigured: false,
+          cloudStorageConfigured: false,
+        },
+        uptimeSeconds: 0,
         timestamp: new Date().toISOString(),
       });
       setLastCheckTime(new Date());
@@ -103,16 +113,16 @@ export default function SystemHealthConsole({ subView }: { subView?: string }) {
     const report = {
       title: "ISLAH Foundation CMS System Diagnostics Dump",
       generatedAt: new Date().toISOString(),
-      latencyMs: latencyMs || 18,
-      backendStatus: healthData?.status || "healthy",
-      databaseState: healthData?.database || "connected",
+      latencyMs,
+      backendStatus: healthData?.status || "unknown",
+      databaseState: healthData?.database || "unknown",
       uptimeSeconds: healthData?.uptimeSeconds || 0,
       services: {
-        apiServer: "Express 4.x / Node.js (Active)",
-        mongodb: "MongoDB Atlas Cloud Cluster (Active)",
-        paymentGateway: "Razorpay Production Webhook (Configured)",
-        emailService: "Transactional SMTP Relay (Operational)",
-        cloudStorage: "Local & Cloud Object Storage (Mounted)",
+        apiServer: healthData?.status || "unknown",
+        mongodb: healthData?.database || "unknown",
+        paymentGateway: healthData?.services.razorpayConfigured ? "configured" : "not configured",
+        emailService: healthData?.services.emailConfigured ? "configured" : "not configured",
+        cloudStorage: healthData?.services.cloudStorageConfigured ? "configured" : "not configured",
       },
     };
 
@@ -335,10 +345,10 @@ export default function SystemHealthConsole({ subView }: { subView?: string }) {
                 <td className="py-3.5">
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-[10px]">
                     <CheckCircle2 className="w-3 h-3" />
-                    CONNECTED
+                    {healthData?.database === "connected" ? "CONNECTED" : "UNAVAILABLE"}
                   </span>
                 </td>
-                <td className="py-3.5 text-slate-700 font-bold">{latencyMs ? `${latencyMs}ms` : "< 25ms"}</td>
+                <td className="py-3.5 text-slate-700 font-bold">{latencyMs !== null ? `${latencyMs}ms` : "Not checked"}</td>
                 <td className="py-3.5 text-right text-slate-500 font-mono text-[11px]">
                   {lastCheckTime.toLocaleTimeString()}
                 </td>
@@ -359,10 +369,10 @@ export default function SystemHealthConsole({ subView }: { subView?: string }) {
                 <td className="py-3.5">
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-[10px]">
                     <CheckCircle2 className="w-3 h-3" />
-                    OPERATIONAL
+                    {healthData?.status === "healthy" ? "OPERATIONAL" : "UNAVAILABLE"}
                   </span>
                 </td>
-                <td className="py-3.5 text-slate-700 font-bold">{latencyMs ? `${latencyMs}ms` : "14ms"}</td>
+                <td className="py-3.5 text-slate-700 font-bold">{latencyMs !== null ? `${latencyMs}ms` : "Not checked"}</td>
                 <td className="py-3.5 text-right text-slate-500 font-mono text-[11px]">
                   {lastCheckTime.toLocaleTimeString()}
                 </td>
@@ -383,10 +393,12 @@ export default function SystemHealthConsole({ subView }: { subView?: string }) {
                 <td className="py-3.5">
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-[10px]">
                     <CheckCircle2 className="w-3 h-3" />
-                    CONFIGURED &amp; READY
+                    {healthData?.services.razorpayConfigured ? "CONFIGURED" : "NOT CONFIGURED"}
                   </span>
                 </td>
-                <td className="py-3.5 text-slate-700 font-bold">Live</td>
+                <td className="py-3.5 text-slate-700 font-bold">
+                  {healthData?.services.razorpayConfigured ? "Configured" : "Unavailable"}
+                </td>
                 <td className="py-3.5 text-right text-slate-500 font-mono text-[11px]">
                   {lastCheckTime.toLocaleTimeString()}
                 </td>
@@ -407,10 +419,12 @@ export default function SystemHealthConsole({ subView }: { subView?: string }) {
                 <td className="py-3.5">
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-[10px]">
                     <CheckCircle2 className="w-3 h-3" />
-                    ACTIVE
+                    {healthData?.services.emailConfigured ? "CONFIGURED" : "NOT CONFIGURED"}
                   </span>
                 </td>
-                <td className="py-3.5 text-slate-700 font-bold">Standard Queue</td>
+                <td className="py-3.5 text-slate-700 font-bold">
+                  {healthData?.services.emailConfigured ? "SMTP" : "Developer logger"}
+                </td>
                 <td className="py-3.5 text-right text-slate-500 font-mono text-[11px]">
                   {lastCheckTime.toLocaleTimeString()}
                 </td>
@@ -431,10 +445,12 @@ export default function SystemHealthConsole({ subView }: { subView?: string }) {
                 <td className="py-3.5">
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-[10px]">
                     <CheckCircle2 className="w-3 h-3" />
-                    MOUNTED
+                    {healthData?.services.cloudStorageConfigured ? "CONFIGURED" : "NOT CONFIGURED"}
                   </span>
                 </td>
-                <td className="py-3.5 text-slate-700 font-bold">Writable</td>
+                <td className="py-3.5 text-slate-700 font-bold">
+                  {healthData?.services.cloudStorageConfigured ? "Cloud storage" : "Unavailable"}
+                </td>
                 <td className="py-3.5 text-right text-slate-500 font-mono text-[11px]">
                   {lastCheckTime.toLocaleTimeString()}
                 </td>

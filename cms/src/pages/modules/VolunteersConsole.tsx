@@ -45,49 +45,57 @@ export default function VolunteersConsole() {
   const [targetDate, setTargetDate] = useState("");
 
   useEffect(() => {
-    setLoading(true);
-    // Load real volunteer applications count from database
-    api.listApplications("volunteer").then((res) => {
-      if (res?.success && res.data) {
-        setActiveVolunteerCount(res.data.length);
+    async function loadData() {
+      setLoading(true);
+      try {
+        const [applicationsRes, tasksRes] = await Promise.all([
+          api.listApplications("volunteer"),
+          api.listVolunteerTasks(),
+        ]);
+        if (applicationsRes?.success && applicationsRes.data) {
+          setActiveVolunteerCount(applicationsRes.data.length);
+        }
+        if (tasksRes?.success && Array.isArray(tasksRes.data)) {
+          setTasks(tasksRes.data.map((task: any) => ({ ...task, id: task._id || task.id })));
+        }
+      } catch (error: any) {
+        toast.error(error.message || "Failed to load volunteer assignments.");
+      } finally {
+        setLoading(false);
       }
-      const saved = localStorage.getItem("islah_volunteer_tasks");
-      if (saved) {
-        try {
-          setTasks(JSON.parse(saved));
-        } catch {}
-      }
-      setLoading(false);
-    }).catch(() => {
-      setLoading(false);
-    });
+    }
+    loadData();
   }, []);
 
-  const handleCreateTask = (e: React.FormEvent) => {
+  const handleCreateTask = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) {
       toast.error("Please provide assignment title.");
       return;
     }
 
-    const newTask: VolunteerTask = {
-      id: `TSK-${Date.now().toString().slice(-4)}`,
-      title: title.trim(),
-      sector,
-      location: location.trim() || "Darbhanga",
-      volunteersRequired: Number(volunteersRequired) || 4,
-      assignedCount: 0,
-      targetDate: targetDate || new Date().toISOString().split("T")[0],
-      leadCoordinator: leadCoordinator.trim() || "Field Officer",
-      status: "Upcoming",
-    };
-
-    const updated = [newTask, ...tasks];
-    setTasks(updated);
-    localStorage.setItem("islah_volunteer_tasks", JSON.stringify(updated));
-    toast.success("Field assignment published to volunteer network.");
-    setIsModalOpen(false);
-    setTitle("");
+    try {
+      const res = await api.createVolunteerTask({
+        title: title.trim(),
+        sector,
+        location: location.trim() || "Darbhanga",
+        volunteersRequired: Number(volunteersRequired) || 4,
+        assignedCount: 0,
+        targetDate: targetDate || new Date().toISOString().split("T")[0],
+        leadCoordinator: leadCoordinator.trim() || "Field Officer",
+        status: "Upcoming",
+      });
+      if (!res.success || !res.data) {
+        toast.error(res.message || "Failed to create assignment.");
+        return;
+      }
+      setTasks((current) => [{ ...res.data, id: res.data._id || res.data.id }, ...current]);
+      toast.success("Field assignment published to volunteer network.");
+      setIsModalOpen(false);
+      setTitle("");
+    } catch (error: any) {
+      toast.error(error.message || "Failed to create assignment.");
+    }
   };
 
   const filteredTasks = tasks.filter((t) => {

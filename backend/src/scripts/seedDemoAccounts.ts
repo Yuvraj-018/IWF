@@ -33,7 +33,6 @@ export async function seedDemoAccounts() {
     Role: string;
     Email: string;
     Password: string;
-    Mandates2FA: boolean;
     Scope: string;
   }> = [];
 
@@ -63,9 +62,6 @@ export async function seedDemoAccounts() {
           failedLoginAttempts: 0,
           lockoutUntil: null,
           mustChangePassword: false,
-          twoFactorEnabled: false,
-          twoFactorSecret: null,
-          twoFactorRecoveryCodes: [],
           isActive: true,
         },
       },
@@ -76,7 +72,6 @@ export async function seedDemoAccounts() {
       Role: role.name,
       Email: email,
       Password: rawPassword,
-      Mandates2FA: role.requires2FA,
       Scope: scope.workAreas.length ? scope.workAreas.join(", ") : "All Areas",
     });
   }

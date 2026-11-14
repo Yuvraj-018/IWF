@@ -64,7 +64,7 @@ export async function getPermissionsRegistry(_req: RbacRequest, res: Response): 
 export async function createRole(req: RbacRequest, res: Response): Promise<void> {
   try {
     const actor = req.adminUser;
-    const { key, name, description, permissions = [], requires2FA = false } = req.body;
+    const { key, name, description, permissions = [] } = req.body;
 
     if (!key || !name) {
       res.status(400).json({ success: false, message: "Role key and name are required." });
@@ -99,7 +99,6 @@ export async function createRole(req: RbacRequest, res: Response): Promise<void>
       description: description ? String(description).trim() : "",
       permissions,
       isSystem: false,
-      requires2FA: !!requires2FA,
     });
 
     await logAudit({
@@ -125,7 +124,7 @@ export async function updateRole(req: RbacRequest, res: Response): Promise<void>
   try {
     const actor = req.adminUser;
     const { key } = req.params;
-    const { name, description, permissions, requires2FA } = req.body;
+    const { name, description, permissions } = req.body;
 
     const role = await Role.findOne({ key });
     if (!role) {
@@ -151,13 +150,11 @@ export async function updateRole(req: RbacRequest, res: Response): Promise<void>
       name: role.name,
       description: role.description,
       permissions: role.permissions,
-      requires2FA: role.requires2FA,
     };
 
     if (name) role.name = String(name).trim();
     if (description !== undefined) role.description = String(description).trim();
     if (permissions !== undefined) role.permissions = permissions;
-    if (requires2FA !== undefined) role.requires2FA = !!requires2FA;
 
     await role.save();
 
@@ -172,7 +169,6 @@ export async function updateRole(req: RbacRequest, res: Response): Promise<void>
         name: role.name,
         description: role.description,
         permissions: role.permissions,
-        requires2FA: role.requires2FA,
       },
       reason: `Role "${role.key}" updated by ${actor?.name}`,
     });

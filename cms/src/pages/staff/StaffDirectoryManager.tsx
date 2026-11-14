@@ -7,7 +7,6 @@ import {
   Mail,
   MapPin,
   Briefcase,
-  Smartphone,
   CheckCircle2,
   XCircle,
   Loader2,
@@ -186,10 +185,7 @@ export default function StaffDirectoryManager() {
 
               {/* Footer info */}
               <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
-                <span className="flex items-center gap-1 font-mono">
-                  <Smartphone className="w-3 h-3 text-slate-400" />
-                  <span>2FA: {member.twoFactorEnabled ? "Active" : "Disabled"}</span>
-                </span>
+                <span className="font-mono">Account status</span>
                 <span>Active since {member.createdAt ? new Date(member.createdAt).getFullYear() : "2025"}</span>
               </div>
             </div>

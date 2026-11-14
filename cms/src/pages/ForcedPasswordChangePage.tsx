@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 export default function ForcedPasswordChangePage() {
   const navigate = useNavigate();
-  const { user, changePassword } = useAuth();
+  const { changePassword } = useAuth();
 
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -41,11 +41,7 @@ export default function ForcedPasswordChangePage() {
 
     if (res.success) {
       toast.success("Password configured successfully.");
-      if (user?.mustEnroll2FA) {
-        navigate("/2fa-enroll", { replace: true });
-      } else {
-        navigate("/dashboard", { replace: true });
-      }
+      navigate("/dashboard", { replace: true });
     } else {
       toast.error(res.message || "Failed to update password.");
     }

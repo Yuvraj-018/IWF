@@ -89,7 +89,7 @@ export async function listAccessRequests(req: RbacRequest, res: Response) {
       user.roles?.includes("super_admin") ||
       user.role === "superadmin" ||
       user.permissions?.includes("*") ||
-      user.permissions?.includes("staff.account:update");
+      user.permissions?.includes("system.staff:edit");
 
     const { status } = req.query;
     const filter: Record<string, any> = {};
@@ -134,7 +134,7 @@ export async function approveAccessRequest(req: RbacRequest, res: Response) {
       reviewer.roles?.includes("super_admin") ||
       reviewer.role === "superadmin" ||
       reviewer.permissions?.includes("*") ||
-      reviewer.permissions?.includes("staff.account:update");
+      reviewer.permissions?.includes("system.staff:edit");
 
     if (!isManager) {
       return res.status(403).json({
@@ -217,7 +217,7 @@ export async function rejectAccessRequest(req: RbacRequest, res: Response) {
       reviewer.roles?.includes("super_admin") ||
       reviewer.role === "superadmin" ||
       reviewer.permissions?.includes("*") ||
-      reviewer.permissions?.includes("staff.account:update");
+      reviewer.permissions?.includes("system.staff:edit");
 
     if (!isManager) {
       return res.status(403).json({

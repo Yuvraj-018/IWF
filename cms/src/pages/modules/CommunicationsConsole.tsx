@@ -40,47 +40,67 @@ export default function CommunicationsConsole() {
 
   useEffect(() => {
     setLoading(true);
-    // Sourced live from real contact submissions in MongoDB
-    api.listContacts().then((res) => {
-      if (res?.success && res.data) {
-        setContactsCount(res.data.length);
-      }
-      const saved = localStorage.getItem("islah_broadcast_campaigns");
-      if (saved) {
-        try {
-          setCampaigns(JSON.parse(saved));
-        } catch {}
-      }
-      setLoading(false);
-    }).catch(() => {
-      setLoading(false);
-    });
+    Promise.all([api.listContacts(), api.listBroadcasts()])
+      .then(([contactsRes, broadcastsRes]) => {
+        if (contactsRes?.success && contactsRes.data) {
+          setContactsCount(contactsRes.data.length);
+        }
+        if (broadcastsRes?.success && Array.isArray(broadcastsRes.data)) {
+          setCampaigns(
+            broadcastsRes.data.map((campaign: any) => ({
+              id: campaign._id,
+              title: campaign.title,
+              targetAudience: campaign.targetAudience,
+              recipientCount: campaign.recipientCount,
+              channel: campaign.channel,
+              dateSent: campaign.createdAt,
+              status: campaign.status,
+            }))
+          );
+        }
+      })
+      .catch((error) => toast.error(error.message || "Failed to load broadcast history."))
+      .finally(() => setLoading(false));
   }, []);
 
-  const handleSendCampaign = (e: React.FormEvent) => {
+  const handleSendCampaign = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !message.trim()) {
       toast.error("Please fill in campaign title and message.");
       return;
     }
 
-    const newCamp: CampaignBroadcast = {
-      id: `CMP-${Date.now().toString().slice(-4)}`,
-      title: title.trim(),
-      targetAudience,
-      recipientCount: contactsCount,
-      channel,
-      dateSent: new Date().toISOString().split("T")[0],
-      status: "Delivered",
-    };
-
-    const updated = [newCamp, ...campaigns];
-    setCampaigns(updated);
-    localStorage.setItem("islah_broadcast_campaigns", JSON.stringify(updated));
-    toast.success("Broadcast dispatched to recipient queue.");
-    setIsModalOpen(false);
-    setTitle("");
-    setMessage("");
+    try {
+      const res = await api.createBroadcast({
+        title: title.trim(),
+        targetAudience,
+        recipientCount: contactsCount,
+        channel,
+        message: message.trim(),
+      });
+      if (!res.success || !res.data) {
+        toast.error(res.message || "Failed to queue broadcast.");
+        return;
+      }
+      setCampaigns((current) => [
+        {
+          id: res.data._id,
+          title: res.data.title,
+          targetAudience: res.data.targetAudience,
+          recipientCount: res.data.recipientCount,
+          channel: res.data.channel,
+          dateSent: res.data.createdAt,
+          status: res.data.status,
+        },
+        ...current,
+      ]);
+      toast.success("Broadcast queued in the central database.");
+      setIsModalOpen(false);
+      setTitle("");
+      setMessage("");
+    } catch (error: any) {
+      toast.error(error.message || "Failed to queue broadcast.");
+    }
   };
 
   const filtered = campaigns.filter(

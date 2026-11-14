@@ -26,7 +26,6 @@ export interface AdminUserContext {
     offices: string[];
   };
   tokenVersion: number;
-  twoFactorEnabled: boolean;
   lastReauthAt?: Date | null;
 }
 
@@ -175,7 +174,6 @@ export async function authenticate(req: RbacRequest, res: Response, next: NextFu
       permissionsSet,
       scope: admin.scope || { workAreas: [], offices: [] },
       tokenVersion: admin.tokenVersion || 0,
-      twoFactorEnabled: !!admin.twoFactorEnabled,
       lastReauthAt: admin.lastReauthAt,
     };
 

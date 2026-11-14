@@ -218,25 +218,6 @@ export default function UserAccountsManager() {
     }
   };
 
-  // Reset 2FA
-  const handleReset2FA = async (staff: any) => {
-    if (!confirm(`Emergency Reset 2FA for ${staff.name}? They will be forced to log in and re-enroll.`)) {
-      return;
-    }
-
-    try {
-      const res = await api.resetStaff2FA(staff._id);
-      if (res.success) {
-        toast.success(`2FA reset for ${staff.name}.`);
-        loadStaff();
-      } else {
-        toast.error(res.message || "Failed to reset 2FA.");
-      }
-    } catch (err: any) {
-      toast.error(err.message || "Error resetting 2FA.");
-    }
-  };
-
   // Deactivate / Reactivate
   const handleToggleActive = async (staff: any) => {
     const action = staff.isActive ? "deactivate" : "reactivate";
@@ -285,7 +266,7 @@ export default function UserAccountsManager() {
             <span className="w-2 h-2 rounded-full bg-orange-500" />
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            Manage administrative staff, credentials, 2FA states, and role allocations across the foundation.
+            Manage administrative staff, credentials, and role allocations across the foundation.
           </p>
         </div>
 

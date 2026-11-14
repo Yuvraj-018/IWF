@@ -26,7 +26,6 @@ export async function seedRbac(): Promise<{
         description: roleDef.description,
         permissions: roleDef.permissions,
         isSystem: true,
-        requires2FA: roleDef.requires2FA,
       },
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
@@ -81,11 +80,6 @@ export async function seedRbac(): Promise<{
       admin.mustChangePassword = false;
       changed = true;
     }
-    if (admin.twoFactorEnabled === undefined) {
-      admin.twoFactorEnabled = false;
-      changed = true;
-    }
-
     if (changed) {
       await admin.save();
       migratedAdmins++;
@@ -112,7 +106,6 @@ export async function seedRbac(): Promise<{
       tokenVersion: 0,
       failedLoginAttempts: 0,
       mustChangePassword: false,
-      twoFactorEnabled: false,
       isActive: true,
     });
     defaultAdminCreated = true;

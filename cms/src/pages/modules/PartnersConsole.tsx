@@ -48,50 +48,61 @@ export default function PartnersConsole() {
   const [expiryDate, setExpiryDate] = useState("");
 
   useEffect(() => {
-    setLoading(true);
-    // Sourced from real partner applications in MongoDB
-    api.listApplications("partner").then((res) => {
-      if (res?.success && res.data) {
-        setInboundPartnersCount(res.data.length);
+    async function loadData() {
+      setLoading(true);
+      try {
+        const [applicationsRes, agreementsRes] = await Promise.all([
+          api.listApplications("partner"),
+          api.listPartnerAgreements(),
+        ]);
+        if (applicationsRes?.success && applicationsRes.data) {
+          setInboundPartnersCount(applicationsRes.data.length);
+        }
+        if (agreementsRes?.success && Array.isArray(agreementsRes.data)) {
+          setAgreements(agreementsRes.data.map((agreement: any) => ({
+            ...agreement,
+            id: agreement._id || agreement.id,
+          })));
+        }
+      } catch (error: any) {
+        toast.error(error.message || "Failed to load partner agreements.");
+      } finally {
+        setLoading(false);
       }
-      const saved = localStorage.getItem("islah_partner_agreements");
-      if (saved) {
-        try {
-          setAgreements(JSON.parse(saved));
-        } catch {}
-      }
-      setLoading(false);
-    }).catch(() => {
-      setLoading(false);
-    });
+    }
+    loadData();
   }, []);
 
-  const handleCreateAgreement = (e: React.FormEvent) => {
+  const handleCreateAgreement = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!partnerName.trim()) {
       toast.error("Please enter partner name.");
       return;
     }
 
-    const newAgreement: PartnerAgreement = {
-      id: `MOU-${Date.now().toString().slice(-4)}`,
-      partnerName: partnerName.trim(),
-      partnerType,
-      agreementRef: agreementRef.trim() || `REF-${Date.now().toString().slice(-6)}`,
-      focusArea,
-      committedGrant: Number(committedGrant) || 0,
-      signedDate: signedDate || new Date().toISOString().split("T")[0],
-      expiryDate: expiryDate || "2027-03-31",
-      status: "Active",
-    };
-
-    const updated = [newAgreement, ...agreements];
-    setAgreements(updated);
-    localStorage.setItem("islah_partner_agreements", JSON.stringify(updated));
-    toast.success("Institutional agreement recorded in repository.");
-    setIsModalOpen(false);
-    setPartnerName("");
-    setAgreementRef("");
+    try {
+      const res = await api.createPartnerAgreement({
+        partnerName: partnerName.trim(),
+        partnerType,
+        agreementRef: agreementRef.trim() || `REF-${Date.now().toString().slice(-6)}`,
+        focusArea,
+        committedGrant: Number(committedGrant) || 0,
+        signedDate: signedDate || new Date().toISOString().split("T")[0],
+        expiryDate: expiryDate || "2027-03-31",
+        status: "Active",
+      });
+      if (!res.success || !res.data) {
+        toast.error(res.message || "Failed to create partner agreement.");
+        return;
+      }
+      setAgreements((current) => [{ ...res.data, id: res.data._id || res.data.id }, ...current]);
+      toast.success("Institutional agreement recorded in repository.");
+      setIsModalOpen(false);
+      setPartnerName("");
+      setAgreementRef("");
+    } catch (error: any) {
+      toast.error(error.message || "Failed to create partner agreement.");
+    }
   };
 
   const filteredAgreements = agreements.filter((a) => {

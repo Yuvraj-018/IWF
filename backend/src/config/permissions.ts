@@ -19,7 +19,6 @@ export interface SystemRoleDefinition {
   name: string;
   description: string;
   permissions: string[];
-  requires2FA: boolean;
 }
 
 // Complete registry of granular permissions
@@ -185,6 +184,10 @@ export const PERMISSIONS: PermissionDefinition[] = [
   { key: "community.partner:view", module: "community", resource: "partner", action: "view", name: "View Partners", description: "View institutional partners and sponsors" },
   { key: "community.partner:edit", module: "community", resource: "partner", action: "edit", name: "Manage Partners", description: "Add and edit partner organizations" },
 
+  // ==================== COMMUNICATIONS MODULE ====================
+  { key: "comms.broadcast:view", module: "comms", resource: "broadcast", action: "view", name: "View Broadcasts", description: "View outbound broadcast history" },
+  { key: "comms.broadcast:create", module: "comms", resource: "broadcast", action: "create", name: "Create Broadcast", description: "Queue an outbound communication" },
+
   // ==================== GOVERNANCE & AUDIT ====================
   { key: "governance.report:view", module: "governance", resource: "report", action: "view", name: "View Governance Reports", description: "View governance reports and meeting minutes" },
   { key: "governance.report:export", module: "governance", resource: "report", action: "export", name: "Export Governance Reports", description: "Export governance records" },
@@ -224,7 +227,6 @@ export const SYSTEM_ROLES: SystemRoleDefinition[] = [
     name: "Super Admin",
     description: "Complete unrestricted administrative control across all modules, staff, roles, and audit trail.",
     permissions: [...ALL_PERMISSION_KEYS],
-    requires2FA: true,
   },
   {
     key: "cms_admin",
@@ -241,8 +243,8 @@ export const SYSTEM_ROLES: SystemRoleDefinition[] = [
       "cms.patient:view", "cms.patient:create", "cms.patient:edit", "cms.patient:delete", "cms.patient:publish",
       "cms.settings:view", "cms.settings:edit",
       "cms.contact:view", "cms.contact:edit",
+      "comms.broadcast:view", "comms.broadcast:create",
     ],
-    requires2FA: false,
   },
   {
     key: "content_editor",
@@ -257,7 +259,6 @@ export const SYSTEM_ROLES: SystemRoleDefinition[] = [
       "cms.media:view", "cms.media:create", "cms.media:edit",
       "cms.patient:view", "cms.patient:create", "cms.patient:edit",
     ],
-    requires2FA: false,
   },
   {
     key: "content_reviewer",
@@ -272,7 +273,6 @@ export const SYSTEM_ROLES: SystemRoleDefinition[] = [
       "cms.media:view",
       "cms.patient:view",
     ],
-    requires2FA: false,
   },
   {
     key: "content_approver",
@@ -287,7 +287,6 @@ export const SYSTEM_ROLES: SystemRoleDefinition[] = [
       "cms.media:view",
       "cms.patient:view", "cms.patient:publish",
     ],
-    requires2FA: false,
   },
   {
     key: "media_manager",
@@ -297,7 +296,6 @@ export const SYSTEM_ROLES: SystemRoleDefinition[] = [
       "cms.dashboard:view",
       "cms.media:view", "cms.media:create", "cms.media:edit", "cms.media:delete",
     ],
-    requires2FA: false,
   },
   {
     key: "comms_staff",
@@ -308,8 +306,8 @@ export const SYSTEM_ROLES: SystemRoleDefinition[] = [
       "cms.news:view", "cms.news:create", "cms.news:edit", "cms.news:publish",
       "cms.contact:view", "cms.contact:edit",
       "cms.media:view", "cms.media:create",
+      "comms.broadcast:view", "comms.broadcast:create",
     ],
-    requires2FA: false,
   },
   {
     key: "programme_manager",
@@ -324,7 +322,6 @@ export const SYSTEM_ROLES: SystemRoleDefinition[] = [
       "programme.budget:view",
       "cms.media:view", "cms.media:create",
     ],
-    requires2FA: false,
   },
   {
     key: "finance_entry",
@@ -338,7 +335,6 @@ export const SYSTEM_ROLES: SystemRoleDefinition[] = [
       "finance.reconciliation:view", "finance.reconciliation:create",
       "finance.budget:view",
     ],
-    requires2FA: true,
   },
   {
     key: "finance_approver",
@@ -356,7 +352,6 @@ export const SYSTEM_ROLES: SystemRoleDefinition[] = [
       "finance.transparency:view", "finance.transparency:publish", "finance.transparency:toggle",
       "finance.bank_account:view", "finance.bank_account:edit", "finance.bank_account:view_pii",
     ],
-    requires2FA: true,
   },
   {
     key: "membership_admin",
@@ -368,7 +363,6 @@ export const SYSTEM_ROLES: SystemRoleDefinition[] = [
       "membership.card:view", "membership.card:generate",
       "membership.renewal:view", "membership.renewal:process",
     ],
-    requires2FA: false,
   },
   {
     key: "community_admin",
@@ -380,7 +374,6 @@ export const SYSTEM_ROLES: SystemRoleDefinition[] = [
       "community.volunteer:view", "community.volunteer:edit", "community.volunteer:view_pii",
       "community.partner:view", "community.partner:edit",
     ],
-    requires2FA: false,
   },
   {
     key: "auditor",
@@ -401,7 +394,6 @@ export const SYSTEM_ROLES: SystemRoleDefinition[] = [
       "governance.audit_log:view", "governance.audit_log:export",
       "system.health:view",
     ],
-    requires2FA: false,
   },
 ];
 

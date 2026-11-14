@@ -24,9 +24,6 @@ export interface IAdmin extends Document {
   mustChangePassword: boolean;
   inviteToken: string | null;
   inviteExpires: Date | null;
-  twoFactorEnabled: boolean;
-  twoFactorSecret: string | null;
-  twoFactorRecoveryCodes: string[];
   lastReauthAt: Date | null;
   isActive: boolean;
   lastLogin?: Date;
@@ -55,9 +52,6 @@ const AdminSchema = new Schema<IAdmin>(
     mustChangePassword: { type: Boolean, default: false },
     inviteToken: { type: String, default: null, index: true },
     inviteExpires: { type: Date, default: null },
-    twoFactorEnabled: { type: Boolean, default: false },
-    twoFactorSecret: { type: String, default: null },
-    twoFactorRecoveryCodes: { type: [String], default: [] },
     lastReauthAt: { type: Date, default: null },
     isActive: { type: Boolean, default: true },
     lastLogin: { type: Date },

@@ -21,8 +21,6 @@ export interface AdminUser {
     workAreas: string[];
     offices: string[];
   };
-  twoFactorEnabled: boolean;
-  mustEnroll2FA?: boolean;
   mustChangePassword?: boolean;
   lastLogin?: string;
   lastReauthAt?: string;
@@ -33,9 +31,6 @@ export interface AdminUser {
 export interface LoginResult {
   success: boolean;
   message?: string;
-  requires2FA?: boolean;
-  twoFactorToken?: string;
-  mustEnroll2FA?: boolean;
   mustChangePassword?: boolean;
   lockoutUntil?: string;
   attemptsRemaining?: number;
@@ -51,10 +46,9 @@ interface AuthContextType {
   hasAll: (permissions: string[]) => boolean;
   inScope: (workArea?: string, office?: string) => boolean;
   login: (email: string, password: string, turnstileToken?: string) => Promise<LoginResult>;
-  validate2FALogin: (twoFactorToken: string, code: string, isRecoveryCode?: boolean) => Promise<LoginResult>;
   acceptInvite: (token: string, newPassword: string) => Promise<LoginResult>;
   changePassword: (newPassword: string, currentPassword?: string) => Promise<{ success: boolean; message?: string }>;
-  reauthenticate: (password?: string, totpCode?: string) => Promise<{ success: boolean; message?: string }>;
+  reauthenticate: (password?: string) => Promise<{ success: boolean; message?: string }>;
   logout: () => void;
   refreshProfile: () => Promise<AdminUser | null>;
   setSession: (token: string, user: AdminUser) => void;
@@ -100,8 +94,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           roles: Array.isArray(res.admin.roles) ? res.admin.roles : [res.admin.role || "super_admin"],
           permissions: Array.isArray(res.admin.permissions) ? res.admin.permissions : [],
           scope: res.admin.scope || { workAreas: [], offices: [] },
-          twoFactorEnabled: false,
-          mustEnroll2FA: false,
           mustChangePassword: !!res.admin.mustChangePassword,
           lastLogin: res.admin.lastLogin,
           lastReauthAt: res.admin.lastReauthAt,
@@ -229,15 +221,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             roles: Array.isArray(res.admin.roles) ? res.admin.roles : [res.admin.role || "super_admin"],
             permissions: Array.isArray(res.admin.permissions) ? res.admin.permissions : [],
             scope: res.admin.scope || { workAreas: [], offices: [] },
-            twoFactorEnabled: false,
-            mustEnroll2FA: false,
             mustChangePassword: !!res.mustChangePassword,
             rbacEnforcementMode: res.admin.rbacEnforcementMode || "report",
           };
           setSession(res.token, adminData);
           return {
             success: true,
-            mustEnroll2FA: false,
             mustChangePassword: !!res.mustChangePassword,
             message: res.message,
           };
@@ -258,40 +247,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const validate2FALogin = async (
-    twoFactorToken: string,
-    code: string,
-    isRecoveryCode = false
-  ): Promise<LoginResult> => {
-    try {
-      const res = await api.validate2FALogin(twoFactorToken, code, isRecoveryCode);
-      if (res.success && res.token && res.admin) {
-        const adminData: AdminUser = {
-          id: res.admin.id || res.admin._id,
-          email: res.admin.email,
-          name: res.admin.name,
-          role: res.admin.role,
-          roles: Array.isArray(res.admin.roles) ? res.admin.roles : [res.admin.role || "super_admin"],
-          permissions: Array.isArray(res.admin.permissions) ? res.admin.permissions : [],
-          scope: res.admin.scope || { workAreas: [], offices: [] },
-          twoFactorEnabled: true,
-          mustEnroll2FA: false,
-          mustChangePassword: !!res.admin.mustChangePassword,
-          rbacEnforcementMode: res.admin.rbacEnforcementMode || "report",
-        };
-        setSession(res.token, adminData);
-        return {
-          success: true,
-          mustChangePassword: !!res.admin.mustChangePassword,
-          message: res.message,
-        };
-      }
-      return { success: false, message: res.message || "Invalid 2FA code" };
-    } catch (err: any) {
-      return { success: false, message: err.message || "2FA validation failed" };
-    }
-  };
-
   const acceptInvite = async (
     token: string,
     newPassword: string
@@ -307,7 +262,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           roles: Array.isArray(res.admin.roles) ? res.admin.roles : [res.admin.role || "super_admin"],
           permissions: Array.isArray(res.admin.permissions) ? res.admin.permissions : [],
           scope: res.admin.scope || { workAreas: [], offices: [] },
-          twoFactorEnabled: !!res.admin.twoFactorEnabled,
           mustChangePassword: false,
         };
         setSession(res.token, adminData);
@@ -336,9 +290,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const reauthenticate = async (password?: string, totpCode?: string) => {
+  const reauthenticate = async (password?: string) => {
     try {
-      const res = await api.reauthenticate(password, totpCode);
+      const res = await api.reauthenticate(password);
       if (res.success) {
         authEvents.resolveReauth(true);
         setIsReauthModalOpen(false);
@@ -377,7 +331,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         hasAll,
         inScope,
         login,
-        validate2FALogin,
         acceptInvite,
         changePassword,
         reauthenticate,

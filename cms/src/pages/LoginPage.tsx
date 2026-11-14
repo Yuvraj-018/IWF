@@ -115,6 +115,7 @@ export default function LoginPage() {
         )}
 
         <form onSubmit={handleCredentialsSubmit} className="space-y-4">
+          <>
           <div>
             <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
               Admin Email
@@ -158,6 +159,7 @@ export default function LoginPage() {
                 onExpire={() => setTurnstileToken("")}
               />
             </div>
+          </>
 
           <button
             type="submit"

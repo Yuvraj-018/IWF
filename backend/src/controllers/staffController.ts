@@ -75,7 +75,7 @@ export async function listStaff(req: RbacRequest, res: Response): Promise<void> 
 
     const [staff, total] = await Promise.all([
       Admin.find(filter)
-        .select("-passwordHash -twoFactorSecret -twoFactorRecoveryCodes")
+        .select("-passwordHash")
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
@@ -105,7 +105,7 @@ export async function listStaff(req: RbacRequest, res: Response): Promise<void> 
 export async function getStaffById(req: RbacRequest, res: Response): Promise<void> {
   try {
     const { id } = req.params;
-    const staff = await Admin.findById(id).select("-passwordHash -twoFactorSecret -twoFactorRecoveryCodes").lean();
+    const staff = await Admin.findById(id).select("-passwordHash").lean();
 
     if (!staff) {
       res.status(404).json({ success: false, message: "Staff account not found" });
@@ -177,7 +177,6 @@ export async function inviteStaff(req: RbacRequest, res: Response): Promise<void
       mustChangePassword: true,
       inviteToken,
       inviteExpires,
-      twoFactorEnabled: false,
       isActive: true,
     });
 

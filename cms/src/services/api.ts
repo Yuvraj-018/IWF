@@ -29,14 +29,6 @@ export const api = {
     return apiFetch("/auth/admin/me");
   },
 
-  // ── 2FA Validation During Login ──
-  async validate2FALogin(twoFactorToken: string, code: string, isRecoveryCode = false) {
-    return apiFetch("/auth/admin/2fa/validate-login", {
-      method: "POST",
-      body: JSON.stringify({ twoFactorToken, code, isRecoveryCode }),
-    });
-  },
-
   // ── Password Management & Acceptance ──
   async acceptInvite(token: string, newPassword: string) {
     return apiFetch("/auth/admin/accept-invite", {
@@ -55,42 +47,12 @@ export const api = {
   },
 
   // ── High-Risk Re-Authentication ──
-  async reauthenticate(password?: string, totpCode?: string) {
+  async reauthenticate(password?: string) {
     const body: Record<string, string> = {};
     if (password) body.password = password;
-    if (totpCode) body.totpCode = totpCode;
     return apiFetch("/auth/admin/reauth", {
       method: "POST",
       body: JSON.stringify(body),
-    });
-  },
-
-  // ── 2FA Self-Service Management ──
-  async setup2FA() {
-    return apiFetch("/auth/admin/2fa/setup", {
-      method: "POST",
-      body: JSON.stringify({}),
-    });
-  },
-
-  async verify2FA(token: string) {
-    return apiFetch("/auth/admin/2fa/verify", {
-      method: "POST",
-      body: JSON.stringify({ token }),
-    });
-  },
-
-  async disable2FA(password: string) {
-    return apiFetch("/auth/admin/2fa/disable", {
-      method: "POST",
-      body: JSON.stringify({ password }),
-    });
-  },
-
-  async resetStaff2FA(staffId: string) {
-    return apiFetch(`/auth/admin/staff/${staffId}/2fa/reset`, {
-      method: "POST",
-      body: JSON.stringify({}),
     });
   },
 
@@ -165,14 +127,14 @@ export const api = {
     return apiFetch(`/admin/roles/${key}`);
   },
 
-  async createRole(data: { key: string; name: string; description?: string; permissions: string[]; requires2FA?: boolean }) {
+  async createRole(data: { key: string; name: string; description?: string; permissions: string[] }) {
     return apiFetch("/admin/roles", {
       method: "POST",
       body: JSON.stringify(data),
     });
   },
 
-  async updateRole(key: string, data: { name?: string; description?: string; permissions?: string[]; requires2FA?: boolean }) {
+  async updateRole(key: string, data: { name?: string; description?: string; permissions?: string[] }) {
     return apiFetch(`/admin/roles/${key}`, {
       method: "PUT",
       body: JSON.stringify(data),
@@ -211,6 +173,47 @@ export const api = {
     return apiFetch(`/admin/audit-logs${q}`);
   },
 
+  async listVolunteerTasks() {
+    return apiFetch("/volunteer-tasks");
+  },
+
+  async createVolunteerTask(data: {
+    title: string;
+    sector: string;
+    location: string;
+    volunteersRequired: number;
+    assignedCount?: number;
+    targetDate: string;
+    leadCoordinator: string;
+    status?: "Active" | "Upcoming" | "Completed";
+  }) {
+    return apiFetch("/volunteer-tasks", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  async listPartnerAgreements() {
+    return apiFetch("/partner-agreements");
+  },
+
+  async createPartnerAgreement(data: {
+    partnerName: string;
+    partnerType: "Corporate CSR" | "Institutional NGO" | "Government / Semi-Gov" | "Philanthropic Trust";
+    agreementRef: string;
+    focusArea: string;
+    committedGrant: number;
+    signedDate: string;
+    expiryDate: string;
+    mouDocUrl?: string;
+    status?: "Active" | "Under Renewal" | "Completed";
+  }) {
+    return apiFetch("/partner-agreements", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
   getAuditExportUrl(params: {
     actor?: string;
     action?: string;
@@ -237,6 +240,11 @@ export const api = {
     status: string;
     service: string;
     database: string;
+    services: {
+      razorpayConfigured: boolean;
+      emailConfigured: boolean;
+      cloudStorageConfigured: boolean;
+    };
     uptimeSeconds: number;
     timestamp: string;
   }> {
@@ -270,18 +278,26 @@ export const api = {
     }
 
     try {
+      const getDashboardJson = async (path: string) => {
+        const response = await fetch(`${API_BASE_URL}${path}`, { headers: getHeaders() });
+        if (!response.ok) {
+          throw new Error(`Dashboard data request failed (${response.status}).`);
+        }
+        return response.json();
+      };
+
       const [members, donations, applications, patients, news, media, careers, publications, stories, contact, settings] = await Promise.all([
-        fetch(`${API_BASE_URL}/members`, { headers: getHeaders() }).then((r) => r.json()).catch(() => ({ total: 0 })),
-        fetch(`${API_BASE_URL}/donations`, { headers: getHeaders() }).then((r) => r.json()).catch(() => ({ count: 0 })),
-        fetch(`${API_BASE_URL}/applications`, { headers: getHeaders() }).then((r) => r.json()).catch(() => ({ count: 0 })),
-        fetch(`${API_BASE_URL}/patients`, { headers: getHeaders() }).then((r) => r.json()).catch(() => ({ count: 0 })),
-        fetch(`${API_BASE_URL}/news`, { headers: getHeaders() }).then((r) => r.json()).catch(() => ({ count: 0 })),
-        fetch(`${API_BASE_URL}/media`, { headers: getHeaders() }).then((r) => r.json()).catch(() => ({ total: 0 })),
-        fetch(`${API_BASE_URL}/careers`, { headers: getHeaders() }).then((r) => r.json()).catch(() => ({ total: 0 })),
-        fetch(`${API_BASE_URL}/publications`, { headers: getHeaders() }).then((r) => r.json()).catch(() => ({ total: 0 })),
-        fetch(`${API_BASE_URL}/stories`, { headers: getHeaders() }).then((r) => r.json()).catch(() => ({ total: 0 })),
-        fetch(`${API_BASE_URL}/contact`, { headers: getHeaders() }).then((r) => r.json()).catch(() => ({ total: 0 })),
-        fetch(`${API_BASE_URL}/settings`, { headers: getHeaders() }).then((r) => r.json()).catch(() => ({ data: {} })),
+        getDashboardJson("/members"),
+        getDashboardJson("/donations"),
+        getDashboardJson("/applications"),
+        getDashboardJson("/patients"),
+        getDashboardJson("/news"),
+        getDashboardJson("/media"),
+        getDashboardJson("/careers"),
+        getDashboardJson("/publications"),
+        getDashboardJson("/stories"),
+        getDashboardJson("/contact"),
+        getDashboardJson("/settings"),
       ]);
 
       const appData = Array.isArray(applications.data) ? applications.data : [];
@@ -307,26 +323,51 @@ export const api = {
 
       apiCache.set(cacheKey, result, 60 * 1000, "dashboard");
       return result;
-    } catch {
-      return {
-        totalMembers: 0,
-        totalDonations: 0,
-        totalApplications: 0,
-        totalPatients: 0,
-        totalNews: 0,
-        totalMedia: 0,
-        totalCareers: 0,
-        totalPublications: 0,
-        totalStories: 0,
-        totalContacts: 0,
-        upcomingEvents: [],
-        recentNews: [],
-        settings: {},
-        pendingMembership: 0,
-        pendingVolunteers: 0,
-        pendingPartners: 0,
-      };
+    } catch (error) {
+      console.error("getDashboardStats error:", error);
+      throw error;
     }
+  },
+
+  // ── Programme Initiatives ──
+  async listInitiatives(params: { sectorCode?: string; search?: string } = {}) {
+    const query = new URLSearchParams();
+    if (params.sectorCode && params.sectorCode !== "all") query.set("sectorCode", params.sectorCode);
+    if (params.search) query.set("search", params.search);
+    const q = query.toString() ? `?${query.toString()}` : "";
+    return apiFetch(`/programmes/initiatives${q}`);
+  },
+
+  async createInitiative(data: {
+    title: string;
+    sector: string;
+    sectorCode: string;
+    targetBeneficiaries: number;
+    allocatedBudget: number;
+    leadOfficer: string;
+  }) {
+    return apiFetch("/programmes/initiatives", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  // ── Communications Broadcasts ──
+  async listBroadcasts() {
+    return apiFetch("/broadcasts");
+  },
+
+  async createBroadcast(data: {
+    title: string;
+    targetAudience: string;
+    recipientCount: number;
+    channel: string;
+    message: string;
+  }) {
+    return apiFetch("/broadcasts", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
   },
 
   // ── Media CMS (Cached: 5 mins) ──

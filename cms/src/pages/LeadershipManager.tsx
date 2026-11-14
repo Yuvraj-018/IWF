@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { api } from "../services/api";
+import { formatKolkataTime } from "../services/httpClient";
 import {
   Users,
   Award,
@@ -68,6 +69,8 @@ export default function LeadershipManager() {
   const [activeTab, setActiveTab] = useState<LeadershipCategory | "all">("all");
   const [search, setSearch] = useState("");
   const [adminUser, setAdminUser] = useState<any>(null);
+  const [recentAuditLogs, setRecentAuditLogs] = useState<any[]>([]);
+  const [staffAccounts, setStaffAccounts] = useState<any[]>([]);
 
   useEffect(() => {
     if (
@@ -86,6 +89,20 @@ export default function LeadershipManager() {
       if (res?.success && res.data) {
         setAdminUser(res.data);
       }
+    });
+    api.listAuditLogs({ limit: 3 }).then((res) => {
+      if (res?.success && Array.isArray(res.data)) {
+        setRecentAuditLogs(res.data);
+      }
+    }).catch((error) => {
+      console.error("Could not fetch recent audit logs:", error);
+    });
+    api.listStaff({ limit: 100 }).then((res) => {
+      if (res?.success && Array.isArray(res.data)) {
+        setStaffAccounts(res.data);
+      }
+    }).catch((error) => {
+      console.error("Could not fetch staff accounts:", error);
     });
   }, []);
 
@@ -326,63 +343,45 @@ export default function LeadershipManager() {
               <table className="w-full text-left text-xs">
                 <thead>
                   <tr className="border-b border-slate-200 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
-                    <th className="pb-3">System Role</th>
-                    <th className="pb-3">Assigned User</th>
-                    <th className="pb-3">Finance &amp; Ledger</th>
-                    <th className="pb-3">Content &amp; Media</th>
-                    <th className="pb-3">System Health</th>
+                    <th className="pb-3">Staff Member</th>
+                    <th className="pb-3">Email</th>
+                    <th className="pb-3">Assigned Roles</th>
+                    <th className="pb-3">Work Areas</th>
+                    <th className="pb-3">Office Scope</th>
                     <th className="pb-3 text-right">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 font-medium">
-                  <tr className="hover:bg-slate-50/70 transition">
-                    <td className="py-4">
-                      <span className="font-bold text-[#071527] block text-xs">Super Admin</span>
-                      <span className="text-[10px] text-slate-400">Chief Executive / Secretary</span>
-                    </td>
-                    <td className="py-4 font-mono text-[11px] text-slate-700">admin@iwfindia.org</td>
-                    <td className="py-4 text-emerald-700 font-bold">Full Read / Write / Approve</td>
-                    <td className="py-4 text-emerald-700 font-bold">Full Publishing</td>
-                    <td className="py-4 text-emerald-700 font-bold">Root Access</td>
-                    <td className="py-4 text-right">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold">
-                        <CheckCircle2 className="w-3 h-3" />
-                        Active
-                      </span>
-                    </td>
-                  </tr>
-
-                  <tr className="hover:bg-slate-50/70 transition">
-                    <td className="py-4">
-                      <span className="font-bold text-[#071527] block text-xs">Content Editor</span>
-                      <span className="text-[10px] text-slate-400">Communications Desk</span>
-                    </td>
-                    <td className="py-4 font-mono text-[11px] text-slate-700">editor@iwfindia.org</td>
-                    <td className="py-4 text-slate-400">View Inquiries Only</td>
-                    <td className="py-4 text-emerald-700 font-bold">Create &amp; Update Content</td>
-                    <td className="py-4 text-slate-400">No Access</td>
-                    <td className="py-4 text-right">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-bold">
-                        Configured
-                      </span>
-                    </td>
-                  </tr>
-
-                  <tr className="hover:bg-slate-50/70 transition">
-                    <td className="py-4">
-                      <span className="font-bold text-[#071527] block text-xs">Finance Auditor</span>
-                      <span className="text-[10px] text-slate-400">Chartered Accountant / Treasurer</span>
-                    </td>
-                    <td className="py-4 font-mono text-[11px] text-slate-700">auditor@iwfindia.org</td>
-                    <td className="py-4 text-emerald-700 font-bold">Read &amp; Export Registers</td>
-                    <td className="py-4 text-slate-400">No Access</td>
-                    <td className="py-4 text-slate-400">Audit Logs Only</td>
-                    <td className="py-4 text-right">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-bold">
-                        Configured
-                      </span>
-                    </td>
-                  </tr>
+                  {staffAccounts.length > 0 ? staffAccounts.map((staff) => (
+                    <tr key={staff._id} className="hover:bg-slate-50/70 transition">
+                      <td className="py-4">
+                        <span className="font-bold text-[#071527] block text-xs">{staff.name}</span>
+                        <span className="text-[10px] text-slate-400">
+                          {(staff.roles || [staff.role || "unassigned"]).join(", ")}
+                        </span>
+                      </td>
+                      <td className="py-4 font-mono text-[11px] text-slate-700">{staff.email}</td>
+                      <td className="py-4 text-slate-600">{(staff.roles || []).length} assigned role(s)</td>
+                      <td className="py-4 text-slate-600">{staff.scope?.workAreas?.length || 0} work area(s)</td>
+                      <td className="py-4 text-slate-600">{staff.scope?.offices?.length || 0} office scope(s)</td>
+                      <td className="py-4 text-right">
+                        <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border text-[10px] font-bold ${
+                          staff.isActive
+                            ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                            : "bg-slate-100 text-slate-500 border-slate-200"
+                        }`}>
+                          <CheckCircle2 className="w-3 h-3" />
+                          {staff.isActive ? "Active" : "Inactive"}
+                        </span>
+                      </td>
+                    </tr>
+                  )) : (
+                    <tr>
+                      <td colSpan={6} className="py-8 text-center text-xs text-slate-400">
+                        No staff accounts found.
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
@@ -399,15 +398,13 @@ export default function LeadershipManager() {
             </div>
 
             <div className="bg-slate-900 rounded-xl p-4 font-mono text-[11px] text-emerald-400 space-y-1.5 border border-slate-800">
-              <p className="text-slate-400">
-                [AUTH] Admin login successful for admin@iwfindia.org (IP: Authorized Admin Session)
-              </p>
-              <p className="text-slate-300">
-                [SECURITY] Cloudflare Turnstile token validation succeeded. Rate limits refreshed.
-              </p>
-              <p className="text-emerald-300">
-                [PERM] Superadmin role permissions verified across all 11 CMS navigation modules.
-              </p>
+              {recentAuditLogs.length > 0 ? recentAuditLogs.map((log) => (
+                <p key={log._id} className="text-slate-300">
+                  [{formatKolkataTime(log.createdAt)}] {log.action} - {log.actorName || "System"}
+                </p>
+              )) : (
+                <p className="text-slate-400">No audit activity recorded yet.</p>
+              )}
             </div>
           </div>
         </div>

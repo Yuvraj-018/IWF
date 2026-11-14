@@ -5,7 +5,6 @@ import { RequirePermission } from "./components/common/RequirePermission";
 
 import LoginPage from "./pages/LoginPage";
 import ForcedPasswordChangePage from "./pages/ForcedPasswordChangePage";
-import TwoFactorEnrollmentWizard from "./pages/TwoFactorEnrollmentWizard";
 import AcceptInvitePage from "./pages/AcceptInvitePage";
 import MyAccountPage from "./pages/MyAccountPage";
 
@@ -85,8 +84,6 @@ export default function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/accept-invite" element={<AcceptInvitePage />} />
           <Route path="/change-password" element={<ForcedPasswordChangePage />} />
-          <Route path="/2fa-enroll" element={<Navigate to="/dashboard" replace />} />
-
           {/* User Account & Security Settings */}
           <Route
             path="/account"

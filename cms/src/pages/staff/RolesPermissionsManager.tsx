@@ -11,7 +11,6 @@ import {
   Search,
   Filter,
   Lock,
-  Smartphone,
   AlertTriangle,
   RotateCcw,
   CheckCircle2,
@@ -29,7 +28,6 @@ interface RoleItem {
   description?: string;
   permissions: string[];
   isSystem: boolean;
-  requires2FA: boolean;
   assignmentCount?: number;
 }
 
@@ -44,7 +42,6 @@ export default function RolesPermissionsManager() {
   // Selected role for viewing / editing in matrix
   const [selectedRole, setSelectedRole] = useState<RoleItem | null>(null);
   const [editingPermissions, setEditingPermissions] = useState<Set<string>>(new Set());
-  const [editRequires2FA, setEditRequires2FA] = useState(false);
   const [editRoleName, setEditRoleName] = useState("");
   const [editRoleDesc, setEditRoleDesc] = useState("");
   const [matrixSearch, setMatrixSearch] = useState("");
@@ -55,7 +52,6 @@ export default function RolesPermissionsManager() {
   const [newRoleKey, setNewRoleKey] = useState("");
   const [newRoleName, setNewRoleName] = useState("");
   const [newRoleDesc, setNewRoleDesc] = useState("");
-  const [newRoleRequires2FA, setNewRoleRequires2FA] = useState(false);
   const [creating, setCreating] = useState(false);
 
   // Diff summary modal before saving
@@ -110,7 +106,6 @@ export default function RolesPermissionsManager() {
   const selectRoleForEditing = (role: RoleItem) => {
     setSelectedRole(role);
     setEditingPermissions(new Set(role.permissions || []));
-    setEditRequires2FA(role.requires2FA);
     setEditRoleName(role.name);
     setEditRoleDesc(role.description || "");
   };
@@ -179,7 +174,6 @@ export default function RolesPermissionsManager() {
         name: editRoleName,
         description: editRoleDesc,
         permissions: Array.from(editingPermissions),
-        requires2FA: editRequires2FA,
       });
 
       if (res.success) {
@@ -210,7 +204,6 @@ export default function RolesPermissionsManager() {
         key: cleanKey,
         name: newRoleName,
         description: newRoleDesc,
-        requires2FA: newRoleRequires2FA,
         permissions: ["cms.dashboard:view"],
       });
 
@@ -220,7 +213,6 @@ export default function RolesPermissionsManager() {
         setNewRoleKey("");
         setNewRoleName("");
         setNewRoleDesc("");
-        setNewRoleRequires2FA(false);
         await loadData();
         if (res.data) selectRoleForEditing(res.data);
       } else {
@@ -311,7 +303,7 @@ export default function RolesPermissionsManager() {
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <p className={`text-xs font-bold ${isSelected ? "text-white" : "text-slate-900"}`}>
+                        <p className={`text-xs font-bold ${isSelected ? "text-[#f8fafc]" : "text-slate-900"}`}>
                           {role.name}
                         </p>
                         <p className={`text-[10px] font-mono mt-0.5 ${isSelected ? "text-orange-400" : "text-slate-400"}`}>
@@ -323,34 +315,24 @@ export default function RolesPermissionsManager() {
                         {role.isSystem && (
                           <span
                             className={`px-1.5 py-0.2 rounded text-[9px] font-bold uppercase ${
-                              isSelected ? "bg-[#16365f] text-slate-300" : "bg-slate-100 text-slate-600"
+                              isSelected ? "bg-[#16365f] text-[#cbd5e1]" : "bg-slate-100 text-slate-600"
                             }`}
                           >
                             System
                           </span>
                         )}
-                        {role.requires2FA && (
-                          <span
-                            className={`px-1.5 py-0.2 rounded text-[9px] font-bold flex items-center gap-0.5 ${
-                              isSelected ? "bg-emerald-950 text-emerald-300" : "bg-emerald-50 text-emerald-700"
-                            }`}
-                          >
-                            <Smartphone className="w-2.5 h-2.5" />
-                            <span>2FA</span>
-                          </span>
-                        )}
                       </div>
                     </div>
 
-                    <p className={`text-[11px] line-clamp-1 mt-1.5 ${isSelected ? "text-slate-300" : "text-slate-500"}`}>
+                    <p className={`text-[11px] line-clamp-1 mt-1.5 ${isSelected ? "text-[#cbd5e1]" : "text-slate-500"}`}>
                       {role.description || "No description"}
                     </p>
 
                     <div className="mt-3 pt-2 border-t border-slate-200/20 flex items-center justify-between text-[11px]">
-                      <span className={isSelected ? "text-slate-400" : "text-slate-500"}>
+                      <span className={isSelected ? "text-[#94a3b8]" : "text-slate-500"}>
                         {role.permissions.includes("*") ? "All (145)" : `${role.permissions.length} perms`}
                       </span>
-                      <span className={isSelected ? "text-slate-400" : "text-slate-500"}>
+                      <span className={isSelected ? "text-[#94a3b8]" : "text-slate-500"}>
                         {role.assignmentCount || 0} assigned
                       </span>
                     </div>
@@ -580,18 +562,6 @@ export default function RolesPermissionsManager() {
                   className="w-full px-3 py-2 text-xs border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-500"
                 />
               </div>
-
-              <label className="flex items-center gap-2 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={newRoleRequires2FA}
-                  onChange={(e) => setNewRoleRequires2FA(e.target.checked)}
-                  className="accent-orange-500"
-                />
-                <span className="text-xs font-medium text-slate-700">
-                  Mandate Two-Factor Authentication (2FA) for this role
-                </span>
-              </label>
 
               <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
                 <button

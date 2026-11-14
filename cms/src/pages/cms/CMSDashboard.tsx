@@ -28,15 +28,6 @@ import {
   ShieldCheck,
   RefreshCw,
 } from "lucide-react";
-import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-} from "recharts";
-
 // Vector Sparkline
 function Sparkline({ color = "#0d9488" }: { color?: string }) {
   return (
@@ -51,16 +42,6 @@ function Sparkline({ color = "#0d9488" }: { color?: string }) {
     </svg>
   );
 }
-
-// 6-Month Page Views vs Unique Visitors
-const analyticsData = [
-  { month: "Nov", views: 55000, visitors: 28000 },
-  { month: "Dec", views: 88000, visitors: 62000 },
-  { month: "Jan", views: 92000, visitors: 65000 },
-  { month: "Feb", views: 110000, visitors: 78000 },
-  { month: "Mar", views: 130000, visitors: 95000 },
-  { month: "Apr", views: 148000, visitors: 112000 },
-];
 
 export default function CMSDashboard() {
   const navigate = useNavigate();
@@ -166,7 +147,7 @@ export default function CMSDashboard() {
             <span className="text-xs font-semibold text-slate-600">Published Content</span>
           </div>
           <div className="mt-3">
-            <h3 className="text-2xl font-black text-slate-900 tracking-tight">{(dbStats?.totalNews ?? 8) + (dbStats?.totalPublications ?? 9) + (dbStats?.totalStories ?? 4)}</h3>
+            <h3 className="text-2xl font-black text-slate-900 tracking-tight">{(dbStats?.totalNews ?? 0) + (dbStats?.totalPublications ?? 0) + (dbStats?.totalStories ?? 0)}</h3>
             <div className="flex items-center justify-between mt-1">
               <span className="text-xs font-bold text-emerald-600">↑ 8% vs last month</span>
               <Sparkline color="#2563eb" />
@@ -200,7 +181,7 @@ export default function CMSDashboard() {
             <span className="text-xs font-semibold text-slate-600">Media Library</span>
           </div>
           <div className="mt-3">
-            <h3 className="text-2xl font-black text-slate-900 tracking-tight">{(dbStats?.totalMedia ?? 40).toLocaleString()}</h3>
+            <h3 className="text-2xl font-black text-slate-900 tracking-tight">{(dbStats?.totalMedia ?? 0).toLocaleString()}</h3>
             <div className="flex items-center justify-between mt-1">
               <span className="text-xs font-bold text-emerald-600">↑ 10% vs last month</span>
               <Sparkline color="#9333ea" />
@@ -265,8 +246,12 @@ export default function CMSDashboard() {
           </div>
 
           <div className="h-[200px] w-full">
+            <div className="h-full flex items-center justify-center text-xs text-slate-400 border border-dashed border-slate-200 rounded-lg">
+              Website analytics will appear after an analytics provider is connected.
+            </div>
+            {/*
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={analyticsData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <LineChart data={[]} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <XAxis dataKey="month" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
                 <YAxis
                   stroke="#94a3b8"
@@ -282,7 +267,7 @@ export default function CMSDashboard() {
                 <Line type="monotone" dataKey="views" stroke="#0d9488" strokeWidth={2.5} dot={{ r: 4, fill: "#0d9488" }} />
                 <Line type="monotone" dataKey="visitors" stroke="#2563eb" strokeWidth={2.5} dot={{ r: 4, fill: "#2563eb" }} />
               </LineChart>
-            </ResponsiveContainer>
+            </ResponsiveContainer> */}
           </div>
         </div>
 
@@ -305,7 +290,7 @@ export default function CMSDashboard() {
                 </div>
                 <span className="text-xs font-semibold text-slate-700">News Articles</span>
               </div>
-              <span className="text-xs font-black text-slate-900">{dbStats?.totalNews ?? 8}</span>
+              <span className="text-xs font-black text-slate-900">{dbStats?.totalNews ?? 0}</span>
             </Link>
 
             {/* Events */}
@@ -316,7 +301,7 @@ export default function CMSDashboard() {
                 </div>
                 <span className="text-xs font-semibold text-slate-700">Events</span>
               </div>
-              <span className="text-xs font-black text-slate-900">{dbStats?.upcomingEvents?.length ?? 2}</span>
+              <span className="text-xs font-black text-slate-900">{dbStats?.upcomingEvents?.length ?? 0}</span>
             </Link>
 
             {/* Success Stories */}
@@ -327,7 +312,7 @@ export default function CMSDashboard() {
                 </div>
                 <span className="text-xs font-semibold text-slate-700">Success Stories</span>
               </div>
-              <span className="text-xs font-black text-slate-900">{dbStats?.totalStories ?? 4}</span>
+              <span className="text-xs font-black text-slate-900">{dbStats?.totalStories ?? 0}</span>
             </Link>
 
             {/* Programme Updates */}
@@ -338,7 +323,7 @@ export default function CMSDashboard() {
                 </div>
                 <span className="text-xs font-semibold text-slate-700">Programme Updates</span>
               </div>
-              <span className="text-xs font-black text-slate-900">{dbStats?.settings?.homepage_stats?.activePrograms ?? 12}</span>
+              <span className="text-xs font-black text-slate-900">{dbStats?.settings?.homepage_stats?.activePrograms ?? 0}</span>
             </Link>
 
             {/* Reports & Documents */}
@@ -349,7 +334,7 @@ export default function CMSDashboard() {
                 </div>
                 <span className="text-xs font-semibold text-slate-700">Reports &amp; Documents</span>
               </div>
-              <span className="text-xs font-black text-slate-900">{dbStats?.totalPublications ?? 9}</span>
+              <span className="text-xs font-black text-slate-900">{dbStats?.totalPublications ?? 0}</span>
             </Link>
           </div>
         </div>

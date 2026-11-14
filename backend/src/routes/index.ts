@@ -20,6 +20,10 @@ import { staffRouter } from "./staffRoutes.js";
 import { roleRouter } from "./roleRoutes.js";
 import { auditRouter } from "./auditRoutes.js";
 import { accessRequestRouter } from "./accessRequests.js";
+import { programmeRouter } from "./programmeRoutes.js";
+import { broadcastRouter } from "./broadcastRoutes.js";
+import { volunteerRouter } from "./volunteerRoutes.js";
+import { partnerRouter } from "./partnerRoutes.js";
 import {
   createOrderController,
   verifyPaymentController,
@@ -47,6 +51,18 @@ apiRouter.get("/health", (_req, res) => {
     status: isHealthy ? "healthy" : "degraded",
     service: "ISLAH Backend API",
     database: dbStatus,
+    services: {
+      razorpayConfigured: Boolean(process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET),
+      emailConfigured: Boolean(
+        (process.env.SMTP_USER || process.env.GMAIL_USER) &&
+          (process.env.SMTP_PASS || process.env.GMAIL_APP_PASSWORD)
+      ),
+      cloudStorageConfigured: Boolean(
+        process.env.CLOUDFLARE_ACCOUNT_ID &&
+          process.env.CLOUDFLARE_R2_ACCESS_KEY_ID &&
+          process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY
+      ),
+    },
     uptimeSeconds: Math.floor(process.uptime()),
     timestamp: new Date().toISOString(),
   });
@@ -69,6 +85,10 @@ apiRouter.use("/careers", careerRouter);
 apiRouter.use("/publications", publicationRouter);
 apiRouter.use("/stories", storyRouter);
 apiRouter.use("/finance", financeRouter);
+apiRouter.use("/programmes", programmeRouter);
+apiRouter.use("/broadcasts", broadcastRouter);
+apiRouter.use("/volunteer-tasks", volunteerRouter);
+apiRouter.use("/partner-agreements", partnerRouter);
 
 // Staff, Role & Governance Administration APIs
 apiRouter.use("/admin/staff", staffRouter);

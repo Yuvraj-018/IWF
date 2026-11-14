@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ShieldCheck, CheckCircle2, TrendingUp, HeartHandshake, ExternalLink } from "lucide-react";
+import { API_BASE_URL } from "@/services/apiClient";
 
 interface PublicFinancialData {
   snapshotNo?: string;
@@ -25,7 +26,7 @@ export default function LiveFinancialTransparencyCard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/public/transparency/financial-summary")
+    fetch(`${API_BASE_URL}/public/transparency/financial-summary`, { cache: "no-store" })
       .then((res) => res.json())
       .then((res) => {
         if (res.success && res.data) {
@@ -38,16 +39,10 @@ export default function LiveFinancialTransparencyCard() {
       .finally(() => setLoading(false));
   }, []);
 
-  const totalDonations = data?.totalDonationsReceivedRupees || 4825750;
-  const totalExpenditure = data?.totalExpenditureIncurredRupees || 782450;
-  const netReserve = data?.netReserveBalanceRupees || 4043300;
-  const sectors = data?.sectorSpendBreakdown || [
-    { name: "Healthcare & Well-being", percentage: 42, amountRupees: 328629 },
-    { name: "Education & Learning", percentage: 28, amountRupees: 219086 },
-    { name: "Women & Youth Empowerment", percentage: 12, amountRupees: 93894 },
-    { name: "Emergency Relief & Disaster Recovery", percentage: 10, amountRupees: 78245 },
-    { name: "Skills & Livelihoods", percentage: 8, amountRupees: 62596 },
-  ];
+  const totalDonations = data?.totalDonationsReceivedRupees;
+  const totalExpenditure = data?.totalExpenditureIncurredRupees;
+  const netReserve = data?.netReserveBalanceRupees;
+  const sectors = data?.sectorSpendBreakdown || [];
 
   return (
     <div className="bg-gradient-to-br from-[#071527] to-[#0d223f] text-white rounded-2xl p-6 sm:p-8 shadow-2xl border border-emerald-500/20 my-8">
@@ -79,7 +74,7 @@ export default function LiveFinancialTransparencyCard() {
         <div className="bg-white/5 border border-white/10 rounded-xl p-4">
           <span className="text-xs text-slate-400">Total Contributions Received</span>
           <div className="text-xl sm:text-2xl font-bold font-mono text-emerald-400 mt-1">
-            ₹ {totalDonations.toLocaleString("en-IN")}
+            {totalDonations === undefined ? "Unavailable" : `₹ ${totalDonations.toLocaleString("en-IN")}`}
           </div>
           <span className="text-[11px] text-slate-400 mt-0.5 block">100% deposited in scheduled bank</span>
         </div>
@@ -87,7 +82,7 @@ export default function LiveFinancialTransparencyCard() {
         <div className="bg-white/5 border border-white/10 rounded-xl p-4">
           <span className="text-xs text-slate-400">Programme Deployments</span>
           <div className="text-xl sm:text-2xl font-bold font-mono text-amber-400 mt-1">
-            ₹ {totalExpenditure.toLocaleString("en-IN")}
+            {totalExpenditure === undefined ? "Unavailable" : `₹ ${totalExpenditure.toLocaleString("en-IN")}`}
           </div>
           <span className="text-[11px] text-slate-400 mt-0.5 block">Across 8 core thematic sectors</span>
         </div>
@@ -95,7 +90,7 @@ export default function LiveFinancialTransparencyCard() {
         <div className="bg-white/5 border border-white/10 rounded-xl p-4">
           <span className="text-xs text-slate-400">Net Reserve Capital Balance</span>
           <div className="text-xl sm:text-2xl font-bold font-mono text-teal-300 mt-1">
-            ₹ {netReserve.toLocaleString("en-IN")}
+            {netReserve === undefined ? "Unavailable" : `₹ ${netReserve.toLocaleString("en-IN")}`}
           </div>
           <span className="text-[11px] text-slate-400 mt-0.5 block">Reserved for ongoing health & relief</span>
         </div>
