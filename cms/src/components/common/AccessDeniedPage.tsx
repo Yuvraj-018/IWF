@@ -76,3 +76,4 @@ export function AccessDeniedPage({ requiredPermission, moduleName }: AccessDenie
     </div>
   );
 }
+

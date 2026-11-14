@@ -676,3 +676,4 @@ export default function RolesPermissionsManager() {
     </div>
   );
 }
+

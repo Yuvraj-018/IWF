@@ -40,8 +40,7 @@ export async function seedDemoAccounts() {
   for (const role of systemRoles) {
     const email = `demo_${role.key}@iwfindia.org`;
     const name = `Demo ${role.name}`;
-    const randomSuffix = crypto.randomBytes(4).toString("hex");
-    const rawPassword = `Demo!${role.key.slice(0, 3).toUpperCase()}#${randomSuffix}`;
+    const rawPassword = process.env.DEMO_ACCOUNT_PASSWORD || "DemoAccount@2026!";
     const passwordHash = hashPassword(rawPassword);
 
     const scope =
@@ -98,3 +97,4 @@ if (process.argv[1]?.endsWith("seedDemoAccounts.ts") || process.argv[1]?.endsWit
       process.exit(1);
     });
 }
+

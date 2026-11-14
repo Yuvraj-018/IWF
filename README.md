@@ -70,7 +70,7 @@ Docker Compose bundles MongoDB, Backend, CMS, and Client into a single isolated 
 
 #### On Windows (PowerShell):
 ```powershell
-.\scripts\docker-start.ps1
+
 ```
 
 #### On Linux / macOS (Bash):
