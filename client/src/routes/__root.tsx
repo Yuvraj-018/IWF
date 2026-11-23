@@ -16,32 +16,82 @@ import {
   Instagram,
   Linkedin,
   Youtube,
+  Home,
+  ArrowRight,
+  AlertTriangle,
 } from "lucide-react";
 import PageTransition, { ScrollProgressBar } from "@/components/PageTransition";
 
 import { Toaster } from "@/components/ui/sonner";
 import { QuickMessageWidget } from "@/components/layout/QuickMessageWidget";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { Header, Footer, NotificationTicker, UtilityBar } from "@/components/layout/SiteLayout";
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
+  useEffect(() => {
+    const prev = document.title;
+    document.title = "404 — Page Not Found | ISLAH Welfare Foundation";
+    const metaRobots = document.querySelector('meta[name="robots"]');
+    if (metaRobots) metaRobots.setAttribute("content", "noindex, follow");
+    return () => { document.title = prev; };
+  }, []);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Go home
-          </Link>
+    <div className="min-h-screen bg-white text-slate-800 flex flex-col font-sans">
+      <NotificationTicker />
+      <UtilityBar />
+      <Header />
+      <main className="flex-grow flex items-center justify-center px-4 py-20">
+        <div className="max-w-lg w-full text-center">
+          {/* Large 404 */}
+          <div className="relative inline-block mb-6">
+            <span className="text-[120px] sm:text-[160px] font-black text-slate-100 leading-none select-none">
+              404
+            </span>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <AlertTriangle className="w-14 h-14 text-brand-orange opacity-80" />
+            </div>
+          </div>
+
+          <h1 className="text-2xl sm:text-3xl font-semibold text-[#071527] mb-3">
+            Page Not Found
+          </h1>
+          <p className="text-sm text-slate-500 leading-relaxed mb-8 max-w-sm mx-auto">
+            The page you're looking for doesn't exist or may have been moved.
+            Let's get you back on track.
+          </p>
+
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-brand-orange hover:bg-orange-600 text-white font-semibold text-sm transition-all shadow-sm active:scale-95"
+            >
+              <Home className="w-4 h-4" />
+              Go to Homepage
+            </Link>
+            <Link
+              to="/donate"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 font-semibold text-sm transition-all active:scale-95"
+            >
+              Donate
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 font-semibold text-sm transition-all active:scale-95"
+            >
+              Contact Us
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          <p className="mt-10 text-xs text-slate-400">
+            Error 404 — ISLAH Welfare Foundation
+          </p>
         </div>
-      </div>
+      </main>
+      <Footer />
     </div>
   );
 }

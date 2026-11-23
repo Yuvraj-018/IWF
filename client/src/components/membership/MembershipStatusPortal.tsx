@@ -57,7 +57,7 @@ import {
   inputClass,
   type FieldErrors,
 } from "@/components/forms/formFields";
-import { MemberCardViewer } from "./MemberCard";
+import { MemberCardViewer, formatCardValidity } from "./MemberCard";
 import { downloadReceiptPdf, type ReceiptData } from "./membershipReceipt";
 
 // ============================================================================
@@ -107,9 +107,9 @@ function demoProfile(query: string): MemberProfile {
     tier,
     isOrganisation,
     status: "Active",
-    joined: "15 Apr 2025",
-    validFrom: "15 Apr 2025",
-    validTill: "Apr 2026",
+    joined: "Apr 2025",
+    validFrom: "Apr 2025",
+    validTill: "Mar 2026",
     countryCode: "+91",
     phone: /^\d{10}$/.test(query.trim()) ? query.trim() : "9876543210",
     email: isOrganisation ? "contact@sunrisetrust.org" : "aftab.alam@example.com",
@@ -174,9 +174,9 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
               tier,
               isOrganisation: tier === "Orange",
               status: m.status || "Active",
-              joined: m.joinedDate ? new Date(m.joinedDate).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "Recently",
-              validFrom: m.joinedDate ? new Date(m.joinedDate).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "Active",
-              validTill: m.validTill ? new Date(m.validTill).toLocaleDateString("en-IN", { month: "short", year: "numeric" }) : "Active",
+              joined: m.joined || m.validFrom || "Recently",
+              validFrom: m.validFrom || m.joined || "Active",
+              validTill: m.validTill || "Active",
               countryCode: "+91",
               phone: m.phone || "",
               email: m.email || "",
@@ -206,8 +206,8 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
               isOrganisation: tier === "Orange",
               status: m.status,
               joined: m.joined,
-              validFrom: m.validFrom || m.joined,
-              validTill: m.validTill,
+              validFrom: (() => { const src = m.validFrom || m.joined || ""; const d = new Date(src); return isNaN(d.getTime()) ? src : formatDisplayMonth(d); })(),
+              validTill: (() => { const src = m.validTill || ""; const d = new Date(src); if (isNaN(d.getTime())) return src; return formatDisplayMonth(new Date(d.getFullYear(), d.getMonth(), 0)); })(),
               state: m.state,
               district: m.district,
               phone: m.phone || "",
@@ -708,8 +708,8 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
             <dl className="rounded-xl border border-slate-200 divide-y divide-slate-100 text-xs sm:text-sm">
               {[
                 ["Plan", `${tierCfg.cardName} — ${tierCfg.roleTitle}`],
-                ["Member since", member.joined],
-                ["Valid till", member.validTill],
+                ["Member since", formatCardValidity(member.joined, member.validTill).validFrom || member.joined],
+                ["Valid till", formatCardValidity(member.validFrom, member.validTill).validTill || member.validTill],
                 ["Location", [member.district, member.state].filter(Boolean).join(", ")],
               ].map(([k, val]) => (
                 <div key={k} className="flex justify-between gap-3 px-4 py-2.5">

@@ -523,7 +523,7 @@ export function DonationCertificateViewer({ data }: { data: DonationCertificateD
           className={`${btn} border border-slate-300 bg-white hover:bg-slate-50 text-slate-700`}
         >
           <FileText className="w-3.5 h-3.5" />
-          {busy === "pdf" ? "Preparing…" : "PDF (A4)"}
+          {busy === "pdf" ? "Preparing…" : "Print"}
         </button>
       </div>
     </div>

@@ -317,7 +317,8 @@ function HeroSection({ lang }: LanguageProp) {
             </div>
 
             {/* Video (Temporarily replacing stats grid under events/notices) */}
-            <div className="relative w-full aspect-video min-h-[190px] sm:min-h-[210px] rounded-2xl overflow-hidden border border-slate-200 shadow-sm bg-black">
+            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+              <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-black">
               {isVideoPlaying ? (
                 <iframe
                   className="w-full h-full border-0"
@@ -348,6 +349,7 @@ function HeroSection({ lang }: LanguageProp) {
                   </div>
                 </button>
               )}
+              </div>
             </div>
           </div>
         </div>

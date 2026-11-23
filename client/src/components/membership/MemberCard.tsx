@@ -56,6 +56,29 @@ function nameFontSize(name: string) {
   return Math.max(20, Math.min(36, Math.floor(440 / (len * 0.62))));
 }
 
+export function formatCardValidity(validFromRaw?: string, validTillRaw?: string) {
+  const dFrom = validFromRaw ? new Date(validFromRaw) : null;
+  const fromValid = Boolean(dFrom && !isNaN(dFrom.getTime()));
+  const fromMonth = fromValid ? dFrom!.getMonth() : null;
+
+  let dTill = validTillRaw ? new Date(validTillRaw) : null;
+  if (dTill && !isNaN(dTill.getTime())) {
+    if (fromValid && dTill.getMonth() === fromMonth) {
+      dTill = new Date(dTill.getFullYear(), dTill.getMonth(), 0);
+    }
+  }
+
+  const validFrom = fromValid
+    ? dFrom!.toLocaleDateString("en-GB", { month: "short", year: "numeric" })
+    : (validFromRaw ? validFromRaw.replace(/^\d{1,2}\s+/, "") : "");
+
+  const validTill = dTill && !isNaN(dTill.getTime())
+    ? dTill.toLocaleDateString("en-GB", { month: "short", year: "numeric" })
+    : (validTillRaw || "");
+
+  return { validFrom, validTill };
+}
+
 // ============================================================================
 // Front side
 // ============================================================================
@@ -66,6 +89,7 @@ export const MemberCardFront = forwardRef<SVGSVGElement, { data: MemberCardData;
     const tier = MEMBERSHIP_TIERS[data.tier];
     const uid = `f${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
     const displayName = data.name.toUpperCase();
+    const { validFrom, validTill } = formatCardValidity(data.validFrom, data.validTill);
     const initials = data.name
       .split(/\s+/)
       .filter((p) => p && !p.endsWith("."))
@@ -218,14 +242,14 @@ export const MemberCardFront = forwardRef<SVGSVGElement, { data: MemberCardData;
             Valid From
           </text>
           <text x={146} y={466} fontSize={25} fill="#0f172a">
-            {data.validFrom}
+            {validFrom}
           </text>
           <line x1={348} y1={414} x2={348} y2={478} stroke={c.main} strokeWidth={2} />
           <text x={378} y={432} fontSize={17} fill="#475569">
             Valid Till
           </text>
           <text x={378} y={466} fontSize={25} fill="#0f172a">
-            {data.validTill}
+            {validTill}
           </text>
 
           {/* Bottom band label */}

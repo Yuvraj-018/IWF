@@ -417,9 +417,6 @@ export function MembershipApplicationForm({
         if (!Number.isInteger(n) || n < 3 || n > MAX_SPECIFIED_YEARS)
           e.customYears = `Enter a number of years between 3 and ${MAX_SPECIFIED_YEARS}.`;
       }
-      if (isOrg && v.sectors.length === 0) e.sectors = "Select at least one programme sector.";
-      if (v.sectors.includes(OTHER_SECTOR))
-        req("otherSector", v.otherSector, "Please specify the other area.");
       if (isOrg) {
         if (v.contributions.length === 0)
           e.contributions = "Select at least one way your organisation could contribute.";
@@ -1502,48 +1499,6 @@ export function MembershipApplicationForm({
 
             {/* Interests */}
             <div className={section}>
-              <SubHeading
-                title={isOrg ? "Areas of interest & potential contribution" : "Areas of interest"}
-                desc={isOrg ? undefined : "Optional — select all that apply."}
-              />
-              <Field
-                name="sectors"
-                label={
-                  isOrg
-                    ? "Which ISLAH programme sectors align with your organisation's interests?"
-                    : "Programme sectors"
-                }
-                required={isOrg}
-                error={err("sectors")}
-              >
-                <CheckChips
-                  options={SECTOR_OPTIONS}
-                  selected={v.sectors}
-                  onToggle={(o) => toggleIn("sectors", o)}
-                  hasError={has("sectors")}
-                  columns={3}
-                />
-              </Field>
-              <div className={grid}>
-                {v.sectors.includes(OTHER_SECTOR) && (
-                  <Field
-                    name="otherSector"
-                    label="Other — please specify"
-                    required
-                    error={err("otherSector")}
-                  >
-                    {textInput("otherSector", { placeholder: "Describe the area", maxLength: 120 })}
-                  </Field>
-                )}
-                <Field name="preferredSector" label="Preferred Sector / First Choice" optional>
-                  <SelectInput
-                    value={v.sectors.includes(v.preferredSector) ? v.preferredSector : ""}
-                    onChange={(val) => set("preferredSector", val)}
-                    options={v.sectors.length ? v.sectors : SECTOR_OPTIONS}
-                    placeholder="Select your primary area"
-                  />
-                </Field>
-              </div>
 
               {isOrg && (
                 <>
