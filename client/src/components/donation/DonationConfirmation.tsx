@@ -43,6 +43,8 @@ export interface DonationOutcome {
   /** ISLAH-DON-YEAR-XXXXX */
   reference?: string;
   receiptNo?: string;
+  /** Issued by the backend with the receipt (CERT-YYYY-XXXXX). */
+  certificateNo?: string;
   reason?: string;
 }
 
@@ -215,6 +217,7 @@ function DonationSuccess({
     transactionId: outcome.paymentId ?? "",
     frequency: FREQUENCY_LABEL[v.frequency],
     purpose: outcome.purpose ?? "General Support",
+    beneficiary: v.patientSlug && v.patientName ? v.patientName : undefined,
   };
 
   const certificate: DonationCertificateData = {
@@ -223,9 +226,7 @@ function DonationSuccess({
     cause: outcome.purpose ?? "ISLAH Programmes",
     date: formatDocMonth(paidAt),
     year: paidAt.getFullYear(),
-    certificateNo: /RCPT/i.test(receiptNo)
-      ? receiptNo.replace(/RCPT/i, "CERT")
-      : `CERT-${receiptNo}`,
+    certificateNo: outcome.certificateNo || receiptNo.replace(/RCPT|REC/i, "CERT"),
   };
 
   const run = async (kind: "receipt" | "card") => {
@@ -245,6 +246,9 @@ function DonationSuccess({
     ["Donation Amount", fmtINR(amount)],
     ["Support Area", v.supportAreas.join(", ")],
     ["Programme / Initiative", programme],
+    ...(v.patientSlug && v.patientName
+      ? ([["Patient / Beneficiary", v.patientName]] as [string, string][])
+      : []),
     ["Donation Frequency", FREQUENCY_LABEL[v.frequency]],
     [
       "Payment Status",
@@ -330,7 +334,7 @@ function DonationSuccess({
             <p className="text-[11px] text-slate-500 text-center mt-1">
               {RECURRING_AUTO_DEBIT_ENABLED
                 ? `Your ${v.frequency.toLowerCase()} mandate is active. You can cancel it at any time.`
-                : `We'll remind you before each ${v.frequency === "Monthly" ? "month" : "year"}'s contribution — nothing is charged automatically.`}
+                : `Your ${v.frequency === "Monthly" ? "monthly" : "yearly"} pledge is recorded — nothing is charged automatically.`}
             </p>
           )}
         </div>

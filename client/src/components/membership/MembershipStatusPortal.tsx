@@ -35,6 +35,7 @@ import {
   MAX_SPECIFIED_YEARS,
   MEMBERSHIP_TIERS,
   computeValidTill,
+  expiryMonthDate,
   formatDisplayMonth,
   formatLongMonth,
   parseValidTill,
@@ -48,6 +49,7 @@ import {
 import {
   CheckboxRow,
   Field,
+  OtpVerifier,
   PhoneInput,
   CityField,
   RadioPills,
@@ -124,6 +126,16 @@ function demoProfile(query: string): MemberProfile {
 // Component
 // ============================================================================
 
+const VERIFICATION_TYPE_LABEL: Record<string, string> = {
+  donation_receipt: "Donation Receipt",
+  programme_certificate: "Acknowledgement Card",
+  membership_certificate: "Membership",
+  volunteer_certificate: "Volunteer Certificate",
+  sponsorship_certificate: "Sponsorship Certificate",
+  institutional_document: "Statutory Document",
+  authorisation_letter: "Authorisation Letter",
+};
+
 export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => void }) {
   // Lookup
   const [query, setQuery] = useState("");
@@ -140,6 +152,8 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
   const [customYears, setCustomYears] = useState("3");
   const [editingContact, setEditingContact] = useState(false);
   const [contact, setContact] = useState<ContactFields | null>(null);
+  /** "<code><phone>" of a new mobile number confirmed by OTP during renewal. */
+  const [newPhoneVerifiedFor, setNewPhoneVerifiedFor] = useState<string | null>(null);
   const [agree, setAgree] = useState(false);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
@@ -207,7 +221,7 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
               status: m.status,
               joined: m.joined,
               validFrom: (() => { const src = m.validFrom || m.joined || ""; const d = new Date(src); return isNaN(d.getTime()) ? src : formatDisplayMonth(d); })(),
-              validTill: (() => { const src = m.validTill || ""; const d = new Date(src); if (isNaN(d.getTime())) return src; return formatDisplayMonth(new Date(d.getFullYear(), d.getMonth(), 0)); })(),
+              validTill: (() => { const d = expiryMonthDate(m.validTill); return d ? formatDisplayMonth(d) : m.validTill || ""; })(),
               state: m.state,
               district: m.district,
               phone: m.phone || "",
@@ -262,6 +276,15 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
     return { from, till: computeValidTill(from, Math.max(years, 1)) };
   }, [member, years]);
 
+  // A changed mobile number must be confirmed by OTP before renewal.
+  const phoneChanged = Boolean(
+    member &&
+      contact &&
+      (contact.phone !== member.phone || contact.countryCode !== member.countryCode),
+  );
+  const newPhoneVerified =
+    !phoneChanged || newPhoneVerifiedFor === `${contact?.countryCode}${contact?.phone}`;
+
   const startRenewal = (p: "same" | "change") => {
     if (!member) return;
     setPath(p);
@@ -282,6 +305,7 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
     });
     setEditingContact(false);
     setAgree(false);
+    setNewPhoneVerifiedFor(null);
     setErrors({});
     setStage("form");
   };
@@ -311,6 +335,7 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
       if (contact.pincode && !/^\d{6}$/.test(contact.pincode))
         e.pincode = "PIN code must be 6 digits.";
     }
+    if (phoneChanged && !newPhoneVerified) e.newPhoneOtp = "Verify your new mobile number.";
     if (!agree) e.agree = "Required";
     return e;
   };
@@ -358,6 +383,7 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
           contact: `${contact.countryCode || "+91"}${contact.phone}`,
         },
         notes: {
+          purpose: "membership",
           memberNo: member.id,
           isRenewal: "true",
         },
@@ -405,6 +431,9 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
         validFrom,
         validTill,
         type: "Renewal",
+        paymentMode: "Online",
+        paymentStatus: "Successful",
+        transactionId: paymentResult.razorpay_payment_id,
       });
 
       setStage("done");
@@ -533,7 +562,7 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
           }`}
         >
           <Receipt className="w-3.5 h-3.5" />
-          <span>Donations &amp; 80G Receipts</span>
+          <span>Donations &amp; Receipts</span>
           {donations.length > 0 && (
             <span className={`ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-extrabold ${activeTab === "donations" ? "bg-white/20 text-white" : "bg-emerald-100 text-emerald-800"}`}>
               {donations.length}
@@ -568,14 +597,14 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
               <Receipt className="w-8 h-8 text-slate-300 mx-auto" />
               <p className="text-sm font-bold text-slate-700">No linked donation receipts found</p>
               <p className="text-xs text-slate-400">
-                Any future donations made with this phone ({member.phone}) or email ({member.email}) will automatically show here with 1-click tax receipts.
+                Any future donations made with this phone ({member.phone}) or email ({member.email}) will automatically show here with 1-click receipts.
               </p>
             </div>
           ) : (
             <div className="space-y-3">
               {donations.map((d: any) => (
                 <div
-                  key={d.id}
+                  key={d.receiptNo}
                   className="p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs"
                 >
                   <div className="space-y-1">
@@ -590,7 +619,7 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
                         </span>
                       )}
                     </div>
-                    <div className="text-xs text-slate-700 font-semibold">{d.purpose || "General Welfare Contribution"}</div>
+                    <div className="text-xs text-slate-700 font-semibold">{d.financialType || "General Donation"}</div>
                     <div className="text-[11px] text-slate-400 flex items-center gap-2">
                       <span>{new Date(d.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</span>
                       {d.certificateNo && <span>• Cert: #{d.certificateNo}</span>}
@@ -603,14 +632,22 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
                       onClick={() =>
                         downloadDonationReceiptPdf({
                           receiptNo: d.receiptNo,
+                          paidAt: new Date(d.createdAt),
+                          donorName: d.donorName || member.name,
+                          donorType: d.donorType || "Individual",
+                          pan: d.taxExemption ? d.pan : undefined,
+                          address:
+                            d.address ||
+                            [d.city || member.district, d.state || member.state].filter(Boolean).join(", "),
+                          email: d.email || member.email || "-",
+                          phone: member.phone ? `${member.countryCode || "+91"} ${member.phone}` : "-",
+                          taxRequested: Boolean(d.taxExemption),
                           amount: Number(d.amount),
-                          donorName: member.name,
-                          purpose: d.purpose || "General Welfare Fund",
-                          date: new Date(d.createdAt).toLocaleDateString(),
-                          paymentMethod: d.paymentMethod || "Online / Razorpay",
-                          panNumber: d.panNumber,
-                          is80GEligible: Boolean(d.is80GEligible),
-                          certificateNo: d.certificateNo,
+                          paymentMode: d.paymentMode || "Online",
+                          paymentStatus: d.paymentStatus === "Success" ? "Successful" : d.paymentStatus,
+                          transactionId: d.transactionId || "-",
+                          frequency: d.frequency || "One Time",
+                          purpose: d.financialType || "General Donation",
                         }).catch(() => toast.error("Failed to generate PDF"))
                       }
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold transition cursor-pointer"
@@ -654,23 +691,34 @@ export function MembershipStatusPortal({ onOpenPolicy }: { onOpenPolicy: () => v
                   className="p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs"
                 >
                   <div className="space-y-1">
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
-                        {v.documentType || "Official Document"}
+                        {VERIFICATION_TYPE_LABEL[v.documentType] || "Official Document"}
                       </span>
                       <span className="text-xs font-mono font-bold text-slate-800">
-                        {v.referenceNo || member.id}
+                        {v.documentNo || member.id}
                       </span>
-                      <span className="text-[10px] px-2 py-0.2 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold">
-                        Verified
-                      </span>
+                      {(() => {
+                        const expired = v.status === "Verified" && v.validTill && new Date(v.validTill) < new Date();
+                        const label = expired ? "Expired" : v.status || "Verified";
+                        const cls =
+                          label === "Verified"
+                            ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                            : label === "Expired"
+                              ? "bg-amber-50 text-amber-800 border-amber-200"
+                              : "bg-red-50 text-red-700 border-red-200";
+                        return (
+                          <span className={`text-[10px] px-2 py-0.2 rounded-full border font-bold ${cls}`}>{label}</span>
+                        );
+                      })()}
                     </div>
                     <p className="text-[11px] text-slate-500">
-                      Token: <span className="font-mono text-slate-700">{v.token || "REG-SECURE-TOKEN"}</span>
+                      {v.title}
+                      {v.issueDate ? ` · Issued ${new Date(v.issueDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}` : ""}
                     </p>
                   </div>
                   <a
-                    href={`/verify?ref=${encodeURIComponent(v.token || v.referenceNo || member.id)}`}
+                    href={`/verify?ref=${encodeURIComponent(v.documentNo || member.id)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold transition shrink-0"

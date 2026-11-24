@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Verification } from "../models/Verification.js";
 import { Donation } from "../models/Donation.js";
 import { Member } from "../models/Member.js";
+import { escapeRegex, maskPan } from "../utils/escapeRegex.js";
 
 const STATUTORY_DOCS: Record<string, { type: string; title: string; issuedTo: string; details: any }> = {
   "26/2015": {
@@ -57,13 +58,19 @@ export async function verifyDocument(req: Request, res: Response): Promise<void>
 
     // 1. Direct match in Verification collection
     const doc = await Verification.findOne({
-      documentNo: { $regex: new RegExp(`^${cleanNo}$`, "i") },
+      documentNo: { $regex: new RegExp(`^${escapeRegex(cleanNo)}$`, "i") },
     });
 
     if (doc) {
+      const expired = Boolean(doc.validTill && doc.validTill.getTime() < Date.now());
+      const status = expired && doc.status === "Verified" ? "Expired" : doc.status;
+      const details: Record<string, any> = { ...(doc.details || {}) };
+      if (details.pan) details.pan = maskPan(details.pan);
+      delete details.email;
+      delete details.phone;
       res.json({
         success: true,
-        verified: doc.status === "Verified",
+        verified: status === "Verified",
         data: {
           documentNo: doc.documentNo,
           documentType: doc.documentType,
@@ -72,8 +79,8 @@ export async function verifyDocument(req: Request, res: Response): Promise<void>
           issuer: doc.issuer,
           issueDate: doc.issueDate.toISOString().split("T")[0],
           validTill: doc.validTill ? doc.validTill.toISOString().split("T")[0] : null,
-          status: doc.status,
-          details: doc.details,
+          status,
+          details,
         },
       });
       return;
@@ -82,8 +89,8 @@ export async function verifyDocument(req: Request, res: Response): Promise<void>
     // 2. Check Donations collection by receiptNo, certificateNo, or transaction ID
     const donation = await Donation.findOne({
       $or: [
-        { receiptNo: { $regex: new RegExp(`^${cleanNo}$`, "i") } },
-        { certificateNo: { $regex: new RegExp(`^${cleanNo}$`, "i") } },
+        { receiptNo: { $regex: new RegExp(`^${escapeRegex(cleanNo)}$`, "i") } },
+        { certificateNo: { $regex: new RegExp(`^${escapeRegex(cleanNo)}$`, "i") } },
         { transactionId: cleanNo },
       ],
     });
@@ -102,7 +109,7 @@ export async function verifyDocument(req: Request, res: Response): Promise<void>
           documentType: isCertQuery ? "programme_certificate" : "donation_receipt",
           title: isCertQuery
             ? `Donor Appreciation Certificate - ${donation.financialType || "General"}`
-            : `Official 80G Donation Receipt - ₹${donation.amount}`,
+            : `${donation.taxExemption ? "Donation Receipt (Tax Documentation Requested)" : "Donation Receipt"} - ₹${donation.amount}`,
           issuedTo: donation.donorName,
           issuer: "Islah Welfare Foundation (ISLAH)",
           issueDate: donation.createdAt.toISOString().split("T")[0],
@@ -112,7 +119,7 @@ export async function verifyDocument(req: Request, res: Response): Promise<void>
             amount: donation.amount,
             cause: donation.financialType,
             paymentMode: donation.paymentMode,
-            pan: donation.pan || "N/A",
+            pan: maskPan(donation.pan) || "N/A",
             transactionId: donation.transactionId || "N/A",
             receiptNo: donation.receiptNo,
             certificateNo: donation.certificateNo || "N/A",
@@ -124,13 +131,14 @@ export async function verifyDocument(req: Request, res: Response): Promise<void>
 
     // 3. Check Members collection by memberNo
     const member = await Member.findOne({
-      memberNo: { $regex: new RegExp(`^${cleanNo}$`, "i") },
+      memberNo: { $regex: new RegExp(`^${escapeRegex(cleanNo)}$`, "i") },
     });
 
     if (member) {
+      const expired = member.validTill.getTime() < Date.now();
       res.json({
         success: true,
-        verified: member.status === "Active",
+        verified: !expired && member.status === "Active",
         data: {
           documentNo: member.memberNo,
           documentType: "membership_certificate",
@@ -139,7 +147,7 @@ export async function verifyDocument(req: Request, res: Response): Promise<void>
           issuer: "Islah Welfare Foundation (ISLAH)",
           issueDate: member.validFrom.toISOString().split("T")[0],
           validTill: member.validTill.toISOString().split("T")[0],
-          status: member.status,
+          status: expired ? "Expired" : member.status,
           details: {
             category: member.category,
             district: member.district,
@@ -152,9 +160,8 @@ export async function verifyDocument(req: Request, res: Response): Promise<void>
     }
 
     // 4. Check known Statutory documents
-    const statutoryMatch = Object.entries(STATUTORY_DOCS).find(([key]) =>
-      cleanUpper.includes(key) || key.includes(cleanUpper)
-    );
+    // Exact numbers only — partial input like "2" must not "verify" a registration.
+    const statutoryMatch = Object.entries(STATUTORY_DOCS).find(([key]) => key.toUpperCase() === cleanUpper);
 
     if (statutoryMatch) {
       const [matchedKey, meta] = statutoryMatch;

@@ -50,6 +50,7 @@ import { Route as SponsorRouteImport } from './routes/sponsor'
 import { Route as SponsorshipPolicyRouteImport } from './routes/sponsorship-policy'
 import { Route as SuccessStoriesRouteImport } from './routes/success-stories'
 import { Route as TermsAndConditionsRouteImport } from './routes/terms-and-conditions'
+import { Route as VerifyRouteImport } from './routes/verify'
 import { Route as VolunteerRouteImport } from './routes/volunteer'
 import { Route as VolunteerPolicyRouteImport } from './routes/volunteer-policy'
 import { Route as AboutCommunityRouteImport } from './routes/about_/community'
@@ -353,6 +354,11 @@ const SuccessStoriesRoute = SuccessStoriesRouteImport.update({
 const TermsAndConditionsRoute = TermsAndConditionsRouteImport.update({
   id: '/terms-and-conditions',
   path: '/terms-and-conditions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyRoute = VerifyRouteImport.update({
+  id: '/verify',
+  path: '/verify',
   getParentRoute: () => rootRouteImport,
 } as any)
 const VolunteerRoute = VolunteerRouteImport.update({
@@ -960,6 +966,7 @@ export interface FileRoutesByFullPath {
   '/sponsorship-policy': typeof SponsorshipPolicyRoute
   '/success-stories': typeof SuccessStoriesRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
+  '/verify': typeof VerifyRoute
   '/volunteer': typeof VolunteerRoute
   '/volunteer-policy': typeof VolunteerPolicyRoute
   '/about/community': typeof AboutCommunityRoute
@@ -1101,6 +1108,7 @@ export interface FileRoutesByTo {
   '/sponsorship-policy': typeof SponsorshipPolicyRoute
   '/success-stories': typeof SuccessStoriesRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
+  '/verify': typeof VerifyRoute
   '/volunteer': typeof VolunteerRoute
   '/volunteer-policy': typeof VolunteerPolicyRoute
   '/about/community': typeof AboutCommunityRoute
@@ -1243,6 +1251,7 @@ export interface FileRoutesById {
   '/sponsorship-policy': typeof SponsorshipPolicyRoute
   '/success-stories': typeof SuccessStoriesRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
+  '/verify': typeof VerifyRoute
   '/volunteer': typeof VolunteerRoute
   '/volunteer-policy': typeof VolunteerPolicyRoute
   '/about_/community': typeof AboutCommunityRoute
@@ -1386,6 +1395,7 @@ export interface FileRouteTypes {
     | '/sponsorship-policy'
     | '/success-stories'
     | '/terms-and-conditions'
+    | '/verify'
     | '/volunteer'
     | '/volunteer-policy'
     | '/about/community'
@@ -1527,6 +1537,7 @@ export interface FileRouteTypes {
     | '/sponsorship-policy'
     | '/success-stories'
     | '/terms-and-conditions'
+    | '/verify'
     | '/volunteer'
     | '/volunteer-policy'
     | '/about/community'
@@ -1668,6 +1679,7 @@ export interface FileRouteTypes {
     | '/sponsorship-policy'
     | '/success-stories'
     | '/terms-and-conditions'
+    | '/verify'
     | '/volunteer'
     | '/volunteer-policy'
     | '/about_/community'
@@ -1810,6 +1822,7 @@ export interface RootRouteChildren {
   SponsorshipPolicyRoute: typeof SponsorshipPolicyRoute
   SuccessStoriesRoute: typeof SuccessStoriesRoute
   TermsAndConditionsRoute: typeof TermsAndConditionsRoute
+  VerifyRoute: typeof VerifyRoute
   VolunteerRoute: typeof VolunteerRoute
   VolunteerPolicyRoute: typeof VolunteerPolicyRoute
   AboutCommunityRoute: typeof AboutCommunityRoute
@@ -2197,6 +2210,13 @@ declare module '@tanstack/react-router' {
       path: '/terms-and-conditions'
       fullPath: '/terms-and-conditions'
       preLoaderRoute: typeof TermsAndConditionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify': {
+      id: '/verify'
+      path: '/verify'
+      fullPath: '/verify'
+      preLoaderRoute: typeof VerifyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/volunteer': {
@@ -2930,6 +2950,7 @@ const rootRouteChildren: RootRouteChildren = {
   SponsorshipPolicyRoute: SponsorshipPolicyRoute,
   SuccessStoriesRoute: SuccessStoriesRoute,
   TermsAndConditionsRoute: TermsAndConditionsRoute,
+  VerifyRoute: VerifyRoute,
   VolunteerRoute: VolunteerRoute,
   VolunteerPolicyRoute: VolunteerPolicyRoute,
   AboutCommunityRoute: AboutCommunityRoute,

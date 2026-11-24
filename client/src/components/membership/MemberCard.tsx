@@ -22,7 +22,7 @@ import {
   svgToCanvas as svgToCanvasAt,
   useLogoDataUrl,
 } from "@/components/documents/docUtils";
-import { FOUNDATION, MEMBERSHIP_TIERS, type TierType } from "./membershipConfig";
+import { FOUNDATION, MEMBERSHIP_TIERS, expiryMonthDate, type TierType } from "./membershipConfig";
 
 // ============================================================================
 // Types & palette
@@ -59,20 +59,13 @@ function nameFontSize(name: string) {
 export function formatCardValidity(validFromRaw?: string, validTillRaw?: string) {
   const dFrom = validFromRaw ? new Date(validFromRaw) : null;
   const fromValid = Boolean(dFrom && !isNaN(dFrom.getTime()));
-  const fromMonth = fromValid ? dFrom!.getMonth() : null;
-
-  let dTill = validTillRaw ? new Date(validTillRaw) : null;
-  if (dTill && !isNaN(dTill.getTime())) {
-    if (fromValid && dTill.getMonth() === fromMonth) {
-      dTill = new Date(dTill.getFullYear(), dTill.getMonth(), 0);
-    }
-  }
+  const dTill = expiryMonthDate(validTillRaw);
 
   const validFrom = fromValid
     ? dFrom!.toLocaleDateString("en-GB", { month: "short", year: "numeric" })
     : (validFromRaw ? validFromRaw.replace(/^\d{1,2}\s+/, "") : "");
 
-  const validTill = dTill && !isNaN(dTill.getTime())
+  const validTill = dTill
     ? dTill.toLocaleDateString("en-GB", { month: "short", year: "numeric" })
     : (validTillRaw || "");
 

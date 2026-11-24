@@ -75,7 +75,8 @@ import {
 import { ORG } from "@/components/documents/orgDetails";
 import { amountInWords } from "@/components/documents/docUtils";
 import { donorTierFor } from "@/components/documents/donorTier";
-import { usePatients } from "@/services/patientService";
+import { useAllPatients } from "@/services/patientService";
+import type { Patient } from "@/content/patients";
 import { uploadSingleFile } from "@/services/uploadService";
 import { openRazorpayModal } from "@/utils/razorpay";
 import {
@@ -102,6 +103,7 @@ const INITIAL: DonationValues = {
   programme: "",
   programmes: [],
   patientSlug: "",
+  patientName: "",
   amountPreset: "5000",
   amount: "5000",
   frequency: "One Time",
@@ -185,6 +187,7 @@ function programmeLabel(v: DonationValues) {
 
 /** Short purpose used on the receipt and acknowledgement card. */
 function purposeLabel(v: DonationValues) {
+  if (v.patientSlug && v.patientName) return `Medical support for ${v.patientName}`;
   const sectors = v.supportAreas.filter((a) => SECTOR_AREAS.includes(a));
   if (v.programmeChoice === PROGRAMME_SPECIFIC && v.programme) return v.programme;
   if (sectors.length === 1) return sectors[0];
@@ -329,7 +332,24 @@ export function DonationForm({
   const [outcome, setOutcome] = useState<DonationOutcome | null>(null);
   const amountRef = useRef<HTMLInputElement>(null);
 
-  const { patients } = usePatients(true);
+  const { patients: allPatients, loading: patientsLoading } = useAllPatients();
+  // Open appeals only — plus the patient the donor arrived for, whatever their status.
+  const patients = useMemo(
+    () =>
+      allPatients.filter(
+        (p) =>
+          ((p as Patient & { status?: string }).status ?? "Active") === "Active" ||
+          p.slug === v.patientSlug,
+      ),
+    [allPatients, v.patientSlug],
+  );
+  const selectedPatient = patients.find((p) => p.slug === v.patientSlug);
+
+  // A link may carry only the patient's slug: fill in the name once the list arrives.
+  useEffect(() => {
+    if (selectedPatient && v.patientName !== selectedPatient.name)
+      setValues((prev) => ({ ...prev, patientName: selectedPatient.name }));
+  }, [selectedPatient, v.patientName]);
 
   // ---------------------------------------------------------------- draft + prefill
   useEffect(() => {
@@ -443,6 +463,7 @@ export function DonationForm({
           ? ""
           : v.programmeChoice,
       patientSlug: areas.includes("Healthcare & Well-being") ? v.patientSlug : "",
+      patientName: areas.includes("Healthcare & Well-being") ? v.patientName : "",
     });
   };
 
@@ -488,10 +509,25 @@ export function DonationForm({
   const programmeOptions = programmeGroups.length
     ? PROGRAMME_CHOICES
     : [PROGRAMME_GENERAL, PROGRAMME_RECOMMEND];
-  const showPatients =
-    v.supportAreas.includes("Healthcare & Well-being") &&
-    (v.contributionType === "Emergency / Humanitarian Support" || Boolean(v.patientSlug)) &&
-    patients.length > 0;
+  const showPatients = v.supportAreas.includes("Healthcare & Well-being");
+  const patientRemaining = selectedPatient
+    ? Math.max((selectedPatient.neededAmount || 0) - (selectedPatient.raisedAmount || 0), 0)
+    : 0;
+
+  const choosePatient = (p: Patient | null) => {
+    if (!p) return patch({ patientSlug: "", patientName: "" });
+    const changes: Partial<DonationValues> = { patientSlug: p.slug, patientName: p.name };
+    if (!v.contributionType) changes.contributionType = "Emergency / Humanitarian Support";
+    if (
+      !v.programmeChoice ||
+      v.programmeChoice === PROGRAMME_GENERAL ||
+      v.programmeChoice === PROGRAMME_RECOMMEND
+    ) {
+      changes.programmeChoice = PROGRAMME_SPECIFIC;
+      changes.programme = "Critical Life & Emergency Support (CLES)";
+    }
+    patch(changes);
+  };
   const tax = v.documentation === "tax";
   const org = isOrg(v);
   const freqWord = v.frequency === "Monthly" ? "month" : "year";
@@ -513,21 +549,42 @@ export function DonationForm({
     const purpose = purposeLabel(v);
     const primaryArea = sectorAreas[0];
 
+    const financialType =
+      sectorAreas.length === 1
+        ? primaryArea
+        : sectorAreas.length
+          ? "Multiple Programme Areas"
+          : "General Donation";
+    const workAreaId = sectorAreas.length === 1 ? AREA_WORK_CODES[primaryArea] : undefined;
+    // Razorpay allows 15 notes of up to 256 characters each.
+    const gatewayNotes = Object.fromEntries(
+      Object.entries({
+        donorName,
+        donorType: org ? "Corporate" : "Individual",
+        email: v.email.trim(),
+        phone: v.phone,
+        countryCode: v.countryCode,
+        city: v.city.trim(),
+        state: v.state.trim(),
+        financialType,
+        cause: purpose,
+        workAreaId,
+        patientSlug: v.patientSlug,
+        frequency: v.frequency,
+        reminder: v.frequency === "One Time" ? "None" : v.frequency,
+        pan: tax ? v.pan.toUpperCase() : undefined,
+      })
+        .filter(([, x]) => x)
+        .map(([k, x]) => [k, String(x).slice(0, 250)]),
+    );
+
     let payment: Awaited<ReturnType<typeof openRazorpayModal>>;
     try {
       const { createPaymentOrder } = await import("@/services/donationService");
       const order = await createPaymentOrder({
         amount,
         receipt: `don_${Date.now()}`,
-        notes: {
-          donorName,
-          email: v.email.trim(),
-          phone: `${v.countryCode}${v.phone}`,
-          cause: purpose.slice(0, 250),
-          frequency: v.frequency,
-          workAreaId: sectorAreas.length === 1 ? AREA_WORK_CODES[primaryArea] : "",
-          patientSlug: v.patientSlug,
-        },
+        notes: { purpose: "donation", ...gatewayNotes },
       });
       if (!order?.order_id) throw new Error(order?.message || "Could not start the payment.");
 
@@ -538,7 +595,8 @@ export function DonationForm({
         name: ORG.name,
         description: `Donation — ${purpose}`.slice(0, 250),
         prefill: { name: donorName, email: v.email.trim(), contact: `${v.countryCode}${v.phone}` },
-        notes: { contributionType: contributionLabel(v).slice(0, 250), frequency: v.frequency },
+        // Razorpay's webhook builds a backup record from these if verification never completes.
+        notes: { purpose: "donation", ...gatewayNotes },
       });
     } catch (err) {
       const msg = err instanceof Error ? err.message : "";
@@ -605,13 +663,8 @@ export function DonationForm({
           city: v.city.trim(),
           state: v.state.trim(),
           pincode: v.pin,
-          financialType:
-            sectorAreas.length === 1
-              ? primaryArea
-              : sectorAreas.length
-                ? "Multiple Programme Areas"
-                : "General Donation",
-          workAreaId: sectorAreas.length === 1 ? AREA_WORK_CODES[primaryArea] : undefined,
+          financialType,
+          workAreaId,
           frequency: v.frequency,
           reminder: v.frequency === "One Time" ? "None" : v.frequency,
           recurringPledge: recurring,
@@ -631,6 +684,7 @@ export function DonationForm({
             programmes: v.programmeChoice === PROGRAMME_SPECIFIC ? [v.programme] : v.programmes,
             purpose,
             purposeDetails: v.purposeDetails.trim(),
+            patientName: v.patientSlug ? v.patientName : undefined,
             donorCategory: v.donorCategory,
             fullName: org ? undefined : v.fullName.trim(),
             organisation: org
@@ -673,7 +727,8 @@ export function DonationForm({
         (typeof entityRef === "string" && entityRef.startsWith("ISLAH-DON") ? entityRef : "") ||
         `ISLAH-DON-${paidAt.getFullYear()}-${payment.razorpay_payment_id.slice(-5).toUpperCase()}`;
       clearDraft();
-      setOutcome({ ...base, status: "success", reference, receiptNo });
+      const certificateNo: string | undefined = res.entity?.certificateNo;
+      setOutcome({ ...base, status: "success", reference, receiptNo, certificateNo });
       toast.success("Payment received. Thank you for supporting ISLAH!");
     } catch (err) {
       console.error("Donation verification error:", err);
@@ -890,20 +945,58 @@ export function DonationForm({
           )}
 
           {showPatients && (
-            <Field name="patientSlug" label="Support a specific patient" optional>
-              <select
+            <Field
+              name="patientSlug"
+              label="Support a specific patient"
+              optional
+              hint="Direct your contribution to a verified patient's treatment, or let ISLAH support the patient whose need is greatest."
+            >
+              <PatientPicker
+                patients={patients}
+                loading={patientsLoading}
                 value={v.patientSlug}
-                onChange={(e) => set("patientSlug", e.target.value)}
-                className={inputClass(false)}
-              >
-                <option value="">Any patient — where the need is greatest</option>
-                {patients.map((p) => (
-                  <option key={p.slug} value={p.slug}>
-                    {p.name} — {p.disease}
-                  </option>
-                ))}
-              </select>
+                onChange={choosePatient}
+              />
             </Field>
+          )}
+          {showPatients && selectedPatient && (
+            <div className="rounded-lg border border-slate-200 bg-slate-50/70 p-3 text-xs text-slate-700 leading-relaxed space-y-1.5">
+              <p>
+                Your contribution will be directed to{" "}
+                <strong className="font-semibold text-[#071527]">{selectedPatient.name}</strong>'s
+                treatment. If their verified need is already fully met, ISLAH will use it for other
+                patients under the same programme, in line with its{" "}
+                <Link
+                  to="/donation-policy"
+                  target="_blank"
+                  className="text-brand-orange font-semibold underline underline-offset-2"
+                >
+                  Donation Policy
+                </Link>
+                .
+              </p>
+              {patientRemaining >= MIN_DONATION && (
+                <p className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                  <span>
+                    Still needed:{" "}
+                    <strong className="font-semibold text-[#071527]">
+                      {fmtINR(patientRemaining)}
+                    </strong>
+                  </span>
+                  {patientRemaining <= MAX_ONLINE_DONATION && amount !== patientRemaining && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        patch({ amount: String(patientRemaining), amountPreset: "Other" })
+                      }
+                      className="text-[11px] font-semibold text-brand-orange hover:text-orange-700 underline underline-offset-2"
+                    >
+                      Donate the remaining amount
+                    </button>
+                  )}
+                </p>
+              )}
+            </div>
           )}
         </>,
         true,
@@ -1004,9 +1097,9 @@ export function DonationForm({
                     Today's payment of <strong>{fmtINR(amount || 0)}</strong> is your first{" "}
                     {freqWord}ly contribution. Automatic debits (e-mandates) are not yet enabled on
                     ISLAH's payment gateway, so{" "}
-                    <strong>nothing will be charged automatically</strong>. We will email you a
-                    reminder before each {freqWord}'s contribution, and you can stop reminders at
-                    any time by writing to {ORG.email}.
+                    <strong>nothing will be charged automatically</strong>. Your {freqWord}ly pledge
+                    is recorded with this donation; make each next contribution on this page, and
+                    stop whenever you like.
                   </span>
                 )}
               </p>
@@ -1016,7 +1109,8 @@ export function DonationForm({
                 required
                 hasError={Boolean(err("recurringAck"))}
               >
-                I understand how recurring support works, including renewal and cancellation.
+                I understand that nothing is charged automatically and that I make each future
+                contribution myself.
               </CheckboxRow>
               {err("recurringAck") && (
                 <p className="text-[11px] text-red-600 flex items-center gap-1">
@@ -1457,7 +1551,7 @@ export function DonationForm({
                           setFile("orgLogo", f);
                           if (!f) set("logoAuthorised", false);
                         }}
-                        accept="image/png,image/jpeg,image/svg+xml"
+                        accept="image/png,image/jpeg,image/webp"
                         imageOnly
                       />
                     </Field>
@@ -1584,6 +1678,7 @@ export function DonationForm({
         ["Donation Frequency", FREQUENCY_LABEL[v.frequency]],
         ["Support Area", v.supportAreas.join(", ")],
         ["Programme / Initiative", programmeLabel(v)],
+        ["Patient / Beneficiary", v.patientSlug ? v.patientName || "Selected patient" : ""],
         ["Donation Purpose", v.purposeDetails.trim() || purposeLabel(v)],
       ],
     },
@@ -1659,7 +1754,7 @@ export function DonationForm({
         {v.frequency !== "One Time" &&
           (RECURRING_AUTO_DEBIT_ENABLED
             ? ` every ${freqWord}`
-            : " today, with a reminder every " + freqWord)}
+            : ` today, as the first of your ${freqWord}ly contributions`)}
         . Your bank or card issuer may apply its own charges.
       </p>
 
@@ -1829,6 +1924,136 @@ export function DonationForm({
             </button>
           )}
         </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// Patient picker (targeted healthcare support)
+// ============================================================================
+
+function PatientPicker({
+  patients,
+  loading,
+  value,
+  onChange,
+}: {
+  patients: Patient[];
+  loading: boolean;
+  value: string;
+  onChange: (p: Patient | null) => void;
+}) {
+  const [query, setQuery] = useState("");
+  const q = query.trim().toLowerCase();
+  const shown = q
+    ? patients.filter((p) =>
+        [p.name, p.disease, p.hospital].some((t) => (t || "").toLowerCase().includes(q)),
+      )
+    : patients;
+
+  const radio = (active: boolean) => (
+    <span
+      className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
+        active ? "border-brand-orange bg-brand-orange" : "border-slate-300"
+      }`}
+    >
+      {active && <span className="w-1.5 h-1.5 rounded-full bg-white" />}
+    </span>
+  );
+  const row = (active: boolean) =>
+    `w-full flex items-center gap-3 px-3 py-2.5 text-left transition ${
+      active ? "bg-orange-50/60" : "bg-white hover:bg-slate-50"
+    }`;
+
+  return (
+    <div className="rounded-lg border border-slate-200 overflow-hidden">
+      {patients.length > 4 && (
+        <div className="p-2 border-b border-slate-200 bg-slate-50/70">
+          <input
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search by name, condition or hospital"
+            className={inputClass(false)}
+          />
+        </div>
+      )}
+      <div role="radiogroup" className="max-h-80 overflow-y-auto divide-y divide-slate-100">
+        <button
+          type="button"
+          role="radio"
+          aria-checked={!value}
+          onClick={() => onChange(null)}
+          className={row(!value)}
+        >
+          {radio(!value)}
+          <span className="text-xs sm:text-[13px] font-semibold text-[#071527]">
+            Any patient — where the need is greatest
+          </span>
+        </button>
+        {loading && <p className="px-3 py-3 text-xs text-slate-500">Loading patient appeals…</p>}
+        {!loading && !patients.length && (
+          <p className="px-3 py-3 text-xs text-slate-500">
+            There are no open patient appeals right now.
+          </p>
+        )}
+        {!loading && patients.length > 0 && !shown.length && (
+          <p className="px-3 py-3 text-xs text-slate-500">No patient matches “{query}”.</p>
+        )}
+        {shown.map((p) => {
+          const active = value === p.slug;
+          const needed = p.neededAmount || 0;
+          const raised = Math.min(p.raisedAmount || 0, needed || Infinity);
+          const pct = needed ? Math.round((raised / needed) * 100) : 0;
+          const remaining = Math.max(needed - raised, 0);
+          return (
+            <button
+              key={p.slug}
+              type="button"
+              role="radio"
+              aria-checked={active}
+              onClick={() => onChange(p)}
+              className={row(active)}
+            >
+              {radio(active)}
+              {p.image ? (
+                <img
+                  src={p.image}
+                  alt=""
+                  className="w-10 h-10 rounded-lg object-cover shrink-0 border border-slate-200"
+                />
+              ) : (
+                <span className="w-10 h-10 rounded-lg bg-rose-50 shrink-0" />
+              )}
+              <span className="min-w-0 flex-1">
+                <span className="flex items-center gap-2">
+                  <span className="text-xs sm:text-[13px] font-semibold text-[#071527] truncate">
+                    {p.name}
+                  </span>
+                  {p.urgent && (
+                    <span className="px-1.5 py-px rounded bg-red-50 border border-red-200 text-red-700 text-[10px] font-semibold shrink-0">
+                      Urgent
+                    </span>
+                  )}
+                </span>
+                <span className="block text-[11px] text-slate-500 truncate">
+                  {[p.disease, p.hospital].filter(Boolean).join(" · ")}
+                </span>
+                {needed > 0 && (
+                  <span className="mt-1 flex items-center gap-2">
+                    <span className="h-1 flex-1 max-w-40 rounded-full bg-slate-200 overflow-hidden">
+                      <span className="block h-full bg-emerald-500" style={{ width: `${pct}%` }} />
+                    </span>
+                    <span className="text-[10px] text-slate-500 shrink-0">
+                      {remaining > 0 ? `${fmtINR(remaining)} still needed` : "Fully funded"}
+                    </span>
+                  </span>
+                )}
+              </span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );

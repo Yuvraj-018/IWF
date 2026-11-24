@@ -15,6 +15,8 @@ export interface DonationValues {
   programme: string;
   programmes: string[];
   patientSlug: string;
+  /** Name of the chosen patient, kept so review, receipt and card can show it. */
+  patientName: string;
   amountPreset: string;
   amount: string;
   frequency: DonationFrequency;

@@ -241,6 +241,7 @@ export interface DonationPrefill {
   programme?: string;
   amount?: string;
   patientSlug?: string;
+  patientName?: string;
   purposeDetails?: string;
   /** Short line describing what the donor arrived to support. */
   contextLabel?: string;
@@ -341,6 +342,7 @@ export function prefillFromSearch(search: DonateSearch): DonationPrefill {
   const patientSlug = search.patientId || search.patient;
   if (patientSlug) {
     out.patientSlug = patientSlug;
+    if (search.name) out.patientName = decodeURIComponent(search.name);
     out.contributionType = "Emergency / Humanitarian Support";
     out.supportAreas = ["Healthcare & Well-being"];
     out.programmeChoice = PROGRAMME_SPECIFIC;
