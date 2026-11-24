@@ -41,6 +41,11 @@ import ReceiptsManager from "./pages/finance/ReceiptsManager";
 import ExpensesManager from "./pages/finance/ExpensesManager";
 import BudgetsManager from "./pages/finance/BudgetsManager";
 import FinancialReportsManager from "./pages/finance/FinancialReportsManager";
+import FinanceOverview from "./pages/finance/FinanceOverview";
+import BankAccountsManager from "./pages/finance/BankAccountsManager";
+import CashAccountsManager from "./pages/finance/CashAccountsManager";
+import TransfersManager from "./pages/finance/TransfersManager";
+import JournalsManager from "./pages/finance/JournalsManager";
 
 // Other Platform Modules
 import {
@@ -192,6 +197,46 @@ export default function App() {
             element={
               <ProtectedRoute permission="finance.budget:view" moduleName="Fiscal Budgets">
                 <BudgetsManager />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/finance/overview"
+            element={
+              <ProtectedRoute permission="finance.dashboard:view" moduleName="Finance Overview">
+                <FinanceOverview />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/finance/bank-accounts"
+            element={
+              <ProtectedRoute permission="finance.bank_account:view" moduleName="Bank Accounts">
+                <BankAccountsManager />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/finance/cash-accounts"
+            element={
+              <ProtectedRoute permission="finance.cash_account:view" moduleName="Cash Accounts">
+                <CashAccountsManager />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/finance/transfers"
+            element={
+              <ProtectedRoute permission="finance.transfer:view" moduleName="Transfers & Settlements">
+                <TransfersManager />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/finance/journals"
+            element={
+              <ProtectedRoute permission="finance.journal:view" moduleName="Journals & Trial Balance">
+                <JournalsManager />
               </ProtectedRoute>
             }
           />

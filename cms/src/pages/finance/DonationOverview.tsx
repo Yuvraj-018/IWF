@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { AccountPicker, type AccountChoice } from "../../components/finance/financeUi";
 import {
   Heart,
   CreditCard,
@@ -1083,11 +1084,15 @@ function RecordDonationModal({
     phone: "",
     pan: "",
     amount: "",
-    paymentMode: "UPI",
+    paymentMode: "Bank Transfer",
+    paymentReference: "",
     financialType: "General Donation",
     workAreaId: "HLT",
     taxExemption: true,
   });
+  const [account, setAccount] = useState<AccountChoice>(null);
+  const [accountError, setAccountError] = useState("");
+  const isCash = formData.paymentMode === "Cash";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1095,18 +1100,32 @@ function RecordDonationModal({
       toast.error("Please fill in donor name and amount");
       return;
     }
+    if (formData.phone && !/^[6-9]\d{9}$/.test(formData.phone)) {
+      toast.error("Enter a valid 10-digit mobile number, or leave it blank");
+      return;
+    }
+    if (formData.pan && !/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(formData.pan)) {
+      toast.error("PAN must look like ABCDE1234F");
+      return;
+    }
+    if (!account) {
+      setAccountError(isCash ? "Choose the cash account the money was handed into." : "Choose the bank account the money was received in.");
+      return;
+    }
 
     setSubmitting(true);
     try {
       await financeApi.recordManualDonation({
-        donorName: formData.donorName,
-        email: formData.email || "donor@example.org",
-        phone: formData.phone || "9876543210",
+        donorName: formData.donorName.trim(),
+        email: formData.email.trim() || undefined,
+        phone: formData.phone || undefined,
         pan: formData.pan || undefined,
         amount: Number(formData.amount),
         paymentMode: formData.paymentMode,
+        paymentReference: formData.paymentReference.trim() || undefined,
         financialType: formData.financialType,
         workAreaId: formData.workAreaId,
+        ...(account.kind === "cash" ? { cashAccountId: account.id } : { bankAccountId: account.id }),
       });
 
       toast.success("Donation recorded and ledger entry posted successfully!");
@@ -1181,9 +1200,10 @@ function RecordDonationModal({
               <label className="text-[11px] font-bold text-slate-700">Phone Number</label>
               <input
                 type="tel"
-                placeholder="9876543210"
+                inputMode="numeric"
+                placeholder="10-digit mobile"
                 value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value.replace(/\D/g, "").slice(0, 10) })}
                 className="w-full mt-1 px-3 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none"
               />
             </div>
@@ -1194,14 +1214,17 @@ function RecordDonationModal({
               <label className="text-[11px] font-bold text-slate-700">Payment Mode</label>
               <select
                 value={formData.paymentMode}
-                onChange={(e) => setFormData({ ...formData, paymentMode: e.target.value })}
+                onChange={(e) => {
+                  const mode = e.target.value;
+                  // Cash goes into a cash account, everything else into a bank account.
+                  if ((mode === "Cash") !== isCash) setAccount(null);
+                  setFormData({ ...formData, paymentMode: mode });
+                }}
                 className="w-full mt-1 px-3 py-2 rounded-xl border border-slate-200 text-xs bg-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
               >
-                <option value="UPI">Direct UPI</option>
-                <option value="Bank Transfer">Bank Transfer (NEFT/RTGS)</option>
+                <option value="Bank Transfer">Bank Transfer / UPI (NEFT, RTGS, IMPS, UPI)</option>
                 <option value="Cheque">Cheque</option>
                 <option value="Cash">Cash</option>
-                <option value="Online">Online Gateway</option>
               </select>
             </div>
             <div>
@@ -1241,6 +1264,30 @@ function RecordDonationModal({
                 value={formData.financialType}
                 onChange={(e) => setFormData({ ...formData, financialType: e.target.value })}
                 className="w-full mt-1 px-3 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <AccountPicker
+              key={isCash ? "cash" : "bank"}
+              label={isCash ? "Cash received into" : "Received in bank account"}
+              kinds={isCash ? ["cash"] : ["bank"]}
+              value={account}
+              onChange={(v) => {
+                setAccount(v);
+                setAccountError("");
+              }}
+              error={accountError}
+              showBalance={false}
+            />
+            <div>
+              <label className="text-[11px] font-bold text-slate-700">{isCash ? "Cash receipt no." : "UTR / cheque no."}</label>
+              <input
+                type="text"
+                value={formData.paymentReference}
+                onChange={(e) => setFormData({ ...formData, paymentReference: e.target.value })}
+                className="w-full mt-1 px-3 py-2 rounded-xl border border-slate-200 text-xs font-mono focus:ring-2 focus:ring-emerald-500 focus:outline-none"
               />
             </div>
           </div>
@@ -1331,7 +1378,7 @@ function AddExpenseModal({
             </div>
             <div>
               <h3 className="text-base font-bold text-slate-900">Record Expense Voucher</h3>
-              <p className="text-[11px] text-slate-500">Dual-entry ledger debited to SBI primary account</p>
+              <p className="text-[11px] text-slate-500">Submitted for approval; paid later from a chosen account</p>
             </div>
           </div>
           <button
