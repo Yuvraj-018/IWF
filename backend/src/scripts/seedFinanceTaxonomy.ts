@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import { connectDB } from "../config/db.js";
 import { WorkArea } from "../models/WorkArea.js";
 import { ExpenseHead } from "../models/ExpenseHead.js";
-import { BankAccount } from "../models/BankAccount.js";
+import { ensureChartOfAccounts } from "../services/accountingService.js";
 
 dotenv.config();
 
@@ -121,6 +121,13 @@ export const SEED_EXPENSE_HEADS = [
     group: "Other" as const,
     isActive: true,
   },
+  // Blueprint organisational and capital heads (ADE, ORU, CTE, PCF, BGC, CPE, OCA).
+  { code: "office_rent_utilities", name: "Office Rent & Utilities", group: "Administrative" as const, isActive: true },
+  { code: "communication_technology", name: "Communication & Technology", group: "Administrative" as const, isActive: true },
+  { code: "professional_fees", name: "Professional & Consultancy Fees", group: "Administrative" as const, isActive: true },
+  { code: "bank_gateway_charges", name: "Bank & Payment Gateway Charges", group: "Administrative" as const, isActive: true },
+  { code: "capital_expenditure", name: "Capital Expenditure", group: "Other" as const, isActive: true },
+  { code: "other_capital_assets", name: "Other Capital Assets", group: "Other" as const, isActive: true },
 ];
 
 export async function seedFinanceTaxonomy(): Promise<void> {
@@ -149,24 +156,11 @@ export async function seedFinanceTaxonomy(): Promise<void> {
   }
   console.log(`✓ ${SEED_EXPENSE_HEADS.length} Expense Heads verified/upserted.`);
 
-  // 3. Seed Primary Bank Account
-  console.log("-> Seeding Primary Foundation Bank Account...");
-  const existingPrimary = await BankAccount.findOne({ isPrimary: true });
-  if (!existingPrimary) {
-    await BankAccount.create({
-      bankName: "State Bank of India",
-      accountNumberMasked: "******4567",
-      ifsc: "SBIN0001234",
-      branch: "Main Branch, Darbhanga",
-      type: "current",
-      openingBalancePaise: 50000000, // ₹ 5,00,000 opening balance
-      currentBalancePaise: 50000000,
-      isPrimary: true,
-    });
-    console.log("✓ Primary Bank Account created (SBI).");
-  } else {
-    console.log(`✓ Primary Bank Account already configured (${existingPrimary.bankName}).`);
-  }
+  // 3. Chart of Accounts (system accounts only). Bank and cash accounts are never
+  // seeded with made-up details: finance staff add the real ones in the CMS.
+  console.log("-> Seeding Chart of Accounts...");
+  await ensureChartOfAccounts();
+  console.log("✓ Chart of Accounts verified/upserted.");
 
   console.log("🎉 Finance Master Taxonomy Seeding completed successfully!");
 }

@@ -28,6 +28,7 @@ import {
   calculateMembershipRenewalExpiry,
 } from "../utils/dateUtils.js";
 import { escapeRegex } from "../utils/escapeRegex.js";
+import { postDonation, postMembershipFee, safePost } from "../services/accountingService.js";
 
 export async function createOrderController(req: Request, res: Response): Promise<void> {
   try {
@@ -261,6 +262,8 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
       } catch (ledgerErr) {
         console.warn("Ledger entry recording warning:", ledgerErr);
       }
+      // Double-entry: Dr Razorpay clearing, Cr donation income (idempotent per donation).
+      await safePost(`donation ${createdReceiptNo}`, () => postDonation(savedEntity));
 
       // Synchronize with Community Directory Spotlight
       syncToCommunityDirectory({
@@ -304,8 +307,12 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
       }
     }
 
-    // Handle Member registration or renewal upon verified payment
-    if (memberData) {
+    // A browser retry of the same payment must not create a second member or extend validity twice.
+    const memberAlreadyRecorded = memberData ? await Member.findOne({ transactionId: razorpay_payment_id }) : null;
+    if (memberData && memberAlreadyRecorded) {
+      savedEntity = memberAlreadyRecorded;
+      createdReceiptNo = memberAlreadyRecorded.receiptNo;
+    } else if (memberData) {
       const catKey = (memberData.category as MemberCategory) || "Blue";
       const CATEGORY_CODE_MAP: Record<string, string> = {
         Blue: "BL",
@@ -499,6 +506,22 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
       }
     }
 
+    // Double-entry: Dr Razorpay clearing, Cr membership fees. Posted even if the member
+    // record could not be found, because the money has been received either way.
+    if (memberData) {
+      await safePost(`membership ${razorpay_payment_id}`, () =>
+        postMembershipFee({
+          paymentId: razorpay_payment_id,
+          amountRupees: Number(memberData.amount),
+          memberNo: savedEntity?.memberNo || memberData.memberNo || "unmatched",
+          memberName: savedEntity?.name || memberData.fullName || memberData.name || "Member",
+          organisation: (savedEntity?.category || memberData.category) === "Orange",
+          isRenewal: Boolean(memberData.isRenewal),
+          receiptNo: createdReceiptNo,
+        })
+      );
+    }
+
     res.status(200).json({
       success: true,
       message: "Payment verified successfully",
@@ -674,6 +697,22 @@ export async function handleWebhookController(req: Request, res: Response): Prom
           } catch (ledgerErr) {
             console.warn("Ledger entry recording warning from webhook:", ledgerErr);
           }
+          const webhookDonation = donation;
+          await safePost(`webhook donation ${receiptNo}`, () => postDonation(webhookDonation));
+        } else if (isMembershipPayment) {
+          // The membership record is created by /verify; the fee is booked here too (same
+          // idempotency key) so it is never missed if the browser closed before /verify ran.
+          await safePost(`webhook membership ${paymentId}`, () =>
+            postMembershipFee({
+              paymentId,
+              amountRupees: Number(payment.amount) / 100,
+              memberNo: notes.memberNo || "pending",
+              memberName: notes.fullName || notes.name || payment.email || "Member",
+              organisation: notes.category === "Orange",
+              isRenewal: notes.isRenewal === "true",
+              date: payment.created_at ? new Date(Number(payment.created_at) * 1000) : new Date(),
+            })
+          );
         }
       }
     }

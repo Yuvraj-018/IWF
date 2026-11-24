@@ -49,25 +49,22 @@ export async function uploadBankStatement(req: Request, res: Response): Promise<
       return;
     }
 
-    // Default to primary bank account if not specified
+    // A statement always belongs to a real, registered bank account. (An earlier version
+    // invented a placeholder account here; that is gone — add the account first.)
     if (!bankAccountId) {
-      const primary = await BankAccount.findOne({ isPrimary: true }) || await BankAccount.findOne();
+      const primary = (await BankAccount.findOne({ isPrimary: true, status: { $nin: ["inactive", "closed"] } })) ||
+        (await BankAccount.findOne({ status: { $nin: ["inactive", "closed"] } }));
       if (!primary) {
-        // Create default SBI primary account if database is fresh
-        const newPrimary = await BankAccount.create({
-          bankName: "State Bank of India",
-          accountNumberMasked: "******1092",
-          ifsc: "SBIN0001234",
-          branch: "Main Branch",
-          type: "current",
-          openingBalancePaise: 50000000,
-          currentBalancePaise: 50000000,
-          isPrimary: true,
+        res.status(400).json({
+          success: false,
+          message: "Add the bank account under Finance → Bank Accounts before importing its statement.",
         });
-        bankAccountId = newPrimary._id;
-      } else {
-        bankAccountId = primary._id;
+        return;
       }
+      bankAccountId = primary._id;
+    } else if (!(await BankAccount.exists({ _id: bankAccountId }))) {
+      res.status(400).json({ success: false, message: "Bank account not found." });
+      return;
     }
 
     const { statement, lines } = await parseAndSaveBankStatement({

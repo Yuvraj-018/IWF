@@ -22,6 +22,8 @@ export interface IExpensePayment {
   date?: Date;
   method?: string;
   bankAccountId?: Types.ObjectId;
+  /** Set instead of bankAccountId when the voucher was paid in cash. */
+  cashAccountId?: Types.ObjectId;
   reference?: string;
 }
 
@@ -82,6 +84,7 @@ const ExpenseSchema = new Schema<IExpense>(
       date: { type: Date },
       method: { type: String },
       bankAccountId: { type: Schema.Types.ObjectId, ref: "BankAccount" },
+      cashAccountId: { type: Schema.Types.ObjectId, ref: "CashAccount" },
       reference: { type: String },
     },
     approval: {

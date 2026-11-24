@@ -47,6 +47,27 @@ import {
   toggleSnapshotPublish,
   getPublicFinancialSummary,
 } from "../controllers/transparencyController.js";
+import {
+  getAccountsOverview,
+  listBankAccountRegister,
+  getBankAccountDetail,
+  revealBankAccountNumber,
+  createBankAccount,
+  updateBankAccount,
+  listCashAccounts,
+  getCashAccountDetail,
+  createCashAccount,
+  updateCashAccount,
+  listTransfers,
+  createTransfer,
+  approveTransfer,
+  rejectTransfer,
+  createSettlement,
+  listSettlements,
+  listJournals,
+  listChartOfAccounts,
+  getTrialBalance,
+} from "../controllers/accountsController.js";
 import { authenticate, requirePermission, requireReauth } from "../middlewares/rbac.js";
 
 export const financeRouter = Router();
@@ -87,7 +108,12 @@ financeRouter.get(
   listReceipts
 );
 // Public receipt download for donors
-financeRouter.get("/receipts/:receiptNo/pdf", downloadReceiptPdf);
+financeRouter.get(
+  "/receipts/:receiptNo/pdf",
+  authenticate,
+  requirePermission("finance.receipt:view"),
+  downloadReceiptPdf
+);
 financeRouter.post(
   "/receipts/:receiptNo/resend",
   authenticate,
@@ -294,6 +320,50 @@ financeRouter.post(
   requirePermission("finance.transparency:toggle"),
   toggleSnapshotPublish
 );
+
+/**
+ * Centralised accounts (double-entry): overview, bank & cash registers,
+ * transfers, gateway settlements, journals, chart of accounts, trial balance.
+ */
+financeRouter.get("/accounts/overview", authenticate, requirePermission("finance.dashboard:view"), getAccountsOverview);
+
+financeRouter.get("/accounts/bank", authenticate, requirePermission("finance.bank_account:view"), listBankAccountRegister);
+financeRouter.post("/accounts/bank", authenticate, requirePermission("finance.bank_account:edit"), createBankAccount);
+financeRouter.get("/accounts/bank/:id", authenticate, requirePermission("finance.bank_account:view"), getBankAccountDetail);
+financeRouter.patch("/accounts/bank/:id", authenticate, requirePermission("finance.bank_account:edit"), updateBankAccount);
+financeRouter.get(
+  "/accounts/bank/:id/account-number",
+  authenticate,
+  requirePermission("finance.bank_account:view_pii"),
+  revealBankAccountNumber
+);
+
+financeRouter.get("/accounts/cash", authenticate, requirePermission("finance.cash_account:view"), listCashAccounts);
+financeRouter.post("/accounts/cash", authenticate, requirePermission("finance.cash_account:edit"), createCashAccount);
+financeRouter.get("/accounts/cash/:id", authenticate, requirePermission("finance.cash_account:view"), getCashAccountDetail);
+financeRouter.patch("/accounts/cash/:id", authenticate, requirePermission("finance.cash_account:edit"), updateCashAccount);
+
+financeRouter.get("/accounts/transfers", authenticate, requirePermission("finance.transfer:view"), listTransfers);
+financeRouter.post("/accounts/transfers", authenticate, requirePermission("finance.transfer:create"), createTransfer);
+financeRouter.post(
+  "/accounts/transfers/:id/approve",
+  authenticate,
+  requirePermission("finance.transfer:approve"),
+  approveTransfer
+);
+financeRouter.post(
+  "/accounts/transfers/:id/reject",
+  authenticate,
+  requirePermission("finance.transfer:approve"),
+  rejectTransfer
+);
+
+financeRouter.get("/accounts/settlements", authenticate, requirePermission("finance.journal:view"), listSettlements);
+financeRouter.post("/accounts/settlements", authenticate, requirePermission("finance.settlement:create"), createSettlement);
+
+financeRouter.get("/accounts/journals", authenticate, requirePermission("finance.journal:view"), listJournals);
+financeRouter.get("/accounts/chart", authenticate, requirePermission("finance.journal:view"), listChartOfAccounts);
+financeRouter.get("/accounts/trial-balance", authenticate, requirePermission("finance.journal:view"), getTrialBalance);
 
 /**
  * Unauthenticated Public Financial Transparency Summary
