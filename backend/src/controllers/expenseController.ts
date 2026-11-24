@@ -11,6 +11,9 @@ import { getActor, logAudit } from "../services/auditService.js";
 import { checkSeparationOfDuties } from "../services/separationOfDuties.js";
 import { applyScopeFilter } from "../utils/piiFilter.js";
 import { RbacRequest } from "../middlewares/rbac.js";
+import { BankAccount } from "../models/BankAccount.js";
+import { CashAccount } from "../models/CashAccount.js";
+import { postExpensePayment, reverseExpensePayment, safePost } from "../services/accountingService.js";
 
 /**
  * 1. Submit an Expense Voucher
@@ -349,6 +352,7 @@ export async function recordPayment(req: Request, res: Response): Promise<void> 
       paymentMethod = "Bank Transfer",
       reference, // UTR or Cheque number
       bankAccountId,
+      cashAccountId,
     } = req.body;
 
     const expense = await Expense.findById(id);
@@ -363,6 +367,40 @@ export async function recordPayment(req: Request, res: Response): Promise<void> 
         message: `Cannot record payment for expense in '${expense.status}' status. Voucher must be approved first.`,
       });
       return;
+    }
+
+    if (expense.payment?.status === "paid") {
+      res.status(409).json({ success: false, message: `${expense.expenseNo} is already marked as paid.` });
+      return;
+    }
+
+    // Every payment must come out of a real, active bank or cash account (Finance blueprint §2).
+    if (Boolean(bankAccountId) === Boolean(cashAccountId)) {
+      res.status(400).json({
+        success: false,
+        message: "Choose the one bank account or cash account this payment was made from.",
+      });
+      return;
+    }
+    if (bankAccountId) {
+      const bank = await BankAccount.findById(bankAccountId);
+      if (!bank || bank.status !== "active") {
+        res.status(400).json({ success: false, message: "The selected bank account is not active." });
+        return;
+      }
+    } else {
+      const cash = await CashAccount.findById(cashAccountId);
+      if (!cash || cash.status !== "active") {
+        res.status(400).json({ success: false, message: "The selected cash account is not active." });
+        return;
+      }
+      if ((cash.currentBalancePaise || 0) < expense.amountPaise) {
+        res.status(400).json({
+          success: false,
+          message: `Not enough cash in ${cash.name}: balance ₹${((cash.currentBalancePaise || 0) / 100).toLocaleString("en-IN")}.`,
+        });
+        return;
+      }
     }
 
     const actor = getActor(req);
@@ -384,10 +422,13 @@ export async function recordPayment(req: Request, res: Response): Promise<void> 
       date: payDate,
       method: paymentMethod,
       reference: reference || `UTR-${Date.now()}`,
-      bankAccountId,
+      ...(bankAccountId ? { bankAccountId } : { cashAccountId }),
     };
 
     await expense.save();
+
+    // Double-entry journal: Dr expense head, Cr the bank/cash account it was paid from.
+    await safePost(`expense ${expense.expenseNo}`, () => postExpensePayment(expense, actor.name || actor.email));
 
     await logAudit({
       req,
@@ -519,6 +560,10 @@ export async function reverseExpense(req: Request, res: Response): Promise<void>
           idempotencyKey: `rev_exp_${expense.expenseNo}`,
           createdBy: actor.name || actor.email,
         });
+
+        await safePost(`reverse expense ${expense.expenseNo}`, () =>
+          reverseExpensePayment(expense._id, reason || "Expense cancelled", actor.name || actor.email)
+        );
 
         // Decrement spentPaise in Budget
         await Budget.findOneAndUpdate(

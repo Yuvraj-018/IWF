@@ -136,9 +136,18 @@ export async function refundRazorpayPayment({
       };
     }
   } catch (err: any) {
-    console.warn("Razorpay live refund notice (sandbox/offline mode fallback):", err.message);
+    // In production a failed gateway refund must fail the whole refund: recording it as
+    // processed would show money returned that never left ISLAH's account.
+    if (process.env.NODE_ENV === "production") {
+      throw new Error(`Razorpay refund failed: ${err?.error?.description || err.message}`);
+    }
+    console.warn("Razorpay refund failed — simulating it outside production:", err.message);
   }
 
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("Razorpay is not configured, so the refund cannot be sent.");
+  }
+  // Development / test only: a simulated refund id (rfnd_sim_…) that is easy to spot.
   return {
     id: `rfnd_sim_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
     amount: amountPaise,

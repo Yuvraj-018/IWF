@@ -5,6 +5,7 @@ import { Donation } from "../models/Donation.js";
 import { Expense } from "../models/Expense.js";
 import { Verification } from "../models/Verification.js";
 import { getNextReceiptNo, getNextTransactionNo, getCurrentFinancialYear } from "../utils/idGenerator.js";
+import { postDonation, safePost } from "./accountingService.js";
 
 /**
  * Robust CSV line splitter that handles quoted commas and spaces
@@ -548,6 +549,7 @@ export async function recordDirectIncomeFromLine({
   const receiptNo = await getNextReceiptNo(currentYear);
   const certificateNo = `CERT-${currentYear}-${receiptNo.replace(/\D/g, "").slice(-5)}`;
   const amountRupees = line.creditPaise / 100;
+  const statement = await BankStatement.findById(line.statementId).select("bankAccountId");
 
   const donation = new Donation({
     receiptNo,
@@ -571,9 +573,13 @@ export async function recordDirectIncomeFromLine({
     websiteConsent: "Yes",
     isPublicConsent: true,
     notes: `Direct bank credit reconciled from line: ${line.narration}`,
+    // The money is already in this bank account, so the journal debits it directly.
+    bankAccountId: statement?.bankAccountId,
+    createdAt: line.date,
   });
 
   await donation.save();
+  await safePost(`direct income ${receiptNo}`, () => postDonation(donation, adminUser));
 
   // Create Reconciled Dual-entry Ledger Entry
   const fy = getCurrentFinancialYear();

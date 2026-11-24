@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, Types } from "mongoose";
 
 export interface IDonation extends Document {
   receiptNo: string;
@@ -41,6 +41,10 @@ export interface IDonation extends Document {
   pledgeMonths?: string;
   reminder?: "None" | "Monthly" | "Yearly";
   notes?: string;
+  /** Account an offline gift was paid into; online gifts sit in gateway clearing until settled. */
+  bankAccountId?: Types.ObjectId;
+  cashAccountId?: Types.ObjectId;
+  fundType?: "general" | "restricted";
   metadata?: Record<string, any>;
   createdAt: Date;
   updatedAt: Date;
@@ -92,6 +96,9 @@ const DonationSchema = new Schema<IDonation>(
     pledgeMonths: { type: String },
     reminder: { type: String, enum: ["None", "Monthly", "Yearly"], default: "None" },
     notes: { type: String },
+    bankAccountId: { type: Schema.Types.ObjectId, ref: "BankAccount" },
+    cashAccountId: { type: Schema.Types.ObjectId, ref: "CashAccount" },
+    fundType: { type: String, enum: ["general", "restricted"], default: "general" },
     metadata: { type: Schema.Types.Mixed, default: {} },
   },
   { timestamps: true }

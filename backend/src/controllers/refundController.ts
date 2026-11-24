@@ -6,6 +6,7 @@ import { Verification } from "../models/Verification.js";
 import { getNextRefundNo, getNextTransactionNo, getCurrentFinancialYear } from "../utils/idGenerator.js";
 import { refundRazorpayPayment } from "../services/razorpayService.js";
 import { getActor, logAudit } from "../services/auditService.js";
+import { postRefund, safePost } from "../services/accountingService.js";
 
 /**
  * 1. Process Donation Refund (Full or Partial)
@@ -82,15 +83,20 @@ export async function createRefund(req: Request, res: Response): Promise<void> {
     // 1. Online Gateway Refund (if paid via Razorpay)
     let razorpayRefundId: string | undefined = undefined;
     if (donation.razorpayPaymentId) {
-      const gatewayRes = await refundRazorpayPayment({
-        paymentId: donation.razorpayPaymentId,
-        amountPaise: targetPaise,
-        notes: {
-          receiptNo: donation.receiptNo,
-          reason: reason.trim(),
-        },
-      });
-      razorpayRefundId = gatewayRes.id;
+      try {
+        const gatewayRes = await refundRazorpayPayment({
+          paymentId: donation.razorpayPaymentId,
+          amountPaise: targetPaise,
+          notes: {
+            receiptNo: donation.receiptNo,
+            reason: reason.trim(),
+          },
+        });
+        razorpayRefundId = gatewayRes.id;
+      } catch (gatewayErr: any) {
+        res.status(502).json({ success: false, message: gatewayErr.message || "The payment gateway refused the refund." });
+        return;
+      }
     }
 
     // 2. Generate Atomic Refund Number: REF-YYYY-XXXXX
@@ -152,6 +158,10 @@ export async function createRefund(req: Request, res: Response): Promise<void> {
     } catch (ledgerErr) {
       console.warn("Refund ledger entry creation warning:", ledgerErr);
     }
+    // Double-entry: Dr donation income, Cr the account the money is returned from.
+    await safePost(`refund ${refund.refundNo}`, () =>
+      postRefund({ refundId: refund._id, amountPaise: targetPaise, donation, createdBy: adminUser })
+    );
 
     // 6. Update 80G Certificate Verification status if fully refunded
     if (isFullRefund) {

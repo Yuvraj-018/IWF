@@ -226,6 +226,212 @@ export interface BudgetOverview {
   }>;
 }
 
+// ───────────────────────── Centralised accounts (double-entry) ─────────────────────────
+
+async function accountsRequest<T>(path: string, init: { method?: string; body?: unknown } = {}): Promise<T> {
+  const res = await fetch(`${API_BASE_URL}${path}`, {
+    method: init.method || "GET",
+    headers: getHeaders(),
+    body: init.body === undefined ? undefined : JSON.stringify(init.body),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.message || `Request failed (${res.status})`);
+  return data as T;
+}
+
+export interface AccountsOverview {
+  fy: string;
+  totalBankPaise: number;
+  totalCashPaise: number;
+  totalFundsAvailablePaise: number;
+  gatewayClearingPaise: number;
+  pendingMappingPaise: number;
+  fyIncomePaise: number;
+  fyExpenditurePaise: number;
+  fyCapitalPaise: number;
+  restrictedFundsPaise: number;
+  outstandingCommitmentsPaise: number;
+  outstandingCommitmentsCount: number;
+  pendingApprovals: { expenses: number; transfers: number };
+  unreconciledStatementLines: number;
+  bankAccounts: { _id: string; bankName: string; accountNumberMasked: string; isPrimary: boolean; balancePaise: number }[];
+  cashAccounts: { _id: string; name: string; custodianName: string; balancePaise: number }[];
+}
+
+export interface BankAccountItem {
+  _id: string;
+  bankName: string;
+  accountName?: string;
+  accountNumberMasked: string;
+  ifsc: string;
+  branch?: string;
+  type: "current" | "savings" | "other";
+  purpose?: "general" | "programme" | "grant" | "other";
+  office?: "registered" | "administrative" | "regional" | "other";
+  fundClassification?: "general" | "restricted" | "specific";
+  openingBalancePaise: number;
+  openingDate?: string;
+  status: "active" | "inactive" | "closed";
+  integrationStatus?: string;
+  ledgerAccountCode?: string;
+  isPrimary: boolean;
+  notes?: string;
+  balancePaise: number;
+  unreconciledLines?: number;
+  lastReconciledDate?: string | null;
+  lastStatementImportedAt?: string | null;
+}
+
+export interface BankAccountPayload {
+  bankName: string;
+  accountName?: string;
+  accountNumber?: string;
+  ifsc: string;
+  branch?: string;
+  type?: string;
+  purpose?: string;
+  office?: string;
+  fundClassification?: string;
+  openingBalance?: number;
+  openingDate?: string;
+  isPrimary?: boolean;
+  notes?: string;
+}
+
+export interface CashAccountItem {
+  _id: string;
+  name: string;
+  type: "head_office" | "admin_office" | "programme" | "petty" | "emergency" | "other";
+  office?: string;
+  custodianName: string;
+  custodianContact?: string;
+  openingBalancePaise: number;
+  openingDate: string;
+  status: "active" | "inactive" | "closed";
+  ledgerAccountCode?: string;
+  notes?: string;
+  balancePaise: number;
+  lastMovementAt?: string | null;
+}
+
+export interface CashAccountPayload {
+  name: string;
+  type?: string;
+  office?: string;
+  custodianName: string;
+  custodianContact?: string;
+  openingBalance?: number;
+  openingDate?: string;
+  notes?: string;
+}
+
+export interface RegisterLine {
+  _id: string;
+  journalNo: string;
+  date: string;
+  narration: string;
+  sourceType: string;
+  sourceRef?: string;
+  status: "posted" | "reversed";
+  debitPaise: number;
+  creditPaise: number;
+  memo?: string;
+  balancePaise: number;
+}
+
+export type TransferType = "withdrawal" | "deposit" | "bank_transfer" | "cash_transfer";
+
+export interface TransferItem {
+  _id: string;
+  transferNo: string;
+  type: TransferType;
+  date: string;
+  fromKind: "bank" | "cash";
+  fromId: string;
+  toKind: "bank" | "cash";
+  toId: string;
+  fromName: string;
+  toName: string;
+  amountPaise: number;
+  reference?: string;
+  purpose: string;
+  fundType: "general" | "restricted";
+  receivedBy?: string;
+  status: "pending" | "approved" | "rejected";
+  submittedBy: string;
+  approvedBy?: string;
+  approvedAt?: string;
+  rejectionReason?: string;
+}
+
+export interface TransferPayload {
+  type: TransferType;
+  date: string;
+  fromId: string;
+  toId: string;
+  amount: number;
+  purpose: string;
+  reference?: string;
+  receivedBy?: string;
+  fundType?: "general" | "restricted";
+}
+
+export interface JournalLineItem {
+  accountCode: string;
+  accountName: string;
+  debitPaise: number;
+  creditPaise: number;
+  workAreaId?: string;
+  fundType: "general" | "restricted";
+  memo?: string;
+}
+
+export interface JournalItem {
+  _id: string;
+  journalNo: string;
+  date: string;
+  postedAt: string;
+  fy: string;
+  narration: string;
+  sourceType: string;
+  sourceRef?: string;
+  lines: JournalLineItem[];
+  totalPaise: number;
+  status: "posted" | "reversed";
+  createdBy: string;
+}
+
+export interface ChartAccountItem {
+  _id: string;
+  code: string;
+  name: string;
+  group: "asset" | "liability" | "fund" | "income" | "expense";
+  category: string;
+  isHeader: boolean;
+  parentCode?: string;
+  shortCode?: string;
+  isSystem: boolean;
+  isActive: boolean;
+  description?: string;
+  balancePaise: number;
+}
+
+export interface TrialBalance {
+  rows: {
+    code: string;
+    name: string;
+    group: string;
+    normalSide: "debit" | "credit";
+    totalDebitPaise: number;
+    totalCreditPaise: number;
+    debitBalancePaise: number;
+    creditBalancePaise: number;
+  }[];
+  totalDebitPaise: number;
+  totalCreditPaise: number;
+  balanced: boolean;
+}
+
 export const financeApi = {
   /**
    * Fetch overview metrics, charts and feeds
@@ -384,6 +590,9 @@ export const financeApi = {
     initiativeId?: string;
     taxExemption?: boolean;
     notes?: string;
+    bankAccountId?: string;
+    cashAccountId?: string;
+    fundType?: "general" | "restricted";
   }) {
     const res = await fetch(`${API_BASE_URL}/finance/donations/manual`, {
       method: "POST",
@@ -501,6 +710,7 @@ export const financeApi = {
     paymentMethod?: string;
     reference: string;
     bankAccountId?: string;
+    cashAccountId?: string;
   }) {
     const res = await fetch(`${API_BASE_URL}/finance/expenses/${id}/pay`, {
       method: "POST",
@@ -918,5 +1128,105 @@ export const financeApi = {
     const data = await res.json();
     if (!res.ok) throw new Error(data.message || "Failed to toggle snapshot");
     return data;
+  },
+  // ───────────────────────── Centralised accounts (double-entry) ─────────────────────────
+
+  async getAccountsOverview(fy?: string): Promise<{ success: boolean; data: AccountsOverview }> {
+    return accountsRequest(`/finance/accounts/overview${fy ? `?fy=${encodeURIComponent(fy)}` : ""}`);
+  },
+
+  async getBankAccountRegister(): Promise<{ success: boolean; data: BankAccountItem[] }> {
+    return accountsRequest("/finance/accounts/bank");
+  },
+
+  async getBankAccountDetail(id: string): Promise<{ success: boolean; data: BankAccountItem; register: RegisterLine[] }> {
+    return accountsRequest(`/finance/accounts/bank/${id}`);
+  },
+
+  async revealBankAccountNumber(id: string): Promise<{ success: boolean; accountNumber: string | null }> {
+    return accountsRequest(`/finance/accounts/bank/${id}/account-number`);
+  },
+
+  async createBankAccount(payload: BankAccountPayload): Promise<{ success: boolean; data: BankAccountItem }> {
+    return accountsRequest("/finance/accounts/bank", { method: "POST", body: payload });
+  },
+
+  async updateBankAccount(id: string, payload: Partial<BankAccountPayload> & { status?: string; reason?: string }) {
+    return accountsRequest<{ success: boolean; data: BankAccountItem }>(`/finance/accounts/bank/${id}`, { method: "PATCH", body: payload });
+  },
+
+  async getCashAccounts(): Promise<{ success: boolean; data: CashAccountItem[] }> {
+    return accountsRequest("/finance/accounts/cash");
+  },
+
+  async getCashAccountDetail(id: string): Promise<{ success: boolean; data: CashAccountItem; register: RegisterLine[] }> {
+    return accountsRequest(`/finance/accounts/cash/${id}`);
+  },
+
+  async createCashAccount(payload: CashAccountPayload): Promise<{ success: boolean; data: CashAccountItem }> {
+    return accountsRequest("/finance/accounts/cash", { method: "POST", body: payload });
+  },
+
+  async updateCashAccount(id: string, payload: Partial<CashAccountPayload> & { status?: string; reason?: string }) {
+    return accountsRequest<{ success: boolean; data: CashAccountItem }>(`/finance/accounts/cash/${id}`, { method: "PATCH", body: payload });
+  },
+
+  async getTransfers(params: { status?: string; type?: string } = {}): Promise<{ success: boolean; data: TransferItem[] }> {
+    const q = new URLSearchParams();
+    if (params.status) q.set("status", params.status);
+    if (params.type) q.set("type", params.type);
+    return accountsRequest(`/finance/accounts/transfers?${q.toString()}`);
+  },
+
+  async createTransfer(payload: TransferPayload): Promise<{ success: boolean; data: TransferItem; message: string }> {
+    return accountsRequest("/finance/accounts/transfers", { method: "POST", body: payload });
+  },
+
+  async approveTransfer(id: string): Promise<{ success: boolean; message: string }> {
+    return accountsRequest(`/finance/accounts/transfers/${id}/approve`, { method: "POST", body: {} });
+  },
+
+  async rejectTransfer(id: string, reason: string): Promise<{ success: boolean }> {
+    return accountsRequest(`/finance/accounts/transfers/${id}/reject`, { method: "POST", body: { reason } });
+  },
+
+  async getSettlements(): Promise<{ success: boolean; data: JournalItem[]; clearingBalancePaise: number }> {
+    return accountsRequest("/finance/accounts/settlements");
+  },
+
+  async createSettlement(payload: {
+    bankAccountId: string;
+    date: string;
+    utr: string;
+    grossAmount: number;
+    fee: number;
+    tax: number;
+  }): Promise<{ success: boolean; data: JournalItem; warning?: string }> {
+    return accountsRequest("/finance/accounts/settlements", { method: "POST", body: payload });
+  },
+
+  async getJournals(params: {
+    fy?: string;
+    sourceType?: string;
+    accountCode?: string;
+    search?: string;
+    from?: string;
+    to?: string;
+    page?: number;
+    limit?: number;
+  } = {}): Promise<{ success: boolean; data: JournalItem[]; pagination: { page: number; limit: number; total: number; pages: number } }> {
+    const q = new URLSearchParams();
+    Object.entries(params).forEach(([k, v]) => {
+      if (v !== undefined && v !== "") q.set(k, String(v));
+    });
+    return accountsRequest(`/finance/accounts/journals?${q.toString()}`);
+  },
+
+  async getChartOfAccounts(): Promise<{ success: boolean; data: ChartAccountItem[] }> {
+    return accountsRequest("/finance/accounts/chart");
+  },
+
+  async getTrialBalance(fy?: string): Promise<{ success: boolean; data: TrialBalance }> {
+    return accountsRequest(`/finance/accounts/trial-balance${fy ? `?fy=${encodeURIComponent(fy)}` : ""}`);
   },
 };

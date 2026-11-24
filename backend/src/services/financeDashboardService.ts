@@ -744,73 +744,7 @@ export class FinanceDashboardService {
     // Sort all gathered activities by timestamp descending
     activities.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
 
-    // If fewer than limit events exist, provide fallback system baseline events so the UI feed is populated
-    if (activities.length === 0) {
-      const now = new Date();
-      return [
-        {
-          id: "act-fb-1",
-          type: "donation",
-          title: "Donation received",
-          description: "₹50,000 from Ayesha Khan",
-          timestamp: new Date(now.getTime() - 2 * 60 * 60 * 1000).toISOString(),
-          relativeTime: "2 hours ago",
-          icon: "heart",
-          status: "received",
-        },
-        {
-          id: "act-fb-2",
-          type: "payment",
-          title: "Payment verified",
-          description: "₹25,000 (Razorpay)",
-          timestamp: new Date(now.getTime() - 3 * 60 * 60 * 1000).toISOString(),
-          relativeTime: "3 hours ago",
-          icon: "credit-card",
-          status: "verified",
-        },
-        {
-          id: "act-fb-3",
-          type: "receipt",
-          title: "Receipt issued",
-          description: "#ISL-2025-0456",
-          timestamp: new Date(now.getTime() - 4 * 60 * 60 * 1000).toISOString(),
-          relativeTime: "4 hours ago",
-          icon: "file-text",
-          status: "issued",
-        },
-        {
-          id: "act-fb-4",
-          type: "expense",
-          title: "Expense approved",
-          description: "Medical supplies - ₹12,500",
-          timestamp: new Date(now.getTime() - 6 * 60 * 60 * 1000).toISOString(),
-          relativeTime: "6 hours ago",
-          icon: "receipt",
-          status: "approved",
-        },
-        {
-          id: "act-fb-5",
-          type: "reconciliation",
-          title: "Reconciliation completed",
-          description: "Bank - Axis Bank",
-          timestamp: new Date(now.getTime() - 7 * 60 * 60 * 1000).toISOString(),
-          relativeTime: "7 hours ago",
-          icon: "refresh",
-          status: "completed",
-        },
-        {
-          id: "act-fb-6",
-          type: "refund",
-          title: "Refund processed",
-          description: "₹8,000 to Rahul Verma",
-          timestamp: new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString(),
-          relativeTime: "1 day ago",
-          icon: "rotate-ccw",
-          status: "processed",
-        },
-      ];
-    }
-
+    // No invented activity: an empty organisation shows an empty feed.
     return activities.slice(0, limit).map((act) => ({
       ...act,
       timestamp: act.timestamp.toISOString(),

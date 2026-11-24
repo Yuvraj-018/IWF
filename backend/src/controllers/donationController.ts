@@ -17,6 +17,9 @@ import { generateReceiptPdfBuffer } from "../services/receiptPdfService.js";
 import { projectDonor } from "../utils/piiFilter.js";
 import { getActor, logAudit } from "../services/auditService.js";
 import { escapeRegex } from "../utils/escapeRegex.js";
+import { BankAccount } from "../models/BankAccount.js";
+import { CashAccount } from "../models/CashAccount.js";
+import { postDonation, safePost } from "../services/accountingService.js";
 
 function maskEmail(email: string): string {
   if (!email || !email.includes("@")) return "***";
@@ -141,6 +144,7 @@ export async function createDonation(req: Request, res: Response): Promise<void>
     } catch (ledgerErr) {
       console.warn("Ledger entry recording warning in createDonation:", ledgerErr);
     }
+    await safePost(`donation ${receiptNo}`, () => postDonation(donation));
 
     // If donation was for an urgent patient, increment raisedAmount and donorsCount
     if (patientSlug) {
@@ -538,6 +542,9 @@ export async function createManualDonation(req: Request, res: Response): Promise
       taxExemption = true,
       pan,
       notes,
+      bankAccountId,
+      cashAccountId,
+      fundType = "general",
     } = req.body;
 
     if (!donorName || !amount) {
@@ -551,6 +558,25 @@ export async function createManualDonation(req: Request, res: Response): Promise
         res.status(400).json({ success: false, message: "Invalid PAN format. Must be 10 characters (e.g. ABCDE1234F)" });
         return;
       }
+    }
+
+    // The account the money was paid into. Without one the receipt is posted to
+    // "Pending Account Mapping" and shows up on the finance dashboard to be fixed.
+    if (bankAccountId && cashAccountId) {
+      res.status(400).json({ success: false, message: "Choose either a bank account or a cash account, not both." });
+      return;
+    }
+    if (bankAccountId && !(await BankAccount.exists({ _id: bankAccountId, status: { $nin: ["inactive", "closed"] } }))) {
+      res.status(400).json({ success: false, message: "The selected bank account is not active." });
+      return;
+    }
+    if (cashAccountId && !(await CashAccount.exists({ _id: cashAccountId, status: "active" }))) {
+      res.status(400).json({ success: false, message: "The selected cash account is not active." });
+      return;
+    }
+    if (paymentMode === "Cash" && bankAccountId) {
+      res.status(400).json({ success: false, message: "A cash donation must be recorded against a cash account." });
+      return;
     }
 
     const currentYear = new Date().getFullYear();
@@ -588,6 +614,9 @@ export async function createManualDonation(req: Request, res: Response): Promise
       websiteConsent: "Yes",
       isPublicConsent: true,
       notes,
+      bankAccountId: bankAccountId || undefined,
+      cashAccountId: cashAccountId || undefined,
+      fundType: fundType === "restricted" ? "restricted" : "general",
     });
 
     await donation.save();
@@ -632,6 +661,7 @@ export async function createManualDonation(req: Request, res: Response): Promise
     } catch (ledgerErr) {
       console.warn("Manual donation ledger post warning:", ledgerErr);
     }
+    await safePost(`manual donation ${receiptNo}`, () => postDonation(donation, actor.name || actor.email));
 
     // Auto-create document verification record for 80G receipt
     await Verification.findOneAndUpdate(

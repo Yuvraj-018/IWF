@@ -557,14 +557,14 @@ export default function TransactionsManager() {
 
                 <div className="pl-3 relative">
                   <div className="absolute -left-[19px] top-1 w-3 h-3 rounded-full bg-teal-500 ring-4 ring-white" />
-                  <p className="text-xs font-bold text-slate-900">Append-Only Dual-Entry Ledger Entry Created</p>
-                  <p className="text-[10px] text-slate-500 font-mono">Credit to General Fund Paired Account</p>
+                  <p className="text-xs font-bold text-slate-900">Posted to the Ledger</p>
+                  <p className="text-[10px] text-slate-500 font-mono">Double-entry journal (see Journals &amp; Trial Balance)</p>
                 </div>
 
                 <div className="pl-3 relative">
                   <div className="absolute -left-[19px] top-1 w-3 h-3 rounded-full bg-slate-300 ring-4 ring-white" />
                   <p className="text-xs font-bold text-slate-700">Bank Statement Reconciliation</p>
-                  <p className="text-[10px] text-slate-400">Matched to SBI Current Account (*****1092)</p>
+                  <p className="text-[10px] text-slate-400">Matched under Bank Reconciliation once the statement line is imported</p>
                 </div>
               </div>
             </div>
