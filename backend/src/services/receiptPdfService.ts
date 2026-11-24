@@ -58,9 +58,9 @@ export async function generateReceiptPdfBuffer(data: ReceiptPdfData): Promise<Bu
         size: "A4",
         margin: 40,
         info: {
-          Title: `80G Donation Receipt - ${data.receiptNo}`,
+          Title: `Donation Receipt - ${data.receiptNo}`,
           Author: "ISLAH Welfare Foundation",
-          Subject: "Official Donation Receipt under Section 80G Income Tax Act",
+          Subject: "Official Donation Receipt",
           Keywords: "Donation, 80G, Tax Exemption, ISLAH, NGO, Charity",
         },
       });
@@ -134,7 +134,7 @@ export async function generateReceiptPdfBuffer(data: ReceiptPdfData): Promise<Bu
         .fillColor(emerald)
         .font("Helvetica-Bold")
         .fontSize(13)
-        .text("OFFICIAL DONATION RECEIPT & 80G CERTIFICATE", 45, 130, { align: "center" });
+        .text(data.taxExemption && data.pan ? "OFFICIAL DONATION RECEIPT — TAX DOCUMENTATION REQUESTED" : "OFFICIAL DONATION RECEIPT", 45, 130, { align: "center" });
 
       // ── Receipt Details Grid ──
       const startY = 165;
@@ -182,8 +182,8 @@ export async function generateReceiptPdfBuffer(data: ReceiptPdfData): Promise<Bu
       const fullAddress = [data.address, data.city, data.state, data.pincode].filter(Boolean).join(", ") || "India";
       doc.font("Helvetica").text(fullAddress, 140, donorBoxY + 78, { width: 390 });
 
-      doc.font("Helvetica-Bold").text("Donor PAN (80G):", 55, donorBoxY + 94);
-      doc.font("Helvetica").fillColor(data.pan ? emerald : slateLight).text(data.pan ? data.pan.toUpperCase() : "Not Provided (Eligible as General Contribution)", 140, donorBoxY + 94);
+      doc.font("Helvetica-Bold").text("Donor PAN:", 55, donorBoxY + 94);
+      doc.font("Helvetica").fillColor(data.pan ? emerald : slateLight).text(data.pan ? data.pan.toUpperCase() : "Not provided (no tax documentation requested)", 140, donorBoxY + 94);
 
       // ── Contribution Itemization Table ──
       const tableTop = donorBoxY + 125;
@@ -223,14 +223,18 @@ export async function generateReceiptPdfBuffer(data: ReceiptPdfData): Promise<Bu
       const taxBoxY = wordsY + 24;
       doc.rect(45, taxBoxY, 505, 80).fillAndStroke("#eff6ff", "#bfdbfe");
 
-      doc.fillColor("#1e40af").font("Helvetica-Bold").fontSize(8.5).text("STATUTORY TAX EXEMPTION INFORMATION (SECTION 80G & 12A)", 55, taxBoxY + 8);
+      doc.fillColor("#1e40af").font("Helvetica-Bold").fontSize(8.5).text("TAX INFORMATION (SECTION 80G & 12A)", 55, taxBoxY + 8);
 
       doc.font("Helvetica").fontSize(7.5).fillColor("#1e3a8a").text(
-        "• All donations made to ISLAH Welfare Foundation are 50% exempt from Income Tax under Section 80G of the Income Tax Act, 1961.\n" +
+        (data.taxExemption && data.pan
+          ? "• Tax documentation was requested. It is issued only where ISLAH is eligible and legal requirements are met.\n"
+          : "• No tax-deduction documentation was requested for this contribution.\n") +
         "• Unique Registration Number (URN) / 80G Approval Order No: AABTI2820HF2026 issued by the Director of Income Tax (Exemptions).\n" +
         "• Section 12A Registration Order No: AABTI2820HE2026.\n" +
         "• This is an electronically generated and digitally authenticated receipt. No physical signature is required for claiming deduction.\n" +
-        "• As per CBDT guidelines, donors who provided a valid PAN will have their contribution filed in Form 10BD for annual tax credit.",
+        (data.taxExemption && data.pan
+          ? "• Where eligible, ISLAH reports this contribution with your PAN; the official donor certificate follows."
+          : "• To request tax documentation for this contribution, contact ISLAH with your PAN and this receipt number."),
         55,
         taxBoxY + 22,
         { lineGap: 2.5, width: 485 }

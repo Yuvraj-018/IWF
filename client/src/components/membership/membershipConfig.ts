@@ -326,6 +326,23 @@ export function parseValidTill(s: string): Date | null {
   return Number.isNaN(d.getTime()) ? null : d;
 }
 
+/**
+ * Last day of the month a stored expiry belongs to, read in IST.
+ * Validity always ends on the last day of a month (joining month = month 1, so
+ * joining in Nov 2026 is valid till 31 Oct 2027). Expiries saved by a server on
+ * UTC time fall at 05:29 IST on the 1st of the next month; stepping back 12 hours
+ * reads those, IST-saved values and plain "YYYY-MM-DD" dates all correctly.
+ * Accepts month labels ("Oct 2027") too.
+ */
+export function expiryMonthDate(raw?: string | Date | null): Date | null {
+  if (!raw) return null;
+  if (typeof raw === "string" && /^[A-Za-z]{3,9}\s+\d{4}$/.test(raw.trim())) return parseValidTill(raw);
+  const d = new Date(raw);
+  if (Number.isNaN(d.getTime())) return null;
+  const ist = new Date(d.getTime() - 12 * 60 * 60 * 1000 + 330 * 60 * 1000);
+  return new Date(ist.getUTCFullYear(), ist.getUTCMonth() + 1, 0);
+}
+
 export function generateMemberId(tier: TierType): string {
   const year = new Date().getFullYear();
   const suffix = Math.floor(1000 + Math.random() * 9000);

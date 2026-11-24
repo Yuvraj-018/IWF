@@ -21,7 +21,7 @@ import SubpageHeroCarousel from "@/components/common/SubpageHeroCarousel";
 import { FormSection, Section, SectionHeader } from "@/components/getInvolved/PageSections";
 import { DonationForm } from "@/components/donation/DonationForm";
 import { ORG } from "@/components/documents/orgDetails";
-import { usePatients } from "@/services/patientService";
+import { useAllPatients } from "@/services/patientService";
 import {
   OFFLINE_BANK_DETAILS,
   prefillFromSearch,
@@ -70,7 +70,7 @@ function CopyRow({ label, value, mono }: { label: string; value: string; mono?: 
 export default function DonatePage() {
   const search = useSearch({ strict: false }) as DonateSearch;
   const prefill = useMemo(() => prefillFromSearch(search), [search]);
-  const { patients } = usePatients(true);
+  const { patients } = useAllPatients();
   const patient = prefill.patientSlug
     ? patients.find((p) => p.slug === prefill.patientSlug)
     : undefined;

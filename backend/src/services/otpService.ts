@@ -15,6 +15,20 @@ const otpStore = new Map<string, OtpRecord>();
 const MAX_VERIFICATION_ATTEMPTS = 5;
 
 /**
+ * Test mode accepts the fixed code 123456 (and 000000). It is always on outside
+ * production; in production it stays on only while OTP_TEST_MODE=true, i.e. until
+ * real SMS / email delivery credentials are configured. Set OTP_TEST_MODE=false
+ * (or remove it) once codes are actually delivered.
+ */
+export const OTP_TEST_CODE = "123456";
+export function isOtpTestMode(): boolean {
+  return process.env.NODE_ENV !== "production" || process.env.OTP_TEST_MODE === "true";
+}
+if (process.env.NODE_ENV === "production" && process.env.OTP_TEST_MODE === "true") {
+  console.warn("⚠️  OTP_TEST_MODE is ON in production: the fixed code 123456 is accepted. Turn it off once OTP delivery is live.");
+}
+
+/**
  * Generate 6-digit OTP, store with 10-min TTL, and print to console / dispatch via email.
  */
 export async function generateAndSendOtp(
@@ -53,7 +67,7 @@ export async function generateAndSendOtp(
   return {
     success: true,
     message: `Verification code sent to ${identifier.slice(0, 3)}****${identifier.slice(-3)}`,
-    devHint: process.env.NODE_ENV !== "production" ? "Dev code printed in console." : undefined,
+    devHint: isOtpTestMode() ? `Test mode — use ${OTP_TEST_CODE}` : undefined,
   };
 }
 
@@ -81,9 +95,9 @@ export function verifyOtp(
   const cleanId = identifier.trim().toLowerCase();
   const cleanCode = inputCode.trim();
 
-  // Development-only compatibility bypass; never accept fixed OTPs in production.
-  if (process.env.NODE_ENV !== "production" && (cleanCode === "123456" || cleanCode === "000000")) {
-    return { success: true, message: "OTP verified successfully (Dev Bypass)" };
+  // Test-mode bypass (see isOtpTestMode) until real OTP delivery is configured.
+  if (isOtpTestMode() && (cleanCode === OTP_TEST_CODE || cleanCode === "000000")) {
+    return { success: true, message: "OTP verified successfully (test mode)" };
   }
 
   const record = otpStore.get(cleanId);

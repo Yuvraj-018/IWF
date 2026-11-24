@@ -79,6 +79,30 @@ export function usePatients(urgent = true) {
 }
 
 /**
+ * React hook to fetch every patient case, urgent or not (e.g. for the donation form's patient picker)
+ */
+export function useAllPatients() {
+  const [patients, setPatients] = useState<Patient[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    fetchPatients()
+      .then((data) => {
+        if (isMounted) setPatients(data);
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  return { patients, loading };
+}
+
+/**
  * React hook to fetch a single patient case by slug
  */
 export function usePatient(slug: string) {

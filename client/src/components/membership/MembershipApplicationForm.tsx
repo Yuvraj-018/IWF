@@ -41,6 +41,7 @@ import {
   SECTOR_OPTIONS,
   URL_RE,
   computeValidTill,
+  expiryMonthDate,
   formatDisplayDate,
   formatDisplayMonth,
   formatLongMonth,
@@ -594,6 +595,8 @@ export function MembershipApplicationForm({
           contact: `${countryCode}${phone}`,
         },
         notes: {
+          purpose: "membership",
+          isMembership: "true",
           category: effectiveTier,
           years: String(years),
           fee: String(fee),
@@ -684,7 +687,7 @@ export function MembershipApplicationForm({
       const verifiedMemberNo = savedMember?.memberNo || generateMemberId(effectiveTier);
       const verifiedReceiptNo = verifyData.receiptNo || savedMember?.receiptNo || generateReceiptNo();
       const validFromDate = savedMember?.validFrom ? new Date(savedMember.validFrom) : from;
-      const validTillDate = savedMember?.validTill ? new Date(savedMember.validTill) : till;
+      const validTillDate = expiryMonthDate(savedMember?.validTill) ?? till;
 
       setResult({
         card: {
@@ -708,6 +711,9 @@ export function MembershipApplicationForm({
           validFrom: formatDisplayMonth(validFromDate),
           validTill: formatDisplayMonth(validTillDate),
           type: "New Membership",
+          paymentMode: "Online",
+          paymentStatus: "Successful",
+          transactionId: paymentResult.razorpay_payment_id,
         },
       });
 

@@ -4,7 +4,7 @@ import {
   verifyRazorpaySignature,
   verifyWebhookSignature,
 } from "../services/razorpayService.js";
-import { RAZORPAY_CONFIG } from "../config/razorpay.js";
+import { RAZORPAY_CONFIG, razorpayInstance } from "../config/razorpay.js";
 import { Donation } from "../models/Donation.js";
 import { Member, MemberCategory } from "../models/Member.js";
 import { Patient } from "../models/Patient.js";
@@ -27,6 +27,7 @@ import {
   calculateMembershipExpiry,
   calculateMembershipRenewalExpiry,
 } from "../utils/dateUtils.js";
+import { escapeRegex } from "../utils/escapeRegex.js";
 
 export async function createOrderController(req: Request, res: Response): Promise<void> {
   try {
@@ -95,15 +96,39 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
       return;
     }
 
+    // The amount arrives from the browser, so check it against the order ISLAH created on the server.
+    const claimed = donationData || memberData;
+    if (claimed) {
+      const order: any = await razorpayInstance.orders.fetch(razorpay_order_id);
+      const orderRupees = Number(order?.amount) / 100;
+      if (claimed.amount === undefined || claimed.amount === null || claimed.amount === "") {
+        claimed.amount = orderRupees;
+      } else if (!Number.isFinite(Number(claimed.amount)) || Math.abs(Number(claimed.amount) - orderRupees) > 0.01) {
+        res.status(400).json({
+          success: false,
+          message: "Payment amount does not match the order. Please contact ISLAH with your payment ID.",
+        });
+        return;
+      }
+    }
+
     let createdReceiptNo: string | undefined;
     let createdDonationRef: string | undefined;
     let savedEntity: any = null;
 
     // Handle Donation persistence upon verified payment
     if (donationData) {
-      createdReceiptNo = await getNextReceiptNumber();
-      createdDonationRef = await getNextDonationReference();
-      const createdCertificateNo = createdReceiptNo.replace(/RCPT|REC/i, "CERT");
+      // Razorpay's webhook may already have recorded this payment, or the browser may be retrying:
+      // complete that record instead of creating a second one.
+      const existingDonation = await Donation.findOne({ transactionId: razorpay_payment_id });
+      const firstFormSubmission = !existingDonation || !existingDonation.metadata?.source;
+      createdReceiptNo = existingDonation?.receiptNo || (await getNextReceiptNumber());
+      createdDonationRef =
+        existingDonation?.donationNo && existingDonation.donationNo.startsWith("ISLAH-DON")
+          ? existingDonation.donationNo
+          : await getNextDonationReference();
+      const createdCertificateNo =
+        existingDonation?.certificateNo || createdReceiptNo.replace(/RCPT|REC/i, "CERT");
       // Structured answers from the Donation & Community Support Form (recognition, programme, etc.)
       const formMeta: Record<string, any> =
         donationData.metadata && typeof donationData.metadata === "object" && !Array.isArray(donationData.metadata)
@@ -111,7 +136,7 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
           : {};
       const isPublicConsent = donationData.websiteConsent === "Yes" || Boolean(donationData.isPublicConsent);
 
-      const donation = new Donation({
+      const donationFields = {
         receiptNo: createdReceiptNo,
         certificateNo: createdCertificateNo,
         donationNo: createdDonationRef,
@@ -146,12 +171,14 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
         workAreaId: donationData.workAreaId,
         notes: `Razorpay Order: ${razorpay_order_id}`,
         metadata: formMeta,
-      });
+      };
+      const donation = existingDonation ?? new Donation(donationFields);
+      if (existingDonation) existingDonation.set(donationFields);
 
       savedEntity = await donation.save();
 
-      // If tied to an urgent patient, increment raised funds
-      if (donationData.patientSlug) {
+      // If tied to a patient, increment raised funds (the webhook already did this for its own record)
+      if (donationData.patientSlug && !existingDonation) {
         await Patient.findOneAndUpdate(
           { slug: donationData.patientSlug },
           { $inc: { raisedAmount: Number(donationData.amount), donorsCount: 1 } }
@@ -164,7 +191,7 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
         {
           documentNo: createdReceiptNo,
           documentType: "donation_receipt",
-          title: `80G Donation Receipt - ${donationData.financialType || "General"}`,
+          title: `${donationData.taxExemption ? "Donation Receipt (Tax Documentation Requested)" : "Donation Receipt"} - ${donationData.financialType || "General"}`,
           issuedTo: donationData.donorName,
           issueDate: new Date(),
           status: "Verified",
@@ -251,7 +278,7 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
       }).catch((e) => console.warn("Donor directory sync warning:", e));
 
       // Dispatch 80G Donation Receipt email with PDF Attachment
-      if (donation.email) {
+      if (donation.email && firstFormSubmission) {
         sendReceiptEmail(donation.email, {
           donorName: donation.donorName,
           donorType: donation.donorType,
@@ -297,7 +324,7 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
       if (memberData.isRenewal && memberData.memberNo) {
         // ── RENEWAL FLOW VIA RAZORPAY ──
         const existing = await Member.findOne({
-          memberNo: { $regex: new RegExp(`^${memberData.memberNo.trim()}$`, "i") },
+          memberNo: { $regex: new RegExp(`^${escapeRegex(memberData.memberNo.trim())}$`, "i") },
         });
 
         if (existing) {
@@ -545,8 +572,15 @@ export async function handleWebhookController(req: Request, res: Response): Prom
       if (payment) {
         const paymentId = payment.id;
         let donation = await Donation.findOne({ transactionId: paymentId });
-        if (!donation) {
-          const notes = payment.notes || {};
+        const notes = payment.notes || {};
+        // Membership fees are recorded by the membership flow, never as donations.
+        const isMembershipPayment =
+          notes.purpose === "membership" ||
+          notes.isMembership === "true" ||
+          notes.isRenewal === "true" ||
+          Boolean(notes.memberNo) ||
+          Boolean(notes.category && notes.years);
+        if (!donation && !isMembershipPayment) {
           const receiptNo = await getNextReceiptNo();
           const amountInPaise = Number(payment.amount);
           const amountInRupees = amountInPaise / 100;
@@ -567,7 +601,7 @@ export async function handleWebhookController(req: Request, res: Response): Prom
             state: notes.state || "Not Specified",
             pincode: notes.pincode || "",
             financialType: notes.financialType || "General Donation",
-            frequency: "One Time",
+            frequency: ["Monthly", "Yearly"].includes(notes.frequency) ? notes.frequency : "One Time",
             amount: amountInRupees,
             amountPaise: amountInPaise,
             grossPaise: amountInPaise,

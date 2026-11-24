@@ -16,6 +16,7 @@ import { invalidateCache } from "../middlewares/cache.js";
 import { syncToCommunityDirectory } from "../services/directorySyncService.js";
 import { projectMember, maskPhone, maskEmail } from "../utils/piiFilter.js";
 import { getActor, logAudit } from "../services/auditService.js";
+import { escapeRegex, maskPan } from "../utils/escapeRegex.js";
 
 const CATEGORY_FEE_MAP: Record<MemberCategory, number> = {
   Community: 2500,
@@ -248,9 +249,9 @@ export async function checkMemberStatus(req: Request, res: Response): Promise<vo
 
     const member = await Member.findOne({
       $or: [
-        { memberNo: { $regex: new RegExp(`^${clean}$`, "i") } },
-        { phone: { $regex: cleanDigits.length >= 8 ? cleanDigits.slice(-10) : `^${clean}$`, $options: "i" } },
-        { email: { $regex: new RegExp(`^${clean}$`, "i") } },
+        { memberNo: { $regex: new RegExp(`^${escapeRegex(clean)}$`, "i") } },
+        { phone: { $regex: cleanDigits.length >= 8 ? escapeRegex(cleanDigits.slice(-10)) : `^${escapeRegex(clean)}$`, $options: "i" } },
+        { email: { $regex: new RegExp(`^${escapeRegex(clean)}$`, "i") } },
       ],
     });
 
@@ -309,10 +310,10 @@ export async function getMemberProfile(req: Request, res: Response): Promise<voi
     // 1. Find Member by memberNo, phone, or email
     const member = await Member.findOne({
       $or: [
-        { memberNo: { $regex: new RegExp(`^${clean}$`, "i") } },
-        { email: { $regex: new RegExp(`^${clean}$`, "i") } },
-        { phone: { $regex: cleanDigits.length >= 8 ? cleanDigits.slice(-10) : `^${clean}$`, $options: "i" } },
-        { receiptNo: { $regex: new RegExp(`^${clean}$`, "i") } },
+        { memberNo: { $regex: new RegExp(`^${escapeRegex(clean)}$`, "i") } },
+        { email: { $regex: new RegExp(`^${escapeRegex(clean)}$`, "i") } },
+        { phone: { $regex: cleanDigits.length >= 8 ? escapeRegex(cleanDigits.slice(-10)) : `^${escapeRegex(clean)}$`, $options: "i" } },
+        { receiptNo: { $regex: new RegExp(`^${escapeRegex(clean)}$`, "i") } },
       ],
     });
 
@@ -322,7 +323,7 @@ export async function getMemberProfile(req: Request, res: Response): Promise<voi
     // 2. Fetch all linked donations
     const donationFilters: any[] = [];
     if (candidateEmail) donationFilters.push({ email: candidateEmail });
-    if (candidatePhone) donationFilters.push({ phone: { $regex: candidatePhone } });
+    if (candidatePhone) donationFilters.push({ phone: { $regex: escapeRegex(candidatePhone) } });
     if (member?.receiptNo) donationFilters.push({ receiptNo: member.receiptNo });
 
     const donations = donationFilters.length > 0
@@ -347,7 +348,7 @@ export async function getMemberProfile(req: Request, res: Response): Promise<voi
     // 4. Fetch any applications (volunteer, career, etc.)
     const appFilters: any[] = [];
     if (candidateEmail) appFilters.push({ email: candidateEmail });
-    if (candidatePhone) appFilters.push({ phone: { $regex: candidatePhone } });
+    if (candidatePhone) appFilters.push({ phone: { $regex: escapeRegex(candidatePhone) } });
 
     const applications = appFilters.length > 0
       ? await Application.find({ $or: appFilters }).sort({ createdAt: -1 })
@@ -391,6 +392,13 @@ export async function getMemberProfile(req: Request, res: Response): Promise<voi
           : null,
         donations: donations.map((d) => ({
           receiptNo: d.receiptNo,
+          donationNo: d.donationNo,
+          donorType: d.donorType,
+          email: d.email,
+          address: d.address,
+          city: d.city,
+          state: d.state,
+          frequency: d.frequency,
           certificateNo: d.certificateNo || d.receiptNo.replace(/RCPT|REC/i, "CERT"),
           donorName: d.donorName,
           amount: d.amount,
@@ -399,7 +407,7 @@ export async function getMemberProfile(req: Request, res: Response): Promise<voi
           paymentStatus: d.paymentStatus,
           transactionId: d.transactionId,
           taxExemption: d.taxExemption,
-          pan: d.pan,
+          pan: maskPan(d.pan),
           createdAt: d.createdAt,
         })),
         verifications: verifications.map((v) => ({
@@ -577,7 +585,7 @@ export async function sendMemberOtp(req: Request, res: Response): Promise<void> 
     // Look up member to find associated email for dual delivery
     const member = await Member.findOne({
       $or: [
-        { memberNo: { $regex: new RegExp(`^${cleanId}$`, "i") } },
+        { memberNo: { $regex: new RegExp(`^${escapeRegex(cleanId)}$`, "i") } },
         { phone: cleanId },
         { email: cleanId.toLowerCase() },
       ],
@@ -645,7 +653,7 @@ export async function renewMember(req: Request, res: Response): Promise<void> {
 
     const cleanMemberNo = String(memberNo).trim();
     const member = await Member.findOne({
-      memberNo: { $regex: new RegExp(`^${cleanMemberNo}$`, "i") },
+      memberNo: { $regex: new RegExp(`^${escapeRegex(cleanMemberNo)}$`, "i") },
     });
 
     if (!member) {

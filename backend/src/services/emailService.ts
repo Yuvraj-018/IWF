@@ -271,6 +271,8 @@ export async function sendReceiptEmail(
 
   // Only donors who asked for tax documentation (and gave a PAN) get tax wording.
   const taxRequested = Boolean(data.taxExemption && data.pan);
+  const siteUrl = (process.env.CLIENT_URL || "https://www.iwfindia.org").replace(/\/$/, "");
+  const verifyUrl = `${siteUrl}/verify?ref=${encodeURIComponent(data.receiptNo)}`;
   const formattedAmount = `₹${Number(data.amount).toLocaleString("en-IN")}`;
   const title = `${taxRequested ? "Donation Receipt & Tax Documentation Request" : "Donation Receipt"}: ${data.receiptNo} - ISLAH Welfare Foundation`;
   const preheader = `Thank you for your generous contribution of ${formattedAmount} towards ${data.purpose || data.cause}. Your receipt${cardBuffer ? " and acknowledgement card are" : " is"} attached.`;
@@ -353,12 +355,12 @@ export async function sendReceiptEmail(
 
     <p style="font-size: 13px; color: #64748b; line-height: 1.6;">
       You can independently verify this receipt anytime on our portal at 
-      <a href="https://www.iwfindia.org/verify" style="color: #f97316; font-weight: bold; text-decoration: none;">www.iwfindia.org/verify</a> 
+      <a href="${verifyUrl}" style="color: #f97316; font-weight: bold; text-decoration: none;">www.iwfindia.org/verify</a> 
       using receipt number <strong>${data.receiptNo}</strong>.
     </p>
 
     <div style="margin-top: 24px; text-align: center;">
-      <a href="https://www.iwfindia.org/verify" style="display: inline-block; background-color: #071527; color: #ffffff; text-decoration: none; font-weight: 700; font-size: 13px; padding: 12px 28px; border-radius: 10px;">
+      <a href="${verifyUrl}" style="display: inline-block; background-color: #071527; color: #ffffff; text-decoration: none; font-weight: 700; font-size: 13px; padding: 12px 28px; border-radius: 10px;">
         Verify Receipt Online
       </a>
     </div>

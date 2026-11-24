@@ -16,6 +16,7 @@ import { syncToCommunityDirectory } from "../services/directorySyncService.js";
 import { generateReceiptPdfBuffer } from "../services/receiptPdfService.js";
 import { projectDonor } from "../utils/piiFilter.js";
 import { getActor, logAudit } from "../services/auditService.js";
+import { escapeRegex } from "../utils/escapeRegex.js";
 
 function maskEmail(email: string): string {
   if (!email || !email.includes("@")) return "***";
@@ -224,6 +225,10 @@ export async function createDonation(req: Request, res: Response): Promise<void>
         taxExemption: donation.taxExemption,
         transactionId: donation.transactionId,
         createdAt: donation.createdAt,
+        certificateNo: donation.certificateNo,
+        donationRef: donation.donationNo?.startsWith("ISLAH-DON") ? donation.donationNo : undefined,
+        frequency: donation.frequency,
+        purpose: typeof donation.metadata?.purpose === "string" ? donation.metadata.purpose : undefined,
       }).catch((e) => console.warn("Donation receipt email dispatch failed:", e));
 
       // Admin Alert
@@ -314,7 +319,7 @@ export async function listDonations(req: Request, res: Response): Promise<void> 
     }
 
     if (req.query.paymentMode && req.query.paymentMode !== "all") {
-      filter.paymentMode = { $regex: new RegExp(`^${String(req.query.paymentMode)}$`, "i") };
+      filter.paymentMode = { $regex: new RegExp(`^${escapeRegex(String(req.query.paymentMode))}$`, "i") };
     }
 
     if (req.query.workAreaId && req.query.workAreaId !== "all") {
@@ -489,6 +494,10 @@ export async function resendReceiptEmail(req: Request, res: Response): Promise<v
       taxExemption: donation.taxExemption,
       transactionId: donation.transactionId,
       createdAt: donation.createdAt,
+      certificateNo: donation.certificateNo,
+      donationRef: donation.donationNo?.startsWith("ISLAH-DON") ? donation.donationNo : undefined,
+      frequency: donation.frequency,
+      purpose: typeof donation.metadata?.purpose === "string" ? donation.metadata.purpose : undefined,
     });
 
     res.json({
@@ -684,6 +693,10 @@ export async function createManualDonation(req: Request, res: Response): Promise
         taxExemption: Boolean(taxExemption),
         transactionId,
         createdAt: donation.createdAt,
+        certificateNo: donation.certificateNo,
+        donationRef: donation.donationNo?.startsWith("ISLAH-DON") ? donation.donationNo : undefined,
+        frequency: donation.frequency,
+        purpose: typeof donation.metadata?.purpose === "string" ? donation.metadata.purpose : undefined,
       }).catch((e) => console.warn("Manual donation receipt email error:", e));
     }
 
