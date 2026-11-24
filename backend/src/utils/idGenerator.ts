@@ -64,6 +64,13 @@ export async function getNextRefundNo(year?: number): Promise<string> {
  * Legacy wrapper: Delegated directly to atomic getNextReceiptNo()
  * to ensure 100% backward compatibility with zero race conditions.
  */
+/** Public donation reference shown to donors, e.g. ISLAH-DON-2026-00042. */
+export async function getNextDonationReference(year?: number): Promise<string> {
+  const y = year ?? new Date().getFullYear();
+  const seq = await getNextSequence(`donation_ref_${y}`);
+  return `ISLAH-DON-${y}-${String(seq).padStart(5, "0")}`;
+}
+
 export async function getNextReceiptNumber(): Promise<string> {
   return getNextReceiptNo();
 }

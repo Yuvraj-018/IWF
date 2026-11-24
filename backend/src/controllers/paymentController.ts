@@ -17,6 +17,7 @@ import {
   generateReceiptNumber,
   generateMemberNumber,
   getNextReceiptNumber,
+  getNextDonationReference,
   getNextMemberNumber,
   getNextReceiptNo,
   getNextTransactionNo,
@@ -95,17 +96,25 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
     }
 
     let createdReceiptNo: string | undefined;
+    let createdDonationRef: string | undefined;
     let savedEntity: any = null;
 
     // Handle Donation persistence upon verified payment
     if (donationData) {
       createdReceiptNo = await getNextReceiptNumber();
+      createdDonationRef = await getNextDonationReference();
       const createdCertificateNo = createdReceiptNo.replace(/RCPT|REC/i, "CERT");
+      // Structured answers from the Donation & Community Support Form (recognition, programme, etc.)
+      const formMeta: Record<string, any> =
+        donationData.metadata && typeof donationData.metadata === "object" && !Array.isArray(donationData.metadata)
+          ? donationData.metadata
+          : {};
       const isPublicConsent = donationData.websiteConsent === "Yes" || Boolean(donationData.isPublicConsent);
 
       const donation = new Donation({
         receiptNo: createdReceiptNo,
         certificateNo: createdCertificateNo,
+        donationNo: createdDonationRef,
         donorName: (donationData.donorName || "Anonymous Donor").trim(),
         donorType: donationData.donorType || "Individual",
         email: (donationData.email || "").trim().toLowerCase(),
@@ -134,7 +143,9 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
         recurringPledge: donationData.recurringPledge,
         pledgeMonths: donationData.pledgeMonths,
         reminder: donationData.reminder || "None",
+        workAreaId: donationData.workAreaId,
         notes: `Razorpay Order: ${razorpay_order_id}`,
+        metadata: formMeta,
       });
 
       savedEntity = await donation.save();
@@ -227,7 +238,7 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
       // Synchronize with Community Directory Spotlight
       syncToCommunityDirectory({
         id: `dir-donor-${createdReceiptNo}`,
-        name: donationData.donorName,
+        name: (typeof formMeta.displayName === "string" && formMeta.displayName.trim()) || donationData.donorName,
         role: `${donationData.financialType || "General"} Supporter`,
         type: "donor",
         location: [donationData.city, donationData.state].filter(Boolean).join(", ") || "India",
@@ -258,6 +269,10 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
           taxExemption: donation.taxExemption,
           transactionId: donation.transactionId,
           createdAt: donation.createdAt,
+          donationRef: createdDonationRef,
+          certificateNo: createdCertificateNo,
+          frequency: donation.frequency,
+          purpose: typeof formMeta.purpose === "string" ? formMeta.purpose : undefined,
         }).catch((e) => console.warn("Donation receipt email failed:", e));
       }
     }
@@ -463,6 +478,7 @@ export async function verifyPaymentController(req: Request, res: Response): Prom
       payment_id: razorpay_payment_id,
       order_id: razorpay_order_id,
       receiptNo: createdReceiptNo,
+      donationRef: createdDonationRef,
       entity: savedEntity,
     });
   } catch (error: any) {

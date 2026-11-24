@@ -42,6 +42,11 @@ export interface VerifyPaymentParams {
     websiteConsent?: string;
     recurringPledge?: boolean;
     pledgeMonths?: string;
+    isPublicConsent?: boolean;
+    /** Finance ledger work area (EDU, HLT, WYE, SLE, SJL, AGR, ENV, HRR). */
+    workAreaId?: string;
+    /** Structured answers from the Donation & Community Support Form. */
+    metadata?: Record<string, unknown>;
   };
   memberData?: {
     name?: string;
@@ -76,6 +81,8 @@ export interface VerifyPaymentResponse {
   payment_id: string;
   order_id: string;
   receiptNo?: string;
+  /** Donation reference, ISLAH-DON-YEAR-XXXXX. */
+  donationRef?: string;
   entity?: any;
 }
 

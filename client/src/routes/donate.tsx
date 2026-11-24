@@ -1,33 +1,30 @@
 import { createFileRoute } from "@tanstack/react-router";
 import DonatePage from "@/Pages/DonatePage";
+import type { DonateSearch } from "@/content/donationContent";
+
+const str = (v: unknown) =>
+  typeof v === "string" || typeof v === "number" ? String(v) : undefined;
 
 export const Route = createFileRoute("/donate")({
-  validateSearch: (
-    search: Record<string, unknown>
-  ): {
-    patientId?: string;
-    amount?: string;
-    financialType?: string;
-    program?: string;
-    initiative?: string;
-    cause?: string;
-    type?: string;
-  } => ({
-    patientId: search.patientId as string | undefined,
-    amount: search.amount as string | undefined,
-    financialType: search.financialType as string | undefined,
-    program: search.program as string | undefined,
-    initiative: search.initiative as string | undefined,
-    cause: search.cause as string | undefined,
-    type: search.type as string | undefined,
+  validateSearch: (search: Record<string, unknown>): DonateSearch => ({
+    patientId: str(search.patientId),
+    patient: str(search.patient),
+    name: str(search.name),
+    amount: str(search.amount),
+    financialType: str(search.financialType),
+    program: str(search.program),
+    initiative: str(search.initiative),
+    cause: str(search.cause),
+    type: str(search.type),
+    campaign: str(search.campaign),
   }),
   head: () => ({
     meta: [
-      { title: "Donate — Islah | Islah Welfare Foundation" },
+      { title: "Donation Form — ISLAH | Islah Welfare Foundation" },
       {
         name: "description",
         content:
-          "Support Islah Welfare Foundation's mission. Donate online to fund healthcare, education, women empowerment and rural development in India. 80G tax exemption available.",
+          "Make a one-time or recurring donation to ISLAH Welfare Foundation and choose the programme area you wish to support — education, healthcare, empowerment, livelihoods, environment and humanitarian relief.",
       },
     ],
   }),

@@ -296,14 +296,14 @@ export default function GetInvolvedPage() {
                     </div>
                   </div>
 
-                  {/* 6. Donate Us */}
+                  {/* 6. Donate & Support */}
                   <div className="bg-white rounded-3xl border border-slate-200 p-6 flex flex-col justify-between hover:border-rose-600 hover:shadow-md transition-all group">
                     <div>
                       <div className="w-12 h-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mb-4 shadow-2xs group-hover:scale-105 transition-transform">
                         <Heart className="w-6 h-6" />
                       </div>
                       <h3 className="text-base font-bold text-slate-900 group-hover:text-rose-600 transition-colors">
-                        Donate Us
+                        Donate &amp; Support
                       </h3>
                       <p className="text-sm text-black leading-relaxed font-normal mt-2">
                         Support our mission through one-time or recurring donations. Your contribution helps fund education, healthcare, women empowerment, livelihood, environmental, and humanitarian programs.
@@ -311,11 +311,13 @@ export default function GetInvolvedPage() {
                     </div>
 
                     <div className="pt-5 border-t border-slate-100 flex items-center justify-between gap-2 mt-4 text-xs font-bold">
-                      <a href="/donate" className="text-slate-700 hover:text-rose-600 flex items-center gap-1 transition">
+                      <a href="/donate-and-support" className="text-slate-700 hover:text-rose-600 flex items-center gap-1 transition">
                         Learn More <ArrowRight className="w-3.5 h-3.5" />
                       </a>
                       <a
                         href="/donate"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-lg shadow-2xs transition"
                       >
                         Donate Now &rarr;

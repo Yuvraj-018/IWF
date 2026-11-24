@@ -1,5 +1,9 @@
 import nodemailer from "nodemailer";
-import { generateReceiptPdfBuffer, ReceiptPdfData } from "./receiptPdfService.js";
+import {
+  generateAcknowledgementCardPdfBuffer,
+  generateReceiptPdfBuffer,
+  ReceiptPdfData,
+} from "./receiptPdfService.js";
 
 export interface EmailAttachment {
   filename: string;
@@ -211,6 +215,13 @@ export interface DonationReceiptEmailPayload {
   taxExemption?: boolean;
   transactionId?: string;
   createdAt?: string | Date;
+  /** Public donation reference, ISLAH-DON-YEAR-XXXXX. */
+  donationRef?: string;
+  /** When set, a Donor Acknowledgement Card PDF is attached as well. */
+  certificateNo?: string;
+  frequency?: string;
+  /** Human-readable purpose / programme from the donation form. */
+  purpose?: string;
 }
 
 export async function sendReceiptEmail(
@@ -242,14 +253,32 @@ export async function sendReceiptEmail(
     console.warn("⚠️ [PDF GENERATION WARNING] Could not generate receipt PDF buffer:", err.message);
   }
 
+  let cardBuffer: Buffer | undefined;
+  if (data.certificateNo) {
+    try {
+      cardBuffer = await generateAcknowledgementCardPdfBuffer({
+        donorName: data.donorName,
+        amount: data.amount,
+        purpose: data.purpose || data.cause,
+        certificateNo: data.certificateNo,
+        donationRef: data.donationRef,
+        createdAt: data.createdAt,
+      });
+    } catch (err: any) {
+      console.warn("⚠️ [PDF GENERATION WARNING] Could not generate acknowledgement card:", err.message);
+    }
+  }
+
+  // Only donors who asked for tax documentation (and gave a PAN) get tax wording.
+  const taxRequested = Boolean(data.taxExemption && data.pan);
   const formattedAmount = `₹${Number(data.amount).toLocaleString("en-IN")}`;
-  const title = `Official 80G Donation Receipt: ${data.receiptNo} - ISLAH Welfare Foundation`;
-  const preheader = `Thank you for your generous contribution of ${formattedAmount} towards ${data.cause}. Your official 80G receipt is attached.`;
+  const title = `${taxRequested ? "Donation Receipt & Tax Documentation Request" : "Donation Receipt"}: ${data.receiptNo} - ISLAH Welfare Foundation`;
+  const preheader = `Thank you for your generous contribution of ${formattedAmount} towards ${data.purpose || data.cause}. Your receipt${cardBuffer ? " and acknowledgement card are" : " is"} attached.`;
 
   const bodyContent = `
     <div style="text-align: center; margin-bottom: 24px;">
       <div style="display: inline-block; padding: 6px 14px; background-color: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 9999px; color: #047857; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
-        ✓ Contribution Verified &amp; 80G Eligible
+        ✓ Contribution Received &amp; Verified
       </div>
       <h2 style="font-size: 20px; font-weight: 800; color: #071527; margin: 12px 0 4px;">
         Thank You for Your Generosity!
@@ -269,6 +298,15 @@ export async function sendReceiptEmail(
 
     <!-- Receipt Details Table -->
     <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; margin: 20px 0; overflow: hidden;">
+      ${
+        data.donationRef
+          ? `
+      <tr>
+        <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; font-size: 12px; color: #64748b;">Donation Reference:</td>
+        <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; font-size: 13px; font-weight: 700; color: #071527; text-align: right; font-family: monospace;">${data.donationRef}</td>
+      </tr>`
+          : ""
+      }
       <tr>
         <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; font-size: 12px; color: #64748b;">Receipt Number:</td>
         <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; font-size: 13px; font-weight: 700; color: #071527; text-align: right; font-family: monospace;">${data.receiptNo}</td>
@@ -306,7 +344,11 @@ export async function sendReceiptEmail(
     </table>
 
     <div style="background-color: #eff6ff; border-left: 4px solid #3b82f6; border-radius: 8px; padding: 14px 16px; margin: 20px 0; font-size: 12px; color: #1e40af; line-height: 1.5;">
-      <strong>80G Tax Exemption Note:</strong> Your donation is 50% exempt from income tax under Section 80G of the Income Tax Act. A certified PDF copy of your official 80G receipt is attached with this email for your financial and tax records.
+      ${
+        taxRequested
+          ? "<strong>Tax documentation:</strong> We have recorded your request for tax-deduction documentation. It is issued only where ISLAH is eligible and the applicable legal requirements are met — a donation does not automatically qualify for a tax deduction. Please retain this receipt for your records."
+          : "<strong>Your documents:</strong> Your donation receipt" + (cardBuffer ? " and Donor Acknowledgement Card are" : " is") + " attached to this email for your records."
+      }
     </div>
 
     <p style="font-size: 13px; color: #64748b; line-height: 1.6;">
@@ -327,8 +369,15 @@ export async function sendReceiptEmail(
   const attachments: EmailAttachment[] = [];
   if (pdfBuffer) {
     attachments.push({
-      filename: `80G_Donation_Receipt_${data.receiptNo}.pdf`,
+      filename: `ISLAH_Donation_Receipt_${data.receiptNo}.pdf`.replace(/[\/]/g, "-"),
       content: pdfBuffer,
+      contentType: "application/pdf",
+    });
+  }
+  if (cardBuffer) {
+    attachments.push({
+      filename: `ISLAH_Donor_Acknowledgement_Card_${data.certificateNo}.pdf`.replace(/[\/]/g, "-"),
+      content: cardBuffer,
       contentType: "application/pdf",
     });
   }

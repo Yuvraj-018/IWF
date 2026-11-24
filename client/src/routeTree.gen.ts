@@ -20,6 +20,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CookiePolicyRouteImport } from './routes/cookie-policy'
 import { Route as DisclaimerRouteImport } from './routes/disclaimer'
 import { Route as DonateRouteImport } from './routes/donate'
+import { Route as DonateAndSupportRouteImport } from './routes/donate-and-support'
 import { Route as DonationPolicyRouteImport } from './routes/donation-policy'
 import { Route as EmploymentPolicyRouteImport } from './routes/employment-policy'
 import { Route as FinancialTransparencyPolicyRouteImport } from './routes/financial-transparency-policy'
@@ -201,6 +202,11 @@ const DisclaimerRoute = DisclaimerRouteImport.update({
 const DonateRoute = DonateRouteImport.update({
   id: '/donate',
   path: '/donate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DonateAndSupportRoute = DonateAndSupportRouteImport.update({
+  id: '/donate-and-support',
+  path: '/donate-and-support',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DonationPolicyRoute = DonationPolicyRouteImport.update({
@@ -924,6 +930,7 @@ export interface FileRoutesByFullPath {
   '/cookie-policy': typeof CookiePolicyRoute
   '/disclaimer': typeof DisclaimerRoute
   '/donate': typeof DonateRoute
+  '/donate-and-support': typeof DonateAndSupportRoute
   '/donation-policy': typeof DonationPolicyRoute
   '/employment-policy': typeof EmploymentPolicyRoute
   '/financial-transparency-policy': typeof FinancialTransparencyPolicyRoute
@@ -1064,6 +1071,7 @@ export interface FileRoutesByTo {
   '/cookie-policy': typeof CookiePolicyRoute
   '/disclaimer': typeof DisclaimerRoute
   '/donate': typeof DonateRoute
+  '/donate-and-support': typeof DonateAndSupportRoute
   '/donation-policy': typeof DonationPolicyRoute
   '/employment-policy': typeof EmploymentPolicyRoute
   '/financial-transparency-policy': typeof FinancialTransparencyPolicyRoute
@@ -1205,6 +1213,7 @@ export interface FileRoutesById {
   '/cookie-policy': typeof CookiePolicyRoute
   '/disclaimer': typeof DisclaimerRoute
   '/donate': typeof DonateRoute
+  '/donate-and-support': typeof DonateAndSupportRoute
   '/donation-policy': typeof DonationPolicyRoute
   '/employment-policy': typeof EmploymentPolicyRoute
   '/financial-transparency-policy': typeof FinancialTransparencyPolicyRoute
@@ -1347,6 +1356,7 @@ export interface FileRouteTypes {
     | '/cookie-policy'
     | '/disclaimer'
     | '/donate'
+    | '/donate-and-support'
     | '/donation-policy'
     | '/employment-policy'
     | '/financial-transparency-policy'
@@ -1487,6 +1497,7 @@ export interface FileRouteTypes {
     | '/cookie-policy'
     | '/disclaimer'
     | '/donate'
+    | '/donate-and-support'
     | '/donation-policy'
     | '/employment-policy'
     | '/financial-transparency-policy'
@@ -1627,6 +1638,7 @@ export interface FileRouteTypes {
     | '/cookie-policy'
     | '/disclaimer'
     | '/donate'
+    | '/donate-and-support'
     | '/donation-policy'
     | '/employment-policy'
     | '/financial-transparency-policy'
@@ -1768,6 +1780,7 @@ export interface RootRouteChildren {
   CookiePolicyRoute: typeof CookiePolicyRoute
   DisclaimerRoute: typeof DisclaimerRoute
   DonateRoute: typeof DonateRoute
+  DonateAndSupportRoute: typeof DonateAndSupportRoute
   DonationPolicyRoute: typeof DonationPolicyRoute
   EmploymentPolicyRoute: typeof EmploymentPolicyRoute
   FinancialTransparencyPolicyRoute: typeof FinancialTransparencyPolicyRoute
@@ -1974,6 +1987,13 @@ declare module '@tanstack/react-router' {
       path: '/donate'
       fullPath: '/donate'
       preLoaderRoute: typeof DonateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/donate-and-support': {
+      id: '/donate-and-support'
+      path: '/donate-and-support'
+      fullPath: '/donate-and-support'
+      preLoaderRoute: typeof DonateAndSupportRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/donation-policy': {
@@ -2880,6 +2900,7 @@ const rootRouteChildren: RootRouteChildren = {
   CookiePolicyRoute: CookiePolicyRoute,
   DisclaimerRoute: DisclaimerRoute,
   DonateRoute: DonateRoute,
+  DonateAndSupportRoute: DonateAndSupportRoute,
   DonationPolicyRoute: DonationPolicyRoute,
   EmploymentPolicyRoute: EmploymentPolicyRoute,
   FinancialTransparencyPolicyRoute: FinancialTransparencyPolicyRoute,

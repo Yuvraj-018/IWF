@@ -275,3 +275,105 @@ export async function generateReceiptPdfBuffer(data: ReceiptPdfData): Promise<Bu
   });
 }
 
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Donor Acknowledgement Card (emailed with the receipt)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface AcknowledgementCardData {
+  donorName: string;
+  amount: number;
+  purpose: string;
+  certificateNo: string;
+  donationRef?: string;
+  createdAt?: string | Date;
+}
+
+/** Same thresholds as the website's donor recognition levels. */
+export function donorRecognitionLevel(amount: number): string {
+  if (amount >= 50000) return "Platinum Donor";
+  if (amount >= 20000) return "Gold Donor";
+  if (amount >= 5000) return "Silver Donor";
+  return "General Donor";
+}
+
+export async function generateAcknowledgementCardPdfBuffer(data: AcknowledgementCardData): Promise<Buffer> {
+  return new Promise((resolve, reject) => {
+    try {
+      const level = donorRecognitionLevel(Number(data.amount));
+      const doc = new PDFDocument({
+        size: "A4",
+        layout: "landscape",
+        margin: 0,
+        info: {
+          Title: `${level} — Donor Acknowledgement Card`,
+          Author: "ISLAH Welfare Foundation",
+        },
+      });
+      const chunks: Buffer[] = [];
+      doc.on("data", (chunk: Buffer) => chunks.push(chunk));
+      doc.on("end", () => resolve(Buffer.concat(chunks)));
+      doc.on("error", (err: Error) => reject(err));
+
+      const W = doc.page.width;
+      const H = doc.page.height;
+      const navy = "#071527";
+      const orange = "#f97316";
+      const green = "#004724";
+      const muted = "#64748b";
+      const date = new Date(data.createdAt || Date.now()).toLocaleDateString("en-IN", {
+        month: "long",
+        year: "numeric",
+      });
+
+      doc.rect(0, 0, W, H).fill("#ffffff");
+      doc.lineWidth(6).strokeColor(navy).rect(22, 22, W - 44, H - 44).stroke();
+      doc.lineWidth(1.2).strokeColor(orange).rect(34, 34, W - 68, H - 68).stroke();
+
+      const box = { x: 80, width: W - 160 };
+      doc.font("Helvetica-Bold").fontSize(11).fillColor(orange)
+        .text("ISLAH WELFARE FOUNDATION", box.x, 78, { ...box, align: "center", characterSpacing: 2 });
+      doc.font("Helvetica-Bold").fontSize(34).fillColor(navy)
+        .text("Certificate of Appreciation", box.x, 108, { ...box, align: "center" });
+      doc.font("Helvetica").fontSize(12).fillColor(muted)
+        .text(`Donor Acknowledgement Card  ·  ${level}`, box.x, 152, { ...box, align: "center" });
+
+      doc.font("Helvetica").fontSize(13).fillColor(muted)
+        .text("This acknowledgement is gratefully presented to", box.x, 210, { ...box, align: "center" });
+      doc.font("Helvetica-BoldOblique").fontSize(30).fillColor(green)
+        .text(data.donorName || "Valued Supporter", box.x, 236, { ...box, align: "center" });
+
+      const amount = `Rs. ${Number(data.amount).toLocaleString("en-IN")}`;
+      doc.font("Helvetica").fontSize(13).fillColor("#1e293b")
+        .text(
+          `in recognition of a generous contribution of ${amount} towards ${data.purpose || "ISLAH's programmes"}, ` +
+            "standing with communities working towards opportunity, dignity and sustainable development.",
+          box.x + 40,
+          292,
+          { width: box.width - 80, align: "center", lineGap: 4 }
+        );
+
+      const footY = H - 150;
+      doc.font("Helvetica").fontSize(9).fillColor(muted);
+      doc.text("Date", 110, footY);
+      doc.text("Certificate No.", W / 2 - 90, footY, { width: 180, align: "center" });
+      doc.text("Donation Reference", W - 290, footY, { width: 180, align: "right" });
+      doc.font("Helvetica-Bold").fontSize(11).fillColor(navy);
+      doc.text(date, 110, footY + 14);
+      doc.text(data.certificateNo, W / 2 - 90, footY + 14, { width: 180, align: "center" });
+      doc.text(data.donationRef || "—", W - 290, footY + 14, { width: 180, align: "right" });
+
+      doc.font("Helvetica").fontSize(8.5).fillColor(muted)
+        .text(
+          "This card acknowledges your support and is not a tax document. Please refer to your donation receipt for transaction details.",
+          box.x,
+          H - 78,
+          { ...box, align: "center" }
+        );
+
+      doc.end();
+    } catch (err) {
+      reject(err);
+    }
+  });
+}

@@ -183,7 +183,7 @@ function getMegaHref(menu: string, item: string) {
   if (menu === "Media" && (item === "Photo & Video Gallery" || item === "Gallery" || item === "Photo Gallery")) return "/media/gallery";
   // Get Involved
   if (menu === "Get Involved" && item === "Careers & Opportunities") return "/careers";
-  if (menu === "Get Involved" && item === "Donate & Support") return "/donate";
+  if (menu === "Get Involved" && item === "Donate & Support") return "/donate-and-support";
   if (menu === "Get Involved" && item === "Volunteer With Us") return "/volunteer";
   if (menu === "Get Involved" && item === "Partner With Us") return "/partner";
   if (menu === "Get Involved" && item === "Sponsor a Programme") return "/sponsor";
@@ -712,6 +712,7 @@ export function Footer({ onOpenModal }: { onOpenModal?: (type: any) => void }) {
                   { label: "Sponsor a Programme", href: "/sponsor" },
                   { label: "Become a Mentor", href: "/mentor" },
                   { label: "Become a Member", href: "/membership" },
+                  { label: "Donate & Support", href: "/donate-and-support" },
                   { label: "Careers & Opportunities", href: "/careers" },
                 ] as Array<{ label: string; href?: string; type?: RoleType }>
               ).map((item) => (

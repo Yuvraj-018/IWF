@@ -36,6 +36,13 @@ interface TierPalette {
 }
 
 const PALETTE: Record<DonorTier, TierPalette> = {
+  General: {
+    metal: ["#ecfdf5", "#9fd3b8", "#3f8a68", "#cdeadb"],
+    dark: "#1f5a40",
+    accent: "#3f8a68",
+    sealCenter: "#004724",
+    sealText: "#f0fdf4",
+  },
   Silver: {
     metal: ["#f7f8fa", "#c4c9d0", "#8b929b", "#dde1e6"],
     dark: "#5b626b",
@@ -421,6 +428,20 @@ export const DonationCertificateSvg = forwardRef<
 });
 
 // ============================================================================
+// PDF export (shared by the viewer and the donation confirmation screen)
+// ============================================================================
+
+export async function downloadCertificatePdf(svg: SVGSVGElement, data: DonationCertificateData) {
+  const tier = donorTierFor(data.amount);
+  const { jsPDF } = await import("jspdf");
+  const pdf = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
+  const canvas = await svgToCanvas(svg, W, H, 2);
+  pdf.addImage(canvas.toDataURL("image/jpeg", 0.92), "JPEG", 0, 0, 297, 210);
+  pdf.setProperties({ title: `${tier.label} — Certificate of Appreciation`, author: ORG.name });
+  pdf.save(`ISLAH-${tier.tier}-Donor-Certificate-${safeFileName(data.certificateNo)}.pdf`);
+}
+
+// ============================================================================
 // Viewer with Share / PNG / PDF
 // ============================================================================
 
@@ -451,12 +472,7 @@ export function DonationCertificateViewer({ data }: { data: DonationCertificateD
     if (!svgRef.current) return;
     setBusy("pdf");
     try {
-      const { jsPDF } = await import("jspdf");
-      const pdf = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
-      const canvas = await svgToCanvas(svgRef.current, W, H, 2);
-      pdf.addImage(canvas.toDataURL("image/jpeg", 0.92), "JPEG", 0, 0, 297, 210);
-      pdf.setProperties({ title: `${tier.label} — Certificate of Appreciation`, author: ORG.name });
-      pdf.save(`${fileBase}.pdf`);
+      await downloadCertificatePdf(svgRef.current, data);
     } catch {
       toast.error("Could not generate the PDF. Please try again.");
     } finally {

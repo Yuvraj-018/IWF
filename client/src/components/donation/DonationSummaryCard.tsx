@@ -29,6 +29,7 @@ const TIER_STYLE: Record<DonorTier, { icon: typeof Award; color: string }> = {
   Platinum: { icon: Sparkles, color: "text-slate-800 bg-slate-100 border-slate-300" },
   Gold: { icon: Award, color: "text-amber-800 bg-amber-50 border-amber-200" },
   Silver: { icon: Star, color: "text-slate-600 bg-slate-50 border-slate-200" },
+  General: { icon: BadgeCheck, color: "text-emerald-700 bg-emerald-50 border-emerald-200" },
 };
 
 const REMINDER_TEXT: Record<ReminderChoice, string> = {
